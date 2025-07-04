@@ -28,7 +28,7 @@ private:
 
 	Scene* m_Scene = nullptr; // シーン
 
-	std::vector<std::unique_ptr<Object>> m_Objects; // オブジェクト
+	std::vector<std::unique_ptr<GameObject>> m_Objects; // オブジェクト
 	std::unique_ptr<Input> m_Input;  // 入力処理
 	std::unique_ptr<Camera> m_Camera; // カメラ
 	static SceneName nowScene;
@@ -54,7 +54,7 @@ public:
 
 	void ChangeScene(SceneName sName); // シーンを変更
 	Camera& GetCamera(); // カメラ取得
-	void DeleteObject(Object* pt); // オブジェクトを削除する
+	void DeleteObject(GameObject* pt); // オブジェクトを削除する
 	void DeleteAllObject(); // オブジェクトをすべて削除する
 
 	// オブジェクトを追加する(※テンプレート関数なのでここに直接記述)

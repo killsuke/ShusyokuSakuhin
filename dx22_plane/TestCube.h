@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Object.h"
+#include "GameObject.h"
 
 //-----------------------------------------------------------------------------
 //TestPlaneクラス
 //-----------------------------------------------------------------------------
-class TestCube:public Object {
+class TestCube:public GameObject {
 	// SRT情報（姿勢情報）
 	//DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	//DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);

@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "GameObject.h"
 #include <array>
 
 // 板ポリを切断するなら、切断線が表側か裏側か、板ポリと完全に重なっているかを判定
@@ -18,7 +18,7 @@ struct SlashVertex {
 	DirectX::XMFLOAT2 uv;	// テクスチャ座標（u,v）
 };
 
-class TestBoard :public Object
+class TestBoard :public GameObject
 {
 private:
 	std::vector<SlashVertex> triangles;	// 切断用の三角形頂点データ

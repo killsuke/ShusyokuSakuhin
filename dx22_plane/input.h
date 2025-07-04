@@ -74,8 +74,8 @@ private:
 	static int VibrationTime; //振動継続時間をカウントする変数
 
 	// 現在のマウスのクリックの状態を保持
-	bool isCurrentlyLPressed = false;
-	bool isCurrentlyRPressed = false;
+	static bool isCurrentlyLPressed;
+	static bool isCurrentlyRPressed;
 
 	// マウスのクリックのフラグ
 	static bool isLeftButtonPressed;   // 前回の状態（押され続けているか）
@@ -88,13 +88,13 @@ private:
 
 
 	// マウスのクリックの状態更新
-	void ClickUpdate();
+	static void ClickUpdate();
 
 public:
 
 	Input(); //コンストラクタ
 	~Input(); //デストラクタ
-	void Update(); //更新
+	static void Update(); //更新
 
 	//キー入力
 	static bool GetKeyPress(int key);   //プレス(押している間ずっと)

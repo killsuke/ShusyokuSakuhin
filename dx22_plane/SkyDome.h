@@ -1,11 +1,11 @@
 #pragma once
-#include "Object.h"
+#include "GameObject.h"
 #include <d3d.h>
 #include <SimpleMath.h>
 #include  "Renderer.h"
 #include "Shader.h"
 
-class SkyDome : public Object
+class SkyDome : public GameObject
 {
 private:
     int m_IndexCount = 0;

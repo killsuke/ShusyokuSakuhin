@@ -3,10 +3,10 @@
 #include <SimpleMath.h>
 #include  "Renderer.h"
 #include "Shader.h"
-#include "Object.h"
+#include "GameObject.h"
 #include "Camera.h"
 
-class SkyBox : public Object
+class SkyBox : public GameObject
 {
 private:
    

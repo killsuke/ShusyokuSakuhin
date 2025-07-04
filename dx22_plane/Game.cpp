@@ -5,7 +5,6 @@
 Game* Game::m_Instance = nullptr;
 SceneName Game::nowScene;
 float Game::timeRecord = 0.0f;
-Sound& Game::soundScene = Sound::GetInstance();
 DirectXRender Game::d_rend;
 // コンストラクタ
 Game::Game()
@@ -138,11 +137,6 @@ void Game::ChangeScene(SceneName sName)
 	// 読み込み済みのシーンがあれば削除
 	int score = 0;
 	if (m_Instance->m_Scene != nullptr) {
-		// 消そうとしているシーンがStage1ならスコアを保存しておく
-		/*if (Stage1Scene* sObj = dynamic_cast<Stage1Scene*>(m_Instance->m_Scene)) {
-			score = sObj->GetScore();
-		}*/
-
 		delete m_Instance->m_Scene;
 		m_Instance->m_Scene = nullptr;
 	}
@@ -163,7 +157,7 @@ void Game::ChangeScene(SceneName sName)
 }
 
 // オブジェクトを削除する
-void Game::DeleteObject(Object* pt)
+void Game::DeleteObject(GameObject* pt)
 {
 	if (pt == NULL) return;
 
@@ -174,7 +168,7 @@ void Game::DeleteObject(Object* pt)
 		std::remove_if(
 			m_Instance->m_Objects.begin(),
 			m_Instance->m_Objects.end(),
-			[pt](const std::unique_ptr<Object>& element) {return element.get() == pt; }),
+			[pt](const std::unique_ptr<GameObject>& element) {return element.get() == pt; }),
 		m_Instance->m_Objects.end());
 	m_Instance->m_Objects.shrink_to_fit();
 }

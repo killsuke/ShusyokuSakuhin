@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "GameObject.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Material.h"
@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 // Texture2Dクラス
 //-----------------------------------------------------------------------------
-class Texture2D : public Object
+class Texture2D : public GameObject
 {
 private:
 	// 描画の為の情報（メッシュに関わる情報）

@@ -1,8 +1,8 @@
 #pragma once
-#include "Object.h"
+#include "GameObject.h"
 #include "RigidBodyComponent.h"
 
-class Test_Transparent : public Object
+class Test_Transparent : public GameObject
 {
 private:
 	DirectX::XMFLOAT4 color = {};

@@ -64,13 +64,13 @@ private:
 	XAUDIO2_BUFFER m_buffer[SOUND_LABEL_MAX]{};
 	BYTE* m_DataBuffer[SOUND_LABEL_MAX]{};
 
-	// コンストラクタとデストラクタをここにおいて、アクセス不可にする
-	Sound() = default;
-	~Sound() = default;
+	//// コンストラクタとデストラクタをここにおいて、アクセス不可にする
+	//Sound() = default;
+	//~Sound() = default;
 
-	// コンストラクタと代入演算子を削除して、複製を防ぐ
-	Sound(const Sound&) = delete;
-	Sound& operator=(const Sound&) = delete;
+	//// コンストラクタと代入演算子を削除して、複製を防ぐ
+	//Sound(const Sound&) = delete;
+	//Sound& operator=(const Sound&) = delete;
 
 	HRESULT FindChunk(HANDLE, DWORD, DWORD&, DWORD&);
 	HRESULT ReadChunkData(HANDLE, void*, DWORD, DWORD);
@@ -78,10 +78,13 @@ private:
 public:
 
 	// インスタンスへのアクセスを提供する静的メソッド
-	static Sound& GetInstance() {
-		static Sound soundInstance;	// 初回の呼び出しでのみインスタンス化される
-		return soundInstance;
-	}
+	//static Sound& GetInstance() {
+	//	static Sound soundInstance;	// 初回の呼び出しでのみインスタンス化される
+	//	return soundInstance;
+	//}
+
+	Sound() = default;	// デフォルトコンストラクタ
+	~Sound() = default;	// デフォルトデストラクタ
 
 	// ゲームループ開始前に呼び出すサウンドの初期化処理
 	HRESULT Init(void);

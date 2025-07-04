@@ -13,7 +13,7 @@
 #include "Component.h"
 #include <memory>
 
-class Object {
+class GameObject {
 protected:
 	std::vector<std::shared_ptr<Component>> components;
 
@@ -26,14 +26,14 @@ protected:
 	IndexBuffer	 m_IndexBuffer; // インデックスバッファ
 	VertexBuffer<VERTEX_3D>	m_VertexBuffer; // 頂点バッファ
 
-	ID3D11ShaderResourceView* m_pTextureView;
+	ID3D11ShaderResourceView* m_pTextureView = nullptr;
 
 	// 描画の為の情報（見た目に関わる部分）
 	Texture m_Texture;	// テクスチャ
 	Shader m_Shader; // シェーダー
 
 	// カメラ
-	Camera* m_Camera;
+	Camera* m_Camera = nullptr;
 
 	Collision::AABB coll_ab{};
 	Collision::Sphere coll_sp{};
@@ -50,15 +50,20 @@ protected:
 	std::vector<SUBSET> m_subsets;
 	std::vector<std::unique_ptr<Texture>> m_Textures; // テクスチャ
 
+	std::string tag = "";	// タグを付けて識別する
+	std::string name = "";	// オブジェクトの名前
+
+	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
+
 	// モデルデータを読み込むマネージャーを保持
 	ModelManager& modelManager = ModelManager::GetInstance();	
 
-	Sound& soundObj = Sound::GetInstance();
+	virtual ~GameObject();		// デストラクタ
 
 public:
 
-	Object(Camera* cam);	// コンストラクタ
-	virtual ~Object();		// デストラクタ
+	GameObject() = default;
+	GameObject(Camera* cam);	// コンストラクタ
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;
@@ -123,6 +128,32 @@ public:
 	inline Collision::Vector9& GetColliderSize_OBB() { return this->vec9; };
 	inline Collision::AABB& GetColliderSize_AABB() { return this->coll_ab; };
 	inline Collision::Sphere& GetColliderSize_Sphere() { return this->coll_sp; };
+
+	// セッター
+	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };
+	inline void SetTag(const std::string& tag) { this->tag = tag; };
+	inline void SetName(const std::string& name) { this->name = name; };
+
+	// ゲッター
+	inline bool GetDeleteFg()const { return deletefg; };
+	inline std::string& GetTag() { return tag; };
+	inline std::string& GetName() { return name; };
+
+	// コンポーネントを追加する
+	void AddComponent(std::shared_ptr<Component> component) {
+		components.push_back(component);	// ここであらゆるコンポーネントを装備することで色々出来る。
+	}
+
+	// 装備されているコンポーネントを取得して使用可能にする
+	template<typename T>
+	std::shared_ptr<T> GetComponent() {
+		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(component)) { // ダイナミックキャストでキャスト可能かどうか判定
+				return t; // 指定された型のshared_ptrに変換したものを返却
+			}
+		}
+		return nullptr; // 指定された型がなかった場合nullptr
+	}
 
 	//template <typename T>
 	//void AddComponent(std::shared_ptr<T> component) {

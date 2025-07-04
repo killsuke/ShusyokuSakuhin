@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "Object.h"
+#include "GameObject.h"
 #include "Texture2D.h"
 #include <chrono>
 #include "sound.h"
@@ -9,7 +9,7 @@
 class Stage1Scene : public Scene
 {
 private:
-	std::vector<Object*> m_MySceneObjects; // このシーンのオブジェクト
+	std::vector<GameObject*> m_MySceneObjects; // このシーンのオブジェクト
 
 	int m_State = 0;	// 状態　０：ボール移動中、１：方向選択中、２：パワー選択中
 
@@ -25,7 +25,7 @@ private:
 
 	Texture2D* texOne = nullptr;
 	Texture2D* texTen = nullptr;
-	Object* car = nullptr;
+	GameObject* car = nullptr;
 	Texture2D* texTime1 = nullptr;	// 小数点のタイム計測
 	Texture2D* texTime2 = nullptr;	// 小数点のタイム計測
 	Texture2D* texTime3 = nullptr;	// 小数点のタイム計測
@@ -38,7 +38,6 @@ private:
 	//std::chrono::high_resolution_clock nowTime;		// 現在時刻
 	std::chrono::high_resolution_clock::time_point startTime;	// スタート
 
-	Sound& soundStage = Sound::GetInstance();
 public:
 	Stage1Scene(); // コンストラクタ
 	~Stage1Scene(); // デストラクタ

@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "Object.h"
+#include "GameObject.h"
 #include "Texture2D.h"
 #include "sound.h"
 #include <chrono>
@@ -9,7 +9,7 @@
 class ResultScene : public Scene
 {
 private:
-	std::vector<Object*> m_MySceneObjects; // このシーンのオブジェクト
+	std::vector<GameObject*> m_MySceneObjects; // このシーンのオブジェクト
 
 	Texture2D* texTime1 = nullptr;	// 小数点のタイム計測
 	Texture2D* texTime2 = nullptr;	// 小数点のタイム計測
@@ -21,7 +21,7 @@ private:
 	Texture2D* texRank = nullptr;	// 小数点のタイム計測
 
 	std::chrono::high_resolution_clock::time_point startTime;	// スタートs
-	Sound& soundResult = Sound::GetInstance();
+	//Sound& soundResult = Sound::GetInstance();
 
 	int resultCount = 0;
 

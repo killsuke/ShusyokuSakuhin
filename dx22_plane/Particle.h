@@ -1,6 +1,6 @@
 #pragma once
-#include "Object.h"
-class Particle : public Object
+#include "GameObject.h"
+class Particle : public GameObject
 {
 };
 

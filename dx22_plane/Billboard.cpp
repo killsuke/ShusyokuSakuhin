@@ -3,7 +3,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-Billboard::Billboard(Camera* cam) :Object(cam) {
+Billboard::Billboard(Camera* cam) :GameObject(cam) {
 }
 
 // デストラクタ

@@ -1,14 +1,13 @@
 #pragma once
 #include "Scene.h"
-#include "Object.h"
+#include "GameObject.h"
 #include "sound.h"
 
 // TitleSceneクラス
 class TitleScene : public Scene
 {
 private:
-	std::vector<Object*> m_MySceneObjects; // このシーンのオブジェクト
-	Sound& soundTitle = Sound::GetInstance();
+	std::vector<GameObject*> m_MySceneObjects; // このシーンのオブジェクト
 	bool setumeiFg = false;
 	void Init(); // 初期化
 	void Uninit(); // 終了処理

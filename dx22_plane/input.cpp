@@ -6,6 +6,8 @@ BYTE Input::keyState_old[256] = {};
 XINPUT_STATE Input::controllerState = {};
 XINPUT_STATE Input::controllerState_old = {};
 int Input::VibrationTime = 0;
+bool Input::isCurrentlyLPressed = false;
+bool Input::isCurrentlyRPressed = false;
 
 // ¶ƒNƒŠƒbƒN‚Ì•û
 bool Input::isLeftButtonPressed = false;

@@ -1,6 +1,6 @@
 #pragma once
-#include "Object.h"
-class Billboard : public Object
+#include "GameObject.h"
+class Billboard : public GameObject
 {
 private:
 	DirectX::SimpleMath::Vector3 carPos{};

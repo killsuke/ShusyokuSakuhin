@@ -102,8 +102,8 @@ void ResultScene::Init()
 	texTime6 = pt12;
 
 	startTime = std::chrono::high_resolution_clock::now();
-	soundResult.Play(SOUND_LABEL_BGM002);
-	soundResult.Stop(SOUND_LABEL_SE000);
+	/*soundResult.Play(SOUND_LABEL_BGM002);
+	soundResult.Stop(SOUND_LABEL_SE000);*/
 }
 
 // 更新
@@ -265,7 +265,7 @@ void ResultScene::Uninit()
 	for (auto& o : m_MySceneObjects) {
 		Game::GetInstance()->DeleteObject(o);
 	}
-	soundResult.Stop(SOUND_LABEL_BGM002);
+//	soundResult.Stop(SOUND_LABEL_BGM002);
 }
 
 // スコアを設定
