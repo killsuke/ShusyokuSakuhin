@@ -9,8 +9,8 @@
 #include "DirectXRender.h"
 #include "WICTextureLoader.h" // テクスチャ読み込みライブラリ
 #include <wrl.h>
-#include <codecvt>
-#include <locale>
+//#include <codecvt>
+//#include <locale>
 
 class TextureManager
 {

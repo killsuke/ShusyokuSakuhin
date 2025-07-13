@@ -53,7 +53,13 @@ std::wstring TextureManager::ShortConversion(const std::string& filename) {
     // ファイルパスに "asset/" を追加する
    // std::string fullPath = "asset/" + filename;
 
+	int len = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, nullptr, 0);
+    std::wstring result(len -1, wchar_t(0));    // null終端を除外
+	MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, &result[0], len);
+
+	return result;
+
     // UTF-8 から UTF-16 に文字列を変換
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-    return converter.from_bytes(filename);
+   /* std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    return converter.from_bytes(filename);*/
 }

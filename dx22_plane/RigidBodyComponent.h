@@ -11,7 +11,7 @@
 #include <chrono>	// 時間を計測してくれる
 
 #define GRAVITY (9.80665f)	  // 重力
-#define GRAVITY_STOP (500.0f) // 重力を止めるためのしきい値、これ以上の速度が出たら重力を止める
+#define GRAVITY_STOP (100.0f) // 重力を止めるためのしきい値、これ以上の速度が出たら重力を止める
 #define FRICTION (0.1f)		  // 摩擦係数
 #define RESTITUTION (0.8f)	  // 反発係数（０～１ぐらいが一般的らしい）、この値が大きいほど反発も大きくなる
 #define AIRRESISTANCE (0.05f) // 空気抵抗係数
@@ -22,13 +22,15 @@
 class RigidBodyComponent:public Component
 {
 private:
-	DirectX::XMFLOAT3 velocity{};	 // 速度
-	DirectX::XMFLOAT3 acceleration{};// 加速度
+	DirectX::XMFLOAT3 m_velocity{};	 // 速度
+	DirectX::XMFLOAT3 m_acceleration{};// 加速度
 	float mass = 0.0f;				 // 質量
 	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
 	bool fallFlag = false;		 	 // 落下のフラグ 
 	bool timeFlag = false;			 // 落下タイミングのフラグ
+	float m_deltaTime = 0.0f;		 // 前回の時間からの経過時間
 	std::chrono::high_resolution_clock::time_point startTime;	// 計測開始時間
+	std::chrono::high_resolution_clock::time_point lastTime;	// 最後の時間
 
 public:
 	RigidBodyComponent(float m = 0.0f);	// float posx,float posy,float posz, 
@@ -37,12 +39,12 @@ public:
 	void Update()override;
 
 	// 速度返す
-	inline void SetVelocity(const DirectX::XMFLOAT3& velocity) { this->velocity = velocity; };
-	inline DirectX::XMFLOAT3 GetVelocity()const { return velocity; };
+	inline void SetVelocity(const DirectX::XMFLOAT3& velocity) { this->m_velocity = velocity; };
+	inline DirectX::XMFLOAT3 GetVelocity()const { return m_velocity; };
 	inline void AddVelocity(const DirectX::XMFLOAT3& velocity) {
-		this->velocity.x += velocity.x;
-		this->velocity.y += velocity.y;
-		this->velocity.z += velocity.z;
+		this->m_velocity.x += velocity.x;
+		this->m_velocity.y += velocity.y;
+		this->m_velocity.z += velocity.z;
 	};
 
 	void ConstantVelocity(const DirectX::XMFLOAT3& velocity);	// 等速運動
@@ -65,7 +67,7 @@ public:
 
 	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
 	float UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag);		// 重力
-	inline void AddForce(const DirectX::XMFLOAT3& force) { this->acceleration = force; };
+	inline void AddForce(const DirectX::XMFLOAT3& force) { this->m_acceleration = force; };
 	void AppryForce(const DirectX::XMFLOAT3& force);	// 外力を加える、構造体かfloatか
 	void ApplyFriction_X();	// 摩擦力
 	void ApplyFriction_Y();	// 摩擦力

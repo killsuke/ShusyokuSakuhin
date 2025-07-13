@@ -44,7 +44,7 @@ public:
 	template <typename T2>
 	static T2* AddObject(const std::string& _name = "Noname",const std::string& _tag = "Notag") {
 
-		objects.emplace_back(MakeObject<T2>(_name,_tag);
+		objects.emplace_back(MakeObject<T2>(_name,_tag));
 
 		auto obj = static_cast<T2*>(objects.back().get());
 

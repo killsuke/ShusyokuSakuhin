@@ -17,7 +17,7 @@ using namespace std;
 //=======================================
 void Camera::Init()
 {
-	m_Position = Vector3(0.0f, 0.0f, -100.0f);
+	m_Position = Vector3(0.0f, 0.0f, -500.0f);
 	m_Target = Vector3(0.0f, 0.0f, 0.0f);
 	//	m_CameraDirection = 3.14f;
 }

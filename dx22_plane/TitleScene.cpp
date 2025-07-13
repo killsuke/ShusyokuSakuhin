@@ -25,7 +25,7 @@ void TitleScene::Init()
 {
 	TestCube* cube = Game::GetInstance()->AddObject<TestCube>();
 	TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();
-	SkyDome* dome = Game::GetInstance()->AddObject<SkyDome>();
+	//SkyDome* dome = Game::GetInstance()->AddObject<SkyDome>();
 	Test_Transparent* transparent = Game::GetInstance()->AddObject<Test_Transparent>();
 
 	//TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();

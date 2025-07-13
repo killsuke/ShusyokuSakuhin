@@ -33,7 +33,7 @@ private:
 	std::unique_ptr<Camera> m_Camera; // ƒJƒƒ‰
 	static SceneName nowScene;
 	static float timeRecord;
-	static Sound& soundScene;
+//	static Sound& soundScene;
 
 	static DirectXRender d_rend;
 

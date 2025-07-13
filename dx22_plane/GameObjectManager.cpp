@@ -28,7 +28,7 @@ void GameObjectManager::RemoveTagObject(const std::string& tag) {
 // 更新
 void GameObjectManager::Update() {
 	SizeUP();
-	gpd.Update();
+
 	for (auto obj : objects) {
 		obj->Update();
 		// シーンチェンジが起こったらブレイクしてfor文を抜ける
@@ -74,13 +74,13 @@ void GameObjectManager::Uninit() {
 
 // 描画順のソート
 void GameObjectManager::DrawSort() {
-	auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
-		return a->GetComponent<TransformComponent>()->GetPos().z > b->GetComponent<TransformComponent>()->GetPos().z;
-	};
+	//auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+	//	return a->GetComponent<TransformComponent>()->GetPos().z > b->GetComponent<TransformComponent>()->GetPos().z;
+	//};
 
-	if (!std::is_sorted(objects.begin(), objects.end(), sortZLambda)) {
-		std::sort(objects.begin(), objects.end(), sortZLambda);  // std::is_sortedではなくstd::sortを呼び出す
-	}
+	//if (!std::is_sorted(objects.begin(), objects.end(), sortZLambda)) {
+	//	std::sort(objects.begin(), objects.end(), sortZLambda);  // std::is_sortedではなくstd::sortを呼び出す
+	//}
 }
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
@@ -115,7 +115,3 @@ void GameObjectManager::SizeUP() {
 		objects.reserve(objects.capacity() + 1000);
 	}
 }
-
-GetterPlayerBullet GameObjectManager::GetGetterPlayerBulletObj() {
-	return gpd; 
-};

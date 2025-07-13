@@ -3,7 +3,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-TestBoard::TestBoard(Camera* cam) :Object(cam) {
+TestBoard::TestBoard(Camera* cam) :GameObject(cam) {
 }
 
 // デストラクタ

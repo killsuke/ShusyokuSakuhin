@@ -104,7 +104,13 @@ namespace Collision
 
 	// 検知と押し出し
 	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
 	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos); // AABBとAABB
+
+	// レイとAABBの当たり判定
+	bool IntersectRayAABB(const DirectX::XMVECTOR& rayOrigin, const DirectX::XMVECTOR& rayDir, 
+						  const AABB& hit, float& tMinOut);
+
 
 	// 円どうしの当たり判定
 	// 触れているかどうかだけを検知

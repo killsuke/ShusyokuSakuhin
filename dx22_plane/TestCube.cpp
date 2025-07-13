@@ -4,7 +4,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-TestCube::TestCube(Camera* cam) :Object(cam) {
+TestCube::TestCube(Camera* cam) :GameObject(cam) {
 }
 
 // デストラクタ

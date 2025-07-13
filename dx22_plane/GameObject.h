@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "Component.h"
 #include <memory>
+#include <string>
 
 class GameObject {
 protected:
@@ -58,12 +59,15 @@ protected:
 	// モデルデータを読み込むマネージャーを保持
 	ModelManager& modelManager = ModelManager::GetInstance();	
 
-	virtual ~GameObject();		// デストラクタ
 
 public:
-
+	
 	GameObject() = default;
 	GameObject(Camera* cam);	// コンストラクタ
+	GameObject(const std::string& _name,const std::string& _tag, Camera* cam = nullptr)
+		: m_Camera(cam), name(_name), tag(_tag) {
+	}; // 名前とタグを指定して初期化
+	virtual ~GameObject();		// デストラクタ
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;

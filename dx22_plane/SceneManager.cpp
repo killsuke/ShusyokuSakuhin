@@ -55,14 +55,14 @@ void SceneManager::SceneChange(SCENES scene) {
 
 // 更新
 void SceneManager::Update() {
-	Input::Update();
-	// ポインタ内に入ってるシーンの更新
-	m_pScene->Update();
+	//Input::Update();
+	//// ポインタ内に入ってるシーンの更新
+	//m_pScene->Update();
 };
 
 // 描画
 void SceneManager::Draw() {
-	D3D_StartRender();  //描画開始
-	m_pScene->Draw();	// ポインタ内に入ってるシーンの描画
-	D3D_FinishRender(); //描画終了
+	//D3D_StartRender();  //描画開始
+	//m_pScene->Draw();	// ポインタ内に入ってるシーンの描画
+	//D3D_FinishRender(); //描画終了
 };

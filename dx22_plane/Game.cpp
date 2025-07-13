@@ -25,7 +25,7 @@ void Game::Init()
 	// オブジェクト作成
 	m_Instance = new Game;
 
-	soundScene.Init();
+	//soundScene.Init();
 
 	// 描画初期化
 	d_rend.Init();
@@ -112,7 +112,7 @@ void Game::Uninit()
 	// 描画終了処理
 	RendererSystem::Uninit();
 
-	soundScene.Uninit();
+	//soundScene.Uninit();
 
 	delete m_Instance;
 	m_Instance = nullptr;

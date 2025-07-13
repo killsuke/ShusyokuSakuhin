@@ -4,7 +4,7 @@ using namespace std;
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-Texture2D::Texture2D(Camera* cam) :Object(cam)
+Texture2D::Texture2D(Camera* cam) :GameObject(cam)
 {
 
 }

@@ -145,7 +145,7 @@ void Stage1Scene::Update()
 	if (Game::GetNowScene() == STAGE1) {
 		if (countDown == 180) {
 			startTime = std::chrono::high_resolution_clock::now();
-			soundStage.Play(SOUND_LABEL_SE003);
+			//soundStage.Play(SOUND_LABEL_SE003);
 		}
 		else if (countDown > 181) {
 			std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
@@ -185,7 +185,7 @@ void Stage1Scene::Update()
 			//}
 
 			if (nowLap == 4) {
-				soundStage.Stop(SOUND_LABEL_BGM000);
+				//soundStage.Stop(SOUND_LABEL_BGM000);
 				Game::GetInstance()->ChangeScene(RESULT);
 				return;
 			}
@@ -233,7 +233,7 @@ void Stage1Scene::Update()
 			texCounts->SetScale(0.0f, 0.0f, 0.0f);
 			texCounts->SetPosition(800.0f, 0.0f, 0.0f);
 			//soundStage.Play(SOUND_LABEL_BGM000);
-			soundStage.SetVolume(SOUND_LABEL_BGM000,0.5f);
+		//	soundStage.SetVolume(SOUND_LABEL_BGM000,0.5f);
 		}
 
 		if (countDown < 240) {
@@ -256,7 +256,7 @@ void Stage1Scene::Update()
 			texAngleCount = 0.0f;
 			onceStop = 0;
 			if (countDown < 180) {
-				soundStage.Play(SOUND_LABEL_SE002);
+		//		soundStage.Play(SOUND_LABEL_SE002);
 			}
 		}
 

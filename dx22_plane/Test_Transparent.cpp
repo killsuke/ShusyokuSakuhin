@@ -6,7 +6,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-Test_Transparent::Test_Transparent(Camera* cam) :Object(cam) {
+Test_Transparent::Test_Transparent(Camera* cam) :GameObject(cam) {
 }
 
 // デストラクタ
@@ -76,21 +76,21 @@ void Test_Transparent::Init()
 	vertices[10].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	vertices[11].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	vertices[8].uv  = Vector2(0.33f, 0.5f);
-	vertices[9].uv  = Vector2(0.66f, 0.5f);
+	vertices[8].uv = Vector2(0.33f, 0.5f);
+	vertices[9].uv = Vector2(0.66f, 0.5f);
 	vertices[10].uv = Vector2(0.33f, 1.0f);
 	vertices[11].uv = Vector2(0.66f, 1.0f);
 
-	vertices[8].normal  = Vector3(0.0f, 0.0f, 1.0f);
-	vertices[9].normal  = Vector3(0.0f, 0.0f, 1.0f);
+	vertices[8].normal = Vector3(0.0f, 0.0f, 1.0f);
+	vertices[9].normal = Vector3(0.0f, 0.0f, 1.0f);
 	vertices[10].normal = Vector3(0.0f, 0.0f, 1.0f);
 	vertices[11].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 
-	vertices[12].position = Vector3(-1.0f, -1.0f,  1.0f);
-	vertices[13].position = Vector3(-1.0f,  1.0f,  1.0f);
+	vertices[12].position = Vector3(-1.0f, -1.0f, 1.0f);
+	vertices[13].position = Vector3(-1.0f, 1.0f, 1.0f);
 	vertices[14].position = Vector3(-1.0f, -1.0f, -1.0f);
-	vertices[15].position = Vector3(-1.0f,  1.0f, -1.0f);
+	vertices[15].position = Vector3(-1.0f, 1.0f, -1.0f);
 
 	vertices[12].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	vertices[13].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -109,9 +109,9 @@ void Test_Transparent::Init()
 
 
 	vertices[16].position = Vector3(1.0f, -1.0f, -1.0f);
-	vertices[17].position = Vector3(1.0f,  1.0f, -1.0f);
-	vertices[18].position = Vector3(1.0f, -1.0f,  1.0f);
-	vertices[19].position = Vector3(1.0f,  1.0f,  1.0f);
+	vertices[17].position = Vector3(1.0f, 1.0f, -1.0f);
+	vertices[18].position = Vector3(1.0f, -1.0f, 1.0f);
+	vertices[19].position = Vector3(1.0f, 1.0f, 1.0f);
 
 	vertices[16].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	vertices[17].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -129,10 +129,10 @@ void Test_Transparent::Init()
 	vertices[19].normal = Vector3(1.0f, 0.0f, 0.0f);
 
 
-	vertices[20].position = Vector3(-1.0f, -1.0f,  1.0f);
-	vertices[21].position = Vector3( 1.0f, -1.0f,  1.0f);
+	vertices[20].position = Vector3(-1.0f, -1.0f, 1.0f);
+	vertices[21].position = Vector3(1.0f, -1.0f, 1.0f);
 	vertices[22].position = Vector3(-1.0f, -1.0f, -1.0f);
-	vertices[23].position = Vector3( 1.0f, -1.0f, -1.0f);
+	vertices[23].position = Vector3(1.0f, -1.0f, -1.0f);
 
 	vertices[20].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	vertices[21].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -192,13 +192,12 @@ void Test_Transparent::Init()
 	m_Scale.z = 20.0f;
 
 	m_Position.x = 80.0f;
-	m_Position.y = 50.0f;
+	m_Position.y = 200.0f;
 	m_Position.z = 0.0f;
 
 	color = { 1.0f,1.0f,1.0f,1.0f };
 
 	rigid.SetMass(2.0f);
-	rigid.UseGravity(m_Position, true);
 
 }
 
@@ -231,31 +230,84 @@ void Test_Transparent::Update()
 		rigid.ConstantVelocity_Y(-60.0f);
 	}
 
+
 	rigid.ReduceVelocity_X();
-	rigid.ReduceVelocity_Y();
+	//rigid.ReduceVelocity_Y();
 
-	rigid.GetVelocity();
-
+	//rigid.GetVelocity();
+	rigid.UseGravity(m_Position, true);
 	// リジッドボディの更新
 	rigid.AcceleratorPosition(m_Position);
 
 	SetColliderSize_AABB(m_Position, m_Scale);
 	SetColliderSize_Sphere(m_Position, 20.0f);
 
+	DirectX::XMVECTOR newRayPos = { m_Position.x,m_Position.y - 10.0f,m_Position.z,0.0f };
+	ray.SetOriginPosition(newRayPos);
+	ray.SetDirection(DirectX::XMVECTOR{ 0.0f, -1.0f, 0.0f, 0.0f });
+
 	std::vector<TestBoard*>board = Game::GetInstance()->GetObjects<TestBoard>();
 	std::vector<TestCube*>cube = Game::GetInstance()->GetObjects<TestCube>();
 
+	DirectX::XMFLOAT3 hitNormal = {};
 	// 多くの当たり判定を別々で取って押し戻しができるようにする
 	// 当たったら赤く染める
-	if (Collision::CheckHit_CubeAndCube_NoTrigger2D(board[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position) ||
-		Collision::CheckHit_CubeAndCube_NoTrigger2D(cube[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position)) {
+	if (Collision::CheckHit_CubeAndCube_NoTrigger2D_Normal(board[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position, hitNormal)) {
+		
+		if (hitNormal.y < -0.5f) {	// 天井
+			color.y = 0.0f;
+			color.z = 0.0f;
+			rigid.UseGravity(m_Position, false);
+
+		}
+		else if (hitNormal.y > 0.5f) {	// 地面
+			color.z = 0.0f;
+//			rigid.UseGravity(m_Position, true);
+		}
+		else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
+			color.y = 0.0f;
+		//	rigid.UseGravity(m_Position, true);
+		}
+	}
+	else {
+	//	rigid.UseGravity(m_Position, true);
+
+		color = { 1.0f,1.0f,1.0f,0.5f };
+	}
+
+	if (Collision::CheckHit_CubeAndCube_NoTrigger2D_Normal(cube[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position, hitNormal)) {
+		if (hitNormal.y < -0.5f) {	// 天井
+			color.y = 0.0f;
+			color.z = 0.0f;
+			rigid.UseGravity(m_Position, false);
+
+		}
+		else if (hitNormal.y > 0.5f) {	// 地面
+			color.z = 0.0f;
+			//			rigid.UseGravity(m_Position, true);
+		}
+		else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
+			color.y = 0.0f;
+			//	rigid.UseGravity(m_Position, true);
+		}
+	}
+	else {
+		//	rigid.UseGravity(m_Position, true);
+
+		color = { 1.0f,1.0f,1.0f,0.5f };
+	}
+
+
+	/*float t = 0.0f;
+	if (Collision::IntersectRayAABB(ray.GetOriginPosition(), ray.GetDirection(), board[0]->GetColliderSize_AABB(), t) ||
+		Collision::IntersectRayAABB(ray.GetOriginPosition(), ray.GetDirection(), cube[0]->GetColliderSize_AABB(), t)) {
 		color.y = 0.0f;
 		color.z = 0.0f;
-	//	rigid.UseGravity(m_Position,false);
 	}
 	else {
 		color = { 1.0f,1.0f,1.0f,0.5f };
-	}
+	}*/
+	
 
 	// 当たったら赤く染める
 	/*if (Collision::CheckHit_SphereAndSphere_NoTrigger2D(board[0]->GetColliderSize_Sphere(), GetColliderSize_Sphere(), m_Position)) {

@@ -1,10 +1,12 @@
 #pragma once
 #include "GameObject.h"
 #include "RigidBodyComponent.h"
+#include "Ray.h"
 
 class Test_Transparent : public GameObject
 {
 private:
+	RayComponent ray;
 	DirectX::XMFLOAT4 color = {};
 	RigidBodyComponent rigid;
 public:

@@ -4,7 +4,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-SkyBox::SkyBox(Camera* cam) :Object(cam) {
+SkyBox::SkyBox(Camera* cam) :GameObject(cam) {
 }
 
 // デストラクタ

@@ -1,5 +1,7 @@
 #include "Collision.h"
 #include <algorithm>  // std::min, std::maxのためのヘッダー
+#include <cmath>     // fabsのためのヘッダー
+#include <iostream>
 
 using namespace DirectX::SimpleMath;
 
@@ -366,12 +368,12 @@ namespace Collision
 			DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
 			// X軸での「めり込み量」を計算
-			float dx1 = (p1.max.x - p2.min.x);	// Bの右端 - Aの左端（Aが左から押し込んでいる時）
-			float dx2 = (p1.min.x - p2.max.x);	// Bの右端 - Aの左端（Aが右から押し込んでいる時）
+			float dx1 = (p1.max.x - p2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+			float dx2 = (p1.min.x - p2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
 
 			// Y軸での「めり込み量」を計算
-			float dy1 = (p1.max.y - p2.min.y);	// Bの右端 - Aの左端（Aが下から押し込んでいる時）
-			float dy2 = (p1.min.y - p2.max.y);	// Bの右端 - Aの左端（Aが上から押し込んでいる時）
+			float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（Aが上から押し込んでいる時）
+			float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（Aが下から押し込んでいる時）
 
 			// X軸の処理
 			// X軸方向でどちらに押し戻すべきか（小さい方が自然）
@@ -401,6 +403,82 @@ namespace Collision
 			}
 			else {
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
+			}
+
+			// オブジェクトの位置を押し戻しベクトル分だけ移動させて、衝突によるめり込みを解消する
+			pos.x += pushBack.x;
+			pos.y += pushBack.y;
+			pos.z += 0.0f;	// 2.5DなのでZ軸は無視
+		}
+
+		// 衝突しているかどうかを返す
+		return check;
+	}
+
+	//==================================
+	// ■CheckHit関数
+	// AABBとAABBの当たり判定（2D用）
+	// どこから当たっているのか含む
+	// 戻しアリ
+	//==================================
+	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal) {
+
+		// そもそも衝突しているかどうかのチェック
+		// 奥行きからの敵の登場のことも考えて、念のため
+		// Z軸も考慮した当たり判定とする
+		// 当たって押し出されるのはX軸とY軸みたいな
+		bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
+
+		if (check == true) {
+			// 最終的のオブジェクトを押し戻すためのベクトル
+			DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
+
+			// X軸での「めり込み量」を計算
+			float dx1 = (p1.max.x - p2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+			float dx2 = (p1.min.x - p2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
+
+			// Y軸での「めり込み量」を計算
+			float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（Aが上から押し込んでいる時）
+			float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（Aが下から押し込んでいる時）
+
+			// X軸の処理
+			// X軸方向でどちらに押し戻すべきか（小さい方が自然）
+			if (abs(dx1) < abs(dx2)) {
+				pushBack.x = dx1;	// 左から来たので右に押し戻し
+			}
+			else {
+				pushBack.x = dx2;	// 右から来たので左に押し戻し
+			}
+
+			// Y軸の処理
+			// Y軸方向でどちらに押し戻すべきか（小さい方が自然）
+			if (abs(dy1) < abs(dy2)) {
+				pushBack.y = dy1;	// 下から来たので上に押し戻し
+			}
+			else {
+				pushBack.y = dy2;	// 上から来たので下に押し戻し
+			}
+
+			// Z軸は完全に無視（2.5Dのため）
+			pushBack.z = 0.0f;
+
+			// 法線初期化
+			// ※ 出力される法線方向は逆向きになることに注意
+			hitNormal = { 0.0f,0.0f,0.0f };
+
+			// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
+			// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
+			if (abs(pushBack.x) < abs(pushBack.y)) {
+				pushBack.y = 0.0f;	// 横方向で押し戻す
+
+				// X方向に押し戻された → 壁
+				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+			}
+			else {
+				pushBack.x = 0.0f;	// 縦方向で押し戻す
+				
+				// Y方向に押し戻された → 地面 or 天井
+				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
 			}
 
 			// オブジェクトの位置を押し戻しベクトル分だけ移動させて、衝突によるめり込みを解消する
@@ -487,6 +565,48 @@ namespace Collision
 		}
 
 		return check;
+	}
+
+	// レイとAABBの交差を調べ、交差していればレイの進んだ距離を返す関数
+	bool IntersectRayAABB(
+		const DirectX::XMVECTOR& rayOrigin,	// レイの発射点
+		const DirectX::XMVECTOR& rayDir,	// レイの方向（単位ベクトル）
+		const AABB& hit,					// AABBの最小値と最大値
+		float& tMinOut)						// ヒットした距離を返す
+	{
+		float tmin = 0.0f;	// レイとAABBの最小交差距離
+		float tmax = FLT_MAX;	// レイとAABBの最大交差距離
+
+		// スラブ法
+		// AABBを各軸（X,Y,Z）ごとに「スラブ = ２枚の平面」で切って考える
+		for (int i = 0; i < 3; ++i) {
+			float origin = rayOrigin.m128_f32[i];
+			float dir    = rayDir.m128_f32[i];
+			float bmin	 = (&hit.min.x)[i];	// AABBの最小値
+			float bmax   = (&hit.max.x)[i];
+
+			if(fabs(dir) < 1e-6f) {	// レイの方向がほぼゼロ（平行）
+				if (origin < bmin || origin > bmax) {
+					return false;	// レイはAABBに交差しない
+				}
+			}
+			else {
+				float invDir = 1.0f / dir;
+
+				// スラブの入口と出口の距離
+				float t1 = (bmin - origin) * invDir;	// AABBの最小値との交差距離
+				float t2 = (bmax - origin) * invDir;	// AABBの最大値との交差距離
+				if (t1 > t2) std::swap(t1, t2);	// t1とt2を入れ替え
+				tmin = std::max(tmin, t1);	// 最小交差距離を更新
+				tmax = std::min(tmax, t2);	// 最大交差距離を更新
+				if (tmin > tmax) {
+					return false;	// レイはAABBに交差しない
+				}
+			}
+		}
+
+		tMinOut = tmin;	// ヒットした距離を出力
+		return true;	// レイはAABBに交差した
 	}
 
 	bool CheckHit_SphereAndSphere_IsTrigger3D(const Sphere& p1, const Sphere& p2) {
