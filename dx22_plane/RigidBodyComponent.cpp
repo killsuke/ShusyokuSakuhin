@@ -28,7 +28,8 @@ DirectX::XMFLOAT3& RigidBodyComponent::AcceleratorPosition(DirectX::XMFLOAT3& po
 
 	// 時間の更新
 	auto now = std::chrono::high_resolution_clock::now();
-	m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
+	//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
+	//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
 	lastTime = now;
 
 	return pos;
@@ -48,7 +49,7 @@ void RigidBodyComponent::ConstantVelocity(const DirectX::XMFLOAT3& velocity) {
 }
 
 void RigidBodyComponent::ConstantVelocity_X(const float velocity) {
-	this->m_velocity.x = velocity / mass;	
+	this->m_velocity.x = velocity / mass;
 }
 
 void RigidBodyComponent::ConstantVelocity_Y(const float velocity) {
@@ -105,16 +106,20 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 }
 
 // 自由落下
-float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag) {	
+float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag,const bool firstFallFlag) {
 
 	if (gravityFlag == true) {
-		m_acceleration.y = -GRAVITY;	// 重力の加速度を設定
+		m_acceleration.y = -GRAVITY * 5.0f;	// 重力の加速度を設定
+
+		if (m_gravityFlag == false && gravityFlag == true && firstFallFlag == true) {
+			m_velocity.y += (-GRAVITY * 120.0f) * m_deltaTime;			// 重力の初速を設定
+		}
 
 		// 速度を加速度から更新
 		m_velocity.y += m_acceleration.y * m_deltaTime;	// 速度を更新、0.016fは1/60秒の固定値
 
 		// 最大落下速度の制限
-		if(m_velocity.y < -GRAVITY_STOP) {	// 重力加速度を一定にする
+		if (m_velocity.y < -GRAVITY_STOP) {	// 重力加速度を一定にする
 			m_velocity.y = -GRAVITY_STOP;
 		}
 
@@ -125,6 +130,8 @@ float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityF
 		m_velocity.y = 0.0f;	// 地面に着いた状態では速度を０にする
 		m_acceleration.y = 0.0f;	// 加速度もリセット
 	}
+
+	m_gravityFlag = gravityFlag;	// 重力フラグを更新
 
 	// 念のため、デバッグで値を見る
 	return m_velocity.y;

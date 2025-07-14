@@ -7,6 +7,7 @@ C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\imgui\imgui\Include\imgui_tables.
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\imgui\imgui\Include\imgui_widgets.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\imgui_widgets.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Application.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Application.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\AssimpPerse.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\AssimpPerse.obj
+C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Braid.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Braid.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Camera.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Camera.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Collision.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Collision.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Component.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Component.obj
@@ -18,9 +19,11 @@ C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\EntityManager.cpp;C:\U
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Game.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Game.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\GameObjectManager.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\GameObjectManager.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\input.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\input.obj
+C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\JumpComponent.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\JumpComponent.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\ModelManager.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\ModelManager.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\GameObject.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\GameObject.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Particle.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Particle.obj
+C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Pattern.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Pattern.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\Ray.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\Ray.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\ResultScene.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\ResultScene.obj
 C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\RigidBodyComponent.cpp;C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\dx22_plane\x64\Debug\RigidBodyComponent.obj

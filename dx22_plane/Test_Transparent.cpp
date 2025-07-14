@@ -199,6 +199,7 @@ void Test_Transparent::Init()
 
 	rigid.SetMass(2.0f);
 
+	jump = new JumpComponent(100.0f);
 }
 
 
@@ -207,35 +208,46 @@ void Test_Transparent::Init()
 //=======================================
 void Test_Transparent::Update()
 {
-
+	bool jumpPress = false;
 	if (Input::GetButtonPress(XINPUT_RIGHT) || Input::GetKeyPress(VK_L)) {
 		//rigid.ApplyForce(Vector3(5.0f, 0.0f, 0.0f)); // 右に力を加える
 	//	m_Position.x += 5.0f;
 
-		rigid.ConstantVelocity_X(60.0f);
+		rigid.ConstantVelocity_X(80.0f);
 	}
 	if (Input::GetButtonPress(XINPUT_LEFT) || Input::GetKeyPress(VK_J)) {
 		//rigid.ApplyForce(Vector3(-5.0f, 0.0f, 0.0f)); // 左に力を加える
 	//	m_Position.x -= 5.0f;
-		rigid.ConstantVelocity_X(-60.0f);
+		rigid.ConstantVelocity_X(-80.0f);
 	}
 	if (Input::GetButtonPress(XINPUT_UP) || Input::GetKeyPress(VK_I)) {
 		//rigid.ApplyForce(Vector3(0.0f, 5.0f, 0.0f)); // 上に力を加える
 	//	m_Position.y += 5.0f;
-		rigid.ConstantVelocity_Y(60.0f);
+		//rigid.ConstantVelocity_Y(60.0f);
+		jumpPress = true;
+	}
+	else {
+		jumpPress = false;
 	}
 	if (Input::GetButtonPress(XINPUT_DOWN) || Input::GetKeyPress(VK_K)) {
 		//rigid.ApplyForce(Vector3(0.0f, -5.0f, 0.0f)); // 下に力を加える
 	//	m_Position.y -= 5.0f;
-		rigid.ConstantVelocity_Y(-60.0f);
+		//rigid.ConstantVelocity_Y(-60.0f);
 	}
+	bool trigger = false;
+	if (Input::GetButtonTrigger(XINPUT_UP) || Input::GetKeyTrigger(VK_I)) {
+		trigger = true;
+	}
+
+	// ジャンプの処理（テスト）
+	jump->JumpAction(rigid, jumpPress, isGround,trigger);
 
 
 	rigid.ReduceVelocity_X();
 	//rigid.ReduceVelocity_Y();
 
 	//rigid.GetVelocity();
-	rigid.UseGravity(m_Position, true);
+	rigid.UseGravity(m_Position, true, !jumpPress);
 	// リジッドボディの更新
 	rigid.AcceleratorPosition(m_Position);
 
@@ -249,6 +261,8 @@ void Test_Transparent::Update()
 	std::vector<TestBoard*>board = Game::GetInstance()->GetObjects<TestBoard>();
 	std::vector<TestCube*>cube = Game::GetInstance()->GetObjects<TestCube>();
 
+	isGround = false; // 地面にいるかどうかのフラグを初期化
+
 	DirectX::XMFLOAT3 hitNormal = {};
 	// 多くの当たり判定を別々で取って押し戻しができるようにする
 	// 当たったら赤く染める
@@ -257,8 +271,8 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false);
-
+			rigid.UseGravity(m_Position, false, jumpPress);
+			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
 			color.z = 0.0f;
@@ -279,8 +293,8 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false);
-
+			rigid.UseGravity(m_Position, false, jumpPress);
+			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
 			color.z = 0.0f;
@@ -374,5 +388,6 @@ void Test_Transparent::Draw()
 //=======================================
 void Test_Transparent::Uninit()
 {
-
+	delete jump;
+	jump = nullptr;
 }

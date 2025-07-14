@@ -164,6 +164,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AssimpPerse.cpp" />
+    <ClCompile Include="Braid.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -175,9 +176,11 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="JumpComponent.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
@@ -219,6 +222,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AssimpPerse.h" />
+    <ClInclude Include="Braid.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Component.h" />
@@ -230,12 +234,14 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="JumpComponent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="Pattern.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />

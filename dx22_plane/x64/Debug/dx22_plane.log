@@ -1,2 +1,6 @@
-﻿  Test_Transparent.cpp
+﻿  JumpComponent.cpp
+  RigidBodyComponent.cpp
+  Test_Transparent.cpp
+  TitleScene.cpp
+  コードを生成中...
   dx22_plane.vcxproj -> C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Debug\dx22_plane.exe
