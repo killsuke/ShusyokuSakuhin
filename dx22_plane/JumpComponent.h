@@ -11,6 +11,7 @@ private:
 	float m_time = 0.0f;
 	float m_jumpDuration = 0.5f; // 例：ジャンプの全体が0.5秒で完了
 	float m_magnification = 2.0f; // ジャンプの加速度の倍率
+	float m_firstSpeed = 50.0f;
 	bool  m_isJumping = false; // ジャンプ中かどうか
 
 public:

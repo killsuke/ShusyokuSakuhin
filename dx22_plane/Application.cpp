@@ -363,7 +363,12 @@ void Application::MainLoop()
 			// 前回計測から1000ミリ秒が経過したか？
 			if (nowTick >= oldTick + 1000)
 			{
-
+#if _DEBUG
+				// FPS表示
+				char str[32];
+				wsprintfA(str, "FPS=%d", fpsCounter);
+				SetWindowTextA(m_hWnd, str);
+#endif // デバッグモードならFPSをウィンドウタイトルに表示
 				// カウンターリセット
 				fpsCounter = 0;
 				oldTick = nowTick;

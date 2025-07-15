@@ -213,14 +213,14 @@ void Test_Transparent::Update()
 		//rigid.ApplyForce(Vector3(5.0f, 0.0f, 0.0f)); // âEÇ…óÕÇâ¡Ç¶ÇÈ
 	//	m_Position.x += 5.0f;
 
-		rigid.ConstantVelocity_X(80.0f);
+		rigid.ConstantVelocity_X(150.0f);
 	}
 	if (Input::GetButtonPress(XINPUT_LEFT) || Input::GetKeyPress(VK_J)) {
 		//rigid.ApplyForce(Vector3(-5.0f, 0.0f, 0.0f)); // ç∂Ç…óÕÇâ¡Ç¶ÇÈ
 	//	m_Position.x -= 5.0f;
-		rigid.ConstantVelocity_X(-80.0f);
+		rigid.ConstantVelocity_X(-150.0f);
 	}
-	if (Input::GetButtonPress(XINPUT_UP) || Input::GetKeyPress(VK_I)) {
+	if (Input::GetButtonPress(XINPUT_A) || Input::GetKeyPress(VK_I)) {
 		//rigid.ApplyForce(Vector3(0.0f, 5.0f, 0.0f)); // è„Ç…óÕÇâ¡Ç¶ÇÈ
 	//	m_Position.y += 5.0f;
 		//rigid.ConstantVelocity_Y(60.0f);
@@ -235,7 +235,7 @@ void Test_Transparent::Update()
 		//rigid.ConstantVelocity_Y(-60.0f);
 	}
 	bool trigger = false;
-	if (Input::GetButtonTrigger(XINPUT_UP) || Input::GetKeyTrigger(VK_I)) {
+	if (Input::GetButtonTrigger(XINPUT_A) || Input::GetKeyTrigger(VK_I)) {
 		trigger = true;
 	}
 
