@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-JumpComponent::JumpComponent(float _jumpPower) :m_jumpPower(_jumpPower) {
+JumpComponent::JumpComponent(float _jumpHeight) :m_amplitude(_jumpHeight) {
 
 }
 
@@ -18,7 +18,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 	if (isGround) {
 		m_isJumping = false;
 		m_time = 0.0f;
-		m_firstSpeed = m_jumpPower;
+		m_firstSpeed = 50.0f;
 	}
 
 	// ƒWƒƒƒ“ƒvŽžŠÔ’´‰ß
