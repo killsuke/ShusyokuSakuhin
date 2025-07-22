@@ -106,16 +106,13 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 }
 
 // 自由落下
-float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag,const bool firstFallFlag) {	// firstFallFlagは初速を使うかどうか
+float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag,const float firstFallMagnification,const float fallMagnification) {
 
 	if (gravityFlag == true) {
-		m_acceleration.y = -GRAVITY * 12.0f;	// 重力の加速度を設定
+		m_acceleration.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
 
-		if (m_gravityFlag == false && gravityFlag == true && firstFallFlag == true) {
-			m_velocity.y += (-GRAVITY * 120.0f) * m_deltaTime;			// 重力の初速を設定
-		}
-		else if (m_gravityFlag == false && gravityFlag == true && firstFallFlag == false) {
-			m_velocity.y += (-GRAVITY * 20.0f) * m_deltaTime;			// 重力の初速を設定
+		if (m_gravityFlag == false && gravityFlag == true) {
+			m_velocity.y += (-GRAVITY * firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
 		}
 
 		// 速度を加速度から更新
