@@ -199,7 +199,7 @@ void Test_Transparent::Init()
 
 	rigid.SetMass(2.0f);
 
-	jump = new JumpComponent(100.0f);
+	jump = new JumpComponent(50.0f);
 }
 
 
@@ -247,7 +247,17 @@ void Test_Transparent::Update()
 	//rigid.ReduceVelocity_Y();
 
 	//rigid.GetVelocity();
-	rigid.UseGravity(m_Position, true, !jumpPress);
+
+	float gravityPower = 120.0f; // 重力の強さ
+	if (jumpPress == false) {
+		gravityPower = 120.0f; // 重力の強さ
+	}
+	else {
+		gravityPower = 20.0f; // 重力の強さ
+	}
+
+	rigid.UseGravity(m_Position, true, gravityPower, 12.0f);
+
 	// リジッドボディの更新
 	rigid.AcceleratorPosition(m_Position);
 
@@ -271,7 +281,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false, jumpPress);
+			rigid.UseGravity(m_Position, false, 120.0f,12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
@@ -293,7 +303,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false, jumpPress);
+			rigid.UseGravity(m_Position, false, 120.0f,12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
