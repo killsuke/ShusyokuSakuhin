@@ -14,9 +14,11 @@
 #include <memory>
 #include <string>
 
+class Component; // 前方宣言
+
 class GameObject {
 protected:
-	std::vector<std::shared_ptr<Component>> components;
+	std::vector<std::unique_ptr<Component>> components;
 
 	// SRT情報（姿勢情報）
 	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
@@ -144,15 +146,15 @@ public:
 	inline std::string& GetName() { return name; };
 
 	// コンポーネントを追加する
-	void AddComponent(std::shared_ptr<Component> component) {
+	void AddComponent(std::unique_ptr<Component> component) {
 		components.push_back(component);	// ここであらゆるコンポーネントを装備することで色々出来る。
 	}
 
 	// 装備されているコンポーネントを取得して使用可能にする
 	template<typename T>
-	std::shared_ptr<T> GetComponent() {
+	std::unique_ptr<T> GetComponent() {
 		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(component)) { // ダイナミックキャストでキャスト可能かどうか判定
+			if (std::unique_ptr<T> t = std::dynamic_pointer_cast<T>(component)) { // ダイナミックキャストでキャスト可能かどうか判定
 				return t; // 指定された型のshared_ptrに変換したものを返却
 			}
 		}

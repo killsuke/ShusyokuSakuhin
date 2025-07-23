@@ -3,6 +3,7 @@
 #include "sound.h"
 #include "Input.h"
 #include "Scene.h"
+#include "SceneList.h"
 
 // ƒV[ƒ“‚Ì—ñ‹“Œ^
 enum SCENES {

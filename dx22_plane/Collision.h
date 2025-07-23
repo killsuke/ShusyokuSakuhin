@@ -53,8 +53,8 @@ namespace Collision
 
 	// BOX’è‹`
 	struct AABB {
-		DirectX::SimpleMath::Vector3 min;
-		DirectX::SimpleMath::Vector3 max;
+		DirectX::SimpleMath::Vector3 min = {};
+		DirectX::SimpleMath::Vector3 max = {};
 
 		/*bool none = false;
 		bool left = false;

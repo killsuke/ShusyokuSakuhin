@@ -246,6 +246,7 @@
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneList.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkyBox.h" />

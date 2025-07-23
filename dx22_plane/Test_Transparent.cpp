@@ -280,7 +280,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, true, 120.0f, 12.0f);
+			rigid.UseGravity(m_Position, false, 120.0f, 12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
@@ -302,7 +302,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, true, 120.0f, 12.0f);
+			rigid.UseGravity(m_Position, false, 120.0f, 12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面

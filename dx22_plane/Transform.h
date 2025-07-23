@@ -1,10 +1,9 @@
 #pragma once
-#include "SystemBase.h"
+#include "Component.h"
 #include <SimpleMath.h>
-#include <map>
 #include <iostream>
 
-struct TransformComponent {
+struct Transform {
 	// SRT情報（姿勢情報）
 	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
@@ -17,27 +16,39 @@ struct TransformComponent {
 
 	// ワールド行列
 	DirectX::SimpleMath::Matrix worldMatrix = {};
+
+	// ローカル行列
+	DirectX::SimpleMath::Matrix localMatrix = {};
 };
 
-class TransformSystem : public SystemBase
+class TransformComponent : public Component
 {
 private:
-	std::unordered_map<uint32_t, TransformComponent> components;	// エンティティ保存用
+	Transform m_transform;	// トランスフォーム情報
 public:
-	TransformSystem() = default;
+	TransformComponent() = default;
 
-	~TransformSystem() = default;
-
-	// ベクター内にエンティティ追加
-	void AddComponent(uint32_t entity, const TransformComponent& comp);
-
-	// エンティティからコンポーネントを削除
-	void RemoveComponent(uint32_t entity)override;
-
-	// トランスフォームのコンポーネント取得
-	TransformComponent* GetComponent(uint32_t entity);
+	~TransformComponent() = default;
 
 	// 更新処理
 	void Update()override;
-};
 
+	inline void SetPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position = position; };
+	inline void SetRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_Rotation = rotation; };;
+	inline void SetScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_Scale = scale; };
+
+	inline void SetLocalPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_LocalPosition = position; };
+	inline void SetLocalRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_LocalRotation = rotation; };
+	inline void SetLocalScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_LocalScale = scale; };
+
+	inline DirectX::SimpleMath::Vector3 GetPosition() const { return m_transform.m_Position; };
+	inline DirectX::SimpleMath::Vector3 GetRotation() const { return m_transform.m_Rotation; };
+	inline DirectX::SimpleMath::Vector3 GetScale() const { return m_transform.m_Scale; };
+
+	inline DirectX::SimpleMath::Vector3 GetLocalPosition() const { return m_transform.m_LocalPosition; };
+	inline DirectX::SimpleMath::Vector3 GetLocalRotation() const { return m_transform.m_LocalRotation; };
+	inline DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_transform.m_LocalScale; };
+
+	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_transform.worldMatrix; };
+	inline DirectX::SimpleMath::Matrix GetLocalMatrix() const { return m_transform.localMatrix; };
+};

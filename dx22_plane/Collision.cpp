@@ -438,8 +438,8 @@ namespace Collision
 			float dx2 = (p1.min.x - p2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
 
 			// Y軸での「めり込み量」を計算
-			float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（Aが上から押し込んでいる時）
-			float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（Aが下から押し込んでいる時）
+			float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（p2が上から押し込んでいる時）
+			float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（p2が下から押し込んでいる時）
 
 			// X軸の処理
 			// X軸方向でどちらに押し戻すべきか（小さい方が自然）
@@ -453,10 +453,10 @@ namespace Collision
 			// Y軸の処理
 			// Y軸方向でどちらに押し戻すべきか（小さい方が自然）
 			if (abs(dy1) < abs(dy2)) {
-				pushBack.y = dy1;	// 下から来たので上に押し戻し
+				pushBack.y = dy1;	// 上から来たので下に押し戻し
 			}
 			else {
-				pushBack.y = dy2;	// 上から来たので下に押し戻し
+				pushBack.y = dy2;	// 下から来たので上に押し戻し
 			}
 
 			// Z軸は完全に無視（2.5Dのため）
@@ -476,10 +476,31 @@ namespace Collision
 			}
 			else {
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
-				
+
 				// Y方向に押し戻された → 地面 or 天井
 				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
 			}
+
+			// 相対ベクトル：p1の中心 → p2の中心
+			//float cx = (p1.min.x + p1.max.x) * 0.5f;
+			//float cy = (p1.min.y + p1.max.y) * 0.5f;
+			//float cx2 = (p2.min.x + p2.max.x) * 0.5f;
+			//float cy2 = (p2.min.y + p2.max.y) * 0.5f;
+
+			//float dx = cx2 - cx;
+			//float dy = cy2 - cy;
+
+			//// 接近方向を使って優先軸を決める
+			//if (std::abs(dx) > std::abs(dy)) {
+			//	// 横から来ているのでX優先
+			//	pos.x += pushBack.x;
+			//	hitNormal = { (pushBack.x > 0.0f) ? -1.0f : 1.0f, 0.0f, 0.0f }; // X方向の法線
+			//}
+			//else {
+			//	// 上下から来ているのでY優先
+			//	pos.y += pushBack.y;
+			//	hitNormal = { 0.0f, (pushBack.y > 0.0f) ? -1.0f : 1.0f, 0.0f }; // Y方向の法線
+			//}
 
 			// オブジェクトの位置を押し戻しベクトル分だけ移動させて、衝突によるめり込みを解消する
 			pos.x += pushBack.x;
