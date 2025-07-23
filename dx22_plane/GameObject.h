@@ -5,7 +5,6 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "Camera.h"
-#include "Collider.h"
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "ModelManager.h"
@@ -37,11 +36,6 @@ protected:
 
 	// カメラ
 	Camera* m_Camera = nullptr;
-
-	Collision::AABB coll_ab{};
-	Collision::Sphere coll_sp{};
-
-	Collision::Vector9 vec9{};
 
 	std::vector<VERTEX_3D> m_Vertices;	// 頂点情報
 
@@ -88,52 +82,6 @@ public:
 
 	// 頂点情報を取得
 	std::vector<VERTEX_3D> GetVertices() { return m_Vertices; };
-
-	Collision::AABB GetColl()const { return this->coll_ab; };
-
-	// セッター
-	inline void SetColliderSize_OBB(const DirectX::XMFLOAT3& pos,
-		const DirectX::XMFLOAT3& size, const DirectX::XMFLOAT3& angle) {
-		// 位置
-		this->vec9.x = pos.x;
-		this->vec9.y = pos.y;
-		this->vec9.z = pos.z;
-
-		// サイズ
-		this->vec9.w = size.x;
-		this->vec9.h = size.y;
-		this->vec9.u = size.z;
-
-		// アングル
-		this->vec9.pitch = angle.x;
-		this->vec9.yaw = angle.y;
-		this->vec9.roll = angle.z;
-	};
-
-	// セッター
-	inline void SetColliderSize_AABB(const DirectX::XMFLOAT3& pos,
-		const DirectX::XMFLOAT3& size) {
-		// 最小値
-		this->coll_ab.min.x = pos.x - size.x;
-		this->coll_ab.min.y = pos.y - size.y;
-		this->coll_ab.min.z = pos.z - size.z;
-
-		// 最大値
-		this->coll_ab.max.x = pos.x + size.x;
-		this->coll_ab.max.y = pos.y + size.y;
-		this->coll_ab.max.z = pos.z + size.z;
-	};
-
-	inline void SetColliderSize_Sphere(const DirectX::XMFLOAT3& pos,
-		const float radius) {
-		this->coll_sp.center = pos;
-		this->coll_sp.radius = radius;
-	};
-
-	// ゲッター
-	inline Collision::Vector9& GetColliderSize_OBB() { return this->vec9; };
-	inline Collision::AABB& GetColliderSize_AABB() { return this->coll_ab; };
-	inline Collision::Sphere& GetColliderSize_Sphere() { return this->coll_sp; };
 
 	// セッター
 	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };

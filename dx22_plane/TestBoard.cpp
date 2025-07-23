@@ -1,5 +1,7 @@
 #include "TestBoard.h"
 #include "input.h"
+#include "Collider.h"
+
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
@@ -77,6 +79,7 @@ void TestBoard::Init()
 	m_Position.y = 50.0f;
 	m_Position.z = 0.0f;
 
+	AddComponent<ColliderComponent>(/*this, m_Position, m_Scale, ColliderType::AABB*/);
 }
 
 
@@ -87,8 +90,10 @@ void TestBoard::Update()
 {
 	Vector3 newScale = m_Scale;
 	newScale.z = 20.0f;
-	SetColliderSize_AABB(m_Position, newScale);
-	SetColliderSize_Sphere(m_Position, 20.0f);
+	auto coll = GetComponent<ColliderComponent>();
+
+	coll->SetColliderSize_AABB(m_Position, newScale);
+	coll->SetColliderSize_Sphere(m_Position, 20.0f);
 
 	if(Input::GetKeyTrigger(VK_SPACE)) {
 		std::vector<SlashVertex> cutTriangles;

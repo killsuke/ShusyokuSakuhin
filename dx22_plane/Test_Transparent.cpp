@@ -4,6 +4,7 @@
 #include "TestCube.h"
 #include "Game.h"
 #include "Transform.h"
+#include "Collider.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -203,7 +204,9 @@ void Test_Transparent::Init()
 
 	jump = new JumpComponent(50.0f);
 
-	auto comp = AddComponent<TransformComponent>();
+	AddComponent<TransformComponent>();
+	AddComponent<ColliderComponent>();
+
 }
 
 
@@ -212,6 +215,7 @@ void Test_Transparent::Init()
 //=======================================
 void Test_Transparent::Update()
 {
+	auto coll = GetComponent<ColliderComponent>();
 	bool jumpPress = false;
 	if (Input::GetButtonPress(XINPUT_RIGHT) || Input::GetKeyPress(VK_L)) {
 		//rigid.ApplyForce(Vector3(5.0f, 0.0f, 0.0f)); // 右に力を加える
@@ -264,8 +268,8 @@ void Test_Transparent::Update()
 	// リジッドボディの更新
 	rigid.AcceleratorPosition(m_Position);
 
-	SetColliderSize_AABB(m_Position, m_Scale);
-	SetColliderSize_Sphere(m_Position, 20.0f);
+	coll->SetColliderSize_AABB(m_Position, m_Scale);
+	coll->SetColliderSize_Sphere(m_Position, 20.0f);
 
 	DirectX::XMVECTOR newRayPos = { m_Position.x,m_Position.y - 10.0f,m_Position.z,0.0f };
 	ray.SetOriginPosition(newRayPos);
@@ -279,7 +283,7 @@ void Test_Transparent::Update()
 	DirectX::XMFLOAT3 hitNormal = {};
 	// 多くの当たり判定を別々で取って押し戻しができるようにする
 	// 当たったら赤く染める
-	if (Collision::CheckHit_CubeAndCube_NoTrigger2D_Normal(board[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position, hitNormal)) {
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(board[0]->GetComponent<ColliderComponent>()->GetColliderSize_AABB(), coll->GetColliderSize_AABB(), m_Position, hitNormal)) {
 		
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
@@ -302,7 +306,7 @@ void Test_Transparent::Update()
 		color = { 1.0f,1.0f,1.0f,0.5f };
 	}
 
-	if (Collision::CheckHit_CubeAndCube_NoTrigger2D_Normal(cube[0]->GetColliderSize_AABB(), GetColliderSize_AABB(), m_Position, hitNormal)) {
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(cube[0]->GetComponent<ColliderComponent>()->GetColliderSize_AABB(), coll->GetColliderSize_AABB(), m_Position, hitNormal)) {
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;

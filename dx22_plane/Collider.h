@@ -2,93 +2,99 @@
 
 #include <simplemath.h>
 #include <directxcollision.h>	// Collision の変更を一部する、XMFLOAT4で扱うのが本当は良いらしい。クオータニオンの始まりか？
+#include "Component.h"
 
-namespace Collision
-{
-	// ライン（無限の長さの線）
-	struct Line {
-		DirectX::SimpleMath::Vector3 point; // 通過地点
-		DirectX::SimpleMath::Vector3 vec; // 線の方向ベクトル
-	};
+// ライン（無限の長さの線）
+struct Line {
+	DirectX::SimpleMath::Vector3 point; // 通過地点
+	DirectX::SimpleMath::Vector3 vec; // 線の方向ベクトル
+};
 
-	// プレーン(無限の広さの平面)
-	struct Plane {
-		DirectX::SimpleMath::Vector3 point; // 平面上の1点
-		DirectX::SimpleMath::Vector3 normal; // 平面の法線ベクトル
-		//float d;         // 平面の方程式: ax + by + cz + d = 0 の d
-	};
+// プレーン(無限の広さの平面)
+struct PlaneNormal {
+	DirectX::SimpleMath::Vector3 point; // 平面上の1点
+	DirectX::SimpleMath::Vector3 normal; // 平面の法線ベクトル
+	//float d;         // 平面の方程式: ax + by + cz + d = 0 の d
+};
 
-	// セグメント（有限の長さの線分）
-	struct Segment {
-		DirectX::SimpleMath::Vector3 start; // 始点
-		DirectX::SimpleMath::Vector3 end; // 終点
-	};
+// セグメント（有限の長さの線分）
+struct Segment {
+	DirectX::SimpleMath::Vector3 start; // 始点
+	DirectX::SimpleMath::Vector3 end; // 終点
+};
 
-	// 三角形ポリゴン（有限の広さの平面）
-	struct Polygon {
-		const DirectX::SimpleMath::Vector3 p0; //頂点0
-		const DirectX::SimpleMath::Vector3 p1; //頂点1
-		const DirectX::SimpleMath::Vector3 p2; //頂点2
-	};
+// 三角形ポリゴン（有限の広さの平面）
+struct TrianglePolygon {
+	const DirectX::SimpleMath::Vector3 p0; //頂点0
+	const DirectX::SimpleMath::Vector3 p1; //頂点1
+	const DirectX::SimpleMath::Vector3 p2; //頂点2
+};
 
-	// 球体
-	struct Sphere {
-		DirectX::SimpleMath::Vector3 center; // 中心
-		float radius; // 半径
-	};
+// 球体
+struct Sphere {
+	DirectX::SimpleMath::Vector3 center; // 中心
+	float radius; // 半径
+};
 
-	//// 円柱
-	//struct Cylinder {
-	//	DirectX::SimpleMath::Vector3 top; // 上
-	//	DirectX::SimpleMath::Vector3 bottom; // 底
-	//	float radius; // 半径
-	//};
+//// 円柱
+//struct Cylinder {
+//	DirectX::SimpleMath::Vector3 top; // 上
+//	DirectX::SimpleMath::Vector3 bottom; // 底
+//	float radius; // 半径
+//};
 
-	//// カプセル
-	//struct Capsule {
-	//	DirectX::SimpleMath::Vector3 top; // 上の中心 
-	//	DirectX::SimpleMath::Vector3 bottom; // 底の中心
-	//	float radius; // 半径
-	//};
+//// カプセル
+//struct Capsule {
+//	DirectX::SimpleMath::Vector3 top; // 上の中心 
+//	DirectX::SimpleMath::Vector3 bottom; // 底の中心
+//	float radius; // 半径
+//};
 
-	// BOX定義
-	struct AABB {
-		DirectX::SimpleMath::Vector3 min = {};
-		DirectX::SimpleMath::Vector3 max = {};
+// BOX定義
+struct AABB {
+	DirectX::SimpleMath::Vector3 min = {};
+	DirectX::SimpleMath::Vector3 max = {};
 
-		/*bool none = false;
-		bool left = false;
-		bool right = false;
-		bool top = false;
-		bool bottom = false;
-		bool front = false;
-		bool back = false;*/
-	};
+	/*bool none = false;
+	bool left = false;
+	bool right = false;
+	bool top = false;
+	bool bottom = false;
+	bool front = false;
+	bool back = false;*/
+};
 
-	// 当たり判定でのみ使う
-	struct Vector9 {
-		float x = 0.0f;		
-		float y = 0.0f; 
-		float z = 0.0f;     // 中心座標
-		float w = 0.0f; 
-		float h = 0.0f; 
-		float u = 0.0f;     // 幅、高さ、奥行き
-		float pitch = 0.0f;       // X軸回転角度（ピッチ、度数法）
-		float yaw = 0.0f;         // Y軸回転角度（ヨー、度数法）
-		float roll = 0.0f;        // Z軸回転角度（ロール、度数法）
-	};
+// 当たり判定でのみ使う
+struct OBB {
+	DirectX::SimpleMath::Vector3 center = {};
+	DirectX::SimpleMath::Vector3 size = {};
+	DirectX::SimpleMath::Vector3 rotation = {};
+};
 
+class ColliderComponent : public Component{
+protected:
+
+private:
+	AABB coll_ab; // AABBの当たり判定用
+	OBB coll_ob; // OBBの当たり判定用
+	Sphere coll_sp; // 球体の当たり判定用
+
+public:
+	ColliderComponent() = default;
+	~ColliderComponent() = default;
+
+	void Update() override;
 
 	//当たり判定
-	bool CheckHit(const Line& line, const Plane& plane); //線(無限の長さ)と平面(無限の大きさ)
-	bool CheckHit(const Segment& segment, const Plane& plane); //線分と平面(無限の大きさ)
-	bool CheckHit(const Line& line, const Polygon& polygon); //線(無限の長さ)とポリゴン
-	bool CheckHit(const Line& line, const Polygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
-	bool CheckHit(const Segment& segment, const Polygon& polygon); //線分とポリゴン
-	bool CheckHit(const Segment& segment, const Polygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
-	bool CheckHit(const Sphere& sphere, const Plane& plane); //球体と平面(無限の大きさ)
-	bool CheckHit(const Sphere& sphere, const Polygon& polygon); //球体とポリゴン
-	bool CheckHit(const Sphere& sphere, const Polygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
+	bool CheckHit(const Line& line, const PlaneNormal& plane); //線(無限の長さ)と平面(無限の大きさ)
+	bool CheckHit(const Segment& segment, const PlaneNormal& plane); //線分と平面(無限の大きさ)
+	bool CheckHit(const Line& line, const TrianglePolygon& polygon); //線(無限の長さ)とポリゴン
+	bool CheckHit(const Line& line, const TrianglePolygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
+	bool CheckHit(const Segment& segment, const TrianglePolygon& polygon); //線分とポリゴン
+	bool CheckHit(const Segment& segment, const TrianglePolygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
+	bool CheckHit(const Sphere& sphere, const PlaneNormal& plane); //球体と平面(無限の大きさ)
+	bool CheckHit(const Sphere& sphere, const TrianglePolygon& polygon); //球体とポリゴン
+	bool CheckHit(const Sphere& sphere, const TrianglePolygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
 	//bool CheckHit(const Cylinder& cylinder, const Plane& plane); //円柱と平面
 	//bool CheckHit(const Cylinder& cylinder, const Polygon& polygon); //円柱とポリゴン
 	//bool CheckHit(const Cylinder& cylinder, const Polygon& polygon, DirectX::SimpleMath::Vector3& contact); //同上
@@ -103,36 +109,36 @@ namespace Collision
 	bool CheckHit_CubeAndCube_IsTrigger3D(AABB p1, AABB p2); // AABBとAABB
 
 	// 検知と押し出し
-	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos); // AABBとAABB
-	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
-	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2,DirectX::XMFLOAT3& pos); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
 
 	// レイとAABBの当たり判定
-	bool IntersectRayAABB(const DirectX::XMVECTOR& rayOrigin, const DirectX::XMVECTOR& rayDir, 
-						  const AABB& hit, float& tMinOut);
+	bool IntersectRayAABB(const DirectX::XMVECTOR& rayOrigin, const DirectX::XMVECTOR& rayDir,
+		const AABB& hit, float& tMinOut);
 
 
 	// 円どうしの当たり判定
 	// 触れているかどうかだけを検知
-	bool CheckHit_SphereAndSphere_IsTrigger3D(const Sphere& p1,const Sphere& p2);
+	bool CheckHit_SphereAndSphere_IsTrigger3D(const Sphere& p1, const Sphere& p2);
 
 	// 検知と押し出し
-	bool CheckHit_SphereAndSphere_NoTrigger2D(const Sphere& p1,const Sphere& p2,DirectX::XMFLOAT3& pos);
-	bool CheckHit_SphereAndSphere_NoTrigger3D(const Sphere& p1,const Sphere& p2,DirectX::XMFLOAT3& pos);
+	bool CheckHit_SphereAndSphere_NoTrigger2D(const Sphere& p1, const Sphere& p2, DirectX::XMFLOAT3& pos);
+	bool CheckHit_SphereAndSphere_NoTrigger3D(const Sphere& p1, const Sphere& p2, DirectX::XMFLOAT3& pos);
 
 	// 円と直方体の当たり判定
 	// 検知のみ
 	bool CheckHit_SphereAndCube_IsTrigger3D(const Sphere& p1, const AABB& p2);
 
 	// 検知と押し出し
-	bool CheckHit_SphereAndCube_NoTrigger2D(const Sphere& p1, const AABB& p2,DirectX::XMFLOAT3& pos);
-	bool CheckHit_SphereAndCube_NoTrigger3D(const Sphere& p1, const AABB& p2,DirectX::XMFLOAT3& pos);
+	bool CheckHit_SphereAndCube_NoTrigger2D(const Sphere& p1, const AABB& p2, DirectX::XMFLOAT3& pos);
+	bool CheckHit_SphereAndCube_NoTrigger3D(const Sphere& p1, const AABB& p2, DirectX::XMFLOAT3& pos);
 
 	// 立方体どうしの当たり判定（調べるだけ）
-	bool CubeAndCubeCheck_OBB(const Vector9& col1,const Vector9& col2);
+	bool CubeAndCubeCheck_OBB(const OBB& col1, const OBB& col2);
 
 	// 立方体どうしの当たり判定（めり込みを直す）
-	bool CubeAndCubeHit_OBB(const Vector9& col1, const Vector9& col2);
+	bool CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2);
 
 	// どの１面が当たっているのか判定
 	//AABB& DetectCollisionFace(const AABB& a, const AABB& b);
@@ -147,25 +153,63 @@ namespace Collision
 	float DistanceSquaredPointToSegment(const DirectX::SimpleMath::Vector3& point, const Segment& segment, DirectX::SimpleMath::Vector3& contact);
 	float DistancePointToSegment(const DirectX::SimpleMath::Vector3& point, const Segment& segment);
 	float DistancePointToSegment(const DirectX::SimpleMath::Vector3& point, const Segment& segment, DirectX::SimpleMath::Vector3& contact);
-	float DistancePointToPlane(const DirectX::SimpleMath::Vector3& point, const Plane& plane);
-	DirectX::SimpleMath::Vector3 ProjectPointToPlane(const DirectX::SimpleMath::Vector3& point, const Plane& plane);
-	bool PointInTriangle(const DirectX::SimpleMath::Vector3& point, const Polygon& polygon);
-	DirectX::SimpleMath::Vector3 ClosestPointOnTriangle(const DirectX::SimpleMath::Vector3& point, const Polygon& polygon);
-	DirectX::SimpleMath::Vector3 GetNormal(const Polygon& polygon);
+	float DistancePointToPlane(const DirectX::SimpleMath::Vector3& point, const PlaneNormal& plane);
+	DirectX::SimpleMath::Vector3 ProjectPointToPlane(const DirectX::SimpleMath::Vector3& point, const PlaneNormal& plane);
+	bool PointInTriangle(const DirectX::SimpleMath::Vector3& point, const TrianglePolygon& polygon);
+	DirectX::SimpleMath::Vector3 ClosestPointOnTriangle(const DirectX::SimpleMath::Vector3& point, const TrianglePolygon& polygon);
+	DirectX::SimpleMath::Vector3 GetNormal(const TrianglePolygon& polygon);
 
 
-	DirectX::SimpleMath::Vector3 moveSphere(const Segment& capsule, const float& radius, const Polygon& polygon, const DirectX::SimpleMath::Vector3& contact, float& distance);
-	DirectX::SimpleMath::Vector3 moveSphere(const Sphere& sphere, const Polygon& polygon, const DirectX::SimpleMath::Vector3& contact);
+	DirectX::SimpleMath::Vector3 moveSphere(const Segment& capsule, const float& radius, const TrianglePolygon& polygon, const DirectX::SimpleMath::Vector3& contact, float& distance);
+	DirectX::SimpleMath::Vector3 moveSphere(const Sphere& sphere, const TrianglePolygon& polygon, const DirectX::SimpleMath::Vector3& contact);
+
+	// セッター
+	inline void SetColliderSize_OBB(const DirectX::XMFLOAT3& pos,
+		const DirectX::XMFLOAT3& size, const DirectX::XMFLOAT3& angle) {
+		// 位置
+		coll_ob.center.x = pos.x;
+		coll_ob.center.y = pos.y;
+		coll_ob.center.z = pos.z;
+
+		// サイズ
+		coll_ob.size.x = size.x;
+		coll_ob.size.y = size.y;
+		coll_ob.size.z = size.z;
+
+		// アングル
+		coll_ob.rotation.x = angle.x;
+		coll_ob.rotation.y = angle.y;
+		coll_ob.rotation.z = angle.z;
+	};
+
+	inline void SetColliderSize_AABB(const DirectX::XMFLOAT3& pos,
+		const DirectX::XMFLOAT3& size) {
+		// 最小値
+		this->coll_ab.min.x = pos.x - size.x;
+		this->coll_ab.min.y = pos.y - size.y;
+		this->coll_ab.min.z = pos.z - size.z;
+
+		// 最大値
+		this->coll_ab.max.x = pos.x + size.x;
+		this->coll_ab.max.y = pos.y + size.y;
+		this->coll_ab.max.z = pos.z + size.z;
+	};
+
+	inline void SetColliderSize_Sphere(const DirectX::XMFLOAT3& pos, const float radius) {
+		this->coll_sp.center = pos;
+		this->coll_sp.radius = radius;
+	};
+
+	// ゲッター
+	inline OBB& GetColliderSize_OBB() { return this->coll_ob; };
+	inline AABB& GetColliderSize_AABB() { return this->coll_ab; };
+	inline Sphere& GetColliderSize_Sphere() { return this->coll_sp; };
 
 
 	//struct Plane {
 	//	DirectX::SimpleMath::Vector3 normal; // 平面の法線ベクトル
 	//	float d;         // 平面の方程式: ax + by + cz + d = 0 の d
 	//};
-
-
-
-
 
 	// make AABB
 	AABB SetAABB(DirectX::SimpleMath::Vector3 centerposition, float width, float height, float depth);
@@ -187,9 +231,4 @@ namespace Collision
 			float radius,							// 半径
 			DirectX::SimpleMath::Vector3 CirclePos);						// 中心座標
 		*/
-
-
-
-
-
-}
+};

@@ -1,5 +1,6 @@
 #include "TestCube.h"
 #include "DirectXRender.h"
+#include "Collider.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -201,6 +202,8 @@ void TestCube::Init()
 	m_Position.x = 0.0f;
 	m_Position.y = 0.0f;
 	m_Position.z = 0.0f;
+
+	AddComponent<ColliderComponent>();
 }
 
 
@@ -209,8 +212,9 @@ void TestCube::Init()
 //=======================================
 void TestCube::Update()
 {
-	SetColliderSize_AABB(m_Position, m_Scale);
+	auto coll = GetComponent<ColliderComponent>();
 
+	coll->SetColliderSize_AABB(m_Position, m_Scale);
 }
 
 //=======================================

@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "SceneManager.h"
+#include "Transform.h"
 
 // 静的な宣言として必要
 std::vector<std::shared_ptr<GameObject>>
@@ -49,7 +50,7 @@ void GameObjectManager::Update() {
 void GameObjectManager::Draw() {
 	
 	// 描画順を整える
-	DrawSort();
+//	DrawSort();
 
 	// 全てのGameObjectの描画はここでやる
 	for (auto& obj : objects) {	
@@ -74,13 +75,13 @@ void GameObjectManager::Uninit() {
 
 // 描画順のソート
 void GameObjectManager::DrawSort() {
-	//auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
-	//	return a->GetComponent<TransformComponent>()->GetPos().z > b->GetComponent<TransformComponent>()->GetPos().z;
-	//};
+	auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+		return a->GetComponent<TransformComponent>()->GetPosition().z > b->GetComponent<TransformComponent>()->GetPosition().z;
+	};
 
-	//if (!std::is_sorted(objects.begin(), objects.end(), sortZLambda)) {
-	//	std::sort(objects.begin(), objects.end(), sortZLambda);  // std::is_sortedではなくstd::sortを呼び出す
-	//}
+	if (!std::is_sorted(objects.begin(), objects.end(), sortZLambda)) {
+		std::sort(objects.begin(), objects.end(), sortZLambda);  // std::is_sortedではなくstd::sortを呼び出す
+	}
 }
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
