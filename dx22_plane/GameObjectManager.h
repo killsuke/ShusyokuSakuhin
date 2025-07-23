@@ -8,7 +8,6 @@
 // -----------------------------------------------------------
 
 #pragma once
-#include <list>
 #include <memory>
 #include <vector>
 #include <algorithm>
@@ -33,22 +32,16 @@ public:
 		ListClear();
 	};
 	
-	// 型変換をして作成の手伝い、GameObjectを継承したクラスであるならば追加する
-	template <typename T>
-	static std::shared_ptr<GameObject> MakeObject(const std::string& _name,const std::string& _tag) {	 // オブジェクトを作成して追加
-		static_assert(std::is_base_of<GameObject, T>::value, "T must be derived from GameObject");	// コンパイル時にGameObjectを継承したクラスであるかどうかの検査が入る
-		return std::make_shared<T>(_name,_tag);
-	}
-
 	// リストにゲームオブジェクトを追加
-	template <typename T2>
-	static T2* AddObject(const std::string& _name = "Noname",const std::string& _tag = "Notag") {
+	template <typename T1>
+	static T1* AddObject(const std::string& _name = "Noname",const std::string& _tag = "Notag") {
+		static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
 
-		objects.emplace_back(MakeObject<T2>(_name,_tag));
+		objects.emplace_back(MakeObject<T1>(_name,_tag));
 
-		auto obj = static_cast<T2*>(objects.back().get());
+		auto ptr = static_cast<T1*>(objects.back().get());
 
-		return obj;
+		return ptr;
 	}
 
 	void RemoveObject();	 // オブジェクトを削除する（後に使いやすいように改造）
@@ -71,6 +64,13 @@ public:
 
 private:
 
-	static std::vector<std::shared_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする	
+	static std::vector<std::shared_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする
+
+	// 型変換をして作成の手伝い、GameObjectを継承したクラスであるならば追加する
+	template <typename T2>
+	static std::unique_ptr<GameObject> MakeObject(const std::string& _name, const std::string& _tag) {	 // オブジェクトを作成して追加
+		static_assert(std::is_base_of<GameObject, T2>::value, "T2 must be derived from GameObject");	// コンパイル時にGameObjectを継承したクラスであるかどうかの検査が入る
+		return std::unique_ptr<GameObject>(std::make_unique<T2>(_name, _tag));
+	}
 };
 

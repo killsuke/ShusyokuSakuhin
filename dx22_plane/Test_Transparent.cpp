@@ -3,6 +3,8 @@
 #include "TestBoard.h"
 #include "TestCube.h"
 #include "Game.h"
+#include "Transform.h"
+
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
@@ -200,6 +202,8 @@ void Test_Transparent::Init()
 	rigid.SetMass(2.0f);
 
 	jump = new JumpComponent(50.0f);
+
+	auto comp = AddComponent<TransformComponent>();
 }
 
 

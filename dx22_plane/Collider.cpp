@@ -1,4 +1,4 @@
-#include "Collision.h"
+#include "Collider.h"
 #include <algorithm>  // std::min, std::maxのためのヘッダー
 #include <cmath>     // fabsのためのヘッダー
 #include <iostream>

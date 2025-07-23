@@ -4,10 +4,12 @@
 //Scene クラス
 class Scene
 {
+protected:
+	Scene() = default; // コンストラクタ
+
 public:
 
-	Scene(); // コンストラクタ
-	virtual ~Scene(); // デストラクタ(virtualが必要)
+	virtual ~Scene() = default; // デストラクタ(virtualが必要)
 
 	virtual void Update() = 0; // 更新（純粋仮想関数）
 };

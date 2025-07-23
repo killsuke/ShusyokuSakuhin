@@ -5,7 +5,7 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "Camera.h"
-#include "Collision.h"
+#include "Collider.h"
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "ModelManager.h"
@@ -145,35 +145,26 @@ public:
 	inline std::string& GetTag() { return tag; };
 	inline std::string& GetName() { return name; };
 
+	template<typename T1>
 	// コンポーネントを追加する
-	void AddComponent(std::unique_ptr<Component> component) {
-		components.push_back(component);	// ここであらゆるコンポーネントを装備することで色々出来る。
+	T1* AddComponent() {
+		static_assert(std::is_base_of<Component, T1>::value, 
+			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
+
+		auto comp = std::make_unique<T1>();
+		T1* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+		components.emplace_back(std::move(comp));
+		return ptr;
 	}
 
 	// 装備されているコンポーネントを取得して使用可能にする
-	template<typename T>
-	std::unique_ptr<T> GetComponent() {
+	template<typename T2>
+	T2* GetComponent() {
 		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (std::unique_ptr<T> t = std::dynamic_pointer_cast<T>(component)) { // ダイナミックキャストでキャスト可能かどうか判定
-				return t; // 指定された型のshared_ptrに変換したものを返却
+			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+				return ptr;
 			}
 		}
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
-
-	//template <typename T>
-	//void AddComponent(std::shared_ptr<T> component) {
-	//	components.emplace_back(component);
-	//}
-
-	//template <typename T2>
-	//std::shared_ptr<T2> GetComponent() {
-	//	for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
-	//		if (std::shared_ptr<T2> t = std::dynamic_pointer_cast<T>(component)) { // ダイナミックキャストでキャスト可能かどうか判定
-	//			return t; // 指定された型のshared_ptrに変換したものを返却
-	//		}
-	//	}
-	//	return nullptr; // 指定された型がなかった場合nullptr
-	//}
-
 };

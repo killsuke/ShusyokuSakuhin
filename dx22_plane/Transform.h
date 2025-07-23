@@ -31,7 +31,7 @@ public:
 	~TransformComponent() = default;
 
 	// XVˆ—
-	void Update()override;
+	void Update() override;
 
 	inline void SetPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position = position; };
 	inline void SetRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_Rotation = rotation; };;
