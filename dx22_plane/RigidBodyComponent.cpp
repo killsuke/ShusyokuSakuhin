@@ -186,29 +186,29 @@ void RigidBodyComponent::ApplyCollision_Y(float collision) {
 	m_velocity.y = -m_velocity.y * collision;	// Ｙ軸に反発、もしくは止める等
 }
 
-// 自由落下用の秒数計算
-// 空中にいる間
-void RigidBodyComponent::TimeStart() {
-	if (timeFlag == false) {
-		startTime = std::chrono::high_resolution_clock::now();
-		//		fallFlag = true;
-		timeFlag = true;	// 空中にいる間に一度だけ起動させる
-	}
-}
-
-// 地面に着いてる間
-void RigidBodyComponent::TimeStop() {
-	if (m_velocity.y == 0.0f) {
-		timeFlag = false;
-	}
-}
-
-// 空中にいる時間を返す、自由落下に使う
-float RigidBodyComponent::GetElapsedTime() {
-	//	if (fallFlag == true) {
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float> deltaTime = currentTime - startTime;
-	elapsedTime = deltaTime.count();
-	//	}
-	return elapsedTime;
-}
+//// 自由落下用の秒数計算
+//// 空中にいる間
+//void RigidBodyComponent::TimeStart() {
+//	if (timeFlag == false) {
+//		startTime = std::chrono::high_resolution_clock::now();
+//		//		fallFlag = true;
+//		timeFlag = true;	// 空中にいる間に一度だけ起動させる
+//	}
+//}
+//
+//// 地面に着いてる間
+//void RigidBodyComponent::TimeStop() {
+//	if (m_velocity.y == 0.0f) {
+//		timeFlag = false;
+//	}
+//}
+//
+//// 空中にいる時間を返す、自由落下に使う
+//float RigidBodyComponent::GetElapsedTime() {
+//	//	if (fallFlag == true) {
+//	auto currentTime = std::chrono::high_resolution_clock::now();
+//	std::chrono::duration<float> deltaTime = currentTime - startTime;
+//	elapsedTime = deltaTime.count();
+//	//	}
+//	return elapsedTime;
+//}

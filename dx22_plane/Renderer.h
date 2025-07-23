@@ -7,8 +7,7 @@
 #include	<map>
 #include	<iostream>
 #include	<io.h>
-#include	<string>
-#include	<vector>
+//#include	"Component.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -63,7 +62,7 @@ struct MATERIAL {
 	BOOL Dummy[2];
 };
 
-struct RendererComponent {
+struct Renderer {
 	VERTEX_3D vertex_3D{};
 	//EBlendState eBlendState{};
 	LIGHT light{};
@@ -77,7 +76,6 @@ struct RendererComponent {
 class RendererSystem : public SystemBase
 {
 private:
-	std::unordered_map<uint32_t, RendererComponent> components;	// エンティティ保存用
 
 	static D3D_FEATURE_LEVEL       m_FeatureLevel;
 
@@ -107,15 +105,6 @@ public:
 
 	RendererSystem() = default;
 	~RendererSystem() = default;
-
-	// ベクター内にエンティティ追加
-	void AddComponent(uint32_t entity, const RendererComponent& comp);
-
-	// エンティティからコンポーネントを削除
-	void RemoveComponent(uint32_t entity)override;
-
-	// トランスフォームのコンポーネント取得
-	RendererComponent* GetComponent(uint32_t entity);
 
 	static void Init();
 	void Update()override;

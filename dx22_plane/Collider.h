@@ -32,8 +32,8 @@ struct TrianglePolygon {
 
 // ‹…‘Ì
 struct Sphere {
-	DirectX::SimpleMath::Vector3 center; // ’†S
-	float radius; // ”¼Œa
+	DirectX::SimpleMath::Vector3 center = {}; // ’†S
+	float radius = 0.0f; // ”¼Œa
 };
 
 //// ‰~’Œ

@@ -25,7 +25,7 @@ private:
 	DirectX::XMFLOAT3 m_velocity{};	 // 速度
 	DirectX::XMFLOAT3 m_acceleration{};// 加速度
 	float mass = 0.0f;				 // 質量
-	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
+//	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
 	bool fallFlag = false;		 	 // 落下のフラグ 
 	bool timeFlag = false;			 // 落下タイミングのフラグ
 	const float m_deltaTime = 0.016f;		 // 前回の時間からの経過時間
@@ -81,7 +81,7 @@ public:
 	void ApplyCollision_Y(float collision);
 
 	// 自由落下で使う
-	void TimeStart();
-	void TimeStop();
-	float GetElapsedTime();
+	//void TimeStart();
+	//void TimeStop();
+	//float GetElapsedTime();
 };

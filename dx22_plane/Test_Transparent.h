@@ -9,7 +9,6 @@ class Test_Transparent : public GameObject
 private:
 	RayComponent ray;
 	DirectX::XMFLOAT4 color = {};
-	RigidBodyComponent rigid;
 	JumpComponent* jump = nullptr;
 	bool isGround = false; // ’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©
 public:

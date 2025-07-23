@@ -200,13 +200,14 @@ void Test_Transparent::Init()
 
 	color = { 1.0f,1.0f,1.0f,1.0f };
 
-	rigid.SetMass(2.0f);
+	//rigid.SetMass(2.0f);
 
 	jump = new JumpComponent(50.0f);
 
 	AddComponent<TransformComponent>();
 	AddComponent<ColliderComponent>();
-
+	auto rb = AddComponent<RigidBodyComponent>();
+	rb->SetMass(2.0f);
 }
 
 
@@ -216,17 +217,18 @@ void Test_Transparent::Init()
 void Test_Transparent::Update()
 {
 	auto coll = GetComponent<ColliderComponent>();
+	auto rigid = GetComponent<RigidBodyComponent>();
 	bool jumpPress = false;
 	if (Input::GetButtonPress(XINPUT_RIGHT) || Input::GetKeyPress(VK_L)) {
 		//rigid.ApplyForce(Vector3(5.0f, 0.0f, 0.0f)); // 右に力を加える
 	//	m_Position.x += 5.0f;
 
-		rigid.ConstantVelocity_X(150.0f);
+		rigid->ConstantVelocity_X(150.0f);
 	}
 	if (Input::GetButtonPress(XINPUT_LEFT) || Input::GetKeyPress(VK_J)) {
 		//rigid.ApplyForce(Vector3(-5.0f, 0.0f, 0.0f)); // 左に力を加える
 	//	m_Position.x -= 5.0f;
-		rigid.ConstantVelocity_X(-150.0f);
+		rigid->ConstantVelocity_X(-150.0f);
 	}
 	if (Input::GetButtonPress(XINPUT_A) || Input::GetKeyPress(VK_I)) {
 		//rigid.ApplyForce(Vector3(0.0f, 5.0f, 0.0f)); // 上に力を加える
@@ -248,10 +250,10 @@ void Test_Transparent::Update()
 	}
 
 	// ジャンプの処理（テスト）
-	jump->JumpAction(rigid, jumpPress, isGround,trigger);
+	jump->JumpAction(*rigid, jumpPress, isGround,trigger);
 
 
-	rigid.ReduceVelocity_X();
+	rigid->ReduceVelocity_X();
 	//rigid.ReduceVelocity_Y();
 
 	//rigid.GetVelocity();
@@ -264,9 +266,9 @@ void Test_Transparent::Update()
 		gravityPower = 20.0f; // 重力の力
 	}
 
-	rigid.UseGravity(m_Position, true,gravityPower,12.0f);
+	rigid->UseGravity(m_Position, true,gravityPower,12.0f);
 	// リジッドボディの更新
-	rigid.AcceleratorPosition(m_Position);
+	rigid->AcceleratorPosition(m_Position);
 
 	coll->SetColliderSize_AABB(m_Position, m_Scale);
 	coll->SetColliderSize_Sphere(m_Position, 20.0f);
@@ -288,7 +290,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false, 120.0f, 12.0f);
+			rigid->UseGravity(m_Position, false, 120.0f, 12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面
@@ -310,7 +312,7 @@ void Test_Transparent::Update()
 		if (hitNormal.y < -0.5f) {	// 天井
 			color.y = 0.0f;
 			color.z = 0.0f;
-			rigid.UseGravity(m_Position, false, 120.0f, 12.0f);
+			rigid->UseGravity(m_Position, false, 120.0f, 12.0f);
 			isGround = true;
 		}
 		else if (hitNormal.y > 0.5f) {	// 地面

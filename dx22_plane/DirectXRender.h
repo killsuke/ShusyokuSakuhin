@@ -5,7 +5,6 @@
 #include	<map>
 #include	<iostream>
 #include	<io.h>
-#include	<string>
 #include	<vector>
 
 //ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ

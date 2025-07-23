@@ -476,35 +476,8 @@ void RendererSystem::CreatePixelShader(ID3D11PixelShader** PixelShader, const ch
 	delete[] buffer; // バッファのメモリを解放
 }
 
-// ベクター内にエンティティ追加
-void RendererSystem::AddComponent(uint32_t entity, const RendererComponent& comp) {
-	components.emplace(entity, comp);	// ２つの要素をまとめて挿入
-}
-
-// エンティティからコンポーネントを削除
-void RendererSystem::RemoveComponent(uint32_t entity) {
-	size_t removed = components.erase(entity);	// 削除された要素を取得
-	if (removed == 0) {
-		std::cout << "Warning : Entity" << entity << "Not found in RendererSystem!!" << std::endl;
-	}
-}
-
-// トランスフォームのコンポーネント取得
-RendererComponent* RendererSystem::GetComponent(uint32_t entity) {
-	auto it = components.find(entity);
-	if (it != components.end()) {
-		return &it->second;
-	}
-	return nullptr;
-}
 
 void RendererSystem::Update() {
 
-	for (auto& pair : components) {
-		RendererComponent& renderer = pair.second;	// 参照で取得、unorderd_mapのため、２つセットの内の２つ目を参照、なのでsecond
-
-
-
-	}
 
 };

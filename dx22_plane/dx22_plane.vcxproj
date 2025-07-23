@@ -206,7 +206,9 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="Billboard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -269,7 +271,9 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Billboard.h" />
+    <ClInclude Include="Billboard.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="utility.h" />
