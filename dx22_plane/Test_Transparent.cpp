@@ -201,8 +201,6 @@ void Test_Transparent::Init()
 
 	color = { 1.0f,1.0f,1.0f,1.0f };
 
-	//rigid.SetMass(2.0f);
-
 	jump = new JumpComponent(50.0f);
 
 	AddComponent<TransformComponent>(*this);
@@ -396,7 +394,7 @@ void Test_Transparent::Draw()
 
 	auto camera = Game::GetInstance()->GetObjects<Camera>();
 
-	camera[0]->SetCamera(0);
+	//camera[0]->SetCamera(0);
 
 	cb.matrixView = camera[0]->GetViewMtx3D();
 	cb.matrixProj = camera[0]->GetProjMtx3D();
@@ -404,10 +402,8 @@ void Test_Transparent::Draw()
 	// 行列をシェーダーに渡す
 	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-	auto num = m_IndexBuffer.GetIndexSize();
-
 	deviceContext->DrawIndexed(
-		36,							// 描画するインデックス数（立方体なんで36）
+		m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
 		0,							// 最初のインデックスバッファの位置
 		0);
 }

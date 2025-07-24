@@ -5,7 +5,7 @@
 
 using namespace DirectX::SimpleMath;
 
-ColliderComponent::ColliderComponent(const GameObject& obj) : Component(obj) {
+ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
 }
 
 void ColliderComponent::Update()

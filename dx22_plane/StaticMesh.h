@@ -10,6 +10,12 @@
 
 class StaticMesh : public Mesh {
 public:
+	StaticMesh() = default;
+	~StaticMesh() = default;
+
+	std::vector<VERTEX_3D> CreateMeshVertices() {};
+	std::vector<unsigned int> CreateMeshIndices() {};
+
 	void Load(std::string filename, std::string texturedirectory="");
 
 	const std::vector<MATERIAL>& GetMaterials() {

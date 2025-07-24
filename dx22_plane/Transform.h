@@ -27,7 +27,7 @@ private:
 	Transform m_transform;	// トランスフォーム情報
 public:
 	TransformComponent() = default;
-	TransformComponent(const GameObject& obj);
+	TransformComponent(GameObject& obj);
 
 	~TransformComponent() = default;
 

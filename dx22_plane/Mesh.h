@@ -1,12 +1,19 @@
 #pragma once
 #include	<vector>
-#include	"renderer.h"
+#include	<SimpleMath.h>
+#include	"RenderElement.h"
 
 class Mesh {
 protected:
 	std::vector<VERTEX_3D>		m_vertices;		// 頂点座標群
 	std::vector<unsigned int>	m_indices;		// インデックスデータ群
 public:
+	Mesh() = default;
+	~Mesh() = default;
+
+	virtual std::vector<VERTEX_3D> CreateMeshVertices() = 0;
+	virtual std::vector<unsigned int> CreateMeshIndices() = 0;
+
 	// 頂点データ取得
 	const std::vector<VERTEX_3D>& GetVertices() {
 		return m_vertices;

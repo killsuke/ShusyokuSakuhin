@@ -1,6 +1,6 @@
 #include "Transform.h"
 
-TransformComponent::TransformComponent(const GameObject& obj) :Component(obj) {
+TransformComponent::TransformComponent(GameObject& obj) :Component(obj) {
 
 }
 

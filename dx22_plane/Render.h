@@ -1,14 +1,49 @@
+// ============================================
+// RenderComponent　
+// いずれ切り分けを沢山して、
+// 最低限の機能のみを持たせるようにする
+// 汎用性を上げるために
+// ============================================
+
 #pragma once
 #include "Component.h"
+#include "RenderElement.h"
+
+#include	<d3d11.h>
+#include	<DirectXMath.h>
+#include	<SimpleMath.h>
+#include	<map>
+#include	<iostream>
+#include	<io.h>
+#include	<string>
+#include	<vector>
+#include	<memory>
+#include "Shader.h"
+#include "Texture.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Mesh.h"
+
+//外部ライブラリ
+#pragma comment(lib,"directxtk.lib")
+#pragma comment(lib,"d3d11.lib")
+
 class RenderComponent : public Component
 {
-private:
+protected:
+	std::unique_ptr<Shader> m_Shader;
+	std::unique_ptr<Texture> m_Texture;
+	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
+	IndexBuffer m_IndexBuffer = {};
+	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f,1.0f }; // 色
 
 public:
-	RenderComponent(const GameObject& obj);
+	RenderComponent(GameObject& obj);
 	~RenderComponent() {};
 
 	void Update() override;
-
+	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
+	void SetTexture(const std::string& fileName) { m_Texture->Load(fileName); };
+	void SetMesh(Mesh& mesh);
 };
 

@@ -35,7 +35,7 @@ private:
 
 public:
 	RigidBodyComponent() = default;
-	RigidBodyComponent(const GameObject& obj);
+	RigidBodyComponent(GameObject& obj);
 
 	~RigidBodyComponent() = default;
 

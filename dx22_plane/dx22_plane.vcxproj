@@ -168,6 +168,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="DebugCout.cpp" />
     <ClCompile Include="DirectXRender.cpp" />
     <ClCompile Include="dx11helper.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="SkyDome.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -230,6 +232,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="DebugCout.h" />
     <ClInclude Include="DirectXRender.h" />
     <ClInclude Include="dx11helper.h" />
@@ -249,6 +252,7 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Render3D.h" />
+    <ClInclude Include="RenderElement.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
@@ -258,6 +262,7 @@
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SkyDome.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
