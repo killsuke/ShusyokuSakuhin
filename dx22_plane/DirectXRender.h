@@ -23,9 +23,6 @@ enum EBlendState {
 	MAX_BLENDSTATE
 };
 
-extern ID3D11Device* g_pDevice; // デバイス＝DirectXの各種機能を作る
-extern IDXGISwapChain* g_pSwapChain;
-extern ID3D11DeviceContext* g_pDeviceContext;
 extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
@@ -47,47 +44,49 @@ struct ConstBuffer
 class DirectXRender
 {
 private:
+
+	static ID3D11Device* m_Device;				// デバイス＝DirectXの各種機能を作る
+	static IDXGISwapChain* m_SwapChain;			// スワップチェイン＝ダブルバッファ機能
+	static ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
 	
-	HRESULT DeviceAndSwapCreate();
-	HRESULT RenderTargetCreate();
-	HRESULT DepthStencilCreate();
-	void ViewportCreate();
+	static HRESULT DeviceAndSwapCreate();
+	static HRESULT RenderTargetCreate();
+	static HRESULT DepthStencilCreate();
+	static void ViewportCreate();
 	HRESULT InputLayoutAndShadersCreate();
-	HRESULT RasterizerSetting();
-	HRESULT BlandStateCreate();
-	HRESULT DepthStencilSetting();
-	HRESULT SamplerCreate();
-	HRESULT ConstantBufferCreate();
+	static HRESULT RasterizerSetting();
+	static HRESULT BlandStateCreate();
+	static HRESULT DepthStencilSetting();
+	static HRESULT SamplerCreate();
+	static HRESULT ConstantBufferCreate();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
-		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
+	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
 	HRESULT CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
-	HRESULT VeiwProjConstantCreate();
+	static HRESULT VeiwProjConstantCreate();
 
 public:
 	DirectXRender();
 	~DirectXRender();
 
-	HRESULT Init();
-	void UnInit();
+	static HRESULT Init();
+	static void UnInit();
 
-	void DrawBegin();
-	void DrawEnd();
+	static void DrawBegin();
+	static void DrawEnd();
 
 	static void SetViewMatrix(DirectX::SimpleMath::Matrix* ViewMatrix);
 	static void SetProjectionMatrix(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetDepthEnable(bool Enable);
+	static void SetATCEnable(bool Enable);
+	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
+	static ID3D11Device* GetDevice() { return m_Device; };
 
 	//=============================================================================
 	// ブレンド ステート設定
 	//=============================================================================
-	static void SetBlendState(int nBlendState)
-	{
-		if (nBlendState >= 0 && nBlendState < MAX_BLENDSTATE) {
-			float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-			g_pDeviceContext->OMSetBlendState(g_BlendState[nBlendState], blendFactor, 0xffffffff);
-		}
-	}
+	static void SetBlendState(int nBlendState);
 };
 

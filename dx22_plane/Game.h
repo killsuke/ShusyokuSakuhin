@@ -35,8 +35,6 @@ private:
 	static float timeRecord;
 //	static Sound& soundScene;
 
-	static DirectXRender d_rend;
-
 public:
 	Game(); // コンストラクタ
 	~Game(); // デストラクタ

@@ -12,6 +12,11 @@ private:
 	float m_jumpDuration = 0.5f; // 例：ジャンプの全体が0.5秒で完了
 	float m_magnification = 2.0f; // ジャンプの加速度の倍率
 	float m_firstSpeed = 50.0f;
+	float m_maxJumpTime = 0.7f; // ジャンプの最大時間
+	float m_velocityIgnore = 0.9f; // ジャンプの最小速度（これ以下は無視する）
+	float m_attenuationUp = 0.7f; // ジャンプの上昇中の減衰率（毎フレーム何％ずつ減らすか）
+	float m_attenuationStop = 0.5f; // ジャンプの停止したらの減衰率（毎フレーム何％ずつ減らすか）
+	const float m_deltaTime = 0.016f;
 	bool  m_isJumping = false; // ジャンプ中かどうか
 
 public:

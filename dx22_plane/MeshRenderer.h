@@ -2,6 +2,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Mesh.h"
+#include "DirectXRender.h"
 
 class MeshRenderer {
 protected:
@@ -19,7 +20,7 @@ public:
 	// 描画前処理
 	virtual void BeforeDraw()
 	{
-		ID3D11DeviceContext* devicecontext = RendererSystem::GetDeviceContext();
+		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
 		// トポロジーをセット（旧プリミティブタイプ）
 		devicecontext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -31,7 +32,7 @@ public:
 	// サブセット描画
 	virtual void DrawSubset(unsigned int indexnum,unsigned int baseindex,unsigned int basevertexindex ) 
 	{
-		RendererSystem::GetDeviceContext()->DrawIndexed(
+		DirectXRender::GetDeviceContext()->DrawIndexed(
 			indexnum,								// 描画するインデックス数（面数×３）
 			baseindex,								// 最初のインデックスバッファの位置
 			basevertexindex);						// 頂点バッファの最初から使う
@@ -42,7 +43,7 @@ public:
 	{
 		BeforeDraw();								// 描画前処理
 
-		RendererSystem::GetDeviceContext()->DrawIndexed(
+		DirectXRender::GetDeviceContext()->DrawIndexed(
 			m_IndexNum,								// 描画するインデックス数（面数×３）
 			0,										// 最初のインデックスバッファの位置
 			0);										// 頂点バッファの最初から使う

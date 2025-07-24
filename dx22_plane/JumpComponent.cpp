@@ -10,8 +10,6 @@ void JumpComponent::Update() {}
 
 void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPressed, bool isGround, bool trigger)
 {
-	const float deltaTime = 0.016f;
-	const float maxJumpTime = 0.7f; // 長押しで最大0.4秒滞空
 	DirectX::XMFLOAT3 velocity = rigid.GetVelocity();
 
 	// 地面接触
@@ -22,7 +20,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 	}
 
 	// ジャンプ時間超過
-	if (m_isJumping && m_time > maxJumpTime) {
+	if (m_isJumping && m_time > m_maxJumpTime) {
 		m_isJumping = false;
 	}
 
@@ -34,12 +32,12 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 
 	// ジャンプ中の処理
 	if (m_isJumping) {
-		m_time += deltaTime;
+		m_time += m_deltaTime;
 
-		if (isJumpButtonPressed == true && m_time < maxJumpTime && m_firstSpeed >= 0.9f) {
+		if (isJumpButtonPressed == true && m_time < m_maxJumpTime && m_firstSpeed >= m_velocityIgnore) {
 						
 			// 値があまりにも小さすぎると無視
-			if (m_firstSpeed < 0.9f) {
+			if (m_firstSpeed < m_velocityIgnore) {
 				m_firstSpeed = 0.0f;
 			}
 
@@ -49,7 +47,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 			velocity.y += m_firstSpeed;
 			rigid.SetVelocity(velocity);
 
-			m_firstSpeed = m_firstSpeed * 0.7f;	// 減らす
+			m_firstSpeed = m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
 		}
 
 
@@ -59,7 +57,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 			// この速度減速を段階化して、極小、小、中、大、ぐらいで減速させる
 			// つまり、あまりにもジャンプが低かったりすると減速しないようにする
 			// 速度を減衰させる
-			velocity.y -= velocity.y * 0.5f;
+			velocity.y -= velocity.y * m_attenuationStop;
 
 			//std::cout << velocity.y << std::endl;
 

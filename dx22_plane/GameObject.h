@@ -53,7 +53,7 @@ protected:
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 
 	// モデルデータを読み込むマネージャーを保持
-	ModelManager& modelManager = ModelManager::GetInstance();	
+//	ModelManager& modelManager = ModelManager::GetInstance();	
 
 
 public:
@@ -67,6 +67,7 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;
+//	void Update();
 	virtual void Draw() = 0;
 	virtual void Uninit() = 0;
 
@@ -115,4 +116,16 @@ public:
 		}
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
+
+	//template<typename T3>
+	//// コンポーネントを追加する
+	//T3* AddComponent(GameObject* obj) {
+	//	static_assert(std::is_base_of<Component, T3>::value,
+	//		"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
+
+	//	auto comp = std::make_unique<T3>(obj);
+	//	T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+	//	components.emplace_back(std::move(comp));
+	//	return ptr;
+	//}
 };

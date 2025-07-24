@@ -124,7 +124,9 @@ void SkyDome::Init() {
 }
 
 void SkyDome::TextureLoadSkyBox() {
-	auto hr = DirectX::CreateDDSTextureFromFile(g_pDevice, L"assets/texture/skyDome.dds", nullptr, &m_pTextureView);
+	auto device = DirectXRender::GetDevice();
+
+	auto hr = DirectX::CreateDDSTextureFromFile(device, L"assets/texture/skyDome.dds", nullptr, &m_pTextureView);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, "DDSファイルの読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
@@ -136,6 +138,7 @@ void SkyDome::Update() {
 }
 
 void SkyDome::Draw() {
+	auto deviceContext = DirectXRender::GetDeviceContext();
 
 	// ここで回転が出来る
 	/*std::vector<CarModel*>cars = Game::GetInstance()->GetObjects<CarModel>();
@@ -161,7 +164,7 @@ void SkyDome::Draw() {
 
 	// 描画の処理
 	// トポロジーをセット（プリミティブタイプ）
-	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
 	m_Shader.SetGPU();
 	m_VertexBuffer.SetGPU();
 	m_IndexBuffer.SetGPU();
@@ -169,12 +172,12 @@ void SkyDome::Draw() {
 
 	m_Camera->SetCamera(2);
 
-	g_pDeviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
+	deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 
 	// 行列をシェーダーに渡す
-	g_pDeviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-	g_pDeviceContext->DrawIndexed(
+	deviceContext->DrawIndexed(
 		m_IndexCount,							// 描画するインデックス数（四角形なんで４）
 		0,							// 最初のインデックスバッファの位置
 		0);

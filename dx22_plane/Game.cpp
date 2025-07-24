@@ -5,7 +5,7 @@
 Game* Game::m_Instance = nullptr;
 SceneName Game::nowScene;
 float Game::timeRecord = 0.0f;
-DirectXRender Game::d_rend;
+
 // コンストラクタ
 Game::Game()
 {
@@ -26,9 +26,6 @@ void Game::Init()
 	m_Instance = new Game;
 
 	//soundScene.Init();
-
-	// 描画初期化
-	d_rend.Init();
 
 	// オブジェクト配列作成
 	//m_Instance->m_Objects.emplace_back(new GolfBall);
@@ -73,7 +70,7 @@ void Game::Draw()
 	ImGui::Render();
 
 	// 描画前処理
-	d_rend.DrawBegin();
+	DirectXRender::DrawBegin();
 
 	// カメラ描画
 	m_Instance->m_Camera->Draw();
@@ -88,7 +85,7 @@ void Game::Draw()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	// 描画後処理
-	d_rend.DrawEnd();
+	DirectXRender::DrawEnd();
 }
 
 // 終了処理
@@ -110,7 +107,7 @@ void Game::Uninit()
 	m_Instance->m_Camera->Uninit();
 
 	// 描画終了処理
-	RendererSystem::Uninit();
+//	RendererSystem::Uninit();
 
 	//soundScene.Uninit();
 

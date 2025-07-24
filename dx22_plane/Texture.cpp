@@ -39,7 +39,7 @@ bool Texture::Load(const std::string& filename)
 	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
-	ID3D11Device* device = g_pDevice;
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	HRESULT hr = device->CreateTexture2D(&desc, &subResource, pTexture.GetAddressOf());
 	if (FAILED(hr)) {
@@ -95,7 +95,7 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
-	ID3D11Device* device = g_pDevice;
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	HRESULT hr = device->CreateTexture2D(&desc, &subResource, pTexture.GetAddressOf());
 	if (FAILED(hr)) {
@@ -119,6 +119,6 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 // テクスチャをGPUにセット
 void Texture::SetGPU()
 {
-	ID3D11DeviceContext* devicecontext = g_pDeviceContext;
+	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 	devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
 }

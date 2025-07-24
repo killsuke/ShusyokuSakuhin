@@ -77,40 +77,40 @@ class RendererSystem : public SystemBase
 {
 private:
 
-	static D3D_FEATURE_LEVEL       m_FeatureLevel;
+	//static D3D_FEATURE_LEVEL       m_FeatureLevel;
 
-	static ID3D11Device* m_Device;
-	static ID3D11DeviceContext* m_DeviceContext;
-	static IDXGISwapChain* m_SwapChain;
-	static ID3D11RenderTargetView* m_RenderTargetView;
-	static ID3D11DepthStencilView* m_DepthStencilView;
+	//static ID3D11Device* m_Device;
+	//static ID3D11DeviceContext* m_DeviceContext;
+	//static IDXGISwapChain* m_SwapChain;
+	//static ID3D11RenderTargetView* m_RenderTargetView;
+	//static ID3D11DepthStencilView* m_DepthStencilView;
 
-	static ID3D11Buffer* m_WorldBuffer;
-	static ID3D11Buffer* m_ViewBuffer;
-	static ID3D11Buffer* m_ProjectionBuffer;
+	//static ID3D11Buffer* m_WorldBuffer;
+	//static ID3D11Buffer* m_ViewBuffer;
+	//static ID3D11Buffer* m_ProjectionBuffer;
 
-	static ID3D11Buffer* m_LightBuffer;
-	static ID3D11Buffer* m_MaterialBuffer;
-	static ID3D11Buffer* m_TextureBuffer;	// ＵＶ設定
+	//static ID3D11Buffer* m_LightBuffer;
+	//static ID3D11Buffer* m_MaterialBuffer;
+	//static ID3D11Buffer* m_TextureBuffer;	// ＵＶ設定
 
-	static ID3D11DepthStencilState* m_DepthStateEnable;
-	static ID3D11DepthStencilState* m_DepthStateDisable;
+	//static ID3D11DepthStencilState* m_DepthStateEnable;
+	//static ID3D11DepthStencilState* m_DepthStateDisable;
 
-	static ID3D11BlendState* m_BlendState[4]; // ブレンド ステート;
-	static ID3D11BlendState* m_BlendStateATC;
+	//static ID3D11BlendState* m_BlendState[4]; // ブレンド ステート;
+	//static ID3D11BlendState* m_BlendStateATC;
 
-	static DirectX::SimpleMath::Matrix* view_billboard;
+	//static DirectX::SimpleMath::Matrix* view_billboard;
 
 public:
 
-	RendererSystem() = default;
+	/*RendererSystem() = default;
 	~RendererSystem() = default;
 
 	static void Init();
 	void Update()override;
 	static void Uninit();
-	//static void Begin();
-	//static void End();
+	static void Begin();
+	static void End();
 
 	static void SetDepthEnable(bool Enable);
 
@@ -132,7 +132,7 @@ public:
 
 	static void SetLight(LIGHT Light);
 	static void SetMaterial(MATERIAL Material);
-	static void SetUV(float u, float v, float uw, float vh);
+	static void SetUV(float u, float v, float uw, float vh);*/
 
 	//=============================================================================
 	// ブレンド ステート設定

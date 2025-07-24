@@ -18,7 +18,7 @@ void Shader::Create(std::string vs, std::string ps)
 
 	unsigned int numElements = ARRAYSIZE(layout);
 
-	ID3D11Device* device = g_pDevice;
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	bool sts = CreateVertexShader(device,
@@ -54,7 +54,7 @@ void Shader::Create(std::string vs, std::string ps)
 //=======================================
 void Shader::SetGPU()
 {
-	ID3D11DeviceContext* devicecontext = g_pDeviceContext;
+	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
 	devicecontext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
 	devicecontext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット

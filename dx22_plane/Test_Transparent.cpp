@@ -383,9 +383,11 @@ void Test_Transparent::Draw()
 
 	cb.color = DirectX::XMFLOAT4(color);
 
+	auto deviceContext = DirectXRender::GetDeviceContext();	
+
 	// 描画の処理
 	// トポロジーをセット（プリミティブタイプ）
-	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
 	m_Shader.SetGPU();
 	m_VertexBuffer.SetGPU();
 	m_IndexBuffer.SetGPU();
@@ -394,9 +396,9 @@ void Test_Transparent::Draw()
 	m_Camera->SetCamera(0);
 
 	// 行列をシェーダーに渡す
-	g_pDeviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-	g_pDeviceContext->DrawIndexed(
+	deviceContext->DrawIndexed(
 		36,							// 描画するインデックス数（立方体なんで36）
 		0,							// 最初のインデックスバッファの位置
 		0);

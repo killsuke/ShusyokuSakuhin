@@ -4,7 +4,7 @@
 #include	<d3d11.h>
 #include	<wrl/client.h>
 #include	"dx11helper.h"
-#include	"renderer.h"
+#include	"DirectXRender.h"
 
 class Material {
 
@@ -27,7 +27,7 @@ public:
 	bool Create(MATERIAL mtrl) {
 
 		ID3D11Device* dev;
-		dev = RendererSystem::GetDevice();
+		dev = DirectXRender::GetDevice();
 
 		// コンスタントバッファ作成
 		bool sts = CreateConstantBuffer(
@@ -57,7 +57,7 @@ public:
 		cb.Material = m_Material;
 
 		ID3D11DeviceContext* devcontext;
-		devcontext = RendererSystem::GetDeviceContext();
+		devcontext = DirectXRender::GetDeviceContext();
 
 		devcontext->UpdateSubresource(
 			m_pConstantBufferMaterial.Get(),
@@ -77,7 +77,7 @@ public:
 	void SetGPU() {
 
 		ID3D11DeviceContext* devcontext;
-		devcontext = RendererSystem::GetDeviceContext();
+		devcontext = DirectXRender::GetDeviceContext();
 
 		// コンスタントバッファ4をｂ4レジスタへセット（頂点シェーダー用）
 		devcontext->VSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
@@ -92,7 +92,7 @@ public:
 		cb.Material = mtrl;
 
 		ID3D11DeviceContext* devcontext;
-		devcontext = RendererSystem::GetDeviceContext();
+		devcontext = DirectXRender::GetDeviceContext();
 
 		devcontext->UpdateSubresource(
 			m_pConstantBufferMaterial.Get(),

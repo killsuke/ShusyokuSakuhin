@@ -239,6 +239,12 @@ void Application::MainLoop()
 {
 	MSG msg = {};
 
+	// 描画初期化
+	DirectXRender::Init();
+
+	auto deviceContext = DirectXRender::GetDeviceContext();
+	auto device = DirectXRender::GetDevice();
+
 	//SystemManager systemManager;	// システムのマネージャー作成
 	//EntityManager entityManager;	// エンティティのマネージャー作成
 	//EntityDeleter entityDeleter;	// エンティティとそれについているコンポーネントを削除
@@ -272,7 +278,7 @@ void Application::MainLoop()
 
 	// デバイスやウィンドウへのバインド
 	ImGui_ImplWin32_Init(m_hWnd);  // hwnd: ウィンドウハンドル
-	ImGui_ImplDX11_Init(g_pDevice, g_pDeviceContext);
+	ImGui_ImplDX11_Init(device, deviceContext);
 
 
 	// FPS計測用変数
@@ -379,6 +385,9 @@ void Application::MainLoop()
 	mozc::FinalizeSingletons();
 	// 終了処理
 	Game::Uninit();
+
+	// 描画初期化
+	DirectXRender::UnInit();
 }
 
 //-----------------------------------------------------------------------------

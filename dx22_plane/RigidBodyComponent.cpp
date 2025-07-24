@@ -36,7 +36,7 @@ DirectX::XMFLOAT3& RigidBodyComponent::AcceleratorPosition(DirectX::XMFLOAT3& po
 }
 
 // —Í‚ð‰Á‚¦‚é
-void RigidBodyComponent::AppryForce(const DirectX::XMFLOAT3& force) {
+void RigidBodyComponent::ApplyForce(const DirectX::XMFLOAT3& force) {
 	m_acceleration.x += force.x / mass;
 	m_acceleration.y += force.y / mass;
 	m_acceleration.z += force.z / mass;

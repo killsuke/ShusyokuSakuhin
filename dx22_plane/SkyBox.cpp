@@ -137,7 +137,7 @@ void SkyBox::Init() {
 }
 
 void SkyBox::TextureLoadSkyBox() {
-	DirectX::CreateDDSTextureFromFile(RendererSystem::GetDevice(), L"pretoria_gardens_4k.dds", nullptr, &m_pTextureView);
+	DirectX::CreateDDSTextureFromFile(DirectXRender::GetDevice(), L"pretoria_gardens_4k.dds", nullptr, &m_pTextureView);
 }
 
 void SkyBox::Update() {
@@ -145,6 +145,7 @@ void SkyBox::Update() {
 }
 
 void SkyBox::Draw() {
+	auto deviceContext = DirectXRender::GetDeviceContext();
 
 	// ここで回転にあわせられる
 	//std::vector<CarModel*>cars = Game::GetInstance()->GetObjects<CarModel>();
@@ -170,7 +171,7 @@ void SkyBox::Draw() {
 
 	// 描画の処理
 	// トポロジーをセット（プリミティブタイプ）
-	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
 	m_Shader.SetGPU();
 	m_VertexBuffer.SetGPU();
 	m_IndexBuffer.SetGPU();
@@ -178,12 +179,12 @@ void SkyBox::Draw() {
 
 	m_Camera->SetCamera(2);
 
-	g_pDeviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
+	deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 
 	// 行列をシェーダーに渡す
-	g_pDeviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-	g_pDeviceContext->DrawIndexed(
+	deviceContext->DrawIndexed(
 		36,							// 描画するインデックス数（四角形なんで４）
 		0,							// 最初のインデックスバッファの位置
 		0);

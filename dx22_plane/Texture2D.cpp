@@ -1,4 +1,5 @@
 #include "Texture2D.h"
+#include "DirectXRender.h"
 
 using namespace std;
 using namespace DirectX::SimpleMath;
@@ -84,6 +85,8 @@ void Texture2D::Update()
 //=======================================
 void Texture2D::Draw()
 {
+	auto deviceContext = DirectXRender::GetDeviceContext();
+
 	float PitchRadians = DirectX::XMConvertToRadians(m_Rotation.x); // X軸回転
 	float YawRadians = DirectX::XMConvertToRadians(m_Rotation.y);     // Y軸回転
 	float RollRadians = DirectX::XMConvertToRadians(m_Rotation.z);   // Z軸回転
@@ -101,7 +104,7 @@ void Texture2D::Draw()
 	cb.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// トポロジーをセット（プリミティブタイプ）
-	g_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	m_Shader.SetGPU();
 	m_VertexBuffer.SetGPU();
@@ -116,12 +119,12 @@ void Texture2D::Draw()
 	float uw = 1 / m_SplitX;
 	float vh = 1 / m_SplitY;
 
-	RendererSystem::SetUV(u, v, uw, vh);
+	//RendererSystem::SetUV(u, v, uw, vh);
 
 	// カメラの設定を指定
 	m_Camera->SetCamera(1);
 
-	g_pDeviceContext->DrawIndexed(
+	deviceContext->DrawIndexed(
 		4, // 描画するインデックス数（四角形なんで４）
 		0, // 最初のインデックスバッファの位置
 		0);
@@ -184,3 +187,11 @@ void Texture2D::SetUV(const float& nu, const float& nv, const float& sx, const f
 	m_SplitX = sx;
 	m_SplitY = sy;
 }
+
+//SetUV(float u, float v, float uw, float vh) {
+//	// ＵＶの行列作成
+//	Matrix mat = Matrix::CreateScale(uw, vh, 1.0f);
+//	mat *= Matrix::CreateTranslation(u, v, 0.0f).Transpose();
+//
+//	m_DeviceContext->UpdateSubresource(m_TextureBuffer, 0, NULL, &mat, 0, 0);
+//}

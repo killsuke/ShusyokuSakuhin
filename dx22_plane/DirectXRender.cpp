@@ -12,11 +12,12 @@
 
 D3D_FEATURE_LEVEL      m_FeatureLevel;
 
-ID3D11Device* g_pDevice; // デバイス＝DirectXの各種機能を作る
-// コンテキスト＝描画関連を司る機能
-ID3D11DeviceContext* g_pDeviceContext;
-// スワップチェイン＝ダブルバッファ機能
-IDXGISwapChain* g_pSwapChain;
+ID3D11DeviceContext* DirectXRender::m_DeviceContext = nullptr; // コンテキスト＝描画関連を司る機能
+
+ID3D11Device* DirectXRender::m_Device = nullptr; // コンテキスト＝描画関連を司る機能
+
+IDXGISwapChain* DirectXRender::m_SwapChain = nullptr; // スワップチェーン＝ダブルバッファ機能
+
 // レンダーターゲット＝描画先を表す機能
 ID3D11RenderTargetView* g_pRenderTargetView;
 // デプスバッファ
@@ -50,7 +51,7 @@ DirectXRender::DirectXRender() {
 }
 
 DirectXRender::~DirectXRender() {
-	UnInit();
+	UnInit();	// これはちゃんと呼び出されている？
 }
 
 HRESULT DirectXRender::Init() {
@@ -121,12 +122,12 @@ void DirectXRender::UnInit() {
 	//m_LightBuffer->Release();
 	//m_MaterialBuffer->Release();
 
-	g_pDeviceContext->ClearState();
+	m_DeviceContext->ClearState();
 	SAFE_RELEASE(g_pRenderTargetView);
 	SAFE_RELEASE(g_pDepthStencilView);
 	SAFE_RELEASE(g_DepthStateEnable);
 	SAFE_RELEASE(g_DepthStateDisable);
-	SAFE_RELEASE(g_pSwapChain);
+	SAFE_RELEASE(m_SwapChain);
 	SAFE_RELEASE(g_pInputLayout);
 	SAFE_RELEASE(g_pUnlitVertexShader);
 	SAFE_RELEASE(g_pUnlitPixelShader);
@@ -141,8 +142,8 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_BlendStateATC);
 	SAFE_RELEASE(g_pViewBuffer);
 	SAFE_RELEASE(g_pProjectionBuffer);
-	SAFE_RELEASE(g_pDeviceContext);
-	SAFE_RELEASE(g_pDevice);
+	SAFE_RELEASE(m_DeviceContext);
+	SAFE_RELEASE(m_Device);
 }
 
 //=======================================
@@ -154,20 +155,20 @@ void DirectXRender::DrawBegin() {
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	// レンダーターゲットとデプスステンシルビューを設定
-	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	m_DeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 	// 描画先キャンバスを塗りつぶす
-	g_pDeviceContext->ClearRenderTargetView(g_pRenderTargetView, clearColor);
+	m_DeviceContext->ClearRenderTargetView(g_pRenderTargetView, clearColor);
 	// 深度バッファをリセットする
-	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_DeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	// 	インプットレイアウト（GPUに渡す頂点データのフォーマットを定義）を設定
-	g_pDeviceContext->IASetInputLayout(g_pInputLayout);
+	m_DeviceContext->IASetInputLayout(g_pInputLayout);
 	// どのようにテクスチャを扱うかを設定
 	// ポストエフェクト等でどんな描画かを使う場合は、
 	// 最初の値（スロット）を１以上にする
 	// 次の引数たちも増やすことも考える
-	g_pDeviceContext->PSSetSamplers(0, 1, &g_pSampler);
+	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
 	// 定数バッファを頂点シェーダーにセットする
-	g_pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 }
 
 //=======================================
@@ -175,7 +176,7 @@ void DirectXRender::DrawBegin() {
 //=======================================
 void DirectXRender::DrawEnd() {
 	// ダブルバッファの切り替え
-	g_pSwapChain->Present(1, 0);
+	m_SwapChain->Present(1, 0);
 }
 
 HRESULT DirectXRender::DeviceAndSwapCreate() {
@@ -196,7 +197,7 @@ HRESULT DirectXRender::DeviceAndSwapCreate() {
 	swapChainDesc.Windowed = TRUE; // ウィンドウモード（フルスクリーンではなく、ウィンドウモードで実行）
 
 	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, NULL, 0,
-		D3D11_SDK_VERSION, &swapChainDesc, &g_pSwapChain, &g_pDevice, &m_FeatureLevel, &g_pDeviceContext);
+		D3D11_SDK_VERSION, &swapChainDesc, &m_SwapChain, &m_Device, &m_FeatureLevel, &m_DeviceContext);
 	if (FAILED(hr)) return hr;
 
 	return hr;
@@ -208,8 +209,8 @@ HRESULT DirectXRender::RenderTargetCreate() {
 
 	// レンダーターゲットビュー作成
 	ID3D11Texture2D* renderTarget{};
-	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
-	if (renderTarget != nullptr)g_pDevice->CreateRenderTargetView(renderTarget, NULL, &g_pRenderTargetView);
+	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	if (renderTarget != nullptr)m_Device->CreateRenderTargetView(renderTarget, NULL, &g_pRenderTargetView);
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
@@ -235,7 +236,7 @@ HRESULT DirectXRender::DepthStencilCreate() {
 	textureDesc.CPUAccessFlags = 0;                       // CPUからのアクセスは不要
 	textureDesc.MiscFlags = 0;                            // その他のフラグは設定なし
 
-	hr = g_pDevice->CreateTexture2D(&textureDesc, NULL, &depthStencile);
+	hr = m_Device->CreateTexture2D(&textureDesc, NULL, &depthStencile);
 	if (FAILED(hr)) return hr;
 
 	// デプスステンシルビュー作成
@@ -243,7 +244,7 @@ HRESULT DirectXRender::DepthStencilCreate() {
 	depthStencilViewDesc.Format = textureDesc.Format; // デプスステンシルバッファのフォーマットを設定
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // ビューの次元を2Dテクスチャとして設定（2Dテクスチャ用のデプスステンシルビュー）
 	depthStencilViewDesc.Flags = 0; // 特別なフラグは設定しない（デフォルトの動作）
-	if (depthStencile != nullptr)g_pDevice->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &g_pDepthStencilView);
+	if (depthStencile != nullptr)m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &g_pDepthStencilView);
 	if (FAILED(hr)) return hr;
 	depthStencile->Release();
 
@@ -258,7 +259,7 @@ void DirectXRender::ViewportCreate() {
 	viewport.MaxDepth = 1.0f;                          // 深度範囲の最大値
 	viewport.TopLeftX = 0;                             // ビューポートの左上隅のX座標
 	viewport.TopLeftY = 0;                             // ビューポートの左上隅のY座標）
-	g_pDeviceContext->RSSetViewports(1, &viewport);
+	m_DeviceContext->RSSetViewports(1, &viewport);
 }
 
 HRESULT DirectXRender::RasterizerSetting() {
@@ -275,10 +276,10 @@ HRESULT DirectXRender::RasterizerSetting() {
 	rasterizerDesc.MultisampleEnable = FALSE;
 
 	ID3D11RasterizerState* rs;
-	hr = g_pDevice->CreateRasterizerState(&rasterizerDesc, &rs);
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &rs);
 	if (FAILED(hr)) return hr;
 
-	g_pDeviceContext->RSSetState(rs);
+	m_DeviceContext->RSSetState(rs);
 
 	return hr;
 }
@@ -301,23 +302,23 @@ HRESULT DirectXRender::BlandStateCreate() {
 	BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // アルファ値に対して加算操作を行う
 	BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL; // レンダーターゲットのカラーチャンネル書き込みマスク
 
-	hr = g_pDevice->CreateBlendState(&BlendDesc, &g_BlendState[0]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[0]);
 	if (FAILED(hr)) return hr;
 
 	// ブレンド ステート生成 (アルファ ブレンド用)
 	//BlendDesc.AlphaToCoverageEnable = TRUE;
 	BlendDesc.RenderTarget[0].BlendEnable = TRUE;
-	hr = g_pDevice->CreateBlendState(&BlendDesc, &g_BlendState[1]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[1]);
 	if (FAILED(hr)) return hr;
 
 	// ブレンド ステート生成 (加算合成用)
 	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	hr = g_pDevice->CreateBlendState(&BlendDesc, &g_BlendState[2]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[2]);
 	if (FAILED(hr)) return hr;
 
 	// ブレンド ステート生成 (減算合成用)
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
-	hr = g_pDevice->CreateBlendState(&BlendDesc, &g_BlendState[3]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[3]);
 	if (FAILED(hr)) return hr;
 
 	SetBlendState(BS_ALPHABLEND);
@@ -336,14 +337,14 @@ HRESULT DirectXRender::DepthStencilSetting() {
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	depthStencilDesc.StencilEnable = FALSE;
 
-	hr = g_pDevice->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateEnable); //深度有効ステート
+	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateEnable); //深度有効ステート
 	if (FAILED(hr)) return hr;
 
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	hr = g_pDevice->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateDisable); //深度無効ステート
+	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateDisable); //深度無効ステート
 	if (FAILED(hr)) return hr;
 	
-	g_pDeviceContext->OMSetDepthStencilState(g_DepthStateEnable, NULL);
+	m_DeviceContext->OMSetDepthStencilState(g_DepthStateEnable, NULL);
 
 	return hr;
 }
@@ -363,7 +364,7 @@ HRESULT DirectXRender::SamplerCreate() {
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	//	ID3D11SamplerState* samplerState{};
-	hr = g_pDevice->CreateSamplerState(&samplerDesc, &g_pSampler);
+	hr = m_Device->CreateSamplerState(&samplerDesc, &g_pSampler);
 	if (FAILED(hr)) return hr;
 
 	return hr;
@@ -380,7 +381,7 @@ HRESULT DirectXRender::ConstantBufferCreate() {
 	cbDesc.CPUAccessFlags = 0;
 	cbDesc.MiscFlags = 0;
 	cbDesc.StructureByteStride = 0;
-	hr = g_pDevice->CreateBuffer(&cbDesc, NULL, &g_pConstantBuffer);
+	hr = m_Device->CreateBuffer(&cbDesc, NULL, &g_pConstantBuffer);
 	if (FAILED(hr)) return hr;
 
 	return hr;
@@ -403,7 +404,7 @@ HRESULT DirectXRender::InputLayoutAndShadersCreate() {
 	unsigned int numElements = ARRAYSIZE(layout);
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
-	hr = CreateVertexShader(g_pDevice, "unlitTextureVS.hlsl", "vs_main", "vs_5_0",
+	hr = CreateVertexShader(m_Device, "unlitTextureVS.hlsl", "vs_main", "vs_5_0",
 		layout, numElements, &g_pUnlitVertexShader, &g_pInputLayout);
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);
@@ -411,7 +412,7 @@ HRESULT DirectXRender::InputLayoutAndShadersCreate() {
 	}
 
 	// ピクセルシェーダーオブジェクトを生成
-	hr = CreatePixelShader(g_pDevice, "unlitTexturePS.hlsl", "ps_main", "ps_5_0", &g_pUnlitPixelShader);
+	hr = CreatePixelShader(m_Device, "unlitTexturePS.hlsl", "ps_main", "ps_5_0", &g_pUnlitPixelShader);
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -579,12 +580,12 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	//m_DeviceContext->VSSetConstantBuffers(0, 1, &m_WorldBuffer);
 	//if (FAILED(hr)) return;
 
-	hr = g_pDevice->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer);
-	g_pDeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer);
+	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer);
 	if (FAILED(hr)) return hr;
 
-	hr = g_pDevice->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer);
-	g_pDeviceContext->VSSetConstantBuffers(2, 1, &g_pProjectionBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer);
+	m_DeviceContext->VSSetConstantBuffers(2, 1, &g_pProjectionBuffer);
 	if (FAILED(hr)) return hr;
 
 	return hr;
@@ -599,7 +600,7 @@ void DirectXRender::SetViewMatrix(DirectX::SimpleMath::Matrix* ViewMatrix)
 	view = ViewMatrix->Transpose(); // 転置
 
 	// ビュー行列をGPU側へ送る
-	g_pDeviceContext->UpdateSubresource(g_pViewBuffer, 0, NULL, &view, 0, 0);
+	m_DeviceContext->UpdateSubresource(g_pViewBuffer, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -611,5 +612,50 @@ void DirectXRender::SetProjectionMatrix(DirectX::SimpleMath::Matrix* ProjectionM
 	projection = ProjectionMatrix->Transpose(); // 転置
 
 	// プロジェクション行列をGPU側へ送る
-	g_pDeviceContext->UpdateSubresource(g_pProjectionBuffer, 0, NULL, &projection, 0, 0);
+	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer, 0, NULL, &projection, 0, 0);
+}
+
+//=======================================
+// 深度ステンシルの有効・無効を設定
+//=======================================
+void DirectXRender::SetDepthEnable(bool Enable)
+{
+	if (Enable)
+	{
+		// 深度テストを有効にするステンシルステートをセット
+		m_DeviceContext->OMSetDepthStencilState(g_DepthStateEnable, NULL);
+	}
+	else
+	{
+		// 深度テストを無効にするステンシルステートをセット
+		m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, NULL);
+	}
+}
+
+//=======================================
+// アルファテストとカバレッジ（ATC）の有効・無効を設定
+//=======================================
+void DirectXRender::SetATCEnable(bool Enable)
+{
+	// ブレンドファクター（透明度などの調整に使用）
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	if (Enable)
+	{
+		// アルファテストとカバレッジ (ATC) を有効にするブレンドステートをセット
+		m_DeviceContext->OMSetBlendState(g_BlendStateATC, blendFactor, 0xffffffff);
+	}
+	else
+	{
+		// 通常のブレンドステートをセット
+		m_DeviceContext->OMSetBlendState(g_BlendState[0], blendFactor, 0xffffffff);
+	}
+}
+
+void DirectXRender::SetBlendState(int nBlendState)
+{
+	if (nBlendState >= 0 && nBlendState < MAX_BLENDSTATE) {
+		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		m_DeviceContext->OMSetBlendState(g_BlendState[nBlendState], blendFactor, 0xffffffff);
+	}
 }

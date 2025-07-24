@@ -6,6 +6,9 @@ TextureManager::textureMap;
 
 // テクスチャの読み込み関数
 HRESULT TextureManager::LoadTexture(const std::string& filename) {
+	auto device = DirectXRender::GetDevice();
+	auto deviceContext = DirectXRender::GetDeviceContext();
+
     // ファイルネームに「asset」追加と「L」の省略処理
     std::wstring wfilename = ShortConversion(filename);
     
@@ -17,7 +20,7 @@ HRESULT TextureManager::LoadTexture(const std::string& filename) {
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture = nullptr;
 
     // テクスチャの読み込み処理
-    HRESULT hr = DirectX::CreateWICTextureFromFileEx(g_pDevice, g_pDeviceContext, wfilename.c_str(), 0, D3D11_USAGE_DEFAULT,
+    HRESULT hr = DirectX::CreateWICTextureFromFileEx(device, deviceContext, wfilename.c_str(), 0, D3D11_USAGE_DEFAULT,
                                                      D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &texture);
     // エラーが起きた場合の処理
     if (FAILED(hr)) {
