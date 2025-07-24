@@ -1,5 +1,9 @@
 #include "Transform.h"
 
+TransformComponent::TransformComponent(const GameObject& obj) :Component(obj) {
+
+}
+
 // 更新処理
 void TransformComponent::Update() {
 
@@ -11,12 +15,13 @@ void TransformComponent::Update() {
 		float RollRadians = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);   // Z軸回転
 
 		// SRT情報作成
-		DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
-		DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(m_transform.m_Position.x, m_transform.m_Position.y, m_transform.m_Position.z);
-		DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(m_transform.m_Scale.x, m_transform.m_Scale.y, m_transform.m_Scale.z);
+		DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(YawRadians, PitchRadians, RollRadians);
+		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_Position.x, m_transform.m_Position.y, m_transform.m_Position.z);
+		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_Scale.x, m_transform.m_Scale.y, m_transform.m_Scale.z);
 
 		// ワールド行列を作成し、保存
 		m_transform.worldMatrix = s * r * t;
+		m_transform.worldMatrix = DirectX::XMMatrixTranspose(m_transform.worldMatrix); // 行列を転置
 	}
 
 	// ローカル行列計算
@@ -26,11 +31,12 @@ void TransformComponent::Update() {
 		float RollRadians = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.z);   // Z軸回転
 
 		// SRT情報作成
-		DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
-		DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z);
-		DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(m_transform.m_LocalScale.x, m_transform.m_LocalScale.y, m_transform.m_LocalScale.z);
+		DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(YawRadians, PitchRadians, RollRadians);
+		DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z);
+		DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_LocalScale.x, m_transform.m_LocalScale.y, m_transform.m_LocalScale.z);
 
 		// ローカル行列を作成し、保存
 		m_transform.localMatrix = s * r * t;
+		m_transform.localMatrix = DirectX::XMMatrixTranspose(m_transform.localMatrix); // 行列を転置
 	}
 }

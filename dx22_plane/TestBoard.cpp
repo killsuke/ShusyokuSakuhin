@@ -81,7 +81,7 @@ void TestBoard::Init()
 	m_Position.y = 50.0f;
 	m_Position.z = 0.0f;
 
-	AddComponent<ColliderComponent>(/*this, m_Position, m_Scale, ColliderType::AABB*/);
+	AddComponent<ColliderComponent>(/*this, m_Position, m_Scale, ColliderType::AABB*/*this);
 }
 
 

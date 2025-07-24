@@ -81,6 +81,7 @@ private:
 
 public:
 	ColliderComponent() = default;
+	ColliderComponent(const GameObject& obj);
 	~ColliderComponent() = default;
 
 	void Update() override;

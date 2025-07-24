@@ -24,7 +24,7 @@ class RigidBodyComponent:public Component
 private:
 	DirectX::XMFLOAT3 m_velocity{};	 // 速度
 	DirectX::XMFLOAT3 m_acceleration{};// 加速度
-	float mass = 0.0f;				 // 質量
+	float mass = 1.0f;				 // 質量
 //	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
 	bool fallFlag = false;		 	 // 落下のフラグ 
 	bool timeFlag = false;			 // 落下タイミングのフラグ
@@ -34,7 +34,9 @@ private:
 	std::chrono::high_resolution_clock::time_point lastTime;	// 最後の時間
 
 public:
-	RigidBodyComponent(float m = 0.0f);	// float posx,float posy,float posz, 
+	RigidBodyComponent() = default;
+	RigidBodyComponent(const GameObject& obj);
+
 	~RigidBodyComponent() = default;
 
 	void Update()override;

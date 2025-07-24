@@ -1,6 +1,10 @@
 #include "Render.h"
 
-void Render::Update()
+RenderComponent::RenderComponent(const GameObject& obj) :Component(obj) {
+
+}
+
+void RenderComponent::Update()
 {
 
 }

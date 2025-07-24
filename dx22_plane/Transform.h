@@ -4,21 +4,21 @@
 #include <iostream>
 
 struct Transform {
-	// SRT情報（姿勢情報）
+	// SRT情報（ワールド行列、姿勢情報）
 	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
 
-	// SRT情報（姿勢情報）
+	// SRT情報（ローカル行列、姿勢情報）
 	DirectX::SimpleMath::Vector3 m_LocalPosition = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 m_LocalRotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 m_LocalScale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
 
 	// ワールド行列
-	DirectX::SimpleMath::Matrix worldMatrix = {};
+	DirectX::XMMATRIX worldMatrix = {};
 
 	// ローカル行列
-	DirectX::SimpleMath::Matrix localMatrix = {};
+	DirectX::XMMATRIX localMatrix = {};
 };
 
 class TransformComponent : public Component
@@ -27,6 +27,7 @@ private:
 	Transform m_transform;	// トランスフォーム情報
 public:
 	TransformComponent() = default;
+	TransformComponent(const GameObject& obj);
 
 	~TransformComponent() = default;
 
@@ -49,6 +50,6 @@ public:
 	inline DirectX::SimpleMath::Vector3 GetLocalRotation() const { return m_transform.m_LocalRotation; };
 	inline DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_transform.m_LocalScale; };
 
-	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_transform.worldMatrix; };
-	inline DirectX::SimpleMath::Matrix GetLocalMatrix() const { return m_transform.localMatrix; };
+	inline DirectX::XMMATRIX GetWorldMatrix() const { return m_transform.worldMatrix; };
+	inline DirectX::XMMATRIX GetLocalMatrix() const { return m_transform.localMatrix; };
 };

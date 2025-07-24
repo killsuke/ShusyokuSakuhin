@@ -1,7 +1,7 @@
 #include "RigidBodyComponent.h"
 
 // TransformÇÊÇËÅAXMFLOAT3ÇÃï˚Ç™ó«Ç¢ÇÃÇ≈ÇÕÅH
-RigidBodyComponent::RigidBodyComponent(float m) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, mass(m) {
+RigidBodyComponent::RigidBodyComponent(const GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, mass(0.0f), Component(obj){
 	lastTime = std::chrono::high_resolution_clock::now();
 }
 

@@ -205,7 +205,7 @@ void TestCube::Init()
 	m_Position.y = 0.0f;
 	m_Position.z = 0.0f;
 
-	AddComponent<ColliderComponent>();
+	AddComponent<ColliderComponent>(*this);
 }
 
 

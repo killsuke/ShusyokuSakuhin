@@ -5,6 +5,9 @@
 
 using namespace DirectX::SimpleMath;
 
+ColliderComponent::ColliderComponent(const GameObject& obj) : Component(obj) {
+}
+
 void ColliderComponent::Update()
 {
 	// 当たり判定の更新処理をここに記述

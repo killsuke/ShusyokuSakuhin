@@ -205,9 +205,9 @@ void Test_Transparent::Init()
 
 	jump = new JumpComponent(50.0f);
 
-	AddComponent<TransformComponent>(this);
-	AddComponent<ColliderComponent>(this);
-	auto rb = AddComponent<RigidBodyComponent>(this);
+	AddComponent<TransformComponent>(*this);
+	AddComponent<ColliderComponent>(*this);
+	auto rb = AddComponent<RigidBodyComponent>(*this);
 	rb->SetMass(2.0f);
 }
 
@@ -403,6 +403,8 @@ void Test_Transparent::Draw()
 
 	// 行列をシェーダーに渡す
 	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+
+	auto num = m_IndexBuffer.GetIndexSize();
 
 	deviceContext->DrawIndexed(
 		36,							// 描画するインデックス数（立方体なんで36）

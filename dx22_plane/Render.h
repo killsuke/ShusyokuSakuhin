@@ -1,12 +1,12 @@
 #pragma once
 #include "Component.h"
-class Render : public Component
+class RenderComponent : public Component
 {
 private:
 
 public:
-	Render() = default;
-	~Render() = default;
+	RenderComponent(const GameObject& obj);
+	~RenderComponent() {};
 
 	void Update() override;
 
