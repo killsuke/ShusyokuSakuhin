@@ -4,7 +4,7 @@
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-SkyBox::SkyBox(Camera* cam) :GameObject(cam) {
+SkyBox::SkyBox() {
 }
 
 // デストラクタ
@@ -177,7 +177,9 @@ void SkyBox::Draw() {
 	m_IndexBuffer.SetGPU();
 	m_Texture.SetGPU();
 
-	m_Camera->SetCamera(2);
+	auto camera = Game::GetInstance()->GetObjects<Camera>();
+
+	camera[0]->SetCamera(2);
 
 	deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 

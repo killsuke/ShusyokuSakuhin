@@ -20,7 +20,7 @@ class TestCube:public GameObject {
 	//Texture m_Texture;	// テクスチャ
 
 public:
-	TestCube(Camera* cam);
+	TestCube();
 	~TestCube();
 
 	void Init();

@@ -1,12 +1,14 @@
 #pragma once
 
 #include	<SimpleMath.h>
+#include "GameObject.h"
+
 #define CARCAMERA (0.01745f)
 
 //-----------------------------------------------------------------------------
 //Cameraクラス
 //-----------------------------------------------------------------------------
-class Camera {
+class Camera : public GameObject {
 private:
 	DirectX::SimpleMath::Vector3	m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3	m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
@@ -15,7 +17,6 @@ private:
 	DirectX::SimpleMath::Vector3	m_Target{};
 	DirectX::SimpleMath::Matrix		m_ViewMatrix{};
 
-	//const GolfBall& m_GolfBall;	// ゴルフボールの参照
 	float m_CameraDirection = 0; // カメラの方向
 
 	float targetCount = 0.0f;	// ターゲットにしてから数える
@@ -27,10 +28,19 @@ private:
 
 	DirectX::SimpleMath::Vector2 prevMouse = {};	// マウス位置記録
 
-public:
+	DirectX::SimpleMath::Matrix projectionMtx2D = {};
+	DirectX::SimpleMath::Matrix projectionMtx3D = {};
+	DirectX::SimpleMath::Matrix projectionMtxSky = {};
 
-	// コンストラクタ
-	//Camera(const GolfBall& golfBall);
+	DirectX::SimpleMath::Matrix viewMtx2D = {};
+	DirectX::SimpleMath::Matrix viewMtx3D = {};
+	DirectX::SimpleMath::Matrix viewMtxSky = {};
+
+	void Update2D();
+	void Update3D();
+	void UpdateSky();
+
+public:
 
 	void Init();
 	void Update();
@@ -38,4 +48,12 @@ public:
 	void Uninit();
 
 	void SetCamera(int mode);	// カメラを設定
+
+	DirectX::SimpleMath::Matrix GetProjMtx2D() const { return projectionMtx2D; };
+	DirectX::SimpleMath::Matrix GetProjMtx3D() const { return projectionMtx2D; };
+	DirectX::SimpleMath::Matrix GetProjMtxSky() const { return projectionMtx2D; };
+
+	DirectX::SimpleMath::Matrix GetViewMtx2D() const { return viewMtx2D; };
+	DirectX::SimpleMath::Matrix GetViewMtx3D() const { return viewMtx3D; };
+	DirectX::SimpleMath::Matrix GetViewMtxSky() const { return viewMtxSky; };
 };

@@ -1,11 +1,13 @@
 #include "TestCube.h"
 #include "DirectXRender.h"
 #include "Collider.h"
+#include "Game.h"
+#include "Camera.h"
 
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-TestCube::TestCube(Camera* cam) :GameObject(cam) {
+TestCube::TestCube() {
 }
 
 // デストラクタ
@@ -251,7 +253,9 @@ void TestCube::Draw()
 	m_IndexBuffer.SetGPU();
 	m_Texture.SetGPU();
 
-	m_Camera->SetCamera(0);
+	auto camera = Game::GetInstance()->GetObjects<Camera>();
+
+	camera[0]->SetCamera(0);
 
 	// 行列をシェーダーに渡す
 	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

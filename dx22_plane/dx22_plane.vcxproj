@@ -182,6 +182,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="Render.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="Render.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />

@@ -51,7 +51,7 @@ DirectXRender::DirectXRender() {
 }
 
 DirectXRender::~DirectXRender() {
-	UnInit();	// これはちゃんと呼び出されている？
+//	UnInit();	// これはちゃんと呼び出されている？
 }
 
 HRESULT DirectXRender::Init() {

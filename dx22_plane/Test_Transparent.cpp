@@ -5,11 +5,12 @@
 #include "Game.h"
 #include "Transform.h"
 #include "Collider.h"
+#include "Camera.h"
 
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-Test_Transparent::Test_Transparent(Camera* cam) :GameObject(cam) {
+Test_Transparent::Test_Transparent() {
 }
 
 // デストラクタ
@@ -204,9 +205,9 @@ void Test_Transparent::Init()
 
 	jump = new JumpComponent(50.0f);
 
-	AddComponent<TransformComponent>();
-	AddComponent<ColliderComponent>();
-	auto rb = AddComponent<RigidBodyComponent>();
+	AddComponent<TransformComponent>(this);
+	AddComponent<ColliderComponent>(this);
+	auto rb = AddComponent<RigidBodyComponent>(this);
 	rb->SetMass(2.0f);
 }
 
@@ -393,7 +394,12 @@ void Test_Transparent::Draw()
 	m_IndexBuffer.SetGPU();
 	m_Texture.SetGPU();
 
-	m_Camera->SetCamera(0);
+	auto camera = Game::GetInstance()->GetObjects<Camera>();
+
+	camera[0]->SetCamera(0);
+
+	cb.matrixView = camera[0]->GetViewMtx3D();
+	cb.matrixProj = camera[0]->GetProjMtx3D();
 
 	// 行列をシェーダーに渡す
 	deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

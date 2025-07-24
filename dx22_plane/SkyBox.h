@@ -12,7 +12,7 @@ private:
    
 
 public:
-    SkyBox(Camera* cam);	// コンストラクタ
+    SkyBox();	// コンストラクタ
     ~SkyBox();	// デストラクタ
 
     void Init();

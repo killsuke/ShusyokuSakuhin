@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 
-#include "Camera.h"
 #include "Input.h"
 #include "TitleScene.h"
 #include "Stage1Scene.h"
@@ -30,7 +29,7 @@ private:
 
 	std::vector<std::unique_ptr<GameObject>> m_Objects; // オブジェクト
 	std::unique_ptr<Input> m_Input;  // 入力処理
-	std::unique_ptr<Camera> m_Camera; // カメラ
+	//std::unique_ptr<Camera> m_Camera; // カメラ
 	static SceneName nowScene;
 	static float timeRecord;
 //	static Sound& soundScene;
@@ -51,14 +50,14 @@ public:
 	static SceneName GetNowScene() { return nowScene; };
 
 	void ChangeScene(SceneName sName); // シーンを変更
-	Camera& GetCamera(); // カメラ取得
+	//Camera& GetCamera(); // カメラ取得
 	void DeleteObject(GameObject* pt); // オブジェクトを削除する
 	void DeleteAllObject(); // オブジェクトをすべて削除する
 
 	// オブジェクトを追加する(※テンプレート関数なのでここに直接記述)
 	template<class T> T* AddObject()
 	{
-		T* pt = new T(m_Camera.get());
+		T* pt = new T();
 		m_Instance->m_Objects.emplace_back(pt);
 		pt->Init(); // 初期化
 		return pt;

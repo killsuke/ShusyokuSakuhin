@@ -1,6 +1,8 @@
 #include "Game.h"
 //#include "Renderer.h"
 #include "Application.h"
+#include "Camera.h"
+
 
 Game* Game::m_Instance = nullptr;
 SceneName Game::nowScene;
@@ -10,7 +12,7 @@ float Game::timeRecord = 0.0f;
 Game::Game()
 {
 	m_Input = std::make_unique<Input>(); //入力処理を作成
-	m_Camera = std::make_unique<Camera>(); //カメラを作成
+//	m_Camera = std::make_unique<Camera>(); //カメラを作成
 }
 
 // デストラクタ
@@ -32,7 +34,7 @@ void Game::Init()
 	//m_Instance->m_Objects.emplace_back(new Ground);
 	
 	// カメラ初期化
-	m_Instance->m_Camera->Init();
+//	m_Instance->m_Camera->Init();
 
 	m_Instance->m_Scene = new TitleScene; //メモリを確保
 
@@ -51,7 +53,7 @@ void Game::Update()
 	m_Instance->m_Scene->Update();
 
 	// カメラ更新
-	m_Instance->m_Camera->Update();
+//	m_Instance->m_Camera->Update();
 
 	// 入力処理更新
 	m_Instance->m_Input->Update();
@@ -73,7 +75,7 @@ void Game::Draw()
 	DirectXRender::DrawBegin();
 
 	// カメラ描画
-	m_Instance->m_Camera->Draw();
+//	m_Instance->m_Camera->Draw();
 
 	// オブジェクト描画
 	for (auto& o : m_Instance->m_Objects)
@@ -104,7 +106,7 @@ void Game::Uninit()
 	//}
 
 		// カメラ終了処理
-	m_Instance->m_Camera->Uninit();
+//	m_Instance->m_Camera->Uninit();
 
 	// 描画終了処理
 //	RendererSystem::Uninit();
@@ -122,10 +124,10 @@ Game* Game::GetInstance()
 }
 
 // カメラを取得する
-Camera& Game::GetCamera()
-{
-	return *(m_Instance->m_Camera);
-}
+//Camera& Game::GetCamera()
+//{
+//	return *(m_Instance->m_Camera);
+//}
 
 // シーンを切り替える
 void Game::ChangeScene(SceneName sName)

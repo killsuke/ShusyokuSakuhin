@@ -23,7 +23,7 @@ class TestBoard :public GameObject
 private:
 	std::vector<SlashVertex> triangles;	// 切断用の三角形頂点データ
 public:
-	TestBoard(Camera* cam);
+	TestBoard();
 	~TestBoard();
 
 	void Init();

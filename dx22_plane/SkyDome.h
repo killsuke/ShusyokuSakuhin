@@ -11,7 +11,7 @@ private:
     int m_IndexCount = 0;
 
 public:
-    SkyDome(Camera* cam);	// コンストラクタ
+    SkyDome();	// コンストラクタ
     ~SkyDome();	// デストラクタ
 
     void Init();

@@ -4,7 +4,6 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Texture.h"
-#include "Camera.h"
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "ModelManager.h"
@@ -34,9 +33,6 @@ protected:
 	Texture m_Texture;	// テクスチャ
 	Shader m_Shader; // シェーダー
 
-	// カメラ
-	Camera* m_Camera = nullptr;
-
 	std::vector<VERTEX_3D> m_Vertices;	// 頂点情報
 
 	// 描画の為の情報（メッシュに関わる情報）
@@ -58,10 +54,9 @@ protected:
 
 public:
 	
-	GameObject() = default;
-	GameObject(Camera* cam);	// コンストラクタ
-	GameObject(const std::string& _name,const std::string& _tag, Camera* cam = nullptr)
-		: m_Camera(cam), name(_name), tag(_tag) {
+	GameObject();
+	GameObject(const std::string& _name,const std::string& _tag)
+		: name(_name), tag(_tag) {
 	}; // 名前とタグを指定して初期化
 	virtual ~GameObject();		// デストラクタ
 
@@ -94,17 +89,17 @@ public:
 	inline std::string& GetTag() { return tag; };
 	inline std::string& GetName() { return name; };
 
-	template<typename T1>
-	// コンポーネントを追加する
-	T1* AddComponent() {
-		static_assert(std::is_base_of<Component, T1>::value, 
-			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
+	//template<typename T1>
+	//// コンポーネントを追加する
+	//T1* AddComponent() {
+	//	static_assert(std::is_base_of<Component, T1>::value, 
+	//		"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
 
-		auto comp = std::make_unique<T1>();
-		T1* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
-		components.emplace_back(std::move(comp));
-		return ptr;
-	}
+	//	auto comp = std::make_unique<T1>();
+	//	T1* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+	//	components.emplace_back(std::move(comp));
+	//	return ptr;
+	//}
 
 	// 装備されているコンポーネントを取得して使用可能にする
 	template<typename T2>
@@ -117,15 +112,15 @@ public:
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
 
-	//template<typename T3>
-	//// コンポーネントを追加する
-	//T3* AddComponent(GameObject* obj) {
-	//	static_assert(std::is_base_of<Component, T3>::value,
-	//		"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
+	template<typename T3>
+	// コンポーネントを追加する
+	T3* AddComponent(GameObject* obj) {
+		static_assert(std::is_base_of<Component, T3>::value,
+			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
 
-	//	auto comp = std::make_unique<T3>(obj);
-	//	T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
-	//	components.emplace_back(std::move(comp));
-	//	return ptr;
-	//}
+		auto comp = std::make_unique<T3>(obj);
+		T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+		components.emplace_back(std::move(comp));
+		return ptr;
+	}
 };

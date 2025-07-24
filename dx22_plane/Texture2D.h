@@ -26,7 +26,7 @@ private:
 
 public:
 
-	Texture2D(Camera* cam); // コンストラクタ
+	Texture2D(); // コンストラクタ
 	~Texture2D(); // デストラクタ
 
 	void Init();

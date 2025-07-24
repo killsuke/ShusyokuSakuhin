@@ -12,7 +12,7 @@ private:
 	JumpComponent* jump = nullptr;
 	bool isGround = false; // ’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©
 public:
-	Test_Transparent(Camera* cam);
+	Test_Transparent();
 	~Test_Transparent();
 
 	void Init();

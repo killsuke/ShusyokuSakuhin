@@ -1,10 +1,11 @@
 #include "SkyDome.h"
 #include "Game.h"
+#include "Camera.h"
 #include <DDSTextureLoader.h>
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-SkyDome::SkyDome(Camera* cam) :GameObject(cam) {
+SkyDome::SkyDome() {
 }
 
 // デストラクタ
@@ -169,8 +170,9 @@ void SkyDome::Draw() {
 	m_VertexBuffer.SetGPU();
 	m_IndexBuffer.SetGPU();
 	//m_Texture.SetGPU();
+	auto camera = Game::GetInstance()->GetObjects<Camera>();
 
-	m_Camera->SetCamera(2);
+	camera[0]->SetCamera(2);
 
 	deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 

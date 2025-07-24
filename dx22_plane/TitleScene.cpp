@@ -7,6 +7,7 @@
 #include "TestBoard.h"
 #include "Test_Transparent.h"
 #include "SkyDome.h"
+#include "Camera.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -23,6 +24,7 @@ TitleScene::~TitleScene()
 // 初期化
 void TitleScene::Init()
 {
+	Camera* camera = Game::GetInstance()->AddObject<Camera>();
 	TestCube* cube = Game::GetInstance()->AddObject<TestCube>();
 	TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();
 	//SkyDome* dome = Game::GetInstance()->AddObject<SkyDome>();

@@ -1,11 +1,13 @@
 #include "Texture2D.h"
 #include "DirectXRender.h"
+#include "Game.h"
+#include "Camera.h"
 
 using namespace std;
 using namespace DirectX::SimpleMath;
 
 // コンストラクタ
-Texture2D::Texture2D(Camera* cam) :GameObject(cam)
+Texture2D::Texture2D()
 {
 
 }
@@ -121,8 +123,10 @@ void Texture2D::Draw()
 
 	//RendererSystem::SetUV(u, v, uw, vh);
 
+	auto camera = Game::GetInstance()->GetObjects<Camera>();
+
 	// カメラの設定を指定
-	m_Camera->SetCamera(1);
+	camera[0]->SetCamera(1);
 
 	deviceContext->DrawIndexed(
 		4, // 描画するインデックス数（四角形なんで４）
