@@ -4,32 +4,30 @@
 #include "Input.h"
 #include "Scene.h"
 #include "SceneList.h"
-
-// シーンの列挙型
-enum SCENES {
-	TITLE,
-	GAME,
-	RESULT
-};
+#include <memory>
 
 class SceneManager
 {
 public:
 	
-	SceneManager();	// コンストラクタ
-	~SceneManager();			// デストラクタ
-	static void SceneChange(SCENES scene);	// sceneの値で現在処理するべきシーンへと変更する
-	void Update();					// 現在のシーンの更新
-	void Draw();					// 現在のシーンの描画
+	SceneManager() = default;	// コンストラクタ
+	~SceneManager() = default;			// デストラクタ
+	template <typename T1>
+	static void SceneChange(T1){	// sceneの値で現在処理するべきシーンへと変更する
+		static_assert(std::is_base_of<Scene, T1>::value, "T1 must be derived from Scene");
+		m_pScene = std::make_unique<T1>();	// シーンを変更
+	};	
+	static void Init();					// シーンの初期化
+	static void Update();					// 現在のシーンの更新
+	static void UnInit();					// シーンの片付け
+
 	// シーンチェンジのフラグ管理
 	static void SetSCFrag(const bool _sceneChangeFg) { sceneChangeFg = _sceneChangeFg; };
 	static bool GetSCFrag() { return sceneChangeFg; };
-	static SCENES& GetNowScene() { return nowScene; };	// 現在のシーンを返す
 
 private:
-	static Scene* m_pScene;		// 現在のシーン（形だけの定義）
+	static std::unique_ptr<Scene> m_pScene;		// 現在のシーン
 	//Input input = Input::GetInstance();	// 入力処理のインスタンスを取得
 	Sound* sound = nullptr;	// サウンド用のインスタンス
 	static bool sceneChangeFg;	// シーンチェンジが起こったのかのフラグ
-	static SCENES nowScene;
 };

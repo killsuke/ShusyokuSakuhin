@@ -7,6 +7,14 @@
 using namespace DirectX::SimpleMath;
 using namespace std;
 
+Camera::Camera(GameObject& obj): Component(obj)
+{
+	m_sortNum = CAMERA;
+
+	// 初期化
+	Init();
+}
+
 //=======================================
 //初期化処理
 //=======================================
@@ -215,13 +223,7 @@ void Camera::Update()
 	Update3D();
 	UpdateSky();
 
-}
 
-//=======================================
-//描画処理
-//=======================================
-void Camera::Draw()
-{
 	// マウスの座標を取得
 	Vector2 mouseVec2 = Input::GetMousePositionNormalize();
 
@@ -293,6 +295,84 @@ void Camera::Draw()
 	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
 	DirectXRender::SetProjectionMatrix(&projectionMatrix);
+}
+
+//=======================================
+//描画処理
+//=======================================
+void Camera::Draw()
+{
+	//// マウスの座標を取得
+	//Vector2 mouseVec2 = Input::GetMousePositionNormalize();
+
+	//if (Input::MouseLeftPress() == true) {
+
+	//	// マウス座標の差分を計算
+	//	float delta_X = mouseVec2.x - prevMouse.x;
+	//	float delta_Y = mouseVec2.y - prevMouse.y;
+
+	//	// 感度（スピード）をかける
+	//	const float rotationSpeed = 0.1f;
+	//	m_Rotation.y -= delta_X * rotationSpeed;
+	//	m_Rotation.x += delta_Y * rotationSpeed;
+
+	//	// ラジアンに変換
+	//	float PitchRadians = DirectX::XMConvertToRadians(m_Rotation.x); // X軸回転
+	//	float YawRadians = DirectX::XMConvertToRadians(m_Rotation.y);     // Y軸回転
+	//	float RollRadians = DirectX::XMConvertToRadians(m_Rotation.z);   // Z軸回転
+
+	//	// クォータニオンを構成（ピッチ・ヨーを個別に回転軸に適用）
+	//	DirectX::XMVECTOR qPitch = DirectX::XMQuaternionRotationAxis(DirectX::XMVectorSet(1, 0, 0, 0), PitchRadians);
+	//	DirectX::XMVECTOR qYaw = DirectX::XMQuaternionRotationAxis(DirectX::XMVectorSet(0, 1, 0, 0), YawRadians);
+
+	//	// 合成（順番注意：Yawを先にかけると、カメラが左右中心に回る）
+	//	DirectX::XMVECTOR qRotation = DirectX::XMQuaternionMultiply(qPitch, qYaw);
+
+	//	// 回転行列に変換
+	//	DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationQuaternion(qRotation);
+
+	//	//// オイラー角の計算
+	//	//// 回転行列作成
+	//	//DirectX::XMVECTOR rotVec = DirectX::XMVectorSet(PitchRadians, YawRadians, RollRadians, 0.0f);
+	//	//DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationRollPitchYawFromVector(rotVec);
+
+	//	// 前方ベクトル回転
+	//	DirectX::XMVECTOR forward = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 0, 1, 0), rotMat);
+
+	//	// ターゲット計算
+	//	m_Target = DirectX::XMVectorAdd(m_Position, forward);
+	//}
+	//// ビュー変換後列作成
+	//Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	//m_ViewMatrix = DirectX::XMMatrixLookAtLH(m_Position, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+
+	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	//// このコードは確認テストのために残す
+	//// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+
+	//// このフレームのマウス位置を次回に備えて保存
+	//prevMouse.x = mouseVec2.x;
+	//prevMouse.y = mouseVec2.y;
+
+	//DirectXRender::SetViewMatrix(&m_ViewMatrix);
+
+	////プロジェクション行列の生成
+	//constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+
+	//float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
+	//float nearPlane = 1.0f;       // ニアクリップ
+	//float farPlane = 1000.0f;      // ファークリップ
+
+	////プロジェクション行列の生成
+	//Matrix projectionMatrix;
+	//projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	//// このコードは確認テストのために残す
+	//// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+
+	//DirectXRender::SetProjectionMatrix(&projectionMatrix);
 }
 
 

@@ -67,12 +67,12 @@ public:
 	template<class T> std::vector<T*> GetObjects()
 	{
 		std::vector<T*> res;
-		for (auto& o : m_Instance->m_Objects) {
-			// dynamic_castで型をチェック
-			if (T* derivedObj = dynamic_cast<T*>(o.get())) {
-				res.emplace_back(derivedObj);
-			}
-		}
+		//for (auto& o : m_Instance->m_Objects) {
+		//	// dynamic_castで型をチェック
+		//	if (T* derivedObj = dynamic_cast<T*>(o.get())) {
+		//		res.emplace_back(derivedObj);
+		//	}
+		//}
 		return res;
 	}
 

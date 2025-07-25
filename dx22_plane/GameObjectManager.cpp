@@ -30,37 +30,20 @@ void GameObjectManager::RemoveTagObject(const std::string& tag) {
 void GameObjectManager::Update() {
 	SizeUP();
 
+	// 描画順を整える
+	DrawSort();
+
 	for (auto obj : objects) {
 		obj->Update();
 		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
+	/*	if (SceneManager::GetSCFrag() == true) {
 			SceneManager::SetSCFrag(false);
 			break;
-		}
+		}*/
 	}
 
 	// インスタンスの削除処理
 	RemoveObject();
-
-	// 描画順を整える
-	DrawSort();
-}
-
-// 描画
-void GameObjectManager::Draw() {
-	
-	// 描画順を整える
-//	DrawSort();
-
-	// 全てのGameObjectの描画はここでやる
-	for (auto& obj : objects) {	
-		obj->Draw();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag()) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
 }
 
 // オブジェクトを管理するリストを全て空にする

@@ -11,14 +11,14 @@ GameObject::~GameObject() {
 
 }
 
-//void GameObject::Update() {
-//	// コンポーネントの更新
-//	for (auto& component : components) {
-//		if (component) {
-//			component->Update();
-//		}
-//	}
-//}
+void GameObject::Update() {
+	// コンポーネントの更新
+	for (auto& component : components) {
+		if (component) {
+			component->Update();
+		}
+	}
+}
 
 void GameObject::SortComponents(){
 	std::sort(components.begin(), components.end(),

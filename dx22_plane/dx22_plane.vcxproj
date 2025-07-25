@@ -174,7 +174,9 @@
     <ClCompile Include="dx11helper.cpp" />
     <ClCompile Include="EntityDeleter.cpp" />
     <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
@@ -238,7 +240,9 @@
     <ClInclude Include="dx11helper.h" />
     <ClInclude Include="EntityDeleter.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Game.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />

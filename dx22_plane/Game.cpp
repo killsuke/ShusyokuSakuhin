@@ -2,6 +2,7 @@
 //#include "Renderer.h"
 #include "Application.h"
 #include "Camera.h"
+#include "GameObjectManager.h"
 
 
 Game* Game::m_Instance = nullptr;
@@ -56,13 +57,13 @@ void Game::Update()
 //	m_Instance->m_Camera->Update();
 
 	// 入力処理更新
-	m_Instance->m_Input->Update();
+	//m_Instance->m_Input->Update();
 
-	// オブジェクト更新
-	for (auto& o : m_Instance->m_Objects)
-	{
-		o->Update();
-	}
+	//// オブジェクト更新
+	//for (auto& o : m_Instance->m_Objects)
+	//{
+	//	o->Update();
+	//}
 }
 
 // 描画
@@ -74,14 +75,7 @@ void Game::Draw()
 	// 描画前処理
 	DirectXRender::DrawBegin();
 
-	// カメラ描画
-//	m_Instance->m_Camera->Draw();
-
-	// オブジェクト描画
-	for (auto& o : m_Instance->m_Objects)
-	{
-		o->Draw();
-	}
+	GameObjectManager::Update();
 
 	// ImGuiの描画
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -98,21 +92,6 @@ void Game::Uninit()
 	//オブジェクトを全て削除
 	m_Instance->DeleteAllObject();
 
-	// オブジェクト終了処理
- 	// (※DeleteObject関数で実行するように変更）
-	//for (auto& o : m_Instance->m_Objects)
-	//{
-	//	o->Uninit();
-	//}
-
-		// カメラ終了処理
-//	m_Instance->m_Camera->Uninit();
-
-	// 描画終了処理
-//	RendererSystem::Uninit();
-
-	//soundScene.Uninit();
-
 	delete m_Instance;
 	m_Instance = nullptr;
 }
@@ -123,11 +102,6 @@ Game* Game::GetInstance()
 	return m_Instance;
 }
 
-// カメラを取得する
-//Camera& Game::GetCamera()
-//{
-//	return *(m_Instance->m_Camera);
-//}
 
 // シーンを切り替える
 void Game::ChangeScene(SceneName sName)
@@ -160,7 +134,7 @@ void Game::DeleteObject(GameObject* pt)
 {
 	if (pt == NULL) return;
 
-	pt->Uninit(); // 終了処理
+	//pt->Uninit(); // 終了処理
 
 	// 要素を削除
 	m_Instance->m_Objects.erase(
@@ -176,10 +150,10 @@ void Game::DeleteObject(GameObject* pt)
 void Game::DeleteAllObject()
 {
 	// オブジェクト終了処理
-	for (auto& o : m_Instance->m_Objects)
-	{
-		o->Uninit();
-	}
+	//for (auto& o : m_Instance->m_Objects)
+	//{
+	//	o->Uninit();
+	//}
 
 	m_Instance->m_Objects.clear(); //全て削除
 	m_Instance->m_Objects.shrink_to_fit();

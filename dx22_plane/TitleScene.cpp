@@ -1,13 +1,15 @@
 #include "TitleScene.h"
-#include "Game.h"
 #include "Texture2D.h"
 #include "TestCube.h"
-#include "EntityManager.h"
 #include "Singleton.h"
 #include "TestBoard.h"
 #include "Test_Transparent.h"
 #include "SkyDome.h"
 #include "Camera.h"
+#include "GameObjectManager.h"
+#include "Transform.h"
+#include "CubeMesh.h"
+#include "Render3D.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -24,11 +26,24 @@ TitleScene::~TitleScene()
 // 初期化
 void TitleScene::Init()
 {
-	Camera* camera = Game::GetInstance()->AddObject<Camera>();
+	auto camera = GameObjectManager::AddObject<GameObject>("camera","Camera");
+	camera->AddComponent<TransformComponent>(*camera);
+	camera->AddComponent<Camera>(*camera);
+
+	auto cube = GameObjectManager::AddObject<GameObject>("cube", "Cube");
+	auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+	cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
+	CubeMesh cubeMesh;
+	auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+	cubeRe->SetMesh(cubeMesh);
+	cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	cubeRe->SetTexture("assets/texture/NoTexture.png");
+
+	/*Camera* camera = Game::GetInstance()->AddObject<Camera>();
 	TestCube* cube = Game::GetInstance()->AddObject<TestCube>();
 	TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();
 	SkyDome* dome = Game::GetInstance()->AddObject<SkyDome>();
-	Test_Transparent* transparent = Game::GetInstance()->AddObject<Test_Transparent>();
+	Test_Transparent* transparent = Game::GetInstance()->AddObject<Test_Transparent>();*/
 
 
 
@@ -88,9 +103,5 @@ void TitleScene::Update()
 // 終了処理
 void TitleScene::Uninit()
 {
-	// このシーンのオブジェクトを削除する
-	for (auto& o : m_MySceneObjects) {
-		Game::GetInstance()->DeleteObject(o);
-	}
-	//soundTitle.Stop(SOUND_LABEL_BGM001);
+
 }

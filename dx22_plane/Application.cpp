@@ -3,8 +3,8 @@
 #include "Application.h"
 #include "DirectXRender.h"
 #include "Game.h"
-#include "EntityDeleter.h"
 #include "GameObjectManager.h"
+#include "SceneManager.h"
 
 // Application.cppの先頭などにこれを追加すればOK
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -242,31 +242,10 @@ void Application::MainLoop()
 
 	// 描画初期化
 	DirectXRender::Init();
-	GameObjectManager::Init();
+	SceneManager::Init();
 
 	auto deviceContext = DirectXRender::GetDeviceContext();
 	auto device = DirectXRender::GetDevice();
-
-	//SystemManager systemManager;	// システムのマネージャー作成
-	//EntityManager entityManager;	// エンティティのマネージャー作成
-	//EntityDeleter entityDeleter;	// エンティティとそれについているコンポーネントを削除
-
-	//systemManager.AddSystem<TransformSystem>();
-	//
-	//uint32_t entity1 = entityManager.CreateEntity();
-
-	//systemManager.GetSystem<TransformSystem>().AddComponent(entity1, TransformComponent{});
-
-
-	//auto transform = systemManager.GetSystem<TransformSystem>().GetComponent(entity1);
-
-	///*entityManager.DestroyEntity(entity1);
-	//systemManager.RemoveComponentFromAll(entity1);*/
-	//entityDeleter.MarkForDeletion(entity1);
-	//entityDeleter.ProcessDeletions(entityManager, systemManager);
-
-	// 初期化
-	Game::Init();
 
 	// ImGuiコンテキストの作成
 	IMGUI_CHECKVERSION();
@@ -297,9 +276,6 @@ void Application::MainLoop()
 	QueryPerformanceCounter(&liWork);
 	long long oldCount = liWork.QuadPart;// 前回計測時の時間
 	long long nowCount = oldCount;// 今回計測時の時間
-
-	// エンティティ削除とかも出来るようにしておく
-	EntityDeleter* entityDeleter = mozc::Singleton<EntityDeleter>::GetInstance();
 
 	// ゲームループ
 	while (1)
@@ -351,21 +327,8 @@ void Application::MainLoop()
 				draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
 
 				ImGui::End();
-				//				systemManager.Update();
 
-								// 削除処理とか行う
-				entityDeleter->Update();
-
-				GameObjectManager::Update();
-
-				// 更新
-				Game::Update();
-
-				GameObjectManager::Draw();
-
-				// 描画
-				Game::Draw();
-
+				SceneManager::Update(); // シーンの更新
 
 				fpsCounter++; // ゲーム処理を実行したら＋１する
 				oldCount = nowCount;
@@ -388,12 +351,8 @@ void Application::MainLoop()
 		}
 	}
 
-	mozc::FinalizeSingletons();
-
-	GameObjectManager::UnInit();
-
 	// 終了処理
-	Game::Uninit();
+	SceneManager::UnInit();
 
 	// 描画初期化
 	DirectXRender::UnInit();

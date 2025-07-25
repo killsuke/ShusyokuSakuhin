@@ -3,16 +3,20 @@
 #include "Camera.h"
 #include "Game.h"
 #include "Transform.h"
+#include "GameObjectManager.h"
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = RENDER;
+	m_Shader = std::make_unique<Shader>();
+	m_Texture = std::make_unique<Texture>();
 }
 
 void Render3DComponent::Update()
 {
 	auto transform = p_object->GetComponent<TransformComponent>();
+	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
-	if (transform != nullptr) {
+	if (transform != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
@@ -30,10 +34,10 @@ void Render3DComponent::Update()
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
 
-		auto camera = Game::GetInstance()->GetObjects<Camera>();
+		auto cameraComp = cameraobj->GetComponent<Camera>();
 
-		cb.matrixView = camera[0]->GetViewMtx3D();
-		cb.matrixProj = camera[0]->GetProjMtx3D();
+		cb.matrixView = cameraComp->GetViewMtx3D();
+		cb.matrixProj = cameraComp->GetProjMtx3D();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

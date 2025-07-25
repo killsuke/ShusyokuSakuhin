@@ -186,14 +186,14 @@ public:
 	inline void SetColliderSize_AABB(const DirectX::XMFLOAT3& pos,
 		const DirectX::XMFLOAT3& size) {
 		// Å¬’l
-		this->coll_ab.min.x = pos.x - size.x;
-		this->coll_ab.min.y = pos.y - size.y;
-		this->coll_ab.min.z = pos.z - size.z;
+		coll_ab.min.x = pos.x - size.x;
+		coll_ab.min.y = pos.y - size.y;
+		coll_ab.min.z = pos.z - size.z;
 
 		// Å‘å’l
-		this->coll_ab.max.x = pos.x + size.x;
-		this->coll_ab.max.y = pos.y + size.y;
-		this->coll_ab.max.z = pos.z + size.z;
+		coll_ab.max.x = pos.x + size.x;
+		coll_ab.max.y = pos.y + size.y;
+		coll_ab.max.z = pos.z + size.z;
 	};
 
 	inline void SetColliderSize_Sphere(const DirectX::XMFLOAT3& pos, const float radius) {

@@ -59,13 +59,14 @@ public:
 	GameObject(const std::string& _name,const std::string& _tag)
 		: name(_name), tag(_tag) {
 	}; // 名前とタグを指定して初期化
-	virtual ~GameObject();		// デストラクタ
+//	virtual ~GameObject();		// デストラクタ
+	~GameObject();	// デフォルトデストラクタ
 
-	virtual void Init() = 0;
-	virtual void Update() = 0;
-//	void Update();
-	virtual void Draw() = 0;
-	virtual void Uninit() = 0;
+//	virtual void Init() = 0;
+//	virtual void Update() = 0;
+	void Update();
+//	virtual void Draw() = 0;
+//	virtual void Uninit() = 0;
 
 	// position セッター関数・ゲッター関数
 	inline void SetPosition(const DirectX::SimpleMath::Vector3& pos) { this->m_Position = pos; };

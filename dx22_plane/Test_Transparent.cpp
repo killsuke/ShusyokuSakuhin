@@ -201,7 +201,7 @@ void Test_Transparent::Init()
 
 	color = { 1.0f,1.0f,1.0f,1.0f };
 
-	jump = new JumpComponent(50.0f);
+//	jump = new JumpComponent(50.0f);
 
 	AddComponent<TransformComponent>(*this);
 	AddComponent<ColliderComponent>(*this);
@@ -249,7 +249,7 @@ void Test_Transparent::Update()
 	}
 
 	// ジャンプの処理（テスト）
-	jump->JumpAction(*rigid, jumpPress, isGround,trigger);
+	//jump->JumpAction(*rigid, jumpPress, isGround,trigger);
 
 
 	rigid->ReduceVelocity_X();
@@ -413,6 +413,6 @@ void Test_Transparent::Draw()
 //=======================================
 void Test_Transparent::Uninit()
 {
-	delete jump;
-	jump = nullptr;
+	//delete jump;
+	//jump = nullptr;
 }

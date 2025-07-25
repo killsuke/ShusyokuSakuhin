@@ -7,8 +7,6 @@
 class TitleScene : public Scene
 {
 private:
-	std::vector<GameObject*> m_MySceneObjects; // このシーンのオブジェクト
-	bool setumeiFg = false;
 	void Init(); // 初期化
 	void Uninit(); // 終了処理
 

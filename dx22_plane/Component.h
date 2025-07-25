@@ -10,6 +10,7 @@ enum ComponentType {
 	RIGIDBODY,
 	COLLIDER,
 	RENDER,
+	CAMERA,
 
 	Max			// 最大値（コンポーネントの種類数）
 };

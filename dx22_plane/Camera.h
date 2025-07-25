@@ -2,13 +2,14 @@
 
 #include	<SimpleMath.h>
 #include "GameObject.h"
+#include "Component.h"
 
 #define CARCAMERA (0.01745f)
 
 //-----------------------------------------------------------------------------
 //CameraƒNƒ‰ƒX
 //-----------------------------------------------------------------------------
-class Camera : public GameObject {
+class Camera : public Component {
 private:
 	DirectX::SimpleMath::Vector3	m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3	m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
@@ -41,6 +42,9 @@ private:
 	void UpdateSky();
 
 public:
+
+	Camera(GameObject& obj);
+	~Camera() = default;
 
 	void Init();
 	void Update();
