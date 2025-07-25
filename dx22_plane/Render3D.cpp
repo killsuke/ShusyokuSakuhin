@@ -5,7 +5,7 @@
 #include "Transform.h"
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
-
+	m_sortNum = RENDER;
 }
 
 void Render3DComponent::Update()

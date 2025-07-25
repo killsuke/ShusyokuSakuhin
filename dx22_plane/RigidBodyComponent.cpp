@@ -2,6 +2,7 @@
 
 // Transformより、XMFLOAT3の方が良いのでは？
 RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, mass(0.0f), Component(obj){
+	m_sortNum = RIGIDBODY; // ソート番号を設定
 	lastTime = std::chrono::high_resolution_clock::now();
 }
 

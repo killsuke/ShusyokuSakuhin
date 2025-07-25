@@ -102,6 +102,9 @@ public:
 	//	return ptr;
 	//}
 
+	// コンポーネントのソート番号でソート
+	void SortComponents();	
+
 	// 装備されているコンポーネントを取得して使用可能にする
 	template<typename T2>
 	T2* GetComponent() {
@@ -122,6 +125,7 @@ public:
 		auto comp = std::make_unique<T3>(obj);
 		T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
 		components.emplace_back(std::move(comp));
+		SortComponents();
 		return ptr;
 	}
 };

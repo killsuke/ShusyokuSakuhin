@@ -4,6 +4,7 @@
 #include "DirectXRender.h"
 #include "Game.h"
 #include "EntityDeleter.h"
+#include "GameObjectManager.h"
 
 // Application.cppの先頭などにこれを追加すればOK
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -241,6 +242,7 @@ void Application::MainLoop()
 
 	// 描画初期化
 	DirectXRender::Init();
+	GameObjectManager::Init();
 
 	auto deviceContext = DirectXRender::GetDeviceContext();
 	auto device = DirectXRender::GetDevice();
@@ -354,8 +356,12 @@ void Application::MainLoop()
 								// 削除処理とか行う
 				entityDeleter->Update();
 
+				GameObjectManager::Update();
+
 				// 更新
 				Game::Update();
+
+				GameObjectManager::Draw();
 
 				// 描画
 				Game::Draw();
@@ -383,6 +389,9 @@ void Application::MainLoop()
 	}
 
 	mozc::FinalizeSingletons();
+
+	GameObjectManager::UnInit();
+
 	// 終了処理
 	Game::Uninit();
 

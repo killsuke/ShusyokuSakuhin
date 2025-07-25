@@ -1,7 +1,7 @@
 #include "Transform.h"
 
 TransformComponent::TransformComponent(GameObject& obj) :Component(obj) {
-
+	m_sortNum = TRANSFORM; // ソート番号を設定
 }
 
 // 更新処理

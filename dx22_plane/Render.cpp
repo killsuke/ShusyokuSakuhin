@@ -2,7 +2,7 @@
 #include "Transform.h"
 
 RenderComponent::RenderComponent(GameObject& obj) :Component(obj) {
-
+	m_sortNum = RENDER;
 }
 
 void RenderComponent::Update()

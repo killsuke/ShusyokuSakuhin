@@ -1,4 +1,5 @@
 #include "Collider.h"
+#include "Transform.h"
 #include <algorithm>  // std::min, std::maxのためのヘッダー
 #include <cmath>     // fabsのためのヘッダー
 #include <iostream>
@@ -6,12 +7,17 @@
 using namespace DirectX::SimpleMath;
 
 ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
+	m_sortNum = COLLIDER; // ソート番号を設定
 }
 
 void ColliderComponent::Update()
 {
-	// 当たり判定の更新処理をここに記述
-	// 例: オブジェクトの位置や状態に基づいて当たり判定を更新する
+	auto transform = p_object->GetComponent<TransformComponent>();
+
+	auto pos = transform->GetPosition();
+	auto scale = transform->GetScale();
+
+	SetColliderSize_AABB(pos, scale);
 }
 
 //==================================

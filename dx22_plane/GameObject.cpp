@@ -19,3 +19,10 @@ GameObject::~GameObject() {
 //		}
 //	}
 //}
+
+void GameObject::SortComponents(){
+	std::sort(components.begin(), components.end(),
+		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
+			return a->GetSortNum() < b->GetSortNum();
+		});
+}

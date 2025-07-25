@@ -68,11 +68,6 @@ void GameObjectManager::ListClear() {
 	objects.clear();
 };
 
-// 片付け
-void GameObjectManager::Uninit() {
-	ListClear();
-};
-
 // 描画順のソート
 void GameObjectManager::DrawSort() {
 	auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {

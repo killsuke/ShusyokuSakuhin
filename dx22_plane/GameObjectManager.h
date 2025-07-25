@@ -24,33 +24,31 @@ class GameObjectManager
 {
 public:
 	// コンストラクタ
-	GameObjectManager() {
-		objects.reserve(1000);
-	};
+	GameObjectManager() = default;
+
+	static void Init() { objects.reserve(1000); };
+
 	// デストラクタ
-	~GameObjectManager() {
-		ListClear();
-	};
-	
+	~GameObjectManager() = default;
+	static void UnInit() { ListClear(); };
+
 	// リストにゲームオブジェクトを追加
 	template <typename T1>
-	static T1* AddObject(const std::string& _name = "Noname",const std::string& _tag = "Notag") {
+	static T1* AddObject(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
 		static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
 
-		objects.emplace_back(MakeObject<T1>(_name,_tag));
+		objects.emplace_back(MakeObject<T1>(_name, _tag));
 
 		auto ptr = static_cast<T1*>(objects.back().get());
 
 		return ptr;
 	}
 
-	void RemoveObject();	 // オブジェクトを削除する（後に使いやすいように改造）
+	static void RemoveObject();	 // オブジェクトを削除する（後に使いやすいように改造）
 	static void RemoveTagObject(const std::string& tag);
-	void Update();
-	void Draw();
-	void ListClear();		// ベクター内をクリア
-	void Uninit();
-
+	static void Update();
+	static void Draw();
+	static void ListClear();		// ベクター内をクリア
 
 	static int ListSize() { return static_cast<int>(objects.size()); };	// オブジェクトをいくつ格納しているのかを返す
 
@@ -60,7 +58,7 @@ public:
 	// ゲームオブジェクトを見つければ返す
 	static std::shared_ptr<GameObject>				GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
 	static std::vector<std::shared_ptr<GameObject>> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	void SizeUP();
+	static void SizeUP();
 
 private:
 
