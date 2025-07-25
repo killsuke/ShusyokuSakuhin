@@ -52,4 +52,9 @@ public:
 
 	inline DirectX::XMMATRIX GetWorldMatrix() const { return m_transform.worldMatrix; };
 	inline DirectX::XMMATRIX GetLocalMatrix() const { return m_transform.localMatrix; };
+
+	inline void AddPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position += position; };
+
+	void MakeWorldMatrix();
+	void MakeLocalMatrix();
 };

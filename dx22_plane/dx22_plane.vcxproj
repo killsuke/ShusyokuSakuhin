@@ -187,6 +187,7 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Render3D.cpp" />
+    <ClCompile Include="Render3DColliderAABBComponent.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -208,7 +209,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Test_Transparent.cpp" />
+    <ClCompile Include="TestExtrusionComponent.cpp" />
+    <ClCompile Include="TestMoveComponent.cpp" />
+    <ClCompile Include="Test_Transparent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -256,6 +261,7 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Render3D.h" />
+    <ClInclude Include="Render3DColliderAABBComponent.h" />
     <ClInclude Include="RenderElement.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
@@ -280,7 +286,11 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Test_Transparent.h" />
+    <ClInclude Include="TestExtrusionComponent.h" />
+    <ClInclude Include="TestMoveComponent.h" />
+    <ClInclude Include="Test_Transparent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureManager.h" />

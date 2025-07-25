@@ -45,5 +45,6 @@ public:
 	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
 	void SetTexture(const std::string& fileName) { m_Texture->Load(fileName); };
 	void SetMesh(Mesh& mesh);
+	void SetColor(const DirectX::XMFLOAT4 color) { m_Color = color; };
 };
 

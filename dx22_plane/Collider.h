@@ -54,6 +54,11 @@ struct Sphere {
 struct AABB {
 	DirectX::SimpleMath::Vector3 min = {};
 	DirectX::SimpleMath::Vector3 max = {};
+	DirectX::SimpleMath::Vector3 offsetCenter = {};
+	DirectX::SimpleMath::Vector3 offsetSize = {};
+
+	// ワールド行列
+	DirectX::XMMATRIX worldAABBMatrix = {};
 
 	/*bool none = false;
 	bool left = false;
@@ -78,6 +83,9 @@ private:
 	AABB coll_ab; // AABBの当たり判定用
 	OBB coll_ob; // OBBの当たり判定用
 	Sphere coll_sp; // 球体の当たり判定用
+
+
+//	DirectX::SimpleMath::Vector3 offsetRotation = {};
 
 public:
 	ColliderComponent() = default;
@@ -111,7 +119,7 @@ public:
 
 	// 検知と押し出し
 	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
-	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
 	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
 
 	// レイとAABBの当たり判定
@@ -185,15 +193,24 @@ public:
 
 	inline void SetColliderSize_AABB(const DirectX::XMFLOAT3& pos,
 		const DirectX::XMFLOAT3& size) {
+
+		DirectX::XMFLOAT3 offsetCenter = { pos.x + coll_ab.offsetCenter.x, 
+									 pos.y + coll_ab.offsetCenter.y,
+									 pos.z + coll_ab.offsetCenter.z };
+
+		DirectX::XMFLOAT3 offsetSize =   { size.x + coll_ab.offsetSize.x,
+									 size.y + coll_ab.offsetSize.y,
+									 size.z + coll_ab.offsetSize.z };
+
 		// 最小値
-		coll_ab.min.x = pos.x - size.x;
-		coll_ab.min.y = pos.y - size.y;
-		coll_ab.min.z = pos.z - size.z;
+		coll_ab.min.x = offsetCenter.x - offsetSize.x;
+		coll_ab.min.y = offsetCenter.y - offsetSize.y;
+		coll_ab.min.z = offsetCenter.z - offsetSize.z;
 
 		// 最大値
-		coll_ab.max.x = pos.x + size.x;
-		coll_ab.max.y = pos.y + size.y;
-		coll_ab.max.z = pos.z + size.z;
+		coll_ab.max.x = offsetCenter.x + offsetSize.x;
+		coll_ab.max.y = offsetCenter.y + offsetSize.y;
+		coll_ab.max.z = offsetCenter.z + offsetSize.z;
 	};
 
 	inline void SetColliderSize_Sphere(const DirectX::XMFLOAT3& pos, const float radius) {
@@ -201,11 +218,22 @@ public:
 		this->coll_sp.radius = radius;
 	};
 
+	inline void SetOffsetCenterAABB(const DirectX::SimpleMath::Vector3& offset) { coll_ab.offsetCenter = offset; };
+	inline void SetOffsetSizeAABB(const DirectX::SimpleMath::Vector3& offset) { coll_ab.offsetSize = offset; };
+//	inline void SetOffsetRotation(const DirectX::SimpleMath::Vector3& offset) { this->offsetRotation = offset; };
+
 	// ゲッター
 	inline OBB& GetColliderSize_OBB() { return this->coll_ob; };
 	inline AABB& GetColliderSize_AABB() { return this->coll_ab; };
 	inline Sphere& GetColliderSize_Sphere() { return this->coll_sp; };
 
+	inline DirectX::SimpleMath::Vector3 GetOffsetCenterAABB() const { return coll_ab.offsetCenter; };
+	inline DirectX::SimpleMath::Vector3 GetOffsetSizeAABB() const { return coll_ab.offsetSize; };
+//	inline DirectX::SimpleMath::Vector3 GetOffsetRotation() const { return offsetRotation; };	
+
+	inline DirectX::XMMATRIX GetWorldAABBMatrix() const { return coll_ab.worldAABBMatrix; };
+
+	void MakeWorldAABBMatrix();
 
 	//struct Plane {
 	//	DirectX::SimpleMath::Vector3 normal; // 平面の法線ベクトル

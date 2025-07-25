@@ -6,10 +6,13 @@
 enum ComponentType {
 	// コンポーネントの種類
 	BASECOMPONENT = 0, // ベースコンポーネント（抽象クラス）
+	TEST_MOVE,
 	TRANSFORM,
 	RIGIDBODY,
 	COLLIDER,
+	TEST_EXTRUSION,
 	RENDER,
+	COLLIDER_DEBUG,
 	CAMERA,
 
 	Max			// 最大値（コンポーネントの種類数）

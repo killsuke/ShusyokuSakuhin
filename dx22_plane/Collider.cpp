@@ -18,6 +18,30 @@ void ColliderComponent::Update()
 	auto scale = transform->GetScale();
 
 	SetColliderSize_AABB(pos, scale);
+
+	MakeWorldAABBMatrix();
+}
+
+void ColliderComponent::MakeWorldAABBMatrix() {
+	DirectX::XMFLOAT3 outCenter = {};
+	DirectX::XMFLOAT3 outSize = {};
+
+	outCenter.x = (coll_ab.min.x + coll_ab.max.x) * 0.5f;
+	outCenter.y = (coll_ab.min.y + coll_ab.max.y) * 0.5f;
+	outCenter.z = (coll_ab.min.z + coll_ab.max.z) * 0.5f;
+
+	outSize.x = (coll_ab.max.x - coll_ab.min.x) * 0.5f;
+	outSize.y = (coll_ab.max.y - coll_ab.min.y) * 0.5f;
+	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
+
+	// SRT情報作成
+	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f);
+	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(outCenter.x, outCenter.y, outCenter.z);
+	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(outSize.x, outSize.y, outSize.z);
+
+	// ワールド行列を作成し、保存
+	coll_ab.worldAABBMatrix = s * r * t;
+	coll_ab.worldAABBMatrix = DirectX::XMMatrixTranspose(coll_ab.worldAABBMatrix); // 行列を転置
 }
 
 //==================================
@@ -434,7 +458,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const A
 // どこから当たっているのか含む
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos, DirectX::XMFLOAT3& hitNormal) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& hitNormal) {
 
 	// そもそも衝突しているかどうかのチェック
 	// 奥行きからの敵の登場のことも考えて、念のため
@@ -515,10 +539,20 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, 
 		//	hitNormal = { 0.0f, (pushBack.y > 0.0f) ? -1.0f : 1.0f, 0.0f }; // Y方向の法線
 		//}
 
+		// 位置補正をして、SRT情報を再計算
+		auto transform = p_object->GetComponent<TransformComponent>();
+		transform->AddPosition({ pushBack });
+		transform->MakeWorldMatrix();
+
+		auto pos = transform->GetPosition();
+		auto size = transform->GetScale();
+		SetColliderSize_AABB(pos, size);
+		MakeWorldAABBMatrix();
+
 		// オブジェクトの位置を押し戻しベクトル分だけ移動させて、衝突によるめり込みを解消する
-		pos.x += pushBack.x;
-		pos.y += pushBack.y;
-		pos.z += 0.0f;	// 2.5DなのでZ軸は無視
+		//pos.x += pushBack.x;
+		//pos.y += pushBack.y;
+		//pos.z += 0.0f;	// 2.5DなのでZ軸は無視
 	}
 
 	// 衝突しているかどうかを返す

@@ -10,6 +10,10 @@
 #include "Transform.h"
 #include "CubeMesh.h"
 #include "Render3D.h"
+#include "Render3DColliderAABBComponent.h"
+#include "Collider.h"
+#include "TestMoveComponent.h"
+#include "TestExtrusionComponent.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -26,54 +30,61 @@ TitleScene::~TitleScene()
 // 初期化
 void TitleScene::Init()
 {
-	auto camera = GameObjectManager::AddObject<GameObject>("camera","Camera");
+	auto camera = GameObjectManager::AddObject("camera","Camera");
 	camera->AddComponent<TransformComponent>(*camera);
 	camera->AddComponent<Camera>(*camera);
 
-	auto cube = GameObjectManager::AddObject<GameObject>("cube", "Cube");
-	auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
-	cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
-	CubeMesh cubeMesh;
-	auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
-	cubeRe->SetMesh(cubeMesh);
-	cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	cubeRe->SetTexture("assets/texture/NoTexture.png");
+	{
+		auto cube = GameObjectManager::AddObject("cube1", "Cube");
+		cube->AddComponent<TestMoveComponent>(*cube);
 
-	/*Camera* camera = Game::GetInstance()->AddObject<Camera>();
-	TestCube* cube = Game::GetInstance()->AddObject<TestCube>();
-	TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();
-	SkyDome* dome = Game::GetInstance()->AddObject<SkyDome>();
-	Test_Transparent* transparent = Game::GetInstance()->AddObject<Test_Transparent>();*/
+		auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+		cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
+		cubeTrans->SetPosition({ 30.0f,30.0f,0.0f });
 
+		auto cubeColl = cube->AddComponent<ColliderComponent>(*cube);
+		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
+		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>(*cube);
 
+		CubeMesh cubeMesh;
+		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+		cubeRe->SetMesh(cubeMesh);
+		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
-	//TestBoard* board = Game::GetInstance()->AddObject<TestBoard>();
-	//Test_Transparent* transparent = Game::GetInstance()->AddObject<Test_Transparent>();
-	/*Test_Transparent* transparent2 = Game::GetInstance()->AddObject<Test_Transparent>();
+		CubeMesh cubeMesh2;
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
+		cubeRe2->SetMesh(cubeMesh2);
+		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe2->SetTexture("assets/texture/NoTexture.png");
+		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+	}
 
-	transparent2->SetPosition({ 50.0f, 100.0f, 0.0f });*/
+	{
+		auto cube = GameObjectManager::AddObject("cube2", "Cube");
 
-//	EntityManager* entityMn = mozc::Singleton<EntityManager>::GetInstance();
+		auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+		cubeTrans->SetScale({ 20.0f, 20.0f, 10.0f });
+		cubeTrans->SetPosition({ 0.0f, -10.0f, 0.0f });
 
+		auto cubeColl = cube->AddComponent<ColliderComponent>(*cube);
+		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
-	// 背景画像オブジェクトを作成
-	//Texture2D* pt = Game::GetInstance()->AddObject<Texture2D>();
-	//pt->SetTexture("assets/texture/title_car.png");	// 画像を指定
-	//pt->SetPosition(0.0f, 0.0f, 0.0f);	// 位置を指定
-	//pt->SetRotation(0.0f, 0.0f, 0.0f);	// 角度を指定
-	//pt->SetScale(1280.0f, 720.0f, 0.0f);// 大きさを指定
-	//m_MySceneObjects.emplace_back(pt);
+		CubeMesh cubeMesh;
+		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+		cubeRe->SetMesh(cubeMesh);
+		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
-	// 背景画像オブジェクトを作成
-	//Texture2D* pt2 = Game::GetInstance()->AddObject<Texture2D>();
-	//pt2->SetTexture("assets/texture/titlerogo.png");	// 画像を指定
-	//pt2->SetPosition(0.0f, 0.0f, 0.0f);	// 位置を指定
-	//pt2->SetRotation(0.0f, 0.0f, 0.0f);	// 角度を指定
-	//pt2->SetScale(780.0f, 520.0f, 0.0f);// 大きさを指定
-	//m_MySceneObjects.emplace_back(pt2);
+		CubeMesh cubeMesh2;
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
+		cubeRe2->SetMesh(cubeMesh2);
+		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe2->SetTexture("assets/texture/NoTexture.png");
+		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+	}
 
-	//soundTitle.Play(SOUND_LABEL_BGM001);
 }
 
 // 更新

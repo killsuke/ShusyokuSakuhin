@@ -33,13 +33,13 @@ public:
 	static void UnInit() { ListClear(); };
 
 	// リストにゲームオブジェクトを追加
-	template <typename T1>
-	static T1* AddObject(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
-		static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
+	//template <typename T1>
+	static GameObject* AddObject(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
+		//static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
 
-		objects.emplace_back(MakeObject<T1>(_name, _tag));
+		objects.emplace_back(MakeObject(_name, _tag));
 
-		auto ptr = static_cast<T1*>(objects.back().get());
+		auto ptr = objects.back().get();
 
 		return ptr;
 	}
@@ -64,10 +64,10 @@ private:
 	static std::vector<std::shared_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする
 
 	// 型変換をして作成の手伝い、GameObjectを継承したクラスであるならば追加する
-	template <typename T2>
+//	template <typename T2>
 	static std::unique_ptr<GameObject> MakeObject(const std::string& _name, const std::string& _tag) {	 // オブジェクトを作成して追加
-		static_assert(std::is_base_of<GameObject, T2>::value, "T2 must be derived from GameObject");	// コンパイル時にGameObjectを継承したクラスであるかどうかの検査が入る
-		return std::unique_ptr<GameObject>(std::make_unique<T2>(_name, _tag));
+	//	static_assert(std::is_base_of<GameObject, T2>::value, "T2 must be derived from GameObject");	// コンパイル時にGameObjectを継承したクラスであるかどうかの検査が入る
+		return std::make_unique<GameObject>(_name, _tag);
 	}
 };
 
