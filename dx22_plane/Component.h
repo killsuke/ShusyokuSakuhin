@@ -7,6 +7,7 @@ enum ComponentType {
 	// コンポーネントの種類
 	BASECOMPONENT = 0, // ベースコンポーネント（抽象クラス）
 	TEST_MOVE,
+	JUMP,
 	TRANSFORM,
 	RIGIDBODY,
 	COLLIDER,

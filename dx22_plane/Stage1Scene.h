@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "GameObject.h"
-#include "Texture2D.h"
+//#include "Texture2D.h"
 #include <chrono>
 #include "sound.h"
 
@@ -23,17 +23,17 @@ private:
 	int onceStop = 0;	// カウントダウンの回転と縮小を一旦止める
 	float texAngleCount = 0.0f;
 
-	Texture2D* texOne = nullptr;
-	Texture2D* texTen = nullptr;
-	GameObject* car = nullptr;
-	Texture2D* texTime1 = nullptr;	// 小数点のタイム計測
-	Texture2D* texTime2 = nullptr;	// 小数点のタイム計測
-	Texture2D* texTime3 = nullptr;	// 小数点のタイム計測
-	Texture2D* texTime4 = nullptr;	// 小数点のタイム計測
-	Texture2D* texTime5 = nullptr;	// 小数点のタイム計測
-	Texture2D* texTime6 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texOne = nullptr;
+	//Texture2D* texTen = nullptr;
+	//GameObject* car = nullptr;
+	//Texture2D* texTime1 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texTime2 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texTime3 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texTime4 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texTime5 = nullptr;	// 小数点のタイム計測
+	//Texture2D* texTime6 = nullptr;	// 小数点のタイム計測
 
-	Texture2D* texCounts = nullptr;
+	//Texture2D* texCounts = nullptr;
 
 	//std::chrono::high_resolution_clock nowTime;		// 現在時刻
 	std::chrono::high_resolution_clock::time_point startTime;	// スタート

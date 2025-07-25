@@ -21,14 +21,14 @@ private:
 
 public:
 	JumpComponent() = default;
-	JumpComponent(float _jumpHeight);
+	JumpComponent(GameObject& obj);
 	~JumpComponent() = default;
 
 	void Update()override;
-	void JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPressed,bool isGround,bool trigger);
+	void JumpAction(bool isJumpButtonPressed,bool isGround,bool trigger);
 
-	void SetJumpHeight(const float height) { m_jumpHeight = height; };
-	float GetJumpHeight() const { return m_jumpHeight; };
+	void SetJumpPower(const float power) { m_jumpPower = power; };
+	float GetJumpPower() const { return m_jumpPower; };
 
 	void StartJump() { m_isJumping = true; };
 	void StopJump() { m_isJumping = false; };

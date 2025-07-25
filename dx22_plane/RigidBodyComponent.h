@@ -68,8 +68,8 @@ public:
 
 	inline void SetTimeFlag(const bool flag) { this->timeFlag = flag; };
 
-	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
-	float UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag, const float firstFallMagnification, const float fallMagnification);		// 重力
+//	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
+	float UseGravity(const bool gravityFlag, const float firstFallMagnification, const float fallMagnification);		// 重力
 	inline void AddForce(const DirectX::XMFLOAT3& force) { this->m_acceleration = force; };
 	void ApplyForce(const DirectX::XMFLOAT3& force);	// 外力を加える、構造体かfloatか
 	void ApplyFriction_X();	// 摩擦力

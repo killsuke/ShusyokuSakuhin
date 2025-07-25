@@ -19,30 +19,30 @@ class GameObject {
 protected:
 	std::vector<std::unique_ptr<Component>> components;
 
-	// SRT情報（姿勢情報）
-	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
+	//// SRT情報（姿勢情報）
+	//DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
+	//DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
+	//DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
 
-	// 描画の為の情報（メッシュに関わる情報）
-	IndexBuffer	 m_IndexBuffer; // インデックスバッファ
-	VertexBuffer<VERTEX_3D>	m_VertexBuffer; // 頂点バッファ
+	//// 描画の為の情報（メッシュに関わる情報）
+	//IndexBuffer	 m_IndexBuffer; // インデックスバッファ
+	//VertexBuffer<VERTEX_3D>	m_VertexBuffer; // 頂点バッファ
 
-	ID3D11ShaderResourceView* m_pTextureView = nullptr;
+	//ID3D11ShaderResourceView* m_pTextureView = nullptr;
 
-	// 描画の為の情報（見た目に関わる部分）
-	Texture m_Texture;	// テクスチャ
-	Shader m_Shader; // シェーダー
+	//// 描画の為の情報（見た目に関わる部分）
+	//Texture m_Texture;	// テクスチャ
+	//Shader m_Shader; // シェーダー
 
-	std::vector<VERTEX_3D> m_Vertices;	// 頂点情報
+	//std::vector<VERTEX_3D> m_Vertices;	// 頂点情報
 
-	// 描画の為の情報（メッシュに関わる情報）
-	MeshRenderer m_MeshRenderer; // 頂点バッファ・インデックスバッファ・インデックス数
+	//// 描画の為の情報（メッシュに関わる情報）
+	//MeshRenderer m_MeshRenderer; // 頂点バッファ・インデックスバッファ・インデックス数
 
-	// 描画の為の情報（見た目に関わる部分）
-	std::vector<std::unique_ptr<Material>> m_Materiales;
-	std::vector<SUBSET> m_subsets;
-	std::vector<std::unique_ptr<Texture>> m_Textures; // テクスチャ
+	//// 描画の為の情報（見た目に関わる部分）
+	//std::vector<std::unique_ptr<Material>> m_Materiales;
+	//std::vector<SUBSET> m_subsets;
+	//std::vector<std::unique_ptr<Texture>> m_Textures; // テクスチャ
 
 	std::string tag = "";	// タグを付けて識別する
 	std::string name = "";	// オブジェクトの名前
@@ -69,17 +69,17 @@ public:
 //	virtual void Uninit() = 0;
 
 	// position セッター関数・ゲッター関数
-	inline void SetPosition(const DirectX::SimpleMath::Vector3& pos) { this->m_Position = pos; };
-	inline DirectX::SimpleMath::Vector3 GetPosition() const { return m_Position; };
-	// size セッター関数・ゲッター関数
-	inline void SetScale(const DirectX::SimpleMath::Vector3& size) { this->m_Scale = size; };
-	inline DirectX::SimpleMath::Vector3 GetScale() const { return m_Scale; };
-	// angle セッター関数・ゲッター関数
-	inline void SetRotation(const DirectX::SimpleMath::Vector3& angle) { this->m_Rotation = angle; };
-	inline DirectX::SimpleMath::Vector3 GetRotation() const { return m_Rotation; };
+	//inline void SetPosition(const DirectX::SimpleMath::Vector3& pos) { this->m_Position = pos; };
+	//inline DirectX::SimpleMath::Vector3 GetPosition() const { return m_Position; };
+	//// size セッター関数・ゲッター関数
+	//inline void SetScale(const DirectX::SimpleMath::Vector3& size) { this->m_Scale = size; };
+	//inline DirectX::SimpleMath::Vector3 GetScale() const { return m_Scale; };
+	//// angle セッター関数・ゲッター関数
+	//inline void SetRotation(const DirectX::SimpleMath::Vector3& angle) { this->m_Rotation = angle; };
+	//inline DirectX::SimpleMath::Vector3 GetRotation() const { return m_Rotation; };
 
-	// 頂点情報を取得
-	std::vector<VERTEX_3D> GetVertices() { return m_Vertices; };
+	//// 頂点情報を取得
+	//std::vector<VERTEX_3D> GetVertices() { return m_Vertices; };
 
 	// セッター
 	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };

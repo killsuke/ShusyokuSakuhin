@@ -1,16 +1,21 @@
 #include "JumpComponent.h"
+#include "RigidBodyComponent.h"
 #include <cmath>
 #include <iostream>
 
-JumpComponent::JumpComponent(float _jumpPower) :m_jumpPower(_jumpPower) {
+JumpComponent::JumpComponent(GameObject& obj) :Component(obj) {
+	m_sortNum = JUMP;
+}
+
+void JumpComponent::Update() {
 
 }
 
-void JumpComponent::Update() {}
-
-void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPressed, bool isGround, bool trigger)
+void JumpComponent::JumpAction(bool isJumpButtonPressed, bool isGround, bool trigger)
 {
-	DirectX::XMFLOAT3 velocity = rigid.GetVelocity();
+	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+
+	DirectX::XMFLOAT3 velocity = rigid->GetVelocity();
 
 	// 地面接触
 	if (isGround) {
@@ -45,7 +50,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 
 			// 速度更新
 			velocity.y += m_firstSpeed;
-			rigid.SetVelocity(velocity);
+			rigid->SetVelocity(velocity);
 
 			m_firstSpeed = m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
 		}
@@ -61,7 +66,7 @@ void JumpComponent::JumpAction(RigidBodyComponent& rigid, bool isJumpButtonPress
 
 			//std::cout << velocity.y << std::endl;
 
-			rigid.SetVelocity(velocity);
+			rigid->SetVelocity(velocity);
 		}
 	}
 }

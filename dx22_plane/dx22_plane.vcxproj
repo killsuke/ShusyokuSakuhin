@@ -193,8 +193,12 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Singleton.cpp" />
-    <ClCompile Include="SkyBox.cpp" />
-    <ClCompile Include="SkyDome.cpp" />
+    <ClCompile Include="SkyBox.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SkyDome.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
@@ -202,9 +206,11 @@
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="SystemBase.cpp" />
     <ClCompile Include="SystemManager.cpp" />
-    <ClCompile Include="TestBoard.cpp" />
+    <ClCompile Include="TestBoard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TestCube.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -215,7 +221,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Texture2D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Billboard.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -269,8 +277,12 @@
     <ClInclude Include="SceneList.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SkyBox.h" />
-    <ClInclude Include="SkyDome.h" />
+    <ClInclude Include="SkyBox.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="SkyDome.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="sound.h" />
     <ClInclude Include="SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
@@ -278,9 +290,11 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="SystemBase.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="TestBoard.h" />
+    <ClInclude Include="TestBoard.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="TestCube.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="main.h" />
@@ -292,7 +306,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Texture2D.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Billboard.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

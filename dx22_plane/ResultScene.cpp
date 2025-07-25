@@ -17,10 +17,10 @@ ResultScene::~ResultScene()
 void ResultScene::Init()
 {
 	// 背景画像オブジェクトを作成
-	Texture2D* pt = Game::GetInstance()->AddObject<Texture2D>();
-	pt->SetTexture("assets/texture/goal.png");	// 画像を指定
-	pt->SetScale(1280.0f, 720.0f, 0.0f);	// 大きさを指定
-	m_MySceneObjects.emplace_back(pt);
+	//Texture2D* pt = Game::GetInstance()->AddObject<Texture2D>();
+	//pt->SetTexture("assets/texture/goal.png");	// 画像を指定
+	//pt->SetScale(1280.0f, 720.0f, 0.0f);	// 大きさを指定
+	//m_MySceneObjects.emplace_back(pt);
 
 	// リザルト文字列オブジェクトを作成
 	//Texture2D* pt2 = Game::GetInstance()->AddObject<Texture2D>();
@@ -31,75 +31,75 @@ void ResultScene::Init()
 	//m_MySceneObjects.emplace_back(pt2);
 
 	// タイヤオブジェクトを作成
-	Texture2D* pt3 = Game::GetInstance()->AddObject<Texture2D>();
-	pt3->SetTexture("assets/texture/ranks.png");	// 画像を指定
-	pt3->SetPosition(1000.0f, 0.0f, 0.0f);	// 位置を指定
-	pt3->SetScale(361.0, 400.0f, 0.0f);	// 大きさを指定
-	pt3->SetUV(1, 1, 3, 1);	// 大きさを指定
-	m_MySceneObjects.emplace_back(pt3);
-	texRank = pt3;
+	//Texture2D* pt3 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt3->SetTexture("assets/texture/ranks.png");	// 画像を指定
+	//pt3->SetPosition(1000.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt3->SetScale(361.0, 400.0f, 0.0f);	// 大きさを指定
+	//pt3->SetUV(1, 1, 3, 1);	// 大きさを指定
+	//m_MySceneObjects.emplace_back(pt3);
+	//texRank = pt3;
 
-	Texture2D* pt7 = Game::GetInstance()->AddObject<Texture2D>();
-	pt7->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt7->SetPosition(-10.0f, 0.0f, 0.0f);	// 位置を指定
-	pt7->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt7->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt7);
-	texTime1 = pt7;
+	//Texture2D* pt7 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt7->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt7->SetPosition(-10.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt7->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt7->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt7);
+	//texTime1 = pt7;
 
-	Texture2D* pt8 = Game::GetInstance()->AddObject<Texture2D>();
-	pt8->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt8->SetPosition(-80.0f, 0.0f, 0.0f);	// 位置を指定
-	pt8->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt8->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt8);
-	texTime2 = pt8;
+	//Texture2D* pt8 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt8->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt8->SetPosition(-80.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt8->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt8->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt8);
+	//texTime2 = pt8;
 
-	Texture2D* colon1 = Game::GetInstance()->AddObject<Texture2D>();
-	colon1->SetTexture("assets/texture/koron.png");	// 画像を指定
-	colon1->SetPosition(-150.0f, 0.0f, 0.0f);	// 位置を指定
-	colon1->SetScale(90.0f, 70.0f, 0.0f);	// 大きさを指定
-	colon1->SetUV(1, 1, 1, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(colon1);
+	//Texture2D* colon1 = Game::GetInstance()->AddObject<Texture2D>();
+	//colon1->SetTexture("assets/texture/koron.png");	// 画像を指定
+	//colon1->SetPosition(-150.0f, 0.0f, 0.0f);	// 位置を指定
+	//colon1->SetScale(90.0f, 70.0f, 0.0f);	// 大きさを指定
+	//colon1->SetUV(1, 1, 1, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(colon1);
 
-	Texture2D* pt9 = Game::GetInstance()->AddObject<Texture2D>();
-	pt9->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt9->SetPosition(-220.0f, 0.0f, 0.0f);	// 位置を指定
-	pt9->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt9->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt9);
-	texTime3 = pt9;
+	//Texture2D* pt9 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt9->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt9->SetPosition(-220.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt9->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt9->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt9);
+	//texTime3 = pt9;
 
-	Texture2D* pt10 = Game::GetInstance()->AddObject<Texture2D>();
-	pt10->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt10->SetPosition(-290.0f, 0.0f, 0.0f);	// 位置を指定
-	pt10->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt10->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt10);
-	texTime4 = pt10;
+	//Texture2D* pt10 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt10->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt10->SetPosition(-290.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt10->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt10->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt10);
+	//texTime4 = pt10;
 
-	Texture2D* colon2 = Game::GetInstance()->AddObject<Texture2D>();
-	colon2->SetTexture("assets/texture/koron.png");	// 画像を指定
-	colon2->SetPosition(-340.0f, 0.0f, 0.0f);	// 位置を指定
-	colon2->SetScale(90.0f, 70.0f, 0.0f);	// 大きさを指定
-	colon2->SetUV(1, 1, 1, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(colon2);
+	//Texture2D* colon2 = Game::GetInstance()->AddObject<Texture2D>();
+	//colon2->SetTexture("assets/texture/koron.png");	// 画像を指定
+	//colon2->SetPosition(-340.0f, 0.0f, 0.0f);	// 位置を指定
+	//colon2->SetScale(90.0f, 70.0f, 0.0f);	// 大きさを指定
+	//colon2->SetUV(1, 1, 1, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(colon2);
 
-	Texture2D* pt11 = Game::GetInstance()->AddObject<Texture2D>();
-	pt11->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt11->SetPosition(-390.0f, 0.0f, 0.0f);	// 位置を指定
-	pt11->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt11->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt11);
-	texTime5 = pt11;
+	//Texture2D* pt11 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt11->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt11->SetPosition(-390.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt11->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt11->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt11);
+	//texTime5 = pt11;
 
-	Texture2D* pt12 = Game::GetInstance()->AddObject<Texture2D>();
-	pt12->SetTexture("assets/texture/number.png");	// 画像を指定
-	pt12->SetPosition(-460.0f, 0.0f, 0.0f);	// 位置を指定
-	pt12->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
-	pt12->SetUV(1, 1, 10, 1);	// ＵＶを指定
-	m_MySceneObjects.emplace_back(pt12);
-	texTime6 = pt12;
+	//Texture2D* pt12 = Game::GetInstance()->AddObject<Texture2D>();
+	//pt12->SetTexture("assets/texture/number.png");	// 画像を指定
+	//pt12->SetPosition(-460.0f, 0.0f, 0.0f);	// 位置を指定
+	//pt12->SetScale(80.0f, 80.0f, 0.0f);	// 大きさを指定
+	//pt12->SetUV(1, 1, 10, 1);	// ＵＶを指定
+	//m_MySceneObjects.emplace_back(pt12);
+	//texTime6 = pt12;
 
 	startTime = std::chrono::high_resolution_clock::now();
 	/*soundResult.Play(SOUND_LABEL_BGM002);

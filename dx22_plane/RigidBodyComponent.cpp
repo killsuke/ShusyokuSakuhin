@@ -1,4 +1,5 @@
 #include "RigidBodyComponent.h"
+#include "Transform.h"
 
 // Transformより、XMFLOAT3の方が良いのでは？
 RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, mass(0.0f), Component(obj){
@@ -8,33 +9,40 @@ RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,
 
 
 void RigidBodyComponent::Update() {
+	auto transform = p_object->GetComponent<TransformComponent>();
 
+	if (transform != nullptr) {
+		const float fixedDeltaTime = 1.0f / 60.0f;  // 固定フレームレート（60 FPS相当）
+
+		// 加速度から速度を更新
+		m_velocity.x += m_acceleration.x * fixedDeltaTime;
+		m_velocity.y += m_acceleration.y * fixedDeltaTime;
+		m_velocity.z += m_acceleration.z * fixedDeltaTime;
+
+		DirectX::XMFLOAT3 newPos = {};
+
+		// 速度からTransformの位置を更新
+		newPos.x += m_velocity.x * fixedDeltaTime;
+		newPos.y += m_velocity.y * fixedDeltaTime;
+		newPos.z += m_velocity.z * fixedDeltaTime;
+
+		transform->AddPosition(newPos); // 位置を更新
+		transform->MakeWorldMatrix(); // ワールド行列を更新
+
+		// 毎フレーム加速度をリセット（次のフレームの外力のみ反映）
+		m_acceleration = { 0.0f, 0.0f, 0.0f };
+
+		// 時間の更新
+		auto now = std::chrono::high_resolution_clock::now();
+		//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
+		lastTime = now;
+	}
 }
 
-DirectX::XMFLOAT3& RigidBodyComponent::AcceleratorPosition(DirectX::XMFLOAT3& pos) {
-	const float fixedDeltaTime = 1.0f / 60.0f;  // 固定フレームレート（60 FPS相当）
-
-	// 加速度から速度を更新
-	m_velocity.x += m_acceleration.x * fixedDeltaTime;
-	m_velocity.y += m_acceleration.y * fixedDeltaTime;
-	m_velocity.z += m_acceleration.z * fixedDeltaTime;
-
-	// 速度からTransformの位置を更新
-	pos.x += m_velocity.x * fixedDeltaTime;
-	pos.y += m_velocity.y * fixedDeltaTime;
-	pos.z += m_velocity.z * fixedDeltaTime;
-
-	// 毎フレーム加速度をリセット（次のフレームの外力のみ反映）
-	m_acceleration = { 0.0f, 0.0f, 0.0f };
-
-	// 時間の更新
-	auto now = std::chrono::high_resolution_clock::now();
-	//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
-	//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
-	lastTime = now;
-
-	return pos;
-}
+//DirectX::XMFLOAT3& RigidBodyComponent::AcceleratorPosition(DirectX::XMFLOAT3& pos) {
+//
+//	return pos;
+//}
 
 // 力を加える
 void RigidBodyComponent::ApplyForce(const DirectX::XMFLOAT3& force) {
@@ -107,9 +115,11 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 }
 
 // 自由落下
-float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityFlag,const float firstFallMagnification,const float fallMagnification) {
+float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFallMagnification,const float fallMagnification) {
 
 	if (gravityFlag == true) {
+		auto transform = p_object->GetComponent<TransformComponent>();
+
 		m_acceleration.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
 
 		if (m_gravityFlag == false && gravityFlag == true) {
@@ -124,8 +134,12 @@ float RigidBodyComponent::UseGravity(DirectX::XMFLOAT3& pos, const bool gravityF
 			m_velocity.y = -GRAVITY_STOP;
 		}
 
+		DirectX::XMFLOAT3 pos = {};	// 現在の位置を取得
 		// 位置を速度で更新
 		pos.y += m_velocity.y * m_deltaTime;	// ポジションを更新
+
+		transform->AddPosition(pos);	// 位置を更新
+		transform->MakeWorldMatrix();	// ワールド行列を更新
 	}
 	else {
 		m_velocity.y = 0.0f;	// 地面に着いた状態では速度を０にする
