@@ -506,6 +506,15 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		// ※ 出力される法線方向は逆向きになることに注意
 		hitNormal = { 0.0f,0.0f,0.0f };
 
+	/*	float absPushX = abs(pushBack.x);
+		float absPushY = abs(pushBack.y);
+
+		float delta = abs(absPushX + absPushY);
+
+		if (delta < 1.8f) {
+			return check;
+		}*/
+
 		// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
 		// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
 		if (abs(pushBack.x) < abs(pushBack.y)) {

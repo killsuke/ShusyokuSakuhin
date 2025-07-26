@@ -166,6 +166,7 @@
     <ClCompile Include="AssimpPerse.cpp" />
     <ClCompile Include="Braid.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
@@ -200,6 +201,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="SphereMesh.cpp" />
     <ClCompile Include="SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
@@ -245,6 +247,7 @@
     <ClInclude Include="AssimpPerse.h" />
     <ClInclude Include="Braid.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CubeMesh.h" />
@@ -284,6 +287,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="sound.h" />
+    <ClInclude Include="SphereMesh.h" />
     <ClInclude Include="SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
     <ClInclude Include="StaticMesh.h" />

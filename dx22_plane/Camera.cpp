@@ -238,9 +238,9 @@ void Camera::Update()
 		float delta_Y = mouseVec2.y - prevMouse.y;
 
 		// 感度（スピード）をかける
-		//const float rotationSpeed = 0.1f;
-		//m_Rotation.y -= delta_X * rotationSpeed;
-		//m_Rotation.x += delta_Y * rotationSpeed;
+		const float rotationSpeed = 0.1f;
+		m_Rotation.y -= delta_X * rotationSpeed;
+		m_Rotation.x += delta_Y * rotationSpeed;
 
 
 		// ラジアンに変換

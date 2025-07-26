@@ -207,6 +207,12 @@
     <ClCompile Include="CubeMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="CircleMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -411,6 +417,12 @@
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
   </ItemGroup>
