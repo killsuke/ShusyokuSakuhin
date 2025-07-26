@@ -122,7 +122,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 
 		m_acceleration.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
 
-		if (m_gravityFlag == false && gravityFlag == true) {
+		if (m_beforeGravityFlag == false && gravityFlag == true) {
 			m_velocity.y += (-GRAVITY * firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
 		}
 
@@ -146,7 +146,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 		m_acceleration.y = 0.0f;	// 加速度もリセット
 	}
 
-	m_gravityFlag = gravityFlag;	// 重力フラグを更新
+	m_beforeGravityFlag = gravityFlag;	// 重力フラグを更新
 
 	// 念のため、デバッグで値を見る
 	return m_velocity.y;

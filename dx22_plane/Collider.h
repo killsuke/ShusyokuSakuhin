@@ -84,6 +84,9 @@ private:
 	OBB coll_ob; // OBBの当たり判定用
 	Sphere coll_sp; // 球体の当たり判定用
 
+	GameObject* beforeTouchObj = nullptr;	// 前回のタッチオブジェクト
+	bool beforeTouch = false;	  // 前回のタッチ状態
+	DirectX::SimpleMath::Vector2 beforeTouchAxis = {}; // 前回のタッチ軸
 
 //	DirectX::SimpleMath::Vector3 offsetRotation = {};
 
@@ -119,7 +122,9 @@ public:
 
 	// 検知と押し出し
 	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
-	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
+	
+	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& hitNormal); // AABBとAABB
+	
 	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
 
 	// レイとAABBの当たり判定

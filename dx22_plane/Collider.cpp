@@ -1,5 +1,6 @@
 #include "Collider.h"
 #include "Transform.h"
+#include "RigidBodyComponent.h"
 #include <algorithm>  // std::min, std::maxのためのヘッダー
 #include <cmath>     // fabsのためのヘッダー
 #include <iostream>
@@ -458,25 +459,27 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const A
 // どこから当たっているのか含む
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& hitNormal) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& hitNormal) {
+	AABB coll1 = p1.coll_ab;
+	AABB coll2 = p2.coll_ab;
 
 	// そもそも衝突しているかどうかのチェック
 	// 奥行きからの敵の登場のことも考えて、念のため
 	// Z軸も考慮した当たり判定とする
 	// 当たって押し出されるのはX軸とY軸みたいな
-	bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
+	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
 
 	if (check == true) {
 		// 最終的のオブジェクトを押し戻すためのベクトル
 		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
 		// X軸での「めり込み量」を計算
-		float dx1 = (p1.max.x - p2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
-		float dx2 = (p1.min.x - p2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
+		float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+		float dx2 = (coll1.min.x - coll2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
 
 		// Y軸での「めり込み量」を計算
-		float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（p2が上から押し込んでいる時）
-		float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（p2が下から押し込んでいる時）
+		float dy1 = (coll1.max.y - coll2.min.y);	// p1の上端 - p2の下端（p2が上から押し込んでいる時）
+		float dy2 = (coll1.min.y - coll2.max.y);	// p1の下端 - p2の上端（p2が下から押し込んでいる時）
 
 		// X軸の処理
 		// X軸方向でどちらに押し戻すべきか（小さい方が自然）
@@ -518,28 +521,30 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const AABB& p1, 
 			hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
 		}
 
-		// 相対ベクトル：p1の中心 → p2の中心
-		//float cx = (p1.min.x + p1.max.x) * 0.5f;
-		//float cy = (p1.min.y + p1.max.y) * 0.5f;
-		//float cx2 = (p2.min.x + p2.max.x) * 0.5f;
-		//float cy2 = (p2.min.y + p2.max.y) * 0.5f;
+		// 衝突状態を保存
 
-		//float dx = cx2 - cx;
-		//float dy = cy2 - cy;
+		   // 相対ベクトル：p1の中心 → p2の中心
+		   //float cx = (p1.min.x + p1.max.x) * 0.5f;
+		   //float cy = (p1.min.y + p1.max.y) * 0.5f;
+		   //float cx2 = (p2.min.x + p2.max.x) * 0.5f;
+		   //float cy2 = (p2.min.y + p2.max.y) * 0.5f;
 
-		//// 接近方向を使って優先軸を決める
-		//if (std::abs(dx) > std::abs(dy)) {
-		//	// 横から来ているのでX優先
-		//	pos.x += pushBack.x;
-		//	hitNormal = { (pushBack.x > 0.0f) ? -1.0f : 1.0f, 0.0f, 0.0f }; // X方向の法線
-		//}
-		//else {
-		//	// 上下から来ているのでY優先
-		//	pos.y += pushBack.y;
-		//	hitNormal = { 0.0f, (pushBack.y > 0.0f) ? -1.0f : 1.0f, 0.0f }; // Y方向の法線
-		//}
+		   //float dx = cx2 - cx;
+		   //float dy = cy2 - cy;
 
-		// 位置補正をして、SRT情報を再計算
+		   //// 接近方向を使って優先軸を決める
+		   //if (std::abs(dx) > std::abs(dy)) {
+		   //	// 横から来ているのでX優先
+		   //	pos.x += pushBack.x;
+		   //	hitNormal = { (pushBack.x > 0.0f) ? -1.0f : 1.0f, 0.0f, 0.0f }; // X方向の法線
+		   //}
+		   //else {
+		   //	// 上下から来ているのでY優先
+		   //	pos.y += pushBack.y;
+		   //	hitNormal = { 0.0f, (pushBack.y > 0.0f) ? -1.0f : 1.0f, 0.0f }; // Y方向の法線
+		   //}
+
+		   // 位置補正をして、SRT情報を再計算
 		auto transform = p_object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
 		transform->MakeWorldMatrix();

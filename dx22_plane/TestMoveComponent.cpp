@@ -8,8 +8,16 @@ TestMoveComponent::TestMoveComponent(GameObject& obj) :Component(obj) {
 
 // XVˆ—
 void TestMoveComponent::Update() {
-	auto keyJ = Input::GetKeyPress(VK_J);
-	auto keyL = Input::GetKeyPress(VK_L);
+	bool keyJ = false;
+	bool keyL = false;
+
+	if (Input::GetKeyPress(VK_J) == true || Input::GetButtonPress(XINPUT_LEFT))
+	{
+		keyJ = true;
+	}
+	if (Input::GetKeyPress(VK_L) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
+		keyL = true;
+	}
 
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 

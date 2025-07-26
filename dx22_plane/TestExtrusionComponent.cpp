@@ -44,7 +44,7 @@ void TestExtrusionComponent::Update() {
 	coll->Update();
 
 	DirectX::XMFLOAT3 hitNormal = {};
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(collObj->GetColliderSize_AABB(), coll->GetColliderSize_AABB(), hitNormal)) {
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal)) {
 		if (hitNormal.y < -0.5f) {	// “Vˆä
 			rigid->UseGravity(false, 120.0f, 12.0f);
 			isGround = true;
@@ -55,7 +55,7 @@ void TestExtrusionComponent::Update() {
 		}
 	}
 
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(collObj2->GetColliderSize_AABB(), coll->GetColliderSize_AABB(), hitNormal)) {
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj2, *coll, hitNormal)) {
 		if (hitNormal.y < -0.5f) {	// “Vˆä
 			rigid->UseGravity(false, 120.0f, 12.0f);
 			isGround = true;

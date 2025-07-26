@@ -29,7 +29,7 @@ private:
 	bool fallFlag = false;		 	 // 落下のフラグ 
 	bool timeFlag = false;			 // 落下タイミングのフラグ
 	const float m_deltaTime = 0.016f;		 // 前回の時間からの経過時間
-	bool m_gravityFlag = false;	 // 重力を有効にするかどうか
+	bool m_beforeGravityFlag = false;	 // 重力を有効にするかどうか
 	std::chrono::high_resolution_clock::time_point startTime;	// 計測開始時間
 	std::chrono::high_resolution_clock::time_point lastTime;	// 最後の時間
 

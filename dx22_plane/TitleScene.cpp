@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "Transform.h"
 #include "CubeMesh.h"
+#include "SquareMesh.h"
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Collider.h"
@@ -29,8 +30,9 @@ TitleScene::~TitleScene()
 // 初期化
 void TitleScene::Init()
 {
-	auto camera = GameObjectManager::AddObject("camera","Camera");
-	camera->AddComponent<TransformComponent>(*camera);
+	auto camera = GameObjectManager::AddObject("camera", "Camera");
+	auto cameraTrans = camera->AddComponent<TransformComponent>(*camera);
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -500.0f));
 	camera->AddComponent<Camera>(*camera);
 
 	{
@@ -52,7 +54,7 @@ void TitleScene::Init()
 
 		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>(*cube);
 
-		CubeMesh cubeMesh;
+		SquareMesh cubeMesh;	// 四角形のメッシュ
 		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
