@@ -23,11 +23,26 @@ void Stage1Scene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	camera->AddComponent<Camera>(*camera);
-	camera->AddComponent<TransformComponent>(*camera);
+	auto cameraTrans = camera->AddComponent<TransformComponent>(*camera);
+	cameraTrans->SetPosition({ 0.0f, 0.0f, -50.0f });
 
+
+	// 腰
 	{
 		CircleMesh circleMesh;
-		auto circle = GameObjectManager::AddObject("circle0", "Circle");
+		auto circle = GameObjectManager::AddObject("joint0", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 0.0f, -10.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 胸
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint1", "Circle");
 		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
 		circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
@@ -36,28 +51,161 @@ void Stage1Scene::Init()
 		circleRend->SetTexture("assets/texture/NoTexture.png");
 	}
 
+	// 頭
 	{
 		CircleMesh circleMesh;
-		auto circle = GameObjectManager::AddObject("circle1", "Circle");
+		auto circle = GameObjectManager::AddObject("joint2", "Circle");
 		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
-		circleTrans->SetPosition({ 10.0f, 0.0f, 0.0f });
+		circleTrans->SetPosition({ 0.0f, 15.0f, 0.0f });
 		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
 	}
 
+	// 左肩
 	{
 		CircleMesh circleMesh;
-		auto circle = GameObjectManager::AddObject("circle2", "Circle");
+		auto circle = GameObjectManager::AddObject("joint3", "Circle");
 		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
-		circleTrans->SetPosition({ -10.0f, 0.0f, 0.0f });
+		circleTrans->SetPosition({ 10.0f, 5.0f, 0.0f });
 		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
 	}
 
+	// 左ひじ
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint4", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 20.0f, 5.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 左手
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint5", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 30.0f, 5.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右肩
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint6", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -10.0f, 5.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右ひじ
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint7", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -20.0f, 5.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右手
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint8", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -30.0f, 5.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 左足付け根
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint9", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 5.0f, -15.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 左膝
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint10", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 5.0f, -25.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 左足首
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint11", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ 5.0f, -35.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右足付け根
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint12", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -5.0f, -15.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右膝
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint13", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -5.0f, -25.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
+
+	// 右足首
+	{
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddObject("joint14", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		circleTrans->SetPosition({ -5.0f, -35.0f, 0.0f });
+		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		circleRend->SetMesh(circleMesh);
+		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+	}
 
 }
 

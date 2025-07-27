@@ -164,6 +164,8 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AssimpPerse.cpp" />
+    <ClCompile Include="BonePartsMesh.cpp" />
+    <ClCompile Include="Bones.cpp" />
     <ClCompile Include="Braid.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircleMesh.cpp" />
@@ -189,6 +191,7 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Render3D.cpp" />
     <ClCompile Include="Render3DColliderAABBComponent.cpp" />
+    <ClCompile Include="RenderOneSkinAnimation.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -246,6 +249,8 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="AssimpPerse.h" />
     <ClInclude Include="BoneData.h" />
+    <ClInclude Include="BonePartsMesh.h" />
+    <ClInclude Include="Bones.h" />
     <ClInclude Include="Braid.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CircleMesh.h" />
@@ -275,6 +280,7 @@
     <ClInclude Include="Render3D.h" />
     <ClInclude Include="Render3DColliderAABBComponent.h" />
     <ClInclude Include="RenderElement.h" />
+    <ClInclude Include="RenderOneSkinAnimation.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
@@ -324,6 +330,12 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="OneSkinAnimationVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

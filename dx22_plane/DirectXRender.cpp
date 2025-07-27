@@ -412,7 +412,7 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
-		return false;
+		return hr;
 	}
 
 	return hr;

@@ -23,6 +23,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Mesh.h"
+#include "BoneData.h"
 
 //ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ
 #pragma comment(lib,"directxtk.lib")

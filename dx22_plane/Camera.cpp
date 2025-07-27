@@ -501,9 +501,11 @@ void Camera::Update2D() {
 
 void Camera::Update3D() {
 	auto transform = p_object->GetComponent<TransformComponent>();
+	auto pos = transform->GetPosition();
+
 	// ビュー変換後列作成
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrix = DirectX::XMMatrixLookAtLH(transform->GetPosition(), m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+	m_ViewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す

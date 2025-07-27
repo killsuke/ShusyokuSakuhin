@@ -48,7 +48,7 @@ public:
 	void Draw();
 	void Uninit();
 
-	void SetCamera(int mode);	// ƒJƒƒ‰‚ğİ’è
+//	void SetCamera(int mode);	// ƒJƒƒ‰‚ğİ’è
 
 	DirectX::SimpleMath::Matrix GetProjMtx2D() const { return projectionMtx2D; };
 	DirectX::SimpleMath::Matrix GetProjMtx3D() const { return projectionMtx2D; };

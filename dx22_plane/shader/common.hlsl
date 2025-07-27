@@ -48,6 +48,15 @@ struct VS_ANIMATION
     int4 idx : BLENDINDICES0;
 };
 
+struct VS_OUTPUT
+{
+    float4 pos : SV_POSITION;
+    float4 nrm : TEXCOORD0;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD1;
+    float4 wpos : TEXCOORD2;
+};
+
 struct PS_IN
 {
 	float4 pos : SV_POSITION;

@@ -1,10 +1,12 @@
 #pragma once
 #include <SimpleMath.h>
+#define BONE_NUM (14)		// ボーンの数（最大14個まで）
 
 // 最低限の頂点情報
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
 struct AnimationVertex {
-	DirectX::SimpleMath::Vector3 pos = {};
+	DirectX::SimpleMath::Vector3 position = {};
+	DirectX::SimpleMath::Color color = {};
 	DirectX::SimpleMath::Vector3 weight = {};
 	unsigned int matrixIndex[4] = {};
 };
@@ -16,7 +18,18 @@ struct LineVertex {
 
 // 定数バッファ（ボーン行列用）
 struct CBBoneMatrix {
-	DirectX::SimpleMath::Matrix		mtx[7] = {};
+	// 頂点カラー行列
+	DirectX::XMFLOAT4 color;
+	// UV座標移動行列
+	DirectX::XMMATRIX matrixTex;
+	// プロジェクション変換行列
+	DirectX::XMMATRIX matrixProj;
+	// ワールド変換行列
+	DirectX::XMMATRIX matrixWorld;
+	// ビュー変換行列
+	DirectX::XMMATRIX matrixView;
+	// ボーン行列配列
+	DirectX::SimpleMath::Matrix		mtx[BONE_NUM] = {};
 };
 
 // ボーン構造体

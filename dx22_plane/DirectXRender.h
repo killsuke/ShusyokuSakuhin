@@ -24,6 +24,7 @@ enum EBlendState {
 };
 
 extern ID3D11Buffer* g_pConstantBuffer;
+extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 // 定数バッファ用構造体
