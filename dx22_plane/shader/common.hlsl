@@ -38,6 +38,16 @@ struct VS_IN
     float2 tex : TEXCOORD0;
 };
 
+struct VS_ANIMATION
+{
+    float4 pos : POSITION0;
+    float4 nrm : NORMAL0;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD0;
+    float3 weight : BLENDWEIGHT0;
+    int4 idx : BLENDINDICES0;
+};
+
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
@@ -75,3 +85,8 @@ cbuffer MaterialBuffer:register(b4) {
 cbuffer MaterialBuffer : register(b5) {
 	matrix matrixTex;
 }
+
+cbuffer ConstantBufferBoneComb : register(b6)
+{
+    matrix bonecombmtx[7]; // ボーンコンビネーション行列
+};

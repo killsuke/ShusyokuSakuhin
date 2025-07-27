@@ -28,16 +28,13 @@ std::vector<VERTEX_3D> CircleMesh::CreateMeshVertices() {
 	}
 
 	return m_vertices;
-
-	//// 頂点バッファ生成
-	//m_VertexBuffer.Create(vertices);
 }
 
 std::vector<unsigned int> CircleMesh::CreateMeshIndices() {
 	// インデックス情報生成
 	m_indices.clear(); // 念のためクリア
 
-	for (unsigned int i = 1; i < numSegments; ++i) {
+	for (int i = 1; i < numSegments; ++i) {
 		m_indices.push_back(0);
 		m_indices.push_back(i + 1);
 		m_indices.push_back(i);

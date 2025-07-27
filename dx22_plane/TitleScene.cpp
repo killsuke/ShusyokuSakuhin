@@ -8,6 +8,7 @@
 #include "CubeMesh.h"
 #include "SquareMesh.h"
 #include "CircleMesh.h"
+#include "SphereMesh.h"
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Collider.h"
@@ -33,7 +34,7 @@ void TitleScene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>(*camera);
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -500.0f));
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -50.0f));
 	camera->AddComponent<Camera>(*camera);
 
 	{
@@ -55,18 +56,18 @@ void TitleScene::Init()
 
 		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>(*cube);
 
-		CircleMesh cubeMesh;	// 四角形のメッシュ
+		CubeMesh cubeMesh;	// 四角形のメッシュ
 		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
-		/*CubeMesh cubeMesh2;
+		CubeMesh cubeMesh2;
 		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
 		cubeRe2->SetMesh(cubeMesh2);
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
-		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));*/
+		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 	}
 
 	{

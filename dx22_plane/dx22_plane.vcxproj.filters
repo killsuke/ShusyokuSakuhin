@@ -425,6 +425,9 @@
     <ClInclude Include="SphereMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="BoneData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">

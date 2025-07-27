@@ -8,7 +8,7 @@
 using namespace DirectX::SimpleMath;
 using namespace std;
 
-Camera::Camera(GameObject& obj): Component(obj)
+Camera::Camera(GameObject& obj) : Component(obj)
 {
 	m_sortNum = CAMERA;
 
@@ -239,14 +239,19 @@ void Camera::Update()
 
 		// 感度（スピード）をかける
 		const float rotationSpeed = 0.1f;
-		m_Rotation.y -= delta_X * rotationSpeed;
-		m_Rotation.x += delta_Y * rotationSpeed;
+		float rot_x = 0.0f;
+		float rot_y = 0.0f;
+		rot_y -= delta_X * rotationSpeed;
+		rot_x += delta_Y * rotationSpeed;
 
+		transform->AddRotation({ rot_x, rot_y, rot.z });
+
+		auto rot2 = transform->GetRotation();
 
 		// ラジアンに変換
-		float PitchRadians = DirectX::XMConvertToRadians(rot.x); // X軸回転
-		float YawRadians = DirectX::XMConvertToRadians(rot.y);     // Y軸回転
-		float RollRadians = DirectX::XMConvertToRadians(rot.z);   // Z軸回転
+		float PitchRadians = DirectX::XMConvertToRadians(rot2.x); // X軸回転
+		float YawRadians = DirectX::XMConvertToRadians(rot2.y);     // Y軸回転
+		float RollRadians = DirectX::XMConvertToRadians(rot2.z);   // Z軸回転
 
 		// クォータニオンを構成（ピッチ・ヨーを個別に回転軸に適用）
 		DirectX::XMVECTOR qPitch = DirectX::XMQuaternionRotationAxis(DirectX::XMVectorSet(1, 0, 0, 0), PitchRadians);

@@ -1,5 +1,6 @@
 #include "DirectXRender.h"
 #include "Application.h"
+#include "BoneData.h"
 #include <d3dcompiler.h>
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -37,6 +38,10 @@ ID3D11PixelShader* g_pUnlitPixelShader;
 ID3D11SamplerState* g_pSampler;
 // 定数バッファ用変数
 ID3D11Buffer* g_pConstantBuffer;
+
+// ボーン用の定数バッファ構造体
+ID3D11Buffer* g_pBoneConstantBuffer;
+
 // ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
@@ -66,6 +71,7 @@ HRESULT DirectXRender::Init() {
 	DepthStencilSetting();
 	SamplerCreate();
 	ConstantBufferCreate();
+	BoneConstantBufferCreate();
 
 	SetBlendState(1);
 
@@ -133,6 +139,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pUnlitPixelShader);
 	SAFE_RELEASE(g_pSampler);
 	SAFE_RELEASE(g_pConstantBuffer);
+	SAFE_RELEASE(g_pBoneConstantBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
 			SAFE_RELEASE(g_BlendState[i]);
@@ -169,6 +176,8 @@ void DirectXRender::DrawBegin() {
 	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
 	// 定数バッファを頂点シェーダーにセットする
 	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	// 定数バッファを頂点シェーダーにセットする
+	m_DeviceContext->VSSetConstantBuffers(6, 1, &g_pBoneConstantBuffer);
 }
 
 //=======================================
@@ -383,6 +392,28 @@ HRESULT DirectXRender::ConstantBufferCreate() {
 	cbDesc.StructureByteStride = 0;
 	hr = m_Device->CreateBuffer(&cbDesc, NULL, &g_pConstantBuffer);
 	if (FAILED(hr)) return hr;
+
+	return hr;
+}
+					
+// 定数バッファ作成
+HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
+	HRESULT hr;
+
+	// ボーン用の定数バッファ作成
+	D3D11_BUFFER_DESC bd;
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
+	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+
+	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return false;
+	}
 
 	return hr;
 }

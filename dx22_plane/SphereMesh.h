@@ -3,7 +3,8 @@
 class SphereMesh : public Mesh
 {
 private:
-	const int numSegments = 32;
+	const int latitudeBands = 16;
+	const int longitudeBands = 32;
 	float radius = 1.0f;
 public:
 	SphereMesh();

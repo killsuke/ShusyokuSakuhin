@@ -1,0 +1,37 @@
+#pragma once
+#include <SimpleMath.h>
+
+// 最低限の頂点情報
+//  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
+struct AnimationVertex {
+	DirectX::SimpleMath::Vector3 pos = {};
+	DirectX::SimpleMath::Vector3 weight = {};
+	unsigned int matrixIndex[4] = {};
+};
+
+struct LineVertex {
+	DirectX::SimpleMath::Vector3 pos = {};					// 頂点座標
+	DirectX::XMFLOAT4 color = {};					// 色
+};
+
+// 定数バッファ（ボーン行列用）
+struct CBBoneMatrix {
+	DirectX::SimpleMath::Matrix		mtx[7] = {};
+};
+
+// ボーン構造体
+struct Bone {
+	int id = 0;						// ボーンID（通し番号）
+	Bone* firstChild = nullptr;       // 第1子ボーン
+	Bone* sibling = nullptr;          // 次の兄弟ボーン
+	DirectX::SimpleMath::Matrix offsetMtx;				// ボーンオフセット行列
+	DirectX::SimpleMath::Matrix initMtx;					// 初期姿勢行列（ジョイントをどの配置し、どれだけ回転させておくかを表す行列）
+	DirectX::SimpleMath::Matrix  boneMtx;				// ボーン姿勢行列
+	DirectX::SimpleMath::Matrix* combMtxAry = nullptr;		// 合成姿勢行列配列へのポインタ
+
+	Bone() {
+		initMtx = DirectX::SimpleMath::Matrix::Identity;	// 初期姿勢行列を単位行列に設定
+		offsetMtx = DirectX::SimpleMath::Matrix::Identity;	// ボーンオフセット行列を単位行列に設定
+		boneMtx = DirectX::SimpleMath::Matrix::Identity;	// ボーン姿勢行列を単位行列に設定
+	}
+};

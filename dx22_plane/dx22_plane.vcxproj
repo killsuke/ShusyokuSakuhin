@@ -245,6 +245,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="AssimpPerse.h" />
+    <ClInclude Include="BoneData.h" />
     <ClInclude Include="Braid.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CircleMesh.h" />

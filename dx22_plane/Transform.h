@@ -54,6 +54,7 @@ public:
 	inline DirectX::XMMATRIX GetLocalMatrix() const { return m_transform.localMatrix; };
 
 	inline void AddPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position += position; };
+	inline void AddRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_Rotation += rotation; };
 
 	void MakeWorldMatrix();
 	void MakeLocalMatrix();
