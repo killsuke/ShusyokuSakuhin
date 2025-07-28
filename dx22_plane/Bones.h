@@ -27,4 +27,8 @@ public:
 	void SetBoneMesh(Mesh& mesh);
 	std::vector<AnimationVertex> CreateBoneMeshVertices();
 	std::vector<unsigned int> CreateMeshIndices();
+
+	void DX11MtxRotationX(float angle, DirectX::XMFLOAT4X4& outmtx);
+	void DX11MtxRotationY(float angle, DirectX::XMFLOAT4X4& outmtx);
+	void DX11MtxRotationZ(float angle, DirectX::XMFLOAT4X4& outmtx);
 };

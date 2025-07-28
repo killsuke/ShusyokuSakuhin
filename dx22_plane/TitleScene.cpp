@@ -33,37 +33,37 @@ TitleScene::~TitleScene()
 void TitleScene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
-	auto cameraTrans = camera->AddComponent<TransformComponent>(*camera);
+	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -50.0f));
-	camera->AddComponent<Camera>(*camera);
+	camera->AddComponent<Camera>();
 
 	{
 		auto cube = GameObjectManager::AddObject("cube1", "Cube");
-		cube->AddComponent<TestMoveComponent>(*cube);
+		cube->AddComponent<TestMoveComponent>();
 
-		auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
 		cubeTrans->SetPosition({ 30.0f,30.0f,0.0f });
 
-		auto cubeJump = cube->AddComponent<JumpComponent>(*cube);
+		auto cubeJump = cube->AddComponent<JumpComponent>();
 		cubeJump->SetJumpPower(50.0f);
 
-		auto cubeRigid = cube->AddComponent<RigidBodyComponent>(*cube);
+		auto cubeRigid = cube->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 
-		auto cubeColl = cube->AddComponent<ColliderComponent>(*cube);
+		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
-		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>(*cube);
+		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>();
 
 		CubeMesh cubeMesh;	// 四角形のメッシュ
-		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
 		CubeMesh cubeMesh2;
-		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
 		cubeRe2->SetMesh(cubeMesh2);
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
@@ -73,21 +73,21 @@ void TitleScene::Init()
 	{
 		auto cube = GameObjectManager::AddObject("cube2", "Cube");
 
-		auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 100.0f, 20.0f, 10.0f });
 		cubeTrans->SetPosition({ 0.0f, -20.0f, 0.0f });
 
-		auto cubeColl = cube->AddComponent<ColliderComponent>(*cube);
+		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
 		CubeMesh cubeMesh;
-		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
 		CubeMesh cubeMesh2;
-		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
 		cubeRe2->SetMesh(cubeMesh2);
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
@@ -97,21 +97,21 @@ void TitleScene::Init()
 	{
 		auto cube = GameObjectManager::AddObject("cube3", "Cube");
 
-		auto cubeTrans = cube->AddComponent<TransformComponent>(*cube);
+		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 30.0f, 10.0f });
 		cubeTrans->SetPosition({ 0.0f, 40.0f, 0.0f });
 
-		auto cubeColl = cube->AddComponent<ColliderComponent>(*cube);
+		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
 		CubeMesh cubeMesh;
-		auto cubeRe = cube->AddComponent<Render3DComponent>(*cube);
+		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
 		CubeMesh cubeMesh2;
-		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>(*cube);
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
 		cubeRe2->SetMesh(cubeMesh2);
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");

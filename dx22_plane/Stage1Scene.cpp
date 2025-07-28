@@ -22,8 +22,8 @@ Stage1Scene::~Stage1Scene()
 void Stage1Scene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
-	camera->AddComponent<Camera>(*camera);
-	auto cameraTrans = camera->AddComponent<TransformComponent>(*camera);
+	camera->AddComponent<Camera>();
+	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition({ 0.0f, 0.0f, -50.0f });
 
 
@@ -31,9 +31,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint0", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 0.0f, -10.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -43,9 +43,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint1", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -55,9 +55,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint2", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 0.0f, 15.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -67,9 +67,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint3", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 10.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -79,9 +79,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint4", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 20.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -91,9 +91,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint5", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 30.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -103,9 +103,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint6", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -10.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -115,9 +115,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint7", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -20.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -127,9 +127,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint8", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -30.0f, 5.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -139,9 +139,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint9", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 5.0f, -15.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -151,9 +151,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint10", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 5.0f, -25.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -163,9 +163,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint11", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 5.0f, -35.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -175,9 +175,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint12", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -5.0f, -15.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -187,9 +187,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint13", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -5.0f, -25.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
@@ -199,9 +199,9 @@ void Stage1Scene::Init()
 	{
 		CircleMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint14", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>(*circle);
+		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ -5.0f, -35.0f, 0.0f });
-		auto circleRend = circle->AddComponent<Render3DComponent>(*circle);
+		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");

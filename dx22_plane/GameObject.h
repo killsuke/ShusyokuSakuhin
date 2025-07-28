@@ -119,11 +119,11 @@ public:
 
 	template<typename T3>
 	// コンポーネントを追加する
-	T3* AddComponent(GameObject& obj) {
+	T3* AddComponent() {
 		static_assert(std::is_base_of<Component, T3>::value,
 			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
 
-		auto comp = std::make_unique<T3>(obj);
+		auto comp = std::make_unique<T3>(*this);
 		T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
 		components.emplace_back(std::move(comp));
 		SortComponents();

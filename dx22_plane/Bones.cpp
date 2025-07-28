@@ -7,11 +7,17 @@ using namespace DirectX::SimpleMath;
 // ボーンのコンストラクタ
 Bones::Bones(GameObject& obj) : RenderComponent(obj)
 {
+	// 頂点作成と重み付けもするよ
 	m_sortNum = RENDER_ONE_SKIN_ANIMATION;
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 
 	m_bones = new Bone[BONE_NUM];	// ボーンの数だけメモリを確保
+
+	// Tポーズ姿勢の初期化（回転）
+	for(int i = 0; i < BONE_NUM; ++i) {
+		m_bones[i].initMtx = Matrix::Identity;	// 全て単位行列に
+	}
 
 	// 親子関係を構築します
 	m_bones[0].firstChild = &m_bones[1];	// 腰から胸
@@ -30,6 +36,71 @@ Bones::Bones(GameObject& obj) : RenderComponent(obj)
 	m_bones[2].sibling = &m_bones[3];	// 頭の兄弟に左肩
 	m_bones[3].sibling = &m_bones[6];	// 左肩の兄弟に右肩
 
+	// --- 回転設定 ---
+	// 頭～腰：基本的にＺ軸 -90度回転（Ｙ軸上方向に立ち上がる）
+	DX11MtxRotationZ(-90.0f, m_bones[0].initMtx);	// 腰
+	DX11MtxRotationZ(-90.0f, m_bones[1].initMtx);	// 胸
+	DX11MtxRotationZ(-90.0f, m_bones[2].initMtx);	// 頭
+
+	// 肩と腕：Tポーズなので左右に水平
+	DX11MtxRotationZ(0.0f, m_bones[3].initMtx);	// 左肩
+	DX11MtxRotationZ(0.0f, m_bones[4].initMtx);	// 左腕
+	DX11MtxRotationZ(0.0f, m_bones[5].initMtx);	// 左手
+
+	DX11MtxRotationZ(0.0f, m_bones[6].initMtx);	// 右肩
+	DX11MtxRotationZ(0.0f, m_bones[7].initMtx);	// 右腕
+	DX11MtxRotationZ(0.0f, m_bones[8].initMtx);	// 右手
+
+	// 足：立っている姿勢
+	DX11MtxRotationX(-90.0f, m_bones[9].initMtx);	// 左足付け根
+	DX11MtxRotationX(-90.0f, m_bones[10].initMtx);	// 左膝
+	DX11MtxRotationX(-90.0f, m_bones[11].initMtx);	// 左足首
+
+	DX11MtxRotationX(-90.0f, m_bones[12].initMtx);	// 右足付け根
+	DX11MtxRotationX(-90.0f, m_bones[13].initMtx);	// 右膝
+	DX11MtxRotationX(-90.0f, m_bones[14].initMtx);	// 右足首
+
+	// --- 位置設定 ---
+	// 腰（ルート）＝ 原点
+	m_bones[0].initMtx._41 = 0.0f;	// X座標
+	m_bones[0].initMtx._42 = 0.0f;	// Y座標
+
+	// 胸は腰の上（Ｙ方向）
+	m_bones[1].initMtx._41 = 0.0f;	// X座標
+	m_bones[1].initMtx._42 = 1.0f;	// Y座標
+	// 頭は胸の上（Ｙ方向）
+	m_bones[2].initMtx._41 = 0.0f;	// X座標
+	m_bones[2].initMtx._42 = 1.0f;	// Y座標
+
+	// 左肩 → 左腕 → 左手（Ｘ方向に左へ）
+	m_bones[3].initMtx._41 = -0.5f;	// X座標
+	m_bones[3].initMtx._42 =  0.0f;	// Y座標
+
+	m_bones[4].initMtx._41 = -1.0f;	// X座標
+	m_bones[4].initMtx._42 =  0.0f;	// Y座標
+
+	m_bones[5].initMtx._41 = -1.0f;	// X座標
+	m_bones[5].initMtx._42 =  0.0f;	// Y座標
+
+	// 右肩 → 右腕 → 右手（Ｘ方向に右へ）
+	m_bones[6].initMtx._41 = 0.5f;	// X座標
+	m_bones[6].initMtx._42 = 0.0f;	// Y座標
+
+	m_bones[7].initMtx._41 = 1.0f;	// X座標
+	m_bones[7].initMtx._42 = 0.0f;	// Y座標
+
+	m_bones[8].initMtx._41 = 1.0f;	// X座標
+	m_bones[8].initMtx._42 = 0.0f;	// Y座標
+
+	// 足：腰から下にＹ方向
+	m_bones[9].initMtx._41 = -0.3f;	// X座標
+	m_bones[9].initMtx._42 = -1.0f;	// Y座標
+
+	m_bones[10].initMtx._41 = 0.0f;	// X座標
+	m_bones[10].initMtx._42 = -1.0f;	// Y座標
+
+	m_bones[11].initMtx._41 = 0.0f;	// X座標
+	m_bones[11].initMtx._42 = -1.0f;	// Y座標
 
 
 	g_combMtx = new DirectX::SimpleMath::Matrix[BONE_NUM];	// 合成変換行列の配列を確保
@@ -128,6 +199,55 @@ std::vector<unsigned int> Bones::CreateMeshIndices() {
 }
 
 void Bones::SetBoneMesh(Mesh& mesh) {
-	m_AnimationVertexBuffer.Create(mesh.GetBoneVertices());
-	m_IndexBuffer.Create(mesh.GetIndices());
+	// 頂点とインデックスデータを作る
+	/*m_AnimationVertexBuffer.Create(mesh.GetBoneVertices());
+	m_IndexBuffer.Create(mesh.GetIndices());*/
+}
+
+/*------------------------
+X軸回転行列を求める
+--------------------------*/
+void Bones::DX11MtxRotationX(float angle, DirectX::XMFLOAT4X4& outmtx) {
+
+	DirectX::XMMATRIX mtx;
+
+	// 度数法をラジアンに変換
+	angle = (angle * DirectX::XM_PI) / 180.0f;
+
+	// X軸を中心に回転する行列を作成する
+	mtx = DirectX::XMMatrixRotationX(angle);
+
+	XMStoreFloat4x4(&outmtx, mtx);
+}
+
+/*------------------------
+  Y軸回転行列を求める
+--------------------------*/
+void Bones::DX11MtxRotationY(float angle, DirectX::XMFLOAT4X4& outmtx) {
+
+	DirectX::XMMATRIX mtx;
+
+	// 度数法をラジアンに変換
+	angle = (angle * DirectX::XM_PI) / 180.0f;
+
+	// Y軸を中心に回転する行列を作成する
+	mtx = DirectX::XMMatrixRotationY(angle);
+
+	XMStoreFloat4x4(&outmtx, mtx);
+}
+
+/*------------------------
+   Z軸回転行列を求める
+--------------------------*/
+void Bones::DX11MtxRotationZ(float angle, DirectX::XMFLOAT4X4& outmtx) {
+
+	DirectX::XMMATRIX mtx;
+
+	// 度数法をラジアンに変換
+	angle = (angle * DirectX::XM_PI) / 180.0f;
+
+	// 指定軸を中心に回転する行列を作成する
+	mtx = DirectX::XMMatrixRotationZ(angle);
+
+	XMStoreFloat4x4(&outmtx, mtx);
 }
