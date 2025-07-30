@@ -273,7 +273,7 @@ void Camera::Update()
 	}
 	// ビュー変換後列作成
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+	DirectX::SimpleMath::Matrix viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
 
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
@@ -284,7 +284,7 @@ void Camera::Update()
 	prevMouse.x = mouseVec2.x;
 	prevMouse.y = mouseVec2.y;
 
-	DirectXRender::SetViewMatrix(&m_ViewMatrix);
+//	DirectXRender::SetViewMatrix3D(&viewMatrix);
 
 	// SRT情報更新
 	transform->MakeWorldMatrix();
@@ -304,14 +304,97 @@ void Camera::Update()
 	// このコードは確認テストのために残す
 	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
-	DirectXRender::SetProjectionMatrix(&projectionMatrix);
-
-	viewMtx3D = m_ViewMatrix.Transpose();
-	projectionMtx3D = projectionMatrix.Transpose();
+//	DirectXRender::SetProjectionMatrix3D(&projectionMatrix);
 
 	Update2D();
-//	Update3D();
-	UpdateSky();
+	Update3D();
+//	UpdateSky();
+}
+
+void Camera::Update2D() {
+	// ビュー変換後列作成
+	Vector3 pos = { 0.0f,0.0f,-10.0f };
+	Vector3 tgt = { 0.0f,0.0f,1.0f };
+	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	DirectX::SimpleMath::Matrix viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
+//	viewMtx2D = DirectX::XMMatrixTranspose(viewMatrix);
+
+	DirectXRender::SetViewMatrix2D(&viewMatrix);
+
+	// プロジェクション行列の生成
+	float nearPlane = 1.0f;       // ニアクリップ
+	float farPlane = 1000.0f;      // ファークリップ
+
+	Matrix projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
+
+//	projectionMtx2D = DirectX::XMMatrixTranspose(projectionMatrix);
+
+	DirectXRender::SetProjectionMatrix2D(&projectionMatrix);
+
+	//	DirectXRender::SetProjectionMatrix(&projectionMatrix);
+}
+
+void Camera::Update3D() {
+	auto transform = p_object->GetComponent<TransformComponent>();
+	auto pos = transform->GetPosition();
+
+	// ビュー変換後列作成
+	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	Matrix viewMatrix;
+	viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	// このコードは確認テストのために残す
+	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+
+	DirectXRender::SetViewMatrix3D(&viewMatrix);
+	//viewMtx3D = DirectX::XMMatrixTranspose(viewMatrix);
+
+	//プロジェクション行列の生成
+	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+
+	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
+	float nearPlane = 1.0f;       // ニアクリップ
+	float farPlane = 1000.0f;      // ファークリップ
+
+	//プロジェクション行列の生成
+	Matrix projectionMatrix;
+	projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	// このコードは確認テストのために残す
+	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+
+	DirectXRender::SetProjectionMatrix3D(&projectionMatrix);
+}
+
+void Camera::UpdateSky() {
+	//// ビュー変換後列作成
+	//Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	//m_ViewMatrix = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
+	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	//// このコードは確認テストのために残す
+	//// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+
+	//viewMtxSky = DirectX::XMMatrixTranspose(m_ViewMatrix);
+
+	////プロジェクション行列の生成
+	//constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+
+	//float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
+	//float nearPlane = 1.0f;       // ニアクリップ
+	//float farPlane = 1000.0f;      // ファークリップ
+
+	////プロジェクション行列の生成
+	//Matrix projectionMatrix;
+	//projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	//// このコードは確認テストのために残す
+	//// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+
+	//projectionMtxSky = DirectX::XMMatrixTranspose(projectionMatrix);
 }
 
 //=======================================
@@ -484,83 +567,3 @@ void Camera::Uninit()
 //		DirectXRender::SetProjectionMatrix(&projectionMatrix);
 //	}
 //}
-
-void Camera::Update2D() {
-	// ビュー変換後列作成
-	Vector3 pos = { 0.0f,0.0f,-10.0f };
-	Vector3 tgt = { 0.0f,0.0f,1.0f };
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
-	viewMtx2D = DirectX::XMMatrixTranspose(m_ViewMatrix);
-
-	// プロジェクション行列の生成
-	float nearPlane = 1.0f;       // ニアクリップ
-	float farPlane = 1000.0f;      // ファークリップ
-
-	Matrix projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
-
-	projectionMtx2D = DirectX::XMMatrixTranspose(projectionMatrix);
-	//	DirectXRender::SetProjectionMatrix(&projectionMatrix);
-}
-
-void Camera::Update3D() {
-	auto transform = p_object->GetComponent<TransformComponent>();
-	auto pos = transform->GetPosition();
-
-	// ビュー変換後列作成
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	Matrix viewMatrix;
-	viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
-
-	viewMtx3D = DirectX::XMMatrixTranspose(viewMatrix);
-
-	//プロジェクション行列の生成
-	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
-
-	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
-	float nearPlane = 1.0f;       // ニアクリップ
-	float farPlane = 1000.0f;      // ファークリップ
-
-	//プロジェクション行列の生成
-	Matrix projectionMatrix;
-	projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
-
-	projectionMtx3D = DirectX::XMMatrixTranspose(projectionMatrix);
-}
-
-void Camera::UpdateSky() {
-	// ビュー変換後列作成
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrix = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
-
-	viewMtxSky = DirectX::XMMatrixTranspose(m_ViewMatrix);
-
-	//プロジェクション行列の生成
-	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
-
-	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
-	float nearPlane = 1.0f;       // ニアクリップ
-	float farPlane = 1000.0f;      // ファークリップ
-
-	//プロジェクション行列の生成
-	Matrix projectionMatrix;
-	projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
-
-	projectionMtxSky = DirectX::XMMatrixTranspose(projectionMatrix);
-}

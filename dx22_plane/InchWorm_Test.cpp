@@ -39,7 +39,7 @@ InchWorm_Test::~InchWorm_Test()
 
 void InchWorm_Test::Update() {
 
-	//GPU_Update();	// GPUで更新
+	GPU_Update();	// GPUで更新
 
 	Draw();
 }
@@ -69,7 +69,7 @@ void InchWorm_Test::GPU_Update() {
 	// 自ボーンの座標系でのボーンの姿勢を計算
 	for (int i = 1; i < INCH_WORM_BONE_NUM; i++) {
 		//		DX11MtxRotationY((sinf(val) * 70.0f), defBone[i]);
-		q = Quaternion::CreateFromYawPitchRoll(sinf(val) * DirectX::XMConvertToRadians(30.0f), 0.0f, 0.0f);
+		q = Quaternion::CreateFromYawPitchRoll(sinf(val) * DirectX::XMConvertToRadians(70.0f), 0.0f, 0.0f);
 		defBone[i] = Matrix::CreateFromQuaternion(q);	// 回転行列を作成
 	}
 
@@ -117,7 +117,7 @@ void InchWorm_Test::GPU_Update() {
 
 		// デバッグ用に一応単位行列に
 	for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
-		g_combMtx[i] = Matrix::Identity;
+	//	g_combMtx[i] = Matrix::Identity;
 	}
 
 
@@ -143,21 +143,18 @@ void InchWorm_Test::GPU_Update() {
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 	auto cameraComp = cameraobj->GetComponent<Camera>();
 
-	cb.matrixView = cameraComp->GetViewMtx3D();
-	cb.matrixProj = cameraComp->GetProjMtx3D();
-
 	cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
 	cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
 	//cb.mtx[2] = g_combMtx[2];	// ボーン行列配列
 
 	// ボーン行列格納用定数バッファ更新
-	//HRESULT hr = devcontext->Map(g_pBoneConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-	//if (SUCCEEDED(hr)) {
-	//	memcpy_s(pData.pData, pData.RowPitch, &cb, sizeof(CBBoneMatrix));
-	//	devcontext->Unmap(g_pBoneConstantBuffer, 0);
-	//}
+	HRESULT hr = devcontext->Map(g_pBoneConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+	if (SUCCEEDED(hr)) {
+		memcpy_s(pData.pData, pData.RowPitch, &cb, sizeof(CBBoneMatrix));
+		devcontext->Unmap(g_pBoneConstantBuffer, 0);
+	}
 
-	//devcontext->VSSetConstantBuffers(6, 1, &g_pBoneConstantBuffer);
+	devcontext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 }
 
 void InchWorm_Test::Draw() {
@@ -192,9 +189,6 @@ void InchWorm_Test::Draw() {
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
 
-		cb.matrixView = cameraComp->GetViewMtx3D();
-		cb.matrixProj = cameraComp->GetProjMtx3D();
-
 		// デバッグ用に一応単位行列に
 		for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
 			g_combMtx[i] = Matrix::Identity;
@@ -211,7 +205,7 @@ void InchWorm_Test::Draw() {
 
 
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
+	//	deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
 
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
@@ -246,7 +240,7 @@ void InchWorm_Test::BoneInit() {
 	m_bones[0].initMtx._42 = 0.0f;	// Y座標
 
 	// 胸は腰の上（Ｙ方向）
-	m_bones[1].initMtx._41 = 10.0f;	// X座標
+	m_bones[1].initMtx._41 = 50.0f;	// X座標
 	m_bones[1].initMtx._42 = 0.0f;	// Y座標
 	// 頭は胸の上（Ｙ方向）
 	//m_bones[2].initMtx._41 = 0.0f;	// X座標
@@ -307,50 +301,50 @@ std::vector<AnimationVertex> InchWorm_Test::CreateBoneMeshVertices() {
 	m_boneVertices[7].position = Vector3(1.0f,  1.0f, 0.0f);
 
 
-	//m_boneVertices[0].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[1].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[2].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[3].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[0].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[1].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[2].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[3].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
-	//m_boneVertices[4].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[5].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[6].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	//m_boneVertices[7].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
-
-
-	//m_boneVertices[0].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右下
-	//m_boneVertices[1].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左下
-	//m_boneVertices[2].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左上
-	//m_boneVertices[3].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右上
-	//m_boneVertices[4].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右下
-	//m_boneVertices[5].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
-	//m_boneVertices[6].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
-	//m_boneVertices[7].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右上
+	m_boneVertices[4].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
+	m_boneVertices[5].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
+	m_boneVertices[6].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
+	m_boneVertices[7].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
 
 
-	//m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 0;
-	//m_boneVertices[0].matrixIndex[2] = 0;	m_boneVertices[0].matrixIndex[3] = 0;
+	m_boneVertices[0].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右下
+	m_boneVertices[1].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左下
+	m_boneVertices[2].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左上
+	m_boneVertices[3].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右上
+	m_boneVertices[4].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右下
+	m_boneVertices[5].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[6].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
+	m_boneVertices[7].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右上
 
-	//m_boneVertices[1].matrixIndex[0] = 0;	m_boneVertices[1].matrixIndex[1] = 1;
-	//m_boneVertices[1].matrixIndex[2] = 0;	m_boneVertices[1].matrixIndex[3] = 0;
 
-	//m_boneVertices[2].matrixIndex[0] = 0;	m_boneVertices[2].matrixIndex[1] = 1;
-	//m_boneVertices[2].matrixIndex[2] = 0;	m_boneVertices[2].matrixIndex[3] = 0;
+	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 0;
+	m_boneVertices[0].matrixIndex[2] = 0;	m_boneVertices[0].matrixIndex[3] = 0;
 
-	//m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 0;
-	//m_boneVertices[3].matrixIndex[2] = 0;	m_boneVertices[3].matrixIndex[3] = 0;
+	m_boneVertices[1].matrixIndex[0] = 0;	m_boneVertices[1].matrixIndex[1] = 1;
+	m_boneVertices[1].matrixIndex[2] = 0;	m_boneVertices[1].matrixIndex[3] = 0;
 
-	//m_boneVertices[4].matrixIndex[0] = 0;	m_boneVertices[4].matrixIndex[1] = 1;
-	//m_boneVertices[4].matrixIndex[2] = 0;	m_boneVertices[4].matrixIndex[3] = 0;
+	m_boneVertices[2].matrixIndex[0] = 0;	m_boneVertices[2].matrixIndex[1] = 1;
+	m_boneVertices[2].matrixIndex[2] = 0;	m_boneVertices[2].matrixIndex[3] = 0;
 
-	//m_boneVertices[5].matrixIndex[0] = 1;	m_boneVertices[5].matrixIndex[1] = 0;
-	//m_boneVertices[5].matrixIndex[2] = 0;	m_boneVertices[5].matrixIndex[3] = 0;
+	m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 0;
+	m_boneVertices[3].matrixIndex[2] = 0;	m_boneVertices[3].matrixIndex[3] = 0;
 
-	//m_boneVertices[6].matrixIndex[0] = 1;	m_boneVertices[6].matrixIndex[1] = 0;
-	//m_boneVertices[6].matrixIndex[2] = 0;	m_boneVertices[6].matrixIndex[3] = 0;
+	m_boneVertices[4].matrixIndex[0] = 0;	m_boneVertices[4].matrixIndex[1] = 1;
+	m_boneVertices[4].matrixIndex[2] = 0;	m_boneVertices[4].matrixIndex[3] = 0;
 
-	//m_boneVertices[7].matrixIndex[0] = 0;	m_boneVertices[7].matrixIndex[1] = 1;
-	//m_boneVertices[7].matrixIndex[2] = 0;	m_boneVertices[7].matrixIndex[3] = 0;
+	m_boneVertices[5].matrixIndex[0] = 1;	m_boneVertices[5].matrixIndex[1] = 0;
+	m_boneVertices[5].matrixIndex[2] = 0;	m_boneVertices[5].matrixIndex[3] = 0;
+
+	m_boneVertices[6].matrixIndex[0] = 1;	m_boneVertices[6].matrixIndex[1] = 0;
+	m_boneVertices[6].matrixIndex[2] = 0;	m_boneVertices[6].matrixIndex[3] = 0;
+
+	m_boneVertices[7].matrixIndex[0] = 0;	m_boneVertices[7].matrixIndex[1] = 1;
+	m_boneVertices[7].matrixIndex[2] = 0;	m_boneVertices[7].matrixIndex[3] = 0;
 
 
 

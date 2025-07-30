@@ -7,9 +7,9 @@
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
 struct AnimationVertex {
 	DirectX::SimpleMath::Vector3 position = {};
-	//DirectX::SimpleMath::Color color = {};
-	//DirectX::SimpleMath::Vector3 weight = {};
-	//unsigned int matrixIndex[4] = {};
+	DirectX::SimpleMath::Color color = {};
+	DirectX::SimpleMath::Vector3 weight = {};
+	unsigned int matrixIndex[4] = {};
 };
 
 struct LineVertex {
@@ -26,12 +26,6 @@ struct CBBoneMatrix {
 
 	// ワールド変換行列
 	DirectX::SimpleMath::Matrix matrixWorld = DirectX::XMMatrixIdentity();
-
-	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixView = DirectX::XMMatrixIdentity();
-
-	// プロジェクション変換行列
-	DirectX::SimpleMath::Matrix matrixProj = DirectX::XMMatrixIdentity();
 
 	// ボーン行列配列
 	DirectX::SimpleMath::Matrix		mtx[INCH_WORM_BONE_NUM] = {};

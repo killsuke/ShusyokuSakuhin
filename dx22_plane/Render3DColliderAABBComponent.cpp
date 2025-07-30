@@ -1,7 +1,6 @@
 #include "Render3DColliderAABBComponent.h"
 #include "DirectXRender.h"
 #include "Camera.h"
-#include "Game.h"
 #include "Collider.h"
 #include "GameObjectManager.h"
 
@@ -36,9 +35,6 @@ void Render3DColliderAABBComponent::Update()
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
 
-		cb.matrixView = cameraComp->GetViewMtx3D();
-		cb.matrixProj = cameraComp->GetProjMtx3D();
-
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
@@ -46,6 +42,5 @@ void Render3DColliderAABBComponent::Update()
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
 			0,							// 最初のインデックスバッファの位置
 			0);
-
 	}
 }

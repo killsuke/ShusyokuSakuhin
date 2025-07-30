@@ -2,14 +2,6 @@
 //{
 //	matrix World;
 //}
-cbuffer ViewBuffer : register(b1)
-{
-	matrix View;
-}
-cbuffer ProjectionBuffer : register(b2)
-{
-	matrix Projection;
-}
 
 // 定数バッファ受け取り
 cbuffer ConstBuffer : register(b0) 
@@ -20,14 +12,26 @@ cbuffer ConstBuffer : register(b0)
 	// UV座標移動行列
 	matrix matrixTex1;
 
-	// プロジェクション変換行列
-	matrix matrixProj;
-
 	// ワールド変換行列
 	matrix matrixWorld;
+}
 
-	// ビュー変換行列
-	matrix matrixView;
+cbuffer ViewBuffer3D : register(b1)
+{
+    matrix View3D;
+}
+cbuffer ProjectionBuffer3D : register(b2)
+{
+    matrix Projection3D;
+}
+
+cbuffer ViewBuffer2D : register(b3)
+{
+    matrix View2D;
+}
+cbuffer ProjectionBuffer2D : register(b4)
+{
+    matrix Projection2D;
 }
 
 struct VS_IN
@@ -41,11 +45,11 @@ struct VS_IN
 struct VS_ANIMATION
 {
     float4 pos : POSITION;
-    //float4 nrm : NORMAL0;
- //   float4 col : COLOR0;
-    //float2 tex : TEXCOORD0;
-   // float3 weight : BLENDWEIGHT;
-   // int4 idx : BLENDINDICES;
+//    float4 nrm : NORMAL0;
+    float4 col : COLOR0;
+//    float2 tex : TEXCOORD0;
+    float3 weight : BLENDWEIGHT;
+    int4 idx : BLENDINDICES;
 };
 
 struct VS_OUTPUT
@@ -72,7 +76,7 @@ struct LIGHT {
 	float4 Ambient;		// 環境光用の光の強さ
 };
 
-cbuffer LightBuffer:register(b3) {
+cbuffer LightBuffer:register(b5) {
 	LIGHT Light;
 }
 
@@ -86,16 +90,16 @@ struct MATERIAL {
 	bool2 Dummy;
 };
 
-cbuffer MaterialBuffer:register(b4) {
+cbuffer MaterialBuffer:register(b6) {
 	MATERIAL Material;
 }
 
 // ＵＶ座標移動行列
-cbuffer MaterialTexBuffer : register(b5) {
+cbuffer MaterialTexBuffer : register(b6) {
 	matrix matrixTex;
 }
 
-cbuffer ConstantBufferBoneComb : register(b6)
+cbuffer ConstantBufferBoneComb : register(b8)
 {	
 	//	// 頂点カラー
  //   float4 vertexColorB;
@@ -105,12 +109,6 @@ cbuffer ConstantBufferBoneComb : register(b6)
 
 	// ワールド変換行列
     matrix matrixWorldB;
-
-	// ビュー変換行列
-    matrix matrixViewB;
-	
-	// プロジェクション変換行列
-    matrix matrixProjB;
 	
     matrix bonecombmtx[2]; // ボーンコンビネーション行列
 };

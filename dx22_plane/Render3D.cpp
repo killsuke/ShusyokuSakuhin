@@ -1,7 +1,6 @@
 #include "Render3D.h"
 #include "DirectXRender.h"
 #include "Camera.h"
-#include "Game.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
 
@@ -35,9 +34,6 @@ void Render3DComponent::Update()
 		m_Texture->SetGPU();
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
-
-		cb.matrixView = cameraComp->GetViewMtx3D();
-		cb.matrixProj = cameraComp->GetProjMtx3D();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

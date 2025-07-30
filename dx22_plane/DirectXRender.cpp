@@ -47,8 +47,11 @@ ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 ID3D11BlendState* g_BlendStateATC;
 
-ID3D11Buffer* g_pViewBuffer{}; // ビュー行列
-ID3D11Buffer* g_pProjectionBuffer{}; // プロジェクション行列
+ID3D11Buffer* g_pViewBuffer3D{}; // ビュー行列
+ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
+
+ID3D11Buffer* g_pViewBuffer2D{}; // ビュー行列
+ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
 
 
 DirectXRender::DirectXRender() {
@@ -85,7 +88,7 @@ HRESULT DirectXRender::Init() {
 
 	//bufferDesc.ByteWidth = sizeof(LIGHT);
 	//m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(3, 1, &m_LightBuffer);
+	//m_DeviceContext->VSSetConstantBuffers(5, 1, &m_LightBuffer);
 
 	//// ライト初期化
 	//LIGHT light{};
@@ -98,8 +101,8 @@ HRESULT DirectXRender::Init() {
 
 	//bufferDesc.ByteWidth = sizeof(MATERIAL);
 	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(4, 1, &m_MaterialBuffer);
-	//m_DeviceContext->PSSetConstantBuffers(4, 1, &m_MaterialBuffer);
+	//m_DeviceContext->VSSetConstantBuffers(6, 1, &m_MaterialBuffer);
+	//m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
 	//if (FAILED(hr)) return;
 
 	//// マテリアル初期化
@@ -110,7 +113,7 @@ HRESULT DirectXRender::Init() {
 
 	//bufferDesc.ByteWidth = sizeof(Matrix);
 	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_TextureBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(5, 1, &m_TextureBuffer);
+	//m_DeviceContext->VSSetConstantBuffers(7, 1, &m_TextureBuffer);
 	//if (FAILED(hr)) return;
 
 	//// ＵＶ初期化
@@ -147,8 +150,10 @@ void DirectXRender::UnInit() {
 		}
 	}
 	SAFE_RELEASE(g_BlendStateATC);
-	SAFE_RELEASE(g_pViewBuffer);
-	SAFE_RELEASE(g_pProjectionBuffer);
+	SAFE_RELEASE(g_pViewBuffer3D);
+	SAFE_RELEASE(g_pProjectionBuffer3D);
+	SAFE_RELEASE(g_pViewBuffer2D);
+	SAFE_RELEASE(g_pProjectionBuffer2D);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
 }
@@ -177,7 +182,7 @@ void DirectXRender::DrawBegin() {
 	// 定数バッファを頂点シェーダーにセットする
 	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 	// 定数バッファを頂点シェーダーにセットする
-	m_DeviceContext->VSSetConstantBuffers(6, 1, &g_pBoneConstantBuffer);
+//	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 }
 
 //=======================================
@@ -405,11 +410,11 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 
 	ZeroMemory(&bd, sizeof(bd));
 	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
-	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
-//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
+//	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-	bd.CPUAccessFlags = 0;					// CPUアクセス可能
-//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+//	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
 	if (FAILED(hr)) {
@@ -613,39 +618,71 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	//m_DeviceContext->VSSetConstantBuffers(0, 1, &m_WorldBuffer);
 	//if (FAILED(hr)) return;
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer);
-	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer3D);
+	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer3D);
 	if (FAILED(hr)) return hr;
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer);
-	m_DeviceContext->VSSetConstantBuffers(2, 1, &g_pProjectionBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer3D);
+	m_DeviceContext->VSSetConstantBuffers(2, 1, &g_pProjectionBuffer3D);
+	if (FAILED(hr)) return hr;
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer2D);
+	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pViewBuffer2D);
+	if (FAILED(hr)) return hr;
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer2D);
+	m_DeviceContext->VSSetConstantBuffers(4, 1, &g_pProjectionBuffer2D);
 	if (FAILED(hr)) return hr;
 
 	return hr;
 }
 
 //=======================================
-// ビュー行列を設定
+// ビュー行列を設定（３Ｄ）
 //=======================================
-void DirectXRender::SetViewMatrix(DirectX::SimpleMath::Matrix* ViewMatrix)
+void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
 	DirectX::SimpleMath::Matrix view;
 	view = ViewMatrix->Transpose(); // 転置
 
 	// ビュー行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pViewBuffer, 0, NULL, &view, 0, 0);
+	m_DeviceContext->UpdateSubresource(g_pViewBuffer3D, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
-// プロジェクション行列を設定
+// プロジェクション行列を設定（３Ｄ）
 //=======================================
-void DirectXRender::SetProjectionMatrix(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
 	DirectX::SimpleMath::Matrix projection;
 	projection = ProjectionMatrix->Transpose(); // 転置
 
 	// プロジェクション行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer, 0, NULL, &projection, 0, 0);
+	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer3D, 0, NULL, &projection, 0, 0);
+}
+
+//=======================================
+// ビュー行列を設定（２Ｄ）
+//=======================================
+void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
+{
+	DirectX::SimpleMath::Matrix view;
+	view = ViewMatrix->Transpose(); // 転置
+
+	// ビュー行列をGPU側へ送る
+	m_DeviceContext->UpdateSubresource(g_pViewBuffer2D, 0, NULL, &view, 0, 0);
+}
+
+//=======================================
+// プロジェクション行列を設定（２Ｄ）
+//=======================================
+void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+{
+	DirectX::SimpleMath::Matrix projection;
+	projection = ProjectionMatrix->Transpose(); // 転置
+
+	// プロジェクション行列をGPU側へ送る
+	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer2D, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================

@@ -34,12 +34,8 @@ struct ConstBuffer
 	DirectX::XMFLOAT4 color;
 	// UV座標移動行列
 	DirectX::XMMATRIX matrixTex;
-	// プロジェクション変換行列
-	DirectX::XMMATRIX matrixProj;
 	// ワールド変換行列
 	DirectX::XMMATRIX matrixWorld;
-	// ビュー変換行列
-	DirectX::XMMATRIX matrixView;
 };
 
 class DirectXRender
@@ -79,8 +75,10 @@ public:
 	static void DrawBegin();
 	static void DrawEnd();
 
-	static void SetViewMatrix(DirectX::SimpleMath::Matrix* ViewMatrix);
-	static void SetProjectionMatrix(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };

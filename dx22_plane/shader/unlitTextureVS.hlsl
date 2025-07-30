@@ -24,9 +24,9 @@ PS_IN vs_main(in VS_IN input)
 
 	output.pos = mul(input.pos, matrixWorld);
 
-	output.pos = mul(output.pos, View);
+	output.pos = mul(output.pos, View3D);
 
-	output.pos = mul(output.pos, Projection);
+	output.pos = mul(output.pos, Projection3D);
 
 	// ‚t‚uÀ•W‚ğˆÚ“®‚³‚¹‚é
 	float4 uv;

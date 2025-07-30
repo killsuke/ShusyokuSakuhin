@@ -9,16 +9,20 @@ GameObjectManager::objects;		// ゲーム内で、実際に更新をかけるベクター
 // どうやってオブジェクトをリストから削除するかを考える
 void GameObjectManager::RemoveObject() {
 	// 条件が合えばベクターの中の要素を削除する
-	objects.erase(
-		std::remove_if(objects.begin(), objects.end(), [](const std::unique_ptr<GameObject>& obj) {
-			return obj->GetDeleteFg(); // 削除フラグがtrueのオブジェクトを対象に
-			}),
-		objects.end());
+	//objects.erase(
+	//	std::remove_if(objects.begin(), objects.end(), [](const std::unique_ptr<GameObject>& obj) {
+	//		return obj->GetDeleteFg(); // 削除フラグがtrueのオブジェクトを対象に
+	//		}),
+	//	objects.end());
+
+	// C++ 20で使えるコンテナの要素削除処理
+	std::erase_if(objects, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetDeleteFg();
+	});
 }
 
 void GameObjectManager::RemoveTagObject(const std::string& tag) {
 	
-//	std::vector<std::unique_ptr<GameObject>> matchingObjects;
 	for (const auto& obj : objects) { // objects をループで探索
 		if (obj->GetTag() == tag) { // タグが一致するかチェック
 			obj->SetDeleteFg(true);

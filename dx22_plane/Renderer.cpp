@@ -230,7 +230,7 @@ using namespace DirectX::SimpleMath;
 //	bufferDesc.ByteWidth = sizeof(MATERIAL);
 //	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
 //	m_DeviceContext->VSSetConstantBuffers(4, 1, &m_MaterialBuffer);
-//	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_MaterialBuffer);
+//	m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
 //	if (FAILED(hr)) return;
 //
 //	// ƒ}ƒeƒŠƒAƒ‹‰Šú‰»

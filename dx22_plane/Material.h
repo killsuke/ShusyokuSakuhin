@@ -67,10 +67,10 @@ public:
 			0, 0);
 
 		// コンスタントバッファ4をｂ4レジスタへセット（頂点シェーダー用）
-		devcontext->VSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->VSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 		// コンスタントバッファ4をｂ4レジスタへセット(ピクセルシェーダー用)
-		devcontext->PSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->PSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 	}
 
@@ -80,10 +80,10 @@ public:
 		devcontext = DirectXRender::GetDeviceContext();
 
 		// コンスタントバッファ4をｂ4レジスタへセット（頂点シェーダー用）
-		devcontext->VSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->VSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 		// コンスタントバッファ4をｂ4レジスタへセット(ピクセルシェーダー用)
-		devcontext->PSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->PSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 	}
 
 	void SetMaterial(const MATERIAL& mtrl) {
@@ -102,10 +102,10 @@ public:
 			0, 0);
 
 		// コンスタントバッファ4をｂ4レジスタへセット（頂点シェーダー用）
-		devcontext->VSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->VSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 		// コンスタントバッファ4をｂ4レジスタへセット(ピクセルシェーダー用)
-		devcontext->PSSetConstantBuffers(4, 1, m_pConstantBufferMaterial.GetAddressOf());
+		devcontext->PSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 	}
 
