@@ -12,10 +12,10 @@ enum ComponentType {
 	RIGIDBODY,
 	COLLIDER,
 	TEST_EXTRUSION,
+	CAMERA,
 	RENDER,
 	RENDER_ONE_SKIN_ANIMATION,
 	COLLIDER_DEBUG,
-	CAMERA,
 
 	Max			// 最大値（コンポーネントの種類数）
 };

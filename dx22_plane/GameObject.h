@@ -15,7 +15,7 @@
 
 class Component; // ‘O•ûéŒ¾
 
-class GameObject {
+class GameObject final {	// •Ï‚ÉŒp³‚³‚ê‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß‚Éfinal‚ğ•t‚¯‚é
 protected:
 	std::vector<std::unique_ptr<Component>> components;
 

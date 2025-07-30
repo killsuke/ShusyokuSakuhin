@@ -64,4 +64,8 @@ public:
 			deviceContext->Unmap(m_VertexBuffer.Get(), 0);
 		}
 	}
+
+	ID3D11Buffer* Get() const {
+		return m_VertexBuffer.Get();
+	}
 };

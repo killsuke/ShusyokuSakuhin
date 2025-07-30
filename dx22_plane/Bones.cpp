@@ -103,8 +103,60 @@ Bones::Bones(GameObject& obj) : RenderComponent(obj)
 	m_bones[11].initMtx._42 = -1.0f;	// Y座標
 
 
+	// 初期姿勢の影響を打ち消すために必要
 	g_combMtx = new DirectX::SimpleMath::Matrix[BONE_NUM];	// 合成変換行列の配列を確保
+
+	for (int i = 0; i < BONE_NUM; i++) {
+		m_bones[i].id = i;
+		m_bones[i].combMtxAry = g_combMtx;
+		// ボーンオフセット行列作成（初期姿勢の逆行列計算）
+		DX11MtxInverse(m_bones[i].offsetMtx, m_bones[i].initMtx);
+	}
+
+	/*
+//	再帰を使用した場合
+	// 初期姿勢を親の姿勢からの相対姿勢に直します。
+	// まず子の末端まで下りて、自分のローカル空間での初期姿勢 × 親のボーンオフセット行列で相対姿勢が出ます
+	// 親子関係を辿るので再起関数が必要です。
+
+	struct CalcRelativeMat {
+		static void run(Bone* me, Matrix *parentoffsetMat) {
+			if (me->firstChild)
+				run(me->firstChild, &me->offsetMtx);
+			if (me->sibling)
+				run(me->sibling, parentoffsetMat);
+			if (parentoffsetMat)
+				me->initMtx *= *parentoffsetMat;
+		}
+	};
+	CalcRelativeMat::run(g_bones, 0);
+
+*/
+// 再帰を使わない場合
+//   ボーンの初期姿勢を親ボーンからの相対座標系に変換する
+	// ようするに親子関係を作る
+	m_bones[0].initMtx = m_bones[0].initMtx;
+	m_bones[1].initMtx = m_bones[1].initMtx * m_bones[0].offsetMtx;
+	m_bones[2].initMtx = m_bones[2].initMtx * m_bones[1].offsetMtx;
+
+	m_bones[3].initMtx = m_bones[3].initMtx * m_bones[1].offsetMtx;
+	m_bones[4].initMtx = m_bones[4].initMtx * m_bones[3].offsetMtx;
+	m_bones[5].initMtx = m_bones[5].initMtx * m_bones[4].offsetMtx;
+
+	m_bones[6].initMtx = m_bones[6].initMtx * m_bones[1].offsetMtx;
+	m_bones[7].initMtx = m_bones[7].initMtx * m_bones[6].offsetMtx;
+	m_bones[8].initMtx = m_bones[8].initMtx * m_bones[7].offsetMtx;
+
+	m_bones[9].initMtx = m_bones[9].initMtx * m_bones[0].offsetMtx;
+	m_bones[10].initMtx = m_bones[10].initMtx * m_bones[9].offsetMtx;
+	m_bones[11].initMtx = m_bones[11].initMtx * m_bones[10].offsetMtx;
+
+	m_bones[12].initMtx = m_bones[12].initMtx * m_bones[0].offsetMtx;
+	m_bones[13].initMtx = m_bones[13].initMtx * m_bones[12].offsetMtx;
+	m_bones[14].initMtx = m_bones[14].initMtx * m_bones[13].offsetMtx;
+
 }
+
 
 Bones::~Bones()
 {
@@ -123,9 +175,9 @@ void Bones::Update() {
 		//定数バッファを更新
 		CBBoneMatrix cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix();
+		//cb.matrixWorld = transform->GetWorldMatrix();
 
-		cb.color = DirectX::XMFLOAT4(m_Color);
+		//cb.color = DirectX::XMFLOAT4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
@@ -139,8 +191,8 @@ void Bones::Update() {
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
 
-		cb.matrixView = cameraComp->GetViewMtx3D();
-		cb.matrixProj = cameraComp->GetProjMtx3D();
+	/*	cb.matrixView = cameraComp->GetViewMtx3D();
+		cb.matrixProj = cameraComp->GetProjMtx3D();*/
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
@@ -159,22 +211,22 @@ std::vector<AnimationVertex> Bones::CreateBoneMeshVertices() {
 
 	m_boneVertices.resize(6);
 
-	m_boneVertices[0].position = Vector3(-1.0f, -1.0f, 0.0f);
+	/*m_boneVertices[0].position = Vector3(-1.0f, -1.0f, 0.0f);
 	m_boneVertices[1].position = Vector3(1.0f, -1.0f, 0.0f);
 	m_boneVertices[2].position = Vector3(1.0f, 1.0f, 0.0f);
-	m_boneVertices[3].position = Vector3(-1.0f, 1.0f, 0.0f);
+	m_boneVertices[3].position = Vector3(-1.0f, 1.0f, 0.0f);*/
 
 
-	m_boneVertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	/*m_boneVertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	m_boneVertices[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	m_boneVertices[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	m_boneVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_boneVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);*/
 
 
-	m_boneVertices[0].weight = Vector3(0.0f, 0.0f, 1.0f);	// 右下
-	m_boneVertices[1].weight = Vector3(0.0f, 1.0f, 1.0f);	// 左下
-	m_boneVertices[2].weight = Vector3(0.0f, 1.0f, 0.0f);	// 左上
-	m_boneVertices[3].weight = Vector3(0.0f, 0.0f, 0.0f);	// 右上
+	//m_boneVertices[0].weight = Vector3(0.0f, 0.0f, 1.0f);	// 右下
+	//m_boneVertices[1].weight = Vector3(0.0f, 1.0f, 1.0f);	// 左下
+	//m_boneVertices[2].weight = Vector3(0.0f, 1.0f, 0.0f);	// 左上
+	//m_boneVertices[3].weight = Vector3(0.0f, 0.0f, 0.0f);	// 右上
 
 
 	//m_boneVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
@@ -250,4 +302,15 @@ void Bones::DX11MtxRotationZ(float angle, DirectX::XMFLOAT4X4& outmtx) {
 	mtx = DirectX::XMMatrixRotationZ(angle);
 
 	XMStoreFloat4x4(&outmtx, mtx);
+}
+
+void Bones::DX11MtxInverse(DirectX::XMFLOAT4X4& ansmtx, const DirectX::XMFLOAT4X4& mtx) {
+
+	DirectX::XMMATRIX mat, matans;
+
+	mat = XMLoadFloat4x4(&mtx);
+
+	matans = DirectX::XMMatrixInverse(nullptr, mat);
+
+	XMStoreFloat4x4(&ansmtx, matans);
 }

@@ -40,21 +40,21 @@ struct VS_IN
 
 struct VS_ANIMATION
 {
-    float4 pos : POSITION0;
-    float4 nrm : NORMAL0;
-    float4 col : COLOR0;
-    float2 tex : TEXCOORD0;
-    float3 weight : BLENDWEIGHT0;
-    int4 idx : BLENDINDICES0;
+    float4 pos : POSITION;
+    //float4 nrm : NORMAL0;
+ //   float4 col : COLOR0;
+    //float2 tex : TEXCOORD0;
+   // float3 weight : BLENDWEIGHT;
+   // int4 idx : BLENDINDICES;
 };
 
 struct VS_OUTPUT
 {
     float4 pos : SV_POSITION;
-    float4 nrm : TEXCOORD0;
     float4 col : COLOR0;
-    float2 tex : TEXCOORD1;
-    float4 wpos : TEXCOORD2;
+    float2 tex : TEXCOORD;
+    float4 wpos : TEXCOORD1;
+    float4 nrm : TEXCOORD2;
 };
 
 struct PS_IN
@@ -91,11 +91,26 @@ cbuffer MaterialBuffer:register(b4) {
 }
 
 // ＵＶ座標移動行列
-cbuffer MaterialBuffer : register(b5) {
+cbuffer MaterialTexBuffer : register(b5) {
 	matrix matrixTex;
 }
 
 cbuffer ConstantBufferBoneComb : register(b6)
-{
-    matrix bonecombmtx[7]; // ボーンコンビネーション行列
+{	
+	//	// 頂点カラー
+ //   float4 vertexColorB;
+
+	//// UV座標移動行列
+ //   matrix matrixTex1B;
+
+	// ワールド変換行列
+    matrix matrixWorldB;
+
+	// ビュー変換行列
+    matrix matrixViewB;
+	
+	// プロジェクション変換行列
+    matrix matrixProjB;
+	
+    matrix bonecombmtx[2]; // ボーンコンビネーション行列
 };

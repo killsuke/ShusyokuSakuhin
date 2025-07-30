@@ -55,13 +55,13 @@ public:
 	static void DrawSort();
 
 	// ゲームオブジェクトを見つければ返す
-	static std::shared_ptr<GameObject>				GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
-	static std::vector<std::shared_ptr<GameObject>> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
+	static GameObject*	GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
+	static std::vector<GameObject*> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
 	static void SizeUP();
 
 private:
 
-	static std::vector<std::shared_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする
+	static std::vector<std::unique_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする
 
 	// 型変換をして作成の手伝い、GameObjectを継承したクラスであるならば追加する
 //	template <typename T2>

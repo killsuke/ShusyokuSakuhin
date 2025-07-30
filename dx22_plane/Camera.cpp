@@ -221,9 +221,6 @@ void Camera::Update()
 	////	m_Target = DirectX::SimpleMath::Vector3(posx, 0.0f, 0.0f);	// ターゲットとカメラの位置が一緒じゃダメ
 	//posx += 1.1f;
 
-	Update2D();
-	Update3D();
-	UpdateSky();
 
 	auto rot = transform->GetRotation();
 	auto pos = transform->GetPosition();
@@ -308,6 +305,13 @@ void Camera::Update()
 	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
 	DirectXRender::SetProjectionMatrix(&projectionMatrix);
+
+	viewMtx3D = m_ViewMatrix.Transpose();
+	projectionMtx3D = projectionMatrix.Transpose();
+
+	Update2D();
+//	Update3D();
+	UpdateSky();
 }
 
 //=======================================
@@ -505,13 +509,14 @@ void Camera::Update3D() {
 
 	// ビュー変換後列作成
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+	Matrix viewMatrix;
+	viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
 	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
 
-	viewMtx3D = DirectX::XMMatrixTranspose(m_ViewMatrix);
+	viewMtx3D = DirectX::XMMatrixTranspose(viewMatrix);
 
 	//プロジェクション行列の生成
 	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角

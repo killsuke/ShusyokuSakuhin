@@ -166,7 +166,6 @@
     <ClCompile Include="AssimpPerse.cpp" />
     <ClCompile Include="BonePartsMesh.cpp" />
     <ClCompile Include="Bones.cpp" />
-    <ClCompile Include="Braid.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -181,12 +180,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="InchWorm_Test.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="Pattern.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="Render3D.cpp" />
@@ -251,7 +249,6 @@
     <ClInclude Include="BoneData.h" />
     <ClInclude Include="BonePartsMesh.h" />
     <ClInclude Include="Bones.h" />
-    <ClInclude Include="Braid.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
@@ -266,6 +263,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="InchWorm_Test.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />
     <ClInclude Include="Material.h" />
@@ -273,8 +271,6 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="Pattern.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Render3D.h" />
@@ -330,11 +326,19 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="OneSkinAnimationPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+    </FxCompile>
     <FxCompile Include="OneSkinAnimationVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
     </FxCompile>
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

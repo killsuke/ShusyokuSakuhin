@@ -1,7 +1,7 @@
 #include "TitleScene.h"
 //#include "Texture2D.h"
 #include "Singleton.h"
-#include "SkyDome.h"
+//#include "SkyDome.h"
 #include "Camera.h"
 #include "GameObjectManager.h"
 #include "Transform.h"

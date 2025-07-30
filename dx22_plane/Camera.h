@@ -50,6 +50,8 @@ public:
 
 //	void SetCamera(int mode);	// ƒJƒƒ‰‚ğİ’è
 
+	inline void SetTarget(DirectX::SimpleMath::Vector3& target) { m_Target = target; };
+
 	DirectX::SimpleMath::Matrix GetProjMtx2D() const { return projectionMtx2D; };
 	DirectX::SimpleMath::Matrix GetProjMtx3D() const { return projectionMtx2D; };
 	DirectX::SimpleMath::Matrix GetProjMtxSky() const { return projectionMtx2D; };

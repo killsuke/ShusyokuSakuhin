@@ -1,14 +1,15 @@
 #pragma once
 #include <SimpleMath.h>
-#define BONE_NUM (14)		// ボーンの数（最大14個まで）
+#define BONE_NUM (15)		// ボーンの数（最大14個まで）
+#define INCH_WORM_BONE_NUM (2)
 
 // 最低限の頂点情報
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
 struct AnimationVertex {
 	DirectX::SimpleMath::Vector3 position = {};
-	DirectX::SimpleMath::Color color = {};
-	DirectX::SimpleMath::Vector3 weight = {};
-	unsigned int matrixIndex[4] = {};
+	//DirectX::SimpleMath::Color color = {};
+	//DirectX::SimpleMath::Vector3 weight = {};
+	//unsigned int matrixIndex[4] = {};
 };
 
 struct LineVertex {
@@ -19,17 +20,21 @@ struct LineVertex {
 // 定数バッファ（ボーン行列用）
 struct CBBoneMatrix {
 	// 頂点カラー行列
-	DirectX::XMFLOAT4 color;
-	// UV座標移動行列
-	DirectX::XMMATRIX matrixTex;
-	// プロジェクション変換行列
-	DirectX::XMMATRIX matrixProj;
+	//DirectX::XMFLOAT4 color = {1.0f,1.0f,1.0f,1.0f};
+	//// UV座標移動行列
+	//DirectX::XMMATRIX matrixTex = DirectX::XMMatrixIdentity();
+
 	// ワールド変換行列
-	DirectX::XMMATRIX matrixWorld;
+	DirectX::SimpleMath::Matrix matrixWorld = DirectX::XMMatrixIdentity();
+
 	// ビュー変換行列
-	DirectX::XMMATRIX matrixView;
+	DirectX::SimpleMath::Matrix matrixView = DirectX::XMMatrixIdentity();
+
+	// プロジェクション変換行列
+	DirectX::SimpleMath::Matrix matrixProj = DirectX::XMMatrixIdentity();
+
 	// ボーン行列配列
-	DirectX::SimpleMath::Matrix		mtx[BONE_NUM] = {};
+	DirectX::SimpleMath::Matrix		mtx[INCH_WORM_BONE_NUM] = {};
 };
 
 // ボーン構造体

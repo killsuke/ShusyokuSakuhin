@@ -168,7 +168,7 @@ void DirectXRender::DrawBegin() {
 	// 深度バッファをリセットする
 	m_DeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	// 	インプットレイアウト（GPUに渡す頂点データのフォーマットを定義）を設定
-	m_DeviceContext->IASetInputLayout(g_pInputLayout);
+	//m_DeviceContext->IASetInputLayout(g_pInputLayout);
 	// どのようにテクスチャを扱うかを設定
 	// ポストエフェクト等でどんな描画かを使う場合は、
 	// 最初の値（スロット）を１以上にする
@@ -404,10 +404,12 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 	D3D11_BUFFER_DESC bd;
 
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
 	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
+	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
 	if (FAILED(hr)) {

@@ -31,4 +31,5 @@ public:
 	void DX11MtxRotationX(float angle, DirectX::XMFLOAT4X4& outmtx);
 	void DX11MtxRotationY(float angle, DirectX::XMFLOAT4X4& outmtx);
 	void DX11MtxRotationZ(float angle, DirectX::XMFLOAT4X4& outmtx);
+	void DX11MtxInverse(DirectX::XMFLOAT4X4& ansmtx, const DirectX::XMFLOAT4X4& mtx);
 };

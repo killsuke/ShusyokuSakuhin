@@ -20,9 +20,9 @@ void RenderOneSkinAnimation::Update()
 		//定数バッファを更新
 		CBBoneMatrix cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix();
+		//cb.matrixWorld = transform->GetWorldMatrix();
 
-		cb.color = DirectX::XMFLOAT4(m_Color);
+		//cb.color = DirectX::XMFLOAT4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
@@ -36,8 +36,8 @@ void RenderOneSkinAnimation::Update()
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
 
-		cb.matrixView = cameraComp->GetViewMtx3D();
-		cb.matrixProj = cameraComp->GetProjMtx3D();
+	/*	cb.matrixView = cameraComp->GetViewMtx3D();
+		cb.matrixProj = cameraComp->GetProjMtx3D();*/
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);

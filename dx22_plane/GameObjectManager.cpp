@@ -3,14 +3,14 @@
 #include "Transform.h"
 
 // 静的な宣言として必要
-std::vector<std::shared_ptr<GameObject>>
+std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::objects;		// ゲーム内で、実際に更新をかけるベクター
 
 // どうやってオブジェクトをリストから削除するかを考える
 void GameObjectManager::RemoveObject() {
 	// 条件が合えばベクターの中の要素を削除する
 	objects.erase(
-		std::remove_if(objects.begin(), objects.end(), [](const std::shared_ptr<GameObject>& obj) {
+		std::remove_if(objects.begin(), objects.end(), [](const std::unique_ptr<GameObject>& obj) {
 			return obj->GetDeleteFg(); // 削除フラグがtrueのオブジェクトを対象に
 			}),
 		objects.end());
@@ -18,7 +18,7 @@ void GameObjectManager::RemoveObject() {
 
 void GameObjectManager::RemoveTagObject(const std::string& tag) {
 	
-	std::vector<std::shared_ptr<GameObject>> matchingObjects;
+//	std::vector<std::unique_ptr<GameObject>> matchingObjects;
 	for (const auto& obj : objects) { // objects をループで探索
 		if (obj->GetTag() == tag) { // タグが一致するかチェック
 			obj->SetDeleteFg(true);
@@ -33,7 +33,7 @@ void GameObjectManager::Update() {
 	// 描画順を整える
 	DrawSort();
 
-	for (auto obj : objects) {
+	for (const auto& obj : objects) {
 		obj->Update();
 		// シーンチェンジが起こったらブレイクしてfor文を抜ける
 	/*	if (SceneManager::GetSCFrag() == true) {
@@ -53,8 +53,9 @@ void GameObjectManager::ListClear() {
 
 // 描画順のソート
 void GameObjectManager::DrawSort() {
-	auto sortZLambda = [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
-		return a->GetComponent<TransformComponent>()->GetPosition().z > b->GetComponent<TransformComponent>()->GetPosition().z;
+	auto sortZLambda = [](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b) {
+		return a->GetComponent<TransformComponent>()->GetPosition().z > 
+			   b->GetComponent<TransformComponent>()->GetPosition().z;
 	};
 
 	if (!std::is_sorted(objects.begin(), objects.end(), sortZLambda)) {
@@ -63,10 +64,10 @@ void GameObjectManager::DrawSort() {
 }
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
-std::shared_ptr<GameObject> GameObjectManager::GameObjectFindName(const std::string& name) {
+GameObject* GameObjectManager::GameObjectFindName(const std::string& name) {
 	for (const auto& obj : objects) { // objects をループで探索
 		if (obj->GetName() == name) { // 名前が一致するかチェック
-			return obj; // 一致する場合、そのオブジェクトを返す
+			return obj.get(); // 一致する場合、そのオブジェクトを返す
 		}
 	}
 	// これを使う場合、nullptr、つまり存在しない場所を参照することになるので、
@@ -75,11 +76,11 @@ std::shared_ptr<GameObject> GameObjectManager::GameObjectFindName(const std::str
 }
 
 // 検索したオブジェクトを複数返すが、存在しない場合は止まるので注意
-std::vector<std::shared_ptr<GameObject>> GameObjectManager::GameObjectFindTag(const std::string& tag) {
-	std::vector<std::shared_ptr<GameObject>> matchingObjects;
+std::vector<GameObject*> GameObjectManager::GameObjectFindTag(const std::string& tag) {
+	std::vector<GameObject*> matchingObjects;
 	for (const auto& obj : objects) { // objects をループで探索
 		if (obj->GetTag() == tag) { // タグが一致するかチェック
-			matchingObjects.push_back(obj); // 一致するオブジェクトを追加
+			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
 	}
 
