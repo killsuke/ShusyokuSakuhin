@@ -6,10 +6,15 @@
 // 最低限の頂点情報
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
 struct AnimationVertex {
-	DirectX::SimpleMath::Vector3 position = {};
 	DirectX::SimpleMath::Color color = {};
-	DirectX::SimpleMath::Vector3 weight = {};
+
 	unsigned int matrixIndex[4] = {};
+
+	DirectX::SimpleMath::Vector3 position = {};
+	DirectX::SimpleMath::Vector3 weight = {};
+	float pad1 = 0.0f;
+
+	float pad2 = 0.0f;
 };
 
 struct LineVertex {

@@ -23,7 +23,6 @@ public:
 		return m_boneVertices;
 	}
 	void SetShaderOneSkin(const std::string& vertex, const std::string& pixel) { m_Shader->CreateOneSkinAnimation(vertex, pixel); };
-	void SetBoneMesh(Mesh& mesh);
 	std::vector<AnimationVertex> CreateBoneMeshVertices();
 	std::vector<unsigned int> CreateMeshIndices();
 

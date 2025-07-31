@@ -4,6 +4,7 @@
 #include "Render3D.h"
 #include "GameObjectManager.h"
 #include "CircleMesh.h"
+#include "CubeMesh.h"
 #include "SquareMesh.h"
 #include "InchWorm_Test.h"
 
@@ -38,11 +39,12 @@ void Stage1Scene::Init()
 
 	// ˜
 	{
-		SquareMesh circleMesh;
+		CubeMesh circleMesh;
 		auto circle = GameObjectManager::AddObject("joint0", "Circle");
 		auto circleTrans = circle->AddComponent<TransformComponent>();
 		circleTrans->SetPosition({ 0.0f, -10.0f, -10.0f });
-		circleTrans->SetScale({10.0f,10.0f,1.0f});
+		circleTrans->SetScale({10.0f,10.0f,10.0f});
+//		circleTrans->SetRotation({0.0f,60.0f,0.0f});
 		auto circleRend = circle->AddComponent<Render3DComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");

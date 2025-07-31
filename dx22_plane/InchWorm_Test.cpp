@@ -1,7 +1,6 @@
 #include "InchWorm_Test.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
-#include "Camera.h"
 #include "DirectXRender.h"
 
 using namespace DirectX::SimpleMath;
@@ -22,11 +21,7 @@ InchWorm_Test::InchWorm_Test(GameObject& obj) : RenderComponent(obj)
 	m_Texture->Load("assets/texture/NoTexture.png");
 
 	BoneInit();
-
-
-
 }
-
 
 InchWorm_Test::~InchWorm_Test()
 {
@@ -102,7 +97,7 @@ void InchWorm_Test::GPU_Update() {
 
 	// 再帰を使用しなかった場合
 	Matrix global;
-	DX11MtxRotationZ(val * 0.1f, global);
+	DX11MtxRotationZ(val * 1.0f, global);
 
 	// ボーン行列を計算
 	m_bones[0].boneMtx = m_bones[0].boneMtx/* * global*/;
@@ -113,7 +108,51 @@ void InchWorm_Test::GPU_Update() {
 		// ボーンコンビネーション行列を計算
 	g_combMtx[0] = m_bones[0].offsetMtx * m_bones[0].boneMtx;
 	g_combMtx[1] = m_bones[1].offsetMtx * m_bones[1].boneMtx;
+
+	auto debugCube = GameObjectManager::GameObjectFindName("joint0");
+	auto debugTrans = debugCube->GetComponent<TransformComponent>();
+
+//	auto debugMtx = m_bones[1].boneMtx;
+
+	//debugTrans->SetPosition({debugMtx._41,debugMtx._42 ,debugMtx._43 });
+	//debugTrans->MakeWorldMatrix();
+
 	//	g_combMtx[2] = m_bones[2].offsetMtx * m_bones[2].boneMtx;
+
+	
+
+		Vector3 scale, position;
+	Quaternion rotation;
+
+	if (m_bones[1].boneMtx.Decompose(scale, rotation, position)) {
+		// 成功：回転だけ取り出せた
+		Vector3 euler;
+
+		// yaw (Y軸周り)
+		float siny_cosp = 2.0f * (q.w * q.y + q.z * q.x);
+		float cosy_cosp = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+		euler.y = std::atan2(siny_cosp, cosy_cosp); // yaw
+
+		// pitch (X軸周り)
+		float sinp = 2.0f * (q.w * q.x - q.z * q.y);
+		if (std::abs(sinp) >= 1)
+			euler.x = std::copysign(DirectX::XM_PIDIV2, sinp); // 90度
+		else
+			euler.x = std::asin(sinp); // pitch
+
+		// roll (Z軸周り)
+		float sinr_cosp = 2.0f * (q.w * q.z + q.x * q.y);
+		float cosr_cosp = 1.0f - 2.0f * (q.z * q.z + q.x * q.x);
+		euler.z = std::atan2(sinr_cosp, cosr_cosp); // roll
+
+		// ラジアン → ディグリー変換
+		euler.x = DirectX::XMConvertToDegrees(euler.x);
+		euler.y = DirectX::XMConvertToDegrees(euler.y);
+		euler.z = DirectX::XMConvertToDegrees(euler.z);
+
+		/*debugTrans->SetRotation(euler);
+		debugTrans->MakeWorldMatrix();*/
+	}
 
 		// デバッグ用に一応単位行列に
 	for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
@@ -140,12 +179,10 @@ void InchWorm_Test::GPU_Update() {
 
 	cb.matrixWorld = srt;		// ワールド変換行列
 
-	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
-	auto cameraComp = cameraobj->GetComponent<Camera>();
-
-	cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
-	cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
-	//cb.mtx[2] = g_combMtx[2];	// ボーン行列配列
+	// ボーン行列配列
+	for (int i = 0; i < INCH_WORM_BONE_NUM; ++i) {
+		cb.mtx[i] = g_combMtx[i];
+	}
 
 	// ボーン行列格納用定数バッファ更新
 	HRESULT hr = devcontext->Map(g_pBoneConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
@@ -175,33 +212,25 @@ void InchWorm_Test::Draw() {
 		// トポロジーをセット（プリミティブタイプ）
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
 		m_Shader->SetGPU();
-		//m_VertexBuffer.SetGPU();
-
-		// 頂点バッファをセットする
-	/*	unsigned int stride = sizeof(AnimationVertex);
-		unsigned  offset = 0;
-		deviceContext->IASetVertexBuffers(0, 1, , &stride, &offset);*/
 
 		m_AnimationVertexBuffer.SetGPU();
 
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
 
-		auto cameraComp = cameraobj->GetComponent<Camera>();
-
-		// デバッグ用に一応単位行列に
-		for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
-			g_combMtx[i] = Matrix::Identity;
-		}
+		//// デバッグ用に一応単位行列に
+		//for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
+		//	g_combMtx[i] = Matrix::Identity;
+		//}
 
 
-		// 転置
-		for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
-			DX11MtxTranspose(g_combMtx[i], g_combMtx[i]);
-		}
+		//// 転置
+		//for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
+		//	DX11MtxTranspose(g_combMtx[i], g_combMtx[i]);
+		//}
 
-		cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
-		cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
+		//cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
+		//cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
 
 
 		// 行列をシェーダーに渡す
@@ -240,7 +269,7 @@ void InchWorm_Test::BoneInit() {
 	m_bones[0].initMtx._42 = 0.0f;	// Y座標
 
 	// 胸は腰の上（Ｙ方向）
-	m_bones[1].initMtx._41 = 50.0f;	// X座標
+	m_bones[1].initMtx._41 = 5.0f;	// X座標
 	m_bones[1].initMtx._42 = 0.0f;	// Y座標
 	// 頭は胸の上（Ｙ方向）
 	//m_bones[2].initMtx._41 = 0.0f;	// X座標
@@ -313,16 +342,16 @@ std::vector<AnimationVertex> InchWorm_Test::CreateBoneMeshVertices() {
 
 
 	m_boneVertices[0].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右下
-	m_boneVertices[1].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左下
-	m_boneVertices[2].weight = Vector3(0.50f, 0.50f, 0.00f);	// 左上
+	m_boneVertices[1].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[2].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
 	m_boneVertices[3].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右上
-	m_boneVertices[4].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右下
-	m_boneVertices[5].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
-	m_boneVertices[6].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
-	m_boneVertices[7].weight = Vector3(0.50f, 0.50f, 0.00f);	// 右上
+	m_boneVertices[4].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[5].weight = Vector3(0.30f, 0.70f, 0.00f);	// 右下
+	m_boneVertices[6].weight = Vector3(0.30f, 0.70f, 0.00f);	// 右上
+	m_boneVertices[7].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
 
 
-	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 0;
+	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 1;
 	m_boneVertices[0].matrixIndex[2] = 0;	m_boneVertices[0].matrixIndex[3] = 0;
 
 	m_boneVertices[1].matrixIndex[0] = 0;	m_boneVertices[1].matrixIndex[1] = 1;
@@ -331,16 +360,16 @@ std::vector<AnimationVertex> InchWorm_Test::CreateBoneMeshVertices() {
 	m_boneVertices[2].matrixIndex[0] = 0;	m_boneVertices[2].matrixIndex[1] = 1;
 	m_boneVertices[2].matrixIndex[2] = 0;	m_boneVertices[2].matrixIndex[3] = 0;
 
-	m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 0;
+	m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 1;
 	m_boneVertices[3].matrixIndex[2] = 0;	m_boneVertices[3].matrixIndex[3] = 0;
 
 	m_boneVertices[4].matrixIndex[0] = 0;	m_boneVertices[4].matrixIndex[1] = 1;
 	m_boneVertices[4].matrixIndex[2] = 0;	m_boneVertices[4].matrixIndex[3] = 0;
 
-	m_boneVertices[5].matrixIndex[0] = 1;	m_boneVertices[5].matrixIndex[1] = 0;
+	m_boneVertices[5].matrixIndex[0] = 0;	m_boneVertices[5].matrixIndex[1] = 1;
 	m_boneVertices[5].matrixIndex[2] = 0;	m_boneVertices[5].matrixIndex[3] = 0;
 
-	m_boneVertices[6].matrixIndex[0] = 1;	m_boneVertices[6].matrixIndex[1] = 0;
+	m_boneVertices[6].matrixIndex[0] = 0;	m_boneVertices[6].matrixIndex[1] = 1;
 	m_boneVertices[6].matrixIndex[2] = 0;	m_boneVertices[6].matrixIndex[3] = 0;
 
 	m_boneVertices[7].matrixIndex[0] = 0;	m_boneVertices[7].matrixIndex[1] = 1;
@@ -375,12 +404,6 @@ std::vector<unsigned int> InchWorm_Test::CreateMeshIndices() {
 	m_IndexBuffer.Create(m_indices);
 
 	return m_indices;
-}
-
-void InchWorm_Test::SetBoneMesh(Mesh& mesh) {
-	// 頂点とインデックスデータを作る
-	/*m_AnimationVertexBuffer.Create(mesh.GetBoneVertices());
-	m_IndexBuffer.Create(mesh.GetIndices());*/
 }
 
 /*------------------------
@@ -460,5 +483,4 @@ void InchWorm_Test::DX11MtxTranspose(DirectX::XMFLOAT4X4& outmtx, const DirectX:
 	mtx = XMMatrixTranspose(inmmtx);
 
 	XMStoreFloat4x4(&outmtx, mtx);
-
 }

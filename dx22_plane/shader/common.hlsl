@@ -44,12 +44,16 @@ struct VS_IN
 
 struct VS_ANIMATION
 {
-    float4 pos : POSITION;
-//    float4 nrm : NORMAL0;
     float4 col : COLOR0;
+    int4 idx : BLENDINDICES;
+
+    float3 pos : POSITION;
+//    float4 nrm : NORMAL0;
+	//float pad : PAD;
 //    float2 tex : TEXCOORD0;
     float3 weight : BLENDWEIGHT;
-    int4 idx : BLENDINDICES;
+	
+    float2 dummy : PADDING; // –¾Ž¦“I‚É 4B ‚ð–„‚ß‚é
 };
 
 struct VS_OUTPUT

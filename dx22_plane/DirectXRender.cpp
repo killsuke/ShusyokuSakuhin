@@ -283,8 +283,8 @@ HRESULT DirectXRender::RasterizerSetting() {
 	D3D11_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;	// 試してみよう
-	rasterizerDesc.CullMode = D3D11_CULL_BACK;	 // 裏面を表示しない
-	//rasterizerDesc.CullMode = D3D11_CULL_NONE; // 裏面も表示する
+	//rasterizerDesc.CullMode = D3D11_CULL_BACK;	 // 裏面を表示しない
+	rasterizerDesc.CullMode = D3D11_CULL_NONE; // 裏面も表示する
 	//rasterizerDesc.CullMode = D3D11_CULL_FRONT;
 	rasterizerDesc.DepthClipEnable = TRUE;
 	rasterizerDesc.MultisampleEnable = FALSE;

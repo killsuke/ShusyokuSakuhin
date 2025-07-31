@@ -21,7 +21,7 @@ void TransformComponent::MakeWorldMatrix() {
 	float RollRadians = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);   // Zé≤âÒì]
 
 	// SRTèÓïÒçÏê¨
-	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(YawRadians, PitchRadians, RollRadians);
+	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(PitchRadians, YawRadians, RollRadians);
 	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_Position.x, m_transform.m_Position.y, m_transform.m_Position.z);
 	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_Scale.x, m_transform.m_Scale.y, m_transform.m_Scale.z);
 
@@ -36,7 +36,7 @@ void TransformComponent::MakeLocalMatrix() {
 	float RollRadians = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.z);   // Zé≤âÒì]
 
 	// SRTèÓïÒçÏê¨
-	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(YawRadians, PitchRadians, RollRadians);
+	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(PitchRadians, YawRadians, RollRadians);
 	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z);
 	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_LocalScale.x, m_transform.m_LocalScale.y, m_transform.m_LocalScale.z);
 

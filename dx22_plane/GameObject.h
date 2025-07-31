@@ -19,11 +19,6 @@ class GameObject final {	// 変に継承されないようにするためにfinalを付ける
 protected:
 	std::vector<std::unique_ptr<Component>> components;
 
-	//// SRT情報（姿勢情報）
-	//DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	//DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	//DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
-
 	//// 描画の為の情報（メッシュに関わる情報）
 	//IndexBuffer	 m_IndexBuffer; // インデックスバッファ
 	//VertexBuffer<VERTEX_3D>	m_VertexBuffer; // 頂点バッファ
@@ -107,24 +102,24 @@ public:
 	void SortComponents();	
 
 	// 装備されているコンポーネントを取得して使用可能にする
-	template<typename T2>
-	T2* GetComponent() {
+	template<typename T1>
+	T1* GetComponent() {
 		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+			if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
 				return ptr;
 			}
 		}
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
 
-	template<typename T3>
+	template<typename T2>
 	// コンポーネントを追加する
-	T3* AddComponent() {
-		static_assert(std::is_base_of<Component, T3>::value,
+	T2* AddComponent() {
+		static_assert(std::is_base_of<Component, T2>::value,
 			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
 
-		auto comp = std::make_unique<T3>(*this);
-		T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+		auto comp = std::make_unique<T2>(*this);
+		T2* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
 		components.emplace_back(std::move(comp));
 		SortComponents();
 		return ptr;
