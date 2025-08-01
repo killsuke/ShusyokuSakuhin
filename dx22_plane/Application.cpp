@@ -297,42 +297,57 @@ void Application::MainLoop()
 		{
 			QueryPerformanceCounter(&liWork);// 現在時間を取得
 			nowCount = liWork.QuadPart;
-			// 1/60秒が経過したか？
-			if (nowCount >= oldCount + frequency / 60) {
 
-				// ImGuiのフレーム開始
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
+			// 前回フレームからの経過時間（秒）を計算
+			double elapsedSec = (double)(nowCount - oldCount) / frequency;
 
-				// ImGuiのUI要素をここに追加
-				ImGui::Begin("Debug Window");
-				ImGui::Text("マウスの座標");
-				DirectX::SimpleMath::Vector2 vec2 = Input::GetMousePositionNormalize();
+			// 60FPS = 1フレーム約16.666ms = 約0.0166秒
+			// 経過時間がそれ未満なら、CPUをスリープさせる
+			if (elapsedSec < 1.0 / 60.0) {
 
-				// マウス座標デバッグ
-				ImGui::Text("X_Mouse : %.3f", vec2.x); // 現在の値を表示
-				ImGui::Text("Y_Mouse : %.3f", vec2.y); // 現在の値を表示
+				// 足りない時間をミリ秒に換算してSleeo
+				DWORD sleepTime = (DWORD)(((1.0 / 60.0) - elapsedSec) * 1000.0);
 
-				if (ImGui::Button("Click Me!")) {
-					ImGui::Text("FPS: %d", fpsCounter);
+				if (sleepTime > 0) {
+					Sleep(sleepTime);	// 最小単位は1ms。Sleep(0)は意味がないので除外
 				}
+				continue;	// 次のループへ
 
-				bool isChecked = false;
-				ImGui::Checkbox("Enable Feature", &isChecked);
-
-				ImGui::SliderFloat("Float Slider", &num, 0.0f, 1.0f);
-
-				ImDrawList* draw_list = ImGui::GetWindowDrawList();
-				draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
-
-				ImGui::End();
-
-				SceneManager::Update(); // シーンの更新
-
-				fpsCounter++; // ゲーム処理を実行したら＋１する
-				oldCount = nowCount;
 			}
+
+			// ImGuiのフレーム開始
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+
+			// ImGuiのUI要素をここに追加
+			ImGui::Begin("Debug Window");
+			ImGui::Text("マウスの座標");
+			DirectX::SimpleMath::Vector2 vec2 = Input::GetMousePositionNormalize();
+
+			// マウス座標デバッグ
+			ImGui::Text("X_Mouse : %.3f", vec2.x); // 現在の値を表示
+			ImGui::Text("Y_Mouse : %.3f", vec2.y); // 現在の値を表示
+
+			if (ImGui::Button("Click Me!")) {
+				ImGui::Text("FPS: %d", fpsCounter);
+			}
+
+			bool isChecked = false;
+			ImGui::Checkbox("Enable Feature", &isChecked);
+
+			ImGui::SliderFloat("Float Slider", &num, 0.0f, 1.0f);
+
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
+
+			ImGui::End();
+
+			SceneManager::Update(); // シーンの更新
+
+			fpsCounter++; // ゲーム処理を実行したら＋１する
+			oldCount = nowCount;
+
 
 			nowTick = GetTickCount64();// 現在時間を取得
 			// 前回計測から1000ミリ秒が経過したか？
@@ -343,6 +358,8 @@ void Application::MainLoop()
 				char str[32];
 				wsprintfA(str, "FPS=%d", fpsCounter);
 				SetWindowTextA(m_hWnd, str);
+				//std::cout << "ここFPS" << std::endl; // コンソールに出力
+
 #endif // デバッグモードならFPSをウィンドウタイトルに表示
 				// カウンターリセット
 				fpsCounter = 0;

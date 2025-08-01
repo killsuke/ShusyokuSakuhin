@@ -34,7 +34,7 @@ void TitleScene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -50.0f));
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
 	camera->AddComponent<Camera>();
 
 	{
@@ -147,5 +147,5 @@ void TitleScene::Update()
 // 終了処理
 void TitleScene::Uninit()
 {
-
+	GameObjectManager::UnInit();	// ゲームオブジェクトマネージャーの終了処理
 }

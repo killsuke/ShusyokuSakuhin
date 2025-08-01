@@ -15,6 +15,8 @@ VS_OUTPUT vs_main(in VS_ANIMATION input)
     
     comb += bonecombmtx[input.idx[3]] * (1.0f - w[0] - w[1] - w[2]);
         
+    // 先にワールド行列をかける、そうじゃないとサイズのずれが発生する
+    // ポジション × コンビネーション行列は実質ワールド行列であるため
     output.pos = mul(float4(input.pos.xyz, 1.0f), matrixWorldB);
    // output.pos = mul(input.pos, comb);
     //output.pos = float4(0.0f, 0.0f, 0.0f, 1.0f);

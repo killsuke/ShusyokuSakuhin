@@ -36,6 +36,9 @@ void RigidBodyComponent::Update() {
 		auto now = std::chrono::high_resolution_clock::now();
 		//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
 		lastTime = now;
+
+		// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
+		CheckStopVelocity();
 	}
 }
 
@@ -76,15 +79,7 @@ void RigidBodyComponent::ReduceVelocity(const DirectX::XMFLOAT3& velocity) {
 	this->m_velocity.z *= velocity.z;
 
 	// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
-	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
-		this->m_velocity.x = 0.0f;
-	}
-	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
-		this->m_velocity.y = 0.0f;
-	}
-	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
-		this->m_velocity.z = 0.0f;
-	}
+	CheckStopVelocity();
 }
 
 void RigidBodyComponent::ReduceVelocity_X(const float velocity) {
@@ -199,6 +194,40 @@ void RigidBodyComponent::ApplyCollision_X(float collision) {
 
 void RigidBodyComponent::ApplyCollision_Y(float collision) {
 	m_velocity.y = -m_velocity.y * collision;	// ‚x²‚É”½”­A‚à‚µ‚­‚Í~‚ß‚é“™
+}
+
+void RigidBodyComponent::CheckStopVelocity() {
+	// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
+	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
+		this->m_velocity.x = 0.0f;
+	}
+	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
+		this->m_velocity.y = 0.0f;
+	}
+	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
+		this->m_velocity.z = 0.0f;
+	}
+}
+
+void RigidBodyComponent::CheckStopVelocity_X() {
+	// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
+	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
+		this->m_velocity.x = 0.0f;
+	}
+}
+
+void RigidBodyComponent::CheckStopVelocity_Y() {
+	// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
+	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
+		this->m_velocity.y = 0.0f;
+	}
+}
+
+void RigidBodyComponent::CheckStopVelocity_Z() {
+	// ‚µ‚«‚¢’l‚ğ‰º‰ñ‚Á‚½‚ç~‚ß‚é
+	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
+		this->m_velocity.z = 0.0f;
+	}
 }
 
 //// ©—R—‰º—p‚Ì•b”ŒvZ

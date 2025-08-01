@@ -82,6 +82,11 @@ public:
 	void ApplyCollision_X(float collision);
 	void ApplyCollision_Y(float collision);
 
+	void CheckStopVelocity();
+	void CheckStopVelocity_X();
+	void CheckStopVelocity_Y();
+	void CheckStopVelocity_Z();
+
 	// Ž©—R—Ž‰º‚ÅŽg‚¤
 	//void TimeStart();
 	//void TimeStop();

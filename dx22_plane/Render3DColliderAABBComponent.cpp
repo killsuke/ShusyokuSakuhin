@@ -1,6 +1,5 @@
 #include "Render3DColliderAABBComponent.h"
 #include "DirectXRender.h"
-#include "Camera.h"
 #include "Collider.h"
 #include "GameObjectManager.h"
 
@@ -32,8 +31,6 @@ void Render3DColliderAABBComponent::Update()
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
-
-		auto cameraComp = cameraobj->GetComponent<Camera>();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

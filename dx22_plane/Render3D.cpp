@@ -1,6 +1,5 @@
 #include "Render3D.h"
 #include "DirectXRender.h"
-#include "Camera.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
 
@@ -13,9 +12,8 @@ Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 void Render3DComponent::Update()
 {
 	auto transform = p_object->GetComponent<TransformComponent>();
-	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
-	if (transform != nullptr && cameraobj != nullptr) {
+	if (transform != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
@@ -33,8 +31,6 @@ void Render3DComponent::Update()
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
 
-		auto cameraComp = cameraobj->GetComponent<Camera>();
-
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
@@ -42,6 +38,5 @@ void Render3DComponent::Update()
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
 			0,							// 最初のインデックスバッファの位置
 			0);
-
 	}
 }

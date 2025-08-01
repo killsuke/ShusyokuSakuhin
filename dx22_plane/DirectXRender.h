@@ -45,7 +45,9 @@ private:
 	static ID3D11Device* m_Device;				// デバイス＝DirectXの各種機能を作る
 	static IDXGISwapChain* m_SwapChain;			// スワップチェイン＝ダブルバッファ機能
 	static ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
-	
+	static ID3D11DepthStencilState* m_DepthStateEnable;
+	static ID3D11DepthStencilState* m_DepthStateDisable;
+
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
 	static HRESULT DepthStencilCreate();
@@ -83,6 +85,9 @@ public:
 	static void SetATCEnable(bool Enable);
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
+
+	static ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
+	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
 
 	//=============================================================================
 	// ブレンド ステート設定

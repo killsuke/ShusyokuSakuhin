@@ -216,6 +216,9 @@
     <ClCompile Include="InchWorm_Test.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Render2D.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -434,6 +437,9 @@
     <ClInclude Include="InchWorm_Test.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Render2D.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
@@ -451,6 +457,9 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="OneSkinAnimationPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="unlitTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

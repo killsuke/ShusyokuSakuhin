@@ -26,7 +26,11 @@ public:
 	// コンストラクタ
 	GameObjectManager() = default;
 
-	static void Init() { objects.reserve(1000); };
+	static void Init() { 
+		objects.reserve(1000); 
+		objects_UI.reserve(100);
+		objects_Absfront.reserve(100);
+	};
 
 	// デストラクタ
 	~GameObjectManager() = default;
@@ -44,6 +48,26 @@ public:
 		return ptr;
 	}
 
+	static GameObject* AddUI(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
+		//static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
+
+		objects_UI.emplace_back(MakeObject(_name, _tag));
+
+		auto ptr = objects_UI.back().get();
+
+		return ptr;
+	}
+
+	static GameObject* AddAbsFront(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
+		//static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
+
+		objects_Absfront.emplace_back(MakeObject(_name, _tag));
+
+		auto ptr = objects_Absfront.back().get();
+
+		return ptr;
+	}
+
 	static void RemoveObject();	 // オブジェクトを削除する（後に使いやすいように改造）
 	static void RemoveTagObject(const std::string& tag);
 	static void Update();
@@ -57,11 +81,17 @@ public:
 	// ゲームオブジェクトを見つければ返す
 	static GameObject*	GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
 	static std::vector<GameObject*> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
+	static GameObject* GameObjectFindNameUI(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
+	static std::vector<GameObject*> GameObjectFindTagUI(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
+	static GameObject* GameObjectFindNameAbsFront(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
+	static std::vector<GameObject*> GameObjectFindTagAbsFront(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
 	static void SizeUP();
 
 private:
 
-	static std::vector<std::unique_ptr<GameObject>> objects;		 // シーンをnewする度に様々なオブジェクトを格納するようにする
+	static std::vector<std::unique_ptr<GameObject>> objects;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
+	static std::vector<std::unique_ptr<GameObject>> objects_UI;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
+	static std::vector<std::unique_ptr<GameObject>> objects_Absfront;	 // シーンをnewする度に様々なオブジェクトを格納するようにする
 
 	// 型変換をして作成の手伝い、GameObjectを継承したクラスであるならば追加する
 //	template <typename T2>

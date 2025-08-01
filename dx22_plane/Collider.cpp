@@ -470,6 +470,9 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
 
 	if (check == true) {
+
+		auto rigid = p2.p_object->GetComponent<RigidBodyComponent>();
+
 		// 最終的のオブジェクトを押し戻すためのベクトル
 		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
@@ -524,10 +527,21 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 			hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
 		}
 		else {
-			pushBack.x = 0.0f;	// 縦方向で押し戻す
+			auto collsize = coll1.max.x - coll1.min.x;
 
-			// Y方向に押し戻された → 地面 or 天井
-			hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
+			// コライダーのめり込み量が一定値以下なら
+			if (rigid != nullptr && rigid->GetVelocity().x != 0.0f && ((abs(collsize) * 0.1f) > abs(pushBack.x))) {
+				pushBack.y = 0.0f;
+//				pushBack.x *= 0.8f;
+				// X方向に押し戻された → 壁
+				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+			}
+			else {
+				pushBack.x = 0.0f;	// 縦方向で押し戻す
+
+				// Y方向に押し戻された → 地面 or 天井
+				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
+			}
 		}
 
 		// 衝突状態を保存

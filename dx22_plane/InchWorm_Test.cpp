@@ -16,7 +16,6 @@ InchWorm_Test::InchWorm_Test(GameObject& obj) : RenderComponent(obj)
 	CreateBoneMeshVertices();
 	CreateMeshIndices();
 
-	// もしかしたらここでエラー出る？
 	m_Shader->CreateOneSkinAnimation("OneSkinAnimationVS.hlsl", "OneSkinAnimationPS.hlsl");
 	m_Texture->Load("assets/texture/NoTexture.png");
 
@@ -109,8 +108,8 @@ void InchWorm_Test::GPU_Update() {
 	g_combMtx[0] = m_bones[0].offsetMtx * m_bones[0].boneMtx;
 	g_combMtx[1] = m_bones[1].offsetMtx * m_bones[1].boneMtx;
 
-	auto debugCube = GameObjectManager::GameObjectFindName("joint0");
-	auto debugTrans = debugCube->GetComponent<TransformComponent>();
+	//auto debugCube = GameObjectManager::GameObjectFindName("joint0");
+	//auto debugTrans = debugCube->GetComponent<TransformComponent>();
 
 //	auto debugMtx = m_bones[1].boneMtx;
 

@@ -19,6 +19,10 @@ ID3D11Device* DirectXRender::m_Device = nullptr; // コンテキスト＝描画関連を司る
 
 IDXGISwapChain* DirectXRender::m_SwapChain = nullptr; // スワップチェーン＝ダブルバッファ機能
 
+ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable;
+
+ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable;
+
 // レンダーターゲット＝描画先を表す機能
 ID3D11RenderTargetView* g_pRenderTargetView;
 // デプスバッファ
@@ -134,8 +138,8 @@ void DirectXRender::UnInit() {
 	m_DeviceContext->ClearState();
 	SAFE_RELEASE(g_pRenderTargetView);
 	SAFE_RELEASE(g_pDepthStencilView);
-	SAFE_RELEASE(g_DepthStateEnable);
-	SAFE_RELEASE(g_DepthStateDisable);
+	SAFE_RELEASE(m_DepthStateEnable);
+	SAFE_RELEASE(m_DepthStateDisable);
 	SAFE_RELEASE(m_SwapChain);
 	SAFE_RELEASE(g_pInputLayout);
 	SAFE_RELEASE(g_pUnlitVertexShader);
@@ -181,6 +185,8 @@ void DirectXRender::DrawBegin() {
 	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
 	// 定数バッファを頂点シェーダーにセットする
 	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	//m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, 0);
+
 	// 定数バッファを頂点シェーダーにセットする
 //	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 }
@@ -351,14 +357,17 @@ HRESULT DirectXRender::DepthStencilSetting() {
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	depthStencilDesc.StencilEnable = FALSE;
 
-	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateEnable); //深度有効ステート
+	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &m_DepthStateEnable); //深度有効ステート
 	if (FAILED(hr)) return hr;
 
+	depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &g_DepthStateDisable); //深度無効ステート
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS; // 深度比較関数を常に通す
+	
+	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &m_DepthStateDisable); //深度無効ステート
 	if (FAILED(hr)) return hr;
 	
-	m_DeviceContext->OMSetDepthStencilState(g_DepthStateEnable, NULL);
+	m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, NULL);
 
 	return hr;
 }
@@ -693,12 +702,12 @@ void DirectXRender::SetDepthEnable(bool Enable)
 	if (Enable)
 	{
 		// 深度テストを有効にするステンシルステートをセット
-		m_DeviceContext->OMSetDepthStencilState(g_DepthStateEnable, NULL);
+		m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, NULL);
 	}
 	else
 	{
 		// 深度テストを無効にするステンシルステートをセット
-		m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, NULL);
+		m_DeviceContext->OMSetDepthStencilState(m_DepthStateDisable, NULL);
 	}
 }
 

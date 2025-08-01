@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "Render3D.h"
+#include "Render2D.h"
 #include "GameObjectManager.h"
 #include "CircleMesh.h"
 #include "CubeMesh.h"
@@ -39,10 +40,10 @@ void Stage1Scene::Init()
 
 	// 腰
 	{
-		CubeMesh circleMesh;
-		auto circle = GameObjectManager::AddObject("joint0", "Circle");
+		CircleMesh circleMesh;
+		auto circle = GameObjectManager::AddAbsFront("joint0", "Circle");
 		auto circleTrans = circle->AddComponent<TransformComponent>();
-		circleTrans->SetPosition({ 0.0f, -10.0f, -10.0f });
+		circleTrans->SetPosition({ 0.0f, -10.0f, 10.0f });
 		circleTrans->SetScale({10.0f,10.0f,10.0f});
 //		circleTrans->SetRotation({0.0f,60.0f,0.0f});
 		auto circleRend = circle->AddComponent<Render3DComponent>();
@@ -51,15 +52,16 @@ void Stage1Scene::Init()
 		circleRend->SetTexture("assets/texture/NoTexture.png");
 	}
 
-	//// 胸
+	// 胸
 	//{
 	//	CircleMesh circleMesh;
-	//	auto circle = GameObjectManager::AddObject("joint1", "Circle");
+	//	auto circle = GameObjectManager::AddUI("joint1", "Circle");
 	//	auto circleTrans = circle->AddComponent<TransformComponent>();
 	//	circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-	//	auto circleRend = circle->AddComponent<Render3DComponent>();
+	//	circleTrans->SetScale({ 10.0f, 10.0f, 1.0f });
+	//	auto circleRend = circle->AddComponent<Render2DComponent>();
 	//	circleRend->SetMesh(circleMesh);
-	//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	//	circleRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	//	circleRend->SetTexture("assets/texture/NoTexture.png");
 	//}
 
@@ -233,5 +235,6 @@ void Stage1Scene::Update()
 // 終了処理
 void Stage1Scene::Uninit()
 {
+	GameObjectManager::UnInit();	// ゲームオブジェクトマネージャーの終了処理
 }
 
