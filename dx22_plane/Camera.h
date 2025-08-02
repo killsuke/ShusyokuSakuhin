@@ -13,7 +13,12 @@ class Camera : public Component {
 private:
 
 	DirectX::SimpleMath::Vector3	m_Target{};
-//	DirectX::SimpleMath::Matrix		m_ViewMatrix{};
+
+	DirectX::SimpleMath::Matrix		m_ViewMatrix2D{};
+	DirectX::SimpleMath::Matrix		m_ProjectionMatrix2D{};
+
+	DirectX::SimpleMath::Matrix		m_ViewMatrix3D{};
+	DirectX::SimpleMath::Matrix		m_ProjectionMatrix3D{};
 
 	//float m_CameraDirection = 0; // カメラの方向
 
@@ -23,6 +28,7 @@ private:
 	//bool targetCarFg = false;	// 車をターゲットにするかどうかのフラグ
 
 	//float deltaCamera = 0.0f;
+
 
 	DirectX::SimpleMath::Vector2 prevMouse = {};	// マウス位置記録
 
@@ -43,4 +49,11 @@ public:
 //	void SetCamera(int mode);	// カメラを設定
 
 	inline void SetTarget(DirectX::SimpleMath::Vector3& target) { m_Target = target; };
+
+	// 転置していない状態のモノを返す
+	inline DirectX::SimpleMath::Matrix GetView2D() const { return m_ViewMatrix2D; };
+	inline DirectX::SimpleMath::Matrix GetView3D() const { return m_ViewMatrix3D; };
+
+	inline DirectX::SimpleMath::Matrix GetProj2D() const { return m_ProjectionMatrix2D; };
+	inline DirectX::SimpleMath::Matrix GetProj3D() const { return m_ProjectionMatrix3D; };
 };

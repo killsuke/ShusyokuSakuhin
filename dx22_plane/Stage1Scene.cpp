@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "Render3D.h"
 #include "Render2D.h"
+#include "RenderBillboard.h"
 #include "GameObjectManager.h"
 #include "CircleMesh.h"
 #include "CubeMesh.h"
@@ -46,7 +47,7 @@ void Stage1Scene::Init()
 		circleTrans->SetPosition({ 0.0f, -10.0f, 10.0f });
 		circleTrans->SetScale({10.0f,10.0f,10.0f});
 //		circleTrans->SetRotation({0.0f,60.0f,0.0f});
-		auto circleRend = circle->AddComponent<Render3DComponent>();
+		auto circleRend = circle->AddComponent<RenderBillboardComponent>();
 		circleRend->SetMesh(circleMesh);
 		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");

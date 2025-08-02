@@ -219,6 +219,12 @@
     <ClCompile Include="Render2D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="RenderBillboard.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -438,6 +444,12 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Render2D.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderBillboard.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

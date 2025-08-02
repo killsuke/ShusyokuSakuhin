@@ -319,6 +319,8 @@ void Camera::Update2D() {
 	DirectX::SimpleMath::Matrix viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
 //	viewMtx2D = DirectX::XMMatrixTranspose(viewMatrix);
 
+	m_ViewMatrix2D = viewMatrix;
+
 	DirectXRender::SetViewMatrix2D(&viewMatrix);
 
 	// プロジェクション行列の生成
@@ -326,6 +328,8 @@ void Camera::Update2D() {
 	float farPlane = 1000.0f;      // ファークリップ
 
 	Matrix projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
+
+	m_ProjectionMatrix2D = projectionMatrix;
 
 //	projectionMtx2D = DirectX::XMMatrixTranspose(projectionMatrix);
 
@@ -347,6 +351,8 @@ void Camera::Update3D() {
 	// このコードは確認テストのために残す
 	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
 
+	m_ViewMatrix3D = viewMatrix;
+
 	DirectXRender::SetViewMatrix3D(&viewMatrix);
 	//viewMtx3D = DirectX::XMMatrixTranspose(viewMatrix);
 
@@ -364,6 +370,8 @@ void Camera::Update3D() {
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
 	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+
+	m_ProjectionMatrix3D = projectionMatrix;
 
 	DirectXRender::SetProjectionMatrix3D(&projectionMatrix);
 }
