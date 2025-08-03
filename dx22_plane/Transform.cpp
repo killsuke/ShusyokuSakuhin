@@ -20,14 +20,19 @@ void TransformComponent::MakeWorldMatrix() {
 	float YawRadians = DirectX::XMConvertToRadians(m_transform.m_Rotation.y);     // Y軸回転
 	float RollRadians = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);   // Z軸回転
 
+	// クォータニオン作成
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+
 	// SRT情報作成
-	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(PitchRadians, YawRadians, RollRadians);
-	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_Position.x, m_transform.m_Position.y, m_transform.m_Position.z);
-	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_Scale.x, m_transform.m_Scale.y, m_transform.m_Scale.z);
+	// 各行列を生成
+	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
+	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(m_transform.m_Scale);
+	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(m_transform.m_Position);
+
 
 	// ワールド行列を作成し、保存
 	m_transform.worldMatrix = s * r * t;
-	m_transform.worldMatrix = DirectX::XMMatrixTranspose(m_transform.worldMatrix); // 行列を転置
+	m_transform.worldMatrix = m_transform.worldMatrix.Transpose(); // 行列を転置
 }
 
 void TransformComponent::MakeLocalMatrix() {
@@ -35,12 +40,15 @@ void TransformComponent::MakeLocalMatrix() {
 	float YawRadians = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.y);     // Y軸回転
 	float RollRadians = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.z);   // Z軸回転
 
+	// クォータニオン作成
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+
 	// SRT情報作成
-	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(PitchRadians, YawRadians, RollRadians);
-	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z);
-	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(m_transform.m_LocalScale.x, m_transform.m_LocalScale.y, m_transform.m_LocalScale.z);
+	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
+	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(m_transform.m_LocalScale);
+	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(m_transform.m_LocalPosition);
 
 	// ローカル行列を作成し、保存
 	m_transform.localMatrix = s * r * t;
-	m_transform.localMatrix = DirectX::XMMatrixTranspose(m_transform.localMatrix); // 行列を転置
+	m_transform.localMatrix = m_transform.localMatrix.Transpose(); // 行列を転置
 }

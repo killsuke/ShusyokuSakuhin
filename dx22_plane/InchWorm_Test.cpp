@@ -164,33 +164,33 @@ void InchWorm_Test::GPU_Update() {
 		DX11MtxTranspose(g_combMtx[i], g_combMtx[i]);
 	}
 
-	auto transform = p_object->GetComponent<TransformComponent>();
-	auto srt = transform->GetWorldMatrix();
+	//auto transform = p_object->GetComponent<TransformComponent>();
+	//auto srt = transform->GetWorldMatrix();
 
-	CBBoneMatrix cb;
+	//CBBoneMatrix cb;
 
-	// 定数バッファ更新
-	D3D11_MAPPED_SUBRESOURCE pData;
-	ID3D11DeviceContext* devcontext;
+	//// 定数バッファ更新
+	//D3D11_MAPPED_SUBRESOURCE pData;
+	//ID3D11DeviceContext* devcontext;
 
-	// デバイスコンテキスト取得
-	devcontext = DirectXRender::GetDeviceContext();
+	//// デバイスコンテキスト取得
+	//devcontext = DirectXRender::GetDeviceContext();
 
-	cb.matrixWorld = srt;		// ワールド変換行列
+	//cb.matrixWorld = srt;		// ワールド変換行列
 
-	// ボーン行列配列
-	for (int i = 0; i < INCH_WORM_BONE_NUM; ++i) {
-		cb.mtx[i] = g_combMtx[i];
-	}
+	//// ボーン行列配列
+	//for (int i = 0; i < INCH_WORM_BONE_NUM; ++i) {
+	//	cb.mtx[i] = g_combMtx[i];
+	//}
 
-	// ボーン行列格納用定数バッファ更新
-	HRESULT hr = devcontext->Map(g_pBoneConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-	if (SUCCEEDED(hr)) {
-		memcpy_s(pData.pData, pData.RowPitch, &cb, sizeof(CBBoneMatrix));
-		devcontext->Unmap(g_pBoneConstantBuffer, 0);
-	}
+	//// ボーン行列格納用定数バッファ更新
+	//HRESULT hr = devcontext->Map(g_pBoneConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+	//if (SUCCEEDED(hr)) {
+	//	memcpy_s(pData.pData, pData.RowPitch, &cb, sizeof(CBBoneMatrix));
+	//	devcontext->Unmap(g_pBoneConstantBuffer, 0);
+	//}
 
-	devcontext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
+	//devcontext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 }
 
 void InchWorm_Test::Draw() {
@@ -228,12 +228,12 @@ void InchWorm_Test::Draw() {
 		//	DX11MtxTranspose(g_combMtx[i], g_combMtx[i]);
 		//}
 
-		//cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
-		//cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
+		cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
+		cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
 
 
 		// 行列をシェーダーに渡す
-	//	deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
 
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）

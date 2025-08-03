@@ -236,6 +236,6 @@ void Stage1Scene::Update()
 // 終了処理
 void Stage1Scene::Uninit()
 {
-	GameObjectManager::UnInit();	// ゲームオブジェクトマネージャーの終了処理
+	GameObjectManager::ListClear();	// ゲームオブジェクトマネージャーの終了処理
 }
 

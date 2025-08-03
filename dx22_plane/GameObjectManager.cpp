@@ -65,14 +65,19 @@ void GameObjectManager::Update() {
 	for (const auto& obj : objects) {
 		obj->Update();
 		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-	/*	if (SceneManager::GetSCFrag() == true) {
+		if (SceneManager::GetSCFrag() == true) {
 			SceneManager::SetSCFrag(false);
 			break;
-		}*/
+		}
 	}
 
 	for (const auto& obj : objects_UI) {
 		obj->Update();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			break;
+		}
 	}
 
 	auto deviceContext = DirectXRender::GetDeviceContext();
@@ -81,6 +86,11 @@ void GameObjectManager::Update() {
 
 	for (const auto& obj : objects_Absfront) {
 		obj->Update();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			break;
+		}
 	}
 	DirectXRender::SetDepthEnable(true);
 	// インスタンスの削除処理

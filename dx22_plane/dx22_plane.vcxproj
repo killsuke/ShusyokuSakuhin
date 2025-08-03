@@ -223,6 +223,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TestExtrusionComponent.cpp" />
     <ClCompile Include="TestMoveComponent.cpp" />
+    <ClCompile Include="TestStageScene.cpp" />
     <ClCompile Include="Test_Transparent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -315,6 +316,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TestExtrusionComponent.h" />
     <ClInclude Include="TestMoveComponent.h" />
+    <ClInclude Include="TestStageScene.h" />
     <ClInclude Include="Test_Transparent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>

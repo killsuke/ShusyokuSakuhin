@@ -35,7 +35,7 @@ struct ConstBuffer
 	// UV座標移動行列
 	DirectX::XMMATRIX matrixTex;
 	// ワールド変換行列
-	DirectX::XMMATRIX matrixWorld;
+	DirectX::SimpleMath::Matrix matrixWorld;
 };
 
 class DirectXRender

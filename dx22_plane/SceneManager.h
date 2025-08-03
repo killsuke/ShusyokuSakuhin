@@ -13,8 +13,12 @@ public:
 	SceneManager() = default;	// コンストラクタ
 	~SceneManager() = default;			// デストラクタ
 	template <typename T1>
-	static void SceneChange(T1){	// sceneの値で現在処理するべきシーンへと変更する
+	static void SceneChange(){	// sceneの値で現在処理するべきシーンへと変更する
 		static_assert(std::is_base_of<Scene, T1>::value, "T1 must be derived from Scene");
+		{
+			sceneChangeFg = true;	// シーンチェンジのフラグを立てる
+			m_pScene.reset();	// 現在のシーンを片付ける
+		}
 		m_pScene = std::make_unique<T1>();	// シーンを変更
 	};	
 	static void Init();					// シーンの初期化

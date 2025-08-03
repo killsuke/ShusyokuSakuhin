@@ -15,10 +15,10 @@ struct Transform {
 	DirectX::SimpleMath::Vector3 m_LocalScale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
 
 	// ワールド行列
-	DirectX::XMMATRIX worldMatrix = {};
+	DirectX::SimpleMath::Matrix worldMatrix = {};
 
 	// ローカル行列
-	DirectX::XMMATRIX localMatrix = {};
+	DirectX::SimpleMath::Matrix localMatrix = {};
 };
 
 class TransformComponent : public Component
@@ -50,8 +50,8 @@ public:
 	inline DirectX::SimpleMath::Vector3 GetLocalRotation() const { return m_transform.m_LocalRotation; };
 	inline DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_transform.m_LocalScale; };
 
-	inline DirectX::XMMATRIX GetWorldMatrix() const { return m_transform.worldMatrix; };
-	inline DirectX::XMMATRIX GetLocalMatrix() const { return m_transform.localMatrix; };
+	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_transform.worldMatrix; };
+	inline DirectX::SimpleMath::Matrix GetLocalMatrix() const { return m_transform.localMatrix; };
 
 	inline void AddPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position += position; };
 	inline void AddRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_Rotation += rotation; };

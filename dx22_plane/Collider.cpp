@@ -24,8 +24,8 @@ void ColliderComponent::Update()
 }
 
 void ColliderComponent::MakeWorldAABBMatrix() {
-	DirectX::XMFLOAT3 outCenter = {};
-	DirectX::XMFLOAT3 outSize = {};
+	DirectX::SimpleMath::Vector3 outCenter = {};
+	DirectX::SimpleMath::Vector3 outSize = {};
 
 	outCenter.x = (coll_ab.min.x + coll_ab.max.x) * 0.5f;
 	outCenter.y = (coll_ab.min.y + coll_ab.max.y) * 0.5f;
@@ -35,14 +35,36 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	outSize.y = (coll_ab.max.y - coll_ab.min.y) * 0.5f;
 	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
 
+	// クォータニオン作成
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(0.0f,0.0f,0.0f);
+
 	// SRT情報作成
-	DirectX::XMMATRIX r = DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f);
-	DirectX::XMMATRIX t = DirectX::XMMatrixTranslation(outCenter.x, outCenter.y, outCenter.z);
-	DirectX::XMMATRIX s = DirectX::XMMatrixScaling(outSize.x, outSize.y, outSize.z);
+	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
+	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(outSize);
+	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(outCenter);
 
 	// ワールド行列を作成し、保存
 	coll_ab.worldAABBMatrix = s * r * t;
-	coll_ab.worldAABBMatrix = DirectX::XMMatrixTranspose(coll_ab.worldAABBMatrix); // 行列を転置
+	coll_ab.worldAABBMatrix = coll_ab.worldAABBMatrix.Transpose(); // 行列を転置
+}
+
+void ColliderComponent::MakeWorldOBBMatrix() {
+
+	float PitchRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.x); // X軸回転
+	float YawRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.y);     // Y軸回転
+	float RollRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.z);   // Z軸回転
+
+	// クォータニオン作成
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians,PitchRadians,RollRadians);
+
+	// SRT情報作成
+	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
+	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(coll_ob.size);
+	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(coll_ob.center);
+
+	// ワールド行列を作成し、保存
+	coll_ob.worldOBBMatrix = s * r * t;
+	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
 }
 
 //==================================

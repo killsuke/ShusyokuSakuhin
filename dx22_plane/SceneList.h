@@ -2,3 +2,4 @@
 #include "TitleScene.h"
 #include "Stage1Scene.h"
 #include "ResultScene.h"
+#include "TestStageScene.h"

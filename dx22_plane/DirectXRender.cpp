@@ -188,7 +188,7 @@ void DirectXRender::DrawBegin() {
 	//m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, 0);
 
 	// 定数バッファを頂点シェーダーにセットする
-//	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
+	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 }
 
 //=======================================
@@ -419,11 +419,11 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 
 	ZeroMemory(&bd, sizeof(bd));
 	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
-//	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
-	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
+	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-//	bd.CPUAccessFlags = 0;					// CPUアクセス可能
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
 	if (FAILED(hr)) {

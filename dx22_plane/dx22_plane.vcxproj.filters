@@ -225,6 +225,9 @@
     <ClCompile Include="BoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="TestStageScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="BoneComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TestStageScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
