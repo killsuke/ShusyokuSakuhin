@@ -14,6 +14,9 @@ enum ComponentType {
 	TEST_EXTRUSION,
 	CAMERA,
 	BONE,
+	ATTACK, // 攻撃コンポーネント
+	ENEMY_DAMAGE, // 敵のダメージコンポーネント
+	FIGHTER,
 	RENDER,
 	RENDER_ONE_SKIN_ANIMATION,
 	COLLIDER_DEBUG,
@@ -26,7 +29,7 @@ class GameObject; // 前方宣言
 class Component
 {
 protected:
-	ComponentType m_type = BASECOMPONENT; // コンポーネントの種類
+	//ComponentType m_type = BASECOMPONENT; // コンポーネントの種類
 	uint16_t m_sortNum = 0;	// 更新処理でどれを優先して更新するかソートをする
 	GameObject* p_object = nullptr; // このコンポーネントが所属するGameObjectへのポインタ
 

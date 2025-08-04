@@ -552,18 +552,18 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 			auto collsize = coll1.max.x - coll1.min.x;
 
 			// コライダーのめり込み量が一定値以下なら
-			if (rigid != nullptr && rigid->GetVelocity().x != 0.0f && ((abs(collsize) * 0.1f) > abs(pushBack.x))) {
-				pushBack.y = 0.0f;
-//				pushBack.x *= 0.8f;
-				// X方向に押し戻された → 壁
-				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
-			}
-			else {
+//			if (rigid != nullptr && rigid->GetVelocity().x != 0.0f && ((abs(collsize) * 0.1f) > abs(pushBack.x))) {
+//				pushBack.y = 0.0f;
+////				pushBack.x *= 0.8f;
+//				// X方向に押し戻された → 壁
+//				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+//			}
+//			else {
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
 
 				// Y方向に押し戻された → 地面 or 天井
 				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
-			}
+	//		}
 		}
 
 		// 衝突状態を保存

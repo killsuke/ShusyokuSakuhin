@@ -8,7 +8,7 @@ bool SceneManager::sceneChangeFg = false;	// シーンチェンジのフラグ
 
 void SceneManager::Init() {
 	//	sound.Init();	// サウンドの初期化
-	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
+	m_pScene = std::make_unique<TestStageScene>();	// 初期シーンはタイトルシーン
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	//	Debug::DebugFirst();
 

@@ -228,6 +228,15 @@
     <ClCompile Include="TestStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="FighterComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyDamageComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -457,6 +466,15 @@
     </ClInclude>
     <ClInclude Include="TestStageScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="FighterComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyDamageComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
