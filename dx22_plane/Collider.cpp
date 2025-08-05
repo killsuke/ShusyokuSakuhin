@@ -479,9 +479,49 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const A
 // ■CheckHit関数
 // AABBとAABBの当たり判定（2D用）
 // どこから当たっているのか含む
+// 戻しナシ
+//==================================
+bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal) {
+	AABB coll1 = p1.coll_ab;
+	AABB coll2 = p2.coll_ab;
+
+	bool hit = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
+
+	if(hit == false) {
+		// 衝突していない場合は法線をゼロベクトルに設定
+		hitNormal = { 0.0f, 0.0f, 0.0f };
+		return false;
+	}
+
+	// coll1とcoll2の中心を比較して、どの方向から入ったのかを判断
+	float coll1CenterX = (coll1.min.x + coll1.max.x) * 0.5f;
+	float coll1CenterY = (coll1.min.y + coll1.max.y) * 0.5f;
+
+	float coll2CenterX = (coll2.min.x + coll2.max.x) * 0.5f;
+	float coll2CenterY = (coll2.min.y + coll2.max.y) * 0.5f;
+
+	float dx = coll2CenterX - coll1CenterX;
+	float dy = coll2CenterY - coll1CenterY;
+
+	hitNormal = { 0.0f, 0.0f, 0.0f };
+
+	if (std::abs(dx) > std::abs(dy)) {
+		hitNormal.x = (dx > 0.0f) ? 1.0f : -1.0f;
+	}
+	else {
+		hitNormal.y = (dy > 0.0f) ? 1.0f : -1.0f;
+	}
+
+	return true;
+}
+
+//==================================
+// ■CheckHit関数
+// AABBとAABBの当たり判定（2D用）
+// どこから当たっているのか含む
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& hitNormal) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal) {
 	AABB coll1 = p1.coll_ab;
 	AABB coll2 = p2.coll_ab;
 

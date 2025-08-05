@@ -169,6 +169,8 @@
     <ClCompile Include="BonePartsMesh.cpp" />
     <ClCompile Include="Bones.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraMoveComponent.cpp" />
+    <ClCompile Include="CameraPointComponent.cpp" />
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -209,6 +211,7 @@
     </ClCompile>
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="SphereMesh.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
@@ -259,6 +262,9 @@
     <ClInclude Include="BonePartsMesh.h" />
     <ClInclude Include="Bones.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraMoveComponent.h" />
+    <ClInclude Include="CameraPattern.h" />
+    <ClInclude Include="CameraPointComponent.h" />
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
@@ -304,6 +310,7 @@
     </ClInclude>
     <ClInclude Include="sound.h" />
     <ClInclude Include="SphereMesh.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
     <ClInclude Include="StaticMesh.h" />

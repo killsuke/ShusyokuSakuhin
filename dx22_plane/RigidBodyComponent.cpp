@@ -1,12 +1,13 @@
 #include "RigidBodyComponent.h"
 #include "Transform.h"
 
+using namespace DirectX::SimpleMath;
+
 // Transformより、XMFLOAT3の方が良いのでは？
-RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, mass(0.0f), Component(obj){
+RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, m_mass(1.0f), Component(obj){
 	m_sortNum = RIGIDBODY; // ソート番号を設定
 	lastTime = std::chrono::high_resolution_clock::now();
 }
-
 
 void RigidBodyComponent::Update() {
 	auto transform = p_object->GetComponent<TransformComponent>();
@@ -14,12 +15,17 @@ void RigidBodyComponent::Update() {
 	if (transform != nullptr) {
 		const float fixedDeltaTime = 1.0f / 60.0f;  // 固定フレームレート（60 FPS相当）
 
+		// 力から加速度を更新
+		m_acceleration.x = m_totalForce.x / m_mass; // 合力を質量で割って加速度を計算
+		m_acceleration.y = m_totalForce.y / m_mass; // 合力を質量で割って加速度を計算
+		m_acceleration.z = m_totalForce.z / m_mass; // 合力を質量で割って加速度を計算
+
 		// 加速度から速度を更新
 		m_velocity.x += m_acceleration.x * fixedDeltaTime;
 		m_velocity.y += m_acceleration.y * fixedDeltaTime;
 		m_velocity.z += m_acceleration.z * fixedDeltaTime;
 
-		DirectX::XMFLOAT3 newPos = {};
+		Vector3 newPos = {};
 
 		// 速度からTransformの位置を更新
 		newPos.x += m_velocity.x * fixedDeltaTime;
@@ -31,6 +37,7 @@ void RigidBodyComponent::Update() {
 
 		// 毎フレーム加速度をリセット（次のフレームの外力のみ反映）
 		m_acceleration = { 0.0f, 0.0f, 0.0f };
+		m_totalForce = { 0.0f, 0.0f, 0.0f }; // 合力もリセット
 
 		// 時間の更新
 		auto now = std::chrono::high_resolution_clock::now();
@@ -48,64 +55,64 @@ void RigidBodyComponent::Update() {
 //}
 
 // 力を加える
-void RigidBodyComponent::ApplyForce(const DirectX::XMFLOAT3& force) {
-	m_acceleration.x += force.x / mass;
-	m_acceleration.y += force.y / mass;
-	m_acceleration.z += force.z / mass;
+void RigidBodyComponent::ApplyForce(const Vector3& force) {
+	m_acceleration.x += force.x / m_mass;
+	m_acceleration.y += force.y / m_mass;
+	m_acceleration.z += force.z / m_mass;
 }
 
-void RigidBodyComponent::ConstantVelocity(const DirectX::XMFLOAT3& velocity) {
-	this->m_velocity.x = velocity.x / mass;
-	this->m_velocity.y = velocity.y / mass;
-	this->m_velocity.z = velocity.z / mass;
+void RigidBodyComponent::ConstantVelocity(const Vector3& velocity) {
+	m_velocity.x = velocity.x / m_mass;
+	m_velocity.y = velocity.y / m_mass;
+	m_velocity.z = velocity.z / m_mass;
 }
 
 void RigidBodyComponent::ConstantVelocity_X(const float velocity) {
-	this->m_velocity.x = velocity / mass;
+	m_velocity.x = velocity / m_mass;
 }
 
 void RigidBodyComponent::ConstantVelocity_Y(const float velocity) {
-	this->m_velocity.y = velocity / mass;
+	m_velocity.y = velocity / m_mass;
 }
 
 void RigidBodyComponent::ConstantVelocity_Z(const float velocity) {
-	this->m_velocity.z = velocity / mass;
+	m_velocity.z = velocity / m_mass;
 }
 
-void RigidBodyComponent::ReduceVelocity(const DirectX::XMFLOAT3& velocity) {
+void RigidBodyComponent::ReduceVelocity(const Vector3& velocity) {
 
-	this->m_velocity.x *= velocity.x;
-	this->m_velocity.y *= velocity.y;
-	this->m_velocity.z *= velocity.z;
+	m_velocity.x *= velocity.x;
+	m_velocity.y *= velocity.y;
+	m_velocity.z *= velocity.z;
 
 	// しきい値を下回ったら止める
 	CheckStopVelocity();
 }
 
 void RigidBodyComponent::ReduceVelocity_X(const float velocity) {
-	this->m_velocity.x *= velocity;
+	m_velocity.x *= velocity;
 
 	// しきい値を下回ったら止める
-	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
-		this->m_velocity.x = 0.0f;
+	if (fabsf(m_velocity.x) < STOPVELOCITY) {
+		m_velocity.x = 0.0f;
 	}
 }
 
 void RigidBodyComponent::ReduceVelocity_Y(const float velocity) {
-	this->m_velocity.y *= velocity;
+	m_velocity.y *= velocity;
 
 	// しきい値を下回ったら止める
-	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
-		this->m_velocity.y = 0.0f;
+	if (fabsf(m_velocity.y) < STOPVELOCITY) {
+		m_velocity.y = 0.0f;
 	}
 }
 
 void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
-	this->m_velocity.z *= velocity;
+	m_velocity.z *= velocity;
 
 	// しきい値を下回ったら止める
-	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
-		this->m_velocity.z = 0.0f;
+	if (fabsf(m_velocity.z) < STOPVELOCITY) {
+		m_velocity.z = 0.0f;
 	}
 }
 
@@ -115,14 +122,14 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 	if (gravityFlag == true) {
 		auto transform = p_object->GetComponent<TransformComponent>();
 
-		m_acceleration.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
+		m_totalForce.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
 
 		if (m_beforeGravityFlag == false && gravityFlag == true) {
 			m_velocity.y += (-GRAVITY * firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
 		}
 
 		// 速度を加速度から更新
-		m_velocity.y += m_acceleration.y * m_deltaTime;	// 速度を更新、0.016fは1/60秒の固定値
+		m_velocity.y += m_totalForce.y * m_deltaTime;	// 速度を更新、0.016fは1/60秒の固定値
 
 		// 最大落下速度の制限
 		if (m_velocity.y < -GRAVITY_STOP) {	// 重力加速度を一定にする
@@ -138,7 +145,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 	}
 	else {
 		m_velocity.y = 0.0f;	// 地面に着いた状態では速度を０にする
-		m_acceleration.y = 0.0f;	// 加速度もリセット
+		m_totalForce.y = 0.0f;	// 加速度もリセット
 	}
 
 	m_beforeGravityFlag = gravityFlag;	// 重力フラグを更新

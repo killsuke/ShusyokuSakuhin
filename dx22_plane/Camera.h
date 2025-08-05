@@ -48,7 +48,9 @@ public:
 
 //	void SetCamera(int mode);	// ƒJƒƒ‰‚ğİ’è
 
-	inline void SetTarget(DirectX::SimpleMath::Vector3& target) { m_Target = target; };
+	inline void SetTarget(const DirectX::SimpleMath::Vector3& target) { m_Target = target; };
+
+	inline DirectX::SimpleMath::Vector3 GetTarget() const { return m_Target; }
 
 	// “]’u‚µ‚Ä‚¢‚È‚¢ó‘Ô‚Ìƒ‚ƒm‚ğ•Ô‚·
 	inline DirectX::SimpleMath::Matrix GetView2D() const { return m_ViewMatrix2D; };

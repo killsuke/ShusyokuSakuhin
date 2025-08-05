@@ -53,6 +53,9 @@ void Camera::Update()
 			assert(false); // もしくは throw などで止める
 		}
 
+		m_Target.x = pos.x;
+		m_Target.y = pos.y;
+
 		Vector3 vec3 = {};	// 初期化
 		if (Input::GetKeyPress(VK_A)) {
 			vec3.x -= 1.0f;
@@ -243,6 +246,7 @@ void Camera::Update()
 
 
 		auto rot = transform->GetRotation();
+		auto nowPos = transform->GetPosition();
 
 		// マウスの座標を取得
 		Vector2 mouseVec2 = Input::GetMousePositionNormalize();
@@ -290,7 +294,7 @@ void Camera::Update()
 			DirectX::XMVECTOR forward = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 0, 1, 0), rotMat);
 
 			// ターゲット計算
-			m_Target = DirectX::XMVectorAdd(pos, forward);
+			m_Target = DirectX::XMVectorAdd(nowPos, forward);
 		}
 		// ビュー変換後列作成
 		//Vector3 up = Vector3(0.0f, 1.0f, 0.0f);

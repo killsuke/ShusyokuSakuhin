@@ -237,6 +237,15 @@
     <ClCompile Include="EnemyDamageComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="CameraMoveComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPointComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -475,6 +484,18 @@
     </ClInclude>
     <ClInclude Include="EnemyDamageComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMoveComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Spring.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPointComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPattern.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

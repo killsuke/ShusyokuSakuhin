@@ -14,7 +14,7 @@ GameObject::~GameObject() {
 void GameObject::Update() {
 	// コンポーネントの更新
 	for (auto& component : components) {
-		if (component) {
+		if (component->GetActiveFlag() == true) {
 			component->Update();
 		}
 	}

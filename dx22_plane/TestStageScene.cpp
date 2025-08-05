@@ -16,12 +16,18 @@
 #include "EnemyDamageComponent.h"
 #include "FighterComponent.h"
 #include "AttackComponent.h"
+#include "CameraMoveComponent.h"
+#include "Spring.h"
 
 TestStageScene::TestStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
+	camera->AddComponent<RigidBodyComponent>();
+	camera->AddComponent<CameraMoveComponent>();
 	camera->AddComponent<Camera>();
+
+	auto cameraSpring = camera->AddComponent<SpringComponent>();
 
 	{
 		auto cube = GameObjectManager::AddObject("Player", "Player");
@@ -55,27 +61,27 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
-		CubeMesh cubeMesh3;
-		auto sword = GameObjectManager::AddObject("sword", "Cube");
-		auto swordTrans = sword->AddComponent<TransformComponent>();
-		swordTrans->SetScale({ 10.0f, 20.0f, 10.0f });
-		swordTrans->SetPosition({ 28.0f, 10.0f, 10.0f });
-		auto swordColl = sword->AddComponent<ColliderComponent>();
-		swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+		/*	CubeMesh cubeMesh3;
+			auto sword = GameObjectManager::AddObject("sword", "Cube");
+			auto swordTrans = sword->AddComponent<TransformComponent>();
+			swordTrans->SetScale({ 10.0f, 20.0f, 10.0f });
+			swordTrans->SetPosition({ 28.0f, 10.0f, 10.0f });
+			auto swordColl = sword->AddComponent<ColliderComponent>();
+			swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
-		sword->AddComponent<AttackComponent>();
+			sword->AddComponent<AttackComponent>();
 
-		auto fighter = sword->AddComponent<FighterComponent>();
-		fighter->SetHp(100);
-		fighter->SetAtk(10);
+			auto fighter = sword->AddComponent<FighterComponent>();
+			fighter->SetHp(100);
+			fighter->SetAtk(10);
 
-		sword->AddComponent<EnemyDamageComponent>();
+			sword->AddComponent<EnemyDamageComponent>();
 
-		auto swordRe2 = sword->AddComponent<Render3DColliderAABBComponent>();
-		swordRe2->SetMesh(cubeMesh3);
-		swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		swordRe2->SetTexture("assets/texture/NoTexture.png");
-		swordRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));
+			auto swordRe2 = sword->AddComponent<Render3DColliderAABBComponent>();
+			swordRe2->SetMesh(cubeMesh3);
+			swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			swordRe2->SetTexture("assets/texture/NoTexture.png");
+			swordRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));*/
 
 	}
 
@@ -127,7 +133,7 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));
 	}
 
-	{
+	/*{
 		auto cube = GameObjectManager::AddObject("Enemy", "Enemy");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
@@ -153,7 +159,46 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 0.5f));
+	}*/
+
+	{
+		auto target = GameObjectManager::AddObject("Target", "Target");
+		auto targetTrans = target->AddComponent<TransformComponent>();
+		targetTrans->SetScale({ 10.0f, 10.0f, 10.0f });
+		targetTrans->SetPosition({ 100.0f, 60.0f, -200.0f });
+		auto rigidTa = target->AddComponent<RigidBodyComponent>();
+		rigidTa->SetActiveFlag(false); // 物理演算を無効にする
+		auto targetRend = target->AddComponent<Render3DComponent>();
+		CircleMesh sphereMesh;
+		targetRend->SetMesh(sphereMesh);
+		targetRend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend->SetTexture("assets/texture/NoTexture.png");
+
+		//auto circle = GameObjectManager::AddObject("Scroll", "Scroll");
+		//auto circleTrans = circle->AddComponent<TransformComponent>();
+		//circleTrans->SetScale({ 30.0f, 30.0f, 10.0f });
+		//circleTrans->SetPosition({ -80.0f, 60.0f, 0.0f });
+		//auto rigidMe = circle->AddComponent<RigidBodyComponent>();
+		//rigidMe->SetActiveFlag(true); // 物理演算を有効にする
+		//auto circleRend = circle->AddComponent<Render3DComponent>();
+		//CircleMesh circleMesh;
+		//circleRend->SetMesh(circleMesh);
+		//circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//circleRend->SetTexture("assets/texture/NoTexture.png");
+
+		//auto circleSpring = circle->AddComponent<SpringComponent>();
+		//circleSpring->SetK(20.0f); // ばね定数をセット
+		//circleSpring->MakeDamping(); // ダンピングを作成
+		//circleSpring->SetSpringPartner(target);
+
+		cameraSpring->SetK(20.0f); // ばね定数をセット
+		cameraSpring->MakeDamping(); // ダンピングを作成
+		cameraSpring->SetSpringPartner(target);
+
 	}
+
+
 }
 
 TestStageScene::~TestStageScene() {

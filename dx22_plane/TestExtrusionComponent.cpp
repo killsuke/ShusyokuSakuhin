@@ -43,7 +43,7 @@ void TestExtrusionComponent::Update() {
 
 	coll->Update();
 
-	DirectX::XMFLOAT3 hitNormal = {};
+	DirectX::SimpleMath::Vector3 hitNormal = {};
 	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal)) {
 		if (hitNormal.y < -0.5f) {	// “Vˆä
 			rigid->UseGravity(false, 120.0f, 12.0f);
