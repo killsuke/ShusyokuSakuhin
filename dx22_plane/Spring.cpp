@@ -10,6 +10,62 @@ SpringComponent::SpringComponent(GameObject& obj) : Component(obj) {
 
 void SpringComponent::Update()
 {
+
+}
+
+void SpringComponent::SpringAction2D()
+{
+	auto transformP1 = p_object->GetComponent<TransformComponent>();
+	auto rigidBodyP1 = p_object->GetComponent<RigidBodyComponent>();
+
+	auto transformP2 = m_springPartner->GetComponent<TransformComponent>();
+	auto rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
+
+	auto posP1 = transformP1->GetPosition();
+	auto posP2 = transformP2->GetPosition();
+
+	auto velocityP1 = rigidBodyP1->GetVelocity();
+	auto velocityP2 = rigidBodyP2->GetVelocity();
+
+	// 2Dなのでz座標は無視
+	posP1.z = 0.0f;
+	posP2.z = 0.0f;
+	velocityP1.z = 0.0f;
+	velocityP2.z = 0.0f;
+
+	Vector3 delta = posP1 - posP2;
+	float distance = delta.Length();
+
+	if (distance < 1e-6f) return;           // ゼロ除算対策
+
+	Vector3 direction = delta / distance;   // 正規化
+	// フックの法則
+	float springForceMagnitude = (distance - m_restLength) * m_K;
+
+	// 減衰（相対速度に沿った力）
+	Vector3 relativeVelocity = velocityP1 - velocityP2;
+
+	float dampingForceMagnitude = m_DAMPING * relativeVelocity.Dot(direction);
+
+	// 合力
+	Vector3 force = direction * (springForceMagnitude - dampingForceMagnitude);
+
+	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
+	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
+
+	// 強制停止チェック
+	//Vector3 diff = posP2 - posP1;
+	//if (diff.Length() < 0.01f && velocityP1.Length() < 0.01f) {
+	//	rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
+	//	transformP1->SetPosition(transformP2->GetPosition());
+	//}
+	//else {
+	//	m_p1->Update(); // p2の位置を更新
+	//}
+}
+
+void SpringComponent::SpringAction3D()
+{
 	auto transformP1 = p_object->GetComponent<TransformComponent>();
 	auto rigidBodyP1 = p_object->GetComponent<RigidBodyComponent>();
 
@@ -41,16 +97,6 @@ void SpringComponent::Update()
 
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
-
-	// 強制停止チェック
-	//Vector3 diff = posP2 - posP1;
-	//if (diff.Length() < 0.01f && velocityP1.Length() < 0.01f) {
-	//	rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
-	//	transformP1->SetPosition(transformP2->GetPosition());
-	//}
-	//else {
-	//	m_p1->Update(); // p2の位置を更新
-	//}
 }
 
 // ばね定数をセットする

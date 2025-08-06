@@ -21,6 +21,10 @@ public:
 
 	void Update() override;
 
+	void SpringAction2D();
+
+	void SpringAction3D();
+
 	// ばね定数をセットする
 	void SetK(float k);
 	// ばね定数をセットする

@@ -493,23 +493,55 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 		return false;
 	}
 
-	// coll1とcoll2の中心を比較して、どの方向から入ったのかを判断
-	float coll1CenterX = (coll1.min.x + coll1.max.x) * 0.5f;
-	float coll1CenterY = (coll1.min.y + coll1.max.y) * 0.5f;
+	// 最終的のオブジェクトを押し戻すためのベクトル
+	DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
-	float coll2CenterX = (coll2.min.x + coll2.max.x) * 0.5f;
-	float coll2CenterY = (coll2.min.y + coll2.max.y) * 0.5f;
+	// X軸での「めり込み量」を計算
+	float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+	float dx2 = (coll1.min.x - coll2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
 
-	float dx = coll2CenterX - coll1CenterX;
-	float dy = coll2CenterY - coll1CenterY;
+	// Y軸での「めり込み量」を計算
+	float dy1 = (coll1.max.y - coll2.min.y);	// p1の上端 - p2の下端（p2が上から押し込んでいる時）
+	float dy2 = (coll1.min.y - coll2.max.y);	// p1の下端 - p2の上端（p2が下から押し込んでいる時）
 
-	hitNormal = { 0.0f, 0.0f, 0.0f };
-
-	if (std::abs(dx) > std::abs(dy)) {
-		hitNormal.x = (dx > 0.0f) ? 1.0f : -1.0f;
+	// X軸の処理
+	// X軸方向でどちらに押し戻すべきか（小さい方が自然）
+	if (abs(dx1) < abs(dx2)) {
+		pushBack.x = dx1;	// 左から来たので右に押し戻し
 	}
 	else {
-		hitNormal.y = (dy > 0.0f) ? 1.0f : -1.0f;
+		pushBack.x = dx2;	// 右から来たので左に押し戻し
+	}
+
+	// Y軸の処理
+	// Y軸方向でどちらに押し戻すべきか（小さい方が自然）
+	if (abs(dy1) < abs(dy2)) {
+		pushBack.y = dy1;	// 上から来たので下に押し戻し
+	}
+	else {
+		pushBack.y = dy2;	// 下から来たので上に押し戻し
+	}
+
+	// Z軸は完全に無視（2.5Dのため）
+	pushBack.z = 0.0f;
+
+	// 法線初期化
+	// ※ 出力される法線方向は逆向きになることに注意
+	hitNormal = { 0.0f,0.0f,0.0f };
+
+		// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
+		// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
+	if (abs(pushBack.x) < abs(pushBack.y)) {
+		pushBack.y = 0.0f;	// 横方向で押し戻す
+
+		// X方向に押し戻された → 壁
+		hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+	}
+	else {
+		pushBack.x = 0.0f;	// 縦方向で押し戻す
+
+		// Y方向に押し戻された → 地面 or 天井
+		hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
 	}
 
 	return true;

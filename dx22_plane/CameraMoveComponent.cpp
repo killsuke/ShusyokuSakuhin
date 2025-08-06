@@ -39,7 +39,7 @@ void CameraMoveComponent::Update()
 void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 {
 	auto cameraSpring = cameraObj.GetComponent<SpringComponent>();
-	if (cameraSpring)
+	if (cameraSpring != nullptr)
 	{
 		cameraSpring->SetActiveFlag(false);
 	}
@@ -58,13 +58,14 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 {
 	auto cameraSpring = cameraObj.GetComponent<SpringComponent>();
-	if (cameraSpring)
+	if (cameraSpring != nullptr)
 	{
 		// m_moveTargetから情報を全部もらうとか？
-		cameraSpring->SetActiveFlag(true);
+//		cameraSpring->SetActiveFlag(true);
 		cameraSpring->SetSpringPartner(m_moveTarget);
 		cameraSpring->SetK(20.0f);
 		cameraSpring->MakeDamping(); // ダンピングを作成
+		cameraSpring->SpringAction2D(); // 2Dのばね挙動を行う
 	}
 }
 
