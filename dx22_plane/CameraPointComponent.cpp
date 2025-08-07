@@ -3,11 +3,11 @@
 #include "GameObjectManager.h"
 #include "Collider.h"
 #include "RigidBodyComponent.h"
+#include "CameraTargetComponent.h"
 
 CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 {
 	m_sortNum = CAMERA_POINT;
-	cp = CAMERA_NONE; // 初期はCHASEカメラ
 }
 
 void CameraPointComponent::Update() {
@@ -42,6 +42,7 @@ void CameraPointComponent::Update() {
 		afterTouched = false;
 	}
 
+	// リリースでとる
 	if (beforeTouched == true && afterTouched == false) {
 		// プレイヤーが抜けた方向をセット
 		m_exitDirection = m_beforeDirection;
@@ -69,38 +70,16 @@ void CameraPointComponent::Update() {
 		m_beforeDirection = DirectX::SimpleMath::Vector3::Zero; // 初期化
 	}
 
+	// ポイントから抜けたら処理を行う
 	if (m_exitDirection != DirectX::SimpleMath::Vector3::Zero) {
 
-		switch (cp)
-		{
-		case CAMERA_NONE:
-
-			break;
-		case CHASE:
-			camMove->SetCameraPattern(CHASE);
-			break;
-		case SPRING_CHASE:
-			// プレイヤーが入ってきた方向と抜けた方向が、
-			// 同じならm_targetPosで指定した位置にスクロール
-			// 違うなら、m_beforePointが持つ指定した位置にスクロール
-
-			// 入ってきた面と出た面が違うなら
-			if (m_nextTargetPoint != nullptr && m_isScrollDir == 1) {
-				camMove->SetCameraPattern(SPRING_CHASE);
-				camMove->SetMoveTarget(*m_nextTargetPoint);
-			}
-
-			// 入ってきた面と出た面が同じなら 
-			if (m_beforeTargetObj != nullptr && m_isScrollDir == -1) {
-				camMove->SetCameraPattern(SPRING_CHASE);
-				camMove->SetMoveTarget(*m_beforeTargetObj);
-			}
-
-			break;
-		case CAMERA_MAX:
-			break;
-		default:
-			break;
+		if (m_nextTargetPoint != nullptr && m_isScrollDir == 1) {
+			camMove->SetMoveTarget(*m_nextTargetPoint);
 		}
+		else if (m_beforeTargetObj != nullptr && m_isScrollDir == -1) {
+			camMove->SetMoveTarget(*m_beforeTargetObj);
+		}
+
+		m_exitDirection = DirectX::SimpleMath::Vector3::Zero; // 初期化
 	}
 }

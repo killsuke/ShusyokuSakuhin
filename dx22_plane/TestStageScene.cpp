@@ -18,6 +18,7 @@
 #include "AttackComponent.h"
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
+#include "CameraTargetComponent.h"
 #include "Spring.h"
 
 TestStageScene::TestStageScene() {
@@ -169,6 +170,8 @@ TestStageScene::TestStageScene() {
 		targetTrans->SetPosition({ 100.0f, 60.0f, 0.0f });
 		auto rigidTa = target1->AddComponent<RigidBodyComponent>();
 		rigidTa->SetActiveFlag(false); // •¨—‰‰ŽZ‚ð–³Œø‚É‚·‚é
+		auto cameratarget1 = target1->AddComponent<CameraTargetComponent>();
+		cameratarget1->SetCameraPattern(SPRING_CHASE);
 		auto targetRend = target1->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh;
 		targetRend->SetMesh(sphereMesh);
@@ -183,6 +186,8 @@ TestStageScene::TestStageScene() {
 		targetTrans2->SetPosition({ 0.0f, 60.0f, 0.0f });
 		auto rigidTa2 = target2->AddComponent<RigidBodyComponent>();
 		rigidTa2->SetActiveFlag(false); // •¨—‰‰ŽZ‚ð–³Œø‚É‚·‚é
+		auto cameratarget2 = target2->AddComponent<CameraTargetComponent>();
+		cameratarget2->SetCameraPattern(SPRING_CHASE);
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh2;
 		targetRend2->SetMesh(sphereMesh2);
@@ -226,7 +231,6 @@ TestStageScene::TestStageScene() {
 		pointRend->SetTexture("assets/texture/NoTexture.png");
 		pointRend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 
-		pointCamera->SetCameraPattern(SPRING_CHASE);
 		pointCamera->SetNextTargetObj(*target1);
 		pointCamera->SetBeforeTargetObj(*target2);
 		pointCamera->SetScrollDirection(SCROLL_IN_LEFT);

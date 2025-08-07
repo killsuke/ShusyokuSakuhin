@@ -171,6 +171,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraMoveComponent.cpp" />
     <ClCompile Include="CameraPointComponent.cpp" />
+    <ClCompile Include="CameraTargetComponent.cpp" />
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="CameraMoveComponent.h" />
     <ClInclude Include="CameraPattern.h" />
     <ClInclude Include="CameraPointComponent.h" />
+    <ClInclude Include="CameraTargetComponent.h" />
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />

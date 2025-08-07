@@ -246,6 +246,9 @@
     <ClCompile Include="CameraPointComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="CameraTargetComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -496,6 +499,9 @@
     </ClInclude>
     <ClInclude Include="CameraPattern.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraTargetComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

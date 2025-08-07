@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "CameraPattern.h"
+//#include "CameraPattern.h"
 #include <SimpleMath.h>
 #include <memory>
 
@@ -13,9 +13,8 @@
 class CameraPointComponent : public Component
 {
 private:
-	CameraPattern cp;
+
 	GameObject* m_beforeTargetObj = nullptr;	// 前のポイント（から検索し、m_targetObjを見つける）
-//	GameObject* nextPoint = nullptr;	// 次のポイント
 	GameObject* m_nextTargetPoint = nullptr;	// スクロールしたい位置（目標点直接）
 
 	DirectX::SimpleMath::Vector3 m_beforeDirection = DirectX::SimpleMath::Vector3::Zero;		// プレイヤーが抜けたベクトル
@@ -35,12 +34,10 @@ public:
 
 	void Update() override;
 
-	inline void SetCameraPattern(const CameraPattern& pattern) { cp = pattern; };
 	inline void SetBeforeTargetObj(GameObject& point) { m_beforeTargetObj = &point; };
 	inline void SetNextTargetObj(GameObject& pos) { m_nextTargetPoint = &pos; };
 	inline void SetScrollDirection(const DirectX::SimpleMath::Vector3& dir) { m_scrollDirection = dir; };
 
 	// ヌルポインタであったときのことも考えてGameObject*で返す
 	inline GameObject* GetTargetObj()const { return m_nextTargetPoint; };
-//	inline void SetNextPoint(GameObject* point) { nextPoint = point; };
 };
