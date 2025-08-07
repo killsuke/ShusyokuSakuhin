@@ -60,7 +60,7 @@ void GameObjectManager::Update() {
 	SizeUP();
 
 	// •`‰æ‡‚ð®‚¦‚é
-	DrawSort();
+	//DrawSort();
 
 	for (const auto& obj : objects) {
 		obj->Update();

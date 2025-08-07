@@ -4,6 +4,7 @@
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "Input.h"
+#include "iostream"
 
 TestExtrusionComponent::TestExtrusionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = TEST_EXTRUSION; // ソート番号を設定
@@ -43,26 +44,33 @@ void TestExtrusionComponent::Update() {
 
 	coll->Update();
 
-	DirectX::SimpleMath::Vector3 hitNormal = {};
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal)) {
-		if (hitNormal.y < -0.5f) {	// 天井
-			rigid->UseGravity(false, 120.0f, 12.0f);
-			isGround = true;
-		}
-		else if (hitNormal.y > 0.5f) {	// 地面
-		}
-		else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
+	DirectX::SimpleMath::Vector3 hitNormal1 = {};
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal1)) {
+		if (hitNormal1 != DirectX::SimpleMath::Vector3::Zero) {
+
+			if (hitNormal1.y < -0.5f) {	// 天井
+				rigid->UseGravity(false, 120.0f, 12.0f);
+				isGround = true;
+			}
+			else if (hitNormal1.y > 0.5f) {	// 地面
+			}
+			else if (abs(hitNormal1.x) > 0.5f) { // 左右の壁
+			}
 		}
 	}
 
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj2, *coll, hitNormal)) {
-		if (hitNormal.y < -0.5f) {	// 天井
-			rigid->UseGravity(false, 120.0f, 12.0f);
-			isGround = true;
-		}
-		else if (hitNormal.y > 0.5f) {	// 地面
-		}
-		else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
+	DirectX::SimpleMath::Vector3 hitNormal2 = {};
+	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj2, *coll, hitNormal2)) {
+		if (hitNormal2 != DirectX::SimpleMath::Vector3::Zero) {
+
+			if (hitNormal2.y < -0.5f) {	// 天井
+				rigid->UseGravity(false, 120.0f, 12.0f);
+				isGround = true;
+			}
+			else if (hitNormal2.y > 0.5f) {	// 地面
+			}
+			else if (abs(hitNormal2.x) > 0.5f) { // 左右の壁
+			}
 		}
 	}
 }

@@ -36,7 +36,7 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
 
 	// クォータニオン作成
-	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(0.0f,0.0f,0.0f);
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, 0.0f);
 
 	// SRT情報作成
 	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
@@ -55,7 +55,7 @@ void ColliderComponent::MakeWorldOBBMatrix() {
 	float RollRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.z);   // Z軸回転
 
 	// クォータニオン作成
-	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians,PitchRadians,RollRadians);
+	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
 
 	// SRT情報作成
 	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
@@ -487,7 +487,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 
 	bool hit = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
 
-	if(hit == false) {
+	if (hit == false) {
 		// 衝突していない場合は法線をゼロベクトルに設定
 		hitNormal = { 0.0f, 0.0f, 0.0f };
 		return false;
@@ -529,8 +529,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 	// ※ 出力される法線方向は逆向きになることに注意
 	hitNormal = { 0.0f,0.0f,0.0f };
 
-		// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
-		// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
+	// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
+	// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
 	if (abs(pushBack.x) < abs(pushBack.y)) {
 		pushBack.y = 0.0f;	// 横方向で押し戻す
 
@@ -563,12 +563,22 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	// 当たって押し出されるのはX軸とY軸みたいな
 	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
 
+	//hitNormal = { 0.0f,0.0f,0.0f };
+
 	if (check == true) {
 
-		auto rigid = p2.p_object->GetComponent<RigidBodyComponent>();
+		auto returnDir = DirectX::SimpleMath::Vector3::Zero;
+		auto it = touchObjects.find(p1.p_object);
+		if (it != touchObjects.end()) {
+
+			if (it->second != DirectX::SimpleMath::Vector3::Zero) {
+				hitNormal = it->second;
+				returnDir = hitNormal;
+			}
+		}
 
 		// 最終的のオブジェクトを押し戻すためのベクトル
-		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
+		DirectX::SimpleMath::Vector3 pushBack(0.0f, 0.0f, 0.0f);
 
 		// X軸での「めり込み量」を計算
 		float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
@@ -599,69 +609,39 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		// Z軸は完全に無視（2.5Dのため）
 		pushBack.z = 0.0f;
 
-		// 法線初期化
-		// ※ 出力される法線方向は逆向きになることに注意
-		hitNormal = { 0.0f,0.0f,0.0f };
+		if (returnDir == DirectX::SimpleMath::Vector3::Zero) {
 
-	/*	float absPushX = abs(pushBack.x);
-		float absPushY = abs(pushBack.y);
+			// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
+			// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
+			if (abs(pushBack.x) < abs(pushBack.y)) {
+				pushBack.y = 0.0f;	// 横方向で押し戻す
 
-		float delta = abs(absPushX + absPushY);
+				// X方向に押し戻された → 壁
+				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+			}
+			else {
+				auto collsize = coll1.max.x - coll1.min.x;
 
-		if (delta < 1.8f) {
-			return check;
-		}*/
-
-		// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
-		// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
-		if (abs(pushBack.x) < abs(pushBack.y)) {
-			pushBack.y = 0.0f;	// 横方向で押し戻す
-
-			// X方向に押し戻された → 壁
-			hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
-		}
-		else {
-			auto collsize = coll1.max.x - coll1.min.x;
-
-			// コライダーのめり込み量が一定値以下なら
-//			if (rigid != nullptr && rigid->GetVelocity().x != 0.0f && ((abs(collsize) * 0.1f) > abs(pushBack.x))) {
-//				pushBack.y = 0.0f;
-////				pushBack.x *= 0.8f;
-//				// X方向に押し戻された → 壁
-//				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
-//			}
-//			else {
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
 
 				// Y方向に押し戻された → 地面 or 天井
 				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
-	//		}
+			}
+		}
+		else {
+			if (hitNormal.x != 0.0f) {
+				pushBack.y = 0.0f;	// 横方向で押し戻す
+			}
+			else if(hitNormal.y != 0.0f) {
+				pushBack.x = 0.0f;	// 縦方向で押し戻す
+			}
 		}
 
-		// 衝突状態を保存
+		// 挿入
+		touchObjects.insert({p1.p_object,hitNormal});
+		touchObjects[p1.p_object] = hitNormal;
 
-		   // 相対ベクトル：p1の中心 → p2の中心
-		   //float cx = (p1.min.x + p1.max.x) * 0.5f;
-		   //float cy = (p1.min.y + p1.max.y) * 0.5f;
-		   //float cx2 = (p2.min.x + p2.max.x) * 0.5f;
-		   //float cy2 = (p2.min.y + p2.max.y) * 0.5f;
-
-		   //float dx = cx2 - cx;
-		   //float dy = cy2 - cy;
-
-		   //// 接近方向を使って優先軸を決める
-		   //if (std::abs(dx) > std::abs(dy)) {
-		   //	// 横から来ているのでX優先
-		   //	pos.x += pushBack.x;
-		   //	hitNormal = { (pushBack.x > 0.0f) ? -1.0f : 1.0f, 0.0f, 0.0f }; // X方向の法線
-		   //}
-		   //else {
-		   //	// 上下から来ているのでY優先
-		   //	pos.y += pushBack.y;
-		   //	hitNormal = { 0.0f, (pushBack.y > 0.0f) ? -1.0f : 1.0f, 0.0f }; // Y方向の法線
-		   //}
-
-		   // 位置補正をして、SRT情報を再計算
+		// 位置補正をして、SRT情報を再計算
 		auto transform = p_object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
 		transform->MakeWorldMatrix();
@@ -670,11 +650,13 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		auto size = transform->GetScale();
 		SetColliderSize_AABB(pos, size);
 		MakeWorldAABBMatrix();
-
-		// オブジェクトの位置を押し戻しベクトル分だけ移動させて、衝突によるめり込みを解消する
-		//pos.x += pushBack.x;
-		//pos.y += pushBack.y;
-		//pos.z += 0.0f;	// 2.5DなのでZ軸は無視
+	}
+	else {
+		// 存在確認をして、second情報をリセット上書き
+		auto it = touchObjects.find(p1.p_object);
+		if (it != touchObjects.end()) {
+			it->second = DirectX::SimpleMath::Vector3::Zero;
+		}
 	}
 
 	// 衝突しているかどうかを返す

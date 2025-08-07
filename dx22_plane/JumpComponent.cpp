@@ -46,7 +46,7 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool isGround, bool tri
 				m_firstSpeed = 0.0f;
 			}
 
-			std::cout << m_firstSpeed << std::endl;
+//			std::cout << m_firstSpeed << std::endl;
 
 			// ‘¬“xXV
 			velocity.y += m_firstSpeed;

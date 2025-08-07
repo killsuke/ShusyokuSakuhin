@@ -2,6 +2,7 @@
 
 #include <simplemath.h>
 #include <directxcollision.h>	// Collision の変更を一部する、XMFLOAT4で扱うのが本当は良いらしい。クオータニオンの始まりか？
+#include <unordered_map>
 #include "Component.h"
 
 // ライン（無限の長さの線）
@@ -50,6 +51,12 @@ struct Sphere {
 //	float radius; // 半径
 //};
 
+struct PushNormalize {
+	GameObject* dirObj = nullptr;
+
+	DirectX::SimpleMath::Vector3 pushDir = DirectX::SimpleMath::Vector3::Zero;
+};
+
 // BOX定義
 struct AABB {
 	DirectX::SimpleMath::Vector3 min = {};
@@ -92,6 +99,9 @@ private:
 	GameObject* beforeTouchObj = nullptr;	// 前回のタッチオブジェクト
 	bool beforeTouch = false;	  // 前回のタッチ状態
 	DirectX::SimpleMath::Vector2 beforeTouchAxis = {}; // 前回のタッチ軸
+
+	std::unordered_map<GameObject*, DirectX::SimpleMath::Vector3> 
+		touchObjects; // タッチしているオブジェクトのリスト
 
 //	DirectX::SimpleMath::Vector3 offsetRotation = {};
 

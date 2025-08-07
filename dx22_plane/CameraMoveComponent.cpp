@@ -34,10 +34,10 @@ void CameraMoveComponent::Update()
 		ChaseCamera(*cameraObj, *player);
 		break;
 	case CHASE_X:
-
+		Chase_XCamera(*cameraObj, *player);
 		break;
 	case CHASE_Y:
-
+		Chase_YCamera(*cameraObj, *player);
 		break;
 	case SPRING_CHASE:
 		SpringCamera(*cameraObj);
