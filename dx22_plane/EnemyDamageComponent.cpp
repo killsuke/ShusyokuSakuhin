@@ -22,7 +22,7 @@ void EnemyDamageComponent::Update()
 	auto playerTrans = playerObj->GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
 	transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
-	transform->MakeWorldMatrix();
+//	transform->MakeWorldMatrix();
 
 	auto attack = p_object->GetComponent<AttackComponent>();
 

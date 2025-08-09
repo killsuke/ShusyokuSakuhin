@@ -16,6 +16,7 @@ private:
 
 	std::string m_texname{}; // ファイル名
 	ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
+	ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
 
 	int m_width = 0; // 幅
 	int m_height = 0; // 高さ
@@ -23,7 +24,10 @@ private:
 
 public:
 	bool Load(const std::string& filename);
+	bool LoadMask(const std::string& filename);
+
 	bool LoadFromFemory(const unsigned char* data,int len);
 
 	void SetGPU();
+	void SetGPU_Mask();
 };

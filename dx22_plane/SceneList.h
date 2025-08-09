@@ -3,3 +3,4 @@
 #include "Stage1Scene.h"
 #include "ResultScene.h"
 #include "TestStageScene.h"
+#include "TestMaskScene.h"

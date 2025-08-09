@@ -45,6 +45,10 @@ public:
 	void Update() override;
 	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
 	void SetTexture(const std::string& fileName) { m_Texture->Load(fileName); };
+	void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
+		m_Texture->Load(fileName);
+		m_Texture->LoadMask(maskFileName);
+	};
 	void SetMesh(Mesh& mesh);
 	void SetColor(const DirectX::XMFLOAT4 color) { m_Color = color; };
 };

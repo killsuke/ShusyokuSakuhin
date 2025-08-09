@@ -201,7 +201,7 @@ void InchWorm_Test::Draw() {
 		//定数バッファを更新
 		CBBoneMatrix cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix();
+		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
 
 		//		cb.color = DirectX::XMFLOAT4(m_Color);
 

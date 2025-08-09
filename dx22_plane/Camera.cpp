@@ -312,7 +312,7 @@ void Camera::Update()
 		//	DirectXRender::SetViewMatrix3D(&viewMatrix);
 
 			// SRT情報更新
-		transform->MakeWorldMatrix();
+	//	transform->MakeWorldMatrix();
 
 		//プロジェクション行列の生成
 		//constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角

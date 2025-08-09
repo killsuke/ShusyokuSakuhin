@@ -27,7 +27,8 @@ public:
 	GameObjectManager() = default;
 
 	static void Init() { 
-		objects.reserve(1000); 
+		objects.reserve(100);
+		child_Objects.reserve(100);
 		objects_UI.reserve(100);
 		objects_Absfront.reserve(100);
 	};
@@ -37,13 +38,20 @@ public:
 	static void UnInit() { ListClear(); };
 
 	// リストにゲームオブジェクトを追加
-	//template <typename T1>
 	static GameObject* AddObject(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
-		//static_assert(std::is_base_of<GameObject, T1>::value, "T1 must be derived from GameObject");
 
 		objects.emplace_back(MakeObject(_name, _tag));
 
 		auto ptr = objects.back().get();
+
+		return ptr;
+	}
+
+	static GameObject* AddChild(const std::string& _name = "Noname", const std::string& _tag = "Notag") {
+
+		child_Objects.emplace_back(MakeObject(_name, _tag));
+
+		auto ptr = child_Objects.back().get();
 
 		return ptr;
 	}
@@ -90,6 +98,7 @@ public:
 private:
 
 	static std::vector<std::unique_ptr<GameObject>> objects;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
+	static std::vector<std::unique_ptr<GameObject>> child_Objects;	 // ゲーム内で、実際に更新をかけるベクター
 	static std::vector<std::unique_ptr<GameObject>> objects_UI;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
 	static std::vector<std::unique_ptr<GameObject>> objects_Absfront;	 // シーンをnewする度に様々なオブジェクトを格納するようにする
 

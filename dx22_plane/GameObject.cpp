@@ -18,9 +18,16 @@ void GameObject::Update() {
 			component->Update();
 		}
 	}
+
+	// 子オブジェクトの更新
+	if (!children.empty()) {
+		for (auto& child : children) {
+			child->Update();
+		}
+	}
 }
 
-void GameObject::SortComponents(){
+void GameObject::SortComponents() {
 	std::sort(components.begin(), components.end(),
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();

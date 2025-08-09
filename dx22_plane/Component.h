@@ -8,7 +8,6 @@ enum ComponentType {
 	BASECOMPONENT = 0, // ベースコンポーネント（抽象クラス）
 	TEST_MOVE,
 	JUMP,
-	TRANSFORM,
 	SPRING,
 	RIGIDBODY,
 	COLLIDER,
@@ -21,9 +20,10 @@ enum ComponentType {
 	ATTACK, // 攻撃コンポーネント
 	ENEMY_DAMAGE, // 敵のダメージコンポーネント
 	FIGHTER,
+	TRANSFORM,
 	RENDER,
 	RENDER_ONE_SKIN_ANIMATION,
-	COLLIDER_DEBUG,
+	COLLIDER_DEBUG_RENDER,
 
 	Max			// 最大値（コンポーネントの種類数）
 };
@@ -33,8 +33,7 @@ class GameObject; // 前方宣言
 class Component
 {
 protected:
-	//ComponentType m_type = BASECOMPONENT; // コンポーネントの種類
-	uint16_t m_sortNum = 0;	// 更新処理でどれを優先して更新するかソートをする
+	ComponentType m_sortNum = BASECOMPONENT;	// 更新処理でどれを優先して更新するかソートをする
 	GameObject* p_object = nullptr; // このコンポーネントが所属するGameObjectへのポインタ
 	bool m_activeFlag = true; // コンポーネントが有効かどうかのフラグ
 

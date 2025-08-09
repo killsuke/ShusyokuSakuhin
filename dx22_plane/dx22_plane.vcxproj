@@ -198,6 +198,7 @@
     <ClCompile Include="Render3D.cpp" />
     <ClCompile Include="Render3DColliderAABBComponent.cpp" />
     <ClCompile Include="RenderBillboard.cpp" />
+    <ClCompile Include="RenderMask3D.cpp" />
     <ClCompile Include="RenderOneSkinAnimation.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TestExtrusionComponent.cpp" />
+    <ClCompile Include="TestMaskScene.cpp" />
     <ClCompile Include="TestMoveComponent.cpp" />
     <ClCompile Include="TestStageScene.cpp" />
     <ClCompile Include="Test_Transparent.cpp">
@@ -297,6 +299,7 @@
     <ClInclude Include="Render3DColliderAABBComponent.h" />
     <ClInclude Include="RenderBillboard.h" />
     <ClInclude Include="RenderElement.h" />
+    <ClInclude Include="RenderMask3D.h" />
     <ClInclude Include="RenderOneSkinAnimation.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RigidBodyComponent.h" />
@@ -330,6 +333,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TestExtrusionComponent.h" />
+    <ClInclude Include="TestMaskScene.h" />
     <ClInclude Include="TestMoveComponent.h" />
     <ClInclude Include="TestStageScene.h" />
     <ClInclude Include="Test_Transparent.h">
@@ -349,6 +353,13 @@
     <ClInclude Include="VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="MaskTexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+    </FxCompile>
     <FxCompile Include="OneSkinAnimationPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

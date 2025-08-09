@@ -249,6 +249,12 @@
     <ClCompile Include="CameraTargetComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="TestMaskScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMask3D.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -503,6 +509,12 @@
     <ClInclude Include="CameraTargetComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="TestMaskScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMask3D.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
@@ -523,6 +535,9 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="unlitTextureVS2D.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="MaskTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

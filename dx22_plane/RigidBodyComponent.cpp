@@ -33,7 +33,7 @@ void RigidBodyComponent::Update() {
 		newPos.z += m_velocity.z * fixedDeltaTime;
 
 		transform->AddPosition(newPos); // 位置を更新
-		transform->MakeWorldMatrix(); // ワールド行列を更新
+		//transform->MakeWorldMatrix(); // ワールド行列を更新
 
 		// 毎フレーム加速度をリセット（次のフレームの外力のみ反映）
 		m_acceleration = { 0.0f, 0.0f, 0.0f };
@@ -141,7 +141,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 		pos.y += m_velocity.y * m_deltaTime;	// ポジションを更新
 
 		transform->AddPosition(pos);	// 位置を更新
-		transform->MakeWorldMatrix();	// ワールド行列を更新
+	//	transform->MakeWorldMatrix();	// ワールド行列を更新
 	}
 	else {
 		m_velocity.y = 0.0f;	// 地面に着いた状態では速度を０にする

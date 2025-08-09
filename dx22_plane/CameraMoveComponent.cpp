@@ -65,7 +65,7 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 	auto playerPos = playerTrans->GetPosition();
 
 	cameraTrans->SetPosition({ playerPos.x, cameraTrans->GetPosition().y, cameraTrans->GetPosition().z });
-	cameraTrans->MakeWorldMatrix();
+//	cameraTrans->MakeWorldMatrix();
 	cameraComp->SetTarget({ playerPos.x,cameraComp->GetTarget().y,cameraComp->GetTarget().z });
 }
 
@@ -83,7 +83,7 @@ void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& playe
 	auto playerPos = playerTrans->GetPosition();
 
 	cameraTrans->SetPosition({ playerPos.x, cameraTrans->GetPosition().y, cameraTrans->GetPosition().z });
-	cameraTrans->MakeWorldMatrix();
+//	cameraTrans->MakeWorldMatrix();
 	cameraComp->SetTarget({ playerPos.x,cameraComp->GetTarget().y,cameraComp->GetTarget().z });
 }
 
@@ -97,7 +97,7 @@ void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& playe
 	{
 		// ‚¿‚å‚Á‚Æã‚®‚ç‚¢‚ª‚¿‚å‚¤‚Ç‚¢‚¢
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
-		cameraTrans->MakeWorldMatrix();
+	//	cameraTrans->MakeWorldMatrix();
 		cameraComp->SetTarget({ cameraTrans->GetPosition().x,playerPos.y + 15.0f,cameraComp->GetTarget().z });
 	}
 }
@@ -127,7 +127,7 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 	{
 		// ‚¿‚å‚Á‚Æã‚®‚ç‚¢‚ª‚¿‚å‚¤‚Ç‚¢‚¢
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
-		cameraTrans->MakeWorldMatrix();
+	//	cameraTrans->MakeWorldMatrix();
 		cameraComp->SetTarget({ cameraTrans->GetPosition().x,playerPos.y + 15.0f,cameraComp->GetTarget().z });
 	}
 }

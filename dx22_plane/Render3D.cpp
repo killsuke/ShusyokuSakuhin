@@ -17,7 +17,7 @@ void Render3DComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix();
+		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
 
 		cb.color = DirectX::XMFLOAT4(m_Color);
 

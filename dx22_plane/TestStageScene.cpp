@@ -38,6 +38,7 @@ TestStageScene::TestStageScene() {
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
 		cubeTrans->SetPosition({ 0.0f,30.0f,0.0f });
+		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto cubeJump = cube->AddComponent<JumpComponent>();
 		cubeJump->SetJumpPower(50.0f);
@@ -62,6 +63,19 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+
+		auto child = GameObjectManager::AddChild("child", "Child");
+		cube->SetChild(child);
+		auto childTrans = child->AddComponent<TransformComponent>();
+		childTrans->SetLocalPosition({5.0f,0.0f,0.0f});
+		childTrans->SetLocalScale({ 1.0f, 1.0f, 1.0f });
+		childTrans->SetLocalRotation({ 0.0f, 0.0f, 45.0f });
+		CubeMesh childMesh;
+		auto childRender = child->AddComponent<Render3DComponent>();
+		childRender->SetMesh(childMesh);
+		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		childRender->SetTexture("assets/texture/NoTexture.png");
+
 
 		/*	CubeMesh cubeMesh3;
 			auto sword = GameObjectManager::AddObject("sword", "Cube");

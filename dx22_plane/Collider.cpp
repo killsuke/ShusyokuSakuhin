@@ -644,7 +644,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		// ˆÊ’u•â³‚ð‚µ‚ÄASRTî•ñ‚ðÄŒvŽZ
 		auto transform = p_object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
-		transform->MakeWorldMatrix();
+//		transform->MakeWorldMatrix();
 
 		auto pos = transform->GetPosition();
 		auto size = transform->GetScale();
