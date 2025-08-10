@@ -11,7 +11,7 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 
 void EnemyDamageComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = p_object->GetComponent<ColliderComponent>();
 	auto objOther = GameObjectManager::GameObjectFindName("Enemy");
 	if(objOther == nullptr) {
@@ -21,8 +21,7 @@ void EnemyDamageComponent::Update()
 	auto playerObj = GameObjectManager::GameObjectFindName("Player");
 	auto playerTrans = playerObj->GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
-	transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
-//	transform->MakeWorldMatrix();
+	//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
 	auto attack = p_object->GetComponent<AttackComponent>();
 

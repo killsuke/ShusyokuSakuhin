@@ -7,9 +7,13 @@ FighterComponent::FighterComponent(GameObject& obj) : 	Component(obj)
 
 void FighterComponent::Update() {
 
+
 	if(m_atk < 0) {
 		m_atk = 0; // 攻撃力が0以下になったら0にする
 	}
+
+	m_hp -= m_totalDamage;
+	m_totalDamage = 0;
 
 	if(m_hp <= 0) {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする

@@ -187,6 +187,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GoAroundComponent.cpp" />
     <ClCompile Include="InchWorm_Test.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
@@ -285,6 +286,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="GoAroundComponent.h" />
     <ClInclude Include="InchWorm_Test.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />

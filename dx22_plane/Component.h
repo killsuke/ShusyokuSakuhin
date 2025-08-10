@@ -20,6 +20,7 @@ enum ComponentType {
 	ATTACK, // 攻撃コンポーネント
 	ENEMY_DAMAGE, // 敵のダメージコンポーネント
 	FIGHTER,
+	GO_AROUND,
 	TRANSFORM,
 	RENDER,
 	RENDER_ONE_SKIN_ANIMATION,

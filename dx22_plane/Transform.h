@@ -55,6 +55,11 @@ public:
 
 	inline void AddPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position += position; };
 	inline void AddRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_Rotation += rotation; };
+	inline void AddScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_Scale += scale; };
+
+	inline void AddLocalPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_LocalPosition += position; };
+	inline void AddLocalRotation(const DirectX::SimpleMath::Vector3& rotation) { m_transform.m_LocalRotation += rotation; };
+	inline void AddLocalScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_LocalScale += scale; };
 
 	DirectX::SimpleMath::Matrix MakeWorldMatrix();
 	DirectX::SimpleMath::Matrix MakeLocalMatrix();

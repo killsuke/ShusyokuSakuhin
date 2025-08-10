@@ -20,6 +20,7 @@
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
+#include "GoAroundComponent.h"
 #include "Spring.h"
 
 TestStageScene::TestStageScene() {
@@ -33,84 +34,98 @@ TestStageScene::TestStageScene() {
 	camera->AddComponent<SpringComponent>();
 
 	{
-		auto cube = GameObjectManager::AddObject("Player", "Player");
-		cube->AddComponent<TestMoveComponent>();
+		auto player = GameObjectManager::AddObject("Player", "Player");
+		player->AddComponent<TestMoveComponent>();
 
-		auto cubeTrans = cube->AddComponent<TransformComponent>();
+		auto cubeTrans = player->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
 		cubeTrans->SetPosition({ 0.0f,30.0f,0.0f });
 		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		auto cubeJump = cube->AddComponent<JumpComponent>();
+		auto cubeJump = player->AddComponent<JumpComponent>();
 		cubeJump->SetJumpPower(50.0f);
 
-		auto cubeRigid = cube->AddComponent<RigidBodyComponent>();
+		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 
-		auto cubeColl = cube->AddComponent<ColliderComponent>();
+		auto cubeColl = player->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
-		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
-//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
+		//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
+		//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
 
-		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>();
+		auto cubeCollEX = player->AddComponent<TestExtrusionComponent>();
 
 		CubeMesh cubeMesh;	// 四角形のメッシュ
-		auto cubeRe = cube->AddComponent<Render3DComponent>();
+		auto cubeRe = player->AddComponent<Render3DComponent>();
 		cubeRe->SetMesh(cubeMesh);
 		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe->SetTexture("assets/texture/NoTexture.png");
 
 		CubeMesh cubeMesh2;
-		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
+		auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
 		cubeRe2->SetMesh(cubeMesh2);
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
-		CubeMesh cubeMesh3;
-		auto cubeRe3 = cube->AddComponent<Render3DColliderOBBComponent>();
-		cubeRe3->SetMesh(cubeMesh3);
-		cubeRe3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		cubeRe3->SetTexture("assets/texture/NoTexture.png");
-		cubeRe3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
-
-	/*	auto child = GameObjectManager::AddChild("child", "Child");
-		cube->SetChild(child);
-		auto childTrans = child->AddComponent<TransformComponent>();
-		childTrans->SetLocalPosition({5.0f,0.0f,0.0f});
-		childTrans->SetLocalScale({ 1.0f, 1.0f, 1.0f });
-		childTrans->SetLocalRotation({ 0.0f, 0.0f, 45.0f });
-		childTrans->MakeChildWorld();
-
-		CubeMesh childMesh;
-		auto childRender = child->AddComponent<Render3DComponent>();
-		childRender->SetMesh(childMesh);
-		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		childRender->SetTexture("assets/texture/NoTexture.png");*/
-
-
 		/*	CubeMesh cubeMesh3;
-			auto sword = GameObjectManager::AddObject("sword", "Cube");
-			auto swordTrans = sword->AddComponent<TransformComponent>();
-			swordTrans->SetScale({ 10.0f, 20.0f, 10.0f });
-			swordTrans->SetPosition({ 28.0f, 10.0f, 10.0f });
-			auto swordColl = sword->AddComponent<ColliderComponent>();
-			swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+			auto cubeRe3 = player->AddComponent<Render3DColliderOBBComponent>();
+			cubeRe3->SetMesh(cubeMesh3);
+			cubeRe3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			cubeRe3->SetTexture("assets/texture/NoTexture.png");
+			cubeRe3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
 
-			sword->AddComponent<AttackComponent>();
+			/*auto child = GameObjectManager::AddChild("child", "Child");
+			child->SetChild(child);
 
-			auto fighter = sword->AddComponent<FighterComponent>();
-			fighter->SetHp(100);
-			fighter->SetAtk(10);
+			auto childTrans = child->AddComponent<TransformComponent>();
+			childTrans->SetLocalPosition({5.0f,0.0f,0.0f});
+			childTrans->SetLocalScale({ 1.0f, 1.0f, 1.0f });
+			childTrans->SetLocalRotation({ 0.0f, 0.0f, 45.0f });
+			childTrans->MakeChildWorld();
 
-			sword->AddComponent<EnemyDamageComponent>();
+			CubeMesh childMesh;
+			auto childRender = child->AddComponent<Render3DComponent>();
+			childRender->SetMesh(childMesh);
+			childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			childRender->SetTexture("assets/texture/NoTexture.png");*/
 
-			auto swordRe2 = sword->AddComponent<Render3DColliderAABBComponent>();
-			swordRe2->SetMesh(cubeMesh3);
-			swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-			swordRe2->SetTexture("assets/texture/NoTexture.png");
-			swordRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));*/
 
+		CubeMesh cubeMeshSword;
+		CubeMesh cubeMeshSword2;
+		auto sword = GameObjectManager::AddChild("sword", "Cube");
+
+		player->SetChild(sword);
+
+		auto swordTrans = sword->AddComponent<TransformComponent>();
+		swordTrans->SetLocalScale({ 1.5f, 0.5f, 1.0f });
+		swordTrans->SetLocalPosition({ 3.0f, 2.0f, 0.0f });
+		swordTrans->SetLocalRotation({ 0.0f, 0.0f, 30.0f });
+		swordTrans->MakeChildWorld();
+
+		auto swordColl = sword->AddComponent<ColliderComponent>();
+		swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+		swordColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+
+		auto swordAttack = sword->AddComponent<AttackComponent>();
+		swordAttack->SetCoolDownTime(1.0f);
+
+		auto fighter = sword->AddComponent<FighterComponent>();
+		fighter->SetHp(100);
+		fighter->SetAtk(10);
+
+		sword->AddComponent<EnemyDamageComponent>();
+
+		auto swordRe = sword->AddComponent<Render3DComponent>();
+		swordRe->SetMesh(cubeMeshSword);
+		swordRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		swordRe->SetTexture("assets/texture/NoTexture.png");
+
+		auto swordRe2 = sword->AddComponent<Render3DColliderOBBComponent>();
+		swordRe2->SetMesh(cubeMeshSword2);
+		swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		swordRe2->SetTexture("assets/texture/NoTexture.png");
+		swordRe2->SetColor(DirectX::XMFLOAT4(0.5f, 1.0f, 0.5f, 0.5f));
 	}
 
 	{
@@ -162,7 +177,7 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));
 	}
 
-	/*{
+	{
 		auto cube = GameObjectManager::AddObject("Enemy", "Enemy");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
@@ -188,7 +203,7 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 0.5f));
-	}*/
+	}
 
 	{
 		auto target1 = GameObjectManager::AddObject("target1", "Target");

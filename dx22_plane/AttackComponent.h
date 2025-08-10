@@ -1,11 +1,14 @@
 #pragma once
 #include "Component.h"
+#include <unordered_map>
+
 class AttackComponent : public Component
 {
 protected:
 
 private:
-	unsigned int attackTime = 0;
+	float m_coolDownTime = 0.0f;
+	std::unordered_map<GameObject*, float> m_attackObjs;
 
 public:
 	AttackComponent(GameObject& obj);
@@ -13,5 +16,6 @@ public:
 
 	void Update() override;
 	void Attack(GameObject& obj); // UŒ‚ˆ—‚ğs‚¤ŠÖ”i‰¼À‘•j
-	inline void SetAttackTime(const int time) { attackTime = time; };
+	inline void SetCoolDownTime(const float time) { m_coolDownTime = time; };
+	inline void ClearAttackObjs() { m_attackObjs.clear(); };
 };

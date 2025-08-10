@@ -19,9 +19,17 @@ void ColliderComponent::Update()
 	auto scale = transform->GetScale();
 	auto rot = transform->GetRotation();
 
+	auto childRot = transform->GetLocalRotation();
+
 	SetColliderSize_AABB(pos, scale);
 
-	SetColliderSize_OBB(pos, scale, rot);
+	// 親がいる場合はローカル回転を使用
+	if(p_object->GetParent() != nullptr) {
+		SetColliderSize_OBB(pos, scale, childRot);
+	}
+	else {
+		SetColliderSize_OBB(pos, scale, rot);
+	}
 
 	MakeWorldAABBMatrix();
 	MakeWorldOBBMatrix();
