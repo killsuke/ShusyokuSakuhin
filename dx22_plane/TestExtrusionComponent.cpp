@@ -44,6 +44,13 @@ void TestExtrusionComponent::Update() {
 
 	coll->Update();
 
+	//if (coll->CheckHit_AABBAndOBB_IsTrigger3D(collObj2->GetColliderSize_AABB(), coll->GetColliderSize_OBB())) {
+	//	std::cout << "AABB‚ÆOBB‚ªÕ“Ë‚µ‚Ü‚µ‚½" << std::endl;
+	//}
+	//else {
+	//	std::cout << "AABB‚ÆOBB‚ÍÕ“Ë‚µ‚Ä‚¢‚Ü‚¹‚ñ" << std::endl;
+	//}
+
 	DirectX::SimpleMath::Vector3 hitNormal1 = {};
 	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal1)) {
 		if (hitNormal1 != DirectX::SimpleMath::Vector3::Zero) {
@@ -73,4 +80,6 @@ void TestExtrusionComponent::Update() {
 			}
 		}
 	}
+
+
 }

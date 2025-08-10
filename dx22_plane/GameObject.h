@@ -39,6 +39,7 @@ public:
 	inline std::string& GetTag() { return tag; };
 	inline std::string& GetName() { return name; };
 	inline GameObject* GetParent() { return parent; };
+	inline std::vector<GameObject*>& GetChildren() { return children; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();

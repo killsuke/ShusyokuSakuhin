@@ -18,7 +18,7 @@ void Render3DColliderAABBComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = colliderAABB->GetWorldAABBMatrix();
+		cb.matrixWorld = colliderAABB->GetWorldAABBMatrix().Transpose();
 
 		cb.color = DirectX::XMFLOAT4(m_Color);
 

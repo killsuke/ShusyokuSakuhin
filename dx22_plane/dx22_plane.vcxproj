@@ -197,6 +197,7 @@
     <ClCompile Include="Render2D.cpp" />
     <ClCompile Include="Render3D.cpp" />
     <ClCompile Include="Render3DColliderAABBComponent.cpp" />
+    <ClCompile Include="Render3DColliderOBBComponent.cpp" />
     <ClCompile Include="RenderBillboard.cpp" />
     <ClCompile Include="RenderMask3D.cpp" />
     <ClCompile Include="RenderOneSkinAnimation.cpp" />
@@ -297,6 +298,7 @@
     <ClInclude Include="Render2D.h" />
     <ClInclude Include="Render3D.h" />
     <ClInclude Include="Render3DColliderAABBComponent.h" />
+    <ClInclude Include="Render3DColliderOBBComponent.h" />
     <ClInclude Include="RenderBillboard.h" />
     <ClInclude Include="RenderElement.h" />
     <ClInclude Include="RenderMask3D.h" />

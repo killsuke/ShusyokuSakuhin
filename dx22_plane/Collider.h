@@ -84,6 +84,9 @@ struct OBB {
 	DirectX::SimpleMath::Vector3 offsetCenter = {};
 	DirectX::SimpleMath::Vector3 offsetSize = {};
 	DirectX::SimpleMath::Vector3 offsetRotation = {};
+	DirectX::SimpleMath::Vector3 axisX = {};
+	DirectX::SimpleMath::Vector3 axisY = {};
+	DirectX::SimpleMath::Vector3 axisZ = {};
 
 	DirectX::SimpleMath::Matrix worldOBBMatrix = {}; // ワールド行列
 };
@@ -165,11 +168,20 @@ public:
 	bool CheckHit_SphereAndCube_NoTrigger2D(const Sphere& p1, const AABB& p2, DirectX::XMFLOAT3& pos);
 	bool CheckHit_SphereAndCube_NoTrigger3D(const Sphere& p1, const AABB& p2, DirectX::XMFLOAT3& pos);
 
+	// AABB と OBB の当たり判定
+	bool CheckHit_AABBAndOBB_IsTrigger3D(const AABB& aabb, const OBB& obb);
+
 	// 立方体どうしの当たり判定（調べるだけ）
 	bool CubeAndCubeCheck_OBB(const OBB& col1, const OBB& col2);
 
 	// 立方体どうしの当たり判定（めり込みを直す）
 	bool CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2);
+
+	bool CompareLengthOBBvsAABB(
+		const OBB& obb,
+		const AABB& aabb,
+		const DirectX::SimpleMath::Vector3& axis,
+		const DirectX::SimpleMath::Vector3& vecDistance);
 
 	// どの１面が当たっているのか判定
 	//AABB& DetectCollisionFace(const AABB& a, const AABB& b);
@@ -198,13 +210,13 @@ public:
 	inline void SetColliderSize_OBB(const DirectX::SimpleMath::Vector3& pos,
 		const DirectX::SimpleMath::Vector3& size, const DirectX::SimpleMath::Vector3& angle) {
 		
-		DirectX::SimpleMath::Vector3 offsetCenter = { pos.x + coll_ab.offsetCenter.x,
-							 pos.y + coll_ab.offsetCenter.y,
-							 pos.z + coll_ab.offsetCenter.z };
+		DirectX::SimpleMath::Vector3 offsetCenter = { pos.x + coll_ob.offsetCenter.x,
+							 pos.y + coll_ob.offsetCenter.y,
+							 pos.z + coll_ob.offsetCenter.z };
 
-		DirectX::SimpleMath::Vector3 offsetSize = { size.x + coll_ab.offsetSize.x,
-									 size.y + coll_ab.offsetSize.y,
-									 size.z + coll_ab.offsetSize.z };
+		DirectX::SimpleMath::Vector3 offsetSize = { size.x + coll_ob.offsetSize.x,
+									 size.y + coll_ob.offsetSize.y,
+									 size.z + coll_ob.offsetSize.z };
 
 		DirectX::SimpleMath::Vector3 offsetRotation = { angle.x + coll_ob.offsetRotation.x,
 									 angle.y + coll_ob.offsetRotation.y,
@@ -224,6 +236,12 @@ public:
 		coll_ob.rotation.x = offsetRotation.x;
 		coll_ob.rotation.y = offsetRotation.y;
 		coll_ob.rotation.z = offsetRotation.z;
+
+		// 軸
+		DirectX::SimpleMath::Matrix mtx = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(coll_ob.rotation.y, coll_ob.rotation.x, coll_ob.rotation.z);
+		coll_ob.axisX = DirectX::SimpleMath::Vector3(mtx._11, mtx._12, mtx._13);
+		coll_ob.axisY = DirectX::SimpleMath::Vector3(mtx._21, mtx._22, mtx._23);
+		coll_ob.axisZ = DirectX::SimpleMath::Vector3(mtx._31, mtx._32, mtx._33);
 	};
 
 	inline void SetColliderSize_AABB(const DirectX::SimpleMath::Vector3& pos,

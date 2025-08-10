@@ -58,4 +58,8 @@ public:
 
 	DirectX::SimpleMath::Matrix MakeWorldMatrix();
 	DirectX::SimpleMath::Matrix MakeLocalMatrix();
+
+	void MakeChildWorld();
+
+	DirectX::SimpleMath::Vector3 QuaternionToEulerRad(const DirectX::SimpleMath::Quaternion& q);
 };

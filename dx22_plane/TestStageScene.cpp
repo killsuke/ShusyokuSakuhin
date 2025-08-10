@@ -8,6 +8,7 @@
 #include "SphereMesh.h"
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
+#include "Render3DColliderOBBComponent.h"
 #include "Collider.h"
 #include "TestMoveComponent.h"
 #include "TestExtrusionComponent.h"
@@ -48,6 +49,8 @@ TestStageScene::TestStageScene() {
 
 		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
+//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
 
 		auto cubeCollEX = cube->AddComponent<TestExtrusionComponent>();
 
@@ -64,17 +67,26 @@ TestStageScene::TestStageScene() {
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
-		auto child = GameObjectManager::AddChild("child", "Child");
+		CubeMesh cubeMesh3;
+		auto cubeRe3 = cube->AddComponent<Render3DColliderOBBComponent>();
+		cubeRe3->SetMesh(cubeMesh3);
+		cubeRe3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe3->SetTexture("assets/texture/NoTexture.png");
+		cubeRe3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
+
+	/*	auto child = GameObjectManager::AddChild("child", "Child");
 		cube->SetChild(child);
 		auto childTrans = child->AddComponent<TransformComponent>();
 		childTrans->SetLocalPosition({5.0f,0.0f,0.0f});
 		childTrans->SetLocalScale({ 1.0f, 1.0f, 1.0f });
 		childTrans->SetLocalRotation({ 0.0f, 0.0f, 45.0f });
+		childTrans->MakeChildWorld();
+
 		CubeMesh childMesh;
 		auto childRender = child->AddComponent<Render3DComponent>();
 		childRender->SetMesh(childMesh);
 		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		childRender->SetTexture("assets/texture/NoTexture.png");
+		childRender->SetTexture("assets/texture/NoTexture.png");*/
 
 
 		/*	CubeMesh cubeMesh3;
@@ -134,6 +146,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
 		CubeMesh cubeMesh;
 		auto cubeRe = cube->AddComponent<Render3DComponent>();

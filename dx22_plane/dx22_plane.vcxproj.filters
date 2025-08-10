@@ -255,6 +255,9 @@
     <ClCompile Include="RenderMask3D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Render3DColliderOBBComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -513,6 +516,9 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="RenderMask3D.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Render3DColliderOBBComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

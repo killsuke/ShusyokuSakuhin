@@ -17,15 +17,19 @@ void ColliderComponent::Update()
 
 	auto pos = transform->GetPosition();
 	auto scale = transform->GetScale();
+	auto rot = transform->GetRotation();
 
 	SetColliderSize_AABB(pos, scale);
 
+	SetColliderSize_OBB(pos, scale, rot);
+
 	MakeWorldAABBMatrix();
+	MakeWorldOBBMatrix();
 }
 
 void ColliderComponent::MakeWorldAABBMatrix() {
-	DirectX::SimpleMath::Vector3 outCenter = {};
-	DirectX::SimpleMath::Vector3 outSize = {};
+	Vector3 outCenter = {};
+	Vector3 outSize = {};
 
 	outCenter.x = (coll_ab.min.x + coll_ab.max.x) * 0.5f;
 	outCenter.y = (coll_ab.min.y + coll_ab.max.y) * 0.5f;
@@ -36,35 +40,36 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
 
 	// クォータニオン作成
-	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, 0.0f);
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, 0.0f);
 
 	// SRT情報作成
-	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
-	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(outSize);
-	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(outCenter);
+	Matrix r = Matrix::CreateFromQuaternion(q);
+	Matrix s = Matrix::CreateScale(outSize);
+	Matrix t = Matrix::CreateTranslation(outCenter);
 
 	// ワールド行列を作成し、保存
 	coll_ab.worldAABBMatrix = s * r * t;
-	coll_ab.worldAABBMatrix = coll_ab.worldAABBMatrix.Transpose(); // 行列を転置
+	//	coll_ab.worldAABBMatrix = coll_ab.worldAABBMatrix.Transpose(); // 行列を転置
 }
 
 void ColliderComponent::MakeWorldOBBMatrix() {
 
-	float PitchRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.x); // X軸回転
-	float YawRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.y);     // Y軸回転
-	float RollRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.z);   // Z軸回転
+	// ここについては協議の必要アリ
+	float PitchRadians = DirectX::XMConvertToRadians(coll_ob.rotation.x); // X軸回転
+	float YawRadians = DirectX::XMConvertToRadians(coll_ob.rotation.y);     // Y軸回転
+	float RollRadians = DirectX::XMConvertToRadians(coll_ob.rotation.z);   // Z軸回転
 
 	// クォータニオン作成
-	DirectX::SimpleMath::Quaternion q = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
 
 	// SRT情報作成
-	DirectX::SimpleMath::Matrix r = DirectX::SimpleMath::Matrix::CreateFromQuaternion(q);
-	DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(coll_ob.size);
-	DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(coll_ob.center);
+	Matrix r = Matrix::CreateFromQuaternion(q);
+	Matrix s = Matrix::CreateScale(coll_ob.size);
+	Matrix t = Matrix::CreateTranslation(coll_ob.center);
 
 	// ワールド行列を作成し、保存
 	coll_ob.worldOBBMatrix = s * r * t;
-	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
+	//	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
 }
 
 //==================================
@@ -481,7 +486,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const A
 // どこから当たっているのか含む
 // 戻しナシ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal) {
+bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, Vector3& hitNormal) {
 	AABB coll1 = p1.coll_ab;
 	AABB coll2 = p2.coll_ab;
 
@@ -553,7 +558,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 // どこから当たっているのか含む
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, Vector3& hitNormal) {
 	AABB coll1 = p1.coll_ab;
 	AABB coll2 = p2.coll_ab;
 
@@ -563,22 +568,20 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	// 当たって押し出されるのはX軸とY軸みたいな
 	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
 
-	//hitNormal = { 0.0f,0.0f,0.0f };
-
 	if (check == true) {
 
-		auto returnDir = DirectX::SimpleMath::Vector3::Zero;
+		auto returnDir = Vector3::Zero;
 		auto it = touchObjects.find(p1.p_object);
 		if (it != touchObjects.end()) {
 
-			if (it->second != DirectX::SimpleMath::Vector3::Zero) {
+			if (it->second != Vector3::Zero) {
 				hitNormal = it->second;
 				returnDir = hitNormal;
 			}
 		}
 
 		// 最終的のオブジェクトを押し戻すためのベクトル
-		DirectX::SimpleMath::Vector3 pushBack(0.0f, 0.0f, 0.0f);
+		Vector3 pushBack(0.0f, 0.0f, 0.0f);
 
 		// X軸での「めり込み量」を計算
 		float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
@@ -609,7 +612,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		// Z軸は完全に無視（2.5Dのため）
 		pushBack.z = 0.0f;
 
-		if (returnDir == DirectX::SimpleMath::Vector3::Zero) {
+		if (returnDir == Vector3::Zero) {
 
 			// X軸とY軸のうち、より「めり込みが少ない」軸でのみ押し戻す
 			// →壁にぶつかったとき、斜めではなく「垂直な方向」だけで修正されるようにするため
@@ -632,19 +635,19 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 			if (hitNormal.x != 0.0f) {
 				pushBack.y = 0.0f;	// 横方向で押し戻す
 			}
-			else if(hitNormal.y != 0.0f) {
+			else if (hitNormal.y != 0.0f) {
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
 			}
 		}
 
 		// 挿入
-		touchObjects.insert({p1.p_object,hitNormal});
+		touchObjects.insert({ p1.p_object,hitNormal });
 		touchObjects[p1.p_object] = hitNormal;
 
 		// 位置補正をして、SRT情報を再計算
 		auto transform = p_object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
-//		transform->MakeWorldMatrix();
+		//		transform->MakeWorldMatrix();
 
 		auto pos = transform->GetPosition();
 		auto size = transform->GetScale();
@@ -655,7 +658,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		// 存在確認をして、second情報をリセット上書き
 		auto it = touchObjects.find(p1.p_object);
 		if (it != touchObjects.end()) {
-			it->second = DirectX::SimpleMath::Vector3::Zero;
+			it->second = Vector3::Zero;
 		}
 	}
 
@@ -981,6 +984,80 @@ bool ColliderComponent::CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2) {
 
 	// 衝突判定
 	return obb1.Intersects(obb2);
+}
+
+bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const AABB& aabb, const OBB& obb) {
+
+	auto AABBCenter = (aabb.max + aabb.min) * 0.5f;
+	auto OBBCenter = obb.center;
+
+	Vector3 vecDistance = AABBCenter - OBBCenter;
+
+	const Vector3* obbAxes[3] = { &obb.axisX, &obb.axisY, &obb.axisZ };
+	const Vector3 aabbAxes[3] = { Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1) };
+
+	// OBBの3軸
+	for (int i = 0; i < 3; i++) {
+		if (!CompareLengthOBBvsAABB(obb, aabb, *obbAxes[i], vecDistance)) return false;
+	}
+
+	// AABBの3軸
+	for (int i = 0; i < 3; i++) {
+		if (!CompareLengthOBBvsAABB(obb, aabb, aabbAxes[i], vecDistance)) return false;
+	}
+
+	// 外積9本
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			Vector3 axis = obbAxes[i]->Cross(aabbAxes[j]);
+			float lengthSq = axis.x * axis.x + axis.y * axis.y + axis.z * axis.z;
+			if (lengthSq < 1e-6f) continue; // 平行なら無視
+			axis.Normalize();
+			if (!CompareLengthOBBvsAABB(obb, aabb, axis, vecDistance)) return false;
+		}
+	}
+
+	return true;
+}
+
+bool ColliderComponent::CompareLengthOBBvsAABB(
+	const OBB& obb,
+	const AABB& aabb,
+	const Vector3& axis,
+	const Vector3& vecDistance)
+{
+	// 軸がほぼゼロベクトルなら比較不要
+	if (axis.LengthSquared() < 1e-6f)
+		return true;
+
+	Vector3 axisN = axis; // コピー
+	axisN.Normalize();
+
+	// OBBの半径（各軸方向の投影長を合計）
+	float rOBB =
+		fabsf(obb.size.x  * axisN.Dot(obb.axisX)) +
+		fabsf(obb.size.y  * axisN.Dot(obb.axisY)) +
+		fabsf(obb.size.z  * axisN.Dot(obb.axisZ));
+
+	// AABBの半径（軸はワールド固定X,Y,Z）
+	Vector3 aabbAxisX(1, 0, 0);
+	Vector3 aabbAxisY(0, 1, 0);
+	Vector3 aabbAxisZ(0, 0, 1);
+
+	float extX = (aabb.max.x - aabb.min.x) * 0.5f;
+	float extY = (aabb.max.y - aabb.min.y) * 0.5f;
+	float extZ = (aabb.max.z - aabb.min.z) * 0.5f;
+
+	float rAABB =
+		fabsf(extX * axisN.Dot(aabbAxisX)) +
+		fabsf(extY * axisN.Dot(aabbAxisY)) +
+		fabsf(extZ * axisN.Dot(aabbAxisZ));
+
+	// 中心間距離を投影
+	float dist = fabsf(axisN.Dot(vecDistance));
+
+	// 分離軸判定
+	return dist <= (rOBB + rAABB);
 }
 
 
