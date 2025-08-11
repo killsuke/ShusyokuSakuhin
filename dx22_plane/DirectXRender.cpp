@@ -9,6 +9,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <string.h>
+#include "HPParam.h"
 
 
 D3D_FEATURE_LEVEL      m_FeatureLevel;
@@ -46,6 +47,9 @@ ID3D11Buffer* g_pConstantBuffer;
 // ボーン用の定数バッファ構造体
 ID3D11Buffer* g_pBoneConstantBuffer;
 
+// ＨＰバー用の定数バッファ構造体
+ID3D11Buffer* g_pHPBarConstantBuffer;
+
 // ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
@@ -79,6 +83,7 @@ HRESULT DirectXRender::Init() {
 	SamplerCreate();
 	ConstantBufferCreate();
 	BoneConstantBufferCreate();
+	HPBarConstantBufferCreate();
 
 	SetBlendState(1);
 
@@ -147,6 +152,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pSampler);
 	SAFE_RELEASE(g_pConstantBuffer);
 	SAFE_RELEASE(g_pBoneConstantBuffer);
+	SAFE_RELEASE(g_pHPBarConstantBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
 			SAFE_RELEASE(g_BlendState[i]);
@@ -189,6 +195,8 @@ void DirectXRender::DrawBegin() {
 
 	// 定数バッファを頂点シェーダーにセットする
 	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
+
+	m_DeviceContext->VSSetConstantBuffers(9, 1, &g_pHPBarConstantBuffer);
 }
 
 //=======================================
@@ -426,6 +434,28 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 //	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	return hr;
+}
+
+// 定数バッファ作成
+HRESULT DirectXRender::HPBarConstantBufferCreate() {// コンスタントバッファサイズ
+	HRESULT hr;
+
+	// ボーン用の定数バッファ作成
+	D3D11_BUFFER_DESC bd;
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.ByteWidth = sizeof(HPParam);									// バッファの大き
+	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
+	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+
+	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pHPBarConstantBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;

@@ -21,6 +21,7 @@ enum ComponentType {
 	ENEMY_DAMAGE, // 敵のダメージコンポーネント
 	FIGHTER,
 	GO_AROUND,
+	HP_BAR_MOVE,
 	TRANSFORM,
 	RENDER,
 	RENDER_ONE_SKIN_ANIMATION,

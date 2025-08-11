@@ -188,6 +188,7 @@
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GoAroundComponent.cpp" />
+    <ClCompile Include="HPBarMoveComponent.cpp" />
     <ClCompile Include="InchWorm_Test.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
@@ -287,6 +288,8 @@
     </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GoAroundComponent.h" />
+    <ClInclude Include="HPBarMoveComponent.h" />
+    <ClInclude Include="HPParam.h" />
     <ClInclude Include="InchWorm_Test.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />

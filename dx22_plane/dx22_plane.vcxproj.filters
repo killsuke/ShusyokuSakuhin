@@ -261,6 +261,9 @@
     <ClCompile Include="GoAroundComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="HPBarMoveComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -525,6 +528,12 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="GoAroundComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HPParam.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="HPBarMoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

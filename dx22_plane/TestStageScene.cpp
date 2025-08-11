@@ -21,6 +21,7 @@
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
 #include "GoAroundComponent.h"
+#include "HPBarMoveComponent.h"
 #include "Spring.h"
 
 TestStageScene::TestStageScene() {
@@ -54,6 +55,11 @@ TestStageScene::TestStageScene() {
 		//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
 
 		auto cubeCollEX = player->AddComponent<TestExtrusionComponent>();
+
+		auto fighterPlayer = player->AddComponent<FighterComponent>();
+		fighterPlayer->SetHp(50);
+		fighterPlayer->SetMaxHp(50);
+		fighterPlayer->SetAtk(10);
 
 		CubeMesh cubeMesh;	// 四角形のメッシュ
 		auto cubeRe = player->AddComponent<Render3DComponent>();
@@ -281,10 +287,10 @@ TestStageScene::TestStageScene() {
 
 	// UIの設定
 	{
-		auto hpUnderlay = GameObjectManager::AddUI("hpUI", "HP_UI");
+		auto hpUnderlay = GameObjectManager::AddUI("hpUI_Back", "HP_UI");
 		auto hpUnderlayTrans = hpUnderlay->AddComponent<TransformComponent>();
-		hpUnderlayTrans->SetPosition({ -570.0f, 100.0f, 10.0f });
-		hpUnderlayTrans->SetScale({ 60.0f, 240.0f, 1.0f });
+		hpUnderlayTrans->SetPosition({ -570.0f, 195.0f, 10.0f });
+		hpUnderlayTrans->SetScale({ 40.0f, 145.0f, 1.0f });
 
 		SquareMesh squareMeshhpUnderlay;
 		auto hpUnderlayRender = hpUnderlay->AddComponent<Render3DComponent>();
@@ -295,16 +301,19 @@ TestStageScene::TestStageScene() {
 
 		auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
 		auto hpTrans = hp->AddComponent<TransformComponent>();
-		hpTrans->SetPosition({ -570.0f, 100.0f, 0.0f });
-		hpTrans->SetScale({ 50.0f, 220.0f, 1.0f });
+		hpTrans->SetPosition({ -570.0f, 70.0f, 0.0f });
+		hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
+
+		auto hpBar = hp->AddComponent<HPBarMoveComponent>();
+		auto player = GameObjectManager::GameObjectFindName("Player");
+		hpBar->SetReferenceHPObj(*player);
 
 		SquareMesh squareMesh;
 		auto hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->SetMesh(squareMesh);
 		hpRender->SetShader("OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
 		hpRender->SetTexture("assets/texture/NoTexture.png");
-		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-
+		hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	}
 

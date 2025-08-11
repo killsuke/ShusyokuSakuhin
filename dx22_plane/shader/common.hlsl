@@ -116,3 +116,10 @@ cbuffer ConstantBufferBoneComb : register(b8)
 	
     matrix bonecombmtx[2]; // ボーンコンビネーション行列
 };
+
+cbuffer UIParam : register(b9)
+{
+    float currentHP;
+    float hpScale;
+    float2 padding; // 必要なら
+};

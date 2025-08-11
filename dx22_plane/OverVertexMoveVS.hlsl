@@ -7,11 +7,11 @@ VS_OUTPUT vs_main(in VS_IN input)
     float4 newPos = float4(input.pos.xyz, 1.0f); // OK
     
     // 上側の頂点だけ動かす（ＵＶのＶの値が０の頂点）
-    if(input.tex.y == 0.0f)
+    if (input.tex.y == 0.0f)
     {
-        // 上側の頂点を上に移動
-        newPos.y += 0.1f; // ここで移動量を調整
+        newPos.y += currentHP * hpScale; // HPの数だけ長くする
     }
+
     
     float4 worldPos = mul(float4(newPos.xyz, 1.0f), matrixWorld);
     float4 viewPos = mul(worldPos, View2D);

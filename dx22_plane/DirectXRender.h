@@ -25,6 +25,7 @@ enum EBlendState {
 
 extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11Buffer* g_pBoneConstantBuffer;
+extern ID3D11Buffer* g_pHPBarConstantBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 // 定数バッファ用構造体
@@ -59,6 +60,7 @@ private:
 	static HRESULT SamplerCreate();
 	static HRESULT ConstantBufferCreate();
 	static HRESULT BoneConstantBufferCreate();
+	static HRESULT HPBarConstantBufferCreate();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);

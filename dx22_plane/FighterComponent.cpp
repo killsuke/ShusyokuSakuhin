@@ -18,7 +18,7 @@ void FighterComponent::Update() {
 	if(m_hp <= 0) {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする
 
-		p_object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+//		p_object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 
 }
