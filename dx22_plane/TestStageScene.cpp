@@ -279,6 +279,34 @@ TestStageScene::TestStageScene() {
 
 	}
 
+	// UI‚ÌÝ’è
+	{
+		auto hpUnderlay = GameObjectManager::AddUI("hpUI", "HP_UI");
+		auto hpUnderlayTrans = hpUnderlay->AddComponent<TransformComponent>();
+		hpUnderlayTrans->SetPosition({ -570.0f, 100.0f, 10.0f });
+		hpUnderlayTrans->SetScale({ 60.0f, 240.0f, 1.0f });
+
+		SquareMesh squareMeshhpUnderlay;
+		auto hpUnderlayRender = hpUnderlay->AddComponent<Render3DComponent>();
+		hpUnderlayRender->SetMesh(squareMeshhpUnderlay);
+		hpUnderlayRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpUnderlayRender->SetTexture("assets/texture/NoTexture.png");
+		hpUnderlayRender->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+
+		auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
+		auto hpTrans = hp->AddComponent<TransformComponent>();
+		hpTrans->SetPosition({ -570.0f, 100.0f, 0.0f });
+		hpTrans->SetScale({ 50.0f, 220.0f, 1.0f });
+
+		SquareMesh squareMesh;
+		auto hpRender = hp->AddComponent<Render3DComponent>();
+		hpRender->SetMesh(squareMesh);
+		hpRender->SetShader("OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->SetTexture("assets/texture/NoTexture.png");
+		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+
+
+	}
 
 }
 
