@@ -264,6 +264,15 @@
     <ClCompile Include="HPBarMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainManagerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StageRoadCSVComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadStageScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -535,6 +544,18 @@
     </ClInclude>
     <ClInclude Include="HPBarMoveComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainManagerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StageRoadCSVComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadStageScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CSV_Data.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

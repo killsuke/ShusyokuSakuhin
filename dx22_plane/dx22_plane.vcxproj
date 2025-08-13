@@ -175,6 +175,9 @@
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="RoadStageScene.cpp" />
+    <ClCompile Include="StageRoadCSVComponent.cpp" />
+    <ClCompile Include="TerrainManagerComponent.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="DebugCout.cpp" />
     <ClCompile Include="DirectXRender.cpp" />
@@ -275,6 +278,10 @@
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CSV_Data.h" />
+    <ClInclude Include="RoadStageScene.h" />
+    <ClInclude Include="StageRoadCSVComponent.h" />
+    <ClInclude Include="TerrainManagerComponent.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="DebugCout.h" />
     <ClInclude Include="DirectXRender.h" />
