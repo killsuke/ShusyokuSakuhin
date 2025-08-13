@@ -3,7 +3,6 @@
 #include "GameObjectManager.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
-#include "Input.h"
 #include "iostream"
 
 TestExtrusionComponent::TestExtrusionComponent(GameObject& obj) :Component(obj) {
@@ -12,37 +11,13 @@ TestExtrusionComponent::TestExtrusionComponent(GameObject& obj) :Component(obj) 
 
 // 更新処理
 void TestExtrusionComponent::Update() {
-	bool isPressed = false;
-	bool isTrigger = false;
-
-	if (Input::GetKeyTrigger(VK_I) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
-		isTrigger = true;
-	}
-
-	if (Input::GetKeyPress(VK_I) == true || Input::GetButtonPress(XINPUT_A) == true) {
-		isPressed = true;
-	}
-
 	auto coll = p_object->GetComponent<ColliderComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 	auto jump = p_object->GetComponent<JumpComponent>();
 
-	auto obj = GameObjectManager::GameObjectFindName("cube2");
-	auto obj2 = GameObjectManager::GameObjectFindName("cube3");
-	auto collObj = obj->GetComponent<ColliderComponent>();
-	auto collObj2 = obj2->GetComponent<ColliderComponent>();
-
-	if (coll == nullptr || rigid == nullptr || obj == nullptr || obj2 == nullptr || collObj == nullptr || collObj2 == nullptr || jump == nullptr) {
-		return; // いずれかのコンポーネントが存在しない場合は処理を中断、このやり方はないかな
-	}
-
-	jump->JumpAction(isPressed, isGround, isTrigger);
+	auto terrains = GameObjectManager::GameObjectFindTag("Terrain");
 
 	isGround = false;
-
-	rigid->UseGravity(true, 120.0f, 12.0f);
-
-	coll->Update();
 
 	//if (coll->CheckHit_AABBAndOBB_IsTrigger3D(collObj2->GetColliderSize_AABB(), coll->GetColliderSize_OBB())) {
 	//	std::cout << "AABBとOBBが衝突しました" << std::endl;
@@ -51,35 +26,24 @@ void TestExtrusionComponent::Update() {
 	//	std::cout << "AABBとOBBは衝突していません" << std::endl;
 	//}
 
-	DirectX::SimpleMath::Vector3 hitNormal1 = {};
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj, *coll, hitNormal1)) {
-		if (hitNormal1 != DirectX::SimpleMath::Vector3::Zero) {
+	for(auto& terrain : terrains) {
+		auto terrainColl = terrain->GetComponent<ColliderComponent>();
+		if (terrainColl == nullptr) {
+			continue; // コライダーが存在しない場合はスキップ
+		}
 
-			if (hitNormal1.y < -0.5f) {	// 天井
-				rigid->UseGravity(false, 120.0f, 12.0f);
+		DirectX::SimpleMath::Vector3 hitNormal = {};
+		if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*terrainColl, *coll,hitNormal)) {
+			if (hitNormal.y < -0.5f) {	// 地面
+				rigid->UseGravity(false);
 				isGround = true;
 			}
-			else if (hitNormal1.y > 0.5f) {	// 地面
+			else if (hitNormal.y > 0.5f) {	// 天井
 			}
-			else if (abs(hitNormal1.x) > 0.5f) { // 左右の壁
+			else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
 			}
 		}
 	}
 
-	DirectX::SimpleMath::Vector3 hitNormal2 = {};
-	if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*collObj2, *coll, hitNormal2)) {
-		if (hitNormal2 != DirectX::SimpleMath::Vector3::Zero) {
-
-			if (hitNormal2.y < -0.5f) {	// 天井
-				rigid->UseGravity(false, 120.0f, 12.0f);
-				isGround = true;
-			}
-			else if (hitNormal2.y > 0.5f) {	// 地面
-			}
-			else if (abs(hitNormal2.x) > 0.5f) { // 左右の壁
-			}
-		}
-	}
-
-
+	jump->SetIsGround(isGround); // 地面にいるかどうかを設定
 }

@@ -10,6 +10,10 @@ RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,
 }
 
 void RigidBodyComponent::Update() {
+	if (m_gravityFlag == true) {
+		UseGravity(true);
+	}
+
 	auto transform = p_object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
@@ -117,15 +121,15 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 }
 
 // 自由落下
-float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFallMagnification,const float fallMagnification) {
+float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 
 	if (gravityFlag == true) {
 		auto transform = p_object->GetComponent<TransformComponent>();
 
-		m_totalForce.y = -GRAVITY * fallMagnification;	// 重力の加速度を設定
+		m_totalForce.y = -GRAVITY * m_fallMagnification;	// 重力の加速度を設定
 
 		if (m_beforeGravityFlag == false && gravityFlag == true) {
-			m_velocity.y += (-GRAVITY * firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
+			m_velocity.y += (-GRAVITY * m_firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
 		}
 
 		// 速度を加速度から更新
@@ -136,7 +140,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 			m_velocity.y = -GRAVITY_STOP;
 		}
 
-		DirectX::XMFLOAT3 pos = {};	// 現在の位置を取得
+		Vector3 pos = Vector3::Zero;	// 現在の位置を取得
 		// 位置を速度で更新
 		pos.y += m_velocity.y * m_deltaTime;	// ポジションを更新
 
@@ -156,20 +160,20 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag,const float firstFal
 
 // 摩擦
 void RigidBodyComponent::ApplyFriction_X() {
-	if (fallFlag == false) {
+	if (m_fallFlag == false) {
 		m_velocity.x -= m_velocity.x * FRICTION;
 	}
 }
 
 void RigidBodyComponent::ApplyFriction_Y() {
-	if (fallFlag == false) {
+	if (m_fallFlag == false) {
 		m_velocity.y -= m_velocity.y * FRICTION;
 	}
 }
 
 // 空気抵抗
 void RigidBodyComponent::ApplyAirRessistance() {
-	if (fallFlag == true) {
+	if (m_fallFlag == true) {
 		m_velocity.x -= m_velocity.x * AIRRESISTANCE;
 		m_velocity.y -= m_velocity.y * AIRRESISTANCE;
 	}

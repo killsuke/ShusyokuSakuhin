@@ -1,27 +1,43 @@
 #include "JumpComponent.h"
 #include "RigidBodyComponent.h"
+#include "input.h"
 #include <cmath>
 #include <iostream>
+
+using namespace DirectX::SimpleMath;
 
 JumpComponent::JumpComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = JUMP;
 }
 
 void JumpComponent::Update() {
+	bool isPressed = false;
+	bool isTrigger = false;
+
+	if (Input::GetKeyTrigger(VK_I) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
+		isTrigger = true;
+	}
+
+	if (Input::GetKeyPress(VK_I) == true || Input::GetButtonPress(XINPUT_A) == true) {
+		isPressed = true;
+	}
+
+	JumpAction(isPressed, isTrigger); // isGroundはfalseで初期化
 
 }
 
-void JumpComponent::JumpAction(bool isJumpButtonPressed, bool isGround, bool trigger)
+void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 
-	DirectX::XMFLOAT3 velocity = rigid->GetVelocity();
+	Vector3 velocity = rigid->GetVelocity();
 
 	// 地面接触
-	if (isGround) {
+	if (m_isGround) {
 		m_isJumping = false;
 		m_time = 0.0f;
 		m_firstSpeed = m_jumpPower;
+
 	}
 
 	// ジャンプ時間超過
@@ -30,14 +46,18 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool isGround, bool tri
 	}
 
 	//　ジャンプボタンが押されていて、ジャンプ中でなく、地面の上にいる場合、トリガーもとってさらに厳格に
-	if (!m_isJumping && isJumpButtonPressed && isGround && trigger == true) {
+	if (!m_isJumping && isJumpButtonPressed && m_isGround && trigger == true) {
 		m_isJumping = true;
 		m_time = 0.0f;
+		//std::cout << "Jumping" << std::endl;
+
 	}
 
 	// ジャンプ中の処理
 	if (m_isJumping) {
 		m_time += m_deltaTime;
+
+	//	std::cout << "Jumping" << std::endl;
 
 		if (isJumpButtonPressed == true && m_time < m_maxJumpTime && m_firstSpeed >= m_velocityIgnore) {
 						
@@ -46,7 +66,7 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool isGround, bool tri
 				m_firstSpeed = 0.0f;
 			}
 
-//			std::cout << m_firstSpeed << std::endl;
+			//std::cout << m_firstSpeed << std::endl;
 
 			// 速度更新
 			velocity.y += m_firstSpeed;

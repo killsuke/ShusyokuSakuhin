@@ -48,6 +48,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
+		cubeRigid->SetGravityFlag(true);
 
 		auto cubeColl = player->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
@@ -135,7 +136,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = GameObjectManager::AddObject("cube2", "Cube");
+		auto cube = GameObjectManager::AddObject("cube2", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 100.0f, 20.0f, 10.0f });
@@ -159,7 +160,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = GameObjectManager::AddObject("cube3", "Cube");
+		auto cube = GameObjectManager::AddObject("cube3", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 30.0f, 10.0f });

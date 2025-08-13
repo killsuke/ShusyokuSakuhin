@@ -28,10 +28,13 @@ private:
 	DirectX::SimpleMath::Vector3 m_totalForce{};              // 合力
 	float m_mass = 1.0f;				 // 質量
 	//	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
-	bool fallFlag = false;		 	 // 落下のフラグ 
-	bool timeFlag = false;			 // 落下タイミングのフラグ
-	const float m_deltaTime = 0.016f;		 // 前回の時間からの経過時間
+	bool m_fallFlag = false;		 	 // 落下のフラグ 
+	bool m_gravityFlag = false;			 // 重力を有効にするかどうかのフラグ
+	bool m_timeFlag = false;			 // 落下タイミングのフラグ
 	bool m_beforeGravityFlag = false;	 // 重力を有効にするかどうか
+	const float m_deltaTime = 0.016f;		 // 前回の時間からの経過時間
+	float m_firstFallMagnification = 120.0f; // 初回の落下倍率
+	float m_fallMagnification = 12.0f;	 // 落下倍率
 
 	std::chrono::high_resolution_clock::time_point startTime;	// 計測開始時間
 	std::chrono::high_resolution_clock::time_point lastTime;	// 最後の時間
@@ -64,13 +67,22 @@ public:
 	inline void SetMass(const float mass) { m_mass = mass; };
 	inline float GetMass()const { return m_mass; };
 
-	inline void SetFallFlag(const bool flag) { fallFlag = flag; };
-	inline bool GetFallFlag() const { return fallFlag; };
+	inline void SetFallFlag(const bool flag) { m_fallFlag = flag; };
+	inline bool GetFallFlag() const { return m_fallFlag; };
 
-	inline void SetTimeFlag(const bool flag) { timeFlag = flag; };
+	inline void SetTimeFlag(const bool flag) { m_timeFlag = flag; };
+
+	inline void SetGravityFlag(const bool flag) { m_gravityFlag = flag; }	// 重力を有効にするかどうかのフラグを設定
+	inline bool GetGravityFlag() const { return m_gravityFlag; }	// 重力を有効にするかどうかのフラグを取得
+
+	inline void SetFirstFallMagnification(const float magnification) { m_firstFallMagnification = magnification; }	// 初回の落下倍率を設定
+	inline float GetFirstFallMagnification() const { return m_firstFallMagnification; }	// 初回の落下倍率を取得
+
+	inline void SetFallMagnification(const float magnification) { m_fallMagnification = magnification; }	// 落下倍率を設定
+	inline float GetFallMagnification() const { return m_fallMagnification; }	// 落下倍率を取得
 
 	//	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
-	float UseGravity(const bool gravityFlag, const float firstFallMagnification, const float fallMagnification);		// 重力
+	float UseGravity(const bool gravityFlag);		// 重力
 	inline void AddForce(const DirectX::SimpleMath::Vector3& force) { m_totalForce += force; };
 	inline void ClearForce() { m_totalForce = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f); };	// 合力をクリア
 	inline DirectX::SimpleMath::Vector3 GetTotalForce() const { return m_totalForce; }	// 合力を返す
