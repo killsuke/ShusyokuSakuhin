@@ -24,7 +24,7 @@ void ColliderComponent::Update()
 	SetColliderSize_AABB(pos, scale);
 
 	// 親がいる場合はローカル回転を使用
-	if(p_object->GetParent() != nullptr) {
+	if (p_object->GetParent() != nullptr) {
 		SetColliderSize_OBB(pos, scale, childRot);
 	}
 	else {
@@ -628,15 +628,29 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 				pushBack.y = 0.0f;	// 横方向で押し戻す
 
 				// X方向に押し戻された → 壁
-				hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+
+				if (pushBack.x > 0.0f) {
+
+					hitNormal.x = -1.0f;
+				}
+				else if (pushBack.x < 0.0f) {
+					hitNormal.x = 1.0f;
+				}
 			}
 			else {
-				auto collsize = coll1.max.x - coll1.min.x;
+				//	auto collsize = coll1.max.x - coll1.min.x;
 
 				pushBack.x = 0.0f;	// 縦方向で押し戻す
 
 				// Y方向に押し戻された → 地面 or 天井
-				hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
+
+				if (pushBack.y > 0.0f) {
+
+					hitNormal.y = -1.0f;
+				}
+				else if(pushBack.y < 0.0f){
+					hitNormal.y = 1.0f;
+				}
 			}
 		}
 		else {
@@ -1043,9 +1057,9 @@ bool ColliderComponent::CompareLengthOBBvsAABB(
 
 	// OBBの半径（各軸方向の投影長を合計）
 	float rOBB =
-		fabsf(obb.size.x  * axisN.Dot(obb.axisX)) +
-		fabsf(obb.size.y  * axisN.Dot(obb.axisY)) +
-		fabsf(obb.size.z  * axisN.Dot(obb.axisZ));
+		fabsf(obb.size.x * axisN.Dot(obb.axisX)) +
+		fabsf(obb.size.y * axisN.Dot(obb.axisY)) +
+		fabsf(obb.size.z * axisN.Dot(obb.axisZ));
 
 	// AABBの半径（軸はワールド固定X,Y,Z）
 	Vector3 aabbAxisX(1, 0, 0);

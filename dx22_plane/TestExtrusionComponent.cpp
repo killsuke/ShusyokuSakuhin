@@ -39,8 +39,10 @@ void TestExtrusionComponent::Update() {
 				isGround = true;
 			}
 			else if (hitNormal.y > 0.5f) {	// 天井
+				std::cout << "天井" << std::endl;
 			}
 			else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
+				std::cout << "左右" << std::endl;
 			}
 		}
 	}

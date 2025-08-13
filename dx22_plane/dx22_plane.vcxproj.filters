@@ -273,6 +273,9 @@
     <ClCompile Include="RoadStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="TerrainJsonComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -555,6 +558,12 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CSV_Data.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainJsonComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectStatus.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

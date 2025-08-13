@@ -5,7 +5,7 @@
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
 #include "GameObjectManager.h"
-#include "SquareMesh.h"
+#include "CubeMesh.h"
 #include <string>
 
 TerrainManagerComponent::TerrainManagerComponent(GameObject& obj) : Component(obj) {
@@ -32,19 +32,19 @@ void TerrainManagerComponent::CreateTerrain() {
 		auto terrainObj = GameObjectManager::AddObject(name,"Terrain");
 		auto transform = terrainObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
-		transform->SetScale({ 5.0f,5.0f, 1.0f });
+		transform->SetScale({ 5.0f,5.0f, 5.0f });
 		auto collider = terrainObj->AddComponent<ColliderComponent>();
-		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));
 
-		SquareMesh squareMesh;
+		CubeMesh cubeMesh;
 		auto render = terrainObj->AddComponent<Render3DComponent>();
-		render->SetMesh(squareMesh);
+		render->SetMesh(cubeMesh);
 		render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		render->SetTexture("assets/texture/NoTexture.png");
 
-		SquareMesh squareMeshCollider;
+		CubeMesh cubeMeshCollider;
 		auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();
-		renderCollider->SetMesh(squareMeshCollider);
+		renderCollider->SetMesh(cubeMeshCollider);
 		renderCollider->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		renderCollider->SetTexture("assets/texture/NoTexture.png");
 		renderCollider->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f)); // ”¼“§–¾‚Ì—ÎF

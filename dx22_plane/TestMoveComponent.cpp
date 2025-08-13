@@ -42,24 +42,24 @@ void TestMoveComponent::Update() {
 		fighter->AddDamage(1);
 	}*/
 
-	auto hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
-	auto hpRend = hpUI->GetComponent<Render3DComponent>();
+	//auto hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
+	//auto hpRend = hpUI->GetComponent<Render3DComponent>();
 
-	auto maxHp = fighter->GetMaxHp();
-	auto hp = fighter->GetHp();
+	//auto maxHp = fighter->GetMaxHp();
+	//auto hp = fighter->GetHp();
 
-	// HPのカラー変更
-	if(hp == 0) {
-		hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)); // 透明
-	}
-	else if (hp < (maxHp * 0.3f)) {
-		hpRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)); // 赤色
-	}
-	else if (hp < (maxHp * 0.5f)) {
-		hpRend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)); // 黄色
-	}
-	else {
-		hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)); // 緑色
-	}
+	//// HPのカラー変更
+	//if(hp == 0) {
+	//	hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)); // 透明
+	//}
+	//else if (hp < (maxHp * 0.3f)) {
+	//	hpRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)); // 赤色
+	//}
+	//else if (hp < (maxHp * 0.5f)) {
+	//	hpRend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)); // 黄色
+	//}
+	//else {
+	//	hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)); // 緑色
+	//}
 
 }
