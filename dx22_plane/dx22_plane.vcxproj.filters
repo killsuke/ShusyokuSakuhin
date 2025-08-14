@@ -267,10 +267,10 @@
     <ClCompile Include="TerrainManagerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="StageRoadCSVComponent.cpp">
+    <ClCompile Include="StageLoadCSVComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="RoadStageScene.cpp">
+    <ClCompile Include="LoadStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="TerrainJsonComponent.cpp">
@@ -551,10 +551,10 @@
     <ClInclude Include="TerrainManagerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="StageRoadCSVComponent.h">
+    <ClInclude Include="StageLoadCSVComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="RoadStageScene.h">
+    <ClInclude Include="LoadStageScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CSV_Data.h">

@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\imgui\imgui\Include;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\imgui\imgui\Include;single_include\nlohmann;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\imgui\imgui\Lib\Debug;..\directxtk\lib\x64\Debug;..\assimp\assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <IncludePath>single_include\nlohmann;..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
     <LibraryPath>..\assimp\assimp\5.2.5\lib;..\directxtk\lib\x64\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -175,8 +175,8 @@
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="RoadStageScene.cpp" />
-    <ClCompile Include="StageRoadCSVComponent.cpp" />
+    <ClCompile Include="LoadStageScene.cpp" />
+    <ClCompile Include="StageLoadCSVComponent.cpp" />
     <ClCompile Include="TerrainJsonComponent.cpp" />
     <ClCompile Include="TerrainManagerComponent.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
@@ -281,8 +281,8 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="CSV_Data.h" />
     <ClInclude Include="ObjectStatus.h" />
-    <ClInclude Include="RoadStageScene.h" />
-    <ClInclude Include="StageRoadCSVComponent.h" />
+    <ClInclude Include="LoadStageScene.h" />
+    <ClInclude Include="StageLoadCSVComponent.h" />
     <ClInclude Include="TerrainJsonComponent.h" />
     <ClInclude Include="TerrainManagerComponent.h" />
     <ClInclude Include="CubeMesh.h" />

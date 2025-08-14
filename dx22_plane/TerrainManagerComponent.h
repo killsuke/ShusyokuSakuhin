@@ -6,7 +6,9 @@
 #pragma once
 #include "Component.h"
 #include "CSV_Data.h"
+#include "ObjectStatus.h"
 #include <vector>
+#include <string>
 #include <utility>
 
 class TerrainManagerComponent : public Component
@@ -18,7 +20,7 @@ public:
 	~TerrainManagerComponent() = default;
 
 	void Update() override;
-	void CreateTerrain(); // 地形を生成する関数
+	void CreateTerrain(std::vector<TerrainStatus> status); // 地形を生成する関数
 
 	inline void SetTerrainData(std::vector<CSV_Data>&& data) {
 		m_terrainData = std::move(data); // 地形データをセット

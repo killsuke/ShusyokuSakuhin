@@ -6,7 +6,8 @@
 enum ComponentType {
 	// コンポーネントの種類
 	BASECOMPONENT = 0, // ベースコンポーネント（抽象クラス）
-	STAGE_ROAD_CSV,
+	STAGE_LOAD_CSV,
+	TERRAIN_JSON,
 	TERRAIN_MANAGER,
 	TEST_MOVE,
 	JUMP,
