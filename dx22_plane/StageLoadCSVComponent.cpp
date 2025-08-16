@@ -13,9 +13,9 @@ void StageLoadCSVComponent::Update() {
 
 }
 
-void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName,GameObject& terrainManager) {
+void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject& terrainManager) {
 	const float firstPointX = -100.0f; // 初期X座標
-	const float firstPointY =  100.0f; // 初期X座標
+	const float firstPointY = 100.0f; // 初期X座標
 
 	float posx = firstPointX;
 	float posy = firstPointY;
@@ -60,7 +60,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName,GameObject&
 				// 中身がゼロ以下は読み込まない
 
 					// データを行ベクターに追加 
-				CSV_Data nowcell = { cellName,Vector2(posx, posy)};	// 位置補正と追加
+				CSV_Data nowcell = { cellName,Vector2(posx, posy) };	// 位置補正と追加
 				row.push_back(nowcell);
 				// X座標を更新
 				posx += 10.0f;
@@ -100,8 +100,11 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName,GameObject&
 			// 行データの中に現在の列が存在しているか確認（行ごとにセル数が異なる可能性があるため）
 			if (col < data[row].size()) {
 
-				// 有効なデータを result に追加
-				result.push_back(data[row][col]);
+				char kindFirst = data[row][col].kind[0]; // 現在のセルの種類を取得
+				if (kindFirst == 'T') {
+					// 有効なデータを result に追加
+					result.push_back(data[row][col]);
+				}
 			}
 		}
 	}
@@ -109,10 +112,10 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName,GameObject&
 	auto terrinMn = terrainManager.GetComponent<TerrainManagerComponent>();
 
 	// 地形データを移す
-	if(terrinMn != nullptr) {
+	if (terrinMn != nullptr) {
 		terrinMn->SetTerrainData(std::move(result)); // TerrainManagerComponentにデータをセット
 	}
 
-//	return result;
+	//	return result;
 
 }

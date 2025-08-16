@@ -59,8 +59,8 @@ LoadStageScene::LoadStageScene() {
 		player->AddComponent<TestMoveComponent>();
 
 		auto cubeTrans = player->AddComponent<TransformComponent>();
-		cubeTrans->SetScale({ 5.0f, 10.0f, 5.0f });
-		cubeTrans->SetPosition({ -50.0f,50.0f,0.0f });
+		cubeTrans->SetScale({ 4.0f, 10.0f, 5.0f });
+		cubeTrans->SetPosition({ -50.0f,-30.0f,0.0f });
 		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto cubeJump = player->AddComponent<JumpComponent>();
@@ -71,7 +71,7 @@ LoadStageScene::LoadStageScene() {
 		cubeRigid->SetGravityFlag(true);
 
 		auto cubeColl = player->AddComponent<ColliderComponent>();
-		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+	//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
 		//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
 		//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
 

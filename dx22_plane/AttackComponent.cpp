@@ -55,6 +55,6 @@ void AttackComponent::Attack(GameObject& obj) {
 
 		targetFighter->AddDamage(atk); // 攻撃力分だけ相手のHPを減らす
 
-		std::cout << "ここでダメージ！！" << std::endl;
+	//	std::cout << "ここでダメージ！！" << std::endl;
 	}
 }

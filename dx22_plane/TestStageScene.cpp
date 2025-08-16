@@ -40,7 +40,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeTrans = player->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 10.0f, 10.0f, 10.0f });
-		cubeTrans->SetPosition({ 0.0f,30.0f,0.0f });
+		cubeTrans->SetPosition({ 0.0f,100.0f,0.0f });
 		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto cubeJump = player->AddComponent<JumpComponent>();
@@ -163,8 +163,33 @@ TestStageScene::TestStageScene() {
 		auto cube = GameObjectManager::AddObject("cube3", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
-		cubeTrans->SetScale({ 20.0f, 30.0f, 10.0f });
-		cubeTrans->SetPosition({ -130.0f, 30.0f, 0.0f });
+		cubeTrans->SetScale({ 20.0f, 10.0f, 10.0f });
+		cubeTrans->SetPosition({ -60.0f, 60.0f, 0.0f });
+
+		auto cubeColl = cube->AddComponent<ColliderComponent>();
+		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
+
+		CubeMesh cubeMesh;
+		auto cubeRe = cube->AddComponent<Render3DComponent>();
+		cubeRe->SetMesh(cubeMesh);
+		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetTexture("assets/texture/NoTexture.png");
+
+		CubeMesh cubeMesh2;
+		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
+		cubeRe2->SetMesh(cubeMesh2);
+		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe2->SetTexture("assets/texture/NoTexture.png");
+		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f));
+	}
+
+	{
+		auto cube = GameObjectManager::AddObject("cube4", "Terrain");
+
+		auto cubeTrans = cube->AddComponent<TransformComponent>();
+		cubeTrans->SetScale({ 20.0f, 10.0f, 10.0f });
+		cubeTrans->SetPosition({ -150.0f, -10.0f, 0.0f });
 
 		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));

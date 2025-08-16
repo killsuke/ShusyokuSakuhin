@@ -1,7 +1,7 @@
 {
     "terrains": [
         {
-            "kind": "Block",
+            "kind": "T_Block",
             "scale": {
                 "x": 5.0,
                 "y": 5.0,
@@ -17,7 +17,7 @@
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
         {
-            "kind": "dice",
+            "kind": "T_dice",
             "scale": {
                 "x": 5.0,
                 "y": 10.0,

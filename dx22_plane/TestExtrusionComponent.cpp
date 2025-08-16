@@ -33,7 +33,7 @@ void TestExtrusionComponent::Update() {
 		}
 
 		DirectX::SimpleMath::Vector3 hitNormal = {};
-		if (coll->CheckHit_CubeAndCube_NoTrigger2D_Normal(*terrainColl, *coll,hitNormal)) {
+		if (coll->TestNormal(*terrainColl, *coll,hitNormal)) {
 			if (hitNormal.y < -0.5f) {	// ’n–Ê
 				rigid->UseGravity(false);
 				isGround = true;

@@ -26,7 +26,6 @@ class TransformComponent : public Component
 private:
 	Transform m_transform;	// トランスフォーム情報
 public:
-	TransformComponent() = default;
 	TransformComponent(GameObject& obj);
 
 	~TransformComponent() = default;

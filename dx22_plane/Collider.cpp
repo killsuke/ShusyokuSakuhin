@@ -13,7 +13,10 @@ ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
 
 void ColliderComponent::Update()
 {
+	beforeColl_ab = coll_ab; // 前回のAABBの当たり判定用を保存
+
 	auto transform = p_object->GetComponent<TransformComponent>();
+	transform->MakeChildWorld(); // ワールド行列を更新
 
 	auto pos = transform->GetPosition();
 	auto scale = transform->GetScale();
@@ -648,7 +651,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 
 					hitNormal.y = -1.0f;
 				}
-				else if(pushBack.y < 0.0f){
+				else if (pushBack.y < 0.0f) {
 					hitNormal.y = 1.0f;
 				}
 			}
@@ -805,6 +808,182 @@ bool ColliderComponent::IntersectRayAABB(
 	tMinOut = tmin;	// ヒットした距離を出力
 	return true;	// レイはAABBに交差した
 }
+
+bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal) {
+
+	AABB coll1 = p1.coll_ab;
+	AABB coll2 = p2.coll_ab;
+	AABB beforeColl2 = p2.beforeColl_ab;
+
+	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
+
+	if (check == true) {
+
+		// 最終的のオブジェクトを押し戻すためのベクトル
+		Vector3 pushBack(0.0f, 0.0f, 0.0f);
+
+		// X軸での「めり込み量」を計算
+		float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+		float dx2 = (coll1.min.x - coll2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
+
+		// Y軸での「めり込み量」を計算
+		float dy1 = (coll1.max.y - coll2.min.y);	// p1の上端 - p2の下端（p2が上から押し込んでいる時）
+		float dy2 = (coll1.min.y - coll2.max.y);	// p1の下端 - p2の上端（p2が下から押し込んでいる時）
+
+		// X軸の処理
+		// X軸方向でどちらに押し戻すべきか（小さい方が自然）
+		if (abs(dx1) < abs(dx2)) {
+			pushBack.x = dx1;	// 左から来たので右に押し戻し
+		}
+		else {
+			pushBack.x = dx2;	// 右から来たので左に押し戻し
+		}
+
+		// Y軸の処理
+		// Y軸方向でどちらに押し戻すべきか（小さい方が自然）
+		if (abs(dy1) < abs(dy2)) {
+			pushBack.y = dy1;	// 上から来たので上に押し戻し
+		}
+		else {
+			pushBack.y = dy2;	// 下から来たので下に押し戻し
+		}
+
+		// めり込み四角形（交差領域）計算
+		float ixMin = std::max(coll1.min.x, coll2.min.x);
+		float iyMin = std::max(coll1.min.y, coll2.min.y);
+		float ixMax = std::min(coll1.max.x, coll2.max.x);
+		float iyMax = std::min(coll1.max.y, coll2.max.y);
+
+		Vector2 result1 = Vector2::Zero;
+		Vector2 result2 = Vector2::Zero;
+		Vector2 result3 = Vector2::Zero;
+		Vector2 result4 = Vector2::Zero;
+
+		bool forcedBeside = false;	// 強制的に横押し出しにするかどうか
+
+		if (coll1.max.y == iyMax) {
+
+			// めり込みでできた四角形の下底から、前フレームの
+			// AABBの上底に対してベクトルを引く
+			if (coll2.min.x == ixMin) {	// coll2が右から
+				// 前のフレームの左下の頂点
+				result1 = Vector2(beforeColl2.min.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
+				// 右に平行移動した位置
+				auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.max.y);
+				result2 = newResult1 - Vector2(coll1.max.x, iyMin);
+
+				result3 = Vector2(beforeColl2.min.x, beforeColl2.min.y) - Vector2(ixMax, iyMax);
+				// 上に平行移動した位置
+				auto newResult2 = Vector2(beforeColl2.min.x, beforeColl2.min.y + dy1);
+				result4 = newResult2 - Vector2(coll1.max.x, iyMin);
+
+				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
+				//	forcedBeside = true;	// 強制的に横押し出しにする
+				}
+
+			}
+			else if (coll2.max.x == ixMax) { // coll2が左から
+				// 前のフレームの右下の頂点
+				result1 = Vector2(beforeColl2.max.x, beforeColl2.max.y) - Vector2(ixMax, iyMin);
+				// 左に平行移動した位置
+				auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.max.y);
+				result2 = newResult1 - Vector2(coll1.min.x, iyMin);
+
+				result3 = Vector2(beforeColl2.max.x, beforeColl2.min.y) - Vector2(ixMin, iyMax);
+				// 上に平行移動した位置
+				auto newResult2 = Vector2(beforeColl2.max.x, beforeColl2.min.y + dy1);
+				result4 = newResult2 - Vector2(coll1.min.x, iyMin);
+
+				if (static_cast<int>(coll1.min.x) == static_cast<int>(beforeColl2.max.x)) {
+				//	forcedBeside = true;	// 強制的に横押し出しにする
+				}
+			}
+		}
+		else if (coll1.min.y == iyMin) {
+			//	std::cout << "coll1の下底" << std::endl;
+			if (coll2.min.x == ixMin) {	// coll2が右から
+				// 前のフレームの左下の頂点
+				result1 = Vector2(beforeColl2.min.x, beforeColl2.min.y) - Vector2(ixMin, iyMax);
+				// 右に平行移動した位置
+				auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.min.y);
+				result2 = newResult1 - Vector2(coll1.max.x, iyMax);
+
+				result3 = Vector2(beforeColl2.min.x, beforeColl2.max.y) - Vector2(ixMax, iyMin);
+				// 上に平行移動した位置
+				auto newResult2 = Vector2(beforeColl2.min.x, beforeColl2.max.y + dy2);
+				result4 = newResult2 - Vector2(coll1.max.x, iyMax);
+
+				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
+				//	forcedBeside = true;	// 強制的に横押し出しにする
+				}
+			}
+			else if (coll2.max.x == ixMax) { // coll2が左から
+				// 前のフレームの右下の頂点
+				result1 = Vector2(beforeColl2.max.x, beforeColl2.min.y) - Vector2(ixMax, iyMax);
+				// 左に平行移動した位置
+				auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.min.y);
+				result2 = newResult1 - Vector2(coll1.min.x, iyMax);
+
+				
+				result3 = Vector2(beforeColl2.max.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
+				// 上に平行移動した位置
+				auto newResult2 = Vector2(beforeColl2.max.x, beforeColl2.min.y + dy2);
+				result4 = newResult2 - Vector2(coll1.min.x, iyMax);
+				// 上引っかかりを失くす
+				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
+				//	forcedBeside = true;	// 強制的に横押し出しにする
+				}
+			}
+		}
+		else {
+			forcedBeside = true;	// 強制的に横押し出しにする
+		}
+
+		// Z軸は完全に無視（2.5Dのため）
+		pushBack.z = 0.0f;
+
+		if (((result1.y > 0.0f && result2.y > 0.0f && result3.y >= 0.0f && result4.y >= 0.0f) || (result1.y < 0.0f && result2.y < 0.0f && result3.y <= 0.0f && result4.y <= 0.0f)) && forcedBeside == false) {
+			pushBack.x = 0.0f;	// 縦方向で押し戻す
+
+			// Y方向に押し戻された → 地面 or 天井
+			if (pushBack.y > 0.0f) {
+
+				hitNormal.y = -1.0f;
+			}
+			else if (pushBack.y < 0.0f) {
+				hitNormal.y = 1.0f;
+			}
+		}
+		else {
+
+			pushBack.y = 0.0f;	// 横方向で押し戻す
+
+			// X方向に押し戻された → 壁
+
+			if (pushBack.x > 0.0f) {
+
+				hitNormal.x = -1.0f;
+			}
+			else if (pushBack.x < 0.0f) {
+				hitNormal.x = 1.0f;
+			}
+		}
+
+		// 位置補正をして、SRT情報を再計算
+		auto transform = p_object->GetComponent<TransformComponent>();
+		transform->AddPosition({ pushBack });
+
+		auto pos = transform->GetPosition();
+		auto size = transform->GetScale();
+		SetColliderSize_AABB(pos, size);
+		MakeWorldAABBMatrix();
+	//	beforeColl_ab = GetColliderSize_AABB();
+	}
+
+	// 衝突しているかどうかを返す
+	return check;
+}
+
 
 bool ColliderComponent::CheckHit_SphereAndSphere_IsTrigger3D(const Sphere& p1, const Sphere& p2) {
 	float dx = p1.center.x - p2.center.x;	// ２つのオブジェクトの中心位置の差分

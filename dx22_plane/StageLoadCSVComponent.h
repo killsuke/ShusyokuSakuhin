@@ -2,6 +2,7 @@
 #include "Component.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 class StageLoadCSVComponent :  public Component
 {

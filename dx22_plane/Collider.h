@@ -64,6 +64,11 @@ struct AABB {
 	DirectX::SimpleMath::Vector3 offsetCenter = {};
 	DirectX::SimpleMath::Vector3 offsetSize = {};
 
+	DirectX::SimpleMath::Vector3 beforeMin = {};
+	DirectX::SimpleMath::Vector3 beforeMax = {};
+	DirectX::SimpleMath::Vector3 beforeOffsetCenter = {};
+	DirectX::SimpleMath::Vector3 beforeOffsetSize = {};
+
 	// ワールド行列
 	DirectX::SimpleMath::Matrix worldAABBMatrix = {};
 
@@ -95,6 +100,7 @@ class ColliderComponent : public Component{
 protected:
 
 private:
+	AABB beforeColl_ab; // 前回のAABBの当たり判定用
 	AABB coll_ab; // AABBの当たり判定用
 	OBB coll_ob; // OBBの当たり判定用
 	Sphere coll_sp; // 球体の当たり判定用
@@ -150,6 +156,8 @@ public:
 	// レイとAABBの当たり判定
 	bool IntersectRayAABB(const DirectX::XMVECTOR& rayOrigin, const DirectX::XMVECTOR& rayDir,
 		const AABB& hit, float& tMinOut);
+
+	bool TestNormal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal);
 
 
 	// 円どうしの当たり判定
