@@ -861,11 +861,19 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 
 		bool forcedBeside = false;	// 強制的に横押し出しにするかどうか
 
+		int  rightLeft = 0;
+
 		if (coll1.max.y == iyMax) {
 
 			// めり込みでできた四角形の下底から、前フレームの
 			// AABBの上底に対してベクトルを引く
-			if (coll2.min.x == ixMin) {	// coll2が右から
+			if (coll1.max.x > coll2.max.x && coll1.min.x < coll2.min.x) {
+				result1.y = 1.0f;	// 上に押し出す
+				result2.y = 1.0f;	// 上に押し出す
+				result3.y = 1.0f;	// 上に押し出す
+				result4.y = 1.0f;	// 上に押し出す
+			}
+			else if (coll2.min.x == ixMin) {	// coll2が右から
 				// 前のフレームの左下の頂点
 				result1 = Vector2(beforeColl2.min.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
 				// 右に平行移動した位置
@@ -878,9 +886,9 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				result4 = newResult2 - Vector2(coll1.max.x, iyMin);
 
 				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
-				//	forcedBeside = true;	// 強制的に横押し出しにする
+					forcedBeside = true;	// 強制的に横押し出しにする
 				}
-
+				rightLeft = -1;
 			}
 			else if (coll2.max.x == ixMax) { // coll2が左から
 				// 前のフレームの右下の頂点
@@ -895,13 +903,20 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				result4 = newResult2 - Vector2(coll1.min.x, iyMin);
 
 				if (static_cast<int>(coll1.min.x) == static_cast<int>(beforeColl2.max.x)) {
-				//	forcedBeside = true;	// 強制的に横押し出しにする
+					forcedBeside = true;	// 強制的に横押し出しにする
 				}
+				rightLeft = 1;
 			}
 		}
 		else if (coll1.min.y == iyMin) {
-			//	std::cout << "coll1の下底" << std::endl;
-			if (coll2.min.x == ixMin) {	// coll2が右から
+
+			if (coll1.max.x > coll2.max.x && coll1.min.x < coll2.min.x) {
+				result1.y = -1.0f;	// 下に押し出す
+				result2.y = -1.0f;	// 下に押し出す
+				result3.y = -1.0f;	// 下に押し出す
+				result4.y = -1.0f;	// 下に押し出す
+			}
+			else if (coll2.min.x == ixMin) {	// coll2が右から
 				// 前のフレームの左下の頂点
 				result1 = Vector2(beforeColl2.min.x, beforeColl2.min.y) - Vector2(ixMin, iyMax);
 				// 右に平行移動した位置
@@ -914,8 +929,9 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				result4 = newResult2 - Vector2(coll1.max.x, iyMax);
 
 				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
-				//	forcedBeside = true;	// 強制的に横押し出しにする
+					forcedBeside = true;	// 強制的に横押し出しにする
 				}
+				rightLeft = -1;
 			}
 			else if (coll2.max.x == ixMax) { // coll2が左から
 				// 前のフレームの右下の頂点
@@ -924,18 +940,27 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.min.y);
 				result2 = newResult1 - Vector2(coll1.min.x, iyMax);
 
-				
+
 				result3 = Vector2(beforeColl2.max.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
 				// 上に平行移動した位置
-				auto newResult2 = Vector2(beforeColl2.max.x, beforeColl2.min.y + dy2);
+				auto newResult2 = Vector2(beforeColl2.max.x, beforeColl2.max.y + dy2);
 				result4 = newResult2 - Vector2(coll1.min.x, iyMax);
 				// 上引っかかりを失くす
 				if (static_cast<int>(coll1.max.x) == static_cast<int>(beforeColl2.min.x)) {
-				//	forcedBeside = true;	// 強制的に横押し出しにする
+					forcedBeside = true;	// 強制的に横押し出しにする
 				}
+				rightLeft = 1;
 			}
 		}
 		else {
+			forcedBeside = true;	// 強制的に横押し出しにする
+		}
+
+		// 強制押し出しのとき、引っかかる個所を解除
+		if (forcedBeside == true && result3.y == 0.0f/* && rightLeft == -1*/) {
+			forcedBeside = false;	// 強制的に横押し出しにするのを解除
+		}
+		if (forcedBeside == false && result3.y != 0.0f && result3.x == 0.0f && result4.y != 0.0f && result4.x == 0.0f && rightLeft == 1) {
 			forcedBeside = true;	// 強制的に横押し出しにする
 		}
 
@@ -977,7 +1002,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		auto size = transform->GetScale();
 		SetColliderSize_AABB(pos, size);
 		MakeWorldAABBMatrix();
-	//	beforeColl_ab = GetColliderSize_AABB();
+		//	beforeColl_ab = GetColliderSize_AABB();
 	}
 
 	// 衝突しているかどうかを返す

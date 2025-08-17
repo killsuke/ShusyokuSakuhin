@@ -264,7 +264,7 @@ void Camera::Update()
 			rot_y -= delta_X * rotationSpeed;
 			rot_x += delta_Y * rotationSpeed;
 
-			transform->AddRotation({ rot_x, rot_y, rot.z });
+			//transform->AddRotation({ rot_x, rot_y, rot.z });
 
 			auto rot2 = transform->GetRotation();
 

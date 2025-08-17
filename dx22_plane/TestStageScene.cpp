@@ -189,7 +189,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 10.0f, 10.0f });
-		cubeTrans->SetPosition({ -150.0f, -10.0f, 0.0f });
+		cubeTrans->SetPosition({ -60.0f, 20.0f, 0.0f });
 
 		auto cubeColl = cube->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
