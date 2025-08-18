@@ -36,6 +36,10 @@ public:
 
 	inline void SetBeforeTargetObj(GameObject& point) { m_beforeTargetObj = &point; };
 	inline void SetNextTargetObj(GameObject& pos) { m_nextTargetPoint = &pos; };
+	inline void SetBeforeAndNextTargetObj(GameObject& before, GameObject& next) {
+		m_beforeTargetObj = &before;
+		m_nextTargetPoint = &next;
+	};
 	inline void SetScrollDirection(const DirectX::SimpleMath::Vector3& dir) { m_scrollDirection = dir; };
 
 	// ヌルポインタであったときのことも考えてGameObject*で返す

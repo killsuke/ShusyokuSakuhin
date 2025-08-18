@@ -1,21 +1,26 @@
 #pragma once
 #include "Component.h"
-#include <unordered_map>
+#include <vector>
+
+struct HitRule {
+	GameObject* target = nullptr; // 攻撃対象のゲームオブジェクト
+	float hitCoolTime = 0.0f; // 攻撃が当たったクールダウン時間
+	int hitCount = 0; // 攻撃が当たった回数
+};
 
 class AttackComponent : public Component
 {
 protected:
+	AttackComponent(GameObject& obj);
+	~AttackComponent() = default;
 
-private:
-	float m_coolDownTime = 0.0f;
-	std::unordered_map<GameObject*, float> m_attackObjs;
+	std::vector<HitRule> m_attackObjs;
 
 public:
-	AttackComponent(GameObject& obj);
-	~AttackComponent();
-
+	
 	void Update() override;
-	void Attack(GameObject& obj); // 攻撃処理を行う関数（仮実装）
-	inline void SetCoolDownTime(const float time) { m_coolDownTime = time; };
+
+	virtual void AttackAction(GameObject& obj) = 0; // 攻撃処理を行う関数
+
 	inline void ClearAttackObjs() { m_attackObjs.clear(); };
 };

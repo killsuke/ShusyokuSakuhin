@@ -106,7 +106,9 @@ private:
 	Sphere coll_sp; // 球体の当たり判定用
 
 	GameObject* beforeTouchObj = nullptr;	// 前回のタッチオブジェクト
-	bool beforeTouch = false;	  // 前回のタッチ状態
+	
+	bool m_activeColliderFlag = true; // コライダーの有効・無効フラグ
+
 	DirectX::SimpleMath::Vector2 beforeTouchAxis = {}; // 前回のタッチ軸
 
 	std::unordered_map<GameObject*, DirectX::SimpleMath::Vector3> 
@@ -142,16 +144,16 @@ public:
 
 	// 直方体どうしの当たり判定
 	// 触れているかどうかだけを検知
-	bool CheckHit_CubeAndCube_IsTrigger3D(AABB p1, AABB p2); // AABBとAABB
+	bool CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2); // AABBとAABB
 
 	// 検知と押し出し
-	bool CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger2D(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
 	
 	bool CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal); // AABBとAABB
 
 	bool CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::SimpleMath::Vector3& hitNormal); // AABBとAABB
 	
-	bool CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
+	bool CheckHit_CubeAndCube_NoTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& pos); // AABBとAABB
 
 	// レイとAABBの当たり判定
 	bool IntersectRayAABB(const DirectX::XMVECTOR& rayOrigin, const DirectX::XMVECTOR& rayDir,
@@ -177,7 +179,7 @@ public:
 	bool CheckHit_SphereAndCube_NoTrigger3D(const Sphere& p1, const AABB& p2, DirectX::XMFLOAT3& pos);
 
 	// AABB と OBB の当たり判定
-	bool CheckHit_AABBAndOBB_IsTrigger3D(const AABB& aabb, const OBB& obb);
+	bool CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2);
 
 	// 立方体どうしの当たり判定（調べるだけ）
 	bool CubeAndCubeCheck_OBB(const OBB& col1, const OBB& col2);
@@ -286,6 +288,8 @@ public:
 	inline void SetOffsetSizeOBB(const DirectX::SimpleMath::Vector3& offset) { coll_ob.offsetSize = offset; };
 	inline void SetOffsetRotationOBB(const DirectX::SimpleMath::Vector3& offset) { coll_ob.offsetRotation = offset; };
 
+	inline void SetActiveColliderFlag(bool flag) { this->m_activeColliderFlag = flag; };
+
 	//	inline void SetOffsetRotation(const DirectX::SimpleMath::Vector3& offset) { this->offsetRotation = offset; };
 
 	// ゲッター
@@ -300,6 +304,7 @@ public:
 	inline DirectX::SimpleMath::Matrix GetWorldAABBMatrix() const { return coll_ab.worldAABBMatrix; };
 	inline DirectX::SimpleMath::Matrix GetWorldOBBMatrix() const { return coll_ob.worldOBBMatrix; };
 
+	inline bool GetActiveColliderFlag() const { return this->m_activeColliderFlag; };
 
 	void MakeWorldAABBMatrix();
 	void MakeWorldOBBMatrix();

@@ -16,7 +16,8 @@
 #include "JumpComponent.h"
 #include "EnemyDamageComponent.h"
 #include "FighterComponent.h"
-#include "AttackComponent.h"
+#include "AttackTimingComponent.h"
+#include "AttackOneTimeComponent.h"
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
@@ -114,7 +115,7 @@ TestStageScene::TestStageScene() {
 		swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 		swordColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 
-		auto swordAttack = sword->AddComponent<AttackComponent>();
+		auto swordAttack = sword->AddComponent<AttackTimingComponent>();
 		swordAttack->SetCoolDownTime(1.0f);
 
 		auto fighter = sword->AddComponent<FighterComponent>();

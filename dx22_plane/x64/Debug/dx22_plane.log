@@ -1,6 +1,2 @@
-﻿  JumpComponent.cpp
-  RigidBodyComponent.cpp
-  Test_Transparent.cpp
-  TitleScene.cpp
-  コードを生成中...
+﻿  EnemyDamageComponent.cpp
   dx22_plane.vcxproj -> C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Debug\dx22_plane.exe

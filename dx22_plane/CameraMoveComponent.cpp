@@ -8,7 +8,7 @@
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
 	m_sortNum = CAMERA_MOVE;
-	chaseHeight = 25.0f; // 初期の追従高さは0
+	m_chaseHeight = 25.0f; // 初期の追従高さは0
 }
 
 void CameraMoveComponent::Update()
@@ -93,7 +93,7 @@ void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& playe
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
-	if (abs(playerPos.y) > chaseHeight)
+	if (abs(playerPos.y) > m_chaseHeight)
 	{
 		// ちょっと上ぐらいがちょうどいい
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
@@ -110,7 +110,7 @@ void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 		// m_moveTargetから情報を全部もらうとか？
 //		cameraSpring->SetActiveFlag(true);
 		cameraSpring->SetSpringPartner(m_moveTarget);
-		cameraSpring->SetK(20.0f);
+		cameraSpring->SetK(m_moveTarget->GetComponent<CameraTargetComponent>()->GetSpringK());
 		cameraSpring->MakeDamping(); // ダンピングを作成
 		cameraSpring->SpringAction2D(); // 2Dのばね挙動を行う
 	}
@@ -123,7 +123,7 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
-	if (abs(playerPos.y) > chaseHeight)
+	if (abs(playerPos.y) > m_chaseHeight)
 	{
 		// ちょっと上ぐらいがちょうどいい
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });

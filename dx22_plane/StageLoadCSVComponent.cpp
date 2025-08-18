@@ -35,6 +35,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 		std::string cell;
 		std::vector<CSV_Data> row; // CSVの行を格納するベクター
 
+		//posx = firstPointX;
 		while (std::getline(ss, cell, ',')) {	// カンマで区切られたセルを取得
 
 			// BOM（このファイルは UTF-8 ですよという宣言のようなもの）を削除
@@ -44,39 +45,22 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 				cell.erase(0, 3);
 			}
 
+			std::string cellName = ""; // セルの名前を格納する変数
 			// 空のセルをスキップ 
 			if (cell.empty()) {
-				posx += 10.0f;
-				continue;
-			}
-			try {
-				// 文字列を数値に変換
-				std::string cellName = cell; // 値が99の場合、列をスキップ 
-				if (cellName == "NoData") {
-					posx = firstPointX;
-					break;
-				}
 
-				// 中身がゼロ以下は読み込まない
-
-					// データを行ベクターに追加 
-				CSV_Data nowcell = { cellName,Vector2(posx, posy) };	// 位置補正と追加
-				row.push_back(nowcell);
-				// X座標を更新
-				posx += 10.0f;
-
+				cellName = "NoData"; // 空のセルは "NoData" として扱う
 			}
-			catch (const std::invalid_argument&) {
-				posx += 10.0f;
-				std::cerr << "無効なデータ: " << cell << std::endl; continue;
-				// 次のセルへ 
+			else {
+				cellName = cell; // セルの内容をそのまま使用
+			}
 
-			}
-			catch (const std::out_of_range&) {
-				posx += 10.0f;
-				std::cerr << "値が範囲外: " << cell << std::endl; continue;
-				// 次のセルへ 
-			}
+			
+			// データを行ベクターに追加 
+			CSV_Data nowcell = { cellName,Vector2(posx, posy) };	// 位置補正と追加
+			row.push_back(nowcell);
+			// X座標を更新
+			posx += 10.0f;
 		}
 		// 行データを2次元ベクターに追加 
 		data.push_back(row);
@@ -91,8 +75,16 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 	// 結果を格納する一次元のベクター（列優先で詰めていく）
 	std::vector<CSV_Data> result;
 
+	// 最大列数を求める
+	size_t maxCols = 0;
+	for (auto& row : data) {
+		if (row.size() > maxCols) {
+			maxCols = row.size();
+		}
+	}
+
 	// まず列ごとにループ（左→右方向）
-	for (size_t col = 0; col < data[0].size(); ++col) {
+	for (size_t col = 0; col < maxCols; ++col) {
 
 		// 次に各列に対して行方向にループ（上→下方向）
 		for (size_t row = 0; row < data.size(); ++row) {
@@ -100,10 +92,17 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 			// 行データの中に現在の列が存在しているか確認（行ごとにセル数が異なる可能性があるため）
 			if (col < data[row].size()) {
 
-				char kindFirst = data[row][col].kind[0]; // 現在のセルの種類を取得
-				if (kindFirst == 'T') {
-					// 有効なデータを result に追加
-					result.push_back(data[row][col]);
+				const auto& cell = data[row][col];
+
+				// まず NoData を除外
+				if (cell.kind == "NoData") {
+					continue;
+				}
+
+				// ここで判定
+				// もし「Tで始まるものだけ」なら↓
+				if (cell.kind[0] == 'T') {
+					result.push_back(cell);
 				}
 			}
 		}
@@ -115,7 +114,4 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 	if (terrinMn != nullptr) {
 		terrinMn->SetTerrainData(std::move(result)); // TerrainManagerComponentにデータをセット
 	}
-
-	//	return result;
-
 }

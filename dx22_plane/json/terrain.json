@@ -31,6 +31,54 @@
             "texture": "assets/texture/dice.png",
             "shaderVS": "shader/unlitTextureVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+	{
+            "kind": "T_Floor",
+            "scale": {
+                "x": 115.0,
+                "y": 10.0,
+                "z": 10.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/NoTexture.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+	{
+            "kind": "T_ShortFloor",
+            "scale": {
+                "x": 85.0,
+                "y": 10.0,
+                "z": 10.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/NoTexture.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+	{
+            "kind": "T_Wall",
+            "scale": {
+                "x": 10.0,
+                "y": 80.0,
+                "z": 10.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/NoTexture.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
         }
     ]
 }

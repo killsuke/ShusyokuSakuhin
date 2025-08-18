@@ -38,9 +38,9 @@ protected:
 	IndexBuffer m_IndexBuffer = {};
 	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f,1.0f }; // F
 
-public:
 	RenderComponent(GameObject& obj);
-	~RenderComponent() {};
+	~RenderComponent() = default;
+public:
 
 	void Update() override;
 	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };

@@ -1,7 +1,8 @@
 #include "EnemyDamageComponent.h"
 #include "Collider.h"
 #include "Transform.h"
-#include "AttackComponent.h"
+#include "AttackTimingComponent.h"
+#include "AttackOneTimeComponent.h"
 #include "GameObjectManager.h"
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
@@ -13,25 +14,26 @@ void EnemyDamageComponent::Update()
 {
 	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = p_object->GetComponent<ColliderComponent>();
-	auto objOther = GameObjectManager::GameObjectFindName("Enemy");
-	if(objOther == nullptr) {
-		return; // "Enemy"オブジェクトが見つからない場合は何もしない
-	}
-	auto collObjOther = objOther->GetComponent<ColliderComponent>();
-	auto playerObj = GameObjectManager::GameObjectFindName("Player");
-	auto playerTrans = playerObj->GetComponent<TransformComponent>();
-	auto playerPos = playerTrans->GetPosition();
-	//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
+	auto objOthers = GameObjectManager::GameObjectFindTag("Enemy");
 
-	auto attack = p_object->GetComponent<AttackComponent>();
+	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
+	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");
+	//	auto playerTrans = playerObj->GetComponent<TransformComponent>();
+	//	auto playerPos = playerTrans->GetPosition();
+		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
-	if (collObjMe != nullptr && collObjOther != nullptr) {
+	auto attack = p_object->GetComponent<AttackTimingComponent>();
 
-		if (collObjMe->CheckHit_CubeAndCube_IsTrigger3D(
-			collObjMe->GetColliderSize_AABB(), collObjOther->GetColliderSize_AABB())) {
+	if (collObjMe != nullptr) {
 
-			attack->Attack(*objOther);
+		for (auto& objOther : objOthers) {
+			auto collObjOther = objOther->GetComponent<ColliderComponent>();
+			if (collObjMe->CheckHit_CubeAndCube_IsTrigger3D(
+				*collObjOther, *collObjMe)) {
+
+				attack->AttackAction(*objOther);
+			}
+
 		}
 	}
-
 }

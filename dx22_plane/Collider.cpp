@@ -130,7 +130,7 @@ bool ColliderComponent::CheckHit(const Line& line, const TrianglePolygon& polygo
 	if (fabs(denom) < 1e-6f) {
 		return false; // 交差なし
 	}
-
+	
 	// 線上の交点を計算
 	float d = Dot(normal, polygon.p0);
 	float t = (d - Dot(normal, line.point)) / denom;
@@ -394,32 +394,38 @@ bool ColliderComponent::CheckHit(Sphere sphere1, Sphere sphere2, Vector3& contac
 // ■CheckHit関数
 // AABBとAABBの当たり判定
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(AABB p1, AABB p2) {
+bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2) {
+	if(p1.m_activeColliderFlag == false || p2.m_activeColliderFlag == false) {
+		return false; // コライダーが無効な場合は衝突しない
+	}
+
+	auto coll1 = p1.coll_ab;
+	auto coll2 = p2.coll_ab;
 
 	// X座標
-	if (p1.max.x < p2.min.x) {
+	if (coll1.max.x < coll2.min.x) {
 		return false;
 	}
 
-	if (p1.min.x > p2.max.x) {
+	if (coll1.min.x > coll2.max.x) {
 		return false;
 	}
 
 	// Y座標
-	if (p1.max.y < p2.min.y) {
+	if (coll1.max.y < coll2.min.y) {
 		return false;
 	}
 
-	if (p1.min.y > p2.max.y) {
+	if (coll1.min.y > coll2.max.y) {
 		return false;
 	}
 
 	// Z座標
-	if (p1.max.z < p2.min.z) {
+	if (coll1.max.z < coll2.min.z) {
 		return false;
 	}
 
-	if (p1.min.z > p2.max.z) {
+	if (coll1.min.z > coll2.max.z) {
 		return false;
 	}
 
@@ -431,7 +437,10 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(AABB p1, AABB p2) {
 // AABBとAABBの当たり判定（2D用）
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& pos) {
+
+	auto coll1 = p1.coll_ab;
+	auto coll2 = p2.coll_ab;
 
 	// そもそも衝突しているかどうかのチェック
 	// 奥行きからの敵の登場のことも考えて、念のため
@@ -444,12 +453,12 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const AABB& p1, const A
 		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
 		// X軸での「めり込み量」を計算
-		float dx1 = (p1.max.x - p2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
-		float dx2 = (p1.min.x - p2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
+		float dx1 = (coll1.max.x - coll2.min.x);	// p1の右端 - p2の左端（p2が左から押し込んでいる時）
+		float dx2 = (coll1.min.x - coll2.max.x);	// p1の左端 - p2の右端（p2が右から押し込んでいる時）
 
 		// Y軸での「めり込み量」を計算
-		float dy1 = (p1.max.y - p2.min.y);	// p1の上端 - p2の下端（Aが上から押し込んでいる時）
-		float dy2 = (p1.min.y - p2.max.y);	// p1の下端 - p2の上端（Aが下から押し込んでいる時）
+		float dy1 = (coll1.max.y - coll2.min.y);	// p1の上端 - p2の下端（Aが上から押し込んでいる時）
+		float dy2 = (coll1.min.y - coll2.max.y);	// p1の下端 - p2の上端（Aが下から押し込んでいる時）
 
 		// X軸の処理
 		// X軸方向でどちらに押し戻すべきか（小さい方が自然）
@@ -501,7 +510,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 	AABB coll1 = p1.coll_ab;
 	AABB coll2 = p2.coll_ab;
 
-	bool hit = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
+	bool hit = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
 	if (hit == false) {
 		// 衝突していない場合は法線をゼロベクトルに設定
@@ -577,7 +586,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	// 奥行きからの敵の登場のことも考えて、念のため
 	// Z軸も考慮した当たり判定とする
 	// 当たって押し出されるのはX軸とY軸みたいな
-	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
+	bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
 	if (check == true) {
 
@@ -696,7 +705,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 // AABBとAABBの当たり判定（3D用）
 // 戻しアリ
 //==================================
-bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const AABB& p2, DirectX::XMFLOAT3& pos) {
+bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& pos) {
 
 	bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
@@ -704,15 +713,18 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger3D(const AABB& p1, const A
 		// 最終的のオブジェクトを押し戻すためのベクトル
 		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
+		auto coll1 = p1.coll_ab;
+		auto coll2 = p2.coll_ab;
+
 		// 各軸での「めり込み量」を計算
-		float dx1 = (p1.max.x - p2.min.x);	// Bの右端 - Aの左端（Aが左から押し込んでいる時）
-		float dx2 = (p1.min.x - p2.max.x);	// Bの右端 - Aの左端（Aが右から押し込んでいる時）
+		float dx1 = (coll1.max.x - coll2.min.x);	// Bの右端 - Aの左端（Aが左から押し込んでいる時）
+		float dx2 = (coll1.min.x - coll2.max.x);	// Bの右端 - Aの左端（Aが右から押し込んでいる時）
 
-		float dy1 = (p1.max.y - p2.min.y);	// Bの右端 - Aの左端（Aが下から押し込んでいる時）
-		float dy2 = (p1.min.y - p2.max.y);	// Bの右端 - Aの左端（Aが上から押し込んでいる時）
+		float dy1 = (coll1.max.y - coll2.min.y);	// Bの右端 - Aの左端（Aが下から押し込んでいる時）
+		float dy2 = (coll1.min.y - coll2.max.y);	// Bの右端 - Aの左端（Aが上から押し込んでいる時）
 
-		float dz1 = (p1.max.z - p2.min.z);	// Bの右端 - Aの左端（Aが奥から押し込んでいる時）
-		float dz2 = (p1.min.z - p2.max.z);	// Bの右端 - Aの左端（Aが前から押し込んでいる時）
+		float dz1 = (coll1.max.z - coll2.min.z);	// Bの右端 - Aの左端（Aが奥から押し込んでいる時）
+		float dz2 = (coll1.min.z - coll2.max.z);	// Bの右端 - Aの左端（Aが前から押し込んでいる時）
 
 		// X軸の処理
 		if (abs(dx1) < abs(dx2))
@@ -815,7 +827,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 	AABB coll2 = p2.coll_ab;
 	AABB beforeColl2 = p2.beforeColl_ab;
 
-	bool check = CheckHit_CubeAndCube_IsTrigger3D(coll1, coll2);
+	bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
 	if (check == true) {
 
@@ -1212,24 +1224,27 @@ bool ColliderComponent::CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2) {
 	return obb1.Intersects(obb2);
 }
 
-bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const AABB& aabb, const OBB& obb) {
+bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent& aabb, const ColliderComponent& obb) {
+	if (aabb.m_activeColliderFlag == false || obb.m_activeColliderFlag == false) {
+		return false; // どちらかのコライダーが無効なら衝突無し
+	}
 
-	auto AABBCenter = (aabb.max + aabb.min) * 0.5f;
-	auto OBBCenter = obb.center;
+	auto AABBCenter = (aabb.coll_ab.max + aabb.coll_ab.min) * 0.5f;
+	auto OBBCenter = obb.coll_ob.center;
 
 	Vector3 vecDistance = AABBCenter - OBBCenter;
 
-	const Vector3* obbAxes[3] = { &obb.axisX, &obb.axisY, &obb.axisZ };
+	const Vector3* obbAxes[3] = { &obb.coll_ob.axisX, &obb.coll_ob.axisY, &obb.coll_ob.axisZ };
 	const Vector3 aabbAxes[3] = { Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1) };
 
 	// OBBの3軸
 	for (int i = 0; i < 3; i++) {
-		if (!CompareLengthOBBvsAABB(obb, aabb, *obbAxes[i], vecDistance)) return false;
+		if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, *obbAxes[i], vecDistance)) return false;
 	}
 
 	// AABBの3軸
 	for (int i = 0; i < 3; i++) {
-		if (!CompareLengthOBBvsAABB(obb, aabb, aabbAxes[i], vecDistance)) return false;
+		if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, aabbAxes[i], vecDistance)) return false;
 	}
 
 	// 外積9本
@@ -1239,7 +1254,7 @@ bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const AABB& aabb, const 
 			float lengthSq = axis.x * axis.x + axis.y * axis.y + axis.z * axis.z;
 			if (lengthSq < 1e-6f) continue; // 平行なら無視
 			axis.Normalize();
-			if (!CompareLengthOBBvsAABB(obb, aabb, axis, vecDistance)) return false;
+			if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, axis, vecDistance)) return false;
 		}
 	}
 

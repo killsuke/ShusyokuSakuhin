@@ -16,7 +16,7 @@
 #include "JumpComponent.h"
 #include "EnemyDamageComponent.h"
 #include "FighterComponent.h"
-#include "AttackComponent.h"
+#include "AttackTimingComponent.h"
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
@@ -30,12 +30,13 @@
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 10.0f, -170.0f));
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
 	camera->AddComponent<RigidBodyComponent>();
-	//auto cameraMove = camera->AddComponent<CameraMoveComponent>();
-	camera->AddComponent<Camera>();
+	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
+	auto cameraComp = camera->AddComponent<Camera>();
+	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
 
-//	camera->AddComponent<SpringComponent>();
+	camera->AddComponent<SpringComponent>();
 
 	{
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
@@ -50,8 +51,6 @@ LoadStageScene::LoadStageScene() {
 
 		str->LoadStageCSV("Stage1.csv", *stageRoadCSV); // ステージのCSVを読み込む
 		teM->CreateTerrain(terrainStatus); // 読み込んだCSVからTerrainを生成
-
-		
 	}
 
 	{
@@ -60,7 +59,7 @@ LoadStageScene::LoadStageScene() {
 
 		auto cubeTrans = player->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 4.0f, 10.0f, 5.0f });
-		cubeTrans->SetPosition({ -50.0f,-30.0f,0.0f });
+		cubeTrans->SetPosition({ 0.0f,50.0f,0.0f });
 		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto cubeJump = player->AddComponent<JumpComponent>();
@@ -153,6 +152,108 @@ LoadStageScene::LoadStageScene() {
 		swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		swordRe2->SetTexture("assets/texture/NoTexture.png");
 		swordRe2->SetColor(DirectX::XMFLOAT4(0.5f, 1.0f, 0.5f, 0.5f));*/
+	}
+
+	{
+		auto target1 = GameObjectManager::AddObject("target1", "Target");
+		auto targetTrans1 = target1->AddComponent<TransformComponent>();
+		targetTrans1->SetScale({ 10.0f, 10.0f, 10.0f });
+		targetTrans1->SetPosition({ 10.0f, 30.0f, 0.0f });
+		auto rigidTa1 = target1->AddComponent<RigidBodyComponent>();
+		rigidTa1->SetActiveFlag(false); // 物理演算を無効にする
+		auto cameratarget1 = target1->AddComponent<CameraTargetComponent>();
+		cameratarget1->SetCameraPattern(SPRING_CHASE);
+		cameratarget1->SetSpringK(30.0f); // ばね定数をセット
+		auto targetRend1 = target1->AddComponent<Render3DComponent>();
+		CircleMesh sphereMesh1;
+		targetRend1->SetMesh(sphereMesh1);
+		targetRend1->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend1->SetTexture("assets/texture/NoTexture.png");
+
+
+		auto target2 = GameObjectManager::AddObject("target2", "Target");
+		auto targetTrans2 = target2->AddComponent<TransformComponent>();
+		targetTrans2->SetScale({ 10.0f, 10.0f, 10.0f });
+		targetTrans2->SetPosition({ 240.0f, 30.0f, 0.0f });
+		auto rigidTa2 = target2->AddComponent<RigidBodyComponent>();
+		rigidTa2->SetActiveFlag(false); // 物理演算を無効にする
+		auto cameratarget2 = target2->AddComponent<CameraTargetComponent>();
+		cameratarget2->SetCameraPattern(SPRING_CHASE);
+		cameratarget2->SetSpringK(30.0f); // ばね定数をセット
+		auto targetRend2 = target2->AddComponent<Render3DComponent>();
+		CircleMesh sphereMesh2;
+		targetRend2->SetMesh(sphereMesh2);
+		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend2->SetTexture("assets/texture/NoTexture.png");
+
+		auto target3 = GameObjectManager::AddObject("target3", "Target");
+		auto targetTrans3 = target3->AddComponent<TransformComponent>();
+		targetTrans3->SetScale({ 10.0f, 10.0f, 10.0f });
+		targetTrans3->SetPosition({ 240.0f, -120.0f, 0.0f });
+		auto rigidTa3 = target3->AddComponent<RigidBodyComponent>();
+		rigidTa3->SetActiveFlag(false); // 物理演算を無効にする
+		auto cameratarget3 = target3->AddComponent<CameraTargetComponent>();
+		cameratarget3->SetCameraPattern(SPRING_CHASE);
+		cameratarget3->SetSpringK(30.0f); // ばね定数をセット
+		auto targetRend3 = target3->AddComponent<Render3DComponent>();
+		CircleMesh sphereMesh3;
+		targetRend3->SetMesh(sphereMesh3);
+		targetRend3->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend3->SetTexture("assets/texture/NoTexture.png");
+
+		//auto circle = GameObjectManager::AddObject("Scroll", "Scroll");
+		//auto circleTrans = circle->AddComponent<TransformComponent>();
+		//circleTrans->SetScale({ 30.0f, 30.0f, 10.0f });
+		//circleTrans->SetPosition({ -80.0f, 60.0f, 0.0f });
+		//auto rigidMe = circle->AddComponent<RigidBodyComponent>();
+		//rigidMe->SetActiveFlag(true); // 物理演算を有効にする
+		//auto circleRend = circle->AddComponent<Render3DComponent>();
+		//CircleMesh circleMesh;
+		//circleRend->SetMesh(circleMesh);
+		//circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//circleRend->SetTexture("assets/texture/NoTexture.png");
+
+		//auto circleSpring = circle->AddComponent<SpringComponent>();
+		//circleSpring->SetK(20.0f); // ばね定数をセット
+		//circleSpring->MakeDamping(); // ダンピングを作成
+		//circleSpring->SetSpringPartner(target);
+
+		//cameraSpring->SetK(20.0f); // ばね定数をセット
+		//cameraSpring->MakeDamping(); // ダンピングを作成
+		//cameraSpring->SetSpringPartner(target);
+
+		auto point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
+		auto pointTrans1 = point1->AddComponent<TransformComponent>();
+		pointTrans1->SetScale({ 8.0f, 80.0f, 10.0f });
+		pointTrans1->AddPosition({ 120.0f, 60.0f, 0.0f });
+		auto pointCamera1 = point1->AddComponent<CameraPointComponent>();
+		auto pointColl1 = point1->AddComponent<ColliderComponent>();
+		CubeMesh pointMesh1;
+		auto pointRend1 = point1->AddComponent<Render3DColliderAABBComponent>();
+		pointRend1->SetMesh(pointMesh1);
+		pointRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		pointRend1->SetTexture("assets/texture/NoTexture.png");
+		pointRend1->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
+		pointCamera1->SetBeforeAndNextTargetObj(*target1, *target2);
+		pointCamera1->SetScrollDirection(SCROLL_IN_LEFT);
+
+		auto point2 = GameObjectManager::AddObject("CameraPoint2", "CameraPoint");
+		auto pointTrans2 = point2->AddComponent<TransformComponent>();
+		pointTrans2->SetScale({ 30.0f, 8.0f, 10.0f });
+		pointTrans2->AddPosition({ 305.0f, -30.0f, 0.0f });
+		auto pointCamera2 = point2->AddComponent<CameraPointComponent>();
+		auto pointColl2 = point2->AddComponent<ColliderComponent>();
+		CubeMesh pointMesh2;
+		auto pointRend2 = point2->AddComponent<Render3DColliderAABBComponent>();
+		pointRend2->SetMesh(pointMesh2);
+		pointRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		pointRend2->SetTexture("assets/texture/NoTexture.png");
+		pointRend2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
+		pointCamera2->SetBeforeAndNextTargetObj(*target2, *target3);
+		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
 	}
 
 

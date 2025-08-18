@@ -6,7 +6,7 @@ class CameraMoveComponent : public Component
 {
 private:
 	GameObject* m_moveTarget = nullptr; // カメラの移動ターゲット
-	float chaseHeight = 0.0f;	// この値の高さにプレイヤー達すると追従を始める
+	float m_chaseHeight = 0.0f;	// この値の高さにプレイヤー達すると追従を始める
 
 public:
 	CameraMoveComponent(GameObject& obj);
@@ -20,7 +20,7 @@ public:
 	void SpringCamera(GameObject& cameraObj);
 	void AdjustmentHeight(GameObject& cameraObj,GameObject& player);
 
-	inline void SetChaseHeight(const float height) { chaseHeight = height; };
+	inline void SetChaseHeight(const float height) { m_chaseHeight = height; };
 	void SetMoveTarget(GameObject& target) { m_moveTarget = &target; };
 };
 
