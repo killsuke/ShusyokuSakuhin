@@ -1,5 +1,6 @@
 #include "JumpComponent.h"
 #include "RigidBodyComponent.h"
+#include "TestExtrusionJudgeComponent.h"
 #include "input.h"
 #include <cmath>
 #include <iostream>
@@ -29,6 +30,7 @@ void JumpComponent::Update() {
 void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+
 
 	Vector3 velocity = rigid->GetVelocity();
 
@@ -75,8 +77,9 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 			m_firstSpeed = m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
 		}
 
-
-		if (isJumpButtonPressed == false) {
+		// ジャンプ中に天井に接触するか
+		// ボタンを離すとジャンプを終了
+		if (isJumpButtonPressed == false || m_isCeiling == true) {
 			m_isJumping = false; // 離したら即終了
 
 			// この速度減速を段階化して、極小、小、中、大、ぐらいで減速させる

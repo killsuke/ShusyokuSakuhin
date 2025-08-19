@@ -4,6 +4,8 @@
 #include "Spring.h"
 #include "GameObjectManager.h"
 #include "CameraTargetComponent.h"
+#include "RigidBodyComponent.h"
+using namespace DirectX::SimpleMath;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
@@ -105,6 +107,7 @@ void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& playe
 void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 {
 	auto cameraSpring = cameraObj.GetComponent<SpringComponent>();
+
 	if (cameraSpring != nullptr)
 	{
 		// m_moveTarget‚©‚çî•ñ‚ğ‘S•”‚à‚ç‚¤‚Æ‚©H

@@ -1,6 +1,7 @@
 #include "StageLoadCSVComponent.h"
 #include "CSV_Data.h"
 #include "TerrainManagerComponent.h"
+#include "EnemyManagerComponent.h"
 #include <fstream>
 
 using namespace DirectX::SimpleMath;
@@ -73,7 +74,8 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 
 	// 行で読み込んだデータを列に並び変え
 	// 結果を格納する一次元のベクター（列優先で詰めていく）
-	std::vector<CSV_Data> result;
+	std::vector<CSV_Data> result_Terrains;
+	std::vector<CSV_Data> result_Enemies;
 
 	// 最大列数を求める
 	size_t maxCols = 0;
@@ -102,16 +104,24 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 				// ここで判定
 				// もし「Tで始まるものだけ」なら↓
 				if (cell.kind[0] == 'T') {
-					result.push_back(cell);
+					result_Terrains.push_back(cell);
+				}
+				else if( cell.kind[0] == 'E') { // もし「Eで始まるものだけ」なら↓
+					result_Enemies.push_back(cell);
 				}
 			}
 		}
 	}
 
-	auto terrinMn = terrainManager.GetComponent<TerrainManagerComponent>();
+	auto terrainMn = terrainManager.GetComponent<TerrainManagerComponent>();
+	auto enemyMn = terrainManager.GetComponent<EnemyManagerComponent>();
 
 	// 地形データを移す
-	if (terrinMn != nullptr) {
-		terrinMn->SetTerrainData(std::move(result)); // TerrainManagerComponentにデータをセット
+	if (terrainMn != nullptr) {
+		terrainMn->SetCsvObjData(std::move(result_Terrains)); // TerrainManagerComponentにデータをセット
+	}
+	// 敵キャラデータを移す
+	if(enemyMn != nullptr) {
+		enemyMn->SetCsvObjData(std::move(result_Enemies)); // EnemyObjectManagerComponentにデータをセット
 	}
 }

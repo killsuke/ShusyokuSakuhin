@@ -8,7 +8,7 @@ enum ComponentType {
 	BASECOMPONENT = 0, // ベースコンポーネント（抽象クラス）
 	STAGE_LOAD_CSV,
 	JSON,
-	TERRAIN_MANAGER,
+	CSV_OBJECT_MANAGER,
 	TEST_MOVE,
 	JUMP,
 	SPRING,
@@ -21,6 +21,7 @@ enum ComponentType {
 	GO_AROUND,
 	HP_BAR_MOVE,
 	COLLIDER,
+	TEST_JUDGE_EXTRUSION,
 	TEST_EXTRUSION,
 	ATTACK, // 攻撃コンポーネント
 	ENEMY_DAMAGE, // 敵のダメージコンポーネント

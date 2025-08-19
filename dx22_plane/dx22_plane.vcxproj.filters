@@ -288,6 +288,15 @@
     <ClCompile Include="EnemyJsonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="CSVObjectManagerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManagerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TestExtrusionJudgeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -588,6 +597,15 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="EnemyJsonComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CSVObjectManagerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManagerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TestExtrusionJudgeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

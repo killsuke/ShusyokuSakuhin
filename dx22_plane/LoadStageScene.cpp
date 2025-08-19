@@ -25,8 +25,10 @@
 #include "Spring.h"
 #include "StageLoadCSVComponent.h"
 #include "TerrainManagerComponent.h"
+#include "EnemyManagerComponent.h"
 #include "TerrainJsonComponent.h"
 #include "EnemyJsonComponent.h"
+#include "TestExtrusionJudgeComponent.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -44,6 +46,7 @@ LoadStageScene::LoadStageScene() {
 		auto stageRoadCSVTrans = stageRoadCSV->AddComponent<TransformComponent>();	
 		auto str = stageRoadCSV->AddComponent<StageLoadCSVComponent>();
 		auto teM = stageRoadCSV->AddComponent<TerrainManagerComponent>();
+		auto enM = stageRoadCSV->AddComponent<EnemyManagerComponent>();
 
 		auto terrainJson = stageRoadCSV->AddComponent<TerrainJsonComponent>();
 		terrainJson->LoadTerrainJsonFile("json/terrain.json");
@@ -57,7 +60,8 @@ LoadStageScene::LoadStageScene() {
 	//	enemyJson->MakeSampleStatus(); // サンプルの敵キャラ情報を作成
 
 		str->LoadStageCSV("Stage1.csv", *stageRoadCSV); // ステージのCSVを読み込む
-		teM->CreateTerrain(terrainStatus); // 読み込んだCSVからTerrainを生成
+		teM->CreateTerrains(terrainStatus); // 読み込んだCSVからTerrainを生成
+		enM->CreateEnemies(enemyStatus); // 読み込んだJSONからEnemyを生成
 	}
 
 	{
@@ -75,6 +79,8 @@ LoadStageScene::LoadStageScene() {
 		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 		cubeRigid->SetGravityFlag(true);
+
+		player->AddComponent<TestExtrusionJudgeComponent>();
 
 		auto cubeColl = player->AddComponent<ColliderComponent>();
 	//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));

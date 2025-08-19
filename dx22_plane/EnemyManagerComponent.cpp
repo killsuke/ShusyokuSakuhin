@@ -1,0 +1,63 @@
+#include "EnemyManagerComponent.h"
+#include "Transform.h"
+#include "Collider.h"
+#include "Render3D.h"
+#include "Render3DColliderAABBComponent.h"
+#include "Render3DColliderOBBComponent.h"
+#include "GameObjectManager.h"
+#include "SquareMesh.h"
+#include "EnemyJsonComponent.h"
+#include "RigidBodyComponent.h"
+#include "TestExtrusionJudgeComponent.h"
+
+EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
+{
+	m_sortNum = CSV_OBJECT_MANAGER;
+}
+
+void EnemyManagerComponent::Update()
+{
+}
+
+void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
+{
+	// この中で生成する
+	if (m_csvObjData.empty()) {
+		return; // データがない場合は何もしない
+	}
+	unsigned int num = 0; // 生成したオブジェクトの数をカウント
+	for (auto& data : m_csvObjData) {
+		std::string kind = data.kind; // 敵の種類
+		EnemyStatus eS;
+		for (auto& e : status) {
+			if (e.kind == kind) {
+				eS.kind = e.kind;
+				eS.scale = e.scale;
+				eS.angle = e.angle;
+				eS.texture = e.texture;
+				eS.shaderVS = e.shaderVS;
+				eS.shaderPS = e.shaderPS;
+				break;
+			}
+		}
+		std::string name = "enemy_" + std::to_string(num);
+		auto enemyObj = GameObjectManager::AddObject(name, "Enemy");
+		auto transform = enemyObj->AddComponent<TransformComponent>();
+		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
+		transform->SetScale(eS.scale);
+		transform->SetRotation(eS.angle);
+		auto rigidBody = enemyObj->AddComponent<RigidBodyComponent>();
+		rigidBody->SetGravityFlag(true); // 重力を有効にする
+		enemyObj->AddComponent<TestExtrusionJudgeComponent>(); // 地面判定コンポーネントを追加
+
+		auto collider = enemyObj->AddComponent<ColliderComponent>();
+		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));
+		SquareMesh squareMesh;
+		auto render = enemyObj->AddComponent<Render3DComponent>();
+		render->SetMesh(squareMesh);
+		render->SetShader(eS.shaderVS, eS.shaderPS);
+		render->SetTexture(eS.texture);
+		render->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+		num++;
+	}
+}

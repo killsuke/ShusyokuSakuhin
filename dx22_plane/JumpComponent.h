@@ -6,6 +6,8 @@
 class JumpComponent : public Component
 {
 private:
+	void JumpAction(bool isJumpButtonPressed, bool trigger);
+
 //	float m_jumpHeight = 0.0f; // ジャンプの高さ
 	float m_jumpPower = 5.0f; // ジャンプの振幅
 	float m_time = 0.0f;
@@ -19,19 +21,22 @@ private:
 	const float m_deltaTime = 0.016f;
 	bool  m_isJumping = false; // ジャンプ中かどうか
 	bool m_isGround = false; // 地面にいるかどうか
+	bool m_isCeiling = false; // 天井にいるかどうか
 
 public:
 	JumpComponent(GameObject& obj);
 	~JumpComponent() = default;
 
 	void Update()override;
-	void JumpAction(bool isJumpButtonPressed,bool trigger);
 
 	void SetJumpPower(const float power) { m_jumpPower = power; };
 	float GetJumpPower() const { return m_jumpPower; };
 
 	void SetIsGround(const bool isGround) { m_isGround = isGround; } // 地面にいるかどうかを設定
 	bool GetIsGround() const { return m_isGround; } // 地面にいるかどうかを取得
+
+	void SetIsCeiling(const bool isCeiling) { m_isCeiling = isCeiling; } // 天井にいるかどうかを設定
+	bool GetIsCeiling() const { return m_isCeiling; } // 天井にいるかどうかを取得
 
 	void StartJump() { m_isJumping = true; };
 	void StopJump() { m_isJumping = false; };

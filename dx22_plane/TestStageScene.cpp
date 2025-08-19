@@ -23,6 +23,7 @@
 #include "CameraTargetComponent.h"
 #include "GoAroundComponent.h"
 #include "HPBarMoveComponent.h"
+#include "TestExtrusionJudgeComponent.h"
 #include "Spring.h"
 
 TestStageScene::TestStageScene() {
@@ -50,6 +51,8 @@ TestStageScene::TestStageScene() {
 		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 		cubeRigid->SetGravityFlag(true);
+
+		player->AddComponent<TestExtrusionJudgeComponent>();
 
 		auto cubeColl = player->AddComponent<ColliderComponent>();
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));

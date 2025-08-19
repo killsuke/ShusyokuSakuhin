@@ -177,7 +177,9 @@
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CSVObjectManagerComponent.cpp" />
     <ClCompile Include="EnemyJsonComponent.cpp" />
+    <ClCompile Include="EnemyManagerComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
     <ClCompile Include="StageLoadCSVComponent.cpp" />
@@ -241,6 +243,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TestExtrusionComponent.cpp" />
+    <ClCompile Include="TestExtrusionJudgeComponent.cpp" />
     <ClCompile Include="TestMaskScene.cpp" />
     <ClCompile Include="TestMoveComponent.cpp" />
     <ClCompile Include="TestStageScene.cpp" />
@@ -285,8 +288,10 @@
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
     <ClInclude Include="EnemyJsonComponent.h" />
+    <ClInclude Include="EnemyManagerComponent.h" />
     <ClInclude Include="JsonComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
@@ -358,6 +363,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TestExtrusionComponent.h" />
+    <ClInclude Include="TestExtrusionJudgeComponent.h" />
     <ClInclude Include="TestMaskScene.h" />
     <ClInclude Include="TestMoveComponent.h" />
     <ClInclude Include="TestStageScene.h" />

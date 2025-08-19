@@ -1,0 +1,10 @@
+#include "CSVObjectManagerComponent.h"
+
+CSVObjectManagerComponent::CSVObjectManagerComponent(GameObject& obj) : Component(obj) {
+	m_sortNum = CSV_OBJECT_MANAGER; // É\Å[Égî‘çÜÇê›íË
+}
+
+void CSVObjectManagerComponent::Update() {
+
+
+}
