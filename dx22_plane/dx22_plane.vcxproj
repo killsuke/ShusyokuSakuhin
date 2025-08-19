@@ -177,6 +177,8 @@
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="EnemyJsonComponent.cpp" />
+    <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
     <ClCompile Include="StageLoadCSVComponent.cpp" />
     <ClCompile Include="TerrainJsonComponent.cpp" />
@@ -284,6 +286,8 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="CSV_Data.h" />
+    <ClInclude Include="EnemyJsonComponent.h" />
+    <ClInclude Include="JsonComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
     <ClInclude Include="StageLoadCSVComponent.h" />

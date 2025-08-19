@@ -1,0 +1,37 @@
+{
+    "enemies": [],
+    "terrains": [
+        {
+            "kind": "E_NoMove",
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 5.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/NoTexture.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+        {
+            "kind": "E_dice",
+            "scale": {
+                "x": 5.0,
+                "y": 10.0,
+                "z": 5.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/dice.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
+        }
+    ]
+}

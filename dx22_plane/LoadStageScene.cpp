@@ -26,6 +26,7 @@
 #include "StageLoadCSVComponent.h"
 #include "TerrainManagerComponent.h"
 #include "TerrainJsonComponent.h"
+#include "EnemyJsonComponent.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -45,9 +46,15 @@ LoadStageScene::LoadStageScene() {
 		auto teM = stageRoadCSV->AddComponent<TerrainManagerComponent>();
 
 		auto terrainJson = stageRoadCSV->AddComponent<TerrainJsonComponent>();
-		auto jsonFile = terrainJson->LoadJsonFile("json/terrain.json");
+		terrainJson->LoadTerrainJsonFile("json/terrain.json");
 		auto terrainStatus = terrainJson->GetTerrainStatus();
-		auto terrainKinds = terrainJson->GetTerrainKinds();
+	//	auto terrainKinds = terrainJson->GetKindNames();
+
+		auto enemyJson = stageRoadCSV->AddComponent<EnemyJsonComponent>();
+		enemyJson->LoadEnemyJsonFile("json/enemy.json");
+		auto enemyStatus = enemyJson->GetEnemyStatus();
+
+	//	enemyJson->MakeSampleStatus(); // サンプルの敵キャラ情報を作成
 
 		str->LoadStageCSV("Stage1.csv", *stageRoadCSV); // ステージのCSVを読み込む
 		teM->CreateTerrain(terrainStatus); // 読み込んだCSVからTerrainを生成
