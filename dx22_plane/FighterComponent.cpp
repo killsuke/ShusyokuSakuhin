@@ -2,7 +2,7 @@
 
 FighterComponent::FighterComponent(GameObject& obj) : 	Component(obj)
 {
-	m_sortNum = FIGHTER;
+	m_sortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ƒ\[ƒg”Ô†‚ğİ’è
 }
 
 void FighterComponent::Update() {

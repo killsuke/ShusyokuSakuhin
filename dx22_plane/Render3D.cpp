@@ -4,7 +4,7 @@
 #include "GameObjectManager.h"
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = RENDER;
+	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 }

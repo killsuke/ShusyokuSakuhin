@@ -12,7 +12,7 @@
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
-	m_sortNum = CSV_OBJECT_MANAGER;
+	m_sortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // É\Å[Égî‘çÜÇê›íË
 }
 
 void EnemyManagerComponent::Update()

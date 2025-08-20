@@ -6,7 +6,7 @@
 
 AttackTimingComponent::AttackTimingComponent(GameObject& obj) : AttackComponent(obj)
 {
-	m_sortNum = ATTACK;
+	m_sortNum = ComponentTypeManager::GetID_FromName("ATTACK"); // ƒ\[ƒg”Ô†‚ğİ’è
 }
 
 void AttackTimingComponent::Update() {

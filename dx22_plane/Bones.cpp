@@ -8,7 +8,7 @@ using namespace DirectX::SimpleMath;
 Bones::Bones(GameObject& obj) : RenderComponent(obj)
 {
 	// 頂点作成と重み付けもするよ
-	m_sortNum = RENDER_ONE_SKIN_ANIMATION;
+	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 

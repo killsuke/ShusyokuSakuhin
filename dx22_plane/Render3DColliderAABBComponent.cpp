@@ -4,7 +4,7 @@
 #include "GameObjectManager.h"
 
 Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = COLLIDER_DEBUG_RENDER;
+	m_sortNum = ComponentTypeManager::GetID_FromName("COLLIDER_DEBUG_RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 }

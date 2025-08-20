@@ -8,7 +8,7 @@
 using namespace DirectX::SimpleMath;
 
 JumpComponent::JumpComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = JUMP;
+	m_sortNum = ComponentTypeManager::GetID_FromName("JUMP"); // ƒ\[ƒg”Ô†‚ğİ’è
 }
 
 void JumpComponent::Update() {

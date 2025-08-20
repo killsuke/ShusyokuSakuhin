@@ -243,8 +243,10 @@ void Application::MainLoop()
 
 	// 描画初期化
 	DirectXRender::Init();
-	SceneManager::Init();
 	ComponentTypeManager::Init();
+	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
+	SceneManager::Init();
+
 	//ComponentTypeManager::MakeSampleJson();
 
 	auto deviceContext = DirectXRender::GetDeviceContext();

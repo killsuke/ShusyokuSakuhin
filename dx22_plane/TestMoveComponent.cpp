@@ -7,7 +7,7 @@
 #include "input.h"
 
 TestMoveComponent::TestMoveComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = TEST_MOVE; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
 }
 
 // 更新処理

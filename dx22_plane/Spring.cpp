@@ -5,7 +5,7 @@
 using namespace DirectX::SimpleMath;
 
 SpringComponent::SpringComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = SPRING;
+	m_sortNum = ComponentTypeManager::GetID_FromName("SPRING"); // É\Å[Égî‘çÜÇê›íË
 }
 
 void SpringComponent::Update()

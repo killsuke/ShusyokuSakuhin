@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = CAMERA_MOVE;
+	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA_MOVE"); // ƒ\[ƒg”Ô†‚ğİ’è
 	m_chaseHeight = 25.0f; // ‰Šú‚Ì’Ç]‚‚³‚Í0
 }
 

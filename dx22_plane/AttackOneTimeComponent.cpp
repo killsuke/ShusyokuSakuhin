@@ -4,7 +4,7 @@
 #include <iostream>
 
 AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponent(obj) {
-	m_sortNum = ATTACK; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("ATTACK"); // ソート番号を設定
 }
 
 void AttackOneTimeComponent::Update() {

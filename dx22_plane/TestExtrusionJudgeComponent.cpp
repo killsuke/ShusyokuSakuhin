@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 
 TestExtrusionJudgeComponent::TestExtrusionJudgeComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = TEST_JUDGE_EXTRUSION; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("TEST_JUDGE_EXTRUSION"); // ソート番号を設定
 }
 
 void TestExtrusionJudgeComponent::Update()

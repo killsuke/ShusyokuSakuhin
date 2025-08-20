@@ -2,7 +2,7 @@
 using namespace DirectX::SimpleMath;
 
 TransformComponent::TransformComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = TRANSFORM; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("TRANSFORM"); // ソート番号を設定
 }
 
 // 更新処理

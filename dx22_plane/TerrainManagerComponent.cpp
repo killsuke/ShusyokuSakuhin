@@ -9,7 +9,7 @@
 #include "TerrainJsonComponent.h"
 
 TerrainManagerComponent::TerrainManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
-	m_sortNum = CSV_OBJECT_MANAGER; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ソート番号を設定
 }
 
 void TerrainManagerComponent::Update() {

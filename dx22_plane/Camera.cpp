@@ -11,7 +11,7 @@ using namespace std;
 
 Camera::Camera(GameObject& obj) : Component(obj)
 {
-	m_sortNum = CAMERA;
+	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ƒ\[ƒg”Ô†‚ðÝ’è
 
 	auto transform = p_object->GetComponent<TransformComponent>();
 

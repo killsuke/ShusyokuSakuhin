@@ -7,7 +7,7 @@
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ENEMY_DAMAGE; // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_DAMAGE"); // ソート番号を設定
 }
 
 void EnemyDamageComponent::Update()

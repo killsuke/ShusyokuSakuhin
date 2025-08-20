@@ -3,7 +3,7 @@
 #include "DirectXRender.h"
 
 HPBarMoveComponent::HPBarMoveComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = HP_BAR_MOVE;
+	m_sortNum = ComponentTypeManager::GetID_FromName("HP_BAR_MOVE"); // É\Å[Égî‘çÜÇê›íË
 }
 
 void HPBarMoveComponent::Update() {

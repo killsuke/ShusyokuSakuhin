@@ -5,7 +5,7 @@
 #include "GameObjectManager.h"
 
 RenderOneSkinAnimation::RenderOneSkinAnimation(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = RENDER_ONE_SKIN_ANIMATION;
+	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 }

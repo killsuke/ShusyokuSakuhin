@@ -39,15 +39,13 @@ public:
 	static nlohmann::ordered_json ComponentTypeNameToJson(const std::unordered_map<std::string, uint32_t>& comps);
 	static bool SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath);
 
-	static std::optional<uint32_t> GetID_FromName(const std::string& name) {
+	static uint32_t GetID_FromName(const std::string& name) {
 		auto it = nameToId.find(name);
-		if(it != nameToId.end()) {
-			return it->second; // 見つかった場合はIDを返す
+		if (it != nameToId.end()) {
+			return it->second;
 		}
 		MessageBoxA(nullptr, "その名前のコンポーネントの ID は存在しません。", "Error", MB_ICONERROR | MB_OK);
-
-		return std::nullopt; // 見つからなかった場合は0を返す
-		// ↑ここをどうするか決める
+		return UINT32_MAX; // 魔法の数字で「存在しない」を表す
 	}
 
 	static std::string GetName_FromID(const uint32_t& id) {

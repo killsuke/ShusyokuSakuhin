@@ -79,13 +79,11 @@ void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath
 	nlohmann::json j;
 	ifs >> j;
 
-	//	uint32_t id = 0;
 	for (const auto& comp : j["components"]) {
 		std::string compName = comp.at("name");
 		uint32_t id = comp.at("ID");
 		nameToId[compName] = id; // 名前とIDを紐付け
 		idToName[id] = compName; // IDと名前を紐付け
-		//id++; // IDをインクリメント
 	}
 }
 

@@ -7,7 +7,7 @@
 
 CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = CAMERA_POINT;
+	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA_POINT"); // É\Å[Égî‘çÜÇê›íË
 }
 
 void CameraPointComponent::Update() {
