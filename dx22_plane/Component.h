@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "GameObject.h"
+#include "ComponentTypeManager.h"
 
 enum ComponentType {
 	// コンポーネントの種類
@@ -30,7 +31,7 @@ enum ComponentType {
 	RENDER_ONE_SKIN_ANIMATION,
 	COLLIDER_DEBUG_RENDER,
 
-	Max			// 最大値（コンポーネントの種類数）
+	MAX			// 最大値（コンポーネントの種類数）
 };
 
 class GameObject; // 前方宣言

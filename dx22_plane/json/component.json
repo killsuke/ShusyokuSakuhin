@@ -1,0 +1,104 @@
+{
+    "components": [
+        {
+            "name": "BASECOMPONENT",
+            "ID": 0
+        },
+        {
+            "name": "STAGE_LOAD_CSV",
+            "ID": 1
+        },
+        {
+            "name": "JSON",
+            "ID": 2
+        },
+        {
+            "name": "CSV_OBJECT_MANAGER",
+            "ID": 3
+        },
+        {
+            "name": "TEST_MOVE",
+            "ID": 4
+        },
+        {
+            "name": "JUMP",
+            "ID": 5
+        },
+        {
+            "name": "SPRING",
+            "ID": 6
+        },
+        {
+            "name": "RIGIDBODY",
+            "ID": 7
+        },
+        {
+            "name": "CAMERA_TARGET",
+            "ID": 8
+        },
+        {
+            "name": "CAMERA_POINT",
+            "ID": 9
+        },
+        {
+            "name": "CAMERA_MOVE",
+            "ID": 10
+        },
+        {
+            "name": "CAMERA",
+            "ID": 11
+        },
+        {
+            "name": "BONE",
+            "ID": 12
+        },
+        {
+            "name": "GO_AROUND",
+            "ID": 13
+        },
+        {
+            "name": "HP_BAR_MOVE",
+            "ID": 14
+        },
+        {
+            "name": "COLLIDER",
+            "ID": 15
+        },
+        {
+            "name": "TEST_JUDGE_EXTRUSION",
+            "ID": 16
+        },
+        {
+            "name": "ATTACK",
+            "ID": 17
+        },
+        {
+            "name": "ENEMY_DAMAGE",
+            "ID": 18
+        },
+        {
+            "name": "FIGHTER",
+            "ID": 19
+        },
+        {
+            "name": "TRANSFORM",
+            "ID": 20
+        },
+        {
+            "name": "RENDER",
+            "ID": 21
+        },
+        {
+            "name": "RENDER_ONE_SKIN_ANIMATION",
+            "ID": 22
+        },
+        {
+            "name": "COLLIDER_DEBUG_RENDER",
+            "ID": 23
+        },
+        {
+            "name": "MAX",
+            "ID": 24
+        }
+    ]
+}

@@ -49,7 +49,7 @@ json EnemyJsonComponent::EnemyToJson(const std::vector<EnemyStatus>& enemies) {
         item["texture"] = e.texture;
         item["shaderVS"] = e.shaderVS;
         item["shaderPS"] = e.shaderPS;
-        j["terrains"].push_back(item);
+        j["enemies"].push_back(item);
     }
     return j;
 }

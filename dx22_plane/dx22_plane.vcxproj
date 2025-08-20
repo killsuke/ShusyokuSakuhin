@@ -177,6 +177,7 @@
     <ClCompile Include="CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentTypeManager.cpp" />
     <ClCompile Include="CSVObjectManagerComponent.cpp" />
     <ClCompile Include="EnemyJsonComponent.cpp" />
     <ClCompile Include="EnemyManagerComponent.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentTypeManager.h" />
     <ClInclude Include="CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
     <ClInclude Include="EnemyJsonComponent.h" />

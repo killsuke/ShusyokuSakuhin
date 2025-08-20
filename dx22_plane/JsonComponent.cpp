@@ -29,10 +29,10 @@ Vector3 JsonComponent::JsonToVector3(const nlohmann::ordered_json& j) {
 bool JsonComponent::SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath) {
 
     // ディレクトリ部分を作成（ファイル名を除いたパス）
-    path _pash(filepath);
-    if (!_pash.parent_path().empty()) {
+    path _path(filepath);
+    if (!_path.parent_path().empty()) {
         std::error_code ec;
-        create_directories(_pash.parent_path(), ec);
+        create_directories(_path.parent_path(), ec);
         if (ec) {
             std::cerr << "ディレクトリ作成失敗：" << ec.message() << std::endl;
             return false;

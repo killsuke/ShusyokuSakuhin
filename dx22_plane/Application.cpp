@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "GameObjectManager.h"
 #include "SceneManager.h"
+#include "ComponentTypeManager.h"
 
 // Application.cppの先頭などにこれを追加すればOK
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -243,6 +244,8 @@ void Application::MainLoop()
 	// 描画初期化
 	DirectXRender::Init();
 	SceneManager::Init();
+	ComponentTypeManager::Init();
+	//ComponentTypeManager::MakeSampleJson();
 
 	auto deviceContext = DirectXRender::GetDeviceContext();
 	auto device = DirectXRender::GetDevice();
@@ -367,6 +370,8 @@ void Application::MainLoop()
 			}
 		}
 	}
+
+	ComponentTypeManager::UnInit();
 
 	// 終了処理
 	SceneManager::UnInit();
