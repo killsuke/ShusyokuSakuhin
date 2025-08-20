@@ -22,7 +22,6 @@ enum ComponentType {
 	HP_BAR_MOVE,
 	COLLIDER,
 	TEST_JUDGE_EXTRUSION,
-	TEST_EXTRUSION,
 	ATTACK, // 攻撃コンポーネント
 	ENEMY_DAMAGE, // 敵のダメージコンポーネント
 	FIGHTER,

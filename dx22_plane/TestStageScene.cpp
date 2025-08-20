@@ -11,7 +11,6 @@
 #include "Render3DColliderOBBComponent.h"
 #include "Collider.h"
 #include "TestMoveComponent.h"
-#include "TestExtrusionComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "EnemyDamageComponent.h"
@@ -58,8 +57,6 @@ TestStageScene::TestStageScene() {
 		cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
 		//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
 		//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
-
-		auto cubeCollEX = player->AddComponent<TestExtrusionComponent>();
 
 		auto fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);

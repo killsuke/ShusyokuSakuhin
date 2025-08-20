@@ -14,7 +14,6 @@
 #include "Render3DColliderAABBComponent.h"
 #include "Collider.h"
 #include "TestMoveComponent.h"
-#include "TestExtrusionComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "Input.h"

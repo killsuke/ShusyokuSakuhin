@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include <SimpleMath.h>
 #include "GameObjectManager.h"
+#include <iostream>
 
 using namespace DirectX::SimpleMath;
 
@@ -12,24 +13,21 @@ GoAroundComponent::GoAroundComponent(GameObject& obj) : Component(obj)
 
 void GoAroundComponent::Update()
 {
-	m_deltaTime = 0.016f; // XVŠÔŠuŽžŠÔ‚ð16ms‚¸‚Â‰ÁŽZ
 
 	auto transform = p_object->GetComponent<TransformComponent>();
 	auto rollingObjPos = transform->GetPosition();
 
-	auto obj = GameObjectManager::GameObjectFindName("Player");
-
 	auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
 	auto centerPos = centerTrans->GetPosition();
 
-	auto delta = rollingObjPos - centerPos;
-	auto length = delta.Length();
+	m_angle += m_deltaTime * m_rotationSpeed; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
+	float totalAngle = m_angle + m_initialAngle;
 
-	auto angle = m_deltaTime * 0.5f; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
+	Vector3 rotatedOffset = Vector3(
+		cosf(totalAngle) * m_radius,
+		sinf(totalAngle) * m_radius,
+		0.0f
+	);
 
-	Quaternion rotation = Quaternion::CreateFromAxisAngle(Vector3::Forward, angle);
-
-	Vector3 rotatedOffset = Vector3::Transform(delta, rotation);
-
-	transform->SetPosition(centerPos + rotatedOffset);
+	transform->SetPosition(centerPos  + rotatedOffset);
 }

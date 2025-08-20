@@ -242,7 +242,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="TestExtrusionComponent.cpp" />
     <ClCompile Include="TestExtrusionJudgeComponent.cpp" />
     <ClCompile Include="TestMaskScene.cpp" />
     <ClCompile Include="TestMoveComponent.cpp" />
@@ -362,7 +361,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="TestExtrusionComponent.h" />
     <ClInclude Include="TestExtrusionJudgeComponent.h" />
     <ClInclude Include="TestMaskScene.h" />
     <ClInclude Include="TestMoveComponent.h" />

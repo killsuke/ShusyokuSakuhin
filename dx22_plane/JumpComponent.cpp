@@ -39,7 +39,6 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 		m_isJumping = false;
 		m_time = 0.0f;
 		m_firstSpeed = m_jumpPower;
-
 	}
 
 	// ジャンプ時間超過
@@ -51,15 +50,11 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 	if (!m_isJumping && isJumpButtonPressed && m_isGround && trigger == true) {
 		m_isJumping = true;
 		m_time = 0.0f;
-		//std::cout << "Jumping" << std::endl;
-
 	}
 
 	// ジャンプ中の処理
 	if (m_isJumping) {
 		m_time += m_deltaTime;
-
-	//	std::cout << "Jumping" << std::endl;
 
 		if (isJumpButtonPressed == true && m_time < m_maxJumpTime && m_firstSpeed >= m_velocityIgnore) {
 						
@@ -68,13 +63,11 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 				m_firstSpeed = 0.0f;
 			}
 
-			//std::cout << m_firstSpeed << std::endl;
-
 			// 速度更新
 			velocity.y += m_firstSpeed;
 			rigid->SetVelocity(velocity);
 
-			m_firstSpeed = m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
+			m_firstSpeed -= m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
 		}
 
 		// ジャンプ中に天井に接触するか
@@ -86,8 +79,6 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 			// つまり、あまりにもジャンプが低かったりすると減速しないようにする
 			// 速度を減衰させる
 			velocity.y -= velocity.y * m_attenuationStop;
-
-			//std::cout << velocity.y << std::endl;
 
 			rigid->SetVelocity(velocity);
 		}

@@ -3,6 +3,8 @@
 #include "RigidBodyComponent.h"
 #include <SimpleMath.h>
 #include "GameObjectManager.h"
+#include "JumpComponent.h"
+
 using namespace DirectX::SimpleMath;
 
 TestExtrusionJudgeComponent::TestExtrusionJudgeComponent(GameObject& obj) : Component(obj)
@@ -15,6 +17,8 @@ void TestExtrusionJudgeComponent::Update()
 	auto terrains = GameObjectManager::GameObjectFindTag("Terrain");
 	auto coll = p_object->GetComponent<ColliderComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+	auto jump = p_object->GetComponent<JumpComponent>();
+
 
 	m_isGround = false;
 	m_isCeiling = false;
@@ -41,4 +45,9 @@ void TestExtrusionJudgeComponent::Update()
 		}
 	}
 
+	if(jump == nullptr) {
+		return; // ジャンプコンポーネントが存在しない場合は終了
+	}
+	jump->SetIsGround(m_isGround); // 地面にいるかどうかを設定
+	jump->SetIsCeiling(m_isCeiling); // 天井にいるかどうかを設定
 }

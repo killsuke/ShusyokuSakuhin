@@ -11,7 +11,6 @@
 #include "Render3DColliderOBBComponent.h"
 #include "Collider.h"
 #include "TestMoveComponent.h"
-#include "TestExtrusionComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "EnemyDamageComponent.h"
@@ -43,7 +42,7 @@ LoadStageScene::LoadStageScene() {
 
 	{
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
-		auto stageRoadCSVTrans = stageRoadCSV->AddComponent<TransformComponent>();	
+		auto stageRoadCSVTrans = stageRoadCSV->AddComponent<TransformComponent>();
 		auto str = stageRoadCSV->AddComponent<StageLoadCSVComponent>();
 		auto teM = stageRoadCSV->AddComponent<TerrainManagerComponent>();
 		auto enM = stageRoadCSV->AddComponent<EnemyManagerComponent>();
@@ -51,13 +50,13 @@ LoadStageScene::LoadStageScene() {
 		auto terrainJson = stageRoadCSV->AddComponent<TerrainJsonComponent>();
 		terrainJson->LoadTerrainJsonFile("json/terrain.json");
 		auto terrainStatus = terrainJson->GetTerrainStatus();
-	//	auto terrainKinds = terrainJson->GetKindNames();
+		//	auto terrainKinds = terrainJson->GetKindNames();
 
 		auto enemyJson = stageRoadCSV->AddComponent<EnemyJsonComponent>();
 		enemyJson->LoadEnemyJsonFile("json/enemy.json");
 		auto enemyStatus = enemyJson->GetEnemyStatus();
 
-	//	enemyJson->MakeSampleStatus(); // サンプルの敵キャラ情報を作成
+		//	enemyJson->MakeSampleStatus(); // サンプルの敵キャラ情報を作成
 
 		str->LoadStageCSV("Stage1.csv", *stageRoadCSV); // ステージのCSVを読み込む
 		teM->CreateTerrains(terrainStatus); // 読み込んだCSVからTerrainを生成
@@ -68,10 +67,10 @@ LoadStageScene::LoadStageScene() {
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		player->AddComponent<TestMoveComponent>();
 
-		auto cubeTrans = player->AddComponent<TransformComponent>();
-		cubeTrans->SetScale({ 4.0f, 10.0f, 5.0f });
-		cubeTrans->SetPosition({ 0.0f,50.0f,0.0f });
-		cubeTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
+		auto playerTrans = player->AddComponent<TransformComponent>();
+		playerTrans->SetScale({ 4.0f, 10.0f, 5.0f });
+		playerTrans->SetPosition({ 0.0f,-9.0f,0.0f });
+		playerTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto cubeJump = player->AddComponent<JumpComponent>();
 		cubeJump->SetJumpPower(50.0f);
@@ -83,11 +82,9 @@ LoadStageScene::LoadStageScene() {
 		player->AddComponent<TestExtrusionJudgeComponent>();
 
 		auto cubeColl = player->AddComponent<ColliderComponent>();
-	//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
-		//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
-		//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
-
-		auto cubeCollEX = player->AddComponent<TestExtrusionComponent>();
+		//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+			//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
+			//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
 
 		auto fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);
@@ -107,28 +104,44 @@ LoadStageScene::LoadStageScene() {
 		cubeRe2->SetTexture("assets/texture/NoTexture.png");
 		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 
-		/*	CubeMesh cubeMesh3;
-			auto cubeRe3 = player->AddComponent<Render3DColliderOBBComponent>();
-			cubeRe3->SetMesh(cubeMesh3);
-			cubeRe3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-			cubeRe3->SetTexture("assets/texture/NoTexture.png");
-			cubeRe3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
 
-			/*auto child = GameObjectManager::AddChild("child", "Child");
-			child->SetChild(child);
+		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
-			auto childTrans = child->AddComponent<TransformComponent>();
-			childTrans->SetLocalPosition({5.0f,0.0f,0.0f});
-			childTrans->SetLocalScale({ 1.0f, 1.0f, 1.0f });
-			childTrans->SetLocalRotation({ 0.0f, 0.0f, 45.0f });
-			childTrans->MakeChildWorld();
+		auto rollingTrans = rolling->AddComponent<TransformComponent>();
+		rollingTrans->SetScale({ 8.0f, 3.0f, 3.0f });
+		rollingTrans->SetPosition({30.0f,-9.0f,0.0f});
+		rollingTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-			CubeMesh childMesh;
-			auto childRender = child->AddComponent<Render3DComponent>();
-			childRender->SetMesh(childMesh);
-			childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-			childRender->SetTexture("assets/texture/NoTexture.png");*/
+		auto rollingGoAround = rolling->AddComponent<GoAroundComponent>();
+		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
+		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(),rollingTrans->GetPosition()); // 初期オフセットを設定
+		rollingGoAround->SetRotationSpeed(7.0f); // 回転速度を設定
 
+		SquareMesh rollingMesh;
+		auto rollingRender = rolling->AddComponent<Render3DComponent>();
+		rollingRender->SetMesh(rollingMesh);
+		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rollingRender->SetTexture("assets/texture/NoTexture.png");
+
+
+		auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
+
+		auto rollingTrans2 = rolling2->AddComponent<TransformComponent>();
+		rollingTrans2->SetScale({ 8.0f, 3.0f, 3.0f });
+		rollingTrans2->SetPosition({ -30.0f,-9.0f,0.0f });
+		rollingTrans2->SetRotation({ 0.0f, 0.0f, 0.0f });
+
+		auto rollingGoAround2 = rolling2->AddComponent<GoAroundComponent>();
+		rollingGoAround2->SetCenterObject(player); // プレイヤーを中心に回るように設定
+		rollingGoAround2->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
+		rollingGoAround2->SetRotationSpeed(7.0f); // 回転速度を設定
+		rollingGoAround2->SetInitialAngle(180.0f); // 初期角度を設定
+
+		SquareMesh rollingMesh2;
+		auto rollingRender2 = rolling2->AddComponent<Render3DComponent>();
+		rollingRender2->SetMesh(rollingMesh2);
+		rollingRender2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rollingRender2->SetTexture("assets/texture/NoTexture.png");
 
 		/*CubeMesh cubeMeshSword;
 		CubeMesh cubeMeshSword2;
@@ -255,7 +268,7 @@ LoadStageScene::LoadStageScene() {
 
 		auto point2 = GameObjectManager::AddObject("CameraPoint2", "CameraPoint");
 		auto pointTrans2 = point2->AddComponent<TransformComponent>();
-		pointTrans2->SetScale({ 30.0f, 8.0f, 10.0f });
+		pointTrans2->SetScale({ 30.0f, 5.0f, 10.0f });
 		pointTrans2->AddPosition({ 305.0f, -30.0f, 0.0f });
 		auto pointCamera2 = point2->AddComponent<CameraPointComponent>();
 		auto pointColl2 = point2->AddComponent<ColliderComponent>();
