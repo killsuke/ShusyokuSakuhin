@@ -27,6 +27,9 @@
     <ContentFile>
       <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Debug\unlitTextureVS2D.cso</FullPath>
     </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Debug\unlitTextureVSSkyDome.cso</FullPath>
+    </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />

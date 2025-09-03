@@ -28,6 +28,8 @@
 #include "TerrainJsonComponent.h"
 #include "EnemyJsonComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "SkyDomeMesh.h"
+#include "SkyDomeRenderComponent.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -39,6 +41,17 @@ LoadStageScene::LoadStageScene() {
 	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
 
 	camera->AddComponent<SpringComponent>();
+
+	{
+		auto skydome = GameObjectManager::AddObject("skyDome", "SkyDome");
+		auto skyTrans = skydome->AddComponent<TransformComponent>();
+		skyTrans->SetScale({ 1000.0f,500.0f,1000.0f });
+		auto skyRend = skydome->AddComponent<SkyDomeRenderComponent>();
+		SkyDomeMesh skyMesh;
+		skyRend->SetMesh(skyMesh);
+		skyRend->SetShader("unlitTextureVSSkyDome.hlsl", "shader/unlitTexturePS.hlsl");
+		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");
+	}
 
 	{
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
@@ -105,7 +118,8 @@ LoadStageScene::LoadStageScene() {
 		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 
 
-		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+	//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+		auto rolling = GameObjectManager::AddAbsFront("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 8.0f, 3.0f, 3.0f });
@@ -124,24 +138,27 @@ LoadStageScene::LoadStageScene() {
 		rollingRender->SetTexture("assets/texture/NoTexture.png");
 
 
-		auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
+		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
 
-		auto rollingTrans2 = rolling2->AddComponent<TransformComponent>();
-		rollingTrans2->SetScale({ 8.0f, 3.0f, 3.0f });
-		rollingTrans2->SetPosition({ -30.0f,-9.0f,0.0f });
-		rollingTrans2->SetRotation({ 0.0f, 0.0f, 0.0f });
+		//auto rollingTrans2 = rolling2->AddComponent<TransformComponent>();
+		//rollingTrans2->SetScale({ 8.0f, 3.0f, 3.0f });
+		//rollingTrans2->SetPosition({ -30.0f,-9.0f,0.0f });
+		//rollingTrans2->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		auto rollingGoAround2 = rolling2->AddComponent<GoAroundComponent>();
-		rollingGoAround2->SetCenterObject(player); // プレイヤーを中心に回るように設定
-		rollingGoAround2->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
-		rollingGoAround2->SetRotationSpeed(7.0f); // 回転速度を設定
-		rollingGoAround2->SetInitialAngle(180.0f); // 初期角度を設定
+		//auto rollingGoAround2 = rolling2->AddComponent<GoAroundComponent>();
+		//rollingGoAround2->SetCenterObject(player); // プレイヤーを中心に回るように設定
+		//rollingGoAround2->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
+		//rollingGoAround2->SetRotationSpeed(7.0f); // 回転速度を設定
+		//rollingGoAround2->SetInitialAngle(180.0f); // 初期角度を設定
 
-		SquareMesh rollingMesh2;
-		auto rollingRender2 = rolling2->AddComponent<Render3DComponent>();
-		rollingRender2->SetMesh(rollingMesh2);
-		rollingRender2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		rollingRender2->SetTexture("assets/texture/NoTexture.png");
+		//SquareMesh rollingMesh2;
+		//auto rollingRender2 = rolling2->AddComponent<Render3DComponent>();
+		//rollingRender2->SetMesh(rollingMesh2);
+		//rollingRender2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//rollingRender2->SetTexture("assets/texture/NoTexture.png");
+
+		// == ここ大事↑ ==
+
 
 		/*CubeMesh cubeMeshSword;
 		CubeMesh cubeMeshSword2;
@@ -281,7 +298,6 @@ LoadStageScene::LoadStageScene() {
 		pointCamera2->SetBeforeAndNextTargetObj(*target2, *target3);
 		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
 	}
-
 
 }
 

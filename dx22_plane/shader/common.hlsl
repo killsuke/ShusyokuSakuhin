@@ -123,3 +123,12 @@ cbuffer UIParam : register(b9)
     float hpScale;
     float2 padding; // •K—v‚È‚ç
 };
+
+cbuffer ViewBufferSky : register(b10)
+{
+    matrix ViewSky;
+}
+cbuffer ProjectionBufferSky : register(b11)
+{
+    matrix ProjectionSky;
+}

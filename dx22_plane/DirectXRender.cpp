@@ -61,6 +61,8 @@ ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
 ID3D11Buffer* g_pViewBuffer2D{}; // ビュー行列
 ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
 
+ID3D11Buffer* g_pViewBufferSkyDome{}; // ビュー行列
+ID3D11Buffer* g_pProjectionBufferSkyDome{}; // プロジェクション行列
 
 DirectXRender::DirectXRender() {
 
@@ -164,6 +166,8 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pProjectionBuffer3D);
 	SAFE_RELEASE(g_pViewBuffer2D);
 	SAFE_RELEASE(g_pProjectionBuffer2D);
+	SAFE_RELEASE(g_pViewBufferSkyDome);
+	SAFE_RELEASE(g_pProjectionBufferSkyDome);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
 }
@@ -673,6 +677,14 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	m_DeviceContext->VSSetConstantBuffers(4, 1, &g_pProjectionBuffer2D);
 	if (FAILED(hr)) return hr;
 
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBufferSkyDome);
+	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pViewBufferSkyDome);
+	if (FAILED(hr)) return hr;
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBufferSkyDome);
+	m_DeviceContext->VSSetConstantBuffers(11, 1, &g_pProjectionBufferSkyDome);
+	if (FAILED(hr)) return hr;
+
 	return hr;
 }
 
@@ -722,6 +734,30 @@ void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* Projectio
 
 	// プロジェクション行列をGPU側へ送る
 	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer2D, 0, NULL, &projection, 0, 0);
+}
+
+//=======================================
+// ビュー行列を設定（スカイドーム用）
+//=======================================
+void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix)
+{
+	DirectX::SimpleMath::Matrix view;
+	view = ViewMatrix->Transpose(); // 転置
+
+	// ビュー行列をGPU側へ送る
+	m_DeviceContext->UpdateSubresource(g_pViewBufferSkyDome, 0, NULL, &view, 0, 0);
+}
+
+//=======================================
+// プロジェクション行列を設定（スカイドーム用）
+//=======================================
+void DirectXRender::SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+{
+	DirectX::SimpleMath::Matrix projection;
+	projection = ProjectionMatrix->Transpose(); // 転置
+
+	// プロジェクション行列をGPU側へ送る
+	m_DeviceContext->UpdateSubresource(g_pProjectionBufferSkyDome, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================

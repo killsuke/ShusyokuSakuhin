@@ -29,5 +29,13 @@ void GoAroundComponent::Update()
 		0.0f
 	);
 
+	Vector3 directionToCenter = centerPos - (centerPos + rotatedOffset);
+	directionToCenter.Normalize();
+
+	// ‚yŽ²‰ñ“]i‚Q‚c•½–Êãj‚ð‘z’è‚µ‚Ä‚xŽ²‚ðã‚É‚µ‚½‚¢ê‡
+	float angleToCenter = atan2f(directionToCenter.y, directionToCenter.x);
+
+	transform->SetRotation(Vector3(0.0f, 0.0f, DirectX::XMConvertToDegrees(angleToCenter)));
+
 	transform->SetPosition(centerPos  + rotatedOffset);
 }

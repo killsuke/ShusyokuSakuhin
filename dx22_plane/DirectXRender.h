@@ -81,8 +81,10 @@ public:
 
 	static void SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix);
 	static void SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix);
 	static void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
 	static void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix);
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };

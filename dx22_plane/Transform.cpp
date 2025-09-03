@@ -54,7 +54,6 @@ Matrix TransformComponent::MakeWorldMatrix() {
 
 	// ワールド行列を作成し、保存
 	return	m_transform.worldMatrix = s * r * t;
-	//	m_transform.worldMatrix = m_transform.worldMatrix.Transpose(); // 行列を転置
 }
 
 Matrix TransformComponent::MakeLocalMatrix() {

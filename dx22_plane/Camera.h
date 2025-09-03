@@ -20,6 +20,9 @@ private:
 	DirectX::SimpleMath::Matrix		m_ViewMatrix3D{};
 	DirectX::SimpleMath::Matrix		m_ProjectionMatrix3D{};
 
+	DirectX::SimpleMath::Matrix		m_ViewMatrixSky{};
+	DirectX::SimpleMath::Matrix		m_ProjectionMatrixSky{};
+
 	//float m_CameraDirection = 0; // カメラの方向
 
 	//float targetCount = 0.0f;	// ターゲットにしてから数える

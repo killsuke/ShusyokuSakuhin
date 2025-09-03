@@ -333,7 +333,7 @@ void Camera::Update()
 
 		Update2D();
 		Update3D();
-		//	UpdateSky();
+		UpdateSky();
 	}
 }
 
@@ -404,29 +404,32 @@ void Camera::Update3D() {
 
 void Camera::UpdateSky() {
 	//// ビュー変換後列作成
-	//Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	//m_ViewMatrix = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
-	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	//// このコードは確認テストのために残す
-	//// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	m_ViewMatrixSky = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
+	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	// このコードは確認テストのために残す
+	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
 
-	//viewMtxSky = DirectX::XMMatrixTranspose(m_ViewMatrix);
+	DirectXRender::SetViewMatrixSkyDome(&m_ViewMatrixSky);
 
-	////プロジェクション行列の生成
-	//constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+	//プロジェクション行列の生成
+	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
 
-	//float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
-	//float nearPlane = 1.0f;       // ニアクリップ
-	//float farPlane = 1000.0f;      // ファークリップ
+	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
+	float nearPlane = 1.0f;       // ニアクリップ
+	float farPlane = 1000.0f;      // ファークリップ
 
-	////プロジェクション行列の生成
-	//Matrix projectionMatrix;
-	//projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
-	//// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	//// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	//// このコードは確認テストのために残す
-	//// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+	//プロジェクション行列の生成
+
+	m_ProjectionMatrixSky = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+
+	DirectXRender::SetProjectionMatrixSkyDome(&m_ProjectionMatrixSky);
+
+	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
+	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
+	// このコードは確認テストのために残す
+	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
 	//projectionMtxSky = DirectX::XMMatrixTranspose(projectionMatrix);
 }
