@@ -1,5 +1,6 @@
 #include "RigidBodyComponent.h"
 #include "Transform.h"
+#include "TimeManager.h"
 
 using namespace DirectX::SimpleMath;
 

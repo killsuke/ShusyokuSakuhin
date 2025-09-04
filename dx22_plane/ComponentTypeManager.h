@@ -44,7 +44,9 @@ public:
 		if (it != nameToId.end()) {
 			return it->second;
 		}
-		MessageBoxA(nullptr, "その名前のコンポーネントの ID は存在しません。", "Error", MB_ICONERROR | MB_OK);
+
+		std::string errorMsg = "コンポーネント名 ： " + name + " に対応するＩＤは存在しません。";
+		MessageBoxA(nullptr, errorMsg.c_str(), "Error", MB_ICONERROR | MB_OK);
 		return UINT32_MAX; // 魔法の数字で「存在しない」を表す
 	}
 

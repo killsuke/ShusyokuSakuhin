@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "ComponentTypeManager.h"
+#include "TimeManager.h"
 
 // Application.cppの先頭などにこれを追加すればOK
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -243,6 +244,7 @@ void Application::MainLoop()
 
 	// 描画初期化
 	DirectXRender::Init();
+	TimeManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
@@ -285,6 +287,8 @@ void Application::MainLoop()
 	// ゲームループ
 	while (1)
 	{
+		TimeManager::Update();
+
 		float num = 0.0f;
 		// 新たにメッセージがあれば
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))

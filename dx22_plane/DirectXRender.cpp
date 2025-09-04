@@ -261,6 +261,8 @@ HRESULT DirectXRender::DepthStencilCreate() {
 	textureDesc.MipLevels = 1;                            // ミップレベルは1（ミップマップは使用しない）
 	textureDesc.ArraySize = 1;                            // テクスチャの配列サイズ（通常1）
 	textureDesc.Format = DXGI_FORMAT_D16_UNORM;           // フォーマットは16ビットの深度バッファを使用
+	//textureDesc.Format = DXGI_FORMAT_D32_FLOAT;           // フォーマットは16ビットの深度バッファを使用
+	// ↑ここをいじると奥行判定の精度が変わる（パフォーマンスに影響を及ぼす）
 	textureDesc.SampleDesc.Count = 1;    // スワップチェーンと同じサンプル設定
 	textureDesc.SampleDesc.Quality = 0;    // スワップチェーンと同じサンプル設定
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;              // 使用方法はデフォルト（GPUで使用）

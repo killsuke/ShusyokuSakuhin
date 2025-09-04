@@ -9,6 +9,7 @@
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
+#include "Render2D.h"
 #include "Collider.h"
 #include "TestMoveComponent.h"
 #include "RigidBodyComponent.h"
@@ -298,6 +299,19 @@ LoadStageScene::LoadStageScene() {
 		pointCamera2->SetBeforeAndNextTargetObj(*target2, *target3);
 		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
 	}
+
+	/*{
+		auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
+		auto testUITrans = testUI->AddComponent<TransformComponent>();
+		testUITrans->SetPosition({ -300.0f, 0.0f, 0.0f });
+		testUITrans->SetScale({50.0f,50.0f,50.0f});
+		auto testUIRend = testUI->AddComponent<Render2DComponent>();
+		SquareMesh square;
+		testUIRend->SetMesh(square);
+		testUIRend->SetTexture("assets/texture/NoTexture.png");
+		testUIRend->SetColor({0.0f,0.0f,0.0f,1.0f});
+		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	}*/
 
 }
 
