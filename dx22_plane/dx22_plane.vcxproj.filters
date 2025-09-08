@@ -309,6 +309,9 @@
     <ClCompile Include="ComponentTypeManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="TestSwordActionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -628,6 +631,9 @@
     </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSwordActionComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

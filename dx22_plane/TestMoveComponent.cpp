@@ -16,16 +16,22 @@ void TestMoveComponent::Update() {
 	bool keyL = false;
 
 	auto fighter = p_object->GetComponent<FighterComponent>();
+	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+	
+	if(/*fighter == nullptr || */rigid == nullptr)
+	{
+		return;
+	}
 
 	if (Input::GetKeyPress(VK_J) == true || Input::GetButtonPress(XINPUT_LEFT))
 	{
+		m_rightLeft = false; // ¶Œü‚«
 		keyJ = true;
 	}
 	if (Input::GetKeyPress(VK_L) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
+		m_rightLeft = true; // ‰EŒü‚«
 		keyL = true;
 	}
-
-	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 
 	if (rigid != nullptr) {
 		if (keyJ == true && keyL == false) {

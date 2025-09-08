@@ -31,6 +31,7 @@
 #include "TestExtrusionJudgeComponent.h"
 #include "SkyDomeMesh.h"
 #include "SkyDomeRenderComponent.h"
+#include "TestSwordActionComponent.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -123,20 +124,33 @@ LoadStageScene::LoadStageScene() {
 		auto rolling = GameObjectManager::AddAbsFront("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
-		rollingTrans->SetScale({ 8.0f, 3.0f, 3.0f });
+		rollingTrans->SetScale({ 9.0f, 3.0f, 3.0f });
 		rollingTrans->SetPosition({30.0f,-9.0f,0.0f});
 		rollingTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
+
+		auto rollingColl = rolling->AddComponent<ColliderComponent>();
+		
+		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
 
 		auto rollingGoAround = rolling->AddComponent<GoAroundComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
 		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(),rollingTrans->GetPosition()); // 初期オフセットを設定
+		rollingGoAround->SetInitialAngle(90.0f);
 		rollingGoAround->SetRotationSpeed(7.0f); // 回転速度を設定
+		rollingGoAround->SetRollingActive(false);
+		rollingGoAround->SetClockwise(true);
 
 		SquareMesh rollingMesh;
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->SetMesh(rollingMesh);
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingRender->SetTexture("assets/texture/NoTexture.png");
+
+		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
+		rollingCollRend->SetMesh(rollingMesh);
+		rollingCollRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rollingCollRend->SetTexture("assets/texture/NoTexture.png");
+		rollingCollRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
 
 		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");

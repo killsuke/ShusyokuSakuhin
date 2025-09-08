@@ -58,6 +58,13 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->SetTexture(eS.texture);
 		render->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
+		renderColl->SetMesh(squareMesh);
+		renderColl->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		renderColl->SetTexture("assets/texture/NoTexture.png");
+		renderColl->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+
 		num++;
 	}
 }

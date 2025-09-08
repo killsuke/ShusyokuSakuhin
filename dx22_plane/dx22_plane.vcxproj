@@ -253,6 +253,7 @@
     <ClCompile Include="TestMaskScene.cpp" />
     <ClCompile Include="TestMoveComponent.cpp" />
     <ClCompile Include="TestStageScene.cpp" />
+    <ClCompile Include="TestSwordActionComponent.cpp" />
     <ClCompile Include="Test_Transparent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -383,6 +384,7 @@
     <ClInclude Include="TestMaskScene.h" />
     <ClInclude Include="TestMoveComponent.h" />
     <ClInclude Include="TestStageScene.h" />
+    <ClInclude Include="TestSwordActionComponent.h" />
     <ClInclude Include="Test_Transparent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

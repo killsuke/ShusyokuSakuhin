@@ -13,15 +13,41 @@ GoAroundComponent::GoAroundComponent(GameObject& obj) : Component(obj)
 
 void GoAroundComponent::Update()
 {
-
 	auto transform = p_object->GetComponent<TransformComponent>();
 	auto rollingObjPos = transform->GetPosition();
 
 	auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
 	auto centerPos = centerTrans->GetPosition();
 
-	m_angle += m_deltaTime * m_rotationSpeed; // 角度を更新間隔時間に基づいて計算
-	float totalAngle = m_angle + m_initialAngle;
+	// 回転のみを停止、位置更新はする
+	if (m_rollingActive == true) {
+		// 時計回りか反時計回りか
+		if (m_clockwise == true) {
+			m_nowAngleRadian -= m_deltaTime * m_rotationSpeed; // 角度を更新間隔時間に基づいて計算
+		}
+		else {
+			m_nowAngleRadian += m_deltaTime * m_rotationSpeed; // 角度を更新間隔時間に基づいて計算
+		}
+	}
+
+	// 反転要求があれば、現在の角度を反転
+	if (m_flipRequested == true) {
+
+		m_nowAngleRadian = -m_nowAngleRadian;
+		m_flipRequested = false;
+	}
+
+	float totalAngle = m_nowAngleRadian + m_initialAngleRadian;
+
+	m_nowAngleDegree = totalAngle * (180.0f / DirectX::XM_PI);	// ラジアン → ディグリー
+	
+	// 現在の位置 == 角度として捉えたいので、戻し処理を入れる
+	if ((std::abs(m_nowAngleDegree) + std::abs(m_initialAngleDegree)) > 360.0f && m_clockwise == true) {	// 時計回り
+		m_nowAngleRadian = 0.0f;
+	}
+	else if ((std::abs(m_nowAngleDegree) - std::abs(m_initialAngleDegree)) > 360.0f && m_clockwise == false) {	// 反時計回り
+		m_nowAngleRadian = 0.0f;
+	}
 
 	Vector3 rotatedOffset = Vector3(
 		cosf(totalAngle) * m_radius,
