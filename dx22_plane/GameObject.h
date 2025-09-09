@@ -4,10 +4,18 @@
 #include <memory>
 #include <string>
 
+enum class ActiveState {
+	ACTIVE,
+	UPDATE_STOP,
+	DRAW_STOP,
+	ALL_STOP,
+	MAX
+};
+
 class Component; // 前方宣言
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
-protected:
+private:
 	std::vector<std::unique_ptr<Component>> components;
 	std::vector<std::unique_ptr<Component>> renderComponents;
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
@@ -15,6 +23,7 @@ protected:
 	std::string tag = "";	// タグを付けて識別する
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
+	ActiveState activeState = ActiveState::ACTIVE;
 
 public:
 
@@ -36,6 +45,7 @@ public:
 		children.push_back(obj); 
 		obj->parent = this;	// 親オブジェクトを設定
 	};
+	inline void SetActiveState(ActiveState as) { activeState = as; };
 
 	// ゲッター
 	inline bool GetDeleteFg()const { return deletefg; };
@@ -43,6 +53,7 @@ public:
 	inline std::string& GetName() { return name; };
 	inline GameObject* GetParent() { return parent; };
 	inline std::vector<GameObject*>& GetChildren() { return children; };
+	inline ActiveState GetActiveState()const { return activeState; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();

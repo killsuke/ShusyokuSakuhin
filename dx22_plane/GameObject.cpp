@@ -14,6 +14,10 @@ GameObject::~GameObject() {
 }
 
 void GameObject::Update() {
+
+	if (activeState == ActiveState::UPDATE_STOP || activeState == ActiveState::ALL_STOP)
+		return;
+
 	// コンポーネントの更新
 	for (auto& component : components) {
 		if (component->GetActiveFlag() == true) {
@@ -30,6 +34,9 @@ void GameObject::Update() {
 }
 
 void GameObject::Draw() {
+	if (activeState == ActiveState::DRAW_STOP || activeState == ActiveState::ALL_STOP)
+		return;
+
 	// 描画用コンポーネントの更新
 	for (auto& renderComp : renderComponents) {
 		if (renderComp->GetActiveFlag() == true) {

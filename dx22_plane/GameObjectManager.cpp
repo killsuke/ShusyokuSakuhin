@@ -13,6 +13,80 @@ GameObjectManager::objects_UI;		// ゲーム内で、実際に更新をかけるベクター
 std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
 
+// リストにゲームオブジェクトを追加
+GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
+
+	auto ptr = HelperAddObject(objects, _name, _tag);
+
+	return ptr;
+}
+
+GameObject* GameObjectManager::GameObjectManager::AddChild(const std::string& _name, const std::string& _tag) {
+
+	auto ptr = HelperAddObject(child_Objects, _name, _tag);
+
+	return ptr;
+}
+
+GameObject* GameObjectManager::AddUI(const std::string& _name, const std::string& _tag) {
+	
+	auto ptr = HelperAddObject(objects_UI, _name, _tag);
+
+	return ptr;
+}
+
+GameObject* GameObjectManager::AddAbsFront(const std::string& _name, const std::string& _tag) {
+	
+	auto ptr = HelperAddObject(objects_Absfront, _name, _tag);
+
+	return ptr;
+}
+
+GameObject* GameObjectManager::HelperAddObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& _name, const std::string& _tag) {
+	objs.emplace_back(std::make_unique<GameObject>(_name, _tag));
+
+	auto ptr = objs.back().get();
+
+	return ptr;
+}
+
+void GameObjectManager::HelperRemoveObject(std::vector<std::unique_ptr<GameObject>>& objs) {
+	// C++ 20で使えるコンテナの要素削除処理
+	std::erase_if(objs, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetDeleteFg();
+		});
+}
+
+void GameObjectManager::HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& tag) {
+	for (const auto& obj : objs) { // objects をループで探索
+		if (obj->GetTag() == tag) { // タグが一致するかチェック
+			obj->SetDeleteFg(true);
+		}
+	}
+}
+
+void GameObjectManager::HelperUpdate(std::vector<std::unique_ptr<GameObject>>& objs) {
+	for (const auto& obj : objs) {
+		obj->Update();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			return;
+		}
+	}
+}
+
+void GameObjectManager::HelperDraw(std::vector<std::unique_ptr<GameObject>>& objs) {
+	for (const auto& obj : objs) {
+		obj->Draw();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			return;
+		}
+	}
+}
+
 // どうやってオブジェクトをリストから削除するかを考える
 void GameObjectManager::RemoveObject() {
 	// 条件が合えばベクターの中の要素を削除する
@@ -22,49 +96,18 @@ void GameObjectManager::RemoveObject() {
 	//		}),
 	//	objects.end());
 
-	// C++ 20で使えるコンテナの要素削除処理
-	std::erase_if(objects, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetDeleteFg();
-		});
-
-	std::erase_if(child_Objects, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetDeleteFg();
-		});
-
-	std::erase_if(objects_UI, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetDeleteFg();
-		});
-
-	std::erase_if(objects_Absfront, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetDeleteFg();
-		});
+	HelperRemoveObject(objects);
+	HelperRemoveObject(child_Objects);
+	HelperRemoveObject(objects_UI);
+	HelperRemoveObject(objects_Absfront);
 }
 
 void GameObjectManager::RemoveTagObject(const std::string& tag) {
 
-	for (const auto& obj : objects) { // objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
-			obj->SetDeleteFg(true);
-		}
-	}
-
-	for (const auto& obj : child_Objects) { // child_Objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
-			obj->SetDeleteFg(true);
-		}
-	}
-
-	for (const auto& obj : objects_UI) { // objects_UI をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
-			obj->SetDeleteFg(true);
-		}
-	}
-
-	for (const auto& obj : objects_Absfront) { // objects_Absfront をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
-			obj->SetDeleteFg(true);
-		}
-	}
+	HelperRemoveTagObject(objects, tag);
+	HelperRemoveTagObject(child_Objects, tag);
+	HelperRemoveTagObject(objects_UI, tag);
+	HelperRemoveTagObject(objects_Absfront, tag);
 }
 
 // 更新
@@ -73,38 +116,9 @@ void GameObjectManager::Update() {
 
 	// 描画順を整える
 	//DrawSort();
-
-	for (const auto& obj : objects) {
-		obj->Update();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
-
-//	auto deviceContext = DirectXRender::GetDeviceContext();
-
-//	DirectXRender::SetDepthEnable(false);
-
-	for (const auto& obj : objects_Absfront) {
-		obj->Update();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
-//	DirectXRender::SetDepthEnable(true);
-
-	for (const auto& obj : objects_UI) {
-		obj->Update();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
+	HelperUpdate(objects);
+	HelperUpdate(objects_UI);
+	HelperUpdate(objects_Absfront);
 
 	// インスタンスの削除処理
 	RemoveObject();
@@ -114,34 +128,34 @@ void GameObjectManager::Update() {
 void GameObjectManager::Draw() {
 	auto deviceContext = DirectXRender::GetDeviceContext();
 
-	for (const auto& obj : objects) {
-		obj->Draw();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
+	HelperDraw(objects);
 
 	DirectXRender::SetDepthEnable(false);
-	for (const auto& obj : objects_Absfront) {
-		obj->Draw();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
+
+	HelperDraw(objects_Absfront);
+
 	DirectXRender::SetDepthEnable(true);
 
-	for (const auto& obj : objects_UI) {
-		obj->Draw();
-		// シーンチェンジが起こったらブレイクしてfor文を抜ける
-		if (SceneManager::GetSCFrag() == true) {
-			SceneManager::SetSCFrag(false);
-			break;
-		}
-	}
+	HelperDraw(objects_UI);
+}
+
+void GameObjectManager::OtherThanTagClear(const std::string& tag) {
+	// C++ 20で使えるコンテナの要素削除処理
+	std::erase_if(objects, [tag](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetTag() != tag;
+		});
+
+	std::erase_if(child_Objects, [tag](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetTag() != tag;
+		});
+
+	std::erase_if(objects_UI, [tag](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetTag() != tag;
+		});
+
+	std::erase_if(objects_Absfront, [tag](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetTag() != tag;
+		});
 }
 
 // オブジェクトを管理するリストを全て空にする
