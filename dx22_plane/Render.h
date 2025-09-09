@@ -14,7 +14,7 @@
 #include	<SimpleMath.h>
 #include	<map>
 #include	<iostream>
-#include	<io.h>
+//#include	<io.h>
 #include	<string>
 #include	<vector>
 #include	<memory>
@@ -29,6 +29,9 @@
 #pragma comment(lib,"directxtk.lib")
 #pragma comment(lib,"d3d11.lib")
 
+class GameObject;
+//class Component;
+
 class RenderComponent : public Component
 {
 protected:
@@ -42,7 +45,7 @@ protected:
 	~RenderComponent() = default;
 public:
 
-	void Update() override;
+	virtual void Update() = 0;
 	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
 	void SetTexture(const std::string& fileName) { m_Texture->Load(fileName); };
 	void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {

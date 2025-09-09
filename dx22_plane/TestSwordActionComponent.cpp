@@ -3,6 +3,7 @@
 #include "GoAroundComponent.h"
 #include "input.h"
 #include "GameObjectManager.h"
+#include "Collider.h"
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
@@ -24,12 +25,16 @@ void TestSwordActionComponent::Update() {
 
 void TestSwordActionComponent::SwordAction() {
 	auto goAround = p_object->GetComponent<GoAroundComponent>();
+	auto collider = p_object->GetComponent<ColliderComponent>();
+
 	// ここのプレイヤー取得はのちに別のものに変更
 	auto moveComp = GameObjectManager::GameObjectFindName("Player")->GetComponent<TestMoveComponent>();
 
-	if (goAround == nullptr) {
+	if (goAround == nullptr || collider == nullptr) {
 		return;
 	}
+
+	collider->SetActiveColliderFlag(true);
 
 	goAround->SetRollingActive(true);
 
@@ -40,6 +45,7 @@ void TestSwordActionComponent::SwordAction() {
 	if ((goAround->GetNowAngleDegree() < 0 && direction == true) || (goAround->GetNowAngleDegree() > 180.0f && direction == false)) {
 		goAround->SetRollingActive(false);
 		goAround->ResetAngle();
+		collider->SetActiveColliderFlag(false);
 		m_swordAction = false;
 	}
 

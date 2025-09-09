@@ -22,7 +22,8 @@ void EnemyDamageComponent::Update()
 	//	auto playerPos = playerTrans->GetPosition();
 		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
-	auto attack = p_object->GetComponent<AttackTimingComponent>();
+	//auto attack = p_object->GetComponent<AttackTimingComponent>();
+	auto attack = p_object->GetComponent<AttackOneTimeComponent>();
 
 	if (collObjMe != nullptr) {
 

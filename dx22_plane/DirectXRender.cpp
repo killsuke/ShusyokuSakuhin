@@ -25,9 +25,9 @@ ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable;
 ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable;
 
 // レンダーターゲット＝描画先を表す機能
-ID3D11RenderTargetView* g_pRenderTargetView;
+ID3D11RenderTargetView* DirectXRender::g_pRenderTargetView = nullptr;
 // デプスバッファ
-ID3D11DepthStencilView* g_pDepthStencilView;
+ID3D11DepthStencilView* DirectXRender::g_pDepthStencilView = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateEnable;
 

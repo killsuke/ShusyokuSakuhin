@@ -9,6 +9,7 @@
 #include "EnemyJsonComponent.h"
 #include "RigidBodyComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "FighterComponent.h"
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
@@ -34,6 +35,8 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 				eS.kind = e.kind;
 				eS.scale = e.scale;
 				eS.angle = e.angle;
+				eS.atk = e.atk;
+				eS.hp = e.hp;
 				eS.texture = e.texture;
 				eS.shaderVS = e.shaderVS;
 				eS.shaderPS = e.shaderPS;
@@ -49,6 +52,10 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		auto rigidBody = enemyObj->AddComponent<RigidBodyComponent>();
 		rigidBody->SetGravityFlag(true); // 重力を有効にする
 		enemyObj->AddComponent<TestExtrusionJudgeComponent>(); // 地面判定コンポーネントを追加
+
+		auto fighter = enemyObj->AddComponent<FighterComponent>();
+		fighter->SetAtk(eS.atk);
+		fighter->SetHp(eS.hp);
 
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
 		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));

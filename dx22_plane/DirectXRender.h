@@ -48,6 +48,8 @@ private:
 	static ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
 	static ID3D11DepthStencilState* m_DepthStateEnable;
 	static ID3D11DepthStencilState* m_DepthStateDisable;
+	static ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
+	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -89,6 +91,8 @@ public:
 	static void SetATCEnable(bool Enable);
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
+	static ID3D11RenderTargetView* GetRenderTargetView() { return g_pRenderTargetView; };
+	static ID3D11DepthStencilView* GetDepthStencilView() { return g_pDepthStencilView; };
 
 	static ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
 	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };

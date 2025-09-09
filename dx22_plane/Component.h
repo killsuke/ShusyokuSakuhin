@@ -5,6 +5,7 @@
 #include "ComponentTypeManager.h"
 
 class GameObject; // 前方宣言
+//class RenderComponent;
 
 class Component
 {
@@ -13,7 +14,6 @@ protected:
 	GameObject* p_object = nullptr; // このコンポーネントが所属するGameObjectへのポインタ
 	bool m_activeFlag = true; // コンポーネントが有効かどうかのフラグ
 
-	Component() = default;
 	Component(const Component&) = delete;			 // コピーコンストラクタ禁止
 	Component(Component&&) = delete;				 // ムーブコンストラクタ禁止
 	Component& operator=(const Component&) = delete; // コピー代入禁止

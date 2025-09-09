@@ -17,6 +17,7 @@
 #include "EnemyDamageComponent.h"
 #include "FighterComponent.h"
 #include "AttackTimingComponent.h"
+#include "AttackOneTimeComponent.h"
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
@@ -139,6 +140,14 @@ LoadStageScene::LoadStageScene() {
 		rollingGoAround->SetRotationSpeed(7.0f); // ‰ñ“]‘¬“x‚ðÝ’è
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
+
+		auto rollingFT = rolling->AddComponent<FighterComponent>();
+		rollingFT->SetAtk(10);
+		rollingFT->SetHp(50);
+
+		auto rollingAtk = rolling->AddComponent<AttackOneTimeComponent>();
+
+		auto rollingED = rolling->AddComponent<EnemyDamageComponent>();
 
 		SquareMesh rollingMesh;
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();

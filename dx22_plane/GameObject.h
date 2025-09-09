@@ -1,14 +1,17 @@
 #pragma once
 #include <filesystem>
 #include "Component.h"
+//#include "Render.h"
 #include <memory>
 #include <string>
 
 class Component; // 前方宣言
+class RenderComponent;
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
 protected:
 	std::vector<std::unique_ptr<Component>> components;
+	std::vector<std::unique_ptr<Component>> renderComponents;
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
 	GameObject* parent = nullptr;	// 親オブジェクトを持つことができる
 	std::string tag = "";	// タグを付けて識別する
@@ -17,7 +20,7 @@ protected:
 
 public:
 
-	GameObject();
+	//GameObject();
 	GameObject(const std::string& _name, const std::string& _tag)
 		: name(_name), tag(_tag) {
 	}; // 名前とタグを指定して初期化
@@ -71,7 +74,13 @@ public:
 		//}
 		//else {
 
+
+		/*if (auto renderComp = dynamic_cast<RenderComponent*>(ptr)) {
+			renderComponents.emplace_back(renderComp);
+		}
+		else {*/
 			components.emplace_back(std::move(comp));
+		//}
 	//	}
 		SortComponents();
 		return ptr;
