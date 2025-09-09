@@ -1,4 +1,6 @@
 #include "GameObject.h"
+#include "Render.h"
+#include <iostream>
 
 //今のところ記述内容は無し
 // コンストラクタ
@@ -32,4 +34,11 @@ void GameObject::SortComponents() {
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});
+}
+
+void GameObject::ComponentCheck(Component* comp) {
+	if (auto renderComp = dynamic_cast<RenderComponent*>(comp)) {
+		//renderComponents.emplace_back(renderComp);
+		std::cout << this->name << "：" << "RenderComponent です" << std::endl;
+	}
 }

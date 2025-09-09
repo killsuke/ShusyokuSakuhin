@@ -29,9 +29,6 @@
 #pragma comment(lib,"directxtk.lib")
 #pragma comment(lib,"d3d11.lib")
 
-class GameObject;
-//class Component;
-
 class RenderComponent : public Component
 {
 protected:

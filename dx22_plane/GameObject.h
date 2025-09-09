@@ -1,12 +1,10 @@
 #pragma once
 #include <filesystem>
 #include "Component.h"
-//#include "Render.h"
 #include <memory>
 #include <string>
 
 class Component; // 前方宣言
-class RenderComponent;
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
 protected:
@@ -47,6 +45,8 @@ public:
 	// コンポーネントのソート番号でソート
 	void SortComponents();
 
+	void ComponentCheck(Component* comp);
+
 	// 装備されているコンポーネントを取得して使用可能にする
 	template<typename T1>
 	T1* GetComponent() {
@@ -58,31 +58,10 @@ public:
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
 
-	template<typename T2>
 	// コンポーネントを追加する
-	T2* AddComponent() {
-		static_assert(std::is_base_of<Component, T2>::value,
-			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
-
-		auto comp = std::make_unique<T2>(*this);	// thisで呼び出した者を取得可能
-		T2* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
-		
-		//auto num = ptr->GetSortNum();
-
-		//if (num == RENDER || num == RENDER_ONE_SKIN_ANIMATION || num == COLLIDER_DEBUG_RENDER) {
-		//	// ここで別のコンテナに入れるとか？
-		//}
-		//else {
-
-
-		/*if (auto renderComp = dynamic_cast<RenderComponent*>(ptr)) {
-			renderComponents.emplace_back(renderComp);
-		}
-		else {*/
-			components.emplace_back(std::move(comp));
-		//}
-	//	}
-		SortComponents();
-		return ptr;
-	}
+	// 実体はinlファイルに記述して、インクルードによる循環参照を防ぐ（保険程度）
+	template<typename T2>
+	T2* AddComponent();
 };
+
+#include "GameObjectTemplate.inl"
