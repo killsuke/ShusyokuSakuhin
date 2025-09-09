@@ -37,6 +37,7 @@ void SceneManager::Update() {
 	m_pScene->Update();
 
 	GameObjectManager::Update();
+	GameObjectManager::Draw();
 
 	// ImGui‚Ì•`‰æ
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

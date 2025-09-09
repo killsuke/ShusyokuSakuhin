@@ -29,16 +29,41 @@ void GameObject::Update() {
 	}
 }
 
+void GameObject::Draw() {
+	// 描画用コンポーネントの更新
+	for (auto& renderComp : renderComponents) {
+		if (renderComp->GetActiveFlag() == true) {
+			renderComp->Update();
+		}
+	}
+
+	// 子オブジェクトの描画
+	if (!children.empty()) {
+		for (auto& child : children) {
+			child->Draw();
+		}
+	}
+}
+
 void GameObject::SortComponents() {
 	std::sort(components.begin(), components.end(),
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});
+
+	std::sort(renderComponents.begin(), renderComponents.end(),
+		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
+			return a->GetSortNum() < b->GetSortNum();
+		});
 }
 
-void GameObject::ComponentCheck(Component* comp) {
+bool GameObject::ComponentCheck(Component* comp) {
+	// 描画関係の機能と分けるため、ここで判断
 	if (auto renderComp = dynamic_cast<RenderComponent*>(comp)) {
-		//renderComponents.emplace_back(renderComp);
-		std::cout << this->name << "：" << "RenderComponent です" << std::endl;
+
+		//std::cout << this->name << "：" << "RenderComponent です" << std::endl;
+		return true;
 	}
+
+	return false;
 }

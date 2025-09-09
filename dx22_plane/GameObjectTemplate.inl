@@ -11,8 +11,14 @@ T2* GameObject::AddComponent() {
 
 	Component* p_comp = comp.get();
 
-	ComponentCheck(p_comp);
-	components.emplace_back(std::move(comp));
+	bool renderFlag = ComponentCheck(p_comp);
+
+	if (renderFlag == true) {
+		renderComponents.emplace_back(std::move(comp));
+	}
+	else {
+		components.emplace_back(std::move(comp));
+	}
 
 	SortComponents();
 	return ptr;

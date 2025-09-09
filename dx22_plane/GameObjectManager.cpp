@@ -83,9 +83,9 @@ void GameObjectManager::Update() {
 		}
 	}
 
-	auto deviceContext = DirectXRender::GetDeviceContext();
+//	auto deviceContext = DirectXRender::GetDeviceContext();
 
-	DirectXRender::SetDepthEnable(false);
+//	DirectXRender::SetDepthEnable(false);
 
 	for (const auto& obj : objects_Absfront) {
 		obj->Update();
@@ -95,7 +95,7 @@ void GameObjectManager::Update() {
 			break;
 		}
 	}
-	DirectXRender::SetDepthEnable(true);
+//	DirectXRender::SetDepthEnable(true);
 
 	for (const auto& obj : objects_UI) {
 		obj->Update();
@@ -108,6 +108,40 @@ void GameObjectManager::Update() {
 
 	// インスタンスの削除処理
 	RemoveObject();
+}
+
+// 描画
+void GameObjectManager::Draw() {
+	auto deviceContext = DirectXRender::GetDeviceContext();
+
+	for (const auto& obj : objects) {
+		obj->Draw();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			break;
+		}
+	}
+
+	DirectXRender::SetDepthEnable(false);
+	for (const auto& obj : objects_Absfront) {
+		obj->Draw();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			break;
+		}
+	}
+	DirectXRender::SetDepthEnable(true);
+
+	for (const auto& obj : objects_UI) {
+		obj->Draw();
+		// シーンチェンジが起こったらブレイクしてfor文を抜ける
+		if (SceneManager::GetSCFrag() == true) {
+			SceneManager::SetSCFrag(false);
+			break;
+		}
+	}
 }
 
 // オブジェクトを管理するリストを全て空にする

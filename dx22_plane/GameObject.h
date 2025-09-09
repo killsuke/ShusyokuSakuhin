@@ -26,6 +26,8 @@ public:
 
 	void Update();
 
+	void Draw();
+
 	// セッター
 	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };
 	inline void SetTag(const std::string& tag) { this->tag = tag; };
@@ -45,7 +47,7 @@ public:
 	// コンポーネントのソート番号でソート
 	void SortComponents();
 
-	void ComponentCheck(Component* comp);
+	bool ComponentCheck(Component* comp);
 
 	// 装備されているコンポーネントを取得して使用可能にする
 	template<typename T1>
