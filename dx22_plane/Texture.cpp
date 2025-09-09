@@ -3,6 +3,8 @@
 #include	"stb_image.h"
 #include	"DirectXRender.h"
 
+using namespace DirectX::SimpleMath;
+
 // テクスチャをロード
 bool Texture::Load(const std::string& filename)
 {
@@ -183,4 +185,12 @@ void Texture::SetGPU_Mask()
 {
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 	devicecontext->PSSetShaderResources(1, 1, m_srvMask.GetAddressOf());
+}
+
+Matrix Texture::MakeUV(float u, float v, float uw, float vh) {
+	// ＵＶの行列作成
+	Matrix mat = Matrix::CreateScale(uw, vh, 1.0f);
+	mat *= Matrix::CreateTranslation(u, v, 0.0f).Transpose();
+
+	return mat;
 }

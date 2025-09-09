@@ -23,12 +23,12 @@ void TestMoveComponent::Update() {
 		return;
 	}
 
-	if (Input::GetKeyPress(VK_J) == true || Input::GetButtonPress(XINPUT_LEFT))
+	if (Input::GetKeyPress(VK_A) == true || Input::GetButtonPress(XINPUT_LEFT))
 	{
 		m_rightLeft = false; // ¶Œü‚«
 		keyJ = true;
 	}
-	if (Input::GetKeyPress(VK_L) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
+	if (Input::GetKeyPress(VK_D) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
 		m_rightLeft = true; // ‰EŒü‚«
 		keyL = true;
 	}

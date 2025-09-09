@@ -4,6 +4,8 @@
 #include "GameObjectManager.h"
 #include "Camera.h"
 
+using namespace DirectX::SimpleMath;
+
 RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
@@ -29,12 +31,12 @@ void RenderBillboardComponent::Update()
 		cameraView3D._42 = 0.0f;
 		cameraView3D._43 = 0.0f;
 
-		DirectX::SimpleMath::Matrix t = DirectX::SimpleMath::Matrix::CreateTranslation(pos.x, pos.y, pos.z);
-		DirectX::SimpleMath::Matrix s = DirectX::SimpleMath::Matrix::CreateScale(scale.x, scale.y, scale.z);
+		Matrix t = Matrix::CreateTranslation(pos.x, pos.y, pos.z);
+		Matrix s = Matrix::CreateScale(scale.x, scale.y, scale.z);
 
 		cb.matrixWorld = (s * cameraView3D * t).Transpose();
 
-		cb.color = DirectX::XMFLOAT4(m_Color);
+		cb.color = Vector4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

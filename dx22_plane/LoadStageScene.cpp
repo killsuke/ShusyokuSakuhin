@@ -323,7 +323,7 @@ LoadStageScene::LoadStageScene() {
 		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
 	}
 
-	/*{
+	{
 		auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
 		auto testUITrans = testUI->AddComponent<TransformComponent>();
 		testUITrans->SetPosition({ -300.0f, 0.0f, 0.0f });
@@ -331,10 +331,10 @@ LoadStageScene::LoadStageScene() {
 		auto testUIRend = testUI->AddComponent<Render2DComponent>();
 		SquareMesh square;
 		testUIRend->SetMesh(square);
-		testUIRend->SetTexture("assets/texture/NoTexture.png");
-		testUIRend->SetColor({0.0f,0.0f,0.0f,1.0f});
+		testUIRend->SetTexture("assets/texture/3count.png");
+		testUIRend->SetColor({1.0f,1.0f,1.0f,1.0f});
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-	}*/
+	}
 
 }
 

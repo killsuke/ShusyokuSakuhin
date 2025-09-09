@@ -14,7 +14,7 @@ GameObject::~GameObject() {
 }
 
 void GameObject::Update() {
-
+	// 更新処理を消すか？
 	if (activeState == ActiveState::UPDATE_STOP || activeState == ActiveState::ALL_STOP)
 		return;
 
@@ -34,6 +34,7 @@ void GameObject::Update() {
 }
 
 void GameObject::Draw() {
+	// 描画処理を消すか？
 	if (activeState == ActiveState::DRAW_STOP || activeState == ActiveState::ALL_STOP)
 		return;
 

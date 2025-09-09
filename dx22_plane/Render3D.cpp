@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "GameObjectManager.h"
 
+using namespace DirectX::SimpleMath;
+
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
@@ -19,7 +21,7 @@ void Render3DComponent::Update()
 
 		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
 
-		cb.color = DirectX::XMFLOAT4(m_Color);
+		cb.color = Vector4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

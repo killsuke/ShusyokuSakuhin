@@ -57,16 +57,16 @@ void Camera::Update()
 		m_Target.y = pos.y;
 
 		Vector3 vec3 = {};	// ‰Šú‰»
-		if (Input::GetKeyPress(VK_A)) {
+		if (Input::GetKeyPress(VK_J)) {
 			vec3.x -= 1.0f;
 		}
-		if (Input::GetKeyPress(VK_S)) {
+		if (Input::GetKeyPress(VK_K)) {
 			vec3.z -= 1.0f;
 		}
-		if (Input::GetKeyPress(VK_D)) {
+		if (Input::GetKeyPress(VK_L)) {
 			vec3.x += 1.0f;
 		}
-		if (Input::GetKeyPress(VK_W)) {
+		if (Input::GetKeyPress(VK_I)) {
 			vec3.z += 1.0f;
 		}
 

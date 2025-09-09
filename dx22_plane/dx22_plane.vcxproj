@@ -179,6 +179,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentTypeManager.cpp" />
     <ClCompile Include="CSVObjectManagerComponent.cpp" />
+    <ClCompile Include="DoorFadeComponent.cpp" />
     <ClCompile Include="EnemyJsonComponent.cpp" />
     <ClCompile Include="EnemyManagerComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="ComponentTypeManager.h" />
     <ClInclude Include="CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
+    <ClInclude Include="DoorFadeComponent.h" />
     <ClInclude Include="EnemyJsonComponent.h" />
     <ClInclude Include="EnemyManagerComponent.h" />
     <ClInclude Include="JsonComponent.h" />

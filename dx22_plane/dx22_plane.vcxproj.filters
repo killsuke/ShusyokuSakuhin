@@ -312,6 +312,9 @@
     <ClCompile Include="TestSwordActionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="DoorFadeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -633,6 +636,9 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="TestSwordActionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DoorFadeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

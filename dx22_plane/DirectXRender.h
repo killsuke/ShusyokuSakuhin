@@ -32,9 +32,9 @@ extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 struct ConstBuffer
 {
 	// 頂点カラー行列
-	DirectX::XMFLOAT4 color = {};
+	DirectX::SimpleMath::Vector4 color = {};
 	// UV座標移動行列
-	DirectX::XMMATRIX matrixTex;
+	DirectX::SimpleMath::Matrix matrixTex;
 	// ワールド変換行列
 	DirectX::SimpleMath::Matrix matrixWorld;
 };

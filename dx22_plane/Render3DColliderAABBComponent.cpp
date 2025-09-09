@@ -3,6 +3,8 @@
 #include "Collider.h"
 #include "GameObjectManager.h"
 
+using namespace DirectX::SimpleMath;
+
 Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("COLLIDER_DEBUG_RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
@@ -20,7 +22,7 @@ void Render3DColliderAABBComponent::Update()
 
 		cb.matrixWorld = colliderAABB->GetWorldAABBMatrix().Transpose();
 
-		cb.color = DirectX::XMFLOAT4(m_Color);
+		cb.color = Vector4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

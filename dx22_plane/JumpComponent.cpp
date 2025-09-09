@@ -15,11 +15,11 @@ void JumpComponent::Update() {
 	bool isPressed = false;
 	bool isTrigger = false;
 
-	if (Input::GetKeyTrigger(VK_I) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
+	if (Input::GetKeyTrigger(VK_W) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
 		isTrigger = true;
 	}
 
-	if (Input::GetKeyPress(VK_I) == true || Input::GetButtonPress(XINPUT_A) == true) {
+	if (Input::GetKeyPress(VK_W) == true || Input::GetButtonPress(XINPUT_A) == true) {
 		isPressed = true;
 	}
 
