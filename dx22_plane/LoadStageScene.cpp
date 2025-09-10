@@ -33,6 +33,7 @@
 #include "SkyDomeMesh.h"
 #include "SkyDomeRenderComponent.h"
 #include "TestSwordActionComponent.h"
+#include "DoorFadeComponent.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -336,6 +337,9 @@ LoadStageScene::LoadStageScene() {
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	}
 
+	//auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
+	//auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
+	//fadeUI->SetOpenCloseFlag(false);
 }
 
 LoadStageScene::~LoadStageScene() {

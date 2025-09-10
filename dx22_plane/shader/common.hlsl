@@ -73,8 +73,6 @@ struct PS_IN
 };
 
 struct LIGHT {
-	bool   Enable;		// 使用するか否か
-	bool3  Dummy;		// PADDING
 	float4 Direction;	// 方向
 	float4 Diffuse;		// 拡散反射用の光の強さ
 	float4 Ambient;		// 環境光用の光の強さ

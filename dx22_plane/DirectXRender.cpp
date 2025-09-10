@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "HPParam.h"
-
+using namespace DirectX::SimpleMath;
 
 D3D_FEATURE_LEVEL      m_FeatureLevel;
 
@@ -28,6 +28,10 @@ ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable;
 ID3D11RenderTargetView* DirectXRender::g_pRenderTargetView = nullptr;
 // ÉfÉvÉXÉoÉbÉtÉ@
 ID3D11DepthStencilView* DirectXRender::g_pDepthStencilView = nullptr;
+
+ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
+
+ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateEnable;
 
@@ -69,7 +73,7 @@ DirectXRender::DirectXRender() {
 }
 
 DirectXRender::~DirectXRender() {
-//	UnInit();	// Ç±ÇÍÇÕÇøÇ·ÇÒÇ∆åƒÇ—èoÇ≥ÇÍÇƒÇ¢ÇÈÅH
+	//	UnInit();	// Ç±ÇÍÇÕÇøÇ·ÇÒÇ∆åƒÇ—èoÇ≥ÇÍÇƒÇ¢ÇÈÅH
 }
 
 HRESULT DirectXRender::Init() {
@@ -87,6 +91,10 @@ HRESULT DirectXRender::Init() {
 	BoneConstantBufferCreate();
 	HPBarConstantBufferCreate();
 
+	LightBufferCreate();
+
+	LightSetting();
+
 	SetBlendState(1);
 
 	VeiwProjConstantCreate();
@@ -95,7 +103,7 @@ HRESULT DirectXRender::Init() {
 	// íËêîÉoÉbÉtÉ@ç\ë¢ëÃÇçÏÇÈ
 	// íËêîÉoÉbÉtÉ@Ç∆Ç©ÇØÇƒï`âÊÇ≈Ç´ÇÈÇÊÇ§Ç…Ç∑ÇÈ
 
-	
+
 
 	//bufferDesc.ByteWidth = sizeof(LIGHT);
 	//m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
@@ -155,6 +163,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pConstantBuffer);
 	SAFE_RELEASE(g_pBoneConstantBuffer);
 	SAFE_RELEASE(g_pHPBarConstantBuffer);
+	SAFE_RELEASE(m_LightBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
 		if (g_BlendState[i]) {  // nullptr É`ÉFÉbÉN
 			SAFE_RELEASE(g_BlendState[i]);
@@ -377,10 +386,10 @@ HRESULT DirectXRender::DepthStencilSetting() {
 	depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS; // ê[ìxî‰ärä÷êîÇèÌÇ…í Ç∑
-	
+
 	hr = m_Device->CreateDepthStencilState(&depthStencilDesc, &m_DepthStateDisable); //ê[ìxñ≥å¯ÉXÉeÅ[Ég
 	if (FAILED(hr)) return hr;
-	
+
 	m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, NULL);
 
 	return hr;
@@ -423,7 +432,7 @@ HRESULT DirectXRender::ConstantBufferCreate() {
 
 	return hr;
 }
-					
+
 // íËêîÉoÉbÉtÉ@çÏê¨
 HRESULT DirectXRender::BoneConstantBufferCreate() {// ÉRÉìÉXÉ^ÉìÉgÉoÉbÉtÉ@ÉTÉCÉY
 	HRESULT hr;
@@ -434,10 +443,10 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// ÉRÉìÉXÉ^ÉìÉgÉoÉbÉtÉ@ÉTÉCÉY
 	ZeroMemory(&bd, sizeof(bd));
 	bd.ByteWidth = sizeof(CBBoneMatrix);									// ÉoÉbÉtÉ@ÇÃëÂÇ´
 	bd.Usage = D3D11_USAGE_DEFAULT;							// ÉoÉbÉtÉ@égópï˚ñ@
-//	bd.Usage = D3D11_USAGE_DYNAMIC;							// ÉoÉbÉtÉ@égópï˚ñ@
+	//	bd.Usage = D3D11_USAGE_DYNAMIC;							// ÉoÉbÉtÉ@égópï˚ñ@
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// ÉRÉìÉXÉ^ÉìÉgÉoÉbÉtÉ@
 	bd.CPUAccessFlags = 0;					// CPUÉAÉNÉZÉXâ¬î\
-//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUÉAÉNÉZÉXâ¬î\
+	//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUÉAÉNÉZÉXâ¬î\
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
 	if (FAILED(hr)) {
@@ -468,6 +477,41 @@ HRESULT DirectXRender::HPBarConstantBufferCreate() {// ÉRÉìÉXÉ^ÉìÉgÉoÉbÉtÉ@ÉTÉCÉ
 	}
 
 	return hr;
+}
+
+HRESULT DirectXRender::LightBufferCreate() {
+	HRESULT hr;
+
+	// íËêîÉoÉbÉtÉ@ê∂ê¨
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(LIGHT);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
+
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(5, 1, &m_LightBuffer);
+
+	return hr;
+}
+
+void DirectXRender::LightSetting() {
+	// ÉâÉCÉgèâä˙âª
+	LIGHT light{};
+	light.Direction = Vector4(0.0f, -0.8f, 0.1f, 0.0f);	// ï˚å¸
+	light.Direction.Normalize();
+	light.Diffuse = Color(1.5f, 1.5f, 1.5f, 1.0f);	// ïΩçsåıåπÇÃã≠Ç≥Ç∆êF
+	light.Ambient = Color(0.7f, 0.7f, 0.7f, 1.0f);	// ä¬ã´åıÇÃã≠Ç≥Ç∆êF
+
+	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
 }
 
 HRESULT DirectXRender::InputLayoutAndShadersCreate() {
@@ -652,7 +696,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 
 	// íËêîÉoÉbÉtÉ@ê∂ê¨
 	D3D11_BUFFER_DESC bufferDesc{};
-	bufferDesc.ByteWidth = sizeof(DirectX::SimpleMath::Matrix);
+	bufferDesc.ByteWidth = sizeof(Matrix);
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = 0;

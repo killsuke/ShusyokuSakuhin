@@ -45,7 +45,7 @@
                 "z": 0.0
             },
             "texture": "assets/texture/NoTexture.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
 	{
@@ -61,7 +61,7 @@
                 "z": 0.0
             },
             "texture": "assets/texture/NoTexture.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
 	{
@@ -77,7 +77,7 @@
                 "z": 0.0
             },
             "texture": "assets/texture/NoTexture.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         }
     ]

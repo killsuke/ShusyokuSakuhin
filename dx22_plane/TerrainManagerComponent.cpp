@@ -58,12 +58,12 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 		render->SetShader(tS.shaderVS,tS.shaderPS);
 		render->SetTexture(tS.texture);
 
-		CubeMesh cubeMeshCollider;
-		auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();
-		renderCollider->SetMesh(cubeMeshCollider);
-		renderCollider->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		renderCollider->SetTexture("assets/texture/NoTexture.png");
-		renderCollider->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f)); // ”¼“§–¾‚Ì—ÎF
+		//CubeMesh cubeMeshCollider;
+		//auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();
+		//renderCollider->SetMesh(cubeMeshCollider);
+		//renderCollider->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//renderCollider->SetTexture("assets/texture/NoTexture.png");
+		//renderCollider->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f)); // ”¼“§–¾‚Ì—ÎF
 
 		num++;
 	}

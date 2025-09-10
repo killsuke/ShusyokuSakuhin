@@ -137,8 +137,6 @@ std::vector<VERTEX_3D> CubeMesh::CreateMeshVertices() {
 	m_vertices[23].normal = Vector3(0.0f, -1.0f, 0.0f);
 
 	return m_vertices;
-	//// 頂点バッファ生成
-	//m_VertexBuffer.Create(vertices);
 }
 
 std::vector<unsigned int> CubeMesh::CreateMeshIndices() {
@@ -167,7 +165,4 @@ std::vector<unsigned int> CubeMesh::CreateMeshIndices() {
 	};
 
 	return m_indices;
-
-	//// インデックスバッファ生成
-	//m_IndexBuffer.Create(indices);
 }

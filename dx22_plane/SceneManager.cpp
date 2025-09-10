@@ -5,6 +5,8 @@
 
 std::unique_ptr<Scene> SceneManager::m_pScene;	// ここで書くことでちゃんと定義できる
 bool SceneManager::sceneChangeFg = false;	// シーンチェンジのフラグ
+float SceneManager::waitTime = 0.0f;	// シーンチェンジの待ち時間
+float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
 
 void SceneManager::Init() {
 	//	sound.Init();	// サウンドの初期化
@@ -27,6 +29,10 @@ void SceneManager::UnInit() {
 // 更新
 void SceneManager::Update() {
 	Input::Update();
+
+	if (waitTime != 0.0f) {
+		waitTimeCounter += 0.016f;
+	}
 
 	ImGui::Render();
 

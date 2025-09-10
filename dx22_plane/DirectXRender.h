@@ -6,6 +6,7 @@
 #include	<iostream>
 #include	<io.h>
 #include	<vector>
+#include "RenderElement.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -50,6 +51,8 @@ private:
 	static ID3D11DepthStencilState* m_DepthStateDisable;
 	static ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
 	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
+	static ID3D11Buffer* m_LightBuffer;
+	static ID3D11Buffer* m_MaterialBuffer;
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -63,6 +66,8 @@ private:
 	static HRESULT ConstantBufferCreate();
 	static HRESULT BoneConstantBufferCreate();
 	static HRESULT HPBarConstantBufferCreate();
+	static HRESULT LightBufferCreate();
+	static void LightSetting();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);

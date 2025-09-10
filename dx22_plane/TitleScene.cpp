@@ -1,7 +1,5 @@
 #include "TitleScene.h"
-//#include "Texture2D.h"
 #include "Singleton.h"
-//#include "SkyDome.h"
 #include "Camera.h"
 #include "GameObjectManager.h"
 #include "Transform.h"
@@ -18,6 +16,7 @@
 #include "JumpComponent.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include "DoorFadeComponent.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -36,8 +35,9 @@ void TitleScene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
-	camera->AddComponent<Camera>();
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
+	auto cameraObj = camera->AddComponent<Camera>();
+	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
 
 	auto titleUI = GameObjectManager::AddUI("titleUI", "TitleUI");
 	auto transTitle = titleUI->AddComponent<TransformComponent>();
@@ -48,6 +48,10 @@ void TitleScene::Init()
 	rendTitle->SetMesh(square);
 	rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	rendTitle->SetTexture("assets/texture/title_car.png");
+
+	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
+	auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
+	auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
 }
 
 // 更新
@@ -56,7 +60,7 @@ void TitleScene::Update()
 	// エンターキーを押してステージ1へ
 	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)))
 	{
-		SceneManager::SceneChange<Stage1Scene>();
+		//SceneManager::SceneChange<LoadStageScene>();
 	}
 
 	//else if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)) && setumeiFg == false)
@@ -77,5 +81,6 @@ void TitleScene::Update()
 // 終了処理
 void TitleScene::Uninit()
 {
-	GameObjectManager::ListClear();	// ゲームオブジェクトマネージャーの終了処理
+	//GameObjectManager::ListClear();	// ゲームオブジェクトマネージャーの終了処理
+	GameObjectManager::OtherThanTagClear("FadeUI");
 }

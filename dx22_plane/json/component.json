@@ -80,25 +80,29 @@
             "name": "FIGHTER",
             "ID": 19
         },
+	{
+	    "name": "DOOR_FADE",
+            "ID": 20
+	},
         {
             "name": "TRANSFORM",
-            "ID": 20
-        },
-        {
-            "name": "RENDER",
             "ID": 21
         },
         {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
+            "name": "RENDER",
             "ID": 22
         },
         {
-            "name": "COLLIDER_DEBUG_RENDER",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 23
         },
         {
-            "name": "MAX",
+            "name": "COLLIDER_DEBUG_RENDER",
             "ID": 24
+        },
+        {
+            "name": "MAX",
+            "ID": 25
         }
     ]
 }

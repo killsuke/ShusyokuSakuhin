@@ -2,13 +2,13 @@
 
 PS_IN vs_main(in VS_IN input)
 {
-	PS_IN output;
+    PS_IN output = (PS_IN)0;
 
 	//positoin=============================
 	// ワールド、ビュー、プロジェクション行列を掛け合わせて座標変換を行う
 	matrix wvp;
-	wvp = mul(matrixWorld, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(matrixWorld, View3D);
+	wvp = mul(wvp, Projection3D);
 	output.pos = mul(input.pos, wvp);
 
 	/// color=======================================
@@ -32,12 +32,14 @@ PS_IN vs_main(in VS_IN input)
 	// output.col.xyz += input.col.xyz * (Light.Ambient.xyz * 0.5f); // アンビエント光を半減(強度変更)
 	output.col.xyz += input.col.xyz * Light.Ambient.xyz; // アンビエント光を加算
 	//output.col.xyz += (Material.Emission.xyz * 2.0f);	// Emissionを倍増
-	output.col.xyz += Material.Emission.xyz;	// Emissionを加算
-	output.col.a = input.col.a * Material.Diffuse.a; // アルファ値はそのまま使用
+
+	//output.col.xyz += Material.Emission.xyz;	// Emissionを加算
+	//output.col.a = input.col.a * Material.Diffuse.a; // アルファ値はそのまま使用
 
 	//texture=============================
 	// テクスチャ座標はそのまま使用
 	output.tex = input.tex;
+    output.col.a = vertexColor.a;
 	// output.tex = input.tex * 2.0;	// テクスチャ２倍？
 
 	return output;

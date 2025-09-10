@@ -252,9 +252,6 @@
     <ClCompile Include="HPBarMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainManagerComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="StageLoadCSVComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -314,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="DoorFadeComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainManagerComponent.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -572,9 +572,6 @@
     <ClInclude Include="HPBarMoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainManagerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="StageLoadCSVComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -640,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="DoorFadeComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainManagerComponent.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

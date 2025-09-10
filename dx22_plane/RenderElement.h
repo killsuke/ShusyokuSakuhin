@@ -14,8 +14,6 @@ struct VERTEX_3D
 
 // 平行光源
 struct LIGHT {
-	BOOL Enable;	// 光を使うか否かのフラグ
-	BOOL Dummy[3];	// アライメント
 	DirectX::SimpleMath::Vector4 Direction;	// 平行光源の方向
 	DirectX::SimpleMath::Color Diffuse;		// 平行光源の強さと色
 	DirectX::SimpleMath::Color Ambient;		// 環境光の強さと色
