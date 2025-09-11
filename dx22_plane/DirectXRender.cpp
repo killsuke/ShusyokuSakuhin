@@ -92,8 +92,10 @@ HRESULT DirectXRender::Init() {
 	HPBarConstantBufferCreate();
 
 	LightBufferCreate();
-
 	LightSetting();
+
+	MaterialBufferCreate();
+	MaterialSetting();
 
 	SetBlendState(1);
 
@@ -105,18 +107,6 @@ HRESULT DirectXRender::Init() {
 
 
 
-	//bufferDesc.ByteWidth = sizeof(LIGHT);
-	//m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(5, 1, &m_LightBuffer);
-
-	//// ライト初期化
-	//LIGHT light{};
-	//light.Enable = true;
-	//light.Direction = Vector4(0.5f, -1.0f, 0.8f, 0.0f);	// 方向
-	//light.Direction.Normalize();
-	//light.Diffuse = Color(1.5f, 1.5f, 1.5f, 1.0f);	// 平行光源の強さと色
-	//light.Ambient = Color(0.7f, 0.7f, 0.7f, 1.0f);	// 環境光の強さと色
-	//SetLight(light);
 
 	//bufferDesc.ByteWidth = sizeof(MATERIAL);
 	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
@@ -164,6 +154,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pBoneConstantBuffer);
 	SAFE_RELEASE(g_pHPBarConstantBuffer);
 	SAFE_RELEASE(m_LightBuffer);
+	SAFE_RELEASE(m_MaterialBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
 			SAFE_RELEASE(g_BlendState[i]);
@@ -512,6 +503,40 @@ void DirectXRender::LightSetting() {
 	light.Ambient = Color(0.7f, 0.7f, 0.7f, 1.0f);	// 環境光の強さと色
 
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
+}
+
+void DirectXRender::MaterialSetting() {
+	// マテリアル初期化
+	MATERIAL material{};
+	material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_DeviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+}
+
+HRESULT DirectXRender::MaterialBufferCreate() {
+	HRESULT hr;
+
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(MATERIAL);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
+
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	// ここ２個もいるかね？
+	m_DeviceContext->VSSetConstantBuffers(6, 1, &m_MaterialBuffer);
+	m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
+
+	return hr;
 }
 
 HRESULT DirectXRender::InputLayoutAndShadersCreate() {

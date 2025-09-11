@@ -33,13 +33,13 @@ PS_IN vs_main(in VS_IN input)
 	output.col.xyz += input.col.xyz * Light.Ambient.xyz; // アンビエント光を加算
 	//output.col.xyz += (Material.Emission.xyz * 2.0f);	// Emissionを倍増
 
-	//output.col.xyz += Material.Emission.xyz;	// Emissionを加算
-	//output.col.a = input.col.a * Material.Diffuse.a; // アルファ値はそのまま使用
+	output.col.xyz += Material.Emission.xyz;	// Emissionを加算
+	output.col.a = input.col.a * Material.Diffuse.a; // アルファ値はそのまま使用
 
 	//texture=============================
 	// テクスチャ座標はそのまま使用
 	output.tex = input.tex;
-    output.col.a = vertexColor.a;
+   // output.col.a = vertexColor.a;
 	// output.tex = input.tex * 2.0;	// テクスチャ２倍？
 
 	return output;

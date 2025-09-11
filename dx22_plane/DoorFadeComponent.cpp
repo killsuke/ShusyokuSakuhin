@@ -35,7 +35,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 
 void DoorFadeComponent::Update()
 {
-	if (Input::GetKeyTrigger(VK_SPACE) && m_doorMoveEndFlag == true) {
+	if (m_bootDoor == true && m_doorMoveEndFlag == true) {
 		m_doorMoveEndFlag = false;
 		if (m_openCloseFlag == false) {
 			m_openCloseFlag = true;
@@ -43,6 +43,7 @@ void DoorFadeComponent::Update()
 		else {
 			m_openCloseFlag = false;
 		}
+		m_bootDoor = false;
 		//SceneManager::WaitSceneChange<LoadStageScene>(2.0f);
 	}
 

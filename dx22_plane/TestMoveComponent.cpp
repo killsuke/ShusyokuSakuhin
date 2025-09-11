@@ -17,8 +17,8 @@ void TestMoveComponent::Update() {
 
 	auto fighter = p_object->GetComponent<FighterComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
-	
-	if(/*fighter == nullptr || */rigid == nullptr)
+
+	if (/*fighter == nullptr || */rigid == nullptr)
 	{
 		return;
 	}
@@ -41,7 +41,10 @@ void TestMoveComponent::Update() {
 			rigid->ConstantVelocity_X(150.0f);
 		}
 
-		rigid->ReduceVelocity_X();
+
+		if (keyL == false && keyJ == false) {
+			rigid->ReduceVelocity_X(0.5f);
+		}
 	}
 
 	/*if (Input::GetKeyTrigger(VK_RETURN)) {

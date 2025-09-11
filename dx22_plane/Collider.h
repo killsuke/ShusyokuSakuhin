@@ -247,11 +247,18 @@ public:
 		coll_ob.rotation.y = offsetRotation.y;
 		coll_ob.rotation.z = offsetRotation.z;
 
+		float PitchRadians = DirectX::XMConvertToRadians(coll_ob.rotation.x); // XŽ²‰ñ“]
+		float YawRadians = DirectX::XMConvertToRadians(coll_ob.rotation.y);     // YŽ²‰ñ“]
+		float RollRadians = DirectX::XMConvertToRadians(coll_ob.rotation.z);   // ZŽ²‰ñ“]
+
 		// Ž²
-		DirectX::SimpleMath::Matrix mtx = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(coll_ob.rotation.y, coll_ob.rotation.x, coll_ob.rotation.z);
+		DirectX::SimpleMath::Matrix mtx = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
 		coll_ob.axisX = DirectX::SimpleMath::Vector3(mtx._11, mtx._12, mtx._13);
 		coll_ob.axisY = DirectX::SimpleMath::Vector3(mtx._21, mtx._22, mtx._23);
 		coll_ob.axisZ = DirectX::SimpleMath::Vector3(mtx._31, mtx._32, mtx._33);
+
+		DirectX::SimpleMath::Vector3 worldOffset = DirectX::SimpleMath::Vector3::TransformNormal(coll_ob.offsetCenter, mtx);
+		coll_ob.center = pos + worldOffset;
 	};
 
 	inline void SetColliderSize_AABB(const DirectX::SimpleMath::Vector3& pos,

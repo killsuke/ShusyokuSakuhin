@@ -29,7 +29,7 @@ void EnemyDamageComponent::Update()
 
 		for (auto& objOther : objOthers) {
 			auto collObjOther = objOther->GetComponent<ColliderComponent>();
-			if (collObjMe->CheckHit_CubeAndCube_IsTrigger3D(
+			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 
 				attack->AttackAction(*objOther);

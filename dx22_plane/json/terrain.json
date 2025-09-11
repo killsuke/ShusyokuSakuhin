@@ -46,7 +46,7 @@
             },
             "texture": "assets/texture/NoTexture.png",
             "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderPS": "shader/litTexturePS.hlsl"
         },
 	{
             "kind": "T_ShortFloor",
@@ -62,7 +62,7 @@
             },
             "texture": "assets/texture/NoTexture.png",
             "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderPS": "shader/litTexturePS.hlsl"
         },
 	{
             "kind": "T_Wall",
@@ -78,7 +78,7 @@
             },
             "texture": "assets/texture/NoTexture.png",
             "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderPS": "shader/litTexturePS.hlsl"
         }
     ]
 }

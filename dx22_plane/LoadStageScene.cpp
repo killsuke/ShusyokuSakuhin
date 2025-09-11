@@ -126,12 +126,14 @@ LoadStageScene::LoadStageScene() {
 		auto rolling = GameObjectManager::AddAbsFront("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
-		rollingTrans->SetScale({ 9.0f, 3.0f, 3.0f });
+		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
 		rollingTrans->SetPosition({30.0f,-9.0f,0.0f});
 		rollingTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto rollingColl = rolling->AddComponent<ColliderComponent>();
-		
+		rollingColl->SetOffsetSizeOBB({-3.0f,0.0f,0.0f});
+		rollingColl->SetOffsetCenterOBB({ -3.0f,0.0f,0.0f});
+
 		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
 
 		auto rollingGoAround = rolling->AddComponent<GoAroundComponent>();
@@ -154,7 +156,7 @@ LoadStageScene::LoadStageScene() {
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->SetMesh(rollingMesh);
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		rollingRender->SetTexture("assets/texture/NoTexture.png");
+		rollingRender->SetTexture("assets/texture/sword.png");
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->SetMesh(rollingMesh);
@@ -337,9 +339,11 @@ LoadStageScene::LoadStageScene() {
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	}
 
-	//auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
-	//auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
-	//fadeUI->SetOpenCloseFlag(false);
+	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
+	if (!fade.empty()) {
+		auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
+		fadeUI->SetBootDoor(true);
+	}
 }
 
 LoadStageScene::~LoadStageScene() {

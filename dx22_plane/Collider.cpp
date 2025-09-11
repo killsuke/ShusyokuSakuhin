@@ -65,13 +65,29 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 
 void ColliderComponent::MakeWorldOBBMatrix() {
 
+	Vector3 outCenter = coll_ob.rotation;
+
+	/*outCenter.x -= coll_ob.offsetRotation.x;
+	outCenter.y -= coll_ob.offsetRotation.y;
+	outCenter.z -= coll_ob.offsetRotation.z;*/
+
 	// ここについては協議の必要アリ
-	float PitchRadians = DirectX::XMConvertToRadians(coll_ob.rotation.x); // X軸回転
-	float YawRadians = DirectX::XMConvertToRadians(coll_ob.rotation.y);     // Y軸回転
-	float RollRadians = DirectX::XMConvertToRadians(coll_ob.rotation.z);   // Z軸回転
+	float PitchRadians = DirectX::XMConvertToRadians(outCenter.x); // X軸回転
+	float YawRadians = DirectX::XMConvertToRadians(outCenter.y);     // Y軸回転
+	float RollRadians = DirectX::XMConvertToRadians(outCenter.z);   // Z軸回転
 
 	// クォータニオン作成
 	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+
+	/*Vector3 outSize = coll_ob.size;
+	outSize.x -= coll_ob.offsetSize.x;
+	outSize.y -= coll_ob.offsetSize.y;
+	outSize.z -= coll_ob.offsetSize.z;
+
+	Vector3 outPos = coll_ob.center;
+	outPos.x -= coll_ob.offsetCenter.x;
+	outPos.y -= coll_ob.offsetCenter.y;
+	outPos.z -= coll_ob.offsetCenter.z;*/
 
 	// SRT情報作成
 	Matrix r = Matrix::CreateFromQuaternion(q);
@@ -80,6 +96,35 @@ void ColliderComponent::MakeWorldOBBMatrix() {
 
 	// ワールド行列を作成し、保存
 	coll_ob.worldOBBMatrix = s * r * t;
+
+	//float offsetPitchRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.x); // X軸回転
+	//float offsetYawRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.y);     // Y軸回転
+	//float offsetRollRadians = DirectX::XMConvertToRadians(coll_ob.offsetRotation.z);   // Z軸回転
+
+	//// クォータニオン作成
+	//Quaternion offsetQ = Quaternion::CreateFromYawPitchRoll(offsetYawRadians, offsetPitchRadians, offsetRollRadians);
+
+	//Vector3 offsetSize = {1.0f,1.0f,1.0f};
+	
+	//if (offsetSize.x == 0.0f) {
+	//	offsetSize.x = 1.0f;
+	//}
+	//if (offsetSize.y == 0.0f) {
+	//	offsetSize.y = 1.0f;
+	//}
+	//if (offsetSize.z == 0.0f) {
+	//	offsetSize.z = 1.0f;
+	//}
+
+	// SRT情報作成
+	/*Matrix offsetR = Matrix::CreateFromQuaternion(offsetQ);
+	Matrix offsetS = Matrix::CreateScale(offsetSize);
+	Matrix offsetT = Matrix::CreateTranslation({0.0f,0.0f,0.0f});
+
+	auto offsetMatrix = offsetS * offsetR * offsetT;*/
+
+//	coll_ob.worldOBBMatrix = offsetMatrix * coll_ob.worldOBBMatrix;
+
 	//	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
 }
 

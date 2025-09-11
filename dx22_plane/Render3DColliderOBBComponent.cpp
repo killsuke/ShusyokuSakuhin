@@ -13,14 +13,14 @@ Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : Re
 
 void Render3DColliderOBBComponent::Update()
 {
-	auto colliderAABB = p_object->GetComponent<ColliderComponent>();
+	auto colliderOBB = p_object->GetComponent<ColliderComponent>();
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
-	if (colliderAABB != nullptr && cameraobj != nullptr) {
+	if (colliderOBB != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = colliderAABB->GetWorldOBBMatrix().Transpose();
+		cb.matrixWorld = colliderOBB->GetWorldOBBMatrix().Transpose();
 
 		cb.color = Vector4(m_Color);
 

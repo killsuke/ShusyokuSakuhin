@@ -64,4 +64,6 @@ void GoAroundComponent::Update()
 	transform->SetRotation(Vector3(0.0f, 0.0f, DirectX::XMConvertToDegrees(angleToCenter)));
 
 	transform->SetPosition(centerPos  + rotatedOffset);
+
+	//std::cout << transform->GetRotation().z << std::endl;
 }

@@ -68,6 +68,8 @@ private:
 	static HRESULT HPBarConstantBufferCreate();
 	static HRESULT LightBufferCreate();
 	static void LightSetting();
+	static HRESULT MaterialBufferCreate();
+	static void MaterialSetting();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
@@ -75,7 +77,7 @@ private:
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
 	static HRESULT VeiwProjConstantCreate();
-
+	
 public:
 	DirectXRender();
 	~DirectXRender();
