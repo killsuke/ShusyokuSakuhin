@@ -1,6 +1,7 @@
 #include "TestSwordActionComponent.h"
 #include "TestMoveComponent.h"
 #include "GoAroundComponent.h"
+#include "Transform.h"
 #include "input.h"
 #include "GameObjectManager.h"
 #include "Collider.h"
@@ -14,8 +15,35 @@ TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(o
 
 void TestSwordActionComponent::Update() {
 
-	if (Input::GetKeyTrigger(VK_RETURN) == true || Input::GetButtonTrigger(XINPUT_X)) {
+	if (m_holder == nullptr) {
+		return;
+	}
+
+	auto goAround = p_object->GetComponent<GoAroundComponent>();
+	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
+
+	bool keyEnter = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
+
+	if (keyEnter == true) {
 		m_swordAction = true;
+		goAround->SetActiveFlag(true);
+		p_object->SetDrawContainerChangeFlag(DrawContainer::AbsFfont, true);
+	}
+	else if(keyEnter == false && m_swordAction == false){
+		p_object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
+		goAround->SetActiveFlag(false);
+		auto holderTrans = m_holder->GetComponent<TransformComponent>();
+		auto holderPos = holderTrans->GetPosition();
+		auto objTrans = p_object->GetComponent<TransformComponent>();
+
+		if (moveComp->GetRightLeft() == true) {
+			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
+			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+		}
+		else {
+			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
+			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+		}
 	}
 
 	if (m_swordAction == true) {
@@ -28,7 +56,7 @@ void TestSwordActionComponent::SwordAction() {
 	auto collider = p_object->GetComponent<ColliderComponent>();
 
 	// ここのプレイヤー取得はのちに別のものに変更
-	auto moveComp = GameObjectManager::GameObjectFindName("Player")->GetComponent<TestMoveComponent>();
+	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
 
 	if (goAround == nullptr || collider == nullptr) {
 		return;
@@ -47,6 +75,7 @@ void TestSwordActionComponent::SwordAction() {
 		goAround->ResetAngle();
 		collider->SetActiveColliderFlag(false);
 		m_swordAction = false;
+		p_object->SetDrawContainerChangeFlag(DrawContainer::Default,true);
 	}
 
 	if (direction == true && m_beforeDirection == false) { // 右向き
@@ -59,5 +88,4 @@ void TestSwordActionComponent::SwordAction() {
 	}
 
 	m_beforeDirection = direction;
-
 }

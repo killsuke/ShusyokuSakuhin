@@ -18,6 +18,8 @@ GameObject* GameObjectManager::AddObject(const std::string& _name, const std::st
 
 	auto ptr = HelperAddObject(objects, _name, _tag);
 
+	ptr->SetDrawContainer(DrawContainer::Default);
+
 	return ptr;
 }
 
@@ -32,12 +34,16 @@ GameObject* GameObjectManager::AddUI(const std::string& _name, const std::string
 	
 	auto ptr = HelperAddObject(objects_UI, _name, _tag);
 
+	ptr->SetDrawContainer(DrawContainer::UI);
+
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddAbsFront(const std::string& _name, const std::string& _tag) {
 	
 	auto ptr = HelperAddObject(objects_Absfront, _name, _tag);
+
+	ptr->SetDrawContainer(DrawContainer::AbsFfont);
 
 	return ptr;
 }
@@ -87,6 +93,48 @@ void GameObjectManager::HelperDraw(std::vector<std::unique_ptr<GameObject>>& obj
 	}
 }
 
+void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameObject>>& objs) {
+	for (auto it = objs.begin(); it != objs.end();) {
+
+		GameObject* obj = it->get();
+
+		auto hdc = obj->GetHopeDrawContainer();
+		auto dc = obj->GetDrawContainer();
+
+		if (obj->GetDrawContainerChangeFlag() == true && dc != hdc)
+		{
+			// フラグをクリア
+			obj->SetDrawContainerChangeFlag(hdc, false);
+			obj->SetDrawContainer(hdc);
+
+			// unique_ptr の所有権を移動
+			std::unique_ptr<GameObject> movingObj = std::move(*it);
+			it = objs.erase(it);	// 現在のコンテナから削除
+
+			switch (hdc)
+			{
+			case DrawContainer::Default:
+				objects.push_back(std::move(movingObj));
+				break;
+			case DrawContainer::AbsFfont:
+				objects_Absfront.push_back(std::move(movingObj));
+				break;
+			case DrawContainer::UI:
+				objects_UI.push_back(std::move(movingObj));
+				break;
+			case DrawContainer::Max:
+				break;
+			default:
+				break;
+			}
+
+			continue;
+		}
+
+		++it;
+	}
+}
+
 // どうやってオブジェクトをリストから削除するかを考える
 void GameObjectManager::RemoveObject() {
 	// 条件が合えばベクターの中の要素を削除する
@@ -122,6 +170,9 @@ void GameObjectManager::Update() {
 
 	// インスタンスの削除処理
 	RemoveObject();
+
+	// コンテナ入れ替え
+	ChangeContainer();
 }
 
 // 描画
@@ -165,6 +216,12 @@ void GameObjectManager::ListClear() {
 	objects_UI.clear();
 	objects_Absfront.clear();
 };
+
+void GameObjectManager::ChangeContainer() {
+	HelperChangeContainer(objects);
+	HelperChangeContainer(objects_Absfront);
+	HelperChangeContainer(objects_UI);
+}
 
 // 描画順のソート
 void GameObjectManager::DrawSort() {

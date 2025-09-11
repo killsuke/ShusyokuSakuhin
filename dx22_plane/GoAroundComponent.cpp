@@ -40,7 +40,7 @@ void GoAroundComponent::Update()
 	float totalAngle = m_nowAngleRadian + m_initialAngleRadian;
 
 	m_nowAngleDegree = totalAngle * (180.0f / DirectX::XM_PI);	// ラジアン → ディグリー
-	
+
 	// 現在の位置 == 角度として捉えたいので、戻し処理を入れる
 	if ((std::abs(m_nowAngleDegree) + std::abs(m_initialAngleDegree)) > 360.0f && m_clockwise == true) {	// 時計回り
 		m_nowAngleRadian = 0.0f;
@@ -63,7 +63,7 @@ void GoAroundComponent::Update()
 
 	transform->SetRotation(Vector3(0.0f, 0.0f, DirectX::XMConvertToDegrees(angleToCenter)));
 
-	transform->SetPosition(centerPos  + rotatedOffset);
+	transform->SetPosition(centerPos + rotatedOffset);
 
 	//std::cout << transform->GetRotation().z << std::endl;
 }

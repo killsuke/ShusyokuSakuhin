@@ -12,6 +12,14 @@ enum class ActiveState {
 	MAX
 };
 
+enum class DrawContainer {
+	Default,
+	AbsFfont,
+	UI,
+
+	Max
+};
+
 class Component; // 前方宣言
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
@@ -23,7 +31,10 @@ private:
 	std::string tag = "";	// タグを付けて識別する
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
+	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
 	ActiveState activeState = ActiveState::ACTIVE;
+	DrawContainer drawContainer = DrawContainer::Default;
+	DrawContainer hopeDrawContainer = DrawContainer::Default;
 
 public:
 
@@ -46,6 +57,11 @@ public:
 		obj->parent = this;	// 親オブジェクトを設定
 	};
 	inline void SetActiveState(ActiveState as) { activeState = as; };
+	inline void SetDrawContainer(DrawContainer dc) { drawContainer = dc; };
+	inline void SetDrawContainerChangeFlag(DrawContainer dc, bool dccFlag) { 
+		hopeDrawContainer = dc; 
+		drawContainerChangeFlag = dccFlag;
+	};
 
 	// ゲッター
 	inline bool GetDeleteFg()const { return deletefg; };
@@ -54,6 +70,9 @@ public:
 	inline GameObject* GetParent() { return parent; };
 	inline std::vector<GameObject*>& GetChildren() { return children; };
 	inline ActiveState GetActiveState()const { return activeState; };
+	inline DrawContainer GetDrawContainer()const { return drawContainer; };
+	inline DrawContainer GetHopeDrawContainer()const { return hopeDrawContainer; };
+	inline bool GetDrawContainerChangeFlag()const { return drawContainerChangeFlag; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();

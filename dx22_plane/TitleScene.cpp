@@ -42,7 +42,7 @@ void TitleScene::Init()
 	auto titleUI = GameObjectManager::AddUI("titleUI", "TitleUI");
 	auto transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,0.0f,0.0f });
-	transTitle->SetScale({480.0f,320.0f,1.0f});
+	transTitle->SetScale({ 480.0f,320.0f,1.0f });
 	SquareMesh square;
 	auto rendTitle = titleUI->AddComponent<Render2DComponent>();
 	rendTitle->SetMesh(square);
@@ -79,7 +79,7 @@ void TitleScene::Update()
 	//	setumeiFg = true;
 	//}
 
-	
+
 }
 
 // I—¹ˆ—

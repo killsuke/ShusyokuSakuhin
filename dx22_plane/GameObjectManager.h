@@ -55,6 +55,8 @@ public:
 
 	static int ListSize() { return static_cast<int>(objects.size()); };	// オブジェクトをいくつ格納しているのかを返す
 
+	static void ChangeContainer();
+
 	// ソートをして、描画順の問題解決、が、不必要なら消去する
 	static void DrawSort();
 
@@ -78,5 +80,6 @@ private:
 	static void HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& tag);
 	static void HelperUpdate(std::vector<std::unique_ptr<GameObject>>& objs);
 	static void HelperDraw(std::vector<std::unique_ptr<GameObject>>& objs);
+	static void HelperChangeContainer(std::vector<std::unique_ptr<GameObject>>& objs);
 };
 

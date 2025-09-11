@@ -20,7 +20,7 @@ void SceneManager::UnInit() {
 	//	TextureManager::ReleaseAllTextures();	// 各シーンのテクスチャーをまとめて破棄する
 
 	GameObjectManager::UnInit();	// ゲームオブジェクトのマネージャーを終了
- 
+
 	//sound.Uninit();	// サウンドの終了処理
 //	Debug::DebugFin();
 

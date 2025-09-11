@@ -122,30 +122,31 @@ LoadStageScene::LoadStageScene() {
 		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 
 
-	//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+		//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 		auto rolling = GameObjectManager::AddAbsFront("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
-		rollingTrans->SetPosition({30.0f,-9.0f,0.0f});
+		rollingTrans->SetPosition({ 30.0f,-9.0f,3.0f });
 		rollingTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		auto rollingColl = rolling->AddComponent<ColliderComponent>();
-		rollingColl->SetOffsetSizeOBB({-3.0f,0.0f,0.0f});
-		rollingColl->SetOffsetCenterOBB({ -3.0f,0.0f,0.0f});
+		rollingColl->SetOffsetSizeOBB({ -3.0f,0.0f,3.0f });
+		rollingColl->SetOffsetCenterOBB({ -3.0f,0.0f,0.0f });
 
 		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
+		testAction->SetHolder(player);
 
 		auto rollingGoAround = rolling->AddComponent<GoAroundComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
-		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(),rollingTrans->GetPosition()); // 初期オフセットを設定
+		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
 		rollingGoAround->SetInitialAngle(90.0f);
 		rollingGoAround->SetRotationSpeed(7.0f); // 回転速度を設定
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
 
 		auto rollingFT = rolling->AddComponent<FighterComponent>();
-		rollingFT->SetAtk(10);
+		rollingFT->SetAtk(2);
 		rollingFT->SetHp(50);
 
 		auto rollingAtk = rolling->AddComponent<AttackOneTimeComponent>();
@@ -330,12 +331,12 @@ LoadStageScene::LoadStageScene() {
 		auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
 		auto testUITrans = testUI->AddComponent<TransformComponent>();
 		testUITrans->SetPosition({ -300.0f, 0.0f, 0.0f });
-		testUITrans->SetScale({50.0f,50.0f,50.0f});
+		testUITrans->SetScale({ 50.0f,50.0f,50.0f });
 		auto testUIRend = testUI->AddComponent<Render2DComponent>();
 		SquareMesh square;
 		testUIRend->SetMesh(square);
 		testUIRend->SetTexture("assets/texture/3count.png");
-		testUIRend->SetColor({1.0f,1.0f,1.0f,1.0f});
+		testUIRend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	}
 
