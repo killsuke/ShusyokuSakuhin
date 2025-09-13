@@ -24,11 +24,15 @@ void TestSwordActionComponent::Update() {
 
 	bool keyEnter = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
 
+	// Œ•‚ðU‚é
 	if (keyEnter == true) {
 		m_swordAction = true;
 		goAround->SetActiveFlag(true);
+		goAround->SetRollingActive(true);
+
 		p_object->SetDrawContainerChangeFlag(DrawContainer::AbsFfont, true);
 	}
+	// U‚Á‚Ä‚¢‚È‚¢
 	else if(keyEnter == false && m_swordAction == false){
 		p_object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
 		goAround->SetActiveFlag(false);
@@ -36,11 +40,11 @@ void TestSwordActionComponent::Update() {
 		auto holderPos = holderTrans->GetPosition();
 		auto objTrans = p_object->GetComponent<TransformComponent>();
 
-		if (moveComp->GetRightLeft() == true) {
+		if (moveComp->GetRightLeft() == true) {	// ‰E
 			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
 			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
 		}
-		else {
+		else {									// ¶
 			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
 			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
 		}
@@ -64,18 +68,32 @@ void TestSwordActionComponent::SwordAction() {
 
 	collider->SetActiveColliderFlag(true);
 
-	goAround->SetRollingActive(true);
-
 	// ¶‰E‚ÌŒü‚«•Ï‚í‚Á‚½‚çAŒ»ÝŠp“x‚É{90“x‚µ‚Ä¶‰E”½“]Aã‹L‚ÌŽ~‚ß‚éˆ—‚à‚¿‚å‚¢‚Æ•Ï‚¦‚éHƒ^ƒCƒ€•ûŽ®‚Æ‚©‚É
 	bool direction = moveComp->GetRightLeft();
 
 	// ‚±‚±‚ÅŽ~‚ß‚éˆ—‚Ì§ŒÀ‚ª‚È‚¢
-	if ((goAround->GetNowAngleDegree() < 0 && direction == true) || (goAround->GetNowAngleDegree() > 180.0f && direction == false)) {
+	if ((goAround->GetNowAngleDegree() < 0.0f && direction == true) || (goAround->GetNowAngleDegree() > 180.0f && direction == false)) {
 		goAround->SetRollingActive(false);
-		goAround->ResetAngle();
+		goAround->ResetNowAngle_Radian();
+		goAround->ResetNowAngle_Degree();
 		collider->SetActiveColliderFlag(false);
 		m_swordAction = false;
 		p_object->SetDrawContainerChangeFlag(DrawContainer::Default,true);
+		auto holderTrans = m_holder->GetComponent<TransformComponent>();
+		auto holderPos = holderTrans->GetPosition();
+		auto objTrans = p_object->GetComponent<TransformComponent>();
+
+		if (moveComp->GetRightLeft() == true) {
+			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
+			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+		}
+		else {
+			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
+			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+		}
+		goAround->SetActiveFlag(false);
+
+		return;
 	}
 
 	if (direction == true && m_beforeDirection == false) { // ‰EŒü‚«

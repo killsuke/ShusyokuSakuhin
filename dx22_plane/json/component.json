@@ -57,52 +57,56 @@
             "ID": 13
         },
         {
-            "name": "HP_BAR_MOVE",
+            "name": "ENEMY_ACTION",
             "ID": 14
         },
         {
-            "name": "COLLIDER",
+            "name": "HP_BAR_MOVE",
             "ID": 15
         },
         {
-            "name": "TEST_JUDGE_EXTRUSION",
+            "name": "COLLIDER",
             "ID": 16
         },
         {
-            "name": "ATTACK",
+            "name": "TEST_JUDGE_EXTRUSION",
             "ID": 17
         },
         {
-            "name": "ENEMY_DAMAGE",
+            "name": "ATTACK",
             "ID": 18
         },
         {
-            "name": "FIGHTER",
+            "name": "DAMAGE",
             "ID": 19
+        },
+        {
+            "name": "FIGHTER",
+            "ID": 20
         },
 	{
 	    "name": "DOOR_FADE",
-            "ID": 20
+            "ID": 21
 	},
         {
             "name": "TRANSFORM",
-            "ID": 21
-        },
-        {
-            "name": "RENDER",
             "ID": 22
         },
         {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
+            "name": "RENDER",
             "ID": 23
         },
         {
-            "name": "COLLIDER_DEBUG_RENDER",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 24
         },
         {
-            "name": "MAX",
+            "name": "COLLIDER_DEBUG_RENDER",
             "ID": 25
+        },
+        {
+            "name": "MAX",
+            "ID": 26
         }
     ]
 }

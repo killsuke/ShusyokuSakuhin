@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "Render3D.h"
+#include "Render2D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
 #include "GameObjectManager.h"
@@ -10,6 +11,7 @@
 #include "RigidBodyComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "FighterComponent.h"
+#include "EnemyActionBulletComponent.h"
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
@@ -43,8 +45,9 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 				break;
 			}
 		}
-		std::string name = "enemy_" + std::to_string(num);
-		auto enemyObj = GameObjectManager::AddObject(name, "Enemy");
+
+		std::string newName = "enemy_" + std::to_string(num);
+		auto enemyObj = GameObjectManager::AddObject(newName, "Enemy");
 		auto transform = enemyObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
 		transform->SetScale(eS.scale);
@@ -53,6 +56,8 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		rigidBody->SetGravityFlag(true); // 重力を有効にする
 		enemyObj->AddComponent<TestExtrusionJudgeComponent>(); // 地面判定コンポーネントを追加
 
+		CreateKind(eS.kind, *enemyObj);
+
 		auto fighter = enemyObj->AddComponent<FighterComponent>();
 		fighter->SetAtk(eS.atk);
 		fighter->SetHp(eS.hp);
@@ -60,7 +65,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
 		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));
 		SquareMesh squareMesh;
-		auto render = enemyObj->AddComponent<Render3DComponent>();
+		auto render = enemyObj->AddComponent<Render2DComponent>();
 		render->SetMesh(squareMesh);
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->SetTexture(eS.texture);
@@ -74,4 +79,14 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 
 		num++;
 	}
+}
+
+void EnemyManagerComponent::CreateKind(const std::string& kind, GameObject& obj)
+{
+	if (kind == "E_Gunner") {
+		auto eab = obj.AddComponent<EnemyActionBulletComponent>();
+
+	}
+
+
 }

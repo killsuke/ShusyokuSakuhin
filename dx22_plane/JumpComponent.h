@@ -22,6 +22,9 @@ private:
 	bool  m_isJumping = false; // ジャンプ中かどうか
 	bool m_isGround = false; // 地面にいるかどうか
 	bool m_isCeiling = false; // 天井にいるかどうか
+	bool m_beforePress = false; // 前フレームでジャンプボタンが押されていたかどうか
+	//bool m_jumpTrigger = false; // 最初のジャンプかどうか
+	bool m_jumpPress = false; // ジャンプボタンが押されているかどうか
 
 public:
 	JumpComponent(GameObject& obj);
@@ -40,4 +43,7 @@ public:
 
 	void StartJump() { m_isJumping = true; };
 	void StopJump() { m_isJumping = false; };
+
+//	void SetJumpTrigger(const bool trigger) { m_jumpTrigger = trigger; };
+	void SetJumpPress(const bool press) { m_jumpPress = press; };
 };

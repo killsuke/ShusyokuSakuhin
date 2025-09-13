@@ -40,7 +40,8 @@ public:
 	inline void SetClockwise(bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
 	inline void SetRollingActive(bool active) { m_rollingActive = active; } // 回転の停止・再開
 	inline void SetFlipRequested(bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
-	inline void ResetAngle() { m_nowAngleRadian = 0.0f; } // 角度をリセット
+	inline void ResetNowAngle_Radian() { m_nowAngleRadian = 0.0f; } // 角度をリセット（ラジアン）
+	inline void ResetNowAngle_Degree() { m_nowAngleDegree = 0.0f; } // 角度をリセット（ディグリー）
 	inline void RollingStop() { m_rollingActive = false; } // 回転を停止
 	inline void RollingStart() { m_rollingActive = true; } // 回転を再開
 

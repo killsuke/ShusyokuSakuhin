@@ -1,0 +1,9 @@
+#include "EnemyActionComponent.h"
+
+EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
+	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // É\Å[Égî‘çÜÇê›íË
+}
+
+void EnemyActionComponent::Update() {
+
+}

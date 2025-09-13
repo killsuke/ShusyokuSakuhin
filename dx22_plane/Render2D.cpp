@@ -33,8 +33,6 @@ void Render2DComponent::Update()
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
 
-	//	m_Texture->SetUV(1.0f, 1.0f, 2.0f, 2.0f);
-
 		auto uvs = m_Texture->GetUVSets();
 
 		uvs.x = uvs.x - 1;

@@ -1,7 +1,7 @@
 {
     "enemies": [
         {
-            "kind": "E_NoMove",
+            "kind": "E_Gunner",
             "scale": {
                 "x": 5.0,
                 "y": 10.0,
@@ -15,7 +15,7 @@
             "atk": 10,
             "hp": 10,
             "texture": "assets/texture/bear.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
         {

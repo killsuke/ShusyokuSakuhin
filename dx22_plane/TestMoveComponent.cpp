@@ -3,6 +3,7 @@
 #include "FighterComponent.h"
 #include "Render3D.h"
 #include "HPBarMoveComponent.h"
+#include "JumpComponent.h"
 #include "GameObjectManager.h"
 #include "input.h"
 
@@ -14,6 +15,7 @@ TestMoveComponent::TestMoveComponent(GameObject& obj) :Component(obj) {
 void TestMoveComponent::Update() {
 	bool keyJ = false;
 	bool keyL = false;
+	bool keyW = false;
 
 	auto fighter = p_object->GetComponent<FighterComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
@@ -31,6 +33,21 @@ void TestMoveComponent::Update() {
 	if (Input::GetKeyPress(VK_D) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
 		m_rightLeft = true; // ‰EŒü‚«
 		keyL = true;
+	}
+
+	//bool isTrigger = false;
+
+	//if (Input::GetKeyTrigger(VK_W) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
+	//	isTrigger = true;
+	//}
+
+	if (Input::GetKeyPress(VK_W) == true || Input::GetButtonPress(XINPUT_A) == true) {
+		keyW = true;
+	}
+
+	auto jump = p_object->GetComponent<JumpComponent>();
+	if (jump != nullptr) {
+		jump->SetJumpPress(keyW);
 	}
 
 	if (rigid != nullptr) {

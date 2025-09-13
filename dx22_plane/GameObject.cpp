@@ -54,12 +54,12 @@ void GameObject::Draw() {
 }
 
 void GameObject::SortComponents() {
-	std::sort(components.begin(), components.end(),
+	std::sort(components.begin(), components.end(),	// レンダー関係以外のコンポーネントコンテナをソート
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});
 
-	std::sort(renderComponents.begin(), renderComponents.end(),
+	std::sort(renderComponents.begin(), renderComponents.end(),	// レンダー関係のコンポーネントコンテナをソート
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});
@@ -68,8 +68,6 @@ void GameObject::SortComponents() {
 bool GameObject::ComponentCheck(Component* comp) {
 	// 描画関係の機能と分けるため、ここで判断
 	if (auto renderComp = dynamic_cast<RenderComponent*>(comp)) {
-
-		//std::cout << this->name << "：" << "RenderComponent です" << std::endl;
 		return true;
 	}
 

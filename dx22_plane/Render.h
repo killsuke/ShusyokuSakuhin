@@ -51,5 +51,7 @@ public:
 	};
 	void SetMesh(Mesh& mesh);
 	void SetColor(const DirectX::XMFLOAT4 color) { m_Color = color; };
+
+	Texture* GetTexture() { return m_Texture.get(); };
 };
 

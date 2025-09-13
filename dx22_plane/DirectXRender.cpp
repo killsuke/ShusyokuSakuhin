@@ -20,9 +20,9 @@ ID3D11Device* DirectXRender::m_Device = nullptr; // コンテキスト＝描画関連を司る
 
 IDXGISwapChain* DirectXRender::m_SwapChain = nullptr; // スワップチェーン＝ダブルバッファ機能
 
-ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable;
+ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable = nullptr;
 
-ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable;
+ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable = nullptr;
 
 // レンダーターゲット＝描画先を表す機能
 ID3D11RenderTargetView* DirectXRender::g_pRenderTargetView = nullptr;
@@ -33,9 +33,9 @@ ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
 
 ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
 
-ID3D11DepthStencilState* g_DepthStateEnable;
+ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
-ID3D11DepthStencilState* g_DepthStateDisable;
+ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
 
 // インプットレイアウト
 ID3D11InputLayout* g_pInputLayout;

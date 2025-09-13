@@ -338,6 +338,8 @@ LoadStageScene::LoadStageScene() {
 		testUIRend->SetTexture("assets/texture/3count.png");
 		testUIRend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		auto uiTex = testUIRend->GetTexture();
+		uiTex->SetInitialCut(2.0f, 2.0f);
 	}
 
 	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");

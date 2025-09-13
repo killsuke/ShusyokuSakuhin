@@ -57,4 +57,14 @@ public:
 
 		return uvs;
 	};
+
+	inline void SetInitialCut(float sx, float sy) {
+		m_SplitX = sx;
+		m_SplitY = sy;
+	};
+
+	inline void SetCutNum(float nu, float nv) {
+		m_NumU = nu;
+		m_NumV = nv;
+	};
 };

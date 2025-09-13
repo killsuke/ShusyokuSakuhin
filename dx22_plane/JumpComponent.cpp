@@ -1,7 +1,6 @@
 #include "JumpComponent.h"
 #include "RigidBodyComponent.h"
 #include "TestExtrusionJudgeComponent.h"
-#include "input.h"
 #include <cmath>
 #include <iostream>
 
@@ -12,25 +11,20 @@ JumpComponent::JumpComponent(GameObject& obj) :Component(obj) {
 }
 
 void JumpComponent::Update() {
-	bool isPressed = false;
-	bool isTrigger = false;
-
-	if (Input::GetKeyTrigger(VK_W) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
-		isTrigger = true;
+	
+	bool isJumpButtonTrigger = false;
+	if(m_beforePress == false && m_jumpPress == true) {
+		isJumpButtonTrigger = true;
 	}
 
-	if (Input::GetKeyPress(VK_W) == true || Input::GetButtonPress(XINPUT_A) == true) {
-		isPressed = true;
-	}
+	JumpAction(m_jumpPress, isJumpButtonTrigger); // isGround‚Ífalse‚Å‰Šú‰»
 
-	JumpAction(isPressed, isTrigger); // isGround‚Ífalse‚Å‰Šú‰»
-
+	m_beforePress = m_jumpPress;
 }
 
 void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
-
 
 	Vector3 velocity = rigid->GetVelocity();
 

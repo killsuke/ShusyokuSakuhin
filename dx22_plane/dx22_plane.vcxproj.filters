@@ -315,6 +315,18 @@
     <ClCompile Include="TerrainManagerComponent.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyActionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyActionBulletComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDamageComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -641,6 +653,18 @@
     <ClInclude Include="TerrainManagerComponent.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyActionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyActionBulletComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDamageComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
@@ -670,6 +694,9 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="unlitTextureVSSkyDome.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Animation2DVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>
