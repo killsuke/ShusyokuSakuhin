@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "Render2D.h"
+#include "Render3D.h"
 #include "RigidBodyComponent.h"
 #include "GameObjectManager.h"
 #include "Render3DColliderAABBComponent.h"
@@ -10,6 +11,8 @@
 #include "FighterComponent.h"
 #include "PlayerDamageComponent.h"
 #include "SquareMesh.h"
+
+#include <iostream>
 
 EnemyActionBulletComponent::EnemyActionBulletComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ðÝ’è
@@ -30,14 +33,14 @@ void EnemyActionBulletComponent::Update() {
 		m_rightLeft = true;
 	}
 
-	if (m_recordTime > 2.0f) {
+	if (m_recordTime > 5.0f) {
 		FiringBullet();
 		m_recordTime = 0.0f;
 	}
-
 }
 
 void EnemyActionBulletComponent::FiringBullet() {
+	
 	auto myTrans = p_object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
@@ -61,9 +64,11 @@ void EnemyActionBulletComponent::FiringBullet() {
 	auto dmg = bullet->AddComponent<PlayerDamageComponent>();
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
-	auto rend = bullet->AddComponent<Render2DComponent>();
+	auto rend = bullet->AddComponent<Render3DComponent>();
 	SquareMesh squareMesh;
 	rend->SetMesh(squareMesh);
 	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rend->SetTexture("assets/texture/NoTexture.png");
+	rend->SetTexture("assets/texture/goal.png");
+//	bullet->SetActiveState(ActiveState::UPDATE_STOP);
+
 }

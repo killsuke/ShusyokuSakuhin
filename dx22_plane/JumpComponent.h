@@ -9,7 +9,7 @@ private:
 	void JumpAction(bool isJumpButtonPressed, bool trigger);
 
 //	float m_jumpHeight = 0.0f; // ジャンプの高さ
-	float m_jumpPower = 5.0f; // ジャンプの振幅
+	float m_jumpPower = 50.0f; // ジャンプの振幅
 	float m_time = 0.0f;
 //	float m_jumpDuration = 0.5f; // 例：ジャンプの全体が0.5秒で完了
 	float m_magnification = 2.0f; // ジャンプの加速度の倍率

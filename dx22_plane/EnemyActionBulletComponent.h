@@ -9,7 +9,7 @@ public:
 	EnemyActionBulletComponent(GameObject& obj);
 	~EnemyActionBulletComponent() = default;
 
-	void Update();
+	void Update()override;
 	void FiringBullet();
 
 };

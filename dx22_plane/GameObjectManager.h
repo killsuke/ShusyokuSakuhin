@@ -31,6 +31,7 @@ public:
 		child_Objects.reserve(100);
 		objects_UI.reserve(100);
 		objects_Absfront.reserve(100);
+		temporaryContainer.reserve(100);
 	};
 
 	// デストラクタ
@@ -45,6 +46,8 @@ public:
 	static GameObject* AddUI(const std::string& _name = "Noname", const std::string& _tag = "Notag");
 
 	static GameObject* AddAbsFront(const std::string& _name = "Noname", const std::string& _tag = "Notag");
+
+	static void TransferAddObjects();
 
 	static void RemoveObject();	 // オブジェクトを削除する（後に使いやすいように改造）
 	static void RemoveTagObject(const std::string& tag);
@@ -75,7 +78,10 @@ private:
 	static std::vector<std::unique_ptr<GameObject>> objects_UI;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
 	static std::vector<std::unique_ptr<GameObject>> objects_Absfront;	 // シーンをnewする度に様々なオブジェクトを格納するようにする
 
-	static GameObject* HelperAddObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& _name, const std::string& _tag);
+	static std::vector<std::unique_ptr<GameObject>> temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
+		
+
+	static GameObject* HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag);
 	static void HelperRemoveObject(std::vector<std::unique_ptr<GameObject>>& objs);
 	static void HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& tag);
 	static void HelperUpdate(std::vector<std::unique_ptr<GameObject>>& objs);

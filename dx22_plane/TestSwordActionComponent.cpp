@@ -30,7 +30,7 @@ void TestSwordActionComponent::Update() {
 		goAround->SetActiveFlag(true);
 		goAround->SetRollingActive(true);
 
-		p_object->SetDrawContainerChangeFlag(DrawContainer::AbsFfont, true);
+		p_object->SetDrawContainerChangeFlag(DrawContainer::AbsFront, true);
 	}
 	// U‚Á‚Ä‚¢‚È‚¢
 	else if(keyEnter == false && m_swordAction == false){

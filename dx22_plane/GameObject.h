@@ -14,7 +14,8 @@ enum class ActiveState {
 
 enum class DrawContainer {
 	Default,
-	AbsFfont,
+	Child,
+	AbsFront,
 	UI,
 
 	Max

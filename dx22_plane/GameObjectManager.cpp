@@ -12,46 +12,44 @@ std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::objects_UI;		// ゲーム内で、実際に更新をかけるベクター
 std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
+std::vector<std::unique_ptr<GameObject>>
+GameObjectManager::temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
 
 // リストにゲームオブジェクトを追加
 GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(objects, _name, _tag);
-
-	ptr->SetDrawContainer(DrawContainer::Default);
+	auto ptr = HelperAddObject(DrawContainer::Default, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::GameObjectManager::AddChild(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(child_Objects, _name, _tag);
+	auto ptr = HelperAddObject(DrawContainer::Child, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddUI(const std::string& _name, const std::string& _tag) {
 	
-	auto ptr = HelperAddObject(objects_UI, _name, _tag);
-
-	ptr->SetDrawContainer(DrawContainer::UI);
+	auto ptr = HelperAddObject(DrawContainer::UI, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddAbsFront(const std::string& _name, const std::string& _tag) {
 	
-	auto ptr = HelperAddObject(objects_Absfront, _name, _tag);
-
-	ptr->SetDrawContainer(DrawContainer::AbsFfont);
+	auto ptr = HelperAddObject(DrawContainer::AbsFront, _name, _tag);
 
 	return ptr;
 }
 
-GameObject* GameObjectManager::HelperAddObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& _name, const std::string& _tag) {
-	objs.emplace_back(std::make_unique<GameObject>(_name, _tag));
+GameObject* GameObjectManager::HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag) {
+	temporaryContainer.push_back(std::make_unique<GameObject>(_name, _tag));
 
-	auto ptr = objs.back().get();
+	auto ptr = temporaryContainer.back().get();
+
+	ptr->SetDrawContainer(dc);
 
 	return ptr;
 }
@@ -116,7 +114,7 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 			case DrawContainer::Default:
 				objects.push_back(std::move(movingObj));
 				break;
-			case DrawContainer::AbsFfont:
+			case DrawContainer::AbsFront:
 				objects_Absfront.push_back(std::move(movingObj));
 				break;
 			case DrawContainer::UI:
@@ -133,6 +131,31 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 
 		++it;
 	}
+}
+
+void GameObjectManager::TransferAddObjects() {
+
+	for (auto& p : temporaryContainer)
+	{
+		if(p->GetDrawContainer() == DrawContainer::Default)
+		{
+			objects.push_back(std::move(p));
+		}
+		else if (p->GetDrawContainer() == DrawContainer::Child)
+		{
+			child_Objects.push_back(std::move(p));
+		}
+		else if (p->GetDrawContainer() == DrawContainer::UI)
+		{
+			objects_UI.push_back(std::move(p));
+		}
+		else if (p->GetDrawContainer() == DrawContainer::AbsFront)
+		{
+			objects_Absfront.push_back(std::move(p));
+		}
+	}
+
+	temporaryContainer.clear();
 }
 
 // どうやってオブジェクトをリストから削除するかを考える
@@ -160,6 +183,8 @@ void GameObjectManager::RemoveTagObject(const std::string& tag) {
 
 // 更新
 void GameObjectManager::Update() {
+	TransferAddObjects();
+	// 必要ならコンテナのサイズを増やす
 	SizeUP();
 
 	// 描画順を整える

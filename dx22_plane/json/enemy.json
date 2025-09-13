@@ -19,6 +19,24 @@
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
         {
+            "kind": "E_Hopper",
+            "scale": {
+                "x": 5.0,
+                "y": 10.0,
+                "z": 5.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "atk": 10,
+            "hp": 10,
+            "texture": "assets/texture/dice.png",
+            "shaderVS": "Animation2DVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+        {
             "kind": "E_dice",
             "scale": {
                 "x": 5.0,

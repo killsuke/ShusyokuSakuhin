@@ -1,5 +1,7 @@
 #include "BulletComponent.h"
 #include "RigidBodyComponent.h"
+#include "Transform.h"
+#include <iostream>
 
 BulletComponent::BulletComponent(GameObject& obj) : Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定、仮にGO_AROUNDを設置
@@ -14,7 +16,7 @@ void BulletComponent::Update() {
 
 	m_rimitTime -= m_deltaTime;
 
-	if(m_rimitTime <= 0.0f) {
+	if (m_rimitTime <= 0.0f) {
 		p_object->SetDeleteFg(true);
 	}
 }

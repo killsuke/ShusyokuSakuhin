@@ -12,6 +12,7 @@
 #include "TestExtrusionJudgeComponent.h"
 #include "FighterComponent.h"
 #include "EnemyActionBulletComponent.h"
+#include "EnemyActionHopperComponent.h"
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
@@ -85,7 +86,9 @@ void EnemyManagerComponent::CreateKind(const std::string& kind, GameObject& obj)
 {
 	if (kind == "E_Gunner") {
 		auto eab = obj.AddComponent<EnemyActionBulletComponent>();
-
+	}
+	else if(kind == "E_Hopper") {
+		auto eah = obj.AddComponent<EnemyActionHopperComponent>();
 	}
 
 
