@@ -24,10 +24,10 @@ private:
 	int m_bpp = 0; // BPP
 
 	// UVÀ•W‚Ìî•ñ
-	float m_NumU = 1;
-	float m_NumV = 1;
-	float m_SplitX = 1;
-	float m_SplitY = 1;
+	float m_NumU = 1.0f;
+	float m_NumV = 1.0f;
+	float m_SplitX = 1.0f;
+	float m_SplitY = 1.0f;
 
 public:
 	bool Load(const std::string& filename);

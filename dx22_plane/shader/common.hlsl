@@ -14,6 +14,10 @@ cbuffer ConstBuffer : register(b0)
 
 	// ƒ[ƒ‹ƒh•ÏŠ·s—ñ
 	matrix matrixWorld;
+	
+    bool isInvertX; // ‚t‚uÀ•W‚Ì‡]‚ğ”½“]‚·‚é‚©‚Ç‚¤‚©
+	
+    int pad[3];
 }
 
 cbuffer ViewBuffer3D : register(b1)

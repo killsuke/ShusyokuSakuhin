@@ -38,6 +38,8 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 
 	if (fighter != nullptr && targetFighter != nullptr) {
 
+		m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
+
 		auto it = std::find_if(m_attackObjs.begin(), m_attackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
 
@@ -51,6 +53,8 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 		else {
 			m_attackObjs.push_back({ &obj, m_coolDownTime,1 });	// ここで攻撃対象に組み込む
 		}
+
+		m_attackHitFlag = true; // 攻撃が当たったフラグを立てる
 
 		int atk = fighter->GetAtk();
 

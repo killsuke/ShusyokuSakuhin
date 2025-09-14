@@ -37,6 +37,7 @@ protected:
 	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
 	IndexBuffer m_IndexBuffer = {};
 	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f,1.0f }; // êF
+	bool m_inversionFlag = false;
 
 	RenderComponent(GameObject& obj);
 	~RenderComponent() = default;
@@ -51,6 +52,7 @@ public:
 	};
 	void SetMesh(Mesh& mesh);
 	void SetColor(const DirectX::XMFLOAT4 color) { m_Color = color; };
+	void SetInversionFlag(const bool flag) { m_inversionFlag = flag; };
 
 	Texture* GetTexture() { return m_Texture.get(); };
 };

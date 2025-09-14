@@ -5,6 +5,10 @@
 #include "input.h"
 #include "GameObjectManager.h"
 #include "Collider.h"
+#include "Effect2DComponent.h"
+#include "RenderBillboard.h"
+#include "AttackOneTimeComponent.h"
+#include "SquareMesh.h"
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
@@ -58,6 +62,7 @@ void TestSwordActionComponent::Update() {
 void TestSwordActionComponent::SwordAction() {
 	auto goAround = p_object->GetComponent<GoAroundComponent>();
 	auto collider = p_object->GetComponent<ColliderComponent>();
+	auto atkComp = p_object->GetComponent<AttackOneTimeComponent>();
 
 	// ここのプレイヤー取得はのちに別のものに変更
 	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
@@ -71,7 +76,7 @@ void TestSwordActionComponent::SwordAction() {
 	// 左右の向き変わったら、現在角度に＋90度して左右反転、上記の止める処理もちょいと変える？タイム方式とかに
 	bool direction = moveComp->GetRightLeft();
 
-	// ここで止める処理の制限がない
+	// ここで止める処理
 	if ((goAround->GetNowAngleDegree() < 0.0f && direction == true) || (goAround->GetNowAngleDegree() > 180.0f && direction == false)) {
 		goAround->SetRollingActive(false);
 		goAround->ResetNowAngle_Radian();
@@ -99,11 +104,41 @@ void TestSwordActionComponent::SwordAction() {
 	if (direction == true && m_beforeDirection == false) { // 右向き
 		goAround->SetClockwise(true);
 		goAround->SetFlipRequested(true);
+		m_rightLeft = true;
 	}
 	else if (direction == false && m_beforeDirection == true) { // 左向き
 		goAround->SetClockwise(false);
 		goAround->SetFlipRequested(true);
+		m_rightLeft = false;
+	}
+
+	if (atkComp->GetAttackHitFlag() == true) {
+		CreateSwordEffect();
 	}
 
 	m_beforeDirection = direction;
+}
+
+void TestSwordActionComponent::CreateSwordEffect() {
+	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
+
+	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	auto effectTrans = effect->AddComponent<TransformComponent>();
+	effectTrans->SetScale({ 15.0f,15.0f,5.0f });
+	if( m_rightLeft == true ) {
+		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
+	}
+	else {
+		effectTrans->SetPosition({ pos.x - 7.0f, pos.y, pos.z });
+	}
+	SquareMesh square;
+	auto render = effect->AddComponent<RenderBillboardComponent>();
+	render->SetMesh(square);
+	render->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	render->SetTexture("assets/texture/swordEffect.png");
+	render->SetInversionFlag(!m_rightLeft);
+	auto tex = render->GetTexture();
+	tex->SetInitialCut(5.0f, 1.0f);
+	auto effectComp = effect->AddComponent<Effect2DComponent>();
+	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
 }

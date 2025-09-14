@@ -5,6 +5,7 @@
 #include "GameObjectManager.h"
 #include "CameraTargetComponent.h"
 #include "RigidBodyComponent.h"
+#include <iostream>
 using namespace DirectX::SimpleMath;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
@@ -19,6 +20,10 @@ void CameraMoveComponent::Update()
 	auto player = GameObjectManager::GameObjectFindName("Player");
 
 	//AdjustmentHeight(*cameraObj,*player); // プレイヤーの高さに合わせてカメラの高さを調整
+
+	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
+
+	//std::cout << "CameraPos:" << pos.x << "," << pos.y << std::endl;
 
 	CameraPattern nowCp = CAMERA_NONE;
 

@@ -6,6 +6,7 @@
 #include	<iostream>
 #include	<io.h>
 #include	<vector>
+#include	<Windows.h>
 #include "RenderElement.h"
 
 //外部ライブラリ
@@ -38,6 +39,10 @@ struct ConstBuffer
 	DirectX::SimpleMath::Matrix matrixTex = DirectX::SimpleMath::Matrix();
 	// ワールド変換行列
 	DirectX::SimpleMath::Matrix matrixWorld = DirectX::SimpleMath::Matrix();
+
+	BOOL inverse = FALSE; // 反転フラグ
+
+	int padding[3]; // パディング
 };
 
 class DirectXRender

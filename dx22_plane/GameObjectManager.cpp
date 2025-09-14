@@ -215,22 +215,22 @@ void GameObjectManager::Draw() {
 	HelperDraw(objects_UI);
 }
 
-void GameObjectManager::OtherThanTagClear(const std::string& tag) {
+void GameObjectManager::OtherThanClear() {
 	// C++ 20で使えるコンテナの要素削除処理
-	std::erase_if(objects, [tag](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetTag() != tag;
+	std::erase_if(objects, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetCarryOverFlag() == true;
 		});
 
-	std::erase_if(child_Objects, [tag](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetTag() != tag;
+	std::erase_if(child_Objects, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetCarryOverFlag() == true;
 		});
 
-	std::erase_if(objects_UI, [tag](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetTag() != tag;
+	std::erase_if(objects_UI, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetCarryOverFlag() == true;
 		});
 
-	std::erase_if(objects_Absfront, [tag](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetTag() != tag;
+	std::erase_if(objects_Absfront, [](const std::unique_ptr<GameObject>& obj) {
+		return obj->GetCarryOverFlag() == true;
 		});
 }
 

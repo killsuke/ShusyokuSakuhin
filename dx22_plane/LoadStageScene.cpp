@@ -346,11 +346,13 @@ LoadStageScene::LoadStageScene() {
 	if (!fade.empty()) {
 		auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 		fadeUI->SetBootDoor(true);
+	//	fadeUI->SetNextSceneName();
 	}
 }
 
 LoadStageScene::~LoadStageScene() {
-	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
+//	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
+	GameObjectManager::OtherThanClear(); // 指定したタグ以外のゲームオブジェクトのリストをクリア
 }
 
 void LoadStageScene::Update() {

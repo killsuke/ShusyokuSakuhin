@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "SimpleMath.h"
+#include <string>
 
 class DoorFadeComponent : public Component
 {
@@ -15,6 +16,8 @@ private:
 	DirectX::SimpleMath::Vector3 doorUpFirstPos = DirectX::SimpleMath::Vector3::Zero;
 	DirectX::SimpleMath::Vector3 doorDownFirstPos = DirectX::SimpleMath::Vector3::Zero;
 
+	std::string m_nextSceneName = ""; // éüÇÃÉVÅ[Éìñº
+
 public:
 	DoorFadeComponent(GameObject& obj);
 	~DoorFadeComponent() = default;
@@ -27,5 +30,7 @@ public:
 	inline bool GetOpenCloseFlag() const { return m_openCloseFlag; };
 
 	inline void SetBootDoor(const bool boot) { m_bootDoor = boot; };
+
+	inline void SetNextSceneName(const std::string& name) { m_nextSceneName = name; };
 };
 

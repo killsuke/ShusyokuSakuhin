@@ -15,7 +15,7 @@ protected:
 	~AttackComponent() = default;
 
 	std::vector<HitRule> m_attackObjs;
-
+	bool m_attackHitFlag = false; // UŒ‚‚ª“–‚½‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
 public:
 	
 	void Update() override;
@@ -23,4 +23,5 @@ public:
 	virtual void AttackAction(GameObject& obj) = 0; // UŒ‚ˆ—‚ğs‚¤ŠÖ”
 
 	inline void ClearAttackObjs() { m_attackObjs.clear(); };
+	inline bool GetAttackHitFlag() const { return m_attackHitFlag; };
 };

@@ -54,14 +54,11 @@ void SpringComponent::SpringAction2D()
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
 
 	// 強制停止チェック
-	//Vector3 diff = posP2 - posP1;
-	//if (diff.Length() < 0.01f && velocityP1.Length() < 0.01f) {
-	//	rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
-	//	transformP1->SetPosition(transformP2->GetPosition());
-	//}
-	//else {
-	//	m_p1->Update(); // p2の位置を更新
-	//}
+	Vector3 diff = posP2 - posP1;
+	if (diff.Length() < 0.01f || velocityP1.Length() < 0.01f || force.Length() < 0.01f) {
+		rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
+		//transformP1->SetPosition(transformP2->GetPosition());
+	}
 }
 
 void SpringComponent::SpringAction3D()

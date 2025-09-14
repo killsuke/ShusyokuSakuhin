@@ -48,6 +48,17 @@ void RenderBillboardComponent::Update()
 		m_IndexBuffer.SetGPU();
 		m_Texture->SetGPU();
 
+		auto uvs = m_Texture->GetUVSets();
+
+		uvs.x = uvs.x - 1;
+		uvs.y = uvs.y - 1;
+		uvs.z = 1 / uvs.z;
+		uvs.w = 1 / uvs.w;
+
+		cb.matrixTex = m_Texture->MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
+
+		cb.inverse = m_inversionFlag;
+
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 

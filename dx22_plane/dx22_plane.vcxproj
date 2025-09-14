@@ -181,6 +181,7 @@
     <ClCompile Include="ComponentTypeManager.cpp" />
     <ClCompile Include="CSVObjectManagerComponent.cpp" />
     <ClCompile Include="DoorFadeComponent.cpp" />
+    <ClCompile Include="Effect2DComponent.cpp" />
     <ClCompile Include="EnemyActionComponent.cpp" />
     <ClCompile Include="EnemyActionBulletComponent.cpp" />
     <ClCompile Include="EnemyActionHopperComponent.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
     <ClInclude Include="DoorFadeComponent.h" />
+    <ClInclude Include="Effect2DComponent.h" />
     <ClInclude Include="EnemyActionComponent.h" />
     <ClInclude Include="EnemyActionBulletComponent.h" />
     <ClInclude Include="EnemyActionHopperComponent.h" />

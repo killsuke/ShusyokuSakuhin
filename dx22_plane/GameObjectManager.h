@@ -53,7 +53,7 @@ public:
 	static void RemoveTagObject(const std::string& tag);
 	static void Update();
 	static void Draw();
-	static void OtherThanTagClear(const std::string& tag);
+	static void OtherThanClear();
 	static void ListClear();		// ベクター内をクリア
 
 	static int ListSize() { return static_cast<int>(objects.size()); };	// オブジェクトをいくつ格納しているのかを返す

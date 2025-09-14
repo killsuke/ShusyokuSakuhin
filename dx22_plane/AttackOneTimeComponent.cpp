@@ -24,6 +24,7 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 	auto targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {
+		m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
 		auto it = std::find_if(m_attackObjs.begin(), m_attackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
@@ -38,6 +39,8 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 		else {
 			m_attackObjs.push_back({ &obj, 0.0f,1 });	// ここで攻撃対象に組み込む
 		}
+
+		m_attackHitFlag = true; // 攻撃が当たったフラグを立てる
 
 		int atk = fighter->GetAtk();
 

@@ -27,10 +27,12 @@ void EnemyActionHopperComponent::Update() {
 
 	float length = (playPos - myPos).Length();
 
-	//if (length > 50.0f) {
-
-	//	return; // ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£‚ª‰“‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
-	//}
+	if (length > 100.0f) {
+		m_moveFlag = false;
+	}
+	else {
+		m_moveFlag = true;
+	}
 
 	m_recordTime += m_deltaTime;
 
@@ -41,10 +43,10 @@ void EnemyActionHopperComponent::Update() {
 		m_rightLeft = true;
 	}
 
-	if (m_recordTime < 4.0f) {
+	if (m_recordTime < 2.0f) {
 		jumpFlag = true;
 	}
-	else if (m_recordTime > 4.0f) {
+	else if (m_recordTime > 2.0f) {
 		m_recordTime = 0.0f;
 		jumpFlag = false;
 	}
@@ -64,12 +66,14 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	}
 	else {
 		if (m_rightLeft == false) {
-			rigid->ConstantVelocity_X(-10.0f);
+			rigid->ConstantVelocity_X(-30.0f);
 		}
 		else {
-			rigid->ConstantVelocity_X(10.0f);
+			rigid->ConstantVelocity_X(30.0f);
 		}
 	}
 
-	jump->SetJumpPress(jumpFlag);
+	if (m_moveFlag == true) {
+		jump->SetJumpPress(jumpFlag);
+	}
 }

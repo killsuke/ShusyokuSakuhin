@@ -50,8 +50,10 @@ void TitleScene::Init()
 	rendTitle->SetTexture("assets/texture/title_car.png");
 
 	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
+	fadeUI->SetCarryOverFlag(true);
 	auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
 	auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
+	fadeAC->SetNextSceneName("LoadStageScene");
 }
 
 // 更新
@@ -86,5 +88,5 @@ void TitleScene::Update()
 void TitleScene::Uninit()
 {
 	//GameObjectManager::ListClear();	// ゲームオブジェクトマネージャーの終了処理
-	GameObjectManager::OtherThanTagClear("FadeUI");
+	GameObjectManager::OtherThanClear();
 }

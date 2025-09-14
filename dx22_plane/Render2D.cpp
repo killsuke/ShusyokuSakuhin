@@ -42,6 +42,8 @@ void Render2DComponent::Update()
 
 		cb.matrixTex = m_Texture->MakeUV(uvs.x,uvs.y, uvs.z, uvs.w);
 
+		cb.inverse = m_inversionFlag;
+
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 

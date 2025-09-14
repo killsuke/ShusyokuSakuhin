@@ -88,7 +88,9 @@ void DoorFadeComponent::CloseDoor() {
 	if (timer > 0.65f) {
 		m_doorMoveEndFlag = true;
 		timer = 0.0f;
-		SceneManager::SceneChange<LoadStageScene>();
+		if (m_nextSceneName != "LoadStageScene") {
+			SceneManager::SceneChange<LoadStageScene>();
+		}
 		return;
 	}
 

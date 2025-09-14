@@ -64,11 +64,10 @@ void EnemyActionBulletComponent::FiringBullet() {
 	auto dmg = bullet->AddComponent<PlayerDamageComponent>();
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
-	auto rend = bullet->AddComponent<Render3DComponent>();
+	auto rend = bullet->AddComponent<Render2DComponent>();
 	SquareMesh squareMesh;
 	rend->SetMesh(squareMesh);
 	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rend->SetTexture("assets/texture/goal.png");
-//	bullet->SetActiveState(ActiveState::UPDATE_STOP);
-
+	rend->SetInversionFlag(!m_rightLeft);
 }

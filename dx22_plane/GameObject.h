@@ -33,6 +33,7 @@ private:
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
+	bool carryOverFlag = false; // シーンを跨いでオブジェクトを持ち越すかどうかのフラグ
 	ActiveState activeState = ActiveState::ACTIVE;
 	DrawContainer drawContainer = DrawContainer::Default;
 	DrawContainer hopeDrawContainer = DrawContainer::Default;
@@ -64,6 +65,8 @@ public:
 		drawContainerChangeFlag = dccFlag;
 	};
 
+	inline void SetCarryOverFlag(const bool flag) { carryOverFlag = flag; };
+
 	// ゲッター
 	inline bool GetDeleteFg()const { return deletefg; };
 	inline std::string& GetTag() { return tag; };
@@ -74,6 +77,7 @@ public:
 	inline DrawContainer GetDrawContainer()const { return drawContainer; };
 	inline DrawContainer GetHopeDrawContainer()const { return hopeDrawContainer; };
 	inline bool GetDrawContainerChangeFlag()const { return drawContainerChangeFlag; };
+	inline bool GetCarryOverFlag()const { return carryOverFlag; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();
@@ -88,6 +92,13 @@ public:
 				return ptr;
 			}
 		}
+
+		for (auto& component : renderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+				return ptr;
+			}
+		}
+
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
 
