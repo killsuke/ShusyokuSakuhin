@@ -9,6 +9,7 @@ private:
 	bool m_openCloseFlag = false;	// 開く：false、閉じる：true
 	bool m_doorMoveEndFlag = true; // ドアの移動が終わったかどうかのフラグ
 	bool m_bootDoor = false;	// 起動する
+	bool m_winloseFlag = false; // 勝敗フラグ、true:勝ち、false:負け
 	float timer = 0.0f; // ドアの移動にかかる時間
 	const float deltaTime = 0.016f; // 仮のデルタタイム
 	GameObject* doorUp = nullptr;
@@ -32,5 +33,8 @@ public:
 	inline void SetBootDoor(const bool boot) { m_bootDoor = boot; };
 
 	inline void SetNextSceneName(const std::string& name) { m_nextSceneName = name; };
+
+	inline void SetWinLoseFlag(const bool flag) { m_winloseFlag = flag; };
+	inline bool GetWinLoseFlag() const { return m_winloseFlag; };
 };
 

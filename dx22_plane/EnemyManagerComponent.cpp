@@ -13,6 +13,8 @@
 #include "FighterComponent.h"
 #include "EnemyActionBulletComponent.h"
 #include "EnemyActionHopperComponent.h"
+#include "AttackTimingComponent.h"
+#include "PlayerDamageComponent.h"
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
@@ -71,6 +73,11 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->SetTexture(eS.texture);
 		render->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+
+		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
+		atk->SetCoolDownTime(1.0f);
+
+		auto pd = enemyObj->AddComponent<PlayerDamageComponent>();
 
 		auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->SetMesh(squareMesh);

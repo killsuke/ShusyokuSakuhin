@@ -23,6 +23,7 @@ void EnemyActionHopperComponent::Update() {
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
+	auto rend = p_object->GetComponent<Render2DComponent>();
 	bool jumpFlag = false;
 
 	float length = (playPos - myPos).Length();
@@ -50,6 +51,8 @@ void EnemyActionHopperComponent::Update() {
 		m_recordTime = 0.0f;
 		jumpFlag = false;
 	}
+
+	rend->SetInversionFlag(!m_rightLeft);
 
 	HopperAction(jumpFlag);
 }

@@ -167,6 +167,7 @@
     <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="AttackOneTimeComponent.cpp" />
     <ClCompile Include="AttackTimingComponent.cpp" />
+    <ClCompile Include="BlinkingUIComponent.cpp" />
     <ClCompile Include="BoneComponent.cpp" />
     <ClCompile Include="BonePartsMesh.cpp" />
     <ClCompile Include="Bones.cpp" />
@@ -181,8 +182,10 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentTypeManager.cpp" />
     <ClCompile Include="CSVObjectManagerComponent.cpp" />
+    <ClCompile Include="DeathBlockComponent.cpp" />
     <ClCompile Include="DoorFadeComponent.cpp" />
     <ClCompile Include="Effect2DComponent.cpp" />
+    <ClCompile Include="EnemyActionBossComponent.cpp" />
     <ClCompile Include="EnemyActionComponent.cpp" />
     <ClCompile Include="EnemyActionBulletComponent.cpp" />
     <ClCompile Include="EnemyActionHopperComponent.cpp" />
@@ -296,6 +299,7 @@
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="AttackOneTimeComponent.h" />
     <ClInclude Include="AttackTimingComponent.h" />
+    <ClInclude Include="BlinkingUIComponent.h" />
     <ClInclude Include="BoneComponent.h" />
     <ClInclude Include="BoneData.h" />
     <ClInclude Include="BonePartsMesh.h" />
@@ -313,8 +317,10 @@
     <ClInclude Include="ComponentTypeManager.h" />
     <ClInclude Include="CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
+    <ClInclude Include="DeathBlockComponent.h" />
     <ClInclude Include="DoorFadeComponent.h" />
     <ClInclude Include="Effect2DComponent.h" />
+    <ClInclude Include="EnemyActionBossComponent.h" />
     <ClInclude Include="EnemyActionComponent.h" />
     <ClInclude Include="EnemyActionBulletComponent.h" />
     <ClInclude Include="EnemyActionHopperComponent.h" />
@@ -474,7 +480,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shader\litTextureVS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
@@ -482,7 +488,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shader\unlitTexturePS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>

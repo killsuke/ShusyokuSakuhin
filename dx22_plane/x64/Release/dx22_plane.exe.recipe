@@ -33,6 +33,12 @@
     <ContentFile>
       <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTextureVSSkyDome.cso</FullPath>
     </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\litTexturePS.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\litTextureVS.cso</FullPath>
+    </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />

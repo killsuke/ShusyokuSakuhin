@@ -80,8 +80,8 @@ void Camera::Update()
 		}
 
 		// 座標更新
-		transform->AddPosition(vec3);
-		m_Target += vec3;
+	/*	transform->AddPosition(vec3);
+		m_Target += vec3;*/
 
 		// 視野角をいじって加速の時だけカメラを引く、FOV
 

@@ -218,19 +218,19 @@ void GameObjectManager::Draw() {
 void GameObjectManager::OtherThanClear() {
 	// C++ 20で使えるコンテナの要素削除処理
 	std::erase_if(objects, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetCarryOverFlag() == true;
+		return obj->GetCarryOverFlag() == false;
 		});
 
 	std::erase_if(child_Objects, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetCarryOverFlag() == true;
+		return obj->GetCarryOverFlag() == false;
 		});
 
 	std::erase_if(objects_UI, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetCarryOverFlag() == true;
+		return obj->GetCarryOverFlag() == false;
 		});
 
 	std::erase_if(objects_Absfront, [](const std::unique_ptr<GameObject>& obj) {
-		return obj->GetCarryOverFlag() == true;
+		return obj->GetCarryOverFlag() == false;
 		});
 }
 

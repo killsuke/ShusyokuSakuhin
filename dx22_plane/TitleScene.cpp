@@ -17,6 +17,7 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "DoorFadeComponent.h"
+#include "BlinkingUIComponent.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -39,15 +40,53 @@ void TitleScene::Init()
 	auto cameraObj = camera->AddComponent<Camera>();
 	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
 
+	{
+		auto titleUI = GameObjectManager::AddUI("BackUI", "TitleUI");
+		auto transTitle = titleUI->AddComponent<TransformComponent>();
+		transTitle->SetPosition({ 0.0f,0.0f,1.0f });
+		transTitle->SetScale({ 1080.0f,1000.0f,1.0f });
+		SquareMesh square;
+		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
+		rendTitle->SetMesh(square);
+		rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		rendTitle->SetTexture("assets/texture/NoTexture.png");
+		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+	}
+
 	auto titleUI = GameObjectManager::AddUI("titleUI", "TitleUI");
 	auto transTitle = titleUI->AddComponent<TransformComponent>();
-	transTitle->SetPosition({ 0.0f,0.0f,0.0f });
-	transTitle->SetScale({ 480.0f,320.0f,1.0f });
+	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
+	transTitle->SetScale({ 400.0f,280.0f,1.0f });
 	SquareMesh square;
 	auto rendTitle = titleUI->AddComponent<Render2DComponent>();
 	rendTitle->SetMesh(square);
 	rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-	rendTitle->SetTexture("assets/texture/title_car.png");
+	rendTitle->SetTexture("assets/texture/Slash_Action_2.5D.png");
+
+	{
+		auto titleUI = GameObjectManager::AddUI("tenmetuUI", "TitleUI");
+		auto transTitle = titleUI->AddComponent<TransformComponent>();
+		transTitle->SetPosition({ 0.0f,-200.0f,-0.5f });
+		transTitle->SetScale({ 200.0f,100.0f,1.0f });
+		auto blink = titleUI->AddComponent<BlinkingUIComponent>();
+		blink->SetBlinkingSpeed(0.7f);
+
+		SquareMesh square;
+		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
+		rendTitle->SetMesh(square);
+		rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		rendTitle->SetTexture("assets/texture/please.png");
+		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+
+	auto fadeFake = GameObjectManager::GameObjectFindNameUI("fade");
+	if(fadeFake != nullptr) {
+		auto fade =  fadeFake->GetComponent<DoorFadeComponent>();
+		fade->SetBootDoor(true);
+		fade->SetNextSceneName("LoadStageScene");
+
+		//return;
+	}
 
 	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
 	fadeUI->SetCarryOverFlag(true);
@@ -60,7 +99,7 @@ void TitleScene::Init()
 void TitleScene::Update()
 {
 	// エンターキーを押してステージ1へ
-	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)))
+	if ((Input::GetKeyTrigger(VK_L) ))
 	{
 		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();

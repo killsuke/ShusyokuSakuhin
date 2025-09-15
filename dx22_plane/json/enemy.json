@@ -3,7 +3,7 @@
         {
             "kind": "E_Gunner",
             "scale": {
-                "x": 5.0,
+                "x": 10.0,
                 "y": 10.0,
                 "z": 5.0
             },
@@ -14,15 +14,15 @@
             },
             "atk": 10,
             "hp": 15,
-            "texture": "assets/texture/bear.png",
+            "texture": "assets/texture/ho-dai.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },
         {
             "kind": "E_Hopper",
             "scale": {
-                "x": 5.0,
-                "y": 10.0,
+                "x": 10.0,
+                "y": 8.0,
                 "z": 5.0
             },
             "angle": {
@@ -32,7 +32,7 @@
             },
             "atk": 5,
             "hp": 20,
-            "texture": "assets/texture/dice.png",
+            "texture": "assets/texture/hopper.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
         },

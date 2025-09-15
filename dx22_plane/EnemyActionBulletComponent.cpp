@@ -25,6 +25,7 @@ void EnemyActionBulletComponent::Update() {
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
+	auto rend = p_object->GetComponent<Render2DComponent>();
 
 	if (myPos.x > playPos.x) {
 		m_rightLeft = false;
@@ -32,6 +33,8 @@ void EnemyActionBulletComponent::Update() {
 	else {
 		m_rightLeft = true;
 	}
+
+	rend->SetInversionFlag(!m_rightLeft);
 
 	if (m_recordTime > 3.0f) {
 		FiringBullet();
@@ -69,6 +72,6 @@ void EnemyActionBulletComponent::FiringBullet() {
 	SquareMesh squareMesh;
 	rend->SetMesh(squareMesh);
 	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rend->SetTexture("assets/texture/goal.png");
+	rend->SetTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(!m_rightLeft);
 }

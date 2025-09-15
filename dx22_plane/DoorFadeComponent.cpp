@@ -31,6 +31,9 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	doorDownRender->SetMesh(squareMeshDOWN);
 	doorDownRender->SetTexture("assets/texture/IronWall.png");
 	doorDownRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+
+	doorUp->SetCarryOverFlag(true);
+	doorDown->SetCarryOverFlag(true);
 }
 
 void DoorFadeComponent::Update()
@@ -52,10 +55,6 @@ void DoorFadeComponent::Update()
 	}
 	else {
 		OpenDoor();
-	}
-
-	if (m_doorMoveEndFlag == false) {
-
 	}
 }
 
@@ -88,9 +87,19 @@ void DoorFadeComponent::CloseDoor() {
 	if (timer > 0.65f) {
 		m_doorMoveEndFlag = true;
 		timer = 0.0f;
-		if (m_nextSceneName != "LoadStageScene") {
+		if(m_nextSceneName == "TitleScene"){
+			SceneManager::SceneChange<TitleScene>();
+		}
+		else if (m_nextSceneName == "LoadStageScene") {
 			SceneManager::SceneChange<LoadStageScene>();
 		}
+		else if(m_nextSceneName == "ResultScene") {
+			SceneManager::SceneChange<ResultScene>();
+		}
+		else {
+			// ‰½‚à‚µ‚È‚¢
+		}
+
 		return;
 	}
 

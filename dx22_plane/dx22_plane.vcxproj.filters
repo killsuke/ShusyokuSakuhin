@@ -339,6 +339,15 @@
     <ClCompile Include="BossEventComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyActionBossComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinkingUIComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DeathBlockComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -687,6 +696,15 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BossEventComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyActionBossComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinkingUIComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathBlockComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

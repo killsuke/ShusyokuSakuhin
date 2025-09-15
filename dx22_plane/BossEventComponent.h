@@ -6,6 +6,7 @@ private:
 	const float deltaTime = 0.016f;
 	float recordTime = 0.0f;
 	bool createCompletionFlag = false;
+	GameObject* m_boss = nullptr;
 
 public:
 	BossEventComponent(GameObject& obj);

@@ -31,6 +31,9 @@ void MoveTerrainComponent::Update() {
 		auto playerTransform = m_player->GetComponent<TransformComponent>();
 		auto collplay = m_player->GetComponent<ColliderComponent>();
 
+		if(playerTransform == nullptr || collplay == nullptr) {
+			return;
+		}
 		DirectX::SimpleMath::Vector3 hitNormal = {};
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
 			if (hitNormal.y > 0.5f) {	// プレイヤーが地面に乗っているとき

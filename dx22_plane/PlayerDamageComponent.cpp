@@ -22,8 +22,15 @@ void PlayerDamageComponent::Update()
 	//	auto playerPos = playerTrans->GetPosition();
 		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
-	//auto attack = p_object->GetComponent<AttackTimingComponent>();
-	auto attack = p_object->GetComponent<AttackOneTimeComponent>();
+	auto attack_T = p_object->GetComponent<AttackTimingComponent>();
+	auto attack_O = p_object->GetComponent<AttackOneTimeComponent>();
+
+	if (attack_O != nullptr) {
+		attack_O->ReSetAttackHitFlag();
+	}
+	if (attack_T != nullptr) {
+		attack_T->ReSetAttackHitFlag();
+	}
 
 	if (collObjMe != nullptr) {
 
@@ -32,7 +39,12 @@ void PlayerDamageComponent::Update()
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 
-				attack->AttackAction(*objOther);
+				if (attack_O != nullptr) {
+					attack_O->AttackAction(*objOther);
+				}
+				if (attack_T != nullptr) {
+					attack_T->AttackAction(*objOther);
+				}
 			}
 		}
 	}

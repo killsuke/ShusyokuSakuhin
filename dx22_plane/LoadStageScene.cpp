@@ -112,12 +112,13 @@ LoadStageScene::LoadStageScene() {
 		fighterPlayer->SetMaxHp(50);
 		fighterPlayer->SetAtk(10);
 		fighterPlayer->SetUseInvincible(true);
+		fighterPlayer->SetUseDeadFlag(false);
 
 		SquareMesh cubeMesh;	// 四角形のメッシュ
-		auto cubeRe = player->AddComponent<Render3DComponent>();
+		auto cubeRe = player->AddComponent<Render2DComponent>();
 		cubeRe->SetMesh(cubeMesh);
-		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		cubeRe->SetTexture("assets/texture/NoTexture.png");
+		cubeRe->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetTexture("assets/texture/aka.png");
 
 		CubeMesh cubeMesh2;
 		auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
@@ -233,7 +234,7 @@ LoadStageScene::LoadStageScene() {
 	TargetAndScroolCreate();
 
 	{
-		auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
+		/*auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
 		auto testUITrans = testUI->AddComponent<TransformComponent>();
 		testUITrans->SetPosition({ -300.0f, 0.0f, 0.0f });
 		testUITrans->SetScale({ 50.0f,50.0f,50.0f });
@@ -244,7 +245,7 @@ LoadStageScene::LoadStageScene() {
 		testUIRend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		auto uiTex = testUIRend->GetTexture();
-		uiTex->SetInitialCut(2.0f, 2.0f);
+		uiTex->SetInitialCut(2.0f, 2.0f);*/
 	}
 
 	auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
@@ -295,7 +296,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend1 = target1->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh1;
 		targetRend1->SetMesh(sphereMesh1);
-		targetRend1->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend1->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend1->SetTexture("assets/texture/NoTexture.png");
 
@@ -312,7 +313,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh2;
 		targetRend2->SetMesh(sphereMesh2);
-		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend2->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend2->SetTexture("assets/texture/NoTexture.png");
 
@@ -328,7 +329,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend3 = target3->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh3;
 		targetRend3->SetMesh(sphereMesh3);
-		targetRend3->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend3->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend3->SetTexture("assets/texture/NoTexture.png");
 
@@ -344,7 +345,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend4 = target4->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh4;
 		targetRend4->SetMesh(sphereMesh4);
-		targetRend4->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend4->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend4->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend4->SetTexture("assets/texture/NoTexture.png");
 
@@ -360,7 +361,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend5 = target5->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh5;
 		targetRend5->SetMesh(sphereMesh5);
-		targetRend5->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend5->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend5->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend5->SetTexture("assets/texture/NoTexture.png");
 
@@ -376,7 +377,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend6 = target6->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh6;
 		targetRend6->SetMesh(sphereMesh6);
-		targetRend6->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend6->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend6->SetTexture("assets/texture/NoTexture.png");
 
@@ -392,7 +393,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend7 = target7->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh7;
 		targetRend7->SetMesh(sphereMesh7);
-		targetRend7->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend7->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend7->SetTexture("assets/texture/NoTexture.png");
 
@@ -408,7 +409,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend8 = target8->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh8;
 		targetRend8->SetMesh(sphereMesh8);
-		targetRend8->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		targetRend8->SetColor({ 1.0f,0.0f,0.0f,0.0f });
 		targetRend8->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend8->SetTexture("assets/texture/NoTexture.png");
 
@@ -480,8 +481,8 @@ void LoadStageScene::TargetAndScroolCreate() {
 
 		auto point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
 		auto pointTrans4 = point4->AddComponent<TransformComponent>();
-		pointTrans4->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans4->AddPosition({ 330.0f, -280.0f, 0.0f });
+		pointTrans4->SetScale({ 8.0f, 100.0f, 10.0f });
+		pointTrans4->AddPosition({ 330.0f, -260.0f, 0.0f });
 		auto pointCamera4 = point4->AddComponent<CameraPointComponent>();
 		auto pointColl4 = point4->AddComponent<ColliderComponent>();
 		CubeMesh pointMesh4;

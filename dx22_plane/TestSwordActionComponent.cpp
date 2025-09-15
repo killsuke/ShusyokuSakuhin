@@ -28,7 +28,7 @@ void TestSwordActionComponent::Update() {
 	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
 	auto sound = SceneManager::GetSound();
 
-	bool keyEnter = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
+	bool keyEnter = Input::GetKeyTrigger(VK_L);
 
 	// Œ•‚ğU‚é
 	if (keyEnter == true) {
