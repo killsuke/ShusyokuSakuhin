@@ -6,12 +6,14 @@
 #include <memory>
 #include <typeinfo>
 #include <unordered_map>
+#include "sound.h"
 
 class SystemManager
 {
 private:
 	// システムを保持しておくためのコンテナ
 	std::unordered_map<std::type_index, std::unique_ptr<SystemBase>> systems;
+	inline static Sound sound; // サウンド
 
 public:
 
@@ -52,4 +54,6 @@ public:
 			system->RemoveComponent(entity);	// 全システムからエンティティを削除（１つのエンティティに付くコンポーネント全てをRemoveComponentする）
 		}
 	}
+
+	static Sound& GetSound() { return sound; } // サウンドのインスタンスを返す
 };

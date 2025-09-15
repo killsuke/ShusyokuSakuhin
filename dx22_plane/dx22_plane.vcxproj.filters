@@ -333,6 +333,12 @@
     <ClCompile Include="Effect2DComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="MoveTerrainComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEventComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -675,6 +681,12 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Effect2DComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveTerrainComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEventComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

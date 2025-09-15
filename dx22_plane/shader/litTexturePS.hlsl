@@ -7,14 +7,14 @@ float4 ps_main(in PS_IN input)  : SV_Target
 {	
     float4 color;
 
-    if (Material.TextureEnable) {
+  //  if (Material.TextureEnable) {
         // Sample関数→テクスチャから該当のUV位置のピクセル色を取って来る
         color = g_Texture.Sample(g_SamplerState, input.tex);
         color *= input.col;
-    }
-    else {
-        color = input.col * Material.Diffuse;
-    }
+    //}
+    //else {
+    //    color = input.col * Material.Diffuse;
+    //}
    // color = input.col;
 
     return color;

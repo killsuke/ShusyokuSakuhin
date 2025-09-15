@@ -33,7 +33,7 @@ void EnemyActionBulletComponent::Update() {
 		m_rightLeft = true;
 	}
 
-	if (m_recordTime > 5.0f) {
+	if (m_recordTime > 3.0f) {
 		FiringBullet();
 		m_recordTime = 0.0f;
 	}
@@ -56,7 +56,8 @@ void EnemyActionBulletComponent::FiringBullet() {
 	else {
 		bull->SetFiringVector({ 1.0f, 0.0f, 0.0f });
 	}
-	bull->SetFiringSpeed(10.0f);
+	bull->SetFiringSpeed(100.0f);
+	bull->SetRimitTime(1.0f);
 	auto fight = bullet->AddComponent<FighterComponent>();
 	fight->SetAtk(2);
 	fight->SetHp(2);

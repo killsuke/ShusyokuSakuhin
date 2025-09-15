@@ -44,7 +44,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/NoTexture.png",
+            "texture": "assets/texture/testTerrain.png",
             "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/litTexturePS.hlsl"
         },
@@ -60,7 +60,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/NoTexture.png",
+            "texture": "assets/texture/testTerrain.png",
             "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/litTexturePS.hlsl"
         },
@@ -76,7 +76,39 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/NoTexture.png",
+            "texture": "assets/texture/testTerrain.png",
+            "shaderVS": "shader/litTextureVS.hlsl",
+            "shaderPS": "shader/litTexturePS.hlsl"
+        },
+	{
+            "kind": "T_Small",
+            "scale": {
+                "x": 20.0,
+                "y": 20.0,
+                "z": 10.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/testTerrain.png",
+            "shaderVS": "shader/litTextureVS.hlsl",
+            "shaderPS": "shader/litTexturePS.hlsl"
+        },
+	{
+            "kind": "T_Move",
+            "scale": {
+                "x": 20.0,
+                "y": 5.0,
+                "z": 10.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/testTerrain.png",
             "shaderVS": "shader/litTextureVS.hlsl",
             "shaderPS": "shader/litTexturePS.hlsl"
         }

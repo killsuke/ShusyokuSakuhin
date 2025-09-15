@@ -23,5 +23,7 @@ public:
 	virtual void AttackAction(GameObject& obj) = 0; // UŒ‚ˆ—‚ğs‚¤ŠÖ”
 
 	inline void ClearAttackObjs() { m_attackObjs.clear(); };
+
+	inline void ReSetAttackHitFlag() { m_attackHitFlag = false; };
 	inline bool GetAttackHitFlag() const { return m_attackHitFlag; };
 };

@@ -9,4 +9,6 @@ public:
 	~LoadStageScene();
 
 	void Update();
+
+	void TargetAndScroolCreate();
 };

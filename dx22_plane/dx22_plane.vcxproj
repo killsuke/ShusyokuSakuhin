@@ -170,6 +170,7 @@
     <ClCompile Include="BoneComponent.cpp" />
     <ClCompile Include="BonePartsMesh.cpp" />
     <ClCompile Include="Bones.cpp" />
+    <ClCompile Include="BossEventComponent.cpp" />
     <ClCompile Include="BulletComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraMoveComponent.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="EnemyManagerComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
+    <ClCompile Include="MoveTerrainComponent.cpp" />
     <ClCompile Include="PlayerDamageComponent.cpp" />
     <ClCompile Include="SkyDomeMesh.cpp" />
     <ClCompile Include="SkyDomeRenderComponent.cpp" />
@@ -298,6 +300,7 @@
     <ClInclude Include="BoneData.h" />
     <ClInclude Include="BonePartsMesh.h" />
     <ClInclude Include="Bones.h" />
+    <ClInclude Include="BossEventComponent.h" />
     <ClInclude Include="BulletComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMoveComponent.h" />
@@ -318,6 +321,7 @@
     <ClInclude Include="EnemyJsonComponent.h" />
     <ClInclude Include="EnemyManagerComponent.h" />
     <ClInclude Include="JsonComponent.h" />
+    <ClInclude Include="MoveTerrainComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
     <ClInclude Include="PlayerDamageComponent.h" />

@@ -44,4 +44,6 @@ public:
 
 	// ヌルポインタであったときのことも考えてGameObject*で返す
 	inline GameObject* GetTargetObj()const { return m_nextTargetPoint; };
+
+	inline int GetScrollDir() { return m_isScrollDir; };
 };

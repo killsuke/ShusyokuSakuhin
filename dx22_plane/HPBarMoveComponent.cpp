@@ -1,6 +1,7 @@
 #include "HPBarMoveComponent.h"
 #include "FighterComponent.h"
 #include "DirectXRender.h"
+#include <iostream>
 
 HPBarMoveComponent::HPBarMoveComponent(GameObject& obj) : Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("HP_BAR_MOVE"); // É\Å[Égî‘çÜÇê›íË

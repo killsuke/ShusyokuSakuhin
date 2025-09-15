@@ -20,6 +20,8 @@ void TestMoveComponent::Update() {
 	auto fighter = p_object->GetComponent<FighterComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 
+	bool nowMove = false;
+
 	if (/*fighter == nullptr || */rigid == nullptr)
 	{
 		return;
@@ -29,10 +31,12 @@ void TestMoveComponent::Update() {
 	{
 		m_rightLeft = false; // ¶Œü‚«
 		keyJ = true;
+		nowMove = true;
 	}
 	if (Input::GetKeyPress(VK_D) == true || Input::GetButtonPress(XINPUT_RIGHT)) {
 		m_rightLeft = true; // ‰EŒü‚«
 		keyL = true;
+		nowMove = true;
 	}
 
 	//bool isTrigger = false;
@@ -59,6 +63,9 @@ void TestMoveComponent::Update() {
 		}
 
 
+		/*if (m_beforeMove == true && nowMove == false) {
+			rigid->ReduceVelocity_X(0.5f);
+		}*/
 		if (keyL == false && keyJ == false) {
 			rigid->ReduceVelocity_X(0.5f);
 		}
@@ -87,5 +94,5 @@ void TestMoveComponent::Update() {
 	//else {
 	//	hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)); // —ÎF
 	//}
-
+	m_beforeMove = nowMove;
 }

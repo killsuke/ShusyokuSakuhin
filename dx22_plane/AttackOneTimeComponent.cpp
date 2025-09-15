@@ -24,7 +24,7 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 	auto targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {
-		m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
+		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
 		auto it = std::find_if(m_attackObjs.begin(), m_attackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
@@ -46,6 +46,6 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 
 		targetFighter->AddDamage(atk); // 攻撃力分だけ相手のHPを減らす
 
-			std::cout << "ここでダメージ！！" << std::endl;
+		//	std::cout << "ここでダメージ！！" << std::endl;
 	}
 }

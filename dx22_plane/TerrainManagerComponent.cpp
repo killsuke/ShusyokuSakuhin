@@ -7,6 +7,9 @@
 #include "GameObjectManager.h"
 #include "CubeMesh.h"
 #include "TerrainJsonComponent.h"
+#include "MoveTerrainComponent.h"
+
+using namespace DirectX::SimpleMath;
 
 TerrainManagerComponent::TerrainManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ƒ\[ƒg”Ô†‚ğİ’è
@@ -50,7 +53,13 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 		transform->SetRotation(tS.angle);
 
 		auto collider = terrainObj->AddComponent<ColliderComponent>();
-		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));
+		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+
+		if (kind == "T_Move") {
+			auto move = terrainObj->AddComponent<MoveTerrainComponent>();
+			move->SetMoveSpeed(0.8f);
+			move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
+		}
 
 		CubeMesh cubeMesh;
 		auto render = terrainObj->AddComponent<Render3DComponent>();

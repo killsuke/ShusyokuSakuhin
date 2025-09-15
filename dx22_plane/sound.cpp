@@ -127,21 +127,31 @@ void Sound::Uninit(void)
 //=============================================================================
 void Sound::Play(SOUND_LABEL label)
 {
-	IXAudio2SourceVoice*& pSV = m_pSourceVoice[(int)label];
+	int idx = (int)label;
+	IXAudio2SourceVoice*& pSV = m_pSourceVoice[idx];
 
-	if (pSV != nullptr)
-	{
-		pSV->DestroyVoice();
-		pSV = nullptr;
+	if (!pSV) {
+		// 初回のみ作成
+		HRESULT hr = m_pXAudio2->CreateSourceVoice(&pSV, &(m_wfx[idx].Format));
+		if (FAILED(hr)) {
+			pSV = nullptr;
+			return;
+		}
+	}
+	else {
+		// 2回目以降は再利用
+		pSV->Stop(0);
+		pSV->FlushSourceBuffers();
 	}
 
-	// ソースボイス作成
-	m_pXAudio2->CreateSourceVoice(&pSV, &(m_wfx[(int)label].Format));
-	pSV->SubmitSourceBuffer(&(m_buffer[(int)label]));	// ボイスキューに新しいオーディオバッファーを追加
+	// バッファを再度サブミット
+	HRESULT hr = pSV->SubmitSourceBuffer(&m_buffer[idx]);
+	if (FAILED(hr)) {
+		// エラー処理（ログなど）
+		return;
+	}
 
-	// 再生
 	pSV->Start(0);
-
 }
 
 //=============================================================================
@@ -151,11 +161,26 @@ void Sound::Stop(SOUND_LABEL label)
 {
 	if (m_pSourceVoice[(int)label] == NULL) return;
 
-	XAUDIO2_VOICE_STATE xa2state;
+	/*XAUDIO2_VOICE_STATE xa2state;
 	m_pSourceVoice[(int)label]->GetState(&xa2state);
 	if (xa2state.BuffersQueued)
 	{
 		m_pSourceVoice[(int)label]->Stop(0);
+	}*/
+
+	IXAudio2SourceVoice* pSV = m_pSourceVoice[(int)label];
+	if (pSV != nullptr)
+	{
+		XAUDIO2_VOICE_STATE xa2state = {};
+		pSV->GetState(&xa2state);
+		if (xa2state.BuffersQueued > 0)
+		{
+			HRESULT hr = pSV->Stop(0);
+			if (FAILED(hr))
+			{
+				// ログ出力やエラーハンドリング
+			}
+		}
 	}
 }
 

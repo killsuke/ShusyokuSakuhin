@@ -13,7 +13,7 @@
                 "z": 0.0
             },
             "atk": 10,
-            "hp": 10,
+            "hp": 15,
             "texture": "assets/texture/bear.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
@@ -30,8 +30,8 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "atk": 10,
-            "hp": 10,
+            "atk": 5,
+            "hp": 20,
             "texture": "assets/texture/dice.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"

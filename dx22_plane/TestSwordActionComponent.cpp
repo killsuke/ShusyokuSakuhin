@@ -9,6 +9,7 @@
 #include "RenderBillboard.h"
 #include "AttackOneTimeComponent.h"
 #include "SquareMesh.h"
+#include "SceneManager.h"
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
@@ -25,11 +26,16 @@ void TestSwordActionComponent::Update() {
 
 	auto goAround = p_object->GetComponent<GoAroundComponent>();
 	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
+	auto sound = SceneManager::GetSound();
 
 	bool keyEnter = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
 
 	// 剣を振る
 	if (keyEnter == true) {
+		if( m_swordAction == false ) {
+			sound.Play(SOUND_LABEL::SOUND_LABEL_SE000);
+		}
+
 		m_swordAction = true;
 		goAround->SetActiveFlag(true);
 		goAround->SetRollingActive(true);
@@ -60,6 +66,7 @@ void TestSwordActionComponent::Update() {
 }
 
 void TestSwordActionComponent::SwordAction() {
+	auto sound = SceneManager::GetSound();
 	auto goAround = p_object->GetComponent<GoAroundComponent>();
 	auto collider = p_object->GetComponent<ColliderComponent>();
 	auto atkComp = p_object->GetComponent<AttackOneTimeComponent>();
@@ -114,6 +121,8 @@ void TestSwordActionComponent::SwordAction() {
 
 	if (atkComp->GetAttackHitFlag() == true) {
 		CreateSwordEffect();
+		//sound.Stop(SOUND_LABEL::SOUND_LABEL_SE001);
+		sound.Play(SOUND_LABEL::SOUND_LABEL_SE001);
 	}
 
 	m_beforeDirection = direction;

@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "SceneList.h"
 #include <memory>
+#include "sound.h"
 
 class SceneManager
 {
@@ -40,12 +41,16 @@ public:
 	// シーンチェンジのフラグ管理
 	static void SetSCFrag(const bool _sceneChangeFg) { sceneChangeFg = _sceneChangeFg; };
 	static bool GetSCFrag() { return sceneChangeFg; };
+	
+	static Sound GetSound() { return sound; };
 
 private:
 	static std::unique_ptr<Scene> m_pScene;		// 現在のシーン
 	//Input input = Input::GetInstance();	// 入力処理のインスタンスを取得
-	Sound* sound = nullptr;	// サウンド用のインスタンス
+	//Sound* sound = nullptr;	// サウンド用のインスタンス
 	static bool sceneChangeFg;	// シーンチェンジが起こったのかのフラグ
 	static float waitTime;	// シーン遷移を少し待つ
 	static float waitTimeCounter;
+	inline static Sound sound; // サウンド
+
 };

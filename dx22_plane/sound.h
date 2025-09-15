@@ -43,8 +43,8 @@ private:
 		{"sound/BGM/Result.wav", true},	// サンプルBGM
 		//{"sound/BGM/GAMEOVER.wav", true},	// サンプルBGM
 		//{"sound/BGM/ENDING.wav", true},	// サンプルBGM
-		{"sound/SE/accelerator.wav", false},  		// サンプルSE（ループしないのでfalse設定）
-		{"sound/SE/brake.wav", false},		// サンプルSE
+		{"sound/SE/slash.wav", false},  		// サンプルSE（ループしないのでfalse設定）
+		{"sound/SE/slashHit.wav", false},		// サンプルSE
 		{"sound/SE/count.wav", false},		// サンプルSE
 		{"sound/SE/start.wav", false},		// サンプルSE
 		{"sound/SE/dram.wav", false},		// サンプルSE

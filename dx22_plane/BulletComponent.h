@@ -18,4 +18,5 @@ public:
 
 	void SetFiringVector(DirectX::SimpleMath::Vector3 vector) { m_firingVector = vector; };
 	void SetFiringSpeed(const float speed) { m_firingSpeed = speed; };
+	void SetRimitTime(const float time) { m_rimitTime = time; };
 };

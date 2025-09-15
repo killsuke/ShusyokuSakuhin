@@ -13,6 +13,7 @@ Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : 
 
 void Render3DColliderAABBComponent::Update()
 {
+#ifdef _DEBUG
 	auto colliderAABB = p_object->GetComponent<ColliderComponent>();
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
@@ -42,4 +43,5 @@ void Render3DColliderAABBComponent::Update()
 			0,							// 最初のインデックスバッファの位置
 			0);
 	}
+#endif
 }

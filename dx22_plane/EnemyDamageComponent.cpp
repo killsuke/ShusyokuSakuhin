@@ -25,13 +25,14 @@ void EnemyDamageComponent::Update()
 	//auto attack = p_object->GetComponent<AttackTimingComponent>();
 	auto attack = p_object->GetComponent<AttackOneTimeComponent>();
 
+	attack->ReSetAttackHitFlag();	// 攻撃が当たったかどうかのフラグをリセット
+
 	if (collObjMe != nullptr) {
 
 		for (auto& objOther : objOthers) {
 			auto collObjOther = objOther->GetComponent<ColliderComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
-
 				attack->AttackAction(*objOther);
 			}
 
