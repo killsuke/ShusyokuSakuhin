@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "DirectXRender.h"
+#include <iostream>
 
 // 静的な宣言として必要
 std::vector<std::unique_ptr<GameObject>>
@@ -31,14 +32,14 @@ GameObject* GameObjectManager::GameObjectManager::AddChild(const std::string& _n
 }
 
 GameObject* GameObjectManager::AddUI(const std::string& _name, const std::string& _tag) {
-	
+
 	auto ptr = HelperAddObject(DrawContainer::UI, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddAbsFront(const std::string& _name, const std::string& _tag) {
-	
+
 	auto ptr = HelperAddObject(DrawContainer::AbsFront, _name, _tag);
 
 	return ptr;
@@ -96,34 +97,39 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 
 		GameObject* obj = it->get();
 
-		auto hdc = obj->GetHopeDrawContainer();
-		auto dc = obj->GetDrawContainer();
+		const auto hdc = obj->GetHopeDrawContainer();
+		const auto dc = obj->GetDrawContainer();
+		const bool flag = obj->GetDrawContainerChangeFlag();
 
-		if (obj->GetDrawContainerChangeFlag() == true && dc != hdc)
+		if (flag == true && dc != hdc/* && dc != DrawContainer::Max*/)
 		{
 			// フラグをクリア
 			obj->SetDrawContainerChangeFlag(hdc, false);
 			obj->SetDrawContainer(hdc);
 
-			// unique_ptr の所有権を移動
-			std::unique_ptr<GameObject> movingObj = std::move(*it);
-			it = objs.erase(it);	// 現在のコンテナから削除
-
-			switch (hdc)
 			{
-			case DrawContainer::Default:
-				objects.push_back(std::move(movingObj));
-				break;
-			case DrawContainer::AbsFront:
-				objects_Absfront.push_back(std::move(movingObj));
-				break;
-			case DrawContainer::UI:
-				objects_UI.push_back(std::move(movingObj));
-				break;
-			case DrawContainer::Max:
-				break;
-			default:
-				break;
+				// unique_ptr の所有権を移動
+				std::unique_ptr<GameObject> movingObj = std::move(*it);
+				it = objs.erase(it);	// 現在のコンテナから削除
+
+				//	std::cout << "ここ通った？" << std::endl;
+
+				switch (hdc)
+				{
+				case DrawContainer::Default:
+					objects.push_back(std::move(movingObj));
+					break;
+				case DrawContainer::AbsFront:
+					objects_Absfront.push_back(std::move(movingObj));
+					break;
+				case DrawContainer::UI:
+					objects_UI.push_back(std::move(movingObj));
+					break;
+				case DrawContainer::Max:
+					break;
+				default:
+					break;
+				}
 			}
 
 			continue;
@@ -137,19 +143,21 @@ void GameObjectManager::TransferAddObjects() {
 
 	for (auto& p : temporaryContainer)
 	{
-		if(p->GetDrawContainer() == DrawContainer::Default)
+		auto dc = p->GetDrawContainer();
+
+		if (dc == DrawContainer::Default)
 		{
 			objects.push_back(std::move(p));
 		}
-		else if (p->GetDrawContainer() == DrawContainer::Child)
+		else if (dc == DrawContainer::Child)
 		{
 			child_Objects.push_back(std::move(p));
 		}
-		else if (p->GetDrawContainer() == DrawContainer::UI)
+		else if (dc == DrawContainer::UI)
 		{
 			objects_UI.push_back(std::move(p));
 		}
-		else if (p->GetDrawContainer() == DrawContainer::AbsFront)
+		else if (dc == DrawContainer::AbsFront)
 		{
 			objects_Absfront.push_back(std::move(p));
 		}
@@ -198,6 +206,9 @@ void GameObjectManager::Update() {
 
 	// コンテナ入れ替え
 	ChangeContainer();
+
+	//std::cout << static_cast<int>(objects_Absfront.size()) << std::endl;
+	//std::cout << static_cast<int>(objects.size()) << std::endl;
 }
 
 // 描画

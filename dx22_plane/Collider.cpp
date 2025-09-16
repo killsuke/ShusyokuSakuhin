@@ -605,13 +605,27 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 		pushBack.y = 0.0f;	// ‰¡•ûŒü‚Å‰Ÿ‚µ–ß‚·
 
 		// X•ûŒü‚É‰Ÿ‚µ–ß‚³‚ê‚½ ¨ •Ç
-		hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+		//hitNormal.x = (pushBack.x > 0.0f) ? -1.0f : 1.0f;
+
+		if (pushBack.x > 0.0f) {
+			hitNormal.x = -1.0f;
+		}
+		else if (pushBack.x < 0.0f) {
+			hitNormal.x = 1.0f;
+		}
 	}
 	else {
 		pushBack.x = 0.0f;	// c•ûŒü‚Å‰Ÿ‚µ–ß‚·
 
 		// Y•ûŒü‚É‰Ÿ‚µ–ß‚³‚ê‚½ ¨ ’n–Ê or “Vˆä
-		hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
+	//	hitNormal.y = (pushBack.y > 0.0f) ? -1.0f : 1.0f;
+
+		if (pushBack.y > 0.0f) {
+			hitNormal.y = -1.0f;
+		}
+		else if (pushBack.y < 0.0f) {
+			hitNormal.y = 1.0f;
+		}
 	}
 
 	return true;

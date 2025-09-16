@@ -1,6 +1,7 @@
 #include    "Spring.h"
 #include    "Transform.h"
 #include    "RigidBodyComponent.h"
+#include <iostream>
 
 using namespace DirectX::SimpleMath;
 
@@ -53,9 +54,11 @@ void SpringComponent::SpringAction2D()
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
 
+//	std::cout << force.Length() << std::endl;
+
 	// 強制停止チェック
 	Vector3 diff = posP2 - posP1;
-	if (diff.Length() < 0.01f || velocityP1.Length() < 0.01f || force.Length() < 0.01f) {
+	if (diff.Length() < 0.05f && velocityP1.Length() < 0.05f && force.Length() < 0.05f) {
 		rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
 		//transformP1->SetPosition(transformP2->GetPosition());
 	}

@@ -89,7 +89,7 @@ LoadStageScene::LoadStageScene() {
 		player->AddComponent<TestMoveComponent>();
 
 		auto playerTrans = player->AddComponent<TransformComponent>();
-		playerTrans->SetScale({ 4.0f, 10.0f, 5.0f });
+		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
 		playerTrans->SetPosition({ 0.0f,-9.0f,0.0f });
 		playerTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
@@ -129,7 +129,7 @@ LoadStageScene::LoadStageScene() {
 
 
 		//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
-		auto rolling = GameObjectManager::AddAbsFront("rolling", "Sword");
+		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
@@ -481,7 +481,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 
 		auto point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
 		auto pointTrans4 = point4->AddComponent<TransformComponent>();
-		pointTrans4->SetScale({ 8.0f, 100.0f, 10.0f });
+		pointTrans4->SetScale({ 10.0f, 90.0f, 10.0f });
 		pointTrans4->AddPosition({ 330.0f, -260.0f, 0.0f });
 		auto pointCamera4 = point4->AddComponent<CameraPointComponent>();
 		auto pointColl4 = point4->AddComponent<ColliderComponent>();

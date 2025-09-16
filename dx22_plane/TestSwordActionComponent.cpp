@@ -10,6 +10,7 @@
 #include "AttackOneTimeComponent.h"
 #include "SquareMesh.h"
 #include "SceneManager.h"
+#include <iostream>
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
@@ -52,17 +53,30 @@ void TestSwordActionComponent::Update() {
 
 		if (moveComp->GetRightLeft() == true) {	// 右
 			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
-			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 		else {									// 左
 			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
-			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 	}
 
 	if (m_swordAction == true) {
 		SwordAction();
 	}
+
+	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
+
+	//std::cout << pos.z << std::endl;
+
+	//if(p_object->GetDrawContainer() == DrawContainer::AbsFront ) {
+	//	std::cout << "AbsFront" << std::endl;
+
+	//}
+	//else if( p_object->GetDrawContainer() == DrawContainer::Default ) {
+	//	std::cout << "Default" << std::endl;
+	//}
+
 }
 
 void TestSwordActionComponent::SwordAction() {
@@ -97,11 +111,11 @@ void TestSwordActionComponent::SwordAction() {
 
 		if (moveComp->GetRightLeft() == true) {
 			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
-			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 		else {
 			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
-			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,objTrans->GetPosition().z });
+			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 		goAround->SetActiveFlag(false);
 

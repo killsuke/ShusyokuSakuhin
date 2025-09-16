@@ -35,10 +35,12 @@ void MoveTerrainComponent::Update() {
 			return;
 		}
 		DirectX::SimpleMath::Vector3 hitNormal = {};
+		// 押し戻すことを考える
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
-			if (hitNormal.y > 0.5f) {	// プレイヤーが地面に乗っているとき
+			if (playerTransform->GetPosition().y > transform->GetPosition().y) {	// プレイヤーが地面に乗っているとき
 				playerTransform->AddPosition({ newPosX,0.0f,0.0f });
 			}
+			
 		}
 	}
 
