@@ -63,7 +63,7 @@ void InchWorm_Test::GPU_Update() {
 	// 自ボーンの座標系でのボーンの姿勢を計算
 	for (int i = 1; i < INCH_WORM_BONE_NUM; i++) {
 		//		DX11MtxRotationY((sinf(val) * 70.0f), defBone[i]);
-		q = Quaternion::CreateFromYawPitchRoll(sinf(val) * DirectX::XMConvertToRadians(70.0f), 0.0f, 0.0f);
+		q = Quaternion::CreateFromYawPitchRoll(0.0f, sinf(val) * DirectX::XMConvertToRadians(70.0f), 0.0f);
 		defBone[i] = Matrix::CreateFromQuaternion(q);	// 回転行列を作成
 	}
 
@@ -118,9 +118,9 @@ void InchWorm_Test::GPU_Update() {
 
 	//	g_combMtx[2] = m_bones[2].offsetMtx * m_bones[2].boneMtx;
 
-	
 
-		Vector3 scale, position;
+
+	Vector3 scale, position;
 	Quaternion rotation;
 
 	if (m_bones[1].boneMtx.Decompose(scale, rotation, position)) {
@@ -153,9 +153,9 @@ void InchWorm_Test::GPU_Update() {
 		debugTrans->MakeWorldMatrix();*/
 	}
 
-		// デバッグ用に一応単位行列に
+	// デバッグ用に一応単位行列に
 	for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {
-	//	g_combMtx[i] = Matrix::Identity;
+		//	g_combMtx[i] = Matrix::Identity;
 	}
 
 
@@ -270,6 +270,7 @@ void InchWorm_Test::BoneInit() {
 	// 胸は腰の上（Ｙ方向）
 	m_bones[1].initMtx._41 = 5.0f;	// X座標
 	m_bones[1].initMtx._42 = 0.0f;	// Y座標
+
 	// 頭は胸の上（Ｙ方向）
 	//m_bones[2].initMtx._41 = 0.0f;	// X座標
 	//m_bones[2].initMtx._42 = 1.0f;	// Y座標
@@ -318,17 +319,27 @@ std::vector<AnimationVertex> InchWorm_Test::CreateBoneMeshVertices() {
 
 	m_boneVertices.resize(8);
 
+	// 各頂点位置
+
+	// 腰
 	m_boneVertices[0].position = Vector3(-1.0f, -1.0f, 0.0f);
-	m_boneVertices[1].position = Vector3( 1.0f, -1.0f, 0.0f);
-	m_boneVertices[2].position = Vector3( 1.0f,  1.0f, 0.0f);
-	m_boneVertices[3].position = Vector3(-1.0f,  1.0f, 0.0f);
+	m_boneVertices[1].position = Vector3(1.0f, -1.0f, 0.0f);
+	m_boneVertices[2].position = Vector3(1.0f, 1.0f, 0.0f);
+	m_boneVertices[3].position = Vector3(-1.0f, 1.0f, 0.0f);
 
-	m_boneVertices[4].position = Vector3(1.0f, -1.0f, 0.0f);
-	m_boneVertices[5].position = Vector3(3.0f, -1.0f, 0.0f);
-	m_boneVertices[6].position = Vector3(3.0f,  1.0f, 0.0f);
-	m_boneVertices[7].position = Vector3(1.0f,  1.0f, 0.0f);
+	// 胸
+	m_boneVertices[4].position = Vector3(-1.0f, 1.0f, 0.0f);
+	m_boneVertices[5].position = Vector3(1.0f, 1.0f, 0.0f);
+	m_boneVertices[6].position = Vector3(1.0f, 3.0f, 0.0f);
+	m_boneVertices[7].position = Vector3(-1.0f, 3.0f, 0.0f);
 
+	// 胸横バージョン
+	//m_boneVertices[4].position = Vector3(1.0f, -1.0f, 0.0f);
+	//m_boneVertices[5].position = Vector3(3.0f, -1.0f, 0.0f);
+	//m_boneVertices[6].position = Vector3(3.0f, 1.0f, 0.0f);
+	//m_boneVertices[7].position = Vector3(1.0f, 1.0f, 0.0f);
 
+	// 配色
 	m_boneVertices[0].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 	m_boneVertices[1].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 	m_boneVertices[2].color = Color(1.0f, 0.0f, 0.0f, 1.0f);
@@ -339,17 +350,24 @@ std::vector<AnimationVertex> InchWorm_Test::CreateBoneMeshVertices() {
 	m_boneVertices[6].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
 	m_boneVertices[7].color = Color(1.0f, 1.0f, 0.0f, 1.0f);
 
+	// 影響度
+	m_boneVertices[0].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右下
+	m_boneVertices[1].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[2].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左上
+	m_boneVertices[3].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右上
 
-	m_boneVertices[0].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右下
-	m_boneVertices[1].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
-	m_boneVertices[2].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
-	m_boneVertices[3].weight = Vector3(1.00f, 0.00f, 0.00f);	// 右上
-	m_boneVertices[4].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左下
-	m_boneVertices[5].weight = Vector3(0.30f, 0.70f, 0.00f);	// 右下
-	m_boneVertices[6].weight = Vector3(0.30f, 0.70f, 0.00f);	// 右上
-	m_boneVertices[7].weight = Vector3(1.00f, 0.00f, 0.00f);	// 左上
+	m_boneVertices[4].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[5].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右下
+	m_boneVertices[6].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右上
+	m_boneVertices[7].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 左上
 
+	// 胸横バージョン
+	//m_boneVertices[4].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
+	//m_boneVertices[5].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右下
+	//m_boneVertices[6].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右上
+	//m_boneVertices[7].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左上
 
+	// 影響度に対してどれが影響されるかの番号
 	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 1;
 	m_boneVertices[0].matrixIndex[2] = 0;	m_boneVertices[0].matrixIndex[3] = 0;
 

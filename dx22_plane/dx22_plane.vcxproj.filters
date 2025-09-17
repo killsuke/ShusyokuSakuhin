@@ -348,6 +348,9 @@
     <ClCompile Include="DeathBlockComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="HumanBoneComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -705,6 +708,9 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="DeathBlockComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanBoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

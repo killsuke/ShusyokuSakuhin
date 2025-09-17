@@ -43,6 +43,8 @@ public:
 	//GameObject();
 	GameObject(const std::string& _name, const std::string& _tag)
 		: name(_name), tag(_tag) {
+		components.reserve(20);
+		renderComponents.reserve(4);
 	}; // 名前とタグを指定して初期化
 	~GameObject();	// デフォルトデストラクタ
 

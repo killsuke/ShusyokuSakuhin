@@ -42,7 +42,7 @@ struct ConstBuffer
 
 	BOOL inverse = FALSE; // 反転フラグ
 
-	int padding[3]; // パディング
+	int padding[3] = {}; // パディング
 };
 
 class DirectXRender

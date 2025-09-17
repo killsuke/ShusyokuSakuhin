@@ -1,7 +1,7 @@
 #pragma once
 #include <SimpleMath.h>
 #define BONE_NUM (15)		// ボーンの数（最大14個まで）
-#define INCH_WORM_BONE_NUM (2)
+#define INCH_WORM_BONE_NUM (3)
 
 // 最低限の頂点情報
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
@@ -11,10 +11,9 @@ struct AnimationVertex {
 	unsigned int matrixIndex[4] = {};
 
 	DirectX::SimpleMath::Vector3 position = {};
-	DirectX::SimpleMath::Vector3 weight = {};
 	float pad1 = 0.0f;
 
-	float pad2 = 0.0f;
+	DirectX::SimpleMath::Vector4 weight = {};
 };
 
 struct LineVertex {

@@ -191,6 +191,7 @@
     <ClCompile Include="EnemyActionHopperComponent.cpp" />
     <ClCompile Include="EnemyJsonComponent.cpp" />
     <ClCompile Include="EnemyManagerComponent.cpp" />
+    <ClCompile Include="HumanBoneComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
     <ClCompile Include="MoveTerrainComponent.cpp" />
@@ -214,7 +215,9 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GoAroundComponent.cpp" />
     <ClCompile Include="HPBarMoveComponent.cpp" />
-    <ClCompile Include="InchWorm_Test.cpp" />
+    <ClCompile Include="InchWorm_Test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -326,6 +329,7 @@
     <ClInclude Include="EnemyActionHopperComponent.h" />
     <ClInclude Include="EnemyJsonComponent.h" />
     <ClInclude Include="EnemyManagerComponent.h" />
+    <ClInclude Include="HumanBoneComponent.h" />
     <ClInclude Include="JsonComponent.h" />
     <ClInclude Include="MoveTerrainComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
@@ -351,7 +355,9 @@
     <ClInclude Include="GoAroundComponent.h" />
     <ClInclude Include="HPBarMoveComponent.h" />
     <ClInclude Include="HPParam.h" />
-    <ClInclude Include="InchWorm_Test.h" />
+    <ClInclude Include="InchWorm_Test.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />
     <ClInclude Include="Material.h" />

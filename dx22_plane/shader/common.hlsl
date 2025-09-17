@@ -49,15 +49,15 @@ struct VS_IN
 struct VS_ANIMATION
 {
     float4 col : COLOR0;
-    int4 idx : BLENDINDICES;
+    uint4 idx : BLENDINDICES;
 
     float3 pos : POSITION;
 //    float4 nrm : NORMAL0;
-	//float pad : PAD;
+	float pad : PAD;
 //    float2 tex : TEXCOORD0;
-    float3 weight : BLENDWEIGHT;
+    float4 weight : BLENDWEIGHT0;
 	
-    float2 dummy : PADDING; // 明示的に 4B を埋める
+//    float dummy : PADDING; // 明示的に 4B を埋める
 };
 
 struct VS_OUTPUT
@@ -116,7 +116,7 @@ cbuffer ConstantBufferBoneComb : register(b8)
 	// ワールド変換行列
     matrix matrixWorldB;
 	
-    matrix bonecombmtx[2]; // ボーンコンビネーション行列
+    matrix bonecombmtx[3]; // ボーンコンビネーション行列
 };
 
 cbuffer UIParam : register(b9)

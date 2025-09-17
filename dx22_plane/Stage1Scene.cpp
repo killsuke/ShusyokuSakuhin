@@ -8,7 +8,7 @@
 #include "CircleMesh.h"
 #include "CubeMesh.h"
 #include "SquareMesh.h"
-#include "InchWorm_Test.h"
+#include "HumanBoneComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -36,7 +36,7 @@ void Stage1Scene::Init()
 	auto inchTrans = inchWorm->AddComponent<TransformComponent>();
 	inchTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 	inchTrans->SetScale({ 50.0f, 50.0f, 1.0f });
-	inchWorm->AddComponent<InchWorm_Test>();
+	inchWorm->AddComponent<HumanBoneComponent>();
 
 
 	// çò

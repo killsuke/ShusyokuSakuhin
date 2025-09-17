@@ -80,8 +80,8 @@ void Camera::Update()
 		}
 
 		// 座標更新
-	/*	transform->AddPosition(vec3);
-		m_Target += vec3;*/
+		transform->AddPosition(vec3);
+		m_Target += vec3;
 
 		// 視野角をいじって加速の時だけカメラを引く、FOV
 
@@ -264,7 +264,7 @@ void Camera::Update()
 			rot_y -= delta_X * rotationSpeed;
 			rot_x += delta_Y * rotationSpeed;
 
-			//transform->AddRotation({ rot_x, rot_y, rot.z });
+			transform->AddRotation({ rot_x, rot_y, rot.z });
 
 			auto rot2 = transform->GetRotation();
 

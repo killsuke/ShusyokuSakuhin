@@ -68,6 +68,8 @@ void EnemyActionBulletComponent::FiringBullet() {
 	auto dmg = bullet->AddComponent<PlayerDamageComponent>();
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
+
+	// ここが重い（おそらくテクスチャ取得に問題あり？）
 	auto rend = bullet->AddComponent<Render2DComponent>();
 	SquareMesh squareMesh;
 	rend->SetMesh(squareMesh);

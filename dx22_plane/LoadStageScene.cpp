@@ -270,6 +270,13 @@ LoadStageScene::LoadStageScene() {
 		fadeUI->SetBootDoor(true);
 	//	fadeUI->SetNextSceneName();
 	}
+	else {
+		auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
+		fadeUI->SetCarryOverFlag(true);
+		auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
+		auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
+		fadeAC->SetNextSceneName("LoadStageScene");
+	}
 }
 
 LoadStageScene::~LoadStageScene() {
