@@ -5,7 +5,7 @@
 //=======================================
 //Shader作成
 //=======================================
-void Shader::Create(std::string vs, std::string ps)
+void Shader::Create(std::string vs, std::string ps, std::string gs)
 {
 	// 頂点データの定義
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -21,7 +21,10 @@ void Shader::Create(std::string vs, std::string ps)
 	ID3D11Device* device = DirectXRender::GetDevice();
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
-	bool sts = CreateVertexShader(device,
+	bool sts = false;
+
+	if (vs != "") {
+		sts = CreateVertexShader(device,
 			vs.c_str(),
 			"vs_main",
 			"vs_5_0",
@@ -29,21 +32,38 @@ void Shader::Create(std::string vs, std::string ps)
 			numElements,
 			&m_pVertexShader,
 			&m_pVertexLayout);
-	if (!sts) {
-		MessageBox(nullptr, "CreateVertexShader error", "error", MB_OK);
-		return;
+		if (!sts) {
+			MessageBox(nullptr, "CreateVertexShader error", "error", MB_OK);
+			return;
+		}
 	}
 
-	// ピクセルシェーダーを生成
-	sts = CreatePixelShader(			// ピクセルシェーダーオブジェクトを生成
-		device,							// デバイスオブジェクト
-		ps.c_str(),
-		"ps_main",
-		"ps_5_0",
-		&m_pPixelShader);
-	if (!sts) {
-		MessageBox(nullptr, "CreatePixelShader error", "error", MB_OK);
-		return;
+	if (ps != "") {
+		// ピクセルシェーダーを生成
+		sts = CreatePixelShader(			// ピクセルシェーダーオブジェクトを生成
+			device,							// デバイスオブジェクト
+			ps.c_str(),
+			"ps_main",
+			"ps_5_0",
+			&m_pPixelShader);
+		if (!sts) {
+			MessageBox(nullptr, "CreatePixelShader error", "error", MB_OK);
+			return;
+		}
+	}
+
+	if (gs != "") {
+		// ジオメトリシェーダーを生成
+		sts = CreateGeometryShader(			// ピクセルシェーダーオブジェクトを生成
+			device,							// デバイスオブジェクト
+			gs.c_str(),
+			"main",
+			"gs_5_0",
+			&m_pGeometryShader);
+		if (!sts) {
+			MessageBox(nullptr, "CreateGeometryShader error", "error", MB_OK);
+			return;
+		}
 	}
 
 	return;

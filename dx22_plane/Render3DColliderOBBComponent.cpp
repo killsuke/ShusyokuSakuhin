@@ -6,7 +6,7 @@
 using namespace DirectX::SimpleMath;
 
 Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("COLLIDER_DEBUG_RENDER"); // ソート番号を設定
+	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
 }

@@ -351,6 +351,9 @@
     <ClCompile Include="HumanBoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="LineMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -712,6 +715,9 @@
     </ClInclude>
     <ClInclude Include="HumanBoneComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LineMesh.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

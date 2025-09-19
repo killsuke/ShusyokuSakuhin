@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "GameObjectManager.h"
 #include "DirectXRender.h"
+#include "input.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -33,7 +34,13 @@ HumanBoneComponent::~HumanBoneComponent()
 
 void HumanBoneComponent::Update() {
 
-	GPU_Update();	// GPUで更新
+	if (Input::GetKeyTrigger(VK_RETURN)) {
+		m_stop = !m_stop;
+	}
+
+	if (m_stop == false) {
+		GPU_Update();	// GPUで更新
+	}
 
 	Draw();
 }
@@ -62,8 +69,9 @@ void HumanBoneComponent::GPU_Update() {
 
 	// 自ボーンの座標系でのボーンの姿勢を計算
 	for (int i = 1; i < INCH_WORM_BONE_NUM; i++) {
+		//if(i == 3)
 		//		DX11MtxRotationY((sinf(val) * 70.0f), defBone[i]);
-		q = Quaternion::CreateFromYawPitchRoll(0.0f, sinf(val) * DirectX::XMConvertToRadians(70.0f), 0.0f);
+		q = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, sinf(val) * DirectX::XMConvertToRadians(70.0f));
 		defBone[i] = Matrix::CreateFromQuaternion(q);	// 回転行列を作成
 	}
 
@@ -103,6 +111,9 @@ void HumanBoneComponent::GPU_Update() {
 	m_bones[1].boneMtx = m_bones[1].boneMtx * m_bones[0].boneMtx;
 	m_bones[2].boneMtx = m_bones[2].boneMtx * m_bones[1].boneMtx;
 
+	m_bones[3].boneMtx = m_bones[3].boneMtx * m_bones[1].boneMtx;
+	m_bones[4].boneMtx = m_bones[4].boneMtx * m_bones[3].boneMtx;
+
 
 	// ボーンコンビネーション行列を計算
 	for (int i = 0; i < INCH_WORM_BONE_NUM; ++i) {
@@ -126,38 +137,38 @@ void HumanBoneComponent::GPU_Update() {
 
 
 	{
-		Vector3 scale, position;
-		Quaternion rotation;
+		//Vector3 scale, position;
+		//Quaternion rotation;
 
-		if (m_bones[1].boneMtx.Decompose(scale, rotation, position)) {
-			// 成功：回転だけ取り出せた
-			Vector3 euler;
+		//if (m_bones[1].boneMtx.Decompose(scale, rotation, position)) {
+		//	// 成功：回転だけ取り出せた
+		//	Vector3 euler;
 
-			// yaw (Y軸周り)
-			float siny_cosp = 2.0f * (q.w * q.y + q.z * q.x);
-			float cosy_cosp = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
-			euler.y = std::atan2(siny_cosp, cosy_cosp); // yaw
+		//	// yaw (Y軸周り)
+		//	float siny_cosp = 2.0f * (q.w * q.y + q.z * q.x);
+		//	float cosy_cosp = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+		//	euler.y = std::atan2(siny_cosp, cosy_cosp); // yaw
 
-			// pitch (X軸周り)
-			float sinp = 2.0f * (q.w * q.x - q.z * q.y);
-			if (std::abs(sinp) >= 1)
-				euler.x = std::copysign(DirectX::XM_PIDIV2, sinp); // 90度
-			else
-				euler.x = std::asin(sinp); // pitch
+		//	// pitch (X軸周り)
+		//	float sinp = 2.0f * (q.w * q.x - q.z * q.y);
+		//	if (std::abs(sinp) >= 1)
+		//		euler.x = std::copysign(DirectX::XM_PIDIV2, sinp); // 90度
+		//	else
+		//		euler.x = std::asin(sinp); // pitch
 
-			// roll (Z軸周り)
-			float sinr_cosp = 2.0f * (q.w * q.z + q.x * q.y);
-			float cosr_cosp = 1.0f - 2.0f * (q.z * q.z + q.x * q.x);
-			euler.z = std::atan2(sinr_cosp, cosr_cosp); // roll
+		//	// roll (Z軸周り)
+		//	float sinr_cosp = 2.0f * (q.w * q.z + q.x * q.y);
+		//	float cosr_cosp = 1.0f - 2.0f * (q.z * q.z + q.x * q.x);
+		//	euler.z = std::atan2(sinr_cosp, cosr_cosp); // roll
 
-			// ラジアン → ディグリー変換
-			euler.x = DirectX::XMConvertToDegrees(euler.x);
-			euler.y = DirectX::XMConvertToDegrees(euler.y);
-			euler.z = DirectX::XMConvertToDegrees(euler.z);
+		//	// ラジアン → ディグリー変換
+		//	euler.x = DirectX::XMConvertToDegrees(euler.x);
+		//	euler.y = DirectX::XMConvertToDegrees(euler.y);
+		//	euler.z = DirectX::XMConvertToDegrees(euler.z);
 
-			/*debugTrans->SetRotation(euler);
-			debugTrans->MakeWorldMatrix();*/
-		}
+		//	/*debugTrans->SetRotation(euler);
+		//	debugTrans->MakeWorldMatrix();*/
+		//}
 	}
 
 	// デバッグ用に一応単位行列に
@@ -264,13 +275,16 @@ void HumanBoneComponent::BoneInit() {
 	// 親子関係を構築します
 	m_bones[0].firstChild = &m_bones[1];	// 腰から胸
 	m_bones[1].firstChild = &m_bones[2];	// 胸から頭
-	//m_bones[3].firstChild = &m_bones[4];	// 左肩から左腕
+	m_bones[2].sibling	  = &m_bones[3];	// 胸から左肩
+	m_bones[3].firstChild = &m_bones[4];	// 左肩から左腕
 
 	// --- 回転設定 ---
 	// 頭～腰：基本的にＺ軸 -90度回転（Ｙ軸上方向に立ち上がる）
-	DX11MtxRotationZ(0.0f, m_bones[0].initMtx);	// 腰
-	DX11MtxRotationZ(0.0f, m_bones[1].initMtx);	// 胸
-	DX11MtxRotationZ(0.0f, m_bones[2].initMtx);	// 頭
+	DX11MtxRotationZ(-90.0f, m_bones[0].initMtx);	// 腰
+	DX11MtxRotationZ(-90.0f, m_bones[1].initMtx);	// 胸
+	DX11MtxRotationZ(-90.0f, m_bones[2].initMtx);	// 頭
+	DX11MtxRotationZ(-90.0f, m_bones[3].initMtx);	// 左肩
+	DX11MtxRotationZ(-90.0f, m_bones[4].initMtx);	// 左腕
 
 
 		// --- 位置設定 ---
@@ -280,12 +294,19 @@ void HumanBoneComponent::BoneInit() {
 
 	// 胸は腰の上（Ｙ方向）
 	m_bones[1].initMtx._41 = 0.0f;	// X座標
-	m_bones[1].initMtx._42 = 5.0f;	// Y座標
+	m_bones[1].initMtx._42 = 0.50f;	// Y座標
 
 	// 頭は胸の上（Ｙ方向）
 	m_bones[2].initMtx._41 = 0.0f;	// X座標
-	m_bones[2].initMtx._42 = 5.0f;	// Y座標
+	m_bones[2].initMtx._42 = 1.0f;	// Y座標
 
+	// 左肩は胸の左（Ⅹ方向）
+	m_bones[3].initMtx._41 = 0.50f;	// X座標
+	m_bones[3].initMtx._42 = 0.50f;	// Y座標
+
+	// 左腕は左肩の左（Ⅹ方向）
+	m_bones[4].initMtx._41 = 1.0f;	// X座標
+	m_bones[4].initMtx._42 = 1.0f;	// Y座標
 
 	// 初期姿勢の影響を打ち消すために必要
 	g_combMtx = new DirectX::SimpleMath::Matrix[INCH_WORM_BONE_NUM];	// 合成変換行列の配列を確保
@@ -323,6 +344,9 @@ void HumanBoneComponent::BoneInit() {
 	m_bones[1].initMtx = m_bones[1].initMtx * m_bones[0].offsetMtx;
 	m_bones[2].initMtx = m_bones[2].initMtx * m_bones[1].offsetMtx;
 
+	m_bones[3].initMtx = m_bones[3].initMtx * m_bones[1].offsetMtx;
+	m_bones[4].initMtx = m_bones[4].initMtx * m_bones[3].offsetMtx;
+
 }
 
 std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
@@ -350,6 +374,18 @@ std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
 	m_boneVertices[10].position = Vector3( 1.0f, 5.0f, 0.0f);
 	m_boneVertices[11].position = Vector3(-1.0f, 5.0f, 0.0f);
 
+	// 左肩
+	m_boneVertices[12].position = Vector3(1.0f, 1.0f, 0.0f);
+	m_boneVertices[13].position = Vector3(3.0f, 1.0f, 0.0f);
+	m_boneVertices[14].position = Vector3(3.0f, 3.0f, 0.0f);
+	m_boneVertices[15].position = Vector3(1.0f, 3.0f, 0.0f);
+
+	// 左腕
+	m_boneVertices[16].position = Vector3(3.0f, 1.0f, 0.0f);
+	m_boneVertices[17].position = Vector3(5.0f, 1.0f, 0.0f);
+	m_boneVertices[18].position = Vector3(5.0f, 3.0f, 0.0f);
+	m_boneVertices[19].position = Vector3(3.0f, 3.0f, 0.0f);
+
 	// 胸横バージョン
 	//m_boneVertices[4].position = Vector3(1.0f, -1.0f, 0.0f);
 	//m_boneVertices[5].position = Vector3(3.0f, -1.0f, 0.0f);
@@ -376,25 +412,49 @@ std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
 	m_boneVertices[10].color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 	m_boneVertices[11].color = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
+	// 左肩
+	m_boneVertices[12].color = Color(0.0f, 0.0f, 1.0f, 1.0f);
+	m_boneVertices[13].color = Color(0.0f, 0.0f, 1.0f, 1.0f);
+	m_boneVertices[14].color = Color(0.0f, 0.0f, 1.0f, 1.0f);
+	m_boneVertices[15].color = Color(0.0f, 0.0f, 1.0f, 1.0f);
+
+	// 左腕
+	m_boneVertices[16].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[17].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[18].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	m_boneVertices[19].color = Color(0.0f, 0.0f, 0.0f, 1.0f);
+
 	// 影響度
 
 	// 腰
-	m_boneVertices[0].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右下
-	m_boneVertices[1].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
-	m_boneVertices[2].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左上
-	m_boneVertices[3].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右上
+	m_boneVertices[0].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[1].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右下
+	m_boneVertices[2].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 右上
+	m_boneVertices[3].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 左上
 
 	// 胸
-	m_boneVertices[4].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
-	m_boneVertices[5].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 右下
+	m_boneVertices[4].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[5].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 右下
 	m_boneVertices[6].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右上
 	m_boneVertices[7].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 左上
 
 	// 頭
 	m_boneVertices[8] .weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 左下
 	m_boneVertices[9] .weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右下
-	m_boneVertices[10].weight = Vector4(0.00f, 0.80f, 0.20f, 0.00f);	// 右上
-	m_boneVertices[11].weight = Vector4(0.00f, 0.80f, 0.20f, 0.00f);	// 左上
+	m_boneVertices[10].weight = Vector4(0.10f, 0.80f, 0.10f, 0.00f);	// 右上
+	m_boneVertices[11].weight = Vector4(0.10f, 0.80f, 0.10f, 0.00f);	// 左上
+
+	// 左肩
+	m_boneVertices[12].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[13].weight = Vector4(0.10f, 0.70f, 0.20f, 0.00f);	// 右下
+	m_boneVertices[14].weight = Vector4(0.10f, 0.70f, 0.20f, 0.00f);	// 右上
+	m_boneVertices[15].weight = Vector4(0.50f, 0.50f, 0.00f, 0.00f);	// 左上
+
+	// 左腕
+	m_boneVertices[16].weight = Vector4(0.00f, 1.00f, 0.00f, 0.00f);	// 左下
+	m_boneVertices[17].weight = Vector4(0.00f, 0.70f, 0.30f, 0.00f);	// 右下
+	m_boneVertices[18].weight = Vector4(0.00f, 0.70f, 0.30f, 0.00f);	// 右上
+	m_boneVertices[19].weight = Vector4(0.40f, 0.30f, 0.20f, 0.10f);	// 左上
 
 	// 胸横バージョン
 	//m_boneVertices[4].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左下
@@ -402,19 +462,24 @@ std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
 	//m_boneVertices[6].weight = Vector4(0.30f, 0.70f, 0.00f, 0.00f);	// 右上
 	//m_boneVertices[7].weight = Vector4(1.00f, 0.00f, 0.00f, 0.00f);	// 左上
 
+	// ※ボーンは０番目スタート
+
 	// 影響度に対してどれが影響されるかの番号
-	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 0;
+
+	// 腰：０
+	m_boneVertices[0].matrixIndex[0] = 0;	m_boneVertices[0].matrixIndex[1] = 1;
 	m_boneVertices[0].matrixIndex[2] = 0;	m_boneVertices[0].matrixIndex[3] = 0;
 
-	m_boneVertices[1].matrixIndex[0] = 0;	m_boneVertices[1].matrixIndex[1] = 0;
+	m_boneVertices[1].matrixIndex[0] = 0;	m_boneVertices[1].matrixIndex[1] = 1;
 	m_boneVertices[1].matrixIndex[2] = 0;	m_boneVertices[1].matrixIndex[3] = 0;
 
-	m_boneVertices[2].matrixIndex[0] = 0;	m_boneVertices[2].matrixIndex[1] = 0;
+	m_boneVertices[2].matrixIndex[0] = 0;	m_boneVertices[2].matrixIndex[1] = 1;
 	m_boneVertices[2].matrixIndex[2] = 0;	m_boneVertices[2].matrixIndex[3] = 0;
 
-	m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 0;
+	m_boneVertices[3].matrixIndex[0] = 0;	m_boneVertices[3].matrixIndex[1] = 1;
 	m_boneVertices[3].matrixIndex[2] = 0;	m_boneVertices[3].matrixIndex[3] = 0;
 
+	// 胸：１
 	m_boneVertices[4].matrixIndex[0] = 0;	m_boneVertices[4].matrixIndex[1] = 1;
 	m_boneVertices[4].matrixIndex[2] = 0;	m_boneVertices[4].matrixIndex[3] = 0;
 
@@ -427,13 +492,13 @@ std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
 	m_boneVertices[7].matrixIndex[0] = 0;	m_boneVertices[7].matrixIndex[1] = 1;
 	m_boneVertices[7].matrixIndex[2] = 0;	m_boneVertices[7].matrixIndex[3] = 0;
 
-
+	// 頭：２
 	// ここら辺まだ分かっていないのでとりあえず全部０
-	m_boneVertices[8].matrixIndex[0] = 0;	m_boneVertices[8].matrixIndex[1] = 1;
-	m_boneVertices[8].matrixIndex[2] = 2;	m_boneVertices[8].matrixIndex[3] = 0;
+	m_boneVertices[8] .matrixIndex[0] = 0;	m_boneVertices[8] .matrixIndex[1] = 1;
+	m_boneVertices[8] .matrixIndex[2] = 2;	m_boneVertices[8] .matrixIndex[3] = 0;
 
-	m_boneVertices[9].matrixIndex[0] = 0;	m_boneVertices[9].matrixIndex[1] = 1;
-	m_boneVertices[9].matrixIndex[2] = 2;	m_boneVertices[9].matrixIndex[3] = 0;
+	m_boneVertices[9] .matrixIndex[0] = 0;	m_boneVertices[9] .matrixIndex[1] = 1;
+	m_boneVertices[9] .matrixIndex[2] = 2;	m_boneVertices[9] .matrixIndex[3] = 0;
 
 	m_boneVertices[10].matrixIndex[0] = 0;	m_boneVertices[10].matrixIndex[1] = 1;
 	m_boneVertices[10].matrixIndex[2] = 2;	m_boneVertices[10].matrixIndex[3] = 0;
@@ -441,6 +506,31 @@ std::vector<AnimationVertex> HumanBoneComponent::CreateBoneMeshVertices() {
 	m_boneVertices[11].matrixIndex[0] = 0;	m_boneVertices[11].matrixIndex[1] = 1;
 	m_boneVertices[11].matrixIndex[2] = 2;	m_boneVertices[11].matrixIndex[3] = 0;
 
+	// 左肩：３
+	m_boneVertices[12].matrixIndex[0] = 0;	m_boneVertices[12].matrixIndex[1] = 1;
+	m_boneVertices[12].matrixIndex[2] = 3;	m_boneVertices[12].matrixIndex[3] = 4;
+
+	m_boneVertices[13].matrixIndex[0] = 0;	m_boneVertices[13].matrixIndex[1] = 1;
+	m_boneVertices[13].matrixIndex[2] = 3;	m_boneVertices[13].matrixIndex[3] = 4;
+
+	m_boneVertices[14].matrixIndex[0] = 0;	m_boneVertices[14].matrixIndex[1] = 1;
+	m_boneVertices[14].matrixIndex[2] = 3;	m_boneVertices[14].matrixIndex[3] = 4;
+
+	m_boneVertices[15].matrixIndex[0] = 0;	m_boneVertices[15].matrixIndex[1] = 1;
+	m_boneVertices[15].matrixIndex[2] = 3;	m_boneVertices[15].matrixIndex[3] = 4;
+
+	// 左腕：４
+	m_boneVertices[16].matrixIndex[0] = 0;	m_boneVertices[16].matrixIndex[1] = 1;
+	m_boneVertices[16].matrixIndex[2] = 3;	m_boneVertices[16].matrixIndex[3] = 4;
+
+	m_boneVertices[17].matrixIndex[0] = 0;	m_boneVertices[17].matrixIndex[1] = 1;
+	m_boneVertices[17].matrixIndex[2] = 3;	m_boneVertices[17].matrixIndex[3] = 4;
+
+	m_boneVertices[18].matrixIndex[0] = 0;	m_boneVertices[18].matrixIndex[1] = 1;
+	m_boneVertices[18].matrixIndex[2] = 3;	m_boneVertices[18].matrixIndex[3] = 4;
+	
+	m_boneVertices[19].matrixIndex[0] = 0;	m_boneVertices[19].matrixIndex[1] = 1;
+	m_boneVertices[19].matrixIndex[2] = 3;	m_boneVertices[19].matrixIndex[3] = 4;
 
 
 	//m_boneVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
@@ -462,11 +552,17 @@ std::vector<unsigned int> HumanBoneComponent::CreateMeshIndices() {
 		0,2,1,
 		0,3,2,  // 左側の矩形 → 反時計回りに修正
 
-		6,5,4,
+		4,6,5,
 		4,7,6,   // 右側 → そのままでOK
 
 		8,10,9,
 		8,11,10,
+
+		12,14,13,
+		12,15,14,
+
+		/*16,18,17,
+		16,19,18,*/
 	};
 
 

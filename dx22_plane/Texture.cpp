@@ -2,6 +2,7 @@
 #include	"Texture.h"
 #include	"stb_image.h"
 #include	"DirectXRender.h"
+#include	"TextureManager.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -118,6 +119,7 @@ bool Texture::LoadMask(const std::string& filename)
 	return true;
 }
 
+// これに関してはモデル読み込むってなるとエラーになるはずなので注意
 // テクスチャをメモリからロード
 bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 
@@ -170,6 +172,23 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 
 	// ピクセルイメージ解放
 	stbi_image_free(pixels);
+
+	return true;
+}
+
+bool Texture::LoadTexture(const std::string& filename)
+{
+	auto tex = TextureManager::LoadTexture(filename);
+
+	if (tex != nullptr) {
+		m_srv = tex;
+		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
+		devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
+	}
+	else {
+		MessageBoxA(NULL, "テクスチャをシェーダーリソースビューにセット出来ませんでした。", "エラー", MB_ICONERROR | MB_OK);
+		return false;
+	}
 
 	return true;
 }

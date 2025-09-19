@@ -1,7 +1,8 @@
 #pragma once
 #include <SimpleMath.h>
+#include <vector>
 #define BONE_NUM (15)		// ボーンの数（最大14個まで）
-#define INCH_WORM_BONE_NUM (3)
+#define INCH_WORM_BONE_NUM (5)
 
 // 最低限の頂点情報
 //  座標と各ボーンの重みとしてボーン行列番号があればスキンメッシュはできます！
@@ -44,6 +45,9 @@ struct Bone {
 	DirectX::SimpleMath::Matrix initMtx;					// 初期姿勢行列（ジョイントをどの配置し、どれだけ回転させておくかを表す行列）
 	DirectX::SimpleMath::Matrix  boneMtx;				// ボーン姿勢行列
 	DirectX::SimpleMath::Matrix* combMtxAry = nullptr;		// 合成姿勢行列配列へのポインタ
+
+	Bone* parent = nullptr;
+	std::vector<Bone*> children;
 
 	Bone() {
 		initMtx = DirectX::SimpleMath::Matrix::Identity;	// 初期姿勢行列を単位行列に設定

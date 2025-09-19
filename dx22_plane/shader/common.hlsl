@@ -116,7 +116,7 @@ cbuffer ConstantBufferBoneComb : register(b8)
 	// ワールド変換行列
     matrix matrixWorldB;
 	
-    matrix bonecombmtx[3]; // ボーンコンビネーション行列
+    matrix bonecombmtx[5]; // ボーンコンビネーション行列
 };
 
 cbuffer UIParam : register(b9)

@@ -18,7 +18,7 @@ Camera::Camera(GameObject& obj) : Component(obj)
 	if (transform != nullptr) {
 		auto pos = transform->GetPosition();
 
-		if (pos.z == m_Target.z) {
+		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
 			assert(false); // もしくは throw などで止める
 		}
@@ -48,7 +48,7 @@ void Camera::Update()
 	if (transform != nullptr) {
 		auto pos = transform->GetPosition();
 
-		if (pos.z == m_Target.z) {
+		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
 			assert(false); // もしくは throw などで止める
 		}

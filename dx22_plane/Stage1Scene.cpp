@@ -9,6 +9,7 @@
 #include "CubeMesh.h"
 #include "SquareMesh.h"
 #include "HumanBoneComponent.h"
+#include "input.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -230,7 +231,7 @@ void Stage1Scene::Init()
 //XV
 void Stage1Scene::Update()
 {
-
+	
 }
 
 // I—¹ˆ—

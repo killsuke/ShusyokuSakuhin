@@ -45,7 +45,7 @@ public:
 
 	virtual void Update() = 0;
 	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
-	void SetTexture(const std::string& fileName) { m_Texture->Load(fileName); };
+	void SetTexture(const std::string& fileName) { m_Texture->LoadTexture(fileName); };
 	void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
 		m_Texture->Load(fileName);
 		m_Texture->LoadMask(maskFileName);

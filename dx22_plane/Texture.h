@@ -32,6 +32,7 @@ private:
 public:
 	bool Load(const std::string& filename);
 	bool LoadMask(const std::string& filename);
+	bool LoadTexture(const std::string& filename);
 
 	bool LoadFromFemory(const unsigned char* data,int len);
 

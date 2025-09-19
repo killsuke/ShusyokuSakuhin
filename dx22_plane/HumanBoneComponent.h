@@ -12,11 +12,13 @@ private:
 	VertexBuffer<AnimationVertex> m_AnimationVertexBuffer = {};
 
 	float val = 0.0f;
+
+	bool m_stop = false;
 public:
 	HumanBoneComponent(GameObject& obj);	// デフォルトコンストラクタは非公開にする
 	~HumanBoneComponent();	// デストラクタはデフォルトでOK
 
-	void Update();	// ボーンの更新処理
+	void Update() override;	// ボーンの更新処理
 	void Draw();
 
 	const std::vector<AnimationVertex>& GetBoneVertices() {

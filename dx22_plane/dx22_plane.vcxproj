@@ -193,6 +193,7 @@
     <ClCompile Include="EnemyManagerComponent.cpp" />
     <ClCompile Include="HumanBoneComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
+    <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
     <ClCompile Include="MoveTerrainComponent.cpp" />
     <ClCompile Include="PlayerDamageComponent.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="EnemyManagerComponent.h" />
     <ClInclude Include="HumanBoneComponent.h" />
     <ClInclude Include="JsonComponent.h" />
+    <ClInclude Include="LineMesh.h" />
     <ClInclude Include="MoveTerrainComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />

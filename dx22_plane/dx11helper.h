@@ -102,4 +102,10 @@ bool CreatePixelShader(ID3D11Device* device,		// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚
 	LPCSTR szShaderModel,
 	ID3D11PixelShader** ppPixelShader);
 
+bool CreateGeometryShader(ID3D11Device* device,
+	const char* szFileName,
+	LPCSTR szEntryPoint,
+	LPCSTR szShaderModel,
+	ID3D11GeometryShader** ppGeometryShader);		// ƒWƒIƒƒgƒŠƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚ğ¶¬
+
 std::string ExtractFileName(std::string fullpath, char split);

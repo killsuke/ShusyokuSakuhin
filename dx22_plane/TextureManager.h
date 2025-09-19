@@ -9,8 +9,6 @@
 #include "DirectXRender.h"
 #include "WICTextureLoader.h" // テクスチャ読み込みライブラリ
 #include <wrl.h>
-//#include <codecvt>
-//#include <locale>
 
 class TextureManager
 {
@@ -20,7 +18,7 @@ private:
 	static std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureMap;
 
 public:
-	static HRESULT LoadTexture(const std::string& filename);			// テクスチャの読み込み、シーンをロードするたびにテクスチャごとに一度だけ行う。
+	static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> LoadTexture(const std::string& filename);			// テクスチャの読み込み、シーンをロードするたびにテクスチャごとに一度だけ行う。
  	static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetTexture(const std::string& filename);	// テクスチャの取得、インスタンスにテクスチャを渡す。
 	static void ReleaseAllTextures();	// 片付け
 	static std::wstring ShortConversion(const std::string& filename);		// ファイルパスを簡単に変換する

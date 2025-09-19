@@ -5,7 +5,7 @@ std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView
 TextureManager::textureMap;
 
 // テクスチャの読み込み関数
-HRESULT TextureManager::LoadTexture(const std::string& filename) {
+Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(const std::string& filename) {
 	auto device = DirectXRender::GetDevice();
 	auto deviceContext = DirectXRender::GetDeviceContext();
 
@@ -14,7 +14,7 @@ HRESULT TextureManager::LoadTexture(const std::string& filename) {
     
     auto it = textureMap.find(wfilename);
     if (it != textureMap.end()) {
-        return S_OK;    // 既存のテクスチャが見つかったら、すぐに返す。
+        return it->second;    // 既存のテクスチャが見つかったら、すぐに返す。
     }
 
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture = nullptr;
@@ -23,15 +23,15 @@ HRESULT TextureManager::LoadTexture(const std::string& filename) {
     HRESULT hr = DirectX::CreateWICTextureFromFileEx(device, deviceContext, wfilename.c_str(), 0, D3D11_USAGE_DEFAULT,
                                                      D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &texture);
     // エラーが起きた場合の処理
-    if (FAILED(hr)) {
+    if (FAILED(hr) || !texture) {
         MessageBoxA(NULL, "テクスチャ読み込み失敗", "エラー", MB_ICONERROR | MB_OK);
-        return E_FAIL;
+        return nullptr;
     }
     
     // 読み込みが成功すれば、そのテクスチャのポインタをキャッシュに保存
     textureMap[wfilename] = texture;
     
-    return hr;
+    return texture;
 }
 
 // テクスチャの取得関数
@@ -41,9 +41,10 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(cons
 	if (it != textureMap.end()) { // 要素が見つかった場合
 		return it->second; // 対応するテクスチャを返す
 	}
-	//return nullptr; // 要素が見つからなかった場合、nullptrを返す
-    throw std::runtime_error("Texture not found"); // 見つからなかった場合に例外をスロー
-
+    
+    // エラー処理
+    MessageBoxA(NULL, "要求されたテクスチャが存在しませんでした。", "エラー", MB_ICONERROR | MB_OK);
+    return nullptr;
 }
 
 // 解放処理

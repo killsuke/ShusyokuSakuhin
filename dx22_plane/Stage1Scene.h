@@ -8,7 +8,6 @@
 class Stage1Scene : public Scene
 {
 private:
-
 	void Init(); // ‰Šú‰»
 	void Uninit(); // I—¹ˆ—
 	
