@@ -20,22 +20,14 @@ cbuffer ConstBuffer : register(b0)
     int pad[3];
 }
 
-cbuffer ViewBuffer3D : register(b1)
+cbuffer CameraMatrixBuffer : register(b1)
 {
     matrix View3D;
-}
-cbuffer ProjectionBuffer3D : register(b2)
-{
     matrix Projection3D;
-}
-
-cbuffer ViewBuffer2D : register(b3)
-{
     matrix View2D;
-}
-cbuffer ProjectionBuffer2D : register(b4)
-{
     matrix Projection2D;
+    matrix ViewSky;
+    matrix ProjectionSky;
 }
 
 struct VS_IN
@@ -125,12 +117,3 @@ cbuffer UIParam : register(b9)
     float hpScale;
     float2 padding; // •K—v‚È‚ç
 };
-
-cbuffer ViewBufferSky : register(b10)
-{
-    matrix ViewSky;
-}
-cbuffer ProjectionBufferSky : register(b11)
-{
-    matrix ProjectionSky;
-}

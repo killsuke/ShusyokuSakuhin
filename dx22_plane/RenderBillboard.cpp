@@ -24,17 +24,19 @@ void RenderBillboardComponent::Update()
 		auto pos = transform->GetPosition();
 		auto scale = transform->GetScale();
 		auto cameraView3D = camera->GetComponent<Camera>()->GetView3D();
-		
-		cameraView3D = cameraView3D.Invert();
 
-		cameraView3D._41 = 0.0f; // ビルボードの位置をカメラの位置に合わせる
-		cameraView3D._42 = 0.0f;
-		cameraView3D._43 = 0.0f;
+		Matrix rotationOnly = cameraView3D;
+
+		rotationOnly._41 = 0.0f; // ビルボードの位置をカメラの位置に合わせる
+		rotationOnly._42 = 0.0f;
+		rotationOnly._43 = 0.0f;
 
 		Matrix t = Matrix::CreateTranslation(pos.x, pos.y, pos.z);
 		Matrix s = Matrix::CreateScale(scale.x, scale.y, scale.z);
 
-		cb.matrixWorld = (s * cameraView3D * t).Transpose();
+		rotationOnly = rotationOnly.Transpose();	// 転置行列にすることで逆行列にするより処理が軽い
+
+		cb.matrixWorld = (s * rotationOnly * t).Transpose();
 
 		cb.color = Vector4(m_Color);
 

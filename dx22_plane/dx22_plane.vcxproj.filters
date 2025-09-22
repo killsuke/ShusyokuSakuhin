@@ -730,8 +730,6 @@
     <FxCompile Include="shader\unlitTextureVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\litTexturePS.hlsl" />
-    <FxCompile Include="shader\litTextureVS.hlsl" />
     <FxCompile Include="OneSkinAnimationVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
@@ -751,6 +749,12 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="Animation2DVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\litTextureVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\litTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

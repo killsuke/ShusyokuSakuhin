@@ -444,7 +444,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
 		auto pointTrans1 = point1->AddComponent<TransformComponent>();
 		pointTrans1->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans1->AddPosition({ 120.0f, 60.0f, 0.0f });
+		pointTrans1->AddPosition({ 120.0f, 50.0f, 0.0f });
 		auto pointCamera1 = point1->AddComponent<CameraPointComponent>();
 		auto pointColl1 = point1->AddComponent<ColliderComponent>();
 		CubeMesh pointMesh1;

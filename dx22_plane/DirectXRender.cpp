@@ -33,6 +33,8 @@ ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
 
 ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
 
+CameraMatrix DirectXRender::m_CameraMatrix = {};
+
 ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
@@ -67,6 +69,8 @@ ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
 
 ID3D11Buffer* g_pViewBufferSkyDome{}; // ビュー行列
 ID3D11Buffer* g_pProjectionBufferSkyDome{}; // プロジェクション行列
+
+ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
 
 DirectXRender::DirectXRender() {
 
@@ -168,6 +172,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pProjectionBuffer2D);
 	SAFE_RELEASE(g_pViewBufferSkyDome);
 	SAFE_RELEASE(g_pProjectionBufferSkyDome);
+	SAFE_RELEASE(g_pCameraInformationBuffer);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
 }
@@ -732,7 +737,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	//m_DeviceContext->VSSetConstantBuffers(0, 1, &m_WorldBuffer);
 	//if (FAILED(hr)) return;
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer3D);
+	/*hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer3D);
 	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer3D);
 	if (FAILED(hr)) return hr;
 
@@ -754,6 +759,12 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBufferSkyDome);
 	m_DeviceContext->VSSetConstantBuffers(11, 1, &g_pProjectionBufferSkyDome);
+	if (FAILED(hr)) return hr;*/
+	bufferDesc.ByteWidth = sizeof(CameraMatrix);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
+	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	// ここ後で１番に変更
 	if (FAILED(hr)) return hr;
 
 	return hr;
@@ -764,11 +775,11 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 //=======================================
 void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-	DirectX::SimpleMath::Matrix view;
-	view = ViewMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix view;
+	m_CameraMatrix.matrixView3D = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pViewBuffer3D, 0, NULL, &view, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pViewBuffer3D, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -776,11 +787,11 @@ void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-	DirectX::SimpleMath::Matrix projection;
-	projection = ProjectionMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix projection;
+	m_CameraMatrix.matrixProjection3D = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer3D, 0, NULL, &projection, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer3D, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================
@@ -788,11 +799,11 @@ void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-	DirectX::SimpleMath::Matrix view;
-	view = ViewMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix view;
+	m_CameraMatrix.matrixView2D = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pViewBuffer2D, 0, NULL, &view, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pViewBuffer2D, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -800,11 +811,11 @@ void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-	DirectX::SimpleMath::Matrix projection;
-	projection = ProjectionMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix projection;
+	m_CameraMatrix.matrixProjection2D = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer2D, 0, NULL, &projection, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer2D, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================
@@ -812,11 +823,11 @@ void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-	DirectX::SimpleMath::Matrix view;
-	view = ViewMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix view;
+	m_CameraMatrix.matrixViewSkyDome = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pViewBufferSkyDome, 0, NULL, &view, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pViewBufferSkyDome, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -824,11 +835,27 @@ void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix
 //=======================================
 void DirectXRender::SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-	DirectX::SimpleMath::Matrix projection;
-	projection = ProjectionMatrix->Transpose(); // 転置
+//	DirectX::SimpleMath::Matrix projection;
+	m_CameraMatrix.matrixProjectionSkyDome = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
-	m_DeviceContext->UpdateSubresource(g_pProjectionBufferSkyDome, 0, NULL, &projection, 0, 0);
+//	m_DeviceContext->UpdateSubresource(g_pProjectionBufferSkyDome, 0, NULL, &projection, 0, 0);
+}
+
+//=======================================
+// カメラ情報をGPUへ送る
+//=======================================
+void DirectXRender::GPU_UpdateViewAndProj() {
+	CameraMatrix mtx = m_CameraMatrix;
+	mtx.matrixView3D = m_CameraMatrix.matrixView3D.Transpose();
+	mtx.matrixProjection3D = m_CameraMatrix.matrixProjection3D.Transpose();
+	mtx.matrixView2D = m_CameraMatrix.matrixView2D.Transpose();
+	mtx.matrixProjection2D = m_CameraMatrix.matrixProjection2D.Transpose();
+	mtx.matrixViewSkyDome = m_CameraMatrix.matrixViewSkyDome.Transpose();
+	mtx.matrixProjectionSkyDome = m_CameraMatrix.matrixProjectionSkyDome.Transpose();
+
+	// カメラ情報をGPU側へ送る
+	m_DeviceContext->UpdateSubresource(g_pCameraInformationBuffer, 0, NULL, &mtx, 0, 0);
 }
 
 //=======================================

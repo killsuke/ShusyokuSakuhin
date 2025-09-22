@@ -18,6 +18,7 @@ private:
 	GameObject* m_nextTargetPoint = nullptr;	// スクロールしたい位置（目標点直接）
 
 	DirectX::SimpleMath::Vector3 m_beforeDirection = DirectX::SimpleMath::Vector3::Zero;		// プレイヤーが抜けたベクトル
+	DirectX::SimpleMath::Vector3 m_frame2BeforeDirection = DirectX::SimpleMath::Vector3::Zero;		// 2フレーム前のプレイヤーが抜けたベクトル
 
 	DirectX::SimpleMath::Vector3 m_scrollDirection = DirectX::SimpleMath::Vector3::Zero;	// 次の部屋にスクロールしたい方向
 	DirectX::SimpleMath::Vector3 m_inserDirection = DirectX::SimpleMath::Vector3::Zero;		// プレイヤーが入ってきたベクトル

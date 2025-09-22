@@ -4,6 +4,9 @@
 #include "Collider.h"
 #include "RigidBodyComponent.h"
 #include "CameraTargetComponent.h"
+#include <iostream>
+
+using namespace DirectX::SimpleMath;
 
 CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 {
@@ -29,14 +32,17 @@ void CameraPointComponent::Update() {
 	// ここで当たり判定でリリースがあればこれ以降の処理を実行
 	beforeTouched = afterTouched; // 前に触れたかどうかのフラグを更新
 
-	DirectX::SimpleMath::Vector3 dir = {};
+	Vector3 dir = {};
 	if (camColl->CheckHit_CubeAndCube_IsTrigger2D_Normal(*camColl, *playerColl, dir)) {
 
 		// プレイヤーが入ってきた方向をセット
-		if (m_inserDirection == DirectX::SimpleMath::Vector3::Zero) {
-			m_exitDirection = DirectX::SimpleMath::Vector3::Zero;
+		if (m_inserDirection == Vector3::Zero) {
+			m_exitDirection = Vector3::Zero;
 			m_inserDirection = dir;
+			std::cout << "IN：" << dir.x << "：" << dir.y << "：" << dir.z << std::endl;
 		}
+
+		m_frame2BeforeDirection = m_beforeDirection; // 2フレーム前のプレイヤーが抜けたベクトルを更新
 
 		m_beforeDirection = dir; // プレイヤーが抜けたベクトルをセット
 
@@ -48,6 +54,13 @@ void CameraPointComponent::Update() {
 
 	// リリースでとる
 	if (beforeTouched == true && afterTouched == false) {
+
+		std::cout << "OUT：" << m_beforeDirection.x << "：" << m_beforeDirection.y << "：" << m_beforeDirection.z << std::endl;
+
+		if (m_beforeDirection == Vector3::Zero) {
+			m_beforeDirection = m_frame2BeforeDirection;
+		}
+
 		// プレイヤーが抜けた方向をセット
 		m_exitDirection = m_beforeDirection;
 
@@ -70,12 +83,13 @@ void CameraPointComponent::Update() {
 
 		camRigid->ClearVelocity(); // プレイヤーが抜けたらカメラの速度をリセット
 		camRigid->ClearForce();
-		m_inserDirection = DirectX::SimpleMath::Vector3::Zero;
-		m_beforeDirection = DirectX::SimpleMath::Vector3::Zero; // 初期化
+		m_inserDirection = Vector3::Zero;
+		m_beforeDirection = Vector3::Zero; // 初期化
+		m_frame2BeforeDirection = Vector3::Zero; // 初期化
 	}
 
 	// ポイントから抜けたら処理を行う
-	if (m_exitDirection != DirectX::SimpleMath::Vector3::Zero) {
+	if (m_exitDirection != Vector3::Zero) {
 
 		if (m_nextTargetPoint != nullptr && m_isScrollDir == 1) {
 			camMove->SetMoveTarget(*m_nextTargetPoint);
@@ -84,6 +98,6 @@ void CameraPointComponent::Update() {
 			camMove->SetMoveTarget(*m_beforeTargetObj);
 		}
 
-		m_exitDirection = DirectX::SimpleMath::Vector3::Zero; // 初期化
+		m_exitDirection = Vector3::Zero; // 初期化
 	}
 }

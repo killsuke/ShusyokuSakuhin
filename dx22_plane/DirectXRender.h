@@ -45,6 +45,27 @@ struct ConstBuffer
 	int padding[3] = {}; // パディング
 };
 
+struct CameraMatrix
+{
+	// ３Ｄオブジェクト用
+	// ビュー変換行列
+	DirectX::SimpleMath::Matrix matrixView3D = DirectX::SimpleMath::Matrix();
+	// 射影変換行列
+	DirectX::SimpleMath::Matrix matrixProjection3D = DirectX::SimpleMath::Matrix();
+
+	// ２Ｄオブジェクト用
+	// ビュー変換行列
+	DirectX::SimpleMath::Matrix matrixView2D = DirectX::SimpleMath::Matrix();
+	// 射影変換行列
+	DirectX::SimpleMath::Matrix matrixProjection2D = DirectX::SimpleMath::Matrix();
+
+	// スカイドーム用
+	// ビュー変換行列
+	DirectX::SimpleMath::Matrix matrixViewSkyDome = DirectX::SimpleMath::Matrix();
+	// 射影変換行列
+	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix();
+};
+
 class DirectXRender
 {
 private:
@@ -58,6 +79,7 @@ private:
 	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
 	static ID3D11Buffer* m_LightBuffer;
 	static ID3D11Buffer* m_MaterialBuffer;
+	static CameraMatrix m_CameraMatrix;			// カメラ行列
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -99,6 +121,7 @@ public:
 	static void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
 	static void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
 	static void SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void GPU_UpdateViewAndProj();
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
