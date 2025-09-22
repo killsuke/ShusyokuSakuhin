@@ -27,6 +27,18 @@ void RenderBillboardComponent::Update()
 
 		Matrix rotationOnly = cameraView3D;
 
+		// 万が一カメラのサイズが変わってしまった場合の保険の処理
+		// ３×３行列として計算することで、位置情報を含まない ＝ 純粋に、回転を正規化してベクトルのみを取り出すことができる
+		for (int i = 0; i < 3; ++i) {
+			Vector3 axis(cameraView3D.m[0][i], cameraView3D.m[1][i], cameraView3D.m[2][i]);
+			axis.Normalize();
+
+			// 各軸を正規化して上書き
+			rotationOnly.m[0][i] = axis.x;
+			rotationOnly.m[1][i] = axis.y;
+			rotationOnly.m[2][i] = axis.z;
+		}
+
 		rotationOnly._41 = 0.0f; // ビルボードの位置をカメラの位置に合わせる
 		rotationOnly._42 = 0.0f;
 		rotationOnly._43 = 0.0f;
