@@ -70,7 +70,7 @@ void Game::Update()
 void Game::Draw()
 {
 
-	ImGui::Render();
+	//ImGui::Render();
 
 	// •`‰æ‘Oˆ—
 	DirectXRender::DrawBegin();
@@ -78,7 +78,7 @@ void Game::Draw()
 	GameObjectManager::Update();
 
 	// ImGui‚Ì•`‰æ
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	// •`‰æŒãˆ—
 	DirectXRender::DrawEnd();

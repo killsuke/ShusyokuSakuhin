@@ -16,6 +16,8 @@
 #include "AttackTimingComponent.h"
 #include "PlayerDamageComponent.h"
 
+using namespace DirectX::SimpleMath;
+
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
 	m_sortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // É\Å[Égî‘çÜÇê›íË
@@ -66,13 +68,13 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		fighter->SetHp(eS.hp);
 
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
-		collider->SetOffsetSizeAABB(DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f));
+		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
 		SquareMesh squareMesh;
 		auto render = enemyObj->AddComponent<Render2DComponent>();
 		render->SetMesh(squareMesh);
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->SetTexture(eS.texture);
-		render->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+		render->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
 		atk->SetCoolDownTime(1.0f);
@@ -83,7 +85,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		renderColl->SetMesh(squareMesh);
 		renderColl->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		renderColl->SetTexture("assets/texture/NoTexture.png");
-		renderColl->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));
 
 		num++;
 	}

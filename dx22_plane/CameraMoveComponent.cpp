@@ -19,6 +19,10 @@ void CameraMoveComponent::Update()
 	auto cameraObj = GameObjectManager::GameObjectFindName("camera");
 	auto player = GameObjectManager::GameObjectFindName("Player");
 
+	auto camerapos = cameraObj->GetComponent<RigidBodyComponent>()->GetVelocity();
+
+//	std::cout << camerapos.x << "：" << camerapos.y << "：" << std::endl;
+
 	//AdjustmentHeight(*cameraObj,*player); // プレイヤーの高さに合わせてカメラの高さを調整
 
 	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
@@ -54,7 +58,6 @@ void CameraMoveComponent::Update()
 	default:
 		break;
 	}
-
 }
 
 void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
@@ -115,6 +118,14 @@ void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 
 	if (cameraSpring != nullptr)
 	{
+		// ここでバネが強制停止したかをチェック
+		bool fin = cameraSpring->GetFinSpringAction();
+		if (fin == true) {
+			cameraSpring->SetFinSpringAction(false);
+			m_moveTarget = nullptr;
+			return;
+		}
+
 		// m_moveTargetから情報を全部もらうとか？
 //		cameraSpring->SetActiveFlag(true);
 		cameraSpring->SetSpringPartner(m_moveTarget);

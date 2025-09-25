@@ -4,7 +4,7 @@ VS_OUTPUT vs_main(in VS_IN input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
     
-    float4 newPos = float4(input.pos.xyz, 1.0f); // OK
+    float4 newPos = float4(input.pos, 1.0f); // OK
     
     // 上側の頂点だけ動かす（ＵＶのＶの値が０の頂点）
     if (input.tex.y == 0.0f)
@@ -13,7 +13,7 @@ VS_OUTPUT vs_main(in VS_IN input)
     }
 
     
-    float4 worldPos = mul(float4(newPos.xyz, 1.0f), matrixWorld);
+    float4 worldPos = mul(newPos, matrixWorld);
     float4 viewPos = mul(worldPos, View2D);
     output.pos = mul(viewPos, Projection2D);
 

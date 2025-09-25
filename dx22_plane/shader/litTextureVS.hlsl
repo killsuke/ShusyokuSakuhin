@@ -9,7 +9,10 @@ PS_IN vs_main(in VS_IN input)
 	matrix wvp;
 	wvp = mul(matrixWorld, View3D);
 	wvp = mul(wvp, Projection3D);
-	output.pos = mul(input.pos, wvp);
+	
+    float4 newPos = float4(input.pos, 1.0f); // 入力頂点座標をfloat4に変換(w = 1)
+	
+	output.pos = mul(newPos, wvp);
 
 	/// color=======================================
 	// 法線ベクトルの変換と正規化を行う
@@ -23,7 +26,7 @@ PS_IN vs_main(in VS_IN input)
 
 	// 光源方向と法線ベクトルの内積を計算して拡散光を求める
 	float d = -dot(Light.Direction.xyz, worldNormal.xyz);	// 光の方向と内積を計算
-
+	
 	d = saturate(d);	// dの値を０～１にクランプ
 
 	// output.col.xyz = input.col.xyz *d * Light.Diffuse.xyz * float3(1.0f, 0.0f, 0.0f); // 赤い光になる

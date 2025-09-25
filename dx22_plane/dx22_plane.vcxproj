@@ -197,6 +197,7 @@
     <ClCompile Include="LoadStageScene.cpp" />
     <ClCompile Include="MoveTerrainComponent.cpp" />
     <ClCompile Include="PlayerDamageComponent.cpp" />
+    <ClCompile Include="RenderLineComponent.cpp" />
     <ClCompile Include="SkyDomeMesh.cpp" />
     <ClCompile Include="SkyDomeRenderComponent.cpp" />
     <ClCompile Include="StageLoadCSVComponent.cpp" />
@@ -211,7 +212,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FighterComponent.cpp" />
     <ClCompile Include="Game.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GoAroundComponent.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
     <ClInclude Include="PlayerDamageComponent.h" />
+    <ClInclude Include="RenderLineComponent.h" />
     <ClInclude Include="SkyDomeMesh.h" />
     <ClInclude Include="SkyDomeRenderComponent.h" />
     <ClInclude Include="StageLoadCSVComponent.h" />
@@ -351,7 +353,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="FighterComponent.h" />
     <ClInclude Include="Game.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GoAroundComponent.h" />
@@ -525,6 +527,17 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="unlitTexture_GS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gs_main</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

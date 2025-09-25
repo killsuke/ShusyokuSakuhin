@@ -54,12 +54,16 @@ void SpringComponent::SpringAction2D()
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
 
-//	std::cout << force.Length() << std::endl;
+	//	std::cout << force.Length() << std::endl;
 
-	// 強制停止チェック
+// 強制停止チェック
 	Vector3 diff = posP2 - posP1;
-	if (diff.Length() < 0.05f && velocityP1.Length() < 0.05f && force.Length() < 0.05f) {
+	if (diff.Length() < 1.0f && velocityP1.Length() < 1.0f && force.Length() < 1.0f) {
 		rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
+
+		transformP1->SetPosition({ posP2.x,posP2.y,transformP1->GetPosition().z }); // ← ここでスナップ
+		m_finSpringAction = true;
+		//m_isSpringAction = false;
 		//transformP1->SetPosition(transformP2->GetPosition());
 	}
 }

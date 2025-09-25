@@ -19,6 +19,7 @@ HWND       Application::m_hWnd;         // ウィンドウハンドル
 HWND       Application::m_hWnd2;         // ウィンドウハンドル
 uint32_t   Application::m_Width;        // ウィンドウの横幅
 uint32_t   Application::m_Height;       // ウィンドウの縦幅
+double	   Application::m_accumulatorTime = 0.0;
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -304,25 +305,27 @@ void Application::MainLoop()
 		}
 		else
 		{
-			QueryPerformanceCounter(&liWork);// 現在時間を取得
-			nowCount = liWork.QuadPart;
+
+
+			//QueryPerformanceCounter(&liWork);// 現在時間を取得
+			//nowCount = liWork.QuadPart;
 
 			// 前回フレームからの経過時間（秒）を計算
-			double elapsedSec = (double)(nowCount - oldCount) / frequency;
+			//double elapsedSec = (double)(nowCount - oldCount) / frequency;
 
-			// 60FPS = 1フレーム約16.666ms = 約0.0166秒
-			// 経過時間がそれ未満なら、CPUをスリープさせる
-			if (elapsedSec < 1.0 / 60.0) {
+			//// 60FPS = 1フレーム約16.666ms = 約0.0166秒
+			//// 経過時間がそれ未満なら、CPUをスリープさせる
+			//if (elapsedSec < 1.0 / 60.0) {
 
-				// 足りない時間をミリ秒に換算してSleeo
-				DWORD sleepTime = (DWORD)(((1.0 / 60.0) - elapsedSec) * 1000.0);
+			//	// 足りない時間をミリ秒に換算してSleeo
+			//	DWORD sleepTime = (DWORD)(((1.0 / 60.0) - elapsedSec) * 1000.0);
 
-				if (sleepTime > 0) {
-					Sleep(sleepTime);	// 最小単位は1ms。Sleep(0)は意味がないので除外
-				}
-				continue;	// 次のループへ
+			//	if (sleepTime > 0) {
+			//		Sleep(sleepTime);	// 最小単位は1ms。Sleep(0)は意味がないので除外
+			//	}
+			//	continue;	// 次のループへ
 
-			}
+			//}
 
 			// ImGuiのフレーム開始
 			ImGui_ImplDX11_NewFrame();
@@ -352,10 +355,20 @@ void Application::MainLoop()
 
 			ImGui::End();
 
-			SceneManager::Update(); // シーンの更新
+			double deltaTime = 0.016;
+
+			m_accumulatorTime += deltaTime;
+
+			while (m_accumulatorTime >= 0.016) {
+				SceneManager::Update(); // シーンの更新
+
+				m_accumulatorTime -= 0.016;
+			}
+
+			SceneManager::Draw();   // シーンの描画
 
 			fpsCounter++; // ゲーム処理を実行したら＋１する
-			oldCount = nowCount;
+			//oldCount = nowCount;
 
 
 			nowTick = GetTickCount64();// 現在時間を取得
@@ -364,8 +377,8 @@ void Application::MainLoop()
 			{
 #if _DEBUG
 				// FPS表示
-				char str[32];
-				wsprintfA(str, "FPS=%d", fpsCounter);
+				char str[64];
+				wsprintfA(str, "FPS : %d", fpsCounter);
 				SetWindowTextA(m_hWnd, str);
 				//std::cout << "ここFPS" << std::endl; // コンソールに出力
 

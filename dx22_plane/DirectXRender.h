@@ -66,6 +66,14 @@ struct CameraMatrix
 	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix();
 };
 
+struct StartAndEnd 
+{
+	DirectX::SimpleMath::Vector3 startPos = DirectX::SimpleMath::Vector3::Zero;
+	float pad1 = 0.0f;
+	DirectX::SimpleMath::Vector3 endPos = DirectX::SimpleMath::Vector3::Zero;
+	float pad2 = 0.0f;
+};
+
 class DirectXRender
 {
 private:

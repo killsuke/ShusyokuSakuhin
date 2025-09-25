@@ -32,8 +32,8 @@ cbuffer CameraMatrixBuffer : register(b1)
 
 struct VS_IN
 {
-    float4 pos : POSITION0;
-	float4 nrm : NORMAL0;
+    float3 pos : POSITION0;
+	float3 nrm : NORMAL0;
     float4 col : COLOR0;
     float2 tex : TEXCOORD0;
 };
@@ -50,6 +50,15 @@ struct VS_ANIMATION
     float4 weight : BLENDWEIGHT0;
 	
 //    float dummy : PADDING; // –¾Ž¦“I‚É 4B ‚ð–„‚ß‚é
+};
+
+struct VS_LINE
+{
+    float3 pos : POSITION0;
+    float3 wpos : POSITION1;
+    float3 nrm : NORMAL0;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD0;
 };
 
 struct VS_OUTPUT

@@ -6,9 +6,11 @@
 #include "RenderBillboard.h"
 #include "GameObjectManager.h"
 #include "CircleMesh.h"
+#include "LineMesh.h"
 #include "CubeMesh.h"
 #include "SquareMesh.h"
 #include "HumanBoneComponent.h"
+#include "RenderLineComponent.h"
 #include "input.h"
 
 using namespace DirectX::SimpleMath;
@@ -33,39 +35,42 @@ void Stage1Scene::Init()
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition({ 0.0f, 0.0f, -500.0f });
 
-	auto inchWorm = GameObjectManager::AddObject("inch", "InchWorm");
+	/*auto inchWorm = GameObjectManager::AddObject("inch", "InchWorm");
 	auto inchTrans = inchWorm->AddComponent<TransformComponent>();
 	inchTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 	inchTrans->SetScale({ 50.0f, 50.0f, 1.0f });
-	inchWorm->AddComponent<HumanBoneComponent>();
+	inchWorm->AddComponent<HumanBoneComponent>();*/
 
 
-	// 腰
-	{
-		CircleMesh circleMesh;
-		auto circle = GameObjectManager::AddAbsFront("joint0", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>();
-		circleTrans->SetPosition({ 0.0f, -10.0f, 10.0f });
-		circleTrans->SetScale({10.0f,10.0f,10.0f});
-//		circleTrans->SetRotation({0.0f,60.0f,0.0f});
-		auto circleRend = circle->AddComponent<RenderBillboardComponent>();
-		circleRend->SetMesh(circleMesh);
-		circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		circleRend->SetTexture("assets/texture/NoTexture.png");
-	}
 
-	// 胸
+
+	//// 腰
 	//{
 	//	CircleMesh circleMesh;
-	//	auto circle = GameObjectManager::AddUI("joint1", "Circle");
+	//	auto circle = GameObjectManager::AddAbsFront("joint0", "Circle");
 	//	auto circleTrans = circle->AddComponent<TransformComponent>();
-	//	circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-	//	circleTrans->SetScale({ 10.0f, 10.0f, 1.0f });
-	//	auto circleRend = circle->AddComponent<Render2DComponent>();
+	//	circleTrans->SetPosition({ 0.0f, -80.0f, 10.0f });
+	//	circleTrans->SetScale({10.0f,10.0f,10.0f});
+	//	auto circleRend = circle->AddComponent<RenderBillboardComponent>();
 	//	circleRend->SetMesh(circleMesh);
-	//	circleRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	//	circleRend->SetTexture("assets/texture/NoTexture.png");
 	//}
+
+	// 胸
+	{
+	//	LineMesh circleMesh;
+		auto circle = GameObjectManager::AddAbsFront("joint1", "Circle");
+		auto circleTrans = circle->AddComponent<TransformComponent>();
+		circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+		circleTrans->SetScale({ 10.0f, 10.0f, 1.0f });
+		auto circleRend = circle->AddComponent<RenderLineComponent>();
+	//	circleRend->SetMesh(circleMesh);	// ライン使うならメッシュとかシェーダーとか全部指定するわ
+	//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		circleRend->SetTexture("assets/texture/NoTexture.png");
+		circleRend->SetColor({0.0f,0.0f,0.0f,1.0f});
+		circleRend->SetStartAndEndPosition({0.0f,100.0f,0.0f},{0.0f,-100.0f,0.0f});
+	}
 
 	//// 頭
 	//{

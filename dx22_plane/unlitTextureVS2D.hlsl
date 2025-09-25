@@ -22,7 +22,9 @@ PS_IN vs_main(in VS_IN input)
  //   output.col = input.col;
 	//
 
-    output.pos = mul(input.pos, matrixWorld);
+    float4 newPos = float4(input.pos,1.0f);
+    
+    output.pos = mul(newPos, matrixWorld);
 
     output.pos = mul(output.pos, View2D);
 
@@ -41,6 +43,6 @@ PS_IN vs_main(in VS_IN input)
     output.tex = uv.xy; // 掛け算の結果を送信用変数にセット
 
     output.col = input.col * vertexColor;
-
+        
     return output;
 }

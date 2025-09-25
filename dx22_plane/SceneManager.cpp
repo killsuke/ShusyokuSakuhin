@@ -10,7 +10,7 @@ float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
 
 void SceneManager::Init() {
 	sound.Init();	// サウンドの初期化
-	m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
+	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	//	Debug::DebugFirst();
 
@@ -30,19 +30,23 @@ void SceneManager::UnInit() {
 void SceneManager::Update() {
 	Input::Update();
 
-	if (waitTime != 0.0f) {
-		waitTimeCounter += 0.016f;
-	}
-
-	ImGui::Render();
-
-	// 描画前処理
-	DirectXRender::DrawBegin();
+	//if (waitTime != 0.0f) {
+	//	waitTimeCounter += 0.016f;
+	//}
 
 	// ポインタ内に入ってるシーンの更新
 	m_pScene->Update();
 
 	GameObjectManager::Update();
+};
+
+// 描画
+void SceneManager::Draw() {
+	ImGui::Render();
+
+	// 描画前処理
+	DirectXRender::DrawBegin();
+		
 	GameObjectManager::Draw();
 
 	// ImGuiの描画

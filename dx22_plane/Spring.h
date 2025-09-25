@@ -12,6 +12,9 @@ private:
 
 	float m_restLength = 0.0f;         // 初期の長さ
 
+	bool m_isSpringAction = true;
+	bool m_finSpringAction = false;
+
 public:
 
 	// コンストラクタ
@@ -46,4 +49,10 @@ public:
 	*/
 
 	float ComputeCriticalDamping(float mass, float springConstant);
+
+	void SetSpringAction(const bool flag) { m_isSpringAction = flag; };
+	bool GetSpringAction()const { return m_isSpringAction; };
+
+	void SetFinSpringAction(const bool flag) { m_finSpringAction = flag; };
+	bool GetFinSpringAction()const { return m_finSpringAction; };
 };

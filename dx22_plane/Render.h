@@ -36,7 +36,7 @@ protected:
 	std::unique_ptr<Texture> m_Texture;
 	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
 	IndexBuffer m_IndexBuffer = {};
-	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f,1.0f }; // F
+	DirectX::SimpleMath::Vector4 m_Color = { 1.0f,1.0f,1.0f,1.0f }; // F
 	bool m_inversionFlag = false;
 
 	RenderComponent(GameObject& obj);
@@ -44,14 +44,14 @@ protected:
 public:
 
 	virtual void Update() = 0;
-	void SetShader(const std::string& vertex, const std::string& pixel) { m_Shader->Create(vertex, pixel); };
+	void SetShader(const std::string& vertex, const std::string& pixel, const std::string& geometry = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{}) { m_Shader->Create(vertex, pixel, geometry, lay); };
 	void SetTexture(const std::string& fileName) { m_Texture->LoadTexture(fileName); };
 	void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
 		m_Texture->Load(fileName);
 		m_Texture->LoadMask(maskFileName);
 	};
 	void SetMesh(Mesh& mesh);
-	void SetColor(const DirectX::XMFLOAT4 color) { m_Color = color; };
+	void SetColor(const DirectX::SimpleMath::Vector4 color) { m_Color = color; };
 	void SetInversionFlag(const bool flag) { m_inversionFlag = flag; };
 
 	Texture* GetTexture() { return m_Texture.get(); };

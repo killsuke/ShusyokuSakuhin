@@ -10,6 +10,8 @@
 #include "Transform.h"
 #include "input.h"
 
+using namespace DirectX::SimpleMath;
+
 TestMoveComponent::TestMoveComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ƒ\[ƒg”Ô†‚ğİ’è
 }

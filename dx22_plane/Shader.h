@@ -2,6 +2,7 @@
 #include	<wrl/client.h>
 #include	<string>
 #include	<d3d11.h>
+#include	<vector>
 
 using Microsoft::WRL::ComPtr;
 
@@ -10,7 +11,7 @@ using Microsoft::WRL::ComPtr;
 //-----------------------------------------------------------------------------
 class Shader{
 public:
-	void Create(std::string vs = "", std::string ps = "", std::string gs = "");
+	void Create(std::string vs, std::string ps, std::string gs = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{});
 	void CreateOneSkinAnimation(std::string vs, std::string ps);
 	void SetGPU();
 private:

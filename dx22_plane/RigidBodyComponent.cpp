@@ -210,35 +210,35 @@ void RigidBodyComponent::ApplyCollision_Y(float collision) {
 
 void RigidBodyComponent::CheckStopVelocity() {
 	// ‚µ‚«‚¢’l‚ð‰º‰ñ‚Á‚½‚çŽ~‚ß‚é
-	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
-		this->m_velocity.x = 0.0f;
+	if (fabsf(m_velocity.x) < STOPVELOCITY) {
+		m_velocity.x = 0.0f;
 	}
-	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
-		this->m_velocity.y = 0.0f;
+	if (fabsf(m_velocity.y) < STOPVELOCITY) {
+		m_velocity.y = 0.0f;
 	}
-	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
-		this->m_velocity.z = 0.0f;
+	if (fabsf(m_velocity.z) < STOPVELOCITY) {
+		m_velocity.z = 0.0f;
 	}
 }
 
 void RigidBodyComponent::CheckStopVelocity_X() {
 	// ‚µ‚«‚¢’l‚ð‰º‰ñ‚Á‚½‚çŽ~‚ß‚é
-	if (fabsf(this->m_velocity.x) < STOPVELOCITY) {
-		this->m_velocity.x = 0.0f;
+	if (fabsf(m_velocity.x) < STOPVELOCITY) {
+		m_velocity.x = 0.0f;
 	}
 }
 
 void RigidBodyComponent::CheckStopVelocity_Y() {
 	// ‚µ‚«‚¢’l‚ð‰º‰ñ‚Á‚½‚çŽ~‚ß‚é
-	if (fabsf(this->m_velocity.y) < STOPVELOCITY) {
-		this->m_velocity.y = 0.0f;
+	if (fabsf(m_velocity.y) < STOPVELOCITY) {
+		m_velocity.y = 0.0f;
 	}
 }
 
 void RigidBodyComponent::CheckStopVelocity_Z() {
 	// ‚µ‚«‚¢’l‚ð‰º‰ñ‚Á‚½‚çŽ~‚ß‚é
-	if (fabsf(this->m_velocity.z) < STOPVELOCITY) {
-		this->m_velocity.z = 0.0f;
+	if (fabsf(m_velocity.z) < STOPVELOCITY) {
+		m_velocity.z = 0.0f;
 	}
 }
 

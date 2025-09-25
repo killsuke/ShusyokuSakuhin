@@ -61,14 +61,14 @@ ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 ID3D11BlendState* g_BlendStateATC;
 
-ID3D11Buffer* g_pViewBuffer3D{}; // ビュー行列
-ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
-
-ID3D11Buffer* g_pViewBuffer2D{}; // ビュー行列
-ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
-
-ID3D11Buffer* g_pViewBufferSkyDome{}; // ビュー行列
-ID3D11Buffer* g_pProjectionBufferSkyDome{}; // プロジェクション行列
+//ID3D11Buffer* g_pViewBuffer3D{}; // ビュー行列
+//ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
+//
+//ID3D11Buffer* g_pViewBuffer2D{}; // ビュー行列
+//ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
+//
+//ID3D11Buffer* g_pViewBufferSkyDome{}; // ビュー行列
+//ID3D11Buffer* g_pProjectionBufferSkyDome{}; // プロジェクション行列
 
 ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
 
@@ -166,12 +166,12 @@ void DirectXRender::UnInit() {
 		}
 	}
 	SAFE_RELEASE(g_BlendStateATC);
-	SAFE_RELEASE(g_pViewBuffer3D);
+	/*SAFE_RELEASE(g_pViewBuffer3D);
 	SAFE_RELEASE(g_pProjectionBuffer3D);
 	SAFE_RELEASE(g_pViewBuffer2D);
 	SAFE_RELEASE(g_pProjectionBuffer2D);
 	SAFE_RELEASE(g_pViewBufferSkyDome);
-	SAFE_RELEASE(g_pProjectionBufferSkyDome);
+	SAFE_RELEASE(g_pProjectionBufferSkyDome);*/
 	SAFE_RELEASE(g_pCameraInformationBuffer);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
@@ -502,9 +502,9 @@ HRESULT DirectXRender::LightBufferCreate() {
 void DirectXRender::LightSetting() {
 	// ライト初期化
 	LIGHT light{};
-	light.Direction = Vector4(0.0f, -0.8f, 0.1f, 0.0f);	// 方向
+	light.Direction = Vector4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
 	light.Direction.Normalize();
-	light.Diffuse = Color(1.5f, 1.5f, 1.5f, 1.0f);	// 平行光源の強さと色
+	light.Diffuse = Color(1.5f, 1.5f, 1.0f, 1.0f);	// 平行光源の強さと色
 	light.Ambient = Color(0.7f, 0.7f, 0.7f, 1.0f);	// 環境光の強さと色
 
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);

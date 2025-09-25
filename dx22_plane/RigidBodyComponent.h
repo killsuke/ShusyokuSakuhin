@@ -18,7 +18,7 @@
 #define AIRRESISTANCE (0.05f) // 空気抵抗係数
 #define MIN_VELOCITY_THRESHOLD (10.0f)	// 最小速度のしきい値
 #define DAMPINGFACTOR (0.9f)	// 減衰率	
-#define STOPVELOCITY (0.01f)	// この値を下回ったら値を０にする 
+#define STOPVELOCITY (0.03f)	// この値を下回ったら値を０にする 
 
 class RigidBodyComponent :public Component
 {

@@ -4,7 +4,9 @@ PS_IN vs_main(in VS_IN input)
 {
     PS_IN output;
 	
-    output.pos = mul(input.pos, matrixWorld);
+    float4 newPos = float4(input.pos, 1.0f);
+    
+    output.pos = mul(newPos, matrixWorld);
 
     output.pos = mul(output.pos, View3D);
 
