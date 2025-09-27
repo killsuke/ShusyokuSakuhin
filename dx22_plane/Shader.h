@@ -11,7 +11,7 @@ using Microsoft::WRL::ComPtr;
 //-----------------------------------------------------------------------------
 class Shader{
 public:
-	void Create(std::string vs, std::string ps, std::string gs = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{});
+	void Create(const std::string& vs, const std::string& ps, const std::string& gs = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{});
 	void CreateOneSkinAnimation(std::string vs, std::string ps);
 	void SetGPU();
 private:

@@ -926,21 +926,22 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		float iyMax = std::min(coll1.max.y, coll2.max.y);
 
 		Vector2 result1 = Vector2::Zero;
-		Vector2 result2 = Vector2::Zero;
+	//	Vector2 result2 = Vector2::Zero;
 		Vector2 result3 = Vector2::Zero;
 		Vector2 result4 = Vector2::Zero;
 
 		bool forcedBeside = false;	// 強制的に横押し出しにするかどうか
 
-		int  rightLeft = 0;
+		int  rightLeft = 0;			// 右か左のどっちに押し出すか
 
+		// 上から来た場合
 		if (coll1.max.y == iyMax) {
 
 			// めり込みでできた四角形の下底から、前フレームの
 			// AABBの上底に対してベクトルを引く
 			if (coll1.max.x > coll2.max.x && coll1.min.x < coll2.min.x) {
 				result1.y = 1.0f;	// 上に押し出す
-				result2.y = 1.0f;	// 上に押し出す
+			//	result2.y = 1.0f;	// 上に押し出す
 				result3.y = 1.0f;	// 上に押し出す
 				result4.y = 1.0f;	// 上に押し出す
 			}
@@ -948,8 +949,8 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				// 前のフレームの左下の頂点
 				result1 = Vector2(beforeColl2.min.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
 				// 右に平行移動した位置
-				auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.max.y);
-				result2 = newResult1 - Vector2(coll1.max.x, iyMin);
+				//auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.max.y);
+				//result2 = newResult1 - Vector2(coll1.max.x, iyMin);
 
 				result3 = Vector2(beforeColl2.min.x, beforeColl2.min.y) - Vector2(ixMax, iyMax);
 				// 上に平行移動した位置
@@ -965,8 +966,8 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				// 前のフレームの右下の頂点
 				result1 = Vector2(beforeColl2.max.x, beforeColl2.max.y) - Vector2(ixMax, iyMin);
 				// 左に平行移動した位置
-				auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.max.y);
-				result2 = newResult1 - Vector2(coll1.min.x, iyMin);
+				/*auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.max.y);
+				result2 = newResult1 - Vector2(coll1.min.x, iyMin);*/
 
 				result3 = Vector2(beforeColl2.max.x, beforeColl2.min.y) - Vector2(ixMin, iyMax);
 				// 上に平行移動した位置
@@ -979,11 +980,13 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				rightLeft = 1;
 			}
 		}
+
+		// 下から来た場合
 		else if (coll1.min.y == iyMin) {
 
 			if (coll1.max.x > coll2.max.x && coll1.min.x < coll2.min.x) {
 				result1.y = -1.0f;	// 下に押し出す
-				result2.y = -1.0f;	// 下に押し出す
+				//result2.y = -1.0f;	// 下に押し出す
 				result3.y = -1.0f;	// 下に押し出す
 				result4.y = -1.0f;	// 下に押し出す
 			}
@@ -991,8 +994,8 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				// 前のフレームの左下の頂点
 				result1 = Vector2(beforeColl2.min.x, beforeColl2.min.y) - Vector2(ixMin, iyMax);
 				// 右に平行移動した位置
-				auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.min.y);
-				result2 = newResult1 - Vector2(coll1.max.x, iyMax);
+			/*	auto newResult1 = Vector2(beforeColl2.min.x + dx1, beforeColl2.min.y);
+				result2 = newResult1 - Vector2(coll1.max.x, iyMax);*/
 
 				result3 = Vector2(beforeColl2.min.x, beforeColl2.max.y) - Vector2(ixMax, iyMin);
 				// 上に平行移動した位置
@@ -1008,8 +1011,8 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 				// 前のフレームの右下の頂点
 				result1 = Vector2(beforeColl2.max.x, beforeColl2.min.y) - Vector2(ixMax, iyMax);
 				// 左に平行移動した位置
-				auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.min.y);
-				result2 = newResult1 - Vector2(coll1.min.x, iyMax);
+				//auto newResult1 = Vector2(beforeColl2.max.x + dx2, beforeColl2.min.y);
+				//result2 = newResult1 - Vector2(coll1.min.x, iyMax);
 
 
 				result3 = Vector2(beforeColl2.max.x, beforeColl2.max.y) - Vector2(ixMin, iyMin);
@@ -1038,7 +1041,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		// Z軸は完全に無視（2.5Dのため）
 		pushBack.z = 0.0f;
 
-		if (((result1.y > 0.0f && result2.y > 0.0f && result3.y >= 0.0f && result4.y >= 0.0f) || (result1.y < 0.0f && result2.y < 0.0f && result3.y <= 0.0f && result4.y <= 0.0f)) && forcedBeside == false) {
+		if (((result1.y > 0.0f && /*result2.y > 0.0f &&*/ result3.y >= 0.0f && result4.y >= 0.0f) || (result1.y < 0.0f && /*result2.y < 0.0f &&*/ result3.y <= 0.0f && result4.y <= 0.0f)) && forcedBeside == false) {
 			pushBack.x = 0.0f;	// 縦方向で押し戻す
 
 			// Y方向に押し戻された → 地面 or 天井

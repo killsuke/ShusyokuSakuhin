@@ -5,7 +5,7 @@
 //=======================================
 //Shader作成
 //=======================================
-void Shader::Create(std::string vs, std::string ps, std::string gs, std::vector<D3D11_INPUT_ELEMENT_DESC> lay)
+void Shader::Create(const std::string& vs, const std::string& ps, const std::string& gs, std::vector<D3D11_INPUT_ELEMENT_DESC> lay)
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> layout = lay;
 
@@ -124,6 +124,7 @@ void Shader::SetGPU()
 
 	devicecontext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
 	devicecontext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
+	devicecontext->GSSetShader(m_pGeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
 	devicecontext->IASetInputLayout(m_pVertexLayout.Get());				// 頂点レイアウトセット
 }
 

@@ -303,7 +303,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend1 = target1->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh1;
 		targetRend1->SetMesh(sphereMesh1);
-		targetRend1->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend1->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend1->SetTexture("assets/texture/NoTexture.png");
 
@@ -320,7 +320,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh2;
 		targetRend2->SetMesh(sphereMesh2);
-		targetRend2->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend2->SetTexture("assets/texture/NoTexture.png");
 
@@ -336,7 +336,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend3 = target3->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh3;
 		targetRend3->SetMesh(sphereMesh3);
-		targetRend3->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend3->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend3->SetTexture("assets/texture/NoTexture.png");
 
@@ -352,7 +352,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend4 = target4->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh4;
 		targetRend4->SetMesh(sphereMesh4);
-		targetRend4->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend4->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend4->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend4->SetTexture("assets/texture/NoTexture.png");
 
@@ -368,7 +368,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend5 = target5->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh5;
 		targetRend5->SetMesh(sphereMesh5);
-		targetRend5->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend5->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend5->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend5->SetTexture("assets/texture/NoTexture.png");
 
@@ -384,7 +384,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend6 = target6->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh6;
 		targetRend6->SetMesh(sphereMesh6);
-		targetRend6->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend6->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend6->SetTexture("assets/texture/NoTexture.png");
 
@@ -400,7 +400,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend7 = target7->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh7;
 		targetRend7->SetMesh(sphereMesh7);
-		targetRend7->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend7->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend7->SetTexture("assets/texture/NoTexture.png");
 
@@ -416,7 +416,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto targetRend8 = target8->AddComponent<Render3DComponent>();
 		CircleMesh sphereMesh8;
 		targetRend8->SetMesh(sphereMesh8);
-		targetRend8->SetColor({ 1.0f,0.0f,0.0f,0.0f });
+		targetRend8->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend8->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend8->SetTexture("assets/texture/NoTexture.png");
 

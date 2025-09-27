@@ -23,7 +23,7 @@ std::vector<VERTEX_3D> LineMesh::CreateMeshVertices() {
 	//m_vertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 	m_vertices[0].uv = Vector2(0.0f, 0.0f);
-	m_vertices[1].uv = Vector2(0.33f, 0.0f);
+	m_vertices[1].uv = Vector2(1.0f, 0.0f);
 	/*m_vertices[2].uv = Vector2(0.0f, 0.5f);
 	m_vertices[3].uv = Vector2(0.33f, 0.5f);*/
 

@@ -66,12 +66,10 @@ struct CameraMatrix
 	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix();
 };
 
-struct StartAndEnd 
+struct LineThickness
 {
-	DirectX::SimpleMath::Vector3 startPos = DirectX::SimpleMath::Vector3::Zero;
-	float pad1 = 0.0f;
-	DirectX::SimpleMath::Vector3 endPos = DirectX::SimpleMath::Vector3::Zero;
-	float pad2 = 0.0f;
+	float thickness = 1.0f;
+	float pad[3] = { 0.0f };
 };
 
 class DirectXRender
@@ -88,6 +86,7 @@ private:
 	static ID3D11Buffer* m_LightBuffer;
 	static ID3D11Buffer* m_MaterialBuffer;
 	static CameraMatrix m_CameraMatrix;			// カメラ行列
+	static ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -107,12 +106,12 @@ private:
 	static void MaterialSetting();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
-	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
+		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
 	HRESULT CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
 	static HRESULT VeiwProjConstantCreate();
-	
+
 public:
 	DirectXRender();
 	~DirectXRender();
@@ -139,6 +138,8 @@ public:
 
 	static ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
 	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
+
+	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
 
 	//=============================================================================
 	// ブレンド ステート設定

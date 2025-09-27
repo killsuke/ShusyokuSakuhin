@@ -30,6 +30,12 @@ cbuffer CameraMatrixBuffer : register(b1)
     matrix ProjectionSky;
 }
 
+cbuffer LineThicknessBuffer : register(b2)
+{
+	float lineThickness; // ê¸ÇÃëæÇ≥
+	float pads[3];
+}
+
 struct VS_IN
 {
     float3 pos : POSITION0;
@@ -50,15 +56,6 @@ struct VS_ANIMATION
     float4 weight : BLENDWEIGHT0;
 	
 //    float dummy : PADDING; // ñæé¶ìIÇ… 4B ÇñÑÇﬂÇÈ
-};
-
-struct VS_LINE
-{
-    float3 pos : POSITION0;
-    float3 wpos : POSITION1;
-    float3 nrm : NORMAL0;
-    float4 col : COLOR0;
-    float2 tex : TEXCOORD0;
 };
 
 struct VS_OUTPUT

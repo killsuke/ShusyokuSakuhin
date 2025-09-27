@@ -35,6 +35,8 @@ ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
 
 CameraMatrix DirectXRender::m_CameraMatrix = {};
 
+ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // ü‚Ì‘¾‚³
+
 ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
@@ -173,6 +175,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pViewBufferSkyDome);
 	SAFE_RELEASE(g_pProjectionBufferSkyDome);*/
 	SAFE_RELEASE(g_pCameraInformationBuffer);
+	SAFE_RELEASE(g_pLineThicknessBuffer);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
 }
@@ -764,9 +767,16 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
 	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+
+	bufferDesc.ByteWidth = sizeof(LineThickness);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
+	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
+
 	// ‚±‚±Œã‚Å‚P”Ô‚É•ÏX
 	if (FAILED(hr)) return hr;
-
+	
 	return hr;
 }
 

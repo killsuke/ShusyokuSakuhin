@@ -37,7 +37,7 @@ void EnemyActionBulletComponent::Update() {
 	rend->SetInversionFlag(!m_rightLeft);
 
 	if (m_recordTime > 3.0f) {
-		FiringBullet();
+		FiringBullet();	// ‚±‚±‚ªˆÓŠO‚Æd‚¢
 		m_recordTime = 0.0f;
 	}
 }
@@ -73,7 +73,7 @@ void EnemyActionBulletComponent::FiringBullet() {
 	auto rend = bullet->AddComponent<Render2DComponent>();
 	SquareMesh squareMesh;
 	rend->SetMesh(squareMesh);
-	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rend->SetShader("shader/Animation2DVS.cso", "shader/unlitTexturePS.cso");
 	rend->SetTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(!m_rightLeft);
 }

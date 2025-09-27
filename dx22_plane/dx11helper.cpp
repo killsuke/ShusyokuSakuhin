@@ -54,7 +54,13 @@ bool readShader(const char* csoName, std::vector<unsigned char>& byteArray)
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
 //--------------------------------------------------------------------------------------
-HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut) {
+HRESULT CompileShader(const char* szFileName, // 読み込むシェーダーのファイルパス
+					  LPCSTR szEntryPoint,	  // エントリーポイント関数名（ "main" など）
+					  LPCSTR szShaderModel,	  // シェーダーモデル（ "vs_5_0" や "ps_5_0" など）
+					  void** ShaderObject,	  // シェーダーオブジェクトのポインタ
+					  size_t& ShaderObjectSize, // シェーダーオブジェクトのサイズ
+					  ID3DBlob** ppBlobOut	  // コンパイル結果のバイナリデータ（Blob）
+) {
 
 	HRESULT hr;
 	static std::vector<unsigned char> byteArray;
@@ -65,9 +71,11 @@ HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShad
 		bool sts = readShader(szFileName, byteArray);
 		if (!sts) {
 			FILE* fp;
-			fopen_s(&fp, "debug.txt", "a");
-			fprintf(fp, "file open error \n");
-			fclose(fp);
+			// ファイルは開ける？
+			if (fopen_s(&fp, "debug.txt", "a") == 0 && fp != nullptr) {
+				fprintf(fp, "file open error \n");
+				fclose(fp);
+			}
 			return E_FAIL;
 		}
 		*ShaderObject = byteArray.data();
@@ -326,7 +334,7 @@ bool CreateIndexBuffer(
 
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;								// バッファ使用方
-	bd.ByteWidth = sizeof(unsigned int) * indexnum;				// バッファの大き
+	bd.ByteWidth = sizeof(unsigned int) * indexnum;				// バッファの大きさ
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;						// インデックスバッファ
 	bd.CPUAccessFlags = 0;										// CPUアクセス不要
 

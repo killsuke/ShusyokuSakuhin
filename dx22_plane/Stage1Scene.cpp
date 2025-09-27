@@ -68,7 +68,7 @@ void Stage1Scene::Init()
 	//	circleRend->SetMesh(circleMesh);	// ライン使うならメッシュとかシェーダーとか全部指定するわ
 	//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		circleRend->SetTexture("assets/texture/NoTexture.png");
-		circleRend->SetColor({0.0f,0.0f,0.0f,1.0f});
+		circleRend->SetColor({1.0f,0.0f,0.0f,1.0f});
 		circleRend->SetStartAndEndPosition({0.0f,100.0f,0.0f},{0.0f,-100.0f,0.0f});
 	}
 

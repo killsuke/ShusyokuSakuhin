@@ -39,7 +39,7 @@ void CameraPointComponent::Update() {
 		if (m_inserDirection == Vector3::Zero) {
 			m_exitDirection = Vector3::Zero;
 			m_inserDirection = dir;
-			std::cout << "IN：" << dir.x << "：" << dir.y << "：" << dir.z << std::endl;
+		//	std::cout << "IN：" << dir.x << "：" << dir.y << "：" << dir.z << std::endl;
 		}
 
 		m_frame2BeforeDirection = m_beforeDirection; // 2フレーム前のプレイヤーが抜けたベクトルを更新
@@ -55,7 +55,7 @@ void CameraPointComponent::Update() {
 	// リリースでとる
 	if (beforeTouched == true && afterTouched == false) {
 
-		std::cout << "OUT：" << m_beforeDirection.x << "：" << m_beforeDirection.y << "：" << m_beforeDirection.z << std::endl;
+		//std::cout << "OUT：" << m_beforeDirection.x << "：" << m_beforeDirection.y << "：" << m_beforeDirection.z << std::endl;
 
 		if (m_beforeDirection == Vector3::Zero) {
 			m_beforeDirection = m_frame2BeforeDirection;

@@ -50,13 +50,13 @@ void TestMoveComponent::Update() {
 		return;
 	}
 
-	if (Input::GetKeyPress(VK_A) == true )
+	if ((Input::GetKeyPress(VK_A) || Input::GetButtonPress(XINPUT_LEFT)) == true)
 	{
 		m_rightLeft = false; // ¶Œü‚«
 		keyJ = true;
 		nowMove = true;
 	}
-	if (Input::GetKeyPress(VK_D) == true ) {
+	if ((Input::GetKeyPress(VK_D) || Input::GetButtonPress(XINPUT_RIGHT)) == true) {
 		m_rightLeft = true; // ‰EŒü‚«
 		keyL = true;
 		nowMove = true;
@@ -87,7 +87,7 @@ void TestMoveComponent::Update() {
 	//	isTrigger = true;
 	//}
 
-	if (Input::GetKeyPress(VK_W) == true) {
+	if ((Input::GetKeyPress(VK_SPACE) || Input::GetButtonPress(XINPUT_A)) == true) {
 		keyW = true;
 	}
 

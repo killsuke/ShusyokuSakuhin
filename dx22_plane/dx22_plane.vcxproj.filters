@@ -766,6 +766,9 @@
     <FxCompile Include="unlitTexture_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="LineVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">
