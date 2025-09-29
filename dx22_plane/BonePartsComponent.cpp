@@ -1,0 +1,121 @@
+#include "BonePartsComponent.h"
+#include <iostream>
+#include "input.h"
+
+using namespace DirectX::SimpleMath;
+
+BonePartsComponent::BonePartsComponent(GameObject& obj) : Component(obj) {
+	m_sortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // ソート番号を設定
+
+	myPart.attachBone = std::make_unique<TestBone>();
+}
+
+void BonePartsComponent::Update() {
+	auto trans = p_object->GetComponent<TransformComponent>();
+
+	if (Input::GetKeyPress(VK_RETURN)) {
+		rote += 0.5f;
+	}
+
+	// ワールド行列を計算
+	if (myPart.attachBone->parent != nullptr) {
+
+		myPart.attachBone->localMat = MakeLocalMatrix(*trans);
+
+		Matrix parentMtx = myPart.attachBone->parent->worldMat;
+
+		Vector3 parentPos = {};
+		Vector3 parentScale = {};
+		Quaternion parentRot = {};
+
+		// 親の行列を分解
+		parentMtx.Decompose(parentScale, parentRot, parentPos);
+
+		// ピボット（回転中心）決め
+		Matrix t1 = Matrix::CreateTranslation(-parentPos); // 親を原点に移動
+		Matrix rot = Matrix::CreateRotationZ(DirectX::XMConvertToRadians(rote)); // 回転
+		Matrix t2 = Matrix::CreateTranslation(parentPos); // 元の位置に戻す
+
+		// 親子関係を影響させること前提で回転後の行列を生成
+		Matrix pivotRotation = t1 * rot * t2;
+
+		// 親のワールド行列を回転で曲げた行列を生成
+		Matrix rotatedParent = parentMtx * pivotRotation;
+
+		// 回転を含めたワールド行列を生成
+		Matrix rotatedWorld = myPart.attachBone->localMat * rotatedParent;
+
+		myPart.attachBone->worldMat = rotatedWorld;
+	}
+	else {
+		myPart.attachBone->worldMat = MakeWorldMatrix(*trans);
+	}
+
+	Vector3 scale;
+	Quaternion rotation;
+	Vector3 translation;
+
+	// ワールド行列を分解
+	bool success = myPart.attachBone->worldMat.Decompose(scale, rotation, translation);
+	if (success == true) {
+
+		// 分解した情報をトランスフォームにセット
+		trans->SetPosition(translation);
+		//trans->SetScale(scale);
+		Vector3 rad = trans->QuaternionToEulerRad(rotation);
+		rad.x = DirectX::XMConvertToDegrees(rad.x);
+		rad.y = DirectX::XMConvertToDegrees(rad.y);
+		rad.z = DirectX::XMConvertToDegrees(rad.z);
+		trans->SetRotation(rad);
+	}
+	else {
+		std::cout << "失敗" << std::endl;
+	}
+}
+
+// ※スケール成分を含めるとこの後の行列が狂い出すので、スケール成分は含めない
+// ワールド行列を生成
+DirectX::SimpleMath::Matrix BonePartsComponent::MakeWorldMatrix(const TransformComponent& trans) {
+
+	Vector3 pos = trans.GetPosition();
+	Vector3 rot = trans.GetRotation();
+
+	// 「 度 」から「 ラジアン 」へ変換
+	float PitchRadians = DirectX::XMConvertToRadians(rot.x); // X軸回転
+	float YawRadians = DirectX::XMConvertToRadians(rot.y);     // Y軸回転
+	float RollRadians = DirectX::XMConvertToRadians(rot.z);   // Z軸回転
+
+	// クォータニオン作成
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+
+	// SRT情報作成
+	// 各行列を生成
+	Matrix r = Matrix::CreateFromQuaternion(q);
+	Matrix s = Matrix::CreateScale(Vector3(1.0f,1.0f,1.0f));
+	Matrix t = Matrix::CreateTranslation(pos);
+
+	return s * r * t;
+}
+
+// ローカル行列生成
+DirectX::SimpleMath::Matrix BonePartsComponent::MakeLocalMatrix(const TransformComponent& trans) {
+
+	Vector3 pos = trans.GetLocalPosition();
+	Vector3 rot = trans.GetLocalRotation();
+
+	// 「 度 」から「 ラジアン 」へ変換
+	float PitchRadians = DirectX::XMConvertToRadians(rot.x); // X軸回転
+	float YawRadians = DirectX::XMConvertToRadians(rot.y);     // Y軸回転
+	float RollRadians = DirectX::XMConvertToRadians(rot.z);   // Z軸回転
+
+	// クォータニオン作成
+	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
+
+	// SRT情報作成
+	// 各行列を生成
+	Matrix r = Matrix::CreateFromQuaternion(q);
+	Matrix s = Matrix::CreateScale(Vector3(1.0f, 1.0f, 1.0f));
+	Matrix t = Matrix::CreateTranslation(pos);
+
+	return s * r * t;
+}

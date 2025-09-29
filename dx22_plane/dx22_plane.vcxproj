@@ -169,6 +169,7 @@
     <ClCompile Include="AttackTimingComponent.cpp" />
     <ClCompile Include="BlinkingUIComponent.cpp" />
     <ClCompile Include="BoneComponent.cpp" />
+    <ClCompile Include="BonePartsComponent.cpp" />
     <ClCompile Include="BonePartsMesh.cpp" />
     <ClCompile Include="Bones.cpp" />
     <ClCompile Include="BossEventComponent.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="EnemyActionHopperComponent.cpp" />
     <ClCompile Include="EnemyJsonComponent.cpp" />
     <ClCompile Include="EnemyManagerComponent.cpp" />
+    <ClCompile Include="FollowPositionComponent.cpp" />
     <ClCompile Include="HumanBoneComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LineMesh.cpp" />
@@ -307,6 +309,7 @@
     <ClInclude Include="BlinkingUIComponent.h" />
     <ClInclude Include="BoneComponent.h" />
     <ClInclude Include="BoneData.h" />
+    <ClInclude Include="BonePartsComponent.h" />
     <ClInclude Include="BonePartsMesh.h" />
     <ClInclude Include="Bones.h" />
     <ClInclude Include="BossEventComponent.h" />
@@ -331,6 +334,7 @@
     <ClInclude Include="EnemyActionHopperComponent.h" />
     <ClInclude Include="EnemyJsonComponent.h" />
     <ClInclude Include="EnemyManagerComponent.h" />
+    <ClInclude Include="FollowPositionComponent.h" />
     <ClInclude Include="HumanBoneComponent.h" />
     <ClInclude Include="JsonComponent.h" />
     <ClInclude Include="LineMesh.h" />

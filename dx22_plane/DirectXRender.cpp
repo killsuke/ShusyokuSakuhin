@@ -185,7 +185,7 @@ void DirectXRender::UnInit() {
 //=======================================
 void DirectXRender::DrawBegin() {
 	// 塗りつぶしたい色
-	float clearColor[4] = { 0.0f, 0.9f, 0.9f, 1.0f };
+	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	// レンダーターゲットとデプスステンシルビューを設定

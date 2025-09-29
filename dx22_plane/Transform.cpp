@@ -51,7 +51,6 @@ Matrix TransformComponent::MakeWorldMatrix() {
 	Matrix s = Matrix::CreateScale(m_transform.m_Scale);
 	Matrix t = Matrix::CreateTranslation(m_transform.m_Position);
 
-
 	// ワールド行列を作成し、保存
 	return	m_transform.worldMatrix = s * r * t;
 }

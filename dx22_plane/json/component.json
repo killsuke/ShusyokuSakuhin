@@ -92,12 +92,12 @@
 	    "name": "DOOR_FADE",
             "ID": 22
 	},
+	{
+	    "name": "ANIMATION_TRANSFORM",
+            "ID": 23
+	},
         {
             "name": "TRANSFORM",
-            "ID": 23
-        },
-        {
-            "name": "RENDER",
             "ID": 24
         },
         {
@@ -105,12 +105,16 @@
             "ID": 25
         },
         {
-            "name": "RENDER_DEBUG",
+            "name": "RENDER",
             "ID": 26
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DEBUG",
             "ID": 27
+        },
+        {
+            "name": "MAX",
+            "ID": 28
         }
     ]
 }

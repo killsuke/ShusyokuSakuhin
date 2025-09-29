@@ -11,6 +11,7 @@
 #include "SquareMesh.h"
 #include "HumanBoneComponent.h"
 #include "RenderLineComponent.h"
+#include "BonePartsComponent.h"
 #include "input.h"
 
 using namespace DirectX::SimpleMath;
@@ -58,19 +59,51 @@ void Stage1Scene::Init()
 	//}
 
 	// 胸
-	{
-	//	LineMesh circleMesh;
-		auto circle = GameObjectManager::AddAbsFront("joint1", "Circle");
-		auto circleTrans = circle->AddComponent<TransformComponent>();
-		circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-		circleTrans->SetScale({ 10.0f, 10.0f, 1.0f });
-		auto circleRend = circle->AddComponent<RenderLineComponent>();
-	//	circleRend->SetMesh(circleMesh);	// ライン使うならメッシュとかシェーダーとか全部指定するわ
-	//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		circleRend->SetTexture("assets/texture/NoTexture.png");
-		circleRend->SetColor({1.0f,0.0f,0.0f,1.0f});
-		circleRend->SetStartAndEndPosition({0.0f,100.0f,0.0f},{0.0f,-100.0f,0.0f});
-	}
+
+		//	LineMesh circleMesh;
+	auto circle = GameObjectManager::AddAbsFront("joint1", "Circle");
+	auto circleTrans = circle->AddComponent<TransformComponent>();
+	circleTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+	circleTrans->SetScale({ 10.0f, 10.0f, 1.0f });
+	auto circleRend = circle->AddComponent<RenderLineComponent>();
+	//	circleRend->SetThickness(30.0f);
+		//	circleRend->SetMesh(circleMesh);	// ライン使うならメッシュとかシェーダーとか全部指定するわ
+		//	circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	circleRend->SetTexture("assets/texture/NoTexture.png");
+	circleRend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	circleRend->SetStartAndEndPosition({ 0.0f,100.0f,0.0f }, { 0.0f,-100.0f,0.0f });
+
+
+	// こっちがメイン
+	auto waist = GameObjectManager::AddObject("waist", "Part");
+	auto waistTrans = waist->AddComponent<TransformComponent>();
+	waistTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+	waistTrans->SetScale({ 15.0f, 30.0f, 1.0f });
+	auto waistbone = waist->AddComponent<BonePartsComponent>();
+	waistbone->SetPartName("waist");
+	auto waistrend = waist->AddComponent<Render3DComponent>();
+	SquareMesh waistsquare;
+	waistrend->SetMesh(waistsquare);
+	waistrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	waistrend->SetTexture("assets/texture/NoTexture.png");
+	waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
+
+	// こっちがサブ
+	auto chest = GameObjectManager::AddObject("chest", "Part");
+	auto chestTrans = chest->AddComponent<TransformComponent>();
+	chestTrans->SetLocalPosition({ 0.0f, 100.0f, 0.0f });
+	chestTrans->SetScale({ 15.0f, 30.0f, 1.0f });
+	auto chestbone = chest->AddComponent<BonePartsComponent>();
+	chestbone->SetPartName("chest");
+	chestbone->SetBoneParent(waistbone->GetAttachBone());
+	auto chestrend = chest->AddComponent<Render3DComponent>();
+	SquareMesh chestsquare;
+	chestrend->SetMesh(chestsquare);
+	chestrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	chestrend->SetTexture("assets/texture/NoTexture.png");
+	chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+
+	circleRend->SetStartAndEndFollowObject(waist, chest);
 
 	//// 頭
 	//{
@@ -236,7 +269,7 @@ void Stage1Scene::Init()
 //更新
 void Stage1Scene::Update()
 {
-	
+
 }
 
 // 終了処理

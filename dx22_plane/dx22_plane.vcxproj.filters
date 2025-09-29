@@ -357,6 +357,12 @@
     <ClCompile Include="utility.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="BonePartsComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowPositionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -723,6 +729,12 @@
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="RenderLineComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BonePartsComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FollowPositionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

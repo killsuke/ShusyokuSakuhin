@@ -17,11 +17,6 @@ struct AnimationVertex {
 	DirectX::SimpleMath::Vector4 weight = {};
 };
 
-struct LineVertex {
-	DirectX::SimpleMath::Vector3 pos = {};					// 頂点座標
-	DirectX::XMFLOAT4 color = {};					// 色
-};
-
 // 定数バッファ（ボーン行列用）
 struct CBBoneMatrix {
 	// 頂点カラー行列

@@ -649,3 +649,7 @@ void HumanBoneComponent::DX11MtxTranspose(DirectX::XMFLOAT4X4& outmtx, const Dir
 
 	XMStoreFloat4x4(&outmtx, mtx);
 }
+
+void HumanBoneComponent::CreateDebugBones() {
+
+}

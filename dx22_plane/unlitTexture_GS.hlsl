@@ -15,6 +15,9 @@ void gs_main(line PS_IN input[2], inout TriangleStream<PS_IN> output)
     float3 dir = normalize(endVS.xyz - startVS.xyz);
 
     // カメラ正面に垂直な方向を求める
+    // ここでcameraForwardを(0,0,1)にしているのは、
+    // カメラが実質世界の中心となるため、カメラから見た世界が全て正しい
+    // なので、(0,0,1) == カメラの前方向となる
     float3 cameraForward = float3(0, 0, 1); // ビュー空間ではZ+が前向き
     float3 right = normalize(cross(dir, cameraForward));
    

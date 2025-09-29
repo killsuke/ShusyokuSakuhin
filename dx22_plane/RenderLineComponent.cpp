@@ -6,6 +6,7 @@
 #include "CircleMesh.h"
 #include "LineMesh.h"
 #include "input.h"
+#include "FollowPositionComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -13,8 +14,6 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
 	m_Texture = std::make_unique<Texture>();
-
-	m_thickness = 300.0f;
 
 	LineMesh line;
 	SetMesh(line);
@@ -46,7 +45,7 @@ void RenderLineComponent::Update()
 {
 	auto transform = p_object->GetComponent<TransformComponent>();
 
-	if(Input::GetKeyPress(VK_D)){
+	/*if(Input::GetKeyPress(VK_D)){
 		p_startObj->GetComponent<TransformComponent>()->AddPosition({10.0f,0.0f,0.0f});
 	}
 	if (Input::GetKeyPress(VK_A)) {
@@ -63,7 +62,7 @@ void RenderLineComponent::Update()
 	}
 	if (Input::GetKeyPress(VK_E)) {
 		m_thickness -= 10.0f;
-	}
+	}*/
 
 	if (transform != nullptr) {
 		auto deviceContext = DirectXRender::GetDeviceContext();
@@ -123,4 +122,13 @@ void RenderLineComponent::SetStartAndEndPosition(const DirectX::SimpleMath::Vect
 
 	transS->SetPosition(startPos);
 	transE->SetPosition(endPos);
+}
+
+void RenderLineComponent::SetStartAndEndFollowObject(GameObject* objS,GameObject* objE) {
+
+	auto followS = p_startObj->AddComponent<FollowPositionComponent>();
+	followS->SetFollowObject(objS);
+	auto followE = p_endObj->AddComponent<FollowPositionComponent>();
+	followE->SetFollowObject(objE);
+	
 }

@@ -11,6 +11,8 @@ private:
 
 	VertexBuffer<AnimationVertex> m_AnimationVertexBuffer = {};
 
+	std::vector<GameObject*> m_debugBones;
+
 	float val = 0.0f;
 
 	bool m_stop = false;
@@ -38,4 +40,6 @@ public:
 	void DX11MtxInverse(DirectX::XMFLOAT4X4& ansmtx, const DirectX::XMFLOAT4X4& mtx);
 	void DX11MtxIdentity(DirectX::XMFLOAT4X4& mat);
 	void DX11MtxTranspose(DirectX::XMFLOAT4X4& outmtx, const DirectX::XMFLOAT4X4& inmtx);
+
+	void CreateDebugBones();
 };
