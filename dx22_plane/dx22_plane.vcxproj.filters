@@ -737,6 +737,9 @@
     <ClInclude Include="FollowPositionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="TestBoneData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">

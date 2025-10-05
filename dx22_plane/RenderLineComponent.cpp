@@ -39,6 +39,13 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	rendE->SetMesh(cirE);
 	rendE->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rendE->SetTexture("assets/texture/NoTexture.png");
+
+//#ifdef _DEBUG
+//#else
+	/*p_startObj->SetActiveState(ActiveState::DRAW_STOP);
+	p_endObj->SetActiveState(ActiveState::DRAW_STOP);*/
+
+//#endif // _DEBUG
 }
 
 void RenderLineComponent::Update()
@@ -73,13 +80,16 @@ void RenderLineComponent::Update()
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
 		// ここで全頂点データを更新
-		
-		vtx[0].position = p_startObj->GetComponent<TransformComponent>()->GetPosition();
+		auto pos_S = p_startObj->GetComponent<TransformComponent>()->GetPosition();
+		pos_S.z -= 4.0f;
+		vtx[0].position = pos_S;
 		vtx[0].normal = Vector3(0.0f, 1.0f, 0.0f);
 		vtx[0].color = m_Color;
 		vtx[0].uv = Vector2(0.0f, 0.0f);
 
-		vtx[1].position = p_endObj->GetComponent<TransformComponent>()->GetPosition();
+		auto pos_E = p_endObj->GetComponent<TransformComponent>()->GetPosition();
+		pos_E.z -= 4.0f;
+		vtx[1].position = pos_E;
 		vtx[1].normal = Vector3(0.0f, 1.0f, 0.0f);
 		vtx[1].color = m_Color;
 		vtx[1].uv = Vector2(1.0f, 0.0f);
@@ -109,11 +119,27 @@ void RenderLineComponent::Update()
 		// 行列をシェーダーに渡す
 		//deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
+//#ifdef _DEBUG
+
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
 			0,							// 最初のインデックスバッファの位置
 			0);
+
+//#endif // _DEBUG
 	}
+}
+
+void RenderLineComponent::SetStartPosition(const DirectX::SimpleMath::Vector3& startPos) {
+	auto transS = p_startObj->GetComponent<TransformComponent>();
+
+	transS->SetPosition(startPos);
+}
+
+void RenderLineComponent::SetEndPosition(const DirectX::SimpleMath::Vector3& endPos) {
+	auto transE = p_endObj->GetComponent<TransformComponent>();
+
+	transE->SetPosition(endPos);
 }
 
 void RenderLineComponent::SetStartAndEndPosition(const DirectX::SimpleMath::Vector3& startPos, const DirectX::SimpleMath::Vector3& endPos) {
@@ -130,5 +156,13 @@ void RenderLineComponent::SetStartAndEndFollowObject(GameObject* objS,GameObject
 	followS->SetFollowObject(objS);
 	auto followE = p_endObj->AddComponent<FollowPositionComponent>();
 	followE->SetFollowObject(objE);
-	
+}
+
+void RenderLineComponent::SetStartAndEndBone(TestBone* start, TestBone* end) {
+
+	//auto transS = p_startObj->GetComponent<TransformComponent>();
+	//auto transE = p_endObj->GetComponent<TransformComponent>();
+
+	//transS->SetPosition(startPos);
+	//transE->SetPosition(endPos);
 }

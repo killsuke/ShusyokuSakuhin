@@ -20,7 +20,7 @@ void gs_main(line PS_IN input[2], inout TriangleStream<PS_IN> output)
     // なので、(0,0,1) == カメラの前方向となる
     float3 cameraForward = float3(0, 0, 1); // ビュー空間ではZ+が前向き
     float3 right = normalize(cross(dir, cameraForward));
-   
+       
     right *= lineThickness * 0.5f;
 
     // ４頂点生成
