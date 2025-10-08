@@ -20,6 +20,7 @@ void TransformComponent::Update() {
 
 		m_transform.m_Position = translation; // 位置を更新
 		m_transform.m_Scale = scale; // スケールを更新
+		m_transform.m_Quaternion = rotation;
 
 		Vector3 rad = QuaternionToEulerRad(rotation);
 		rad * (180.0f / DirectX::XM_PI);
@@ -47,7 +48,9 @@ Matrix TransformComponent::MakeWorldMatrix() {
 
 	// SRT情報作成
 	// 各行列を生成
-	Matrix r = Matrix::CreateFromQuaternion(q);
+
+	// ここでクォータニオンに変更
+	Matrix r = Matrix::CreateFromQuaternion(m_transform.m_Quaternion);
 	Matrix s = Matrix::CreateScale(m_transform.m_Scale);
 	Matrix t = Matrix::CreateTranslation(m_transform.m_Position);
 
@@ -64,7 +67,7 @@ Matrix TransformComponent::MakeLocalMatrix() {
 	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
 
 	// SRT情報作成
-	Matrix r = Matrix::CreateFromQuaternion(q);
+	Matrix r = Matrix::CreateFromQuaternion(m_transform.m_LocalQuaternion);
 	Matrix s = Matrix::CreateScale(m_transform.m_LocalScale);
 	Matrix t = Matrix::CreateTranslation(m_transform.m_LocalPosition);
 

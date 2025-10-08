@@ -39,19 +39,6 @@ public:
 		myPart.attachBone->children.push_back(childBone);
 	};
 
-	// ‚±‚ê‚ç‚Í‚¢‚é‚©‚Ç‚¤‚©l‚¦‚é
-	void SetBonePosition(const DirectX::SimpleMath::Vector3& pos) {
-		myPart.attachBone->position = pos;
-	};
-	void SetBoneRotation(const DirectX::SimpleMath::Vector3& rot) {
-		myPart.attachBone->rotation = rot;
-	};
-	void SetBoneScale(const DirectX::SimpleMath::Vector3& scale) {
-		myPart.attachBone->scale = scale;
-	};
-
-	// ‚±‚±‚Ü‚Å
-
 	void SetStartBonePosition(const DirectX::SimpleMath::Vector3& pos) {
 		startBonePos = pos;
 		startBoneLength = startBonePos.Length();

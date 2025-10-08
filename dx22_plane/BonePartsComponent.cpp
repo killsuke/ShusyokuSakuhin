@@ -36,6 +36,8 @@ void BonePartsComponent::Update() {
 		rote -= 0.5f;
 	}
 
+	rote -= 0.4f;
+
 	// ワールド行列を計算
 	if (myPart.attachBone->parent != nullptr) {
 
@@ -45,24 +47,13 @@ void BonePartsComponent::Update() {
 
 		myPart.attachBone->localMat = MakeLocalMatrix(*trans);
 
-		Matrix parentMtx = myPart.attachBone->parent->worldMat;
-
-		Vector3 parentPos = {};
-		Vector3 parentScale = {};
-		Quaternion parentRot = {};
-
-		// 親の行列を分解
-		parentMtx.Decompose(parentScale, parentRot, parentPos);
-
 		auto transPoint = m_referencePoint->GetComponent<TransformComponent>();
 		auto posPoint = transPoint->GetPosition();
 	
-		// クォータニオン作成
-		Quaternion q = Quaternion::CreateFromYawPitchRoll(parentRot.y * 2.0f, parentRot.x * 2.0f, parentRot.z * 2.0f);
-
+		
 		// SRT情報作成
 		// 各行列を生成
-		Matrix r = Matrix::CreateFromQuaternion(q);
+		Matrix r = Matrix::CreateFromQuaternion(myPart.attachBone->parent->quaternion);
 		Matrix s = Matrix::CreateScale(Vector3(1.0f,1.0f,1.0f));
 		Matrix t = Matrix::CreateTranslation(posPoint);
 
@@ -110,11 +101,10 @@ void BonePartsComponent::Update() {
 		// 分解した情報をトランスフォームにセット
 		trans->SetPosition(translation);
 
-		Vector3 rad = trans->QuaternionToEulerRad(rotation);
-		rad.x = DirectX::XMConvertToDegrees(rad.x);
-		rad.y = DirectX::XMConvertToDegrees(rad.y);
-		rad.z = DirectX::XMConvertToDegrees(rad.z);
-		trans->SetRotation(rad);
+		myPart.attachBone->quaternion = rotation;
+
+		// クォータニオン対応を急ぐ
+		trans->SetQuaternion(rotation);
 
 		Vector3 start = Vector3::Transform(startVec, rotation);
 		Vector3 end = Vector3::Transform(endVec,rotation);
