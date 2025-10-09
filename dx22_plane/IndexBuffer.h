@@ -23,7 +23,8 @@ public:
 		// デバイス取得
 		ID3D11Device* device = nullptr;
 
-		device = DirectXRender::GetDevice();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		device = dxRender.GetDevice();
 
 		assert(device);
 
@@ -40,7 +41,8 @@ public:
 	void SetGPU() {
 		// デバイスコンテキスト取得
 		ID3D11DeviceContext* devicecontext = nullptr;
-		devicecontext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		devicecontext = dxRender.GetDeviceContext();
 
 		// インデックスバッファをセット
 		devicecontext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

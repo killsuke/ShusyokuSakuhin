@@ -37,7 +37,9 @@
 #include "BossEventComponent.h"
 
 LoadStageScene::LoadStageScene() {
-	auto camera = GameObjectManager::AddObject("camera", "Camera");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+
+	auto camera = gameObjectManager.AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
 	camera->AddComponent<RigidBodyComponent>();
@@ -48,7 +50,7 @@ LoadStageScene::LoadStageScene() {
 	camera->AddComponent<SpringComponent>();
 
 	{
-		auto skydome = GameObjectManager::AddObject("skyDome", "SkyDome");
+		auto skydome = gameObjectManager.AddObject("skyDome", "SkyDome");
 		auto skyTrans = skydome->AddComponent<TransformComponent>();
 		skyTrans->SetScale({ 1000.0f,500.0f,1000.0f });
 		auto skyRend = skydome->AddComponent<SkyDomeRenderComponent>();
@@ -59,7 +61,7 @@ LoadStageScene::LoadStageScene() {
 	}
 
 	{
-		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
+		auto stageRoadCSV = gameObjectManager.AddObject("StageRoadCSV", "StageRoadCSV");
 		auto stageRoadCSVTrans = stageRoadCSV->AddComponent<TransformComponent>();
 		auto str = stageRoadCSV->AddComponent<StageLoadCSVComponent>();
 		auto teM = stageRoadCSV->AddComponent<TerrainManagerComponent>();
@@ -83,7 +85,7 @@ LoadStageScene::LoadStageScene() {
 
 	GameObject* playOBJ = nullptr;
 	{
-		auto player = GameObjectManager::AddObject("Player", "Player");
+		auto player = gameObjectManager.AddObject("Player", "Player");
 		playOBJ = player;
 		
 		player->AddComponent<TestMoveComponent>();
@@ -129,7 +131,7 @@ LoadStageScene::LoadStageScene() {
 
 
 		//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
-		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+		auto rolling = gameObjectManager.AddObject("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
@@ -248,7 +250,7 @@ LoadStageScene::LoadStageScene() {
 		uiTex->SetInitialCut(2.0f, 2.0f);*/
 	}
 
-	auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
+	auto hp = gameObjectManager.AddUI("hpUI", "HP_UI");
 	auto hpTrans = hp->AddComponent<TransformComponent>();
 	hpTrans->SetPosition({ -570.0f, 70.0f, 0.0f });
 	hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
@@ -264,14 +266,14 @@ LoadStageScene::LoadStageScene() {
 	hpRender->SetTexture("assets/texture/NoTexture.png");
 	hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
-	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
+	auto fade = gameObjectManager.GameObjectFindTagUI("FadeUI");
 	if (!fade.empty()) {
 		auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 		fadeUI->SetBootDoor(true);
 	//	fadeUI->SetNextSceneName();
 	}
 	else {
-		auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
+		auto fadeUI = gameObjectManager.AddUI("fade", "FadeUI");
 		fadeUI->SetCarryOverFlag(true);
 		auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
 		auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
@@ -280,8 +282,9 @@ LoadStageScene::LoadStageScene() {
 }
 
 LoadStageScene::~LoadStageScene() {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 //	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
-	GameObjectManager::OtherThanClear(); // 指定したタグ以外のゲームオブジェクトのリストをクリア
+	gameObjectManager.OtherThanClear(); // 指定したタグ以外のゲームオブジェクトのリストをクリア
 }
 
 void LoadStageScene::Update() {
@@ -289,9 +292,10 @@ void LoadStageScene::Update() {
 }
 
 void LoadStageScene::TargetAndScroolCreate() {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 
 	{
-		auto target1 = GameObjectManager::AddObject("target1", "Target");
+		auto target1 = gameObjectManager.AddObject("target1", "Target");
 		auto targetTrans1 = target1->AddComponent<TransformComponent>();
 		targetTrans1->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans1->SetPosition({ 10.0f, 30.0f, 0.0f });
@@ -308,7 +312,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend1->SetTexture("assets/texture/NoTexture.png");
 
 
-		auto target2 = GameObjectManager::AddObject("target2", "Target");
+		auto target2 = gameObjectManager.AddObject("target2", "Target");
 		auto targetTrans2 = target2->AddComponent<TransformComponent>();
 		targetTrans2->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans2->SetPosition({ 240.0f, 30.0f, 0.0f });
@@ -324,7 +328,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend2->SetTexture("assets/texture/NoTexture.png");
 
-		auto target3 = GameObjectManager::AddObject("target3", "Target");
+		auto target3 = gameObjectManager.AddObject("target3", "Target");
 		auto targetTrans3 = target3->AddComponent<TransformComponent>();
 		targetTrans3->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans3->SetPosition({ 240.0f, -120.0f, 0.0f });
@@ -340,7 +344,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend3->SetTexture("assets/texture/NoTexture.png");
 
-		auto target4 = GameObjectManager::AddObject("target4", "Target");
+		auto target4 = gameObjectManager.AddObject("target4", "Target");
 		auto targetTrans4 = target4->AddComponent<TransformComponent>();
 		targetTrans4->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans4->SetPosition({ 240.0f, -290.0f, 0.0f });
@@ -356,7 +360,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend4->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend4->SetTexture("assets/texture/NoTexture.png");
 
-		auto target5 = GameObjectManager::AddObject("target5", "Target");
+		auto target5 = gameObjectManager.AddObject("target5", "Target");
 		auto targetTrans5 = target5->AddComponent<TransformComponent>();
 		targetTrans5->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans5->SetPosition({ 450.0f, -290.0f, 0.0f });
@@ -372,7 +376,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend5->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend5->SetTexture("assets/texture/NoTexture.png");
 
-		auto target6 = GameObjectManager::AddObject("target6", "Target");
+		auto target6 = gameObjectManager.AddObject("target6", "Target");
 		auto targetTrans6 = target6->AddComponent<TransformComponent>();
 		targetTrans6->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans6->SetPosition({ 700.0f, -290.0f, 0.0f });
@@ -388,7 +392,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend6->SetTexture("assets/texture/NoTexture.png");
 
-		auto target7 = GameObjectManager::AddObject("target7", "Target");
+		auto target7 = gameObjectManager.AddObject("target7", "Target");
 		auto targetTrans7 = target7->AddComponent<TransformComponent>();
 		targetTrans7->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans7->SetPosition({ 950.0f, -290.0f, 0.0f });
@@ -404,7 +408,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend7->SetTexture("assets/texture/NoTexture.png");
 
-		auto target8 = GameObjectManager::AddObject("target8", "Target");
+		auto target8 = gameObjectManager.AddObject("target8", "Target");
 		auto targetTrans8 = target8->AddComponent<TransformComponent>();
 		targetTrans8->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans8->SetPosition({ 1200.0f, -290.0f, 0.0f });
@@ -441,7 +445,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		//cameraSpring->MakeDamping(); // ダンピングを作成
 		//cameraSpring->SetSpringPartner(target);
 
-		auto point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
+		auto point1 = gameObjectManager.AddObject("CameraPoint1", "CameraPoint");
 		auto pointTrans1 = point1->AddComponent<TransformComponent>();
 		pointTrans1->SetScale({ 8.0f, 80.0f, 10.0f });
 		pointTrans1->AddPosition({ 120.0f, 50.0f, 0.0f });
@@ -456,7 +460,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera1->SetBeforeAndNextTargetObj(*target1, *target2);
 		pointCamera1->SetScrollDirection(SCROLL_IN_LEFT);
 
-		auto point2 = GameObjectManager::AddObject("CameraPoint2", "CameraPoint");
+		auto point2 = gameObjectManager.AddObject("CameraPoint2", "CameraPoint");
 		auto pointTrans2 = point2->AddComponent<TransformComponent>();
 		pointTrans2->SetScale({ 30.0f, 5.0f, 10.0f });
 		pointTrans2->AddPosition({ 305.0f, -30.0f, 0.0f });
@@ -471,7 +475,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera2->SetBeforeAndNextTargetObj(*target2, *target3);
 		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
 
-		auto point3 = GameObjectManager::AddObject("CameraPoint3", "CameraPoint");
+		auto point3 = gameObjectManager.AddObject("CameraPoint3", "CameraPoint");
 		auto pointTrans3 = point3->AddComponent<TransformComponent>();
 		pointTrans3->SetScale({ 30.0f, 6.0f, 10.0f });
 		pointTrans3->AddPosition({ 160.0f, -180.0f, 0.0f });
@@ -486,7 +490,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera3->SetBeforeAndNextTargetObj(*target3, *target4);
 		pointCamera3->SetScrollDirection(SCROLL_IN_UP);
 
-		auto point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
+		auto point4 = gameObjectManager.AddObject("CameraPoint4", "CameraPoint");
 		auto pointTrans4 = point4->AddComponent<TransformComponent>();
 		pointTrans4->SetScale({ 10.0f, 90.0f, 10.0f });
 		pointTrans4->AddPosition({ 330.0f, -260.0f, 0.0f });
@@ -501,7 +505,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera4->SetBeforeAndNextTargetObj(*target4, *target5);
 		pointCamera4->SetScrollDirection(SCROLL_IN_LEFT);
 
-		auto point5 = GameObjectManager::AddObject("CameraPoint5", "CameraPoint");
+		auto point5 = gameObjectManager.AddObject("CameraPoint5", "CameraPoint");
 		auto pointTrans5 = point5->AddComponent<TransformComponent>();
 		pointTrans5->SetScale({ 8.0f, 80.0f, 10.0f });
 		pointTrans5->AddPosition({ 580.0f, -280.0f, 0.0f });
@@ -516,7 +520,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera5->SetBeforeAndNextTargetObj(*target5, *target6);
 		pointCamera5->SetScrollDirection(SCROLL_IN_LEFT);
 
-		auto point6 = GameObjectManager::AddObject("CameraPoint6", "CameraPoint");
+		auto point6 = gameObjectManager.AddObject("CameraPoint6", "CameraPoint");
 		auto pointTrans6 = point6->AddComponent<TransformComponent>();
 		pointTrans6->SetScale({ 8.0f, 80.0f, 10.0f });
 		pointTrans6->AddPosition({ 830.0f, -280.0f, 0.0f });
@@ -531,7 +535,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointCamera6->SetBeforeAndNextTargetObj(*target6, *target7);
 		pointCamera6->SetScrollDirection(SCROLL_IN_LEFT);
 
-		auto point7 = GameObjectManager::AddObject("CameraPoint7", "CameraPoint");
+		auto point7 = gameObjectManager.AddObject("CameraPoint7", "CameraPoint");
 		auto pointTrans7 = point7->AddComponent<TransformComponent>();
 		pointTrans7->SetScale({ 8.0f, 80.0f, 10.0f });
 		pointTrans7->AddPosition({ 1080.0f, -280.0f, 0.0f });

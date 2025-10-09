@@ -10,7 +10,7 @@
 #define SCROLL_IN_UP    (DirectX::SimpleMath::Vector3( 0.0f, 1.0f, 0.0f))
 #define SCROLL_IN_DOWN  (DirectX::SimpleMath::Vector3( 0.0f,-1.0f, 0.0f))
 
-class CameraPointComponent : public Component
+class CameraPointComponent final : public Component
 {
 private:
 

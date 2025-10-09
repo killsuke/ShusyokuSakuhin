@@ -52,7 +52,8 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		}
 
 		std::string newName = "enemy_" + std::to_string(num);
-		auto enemyObj = GameObjectManager::AddObject(newName, "Enemy");
+		GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+		auto enemyObj = gameObjectManager.AddObject(newName, "Enemy");
 		auto transform = enemyObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
 		transform->SetScale(eS.scale);

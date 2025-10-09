@@ -14,7 +14,8 @@ TestExtrusionJudgeComponent::TestExtrusionJudgeComponent(GameObject& obj) : Comp
 
 void TestExtrusionJudgeComponent::Update()
 {
-	auto terrains = GameObjectManager::GameObjectFindTag("Terrain");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+	auto terrains = gameObjectManager.GameObjectFindTag("Terrain");
 	auto coll = p_object->GetComponent<ColliderComponent>();
 	auto rigid = p_object->GetComponent<RigidBodyComponent>();
 	auto jump = p_object->GetComponent<JumpComponent>();

@@ -4,17 +4,10 @@
 #include "DirectXRender.h"
 #include <iostream>
 
-// 静的な宣言として必要
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::child_Objects;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects_UI;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
+GameObjectManager& GameObjectManager::GetInstance() {
+	static GameObjectManager instance;
+	return instance;
+}
 
 // リストにゲームオブジェクトを追加
 GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
@@ -213,15 +206,18 @@ void GameObjectManager::Update() {
 
 // 描画
 void GameObjectManager::Draw() {
-	auto deviceContext = DirectXRender::GetDeviceContext();
+
+	DirectXRender& dxRender = DirectXRender::GetInstance();
+
+	auto deviceContext = dxRender.GetDeviceContext();
 
 	HelperDraw(objects);
 
-	DirectXRender::SetDepthEnable(false);
+	dxRender.SetDepthEnable(false);
 
 	HelperDraw(objects_Absfront);
 
-	DirectXRender::SetDepthEnable(true);
+	dxRender.SetDepthEnable(true);
 
 	HelperDraw(objects_UI);
 }

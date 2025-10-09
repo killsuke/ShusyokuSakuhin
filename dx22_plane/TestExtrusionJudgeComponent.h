@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class TestExtrusionJudgeComponent : public Component
+class TestExtrusionJudgeComponent final : public Component
 {
 private:
 	bool m_isGround = false; // ’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO

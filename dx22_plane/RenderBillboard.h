@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-class RenderBillboardComponent : public RenderComponent
+class RenderBillboardComponent final : public RenderComponent
 {
 private:
 

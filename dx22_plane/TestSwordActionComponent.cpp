@@ -145,7 +145,8 @@ void TestSwordActionComponent::SwordAction() {
 void TestSwordActionComponent::CreateSwordEffect() {
 	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
 
-	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+	auto effect = gameObjectManager.AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
 	effectTrans->SetScale({ 15.0f,15.0f,5.0f });
 	if( m_rightLeft == true ) {

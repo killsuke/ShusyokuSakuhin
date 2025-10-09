@@ -11,6 +11,7 @@ MoveTerrainComponent::MoveTerrainComponent(GameObject& obj) : Component(obj)
 }
 
 void MoveTerrainComponent::Update() {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 
 	m_recordTime += m_deltaTime;
 
@@ -22,7 +23,7 @@ void MoveTerrainComponent::Update() {
 	transform->AddPosition({ newPosX,0.0f,0.0f });
 
 	if (m_player == nullptr) {
-		auto player = GameObjectManager::GameObjectFindTag("Player");
+		auto player = gameObjectManager.GameObjectFindTag("Player");
 		if (player.size() > 0) {
 			m_player = player[0];
 		}
@@ -44,7 +45,7 @@ void MoveTerrainComponent::Update() {
 		}
 	}
 
-	auto enemies = GameObjectManager::GameObjectFindTag("Enemy");
+	auto enemies = gameObjectManager.GameObjectFindTag("Enemy");
 
 	for(const auto& obj : enemies) {
 		auto enemyTransform = obj->GetComponent<TransformComponent>();

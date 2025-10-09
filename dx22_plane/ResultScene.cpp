@@ -21,12 +21,14 @@
 // コンストラクタ
 ResultScene::ResultScene()
 {
-	auto camera = GameObjectManager::AddObject("camera", "Camera");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+
+	auto camera = gameObjectManager.AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
 	auto cameraObj = camera->AddComponent<Camera>();
 	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
-	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
+	auto fade = gameObjectManager.GameObjectFindTagUI("FadeUI");
 	auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 
 	/*{
@@ -42,7 +44,7 @@ ResultScene::ResultScene()
 		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	}*/
 
-	auto ResultUI = GameObjectManager::AddUI("resultUI", "ResultUI");
+	auto ResultUI = gameObjectManager.AddUI("resultUI", "ResultUI");
 	auto transTitle = ResultUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,30.0f,0.0f });
 	transTitle->SetScale({ 700.0f,400.0f,1.0f });
@@ -58,7 +60,7 @@ ResultScene::ResultScene()
 	}
 
 	{
-		auto titleUI = GameObjectManager::AddUI("tenmetuUI", "TitleUI");
+		auto titleUI = gameObjectManager.AddUI("tenmetuUI", "TitleUI");
 		auto transTitle = titleUI->AddComponent<TransformComponent>();
 		transTitle->SetPosition({ 0.0f,-200.0f,-0.5f });
 		transTitle->SetScale({ 200.0f,100.0f,1.0f });
@@ -83,16 +85,18 @@ ResultScene::ResultScene()
 // デストラクタ
 ResultScene::~ResultScene()
 {
-	GameObjectManager::OtherThanClear();
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+	gameObjectManager.OtherThanClear();
 }
 
 // 更新
 void ResultScene::Update()
 {
-	
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+
 	if ((Input::GetKeyTrigger(VK_L) || Input::GetButtonTrigger(XINPUT_X)))
 	{
-		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
+		auto fade = gameObjectManager.GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();
 		door->SetNextSceneName("TitleScene");
 

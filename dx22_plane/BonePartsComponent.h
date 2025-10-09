@@ -7,7 +7,7 @@
 #include <string>
 #include <SimpleMath.h>
 
-class BonePartsComponent : public Component
+class BonePartsComponent final : public Component
 {
 private:
 	Part myPart = {};

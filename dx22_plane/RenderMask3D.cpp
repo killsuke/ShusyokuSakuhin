@@ -23,7 +23,8 @@ void RenderMask3DComponent::Update()
 
 		cb.color = Vector4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		auto deviceContext = dxRender.GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

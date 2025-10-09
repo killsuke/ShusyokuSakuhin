@@ -2,7 +2,7 @@
 #include "CSVObjectManagerComponent.h"
 #include <string>
 
-class EnemyManagerComponent :  public CSVObjectManagerComponent
+class EnemyManagerComponent final :  public CSVObjectManagerComponent
 {
 private:
 

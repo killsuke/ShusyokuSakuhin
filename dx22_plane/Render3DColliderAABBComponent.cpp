@@ -14,8 +14,9 @@ Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : 
 void Render3DColliderAABBComponent::Update()
 {
 #ifdef _DEBUG
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 	auto colliderAABB = p_object->GetComponent<ColliderComponent>();
-	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
+	auto cameraobj = gameObjectManager.GameObjectFindName("camera");
 
 	if (colliderAABB != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
@@ -25,7 +26,8 @@ void Render3DColliderAABBComponent::Update()
 
 		cb.color = Vector4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		auto deviceContext = dxRender.GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

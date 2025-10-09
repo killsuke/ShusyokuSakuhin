@@ -3,7 +3,7 @@
 #include "RigidBodyComponent.h"
 #include <SimpleMath.h>
 
-class JumpComponent : public Component
+class JumpComponent final: public Component
 {
 private:
 	void JumpAction(bool isJumpButtonPressed, bool trigger);

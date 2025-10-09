@@ -1,6 +1,6 @@
 #pragma once
 #include "JsonComponent.h"
-class EnemyJsonComponent :  public JsonComponent
+class EnemyJsonComponent final :  public JsonComponent
 {
 private:
 	std::vector<EnemyStatus> m_enemyStatus;	// 敵キャラ情報のベクター

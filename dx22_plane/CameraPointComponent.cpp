@@ -14,12 +14,14 @@ CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 }
 
 void CameraPointComponent::Update() {
-	auto camera = GameObjectManager::GameObjectFindName("camera");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+
+	auto camera = gameObjectManager.GameObjectFindName("camera");
 	auto camMove = camera->GetComponent<CameraMoveComponent>();
 	auto camRigid = camera->GetComponent<RigidBodyComponent>();
 
 	auto camColl = p_object->GetComponent<ColliderComponent>();
-	auto player = GameObjectManager::GameObjectFindName("Player");
+	auto player = gameObjectManager.GameObjectFindName("Player");
 	if (player == nullptr) {
 		return;
 	}

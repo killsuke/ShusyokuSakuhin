@@ -3,7 +3,7 @@
 #include "SimpleMath.h"
 #include <string>
 
-class DoorFadeComponent : public Component
+class DoorFadeComponent final : public Component
 {
 private:
 	bool m_openCloseFlag = false;	// 開く：false、閉じる：true

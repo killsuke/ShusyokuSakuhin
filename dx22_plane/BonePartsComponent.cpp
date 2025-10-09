@@ -36,7 +36,7 @@ void BonePartsComponent::Update() {
 		rote -= 0.5f;
 	}
 
-	rote -= 0.4f;
+	//rote -= 0.4f;
 
 	// ワールド行列を計算
 	if (myPart.attachBone->parent != nullptr) {

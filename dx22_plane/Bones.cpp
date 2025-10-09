@@ -169,7 +169,8 @@ Bones::~Bones()
 
 void Bones::Update() {
 	auto transform = p_object->GetComponent<TransformComponent>();
-	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+	auto cameraobj = gameObjectManager.GameObjectFindName("camera");
 
 	if (transform != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
@@ -179,7 +180,8 @@ void Bones::Update() {
 
 		//cb.color = DirectX::XMFLOAT4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		auto deviceContext = dxRender.GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

@@ -1,6 +1,6 @@
 #pragma once
 #include "EnemyActionComponent.h"
-class EnemyActionBossComponent : public EnemyActionComponent
+class EnemyActionBossComponent final : public EnemyActionComponent
 {
 private:
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class TestSwordActionComponent : public Component
+class TestSwordActionComponent final : public Component
 {
 private:
 	bool m_swordAction = false;

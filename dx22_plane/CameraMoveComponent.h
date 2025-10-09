@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
-class CameraMoveComponent : public Component
+class CameraMoveComponent final : public Component
 {
 private:
 	GameObject* m_moveTarget = nullptr; // カメラの移動ターゲット

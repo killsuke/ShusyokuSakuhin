@@ -2,7 +2,7 @@
 #include "Render.h"
 #include <d3d11.h>
 
-class SkyDomeRenderComponent : public RenderComponent
+class SkyDomeRenderComponent final : public RenderComponent
 {
 private:
 	ID3D11ShaderResourceView* m_pTextureView = nullptr;

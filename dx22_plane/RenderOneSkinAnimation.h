@@ -1,7 +1,7 @@
 #pragma once
 #include "Render.h"
 
-class RenderOneSkinAnimation : public RenderComponent
+class RenderOneSkinAnimation final : public RenderComponent
 {
 private:
 	VertexBuffer<AnimationVertex> m_AnimationVertexBuffer = {};

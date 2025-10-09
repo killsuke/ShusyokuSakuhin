@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
-class GoAroundComponent : public Component
+class GoAroundComponent final : public Component
 {
 private:
 	const float m_deltaTime = 0.016f; // XVŠÔŠuŠÔ

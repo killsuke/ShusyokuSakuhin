@@ -19,7 +19,8 @@ public:
 
 		// デバイス取得
 		ID3D11Device* device = nullptr;
-		device = DirectXRender::GetDevice();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		device = dxRender.GetDevice();
 		assert(device);
 
 		// 頂点バッファ作成
@@ -38,7 +39,8 @@ public:
 
 		// デバイスコンテキスト取得
 		ID3D11DeviceContext* devicecontext = nullptr;
-		devicecontext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		devicecontext = dxRender.GetDeviceContext();
 
 		// 頂点バッファをセットする
 		unsigned int stride = sizeof(T);
@@ -50,7 +52,8 @@ public:
 	// 頂点バッファを書き換える
 	void Modify(const std::vector<T>& vertices)
 	{
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		auto deviceContext = dxRender.GetDeviceContext();
 
 		//頂点データ書き換え
 		D3D11_MAPPED_SUBRESOURCE msr;

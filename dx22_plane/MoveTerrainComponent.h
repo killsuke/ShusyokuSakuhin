@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
-class MoveTerrainComponent : public Component
+class MoveTerrainComponent final : public Component
 {
 private:
 	DirectX::SimpleMath::Vector3 m_moveVector = DirectX::SimpleMath::Vector3::Zero;

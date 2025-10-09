@@ -22,6 +22,8 @@ BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 }
 
 void BossEventComponent::Update() {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+
 	auto point = p_object->GetComponent<CameraPointComponent>();
 	if (point != nullptr)
 	{
@@ -31,10 +33,10 @@ void BossEventComponent::Update() {
 				return;
 			}
 
-			auto obj = GameObjectManager::GameObjectFindNameUI("fade");
+			auto obj = gameObjectManager.GameObjectFindNameUI("fade");
 			auto fade = obj->GetComponent<DoorFadeComponent>();
 
-			if(GameObjectManager::GameObjectFindName("Boss") == nullptr) {
+			if(gameObjectManager.GameObjectFindName("Boss") == nullptr) {
 				fade->SetWinLoseFlag(true);
 				fade->SetNextSceneName("ResultScene");
 				fade->SetBootDoor(true);
@@ -50,8 +52,9 @@ void BossEventComponent::Update() {
 }
 
 void BossEventComponent::CreateBossWalls() {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 
-	auto terrainObj = GameObjectManager::AddObject("bossTerrain", "Terrain");
+	auto terrainObj = gameObjectManager.AddObject("bossTerrain", "Terrain");
 	auto transform = terrainObj->AddComponent<TransformComponent>();
 	transform->SetPosition({ 1080.0f, -280.0f, 0.0f });
 	transform->SetScale({8.0f,80.0f,10.0f});
@@ -65,7 +68,7 @@ void BossEventComponent::CreateBossWalls() {
 	render->SetTexture("assets/texture/testTerrain.png");
 
 
-	auto boss = GameObjectManager::AddObject("Boss", "Enemy");
+	auto boss = gameObjectManager.AddObject("Boss", "Enemy");
 
 	auto playerTrans = boss->AddComponent<TransformComponent>();
 	playerTrans->SetScale({ 40.0f, 30.0f, 5.0f });

@@ -2,7 +2,6 @@
 #include <thread>
 #include "Application.h"
 #include "DirectXRender.h"
-#include "Game.h"
 #include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "ComponentTypeManager.h"
@@ -244,7 +243,8 @@ void Application::MainLoop()
 	MSG msg = {};
 
 	// 描画初期化
-	DirectXRender::Init();
+	DirectXRender & dxRender = DirectXRender::GetInstance();
+	dxRender.Init();
 	TimeManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
@@ -252,8 +252,8 @@ void Application::MainLoop()
 
 	//ComponentTypeManager::MakeSampleJson();
 
-	auto deviceContext = DirectXRender::GetDeviceContext();
-	auto device = DirectXRender::GetDevice();
+	auto deviceContext = dxRender.GetDeviceContext();
+	auto device = dxRender.GetDevice();
 
 	// ImGuiコンテキストの作成
 	IMGUI_CHECKVERSION();
@@ -396,7 +396,7 @@ void Application::MainLoop()
 	SceneManager::UnInit();
 
 	// 描画初期化
-	DirectXRender::UnInit();
+	dxRender.UnInit();
 }
 
 //-----------------------------------------------------------------------------

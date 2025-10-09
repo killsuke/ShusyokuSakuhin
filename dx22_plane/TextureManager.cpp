@@ -6,8 +6,10 @@ TextureManager::textureMap;
 
 // テクスチャの読み込み関数
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(const std::string& filename) {
-	auto device = DirectXRender::GetDevice();
-	auto deviceContext = DirectXRender::GetDeviceContext();
+	
+	DirectXRender& dxRender = DirectXRender::GetInstance();
+    auto device = dxRender.GetDevice();
+	auto deviceContext = dxRender.GetDeviceContext();
 
     // ファイルネームに「asset」追加と「L」の省略処理
     std::wstring wfilename = ShortConversion(filename);

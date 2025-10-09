@@ -14,8 +14,9 @@ RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComp
 
 void RenderBillboardComponent::Update()
 {
+	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 	auto transform = p_object->GetComponent<TransformComponent>();
-	auto camera = GameObjectManager::GameObjectFindName("camera");
+	auto camera = gameObjectManager.GameObjectFindName("camera");
 
 	if (transform != nullptr && camera != nullptr) {
 		//定数バッファを更新
@@ -52,7 +53,8 @@ void RenderBillboardComponent::Update()
 
 		cb.color = Vector4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		DirectXRender& dxRender = DirectXRender::GetInstance();
+		auto deviceContext = dxRender.GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

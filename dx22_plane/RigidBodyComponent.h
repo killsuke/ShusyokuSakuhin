@@ -20,7 +20,7 @@
 #define DAMPINGFACTOR (0.9f)	// Œ¸Š—¦	
 #define STOPVELOCITY (0.03f)	// ‚±‚Ì’l‚ğ‰º‰ñ‚Á‚½‚ç’l‚ğ‚O‚É‚·‚é 
 
-class RigidBodyComponent :public Component
+class RigidBodyComponent final :public Component
 {
 private:
 	DirectX::SimpleMath::Vector3 m_velocity{};	 // ‘¬“x

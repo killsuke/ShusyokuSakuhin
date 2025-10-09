@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class FighterComponent : public Component
+class FighterComponent final : public Component
 {
 private:
 	int m_atk = 0; // UŒ‚—Í

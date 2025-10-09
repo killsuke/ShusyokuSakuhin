@@ -46,7 +46,8 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 
 		std::string name = "terrain_" + std::to_string(num);
 		
-		auto terrainObj = GameObjectManager::AddObject(name,"Terrain");
+		GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
+		auto terrainObj = gameObjectManager.AddObject(name,"Terrain");
 		auto transform = terrainObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
 		transform->SetScale(tS.scale);

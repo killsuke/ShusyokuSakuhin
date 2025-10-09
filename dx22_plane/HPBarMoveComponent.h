@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "HPParam.h"
 
-class HPBarMoveComponent : public Component
+class HPBarMoveComponent final : public Component
 {
 private:
 	GameObject* referenceHpObj = nullptr;
