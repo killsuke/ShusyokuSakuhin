@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class TestMoveComponent final : public Component
+class TestMoveComponent : public Component
 {
 private:
 	const float m_deltaTime = 0.016f; // 仮のデルタタイム

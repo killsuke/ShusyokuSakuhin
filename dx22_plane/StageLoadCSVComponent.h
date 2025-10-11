@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class StageLoadCSVComponent final :  public Component
+class StageLoadCSVComponent :  public Component
 {
 private:
 

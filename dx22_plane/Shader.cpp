@@ -19,8 +19,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 
 	unsigned int numElements = static_cast<unsigned int>(layout.size());
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11Device* device = dxRender.GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	bool sts = false;
@@ -85,8 +84,7 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 
 	unsigned int numElements = ARRAYSIZE(layout);
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11Device* device = dxRender.GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	bool sts = CreateVertexShader(device,
@@ -122,8 +120,7 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 //=======================================
 void Shader::SetGPU()
 {
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11DeviceContext* devicecontext = dxRender.GetDeviceContext();
+	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
 	devicecontext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
 	devicecontext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット

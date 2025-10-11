@@ -26,9 +26,7 @@
 #include "Spring.h"
 
 TestStageScene::TestStageScene() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
-	auto camera = gameObjectManager.AddObject("camera", "Camera");
+	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
 	camera->AddComponent<RigidBodyComponent>();
@@ -38,7 +36,7 @@ TestStageScene::TestStageScene() {
 	camera->AddComponent<SpringComponent>();
 
 	{
-		auto player = gameObjectManager.AddObject("Player", "Player");
+		auto player = GameObjectManager::AddObject("Player", "Player");
 		player->AddComponent<TestMoveComponent>();
 
 		auto cubeTrans = player->AddComponent<TransformComponent>();
@@ -103,7 +101,7 @@ TestStageScene::TestStageScene() {
 
 		CubeMesh cubeMeshSword;
 		CubeMesh cubeMeshSword2;
-		auto sword = gameObjectManager.AddChild("sword", "Cube");
+		auto sword = GameObjectManager::AddChild("sword", "Cube");
 
 		player->SetChild(sword);
 
@@ -139,7 +137,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = gameObjectManager.AddObject("cube2", "Terrain");
+		auto cube = GameObjectManager::AddObject("cube2", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 100.0f, 20.0f, 10.0f });
@@ -163,7 +161,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = gameObjectManager.AddObject("cube3", "Terrain");
+		auto cube = GameObjectManager::AddObject("cube3", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 10.0f, 10.0f });
@@ -188,7 +186,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = gameObjectManager.AddObject("cube4", "Terrain");
+		auto cube = GameObjectManager::AddObject("cube4", "Terrain");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 10.0f, 10.0f });
@@ -213,7 +211,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto cube = gameObjectManager.AddObject("Enemy", "Enemy");
+		auto cube = GameObjectManager::AddObject("Enemy", "Enemy");
 
 		auto cubeTrans = cube->AddComponent<TransformComponent>();
 		cubeTrans->SetScale({ 20.0f, 30.0f, 10.0f });
@@ -241,7 +239,7 @@ TestStageScene::TestStageScene() {
 	}
 
 	{
-		auto target1 = gameObjectManager.AddObject("target1", "Target");
+		auto target1 = GameObjectManager::AddObject("target1", "Target");
 		auto targetTrans = target1->AddComponent<TransformComponent>();
 		targetTrans->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans->SetPosition({ 100.0f, 60.0f, 0.0f });
@@ -257,7 +255,7 @@ TestStageScene::TestStageScene() {
 		targetRend->SetTexture("assets/texture/NoTexture.png");
 
 
-		auto target2 = gameObjectManager.AddObject("target2", "Target");
+		auto target2 = GameObjectManager::AddObject("target2", "Target");
 		auto targetTrans2 = target2->AddComponent<TransformComponent>();
 		targetTrans2->SetScale({ 10.0f, 10.0f, 10.0f });
 		targetTrans2->SetPosition({ 0.0f, 60.0f, 0.0f });
@@ -294,7 +292,7 @@ TestStageScene::TestStageScene() {
 		//cameraSpring->MakeDamping(); // ダンピングを作成
 		//cameraSpring->SetSpringPartner(target);
 
-		auto point = gameObjectManager.AddObject("CameraPoint", "CameraPoint");
+		auto point = GameObjectManager::AddObject("CameraPoint", "CameraPoint");
 		auto pointTrans = point->AddComponent<TransformComponent>();
 		pointTrans->SetScale({ 10.0f, 80.0f, 10.0f });
 		pointTrans->AddPosition({ 50.0f, 60.0f, 0.0f });
@@ -316,7 +314,7 @@ TestStageScene::TestStageScene() {
 
 	// UIの設定
 	{
-		auto hpUnderlay = gameObjectManager.AddUI("hpUI_Back", "HP_UI");
+		auto hpUnderlay = GameObjectManager::AddUI("hpUI_Back", "HP_UI");
 		auto hpUnderlayTrans = hpUnderlay->AddComponent<TransformComponent>();
 		hpUnderlayTrans->SetPosition({ -570.0f, 195.0f, 10.0f });
 		hpUnderlayTrans->SetScale({ 40.0f, 145.0f, 1.0f });
@@ -328,13 +326,13 @@ TestStageScene::TestStageScene() {
 		hpUnderlayRender->SetTexture("assets/texture/NoTexture.png");
 		hpUnderlayRender->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
-		auto hp = gameObjectManager.AddUI("hpUI", "HP_UI");
+		auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
 		auto hpTrans = hp->AddComponent<TransformComponent>();
 		hpTrans->SetPosition({ -570.0f, 70.0f, 0.0f });
 		hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
 
 		auto hpBar = hp->AddComponent<HPBarMoveComponent>();
-		auto player = gameObjectManager.GameObjectFindName("Player");
+		auto player = GameObjectManager::GameObjectFindName("Player");
 		hpBar->SetReferenceHPObj(*player);
 
 		SquareMesh squareMesh;
@@ -349,9 +347,7 @@ TestStageScene::TestStageScene() {
 }
 
 TestStageScene::~TestStageScene() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
-	gameObjectManager.ListClear(); // ゲームオブジェクトのリストをクリア
+	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
 }
 
 void TestStageScene::Update() {

@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 //CameraƒNƒ‰ƒX
 //-----------------------------------------------------------------------------
-class Camera final : public Component {
+class Camera : public Component {
 private:
 
 	DirectX::SimpleMath::Vector3	m_Target{};

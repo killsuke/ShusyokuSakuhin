@@ -24,8 +24,7 @@ void SkyDomeRenderComponent::Update() {
 
 		cb.color = Vector4(m_Color);
 
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		auto deviceContext = dxRender.GetDeviceContext();
+		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -48,8 +47,7 @@ void SkyDomeRenderComponent::Update() {
 }
 
 void SkyDomeRenderComponent::TextureLoadSkyDome(const wchar_t* tex) {
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	auto device = dxRender.GetDevice();
+	auto device = DirectXRender::GetDevice();
 
 	auto hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_pTextureView);
 	if (FAILED(hr))

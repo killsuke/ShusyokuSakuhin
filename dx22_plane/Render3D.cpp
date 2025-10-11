@@ -23,8 +23,7 @@ void Render3DComponent::Update()
 
 		cb.color = Vector4(m_Color);
 
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		auto deviceContext = dxRender.GetDeviceContext();
+		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

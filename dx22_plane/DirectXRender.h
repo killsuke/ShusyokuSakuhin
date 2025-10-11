@@ -72,81 +72,78 @@ struct LineThickness
 	float pad[3] = { 0.0f };
 };
 
-class DirectXRender final
+class DirectXRender
 {
 private:
 
-	ID3D11Device* m_Device;				// デバイス＝DirectXの各種機能を作る
-	IDXGISwapChain* m_SwapChain;			// スワップチェイン＝ダブルバッファ機能
-	ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
-	ID3D11DepthStencilState* m_DepthStateEnable;
-	ID3D11DepthStencilState* m_DepthStateDisable;
-	ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
-	ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
-	ID3D11Buffer* m_LightBuffer;
-	ID3D11Buffer* m_MaterialBuffer;
-	CameraMatrix m_CameraMatrix;			// カメラ行列
-	ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
+	static ID3D11Device* m_Device;				// デバイス＝DirectXの各種機能を作る
+	static IDXGISwapChain* m_SwapChain;			// スワップチェイン＝ダブルバッファ機能
+	static ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
+	static ID3D11DepthStencilState* m_DepthStateEnable;
+	static ID3D11DepthStencilState* m_DepthStateDisable;
+	static ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
+	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
+	static ID3D11Buffer* m_LightBuffer;
+	static ID3D11Buffer* m_MaterialBuffer;
+	static CameraMatrix m_CameraMatrix;			// カメラ行列
+	static ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
 
-	DirectXRender();
-	~DirectXRender();
-
-	HRESULT DeviceAndSwapCreate();
-	HRESULT RenderTargetCreate();
-	HRESULT DepthStencilCreate();
-	void ViewportCreate();
+	static HRESULT DeviceAndSwapCreate();
+	static HRESULT RenderTargetCreate();
+	static HRESULT DepthStencilCreate();
+	static void ViewportCreate();
 	HRESULT InputLayoutAndShadersCreate();
-	HRESULT RasterizerSetting();
-	HRESULT BlandStateCreate();
-	HRESULT DepthStencilSetting();
-	HRESULT SamplerCreate();
-	HRESULT ConstantBufferCreate();
-	HRESULT BoneConstantBufferCreate();
-	HRESULT HPBarConstantBufferCreate();
-	HRESULT LightBufferCreate();
-	void LightSetting();
-	HRESULT MaterialBufferCreate();
-	void MaterialSetting();
+	static HRESULT RasterizerSetting();
+	static HRESULT BlandStateCreate();
+	static HRESULT DepthStencilSetting();
+	static HRESULT SamplerCreate();
+	static HRESULT ConstantBufferCreate();
+	static HRESULT BoneConstantBufferCreate();
+	static HRESULT HPBarConstantBufferCreate();
+	static HRESULT LightBufferCreate();
+	static void LightSetting();
+	static HRESULT MaterialBufferCreate();
+	static void MaterialSetting();
 
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
 	HRESULT CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
-	HRESULT VeiwProjConstantCreate();
+	static HRESULT VeiwProjConstantCreate();
 
 public:
-	
-	static DirectXRender& GetInstance();
+	DirectXRender();
+	~DirectXRender();
 
-	HRESULT Init();
-	void UnInit();
+	static HRESULT Init();
+	static void UnInit();
 
-	void DrawBegin();
-	void DrawEnd();
+	static void DrawBegin();
+	static void DrawEnd();
 
-	void SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix);
-	void SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix);
-	void SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix);
-	void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
-	void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
-	void SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix);
-	void GPU_UpdateViewAndProj();
-	void SetDepthEnable(bool Enable);
-	void SetATCEnable(bool Enable);
-	ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
-	ID3D11Device* GetDevice() { return m_Device; };
-	ID3D11RenderTargetView* GetRenderTargetView() { return g_pRenderTargetView; };
-	ID3D11DepthStencilView* GetDepthStencilView() { return g_pDepthStencilView; };
+	static void SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix);
+	static void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void GPU_UpdateViewAndProj();
+	static void SetDepthEnable(bool Enable);
+	static void SetATCEnable(bool Enable);
+	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
+	static ID3D11Device* GetDevice() { return m_Device; };
+	static ID3D11RenderTargetView* GetRenderTargetView() { return g_pRenderTargetView; };
+	static ID3D11DepthStencilView* GetDepthStencilView() { return g_pDepthStencilView; };
 
-	ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
-	ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
+	static ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
+	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
 
-	ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
+	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
 
 	//=============================================================================
 	// ブレンド ステート設定
 	//=============================================================================
-	void SetBlendState(int nBlendState);
+	static void SetBlendState(int nBlendState);
 };
 

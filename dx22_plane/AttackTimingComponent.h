@@ -1,7 +1,7 @@
 #pragma once
 #include "AttackComponent.h"
 
-class AttackTimingComponent final : public AttackComponent
+class AttackTimingComponent : public AttackComponent
 {
 private:
 	float m_coolDownTime = 0.0f;

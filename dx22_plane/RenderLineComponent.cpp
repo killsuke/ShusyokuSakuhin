@@ -20,9 +20,7 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	// 専用のインプットレイアウトもここで作成予定
 	SetShader("LineVS.hlsl", "shader/unlitTexturePS.hlsl","unlitTexture_GS.hlsl");
 
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
-	p_startObj = gameObjectManager.AddAbsFront("startPoint", "LineObj");
+	p_startObj = GameObjectManager::AddAbsFront("startPoint", "LineObj");
 	auto transS = p_startObj->AddComponent<TransformComponent>();
 	transS->SetScale({10.0f,10.0f,10.0f});
 	transS->SetPosition({ 0.0f,50.0f,0.0f });
@@ -32,7 +30,7 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	rendS->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rendS->SetTexture("assets/texture/NoTexture.png");
 
-	p_endObj = gameObjectManager.AddAbsFront("endPoint","LineObj");
+	p_endObj = GameObjectManager::AddAbsFront("endPoint","LineObj");
 	auto transE = p_endObj->AddComponent<TransformComponent>();
 	transE->SetScale({ 10.0f,10.0f,10.0f });
 	transE->SetPosition({ 0.0f,-50.0f,0.0f });
@@ -74,8 +72,7 @@ void RenderLineComponent::Update()
 	}*/
 
 	if (transform != nullptr) {
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		auto deviceContext = dxRender.GetDeviceContext();
+		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
 		deviceContext->Map(m_VertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
@@ -102,7 +99,7 @@ void RenderLineComponent::Update()
 		LineThickness thick;
 		thick.thickness = m_thickness;
 
-		deviceContext->UpdateSubresource(dxRender.GetLineThicknessBuffer(), 0, NULL, &thick, 0, 0);
+		deviceContext->UpdateSubresource(DirectXRender::GetLineThicknessBuffer(), 0, NULL, &thick, 0, 0);
 
 		//定数バッファを更新
 		/*ConstBuffer cb;

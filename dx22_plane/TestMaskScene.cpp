@@ -6,14 +6,12 @@
 #include "SquareMesh.h"
 
 TestMaskScene::TestMaskScene() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
-	auto camera = gameObjectManager.AddObject("camera", "Camera");
+	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -300.0f));
 	camera->AddComponent<Camera>();
 
-	auto testSquare = gameObjectManager.AddObject("testSquare", "TestSquare");
+	auto testSquare = GameObjectManager::AddObject("testSquare", "TestSquare");
 	auto testSquareTrans = testSquare->AddComponent<TransformComponent>();
 	testSquareTrans->SetScale({ 100.0f, 100.0f, 1.0f });
 	testSquareTrans->SetPosition({ 0.0f, 0.0f, 0.0f });

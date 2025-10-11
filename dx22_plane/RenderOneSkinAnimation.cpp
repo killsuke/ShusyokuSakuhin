@@ -22,8 +22,7 @@ void RenderOneSkinAnimation::Update()
 
 		//cb.color = DirectX::XMFLOAT4(m_Color);
 
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		auto deviceContext = dxRender.GetDeviceContext();
+		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

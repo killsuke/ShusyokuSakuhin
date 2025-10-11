@@ -9,10 +9,8 @@
 
 DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	m_sortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // 更新の優先度を設定（数値が小さいほど優先して更新される）
-	doorUp = gameObjectManager.AddUI("doorUP", "FadeUI");
+	doorUp = GameObjectManager::AddUI("doorUP", "FadeUI");
 	auto doorUpTransform = doorUp->AddComponent<TransformComponent>();
 	doorUpTransform->SetPosition({ 0.0f,600.0f,-1.0f });
 	doorUpTransform->SetScale({ 700.0f,200.0f,1.0f });
@@ -23,7 +21,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	doorUpRender->SetTexture("assets/texture/IronWall.png");
 	doorUpRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 
-	doorDown = gameObjectManager.AddUI("doorDOWN", "FadeUI");
+	doorDown = GameObjectManager::AddUI("doorDOWN", "FadeUI");
 	auto doorDownTransform = doorDown->AddComponent<TransformComponent>();
 	doorDownTransform->SetPosition({ 0.0f,-600.0f,-1.0f });
 	doorDownTransform->SetScale({ 700.0f,200.0f,1.0f });

@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "CameraPattern.h"
 
-class CameraTargetComponent final : public Component
+class CameraTargetComponent : public Component
 {
 private:
 	CameraPattern cp;	// ƒJƒƒ‰‚É‚Ç‚¤‚¢‚¤“®‚«‚ğ‚³‚¹‚½‚¢‚©

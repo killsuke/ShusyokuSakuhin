@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class EnemyDamageComponent final : public Component
+class EnemyDamageComponent : public Component
 {
 private:
 

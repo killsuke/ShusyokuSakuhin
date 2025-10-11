@@ -19,11 +19,10 @@ EnemyActionBulletComponent::EnemyActionBulletComponent(GameObject& obj) :EnemyAc
 }
 
 void EnemyActionBulletComponent::Update() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 
 	m_recordTime += m_deltaTime;
 
-	auto player = gameObjectManager.GameObjectFindTag("Player");
+	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = p_object->GetComponent<Render2DComponent>();
@@ -44,12 +43,11 @@ void EnemyActionBulletComponent::Update() {
 }
 
 void EnemyActionBulletComponent::FiringBullet() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
+	
 	auto myTrans = p_object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
-	auto bullet = gameObjectManager.AddObject("bullet", "Bullets");
+	auto bullet = GameObjectManager::AddObject("bullet", "Bullets");
 	auto trans = bullet->AddComponent<TransformComponent>();
 	trans->SetPosition({ myPos.x,myPos.y,myPos.z });
 	trans->SetScale({ 5.0f,5.0f,1.0f });

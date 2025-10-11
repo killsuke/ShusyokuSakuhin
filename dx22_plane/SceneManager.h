@@ -7,7 +7,7 @@
 #include <memory>
 #include "sound.h"
 
-class SceneManager final
+class SceneManager
 {
 public:
 

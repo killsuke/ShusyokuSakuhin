@@ -3,7 +3,7 @@
 #include "TestBoneData.h"
 #include <SimpleMath.h>
 
-class RenderLineComponent final : public RenderComponent
+class RenderLineComponent : public RenderComponent
 {
 private:
 	GameObject* p_startObj = nullptr;

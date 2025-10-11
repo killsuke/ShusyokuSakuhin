@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class BlinkingUIComponent final : public Component
+class BlinkingUIComponent : public Component
 {
 private:
 	bool m_blinkingFlag = true; // “_–Åƒtƒ‰ƒO

@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
-class FollowPositionComponent final : public Component
+class FollowPositionComponent : public Component
 {
 private:
 	GameObject* p_followObj = nullptr; // 追従するオブジェクト

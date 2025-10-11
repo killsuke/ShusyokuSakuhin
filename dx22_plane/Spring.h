@@ -2,7 +2,7 @@
 #include "Component.h"
 
 // ばね
-class SpringComponent final : public Component
+class SpringComponent : public Component
 {
 private:
 	GameObject* m_springPartner = nullptr;	// バネの相手となるオブジェクト

@@ -25,7 +25,7 @@ struct Transform {
 	DirectX::SimpleMath::Matrix localMatrix = {};
 };
 
-class TransformComponent final: public Component
+class TransformComponent : public Component
 {
 private:
 	Transform m_transform;	// トランスフォーム情報

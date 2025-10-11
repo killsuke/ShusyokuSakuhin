@@ -1,7 +1,7 @@
 #pragma once
 #include "JsonComponent.h"
 
-class TerrainJsonComponent final : public JsonComponent
+class TerrainJsonComponent : public JsonComponent
 {
 private:
 	std::vector<TerrainStatus> m_terrainStatus;	// 地形情報のベクター

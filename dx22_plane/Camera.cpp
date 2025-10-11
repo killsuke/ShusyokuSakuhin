@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Application.h"
 #include "input.h"
+#include "Game.h"
 #include "Transform.h"
 #include <Windows.h>
 
@@ -79,8 +80,8 @@ void Camera::Update()
 		}
 
 		// 座標更新
-		/*transform->AddPosition(vec3);
-		m_Target += vec3;*/
+		transform->AddPosition(vec3);
+		m_Target += vec3;
 
 		// 視野角をいじって加速の時だけカメラを引く、FOV
 
@@ -333,8 +334,7 @@ void Camera::Update()
 		Update2D();
 		Update3D();
 		UpdateSky();
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		dxRender.GPU_UpdateViewAndProj();
+		DirectXRender::GPU_UpdateViewAndProj();
 	}
 }
 
@@ -348,8 +348,7 @@ void Camera::Update2D() {
 
 	m_ViewMatrix2D = viewMatrix;
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	dxRender.SetViewMatrix2D(&viewMatrix);
+	DirectXRender::SetViewMatrix2D(&viewMatrix);
 
 	// プロジェクション行列の生成
 	float nearPlane = 1.0f;       // ニアクリップ
@@ -359,7 +358,11 @@ void Camera::Update2D() {
 
 	m_ProjectionMatrix2D = projectionMatrix;
 
-	dxRender.SetProjectionMatrix2D(&projectionMatrix);
+	//	projectionMtx2D = DirectX::XMMatrixTranspose(projectionMatrix);
+
+	DirectXRender::SetProjectionMatrix2D(&projectionMatrix);
+
+	//	DirectXRender::SetProjectionMatrix(&projectionMatrix);
 }
 
 void Camera::Update3D() {
@@ -377,8 +380,8 @@ void Camera::Update3D() {
 
 	m_ViewMatrix3D = viewMatrix;
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	dxRender.SetViewMatrix3D(&viewMatrix);
+	DirectXRender::SetViewMatrix3D(&viewMatrix);
+	//viewMtx3D = DirectX::XMMatrixTranspose(viewMatrix);
 
 	//プロジェクション行列の生成
 	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
@@ -397,11 +400,11 @@ void Camera::Update3D() {
 
 	m_ProjectionMatrix3D = projectionMatrix;
 
-	dxRender.SetProjectionMatrix3D(&projectionMatrix);
+	DirectXRender::SetProjectionMatrix3D(&projectionMatrix);
 }
 
 void Camera::UpdateSky() {
-	// ビュー変換後列作成
+	//// ビュー変換後列作成
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 	m_ViewMatrixSky = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
@@ -409,8 +412,7 @@ void Camera::UpdateSky() {
 	// このコードは確認テストのために残す
 	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	dxRender.SetViewMatrixSkyDome(&m_ViewMatrixSky);
+	DirectXRender::SetViewMatrixSkyDome(&m_ViewMatrixSky);
 
 	//プロジェクション行列の生成
 	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
@@ -423,12 +425,14 @@ void Camera::UpdateSky() {
 
 	m_ProjectionMatrixSky = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
 
-	dxRender.SetProjectionMatrixSkyDome(&m_ProjectionMatrixSky);
+	DirectXRender::SetProjectionMatrixSkyDome(&m_ProjectionMatrixSky);
 
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
 	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+
+	//projectionMtxSky = DirectX::XMMatrixTranspose(projectionMatrix);
 }
 
 //=======================================

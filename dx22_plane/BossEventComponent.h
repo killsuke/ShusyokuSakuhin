@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-class BossEventComponent final : public Component
+class BossEventComponent : public Component
 {
 private:
 	const float deltaTime = 0.016f;

@@ -12,10 +12,9 @@ PlayerDamageComponent::PlayerDamageComponent(GameObject& obj) : Component(obj)
 
 void PlayerDamageComponent::Update()
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = p_object->GetComponent<ColliderComponent>();
-	auto objOthers = gameObjectManager.GameObjectFindTag("Player");
+	auto objOthers = GameObjectManager::GameObjectFindTag("Player");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
 	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");

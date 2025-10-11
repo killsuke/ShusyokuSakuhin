@@ -14,6 +14,29 @@ using namespace DirectX::SimpleMath;
 
 D3D_FEATURE_LEVEL      m_FeatureLevel;
 
+ID3D11DeviceContext* DirectXRender::m_DeviceContext = nullptr; // コンテキスト＝描画関連を司る機能
+
+ID3D11Device* DirectXRender::m_Device = nullptr; // コンテキスト＝描画関連を司る機能
+
+IDXGISwapChain* DirectXRender::m_SwapChain = nullptr; // スワップチェーン＝ダブルバッファ機能
+
+ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable = nullptr;
+
+ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable = nullptr;
+
+// レンダーターゲット＝描画先を表す機能
+ID3D11RenderTargetView* DirectXRender::g_pRenderTargetView = nullptr;
+// デプスバッファ
+ID3D11DepthStencilView* DirectXRender::g_pDepthStencilView = nullptr;
+
+ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
+
+ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
+
+CameraMatrix DirectXRender::m_CameraMatrix = {};
+
+ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // 線の太さ
+
 ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
@@ -57,11 +80,6 @@ DirectXRender::DirectXRender() {
 
 DirectXRender::~DirectXRender() {
 	//	UnInit();	// これはちゃんと呼び出されている？
-}
-
-DirectXRender& DirectXRender::GetInstance() {
-	static DirectXRender instance;
-	return instance;
 }
 
 HRESULT DirectXRender::Init() {

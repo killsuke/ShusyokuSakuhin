@@ -10,7 +10,7 @@
 #include "WICTextureLoader.h" // テクスチャ読み込みライブラリ
 #include <wrl.h>
 
-class TextureManager final
+class TextureManager
 {
 private:
 	// テクスチャ管理用のマップ

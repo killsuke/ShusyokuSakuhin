@@ -1,7 +1,7 @@
 #pragma once
 #include "AttackComponent.h"
 
-class AttackOneTimeComponent final : public AttackComponent
+class AttackOneTimeComponent : public AttackComponent
 {
 private:
 

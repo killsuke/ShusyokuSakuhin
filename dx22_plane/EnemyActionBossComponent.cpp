@@ -15,10 +15,8 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 }
 
 void EnemyActionBossComponent::Update() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	m_recordTime += m_deltaTime;
-	auto player = gameObjectManager.GameObjectFindTag("Player");
+	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = p_object->GetComponent<Render2DComponent>();
@@ -36,12 +34,10 @@ void EnemyActionBossComponent::Update() {
 }
 
 void EnemyActionBossComponent::BossAction() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	auto myTrans = p_object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
-	auto bullet = gameObjectManager.AddObject("bullet", "Enemy");
+	auto bullet = GameObjectManager::AddObject("bullet", "Enemy");
 	auto trans = bullet->AddComponent<TransformComponent>();
 	trans->SetPosition({ myPos.x + 10.0f,myPos.y,myPos.z });
 	trans->SetScale({ 10.0f,10.0f,1.0f });

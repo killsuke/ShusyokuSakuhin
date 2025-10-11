@@ -12,11 +12,9 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 
 void EnemyDamageComponent::Update()
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = p_object->GetComponent<ColliderComponent>();
-	auto objOthers = gameObjectManager.GameObjectFindTag("Enemy");
+	auto objOthers = GameObjectManager::GameObjectFindTag("Enemy");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
 	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");

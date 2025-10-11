@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-class Render2DComponent final : public RenderComponent
+class Render2DComponent : public RenderComponent
 {
 public:
 	Render2DComponent(GameObject& obj);

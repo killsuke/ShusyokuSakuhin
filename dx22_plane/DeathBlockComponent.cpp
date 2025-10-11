@@ -9,11 +9,9 @@ DeathBlockComponent::DeathBlockComponent(GameObject& obj) : Component(obj) {
 }
 
 void DeathBlockComponent::Update() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	auto collider = p_object->GetComponent<ColliderComponent>();
 
-	auto player = gameObjectManager.GameObjectFindTag("Player");
+	auto player = GameObjectManager::GameObjectFindTag("Player");
 	if (player.size() > 0) {
 		auto m_player = player[0];
 		auto fighter = m_player->GetComponent<FighterComponent>();

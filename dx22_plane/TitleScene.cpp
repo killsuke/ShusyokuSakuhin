@@ -34,16 +34,14 @@ TitleScene::~TitleScene()
 // 初期化
 void TitleScene::Init()
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
-	auto camera = gameObjectManager.AddObject("camera", "Camera");
+	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
 	auto cameraObj = camera->AddComponent<Camera>();
 	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
 
 	{
-		auto titleUI = gameObjectManager.AddUI("BackUI", "TitleUI");
+		auto titleUI = GameObjectManager::AddUI("BackUI", "TitleUI");
 		auto transTitle = titleUI->AddComponent<TransformComponent>();
 		transTitle->SetPosition({ 0.0f,0.0f,1.0f });
 		transTitle->SetScale({ 1080.0f,1000.0f,1.0f });
@@ -55,7 +53,7 @@ void TitleScene::Init()
 		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	}
 
-	auto titleUI = gameObjectManager.AddUI("titleUI", "TitleUI");
+	auto titleUI = GameObjectManager::AddUI("titleUI", "TitleUI");
 	auto transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
 	transTitle->SetScale({ 400.0f,280.0f,1.0f });
@@ -66,7 +64,7 @@ void TitleScene::Init()
 	rendTitle->SetTexture("assets/texture/Slash_Action_2.5D.png");
 
 	{
-		auto titleUI = gameObjectManager.AddUI("tenmetuUI", "TitleUI");
+		auto titleUI = GameObjectManager::AddUI("tenmetuUI", "TitleUI");
 		auto transTitle = titleUI->AddComponent<TransformComponent>();
 		transTitle->SetPosition({ 0.0f,-200.0f,-0.5f });
 		transTitle->SetScale({ 200.0f,100.0f,1.0f });
@@ -81,7 +79,7 @@ void TitleScene::Init()
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 
-	auto fadeFake = gameObjectManager.GameObjectFindNameUI("fade");
+	auto fadeFake = GameObjectManager::GameObjectFindNameUI("fade");
 	if(fadeFake != nullptr) {
 		auto fade =  fadeFake->GetComponent<DoorFadeComponent>();
 		fade->SetBootDoor(true);
@@ -90,7 +88,7 @@ void TitleScene::Init()
 		//return;
 	}
 
-	auto fadeUI = gameObjectManager.AddUI("fade", "FadeUI");
+	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
 	fadeUI->SetCarryOverFlag(true);
 	auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
 	auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
@@ -100,12 +98,10 @@ void TitleScene::Init()
 // 更新
 void TitleScene::Update()
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-
 	// エンターキーを押してステージ1へ
 	if ((Input::GetKeyTrigger(VK_L) ))
 	{
-		auto fade = gameObjectManager.GameObjectFindNameUI("fade");
+		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();
 
 		door->SetBootDoor(true);
@@ -130,6 +126,6 @@ void TitleScene::Update()
 // 終了処理
 void TitleScene::Uninit()
 {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-	gameObjectManager.OtherThanClear();
+	//GameObjectManager::ListClear();	// ゲームオブジェクトマネージャーの終了処理
+	GameObjectManager::OtherThanClear();
 }

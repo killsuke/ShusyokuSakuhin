@@ -36,8 +36,7 @@ void TestMoveComponent::Update() {
 
 	bool nowMove = false;
 
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-	auto fadeObj = gameObjectManager.GameObjectFindNameUI("fade");
+	auto fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
 	auto fade = fadeObj->GetComponent<DoorFadeComponent>();
 
 	if (fighter->GetDeadFlag() == true) {
@@ -118,7 +117,7 @@ void TestMoveComponent::Update() {
 		fighter->AddDamage(1);
 	}*/
 
-	auto hpUI = gameObjectManager.GameObjectFindNameUI("hpUI");
+	auto hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
 	auto hpRend = hpUI->GetComponent<Render3DComponent>();
 
 	auto maxHp = fighter->GetMaxHp();

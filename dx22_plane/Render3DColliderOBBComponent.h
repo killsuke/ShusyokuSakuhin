@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-class Render3DColliderOBBComponent final : public RenderComponent
+class Render3DColliderOBBComponent : public RenderComponent
 {
 public:
 	Render3DColliderOBBComponent(GameObject& obj);

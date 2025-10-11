@@ -42,8 +42,7 @@ bool Texture::Load(const std::string& filename)
 	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11Device* device = dxRender.GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	HRESULT hr = device->CreateTexture2D(&desc, &subResource, pTexture.GetAddressOf());
 	if (FAILED(hr)) {
@@ -99,8 +98,7 @@ bool Texture::LoadMask(const std::string& filename)
 	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11Device* device = dxRender.GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	HRESULT hr = device->CreateTexture2D(&desc, &subResource, pTexture.GetAddressOf());
 	if (FAILED(hr)) {
@@ -157,8 +155,7 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11Device* device = dxRender.GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 	HRESULT hr = device->CreateTexture2D(&desc, &subResource, pTexture.GetAddressOf());
 	if (FAILED(hr)) {
@@ -185,8 +182,7 @@ bool Texture::LoadTexture(const std::string& filename)
 
 	if (tex != nullptr) {
 		m_srv = tex;
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		ID3D11DeviceContext* devicecontext = dxRender.GetDeviceContext();
+		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 		devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
 	}
 	else {
@@ -200,15 +196,13 @@ bool Texture::LoadTexture(const std::string& filename)
 // テクスチャをGPUにセット
 void Texture::SetGPU()
 {
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11DeviceContext* devicecontext = dxRender.GetDeviceContext();
+	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 	devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
 }
 
 void Texture::SetGPU_Mask()
 {
-	DirectXRender& dxRender = DirectXRender::GetInstance();
-	ID3D11DeviceContext* devicecontext = dxRender.GetDeviceContext();
+	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 	devicecontext->PSSetShaderResources(1, 1, m_srvMask.GetAddressOf());
 }
 

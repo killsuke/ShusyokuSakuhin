@@ -19,9 +19,8 @@ EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyAc
 }
 
 void EnemyActionHopperComponent::Update() {
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
 
-	auto player = gameObjectManager.GameObjectFindTag("Player");
+	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = p_object->GetComponent<Render2DComponent>();

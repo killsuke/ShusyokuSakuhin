@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-class RenderMask3DComponent final :  public RenderComponent
+class RenderMask3DComponent :  public RenderComponent
 {
 public:
 	RenderMask3DComponent(GameObject& obj);

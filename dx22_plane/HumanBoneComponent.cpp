@@ -213,8 +213,7 @@ void HumanBoneComponent::GPU_Update() {
 
 void HumanBoneComponent::Draw() {
 	auto transform = p_object->GetComponent<TransformComponent>();
-	GameObjectManager& gameObjectManager = GameObjectManager::GetInstance();
-	auto cameraobj = gameObjectManager.GameObjectFindName("camera");
+	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
@@ -224,8 +223,7 @@ void HumanBoneComponent::Draw() {
 
 		//		cb.color = DirectX::XMFLOAT4(m_Color);
 
-		DirectXRender& dxRender = DirectXRender::GetInstance();
-		auto deviceContext = dxRender.GetDeviceContext();
+		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
