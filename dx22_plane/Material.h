@@ -44,7 +44,7 @@ public:
 		m_Material.Specular = mtrl.Specular;
 		m_Material.Emission = mtrl.Emission;
 		m_Material.Shiness = mtrl.Shiness;
-		m_Material.TextureEnable = mtrl.TextureEnable;
+		//m_Material.TextureEnable = mtrl.TextureEnable;
 
 		Update();
 
@@ -133,6 +133,6 @@ public:
 	}
 
 	bool isTextureEnable() {
-		return m_Material.TextureEnable == TRUE;
+		return /*m_Material.TextureEnable == */TRUE;
 	}
 };

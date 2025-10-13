@@ -30,7 +30,7 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 			vertex.uv = DirectX::SimpleMath::Vector2(v.texcoord.x, v.texcoord.y);
 			vertex.color = DirectX::SimpleMath::Color(v.color.r, v.color.g, v.color.b, v.color.a);
 
-			m_vertices.emplace_back(vertex);
+			m_Vertices.emplace_back(vertex);
 		}
 	}
 
@@ -39,7 +39,7 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 	{
 		for (auto& index : mi)
 		{
-			m_indices.emplace_back(index);
+			m_Indices.emplace_back(index);
 		}
 	}
 
@@ -66,11 +66,11 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 		material.Shiness = m.Shiness;
 
 		if (m.texturename.empty()) {
-			material.TextureEnable = FALSE;
+			//material.TextureEnable = FALSE;
 			m_texturenames.emplace_back("");
 		}
 		else {
-			material.TextureEnable = TRUE;
+			//material.TextureEnable = TRUE;
 			m_texturenames.emplace_back(m.texturename);
 		}
 		m_materials.emplace_back(material);

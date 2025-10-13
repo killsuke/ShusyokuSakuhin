@@ -23,7 +23,7 @@
             "scale": {
                 "x": 10.0,
                 "y": 8.0,
-                "z": 5.0
+                "z": 3.0
             },
             "angle": {
                 "x": 0.0,
@@ -53,6 +53,25 @@
             "texture": "assets/texture/dice.png",
             "shaderVS": "shader/unlitTextureVS.hlsl",
             "shaderPS": "shader/unlitTexturePS.hlsl"
+        },
+	{
+            "kind": "E_Oku_No_TEKI",
+            "scale": {
+                "x": 5.0,
+                "y": 10.0,
+                "z": 3.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "atk": 10,
+            "hp": 10,
+            "texture": "assets/texture/hopper.png",
+            "shaderVS": "shader/unlitTextureVS.hlsl",
+            "shaderPS": "shader/unlitTexturePS.hlsl"
         }
+
     ]
 }

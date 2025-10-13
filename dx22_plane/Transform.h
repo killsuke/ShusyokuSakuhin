@@ -2,27 +2,28 @@
 #include "Component.h"
 #include <SimpleMath.h>
 #include <iostream>
+#include "QuaternionToEuler.h"
 
 struct Transform {
 	// SRT情報（ワールド行列、姿勢情報）
-	DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
-	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
+	DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3::One;
+	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3::Zero;
 
 	// SRT情報（ローカル行列、姿勢情報）
-	DirectX::SimpleMath::Vector3 m_LocalScale = DirectX::SimpleMath::Vector3(1.0f, 1.0f, 1.0f);
-	DirectX::SimpleMath::Vector3 m_LocalRotation = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
-	DirectX::SimpleMath::Vector3 m_LocalPosition = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f);
+	DirectX::SimpleMath::Vector3 m_LocalScale = DirectX::SimpleMath::Vector3::One;
+	DirectX::SimpleMath::Vector3 m_LocalRotation = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 m_LocalPosition = DirectX::SimpleMath::Vector3::Zero;
 
 	DirectX::SimpleMath::Quaternion m_Quaternion = DirectX::SimpleMath::Quaternion::Identity; // クォータニオン
 
 	DirectX::SimpleMath::Quaternion m_LocalQuaternion = DirectX::SimpleMath::Quaternion::Identity; // ローカルクォータニオン
 
 	// ワールド行列
-	DirectX::SimpleMath::Matrix worldMatrix = {};
+	DirectX::SimpleMath::Matrix worldMatrix = DirectX::SimpleMath::Matrix::Identity;
 
 	// ローカル行列
-	DirectX::SimpleMath::Matrix localMatrix = {};
+	DirectX::SimpleMath::Matrix localMatrix = DirectX::SimpleMath::Matrix::Identity;
 };
 
 class TransformComponent : public Component
@@ -111,5 +112,4 @@ public:
 
 	void MakeChildWorld();
 
-	DirectX::SimpleMath::Vector3 QuaternionToEulerRad(const DirectX::SimpleMath::Quaternion& q);
 };

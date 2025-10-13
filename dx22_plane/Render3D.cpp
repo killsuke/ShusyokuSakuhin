@@ -2,6 +2,7 @@
 #include "DirectXRender.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
+#include "CubeMesh.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -36,9 +37,23 @@ void Render3DComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-		deviceContext->DrawIndexed(
-			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
-			0,							// 最初のインデックスバッファの位置
-			0);
+		auto subsets = m_Mesh->GetSubsets();
+
+		//マテリアル数分ループ 
+		for (int i = 0; i < subsets.size(); i++)
+		{
+			// マテリアルをセット(サブセット情報の中にあるマテリアルインデックスを使用)
+		//	m_Materiales[m_subsets[i].MaterialIdx]->SetGPU();
+
+		/*	if (m_Materiales[m_subsets[i].MaterialIdx]->isTextureEnable())
+			{
+				m_Textures[m_subsets[i].MaterialIdx]->SetGPU();
+			}*/
+
+			deviceContext->DrawIndexed(
+				subsets[i].IndexNum,		// 描画するインデックス数
+				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
+				subsets[i].VertexBase);	// 頂点バッファの最初から使用
+		}
 	}
 }

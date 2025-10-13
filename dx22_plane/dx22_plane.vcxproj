@@ -197,8 +197,11 @@
     <ClCompile Include="JsonComponent.cpp" />
     <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MoveTerrainComponent.cpp" />
     <ClCompile Include="PlayerDamageComponent.cpp" />
+    <ClCompile Include="QuaternionToEuler.cpp" />
+    <ClCompile Include="RenderBlurComponent.cpp" />
     <ClCompile Include="RenderLineComponent.cpp" />
     <ClCompile Include="SkyDomeMesh.cpp" />
     <ClCompile Include="SkyDomeRenderComponent.cpp" />
@@ -213,9 +216,6 @@
     <ClCompile Include="EntityDeleter.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FighterComponent.cpp" />
-    <ClCompile Include="Game.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GoAroundComponent.cpp" />
     <ClCompile Include="HPBarMoveComponent.cpp" />
@@ -283,10 +283,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Billboard.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -342,6 +338,8 @@
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
     <ClInclude Include="PlayerDamageComponent.h" />
+    <ClInclude Include="QuaternionToEuler.h" />
+    <ClInclude Include="RenderBlurComponent.h" />
     <ClInclude Include="RenderLineComponent.h" />
     <ClInclude Include="SkyDomeMesh.h" />
     <ClInclude Include="SkyDomeRenderComponent.h" />
@@ -356,9 +354,6 @@
     <ClInclude Include="EntityDeleter.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="FighterComponent.h" />
-    <ClInclude Include="Game.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GoAroundComponent.h" />
     <ClInclude Include="HPBarMoveComponent.h" />
@@ -434,10 +429,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Billboard.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Transform.h" />
@@ -446,14 +437,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Animation2DVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
-    </FxCompile>
-    <FxCompile Include="LineVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -493,9 +476,21 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
+    <FxCompile Include="shader\BlurPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+    </FxCompile>
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\LineVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
     <FxCompile Include="shader\litTexturePS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>

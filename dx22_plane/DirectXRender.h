@@ -28,6 +28,7 @@ enum EBlendState {
 extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11Buffer* g_pHPBarConstantBuffer;
+extern ID3D11Buffer* g_pBlurBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 // 定数バッファ用構造体
@@ -70,6 +71,11 @@ struct LineThickness
 {
 	float thickness = 1.0f;
 	float pad[3] = { 0.0f };
+};
+
+struct BlurBuffer {
+	DirectX::SimpleMath::Vector2 textureSize = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::SimpleMath::Vector2 blurPad = DirectX::SimpleMath::Vector2::Zero;
 };
 
 class DirectXRender

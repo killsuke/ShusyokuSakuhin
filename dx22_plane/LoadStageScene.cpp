@@ -35,6 +35,8 @@
 #include "TestSwordActionComponent.h"
 #include "DoorFadeComponent.h"
 #include "BossEventComponent.h"
+#include "RenderBlurComponent.h"
+#include "ModelManager.h"
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -230,6 +232,29 @@ LoadStageScene::LoadStageScene() {
 		swordRe2->SetTexture("assets/texture/NoTexture.png");
 		swordRe2->SetColor(DirectX::XMFLOAT4(0.5f, 1.0f, 0.5f, 0.5f));*/
 	}
+
+	// ブラーのテスト
+	auto blur = GameObjectManager::AddUI("blur", "BlurUI");
+	auto transBlur = blur->AddComponent<TransformComponent>();
+	transBlur->SetPosition({ 0.0f, 15.0f, 220.0f });
+	transBlur->SetScale({ 50.0f, 50.0f, 1.0f });
+	auto blurRend = blur->AddComponent<RenderBlurComponent>();
+	SquareMesh blurMesh;
+	blurRend->SetMesh(blurMesh);
+	blurRend->SetShader("shader/litTextureVS.hlsl", "shader/blurPS.hlsl");
+	blurRend->SetTexture("assets/texture/title_car.png");
+	blurRend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(200.0f,200.0f));
+
+
+	// モデルテスト
+	/*auto modelObj = GameObjectManager::AddObject("model", "Model");
+	auto trans = modelObj->AddComponent<TransformComponent>();
+	trans->SetPosition({ 0.0f,10.0f,0.0f });
+	trans->SetScale({ 30.0f,30.0f,30.0f });
+	auto model = ModelManager::GetModel("assets/model/goal/goal.fbx", "assets/model/goal");
+	auto rend = modelObj->AddComponent<Render3DComponent>();
+	rend->SetMesh(*model);
+	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");*/
 
 	TargetAndScroolCreate();
 

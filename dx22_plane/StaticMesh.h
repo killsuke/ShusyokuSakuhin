@@ -13,8 +13,8 @@ public:
 	StaticMesh() = default;
 	~StaticMesh() = default;
 
-	std::vector<VERTEX_3D> CreateMeshVertices() {};
-	std::vector<unsigned int> CreateMeshIndices() {};
+	std::vector<VERTEX_3D> CreateMeshVertices() { return m_Vertices; };
+	std::vector<unsigned int> CreateMeshIndices() { return m_Indices; };
 
 	void Load(std::string filename, std::string texturedirectory="");
 

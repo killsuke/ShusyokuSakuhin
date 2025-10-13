@@ -58,6 +58,9 @@ ID3D11Buffer* g_pBoneConstantBuffer;
 // ＨＰバー用の定数バッファ構造体
 ID3D11Buffer* g_pHPBarConstantBuffer;
 
+// ブラー用のバッファ
+ID3D11Buffer* g_pBlurBuffer;
+
 // ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
@@ -159,6 +162,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pConstantBuffer);
 	SAFE_RELEASE(g_pBoneConstantBuffer);
 	SAFE_RELEASE(g_pHPBarConstantBuffer);
+	SAFE_RELEASE(g_pBlurBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
@@ -402,9 +406,9 @@ HRESULT DirectXRender::SamplerCreate() {
 	// サンプラーステート設定
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.MaxAnisotropy = 4;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
@@ -773,6 +777,12 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
 	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
 	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
+
+	bufferDesc.ByteWidth = sizeof(BlurBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
+	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
 
 	// ここ後で１番に変更
 	if (FAILED(hr)) return hr;

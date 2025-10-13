@@ -2,7 +2,6 @@
 #include <thread>
 #include "Application.h"
 #include "DirectXRender.h"
-#include "Game.h"
 #include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "ComponentTypeManager.h"

@@ -22,7 +22,7 @@ struct LIGHT {
 
 // サブセット、メッシュ
 struct SUBSET {
-	std::string  MtrlName;			// マテリアル名
+	std::string  MtrlName = "";			// マテリアル名
 	unsigned int IndexNum = 0;		// インデックス数
 	unsigned int VertexNum = 0;		// 頂点数
 	unsigned int IndexBase = 0;		// 開始インデックス
@@ -37,6 +37,8 @@ struct MATERIAL {
 	DirectX::SimpleMath::Color Specular;// 鏡面反射
 	DirectX::SimpleMath::Color Emission;// 発光
 	float Shiness;	// 光沢の滑らかさ
-	BOOL TextureEnable; // テクスチャを使うか否かのフラグ
-	BOOL Dummy[2];
+	DirectX::SimpleMath::Vector3 Padding; // パディング
+
+	//BOOL TextureEnable; // テクスチャを使うか否かのフラグ
+	//BOOL Dummy[2];
 };

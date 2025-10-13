@@ -16,4 +16,9 @@ public:
 	~Stage1Scene(); // デストラクタ
 
 	void Update(); // 更新
+
+	void BonePartTest();
+	void BoneToPartTest();
+
+	void TestBlur();
 };

@@ -99,6 +99,11 @@ void EnemyManagerComponent::CreateKind(const std::string& kind, GameObject& obj)
 	else if(kind == "E_Hopper") {
 		auto eah = obj.AddComponent<EnemyActionHopperComponent>();
 	}
+	else if (kind == "E_Oku_No_TEKI") {
+		auto eah = obj.AddComponent<EnemyActionHopperComponent>();
 
+		auto trans = obj.GetComponent<TransformComponent>();
+		trans->SetPosition({ 0.0f, 10.0f, 15.0f });
+	}
 
 }

@@ -36,6 +36,12 @@ cbuffer LineThicknessBuffer : register(b2)
 	float pads[3];
 }
 
+cbuffer BlurBuffer : register(b3)
+{
+    float2 texSize; // テクスチャサイズ
+    float2 blurPad; // ブラーをかける方向
+}
+
 struct VS_IN
 {
     float3 pos : POSITION0;
@@ -90,8 +96,7 @@ struct MATERIAL {
 	float4 Specular;
 	float4 Emission;
 	float Shininess;
-	bool TextureEnable;
-	bool2 Dummy;
+    float3 Padding;
 };
 
 cbuffer MaterialBuffer:register(b6) {

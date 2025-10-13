@@ -7,25 +7,13 @@
 class ModelManager {
 public:
     // シングルトンのインスタンス取得
-    static ModelManager& GetInstance() {
+    /*static ModelManager& GetInstance() {
         static ModelManager instance;
         return instance;
-    }
+    }*/
 
     // モデルを取得する関数
-    std::shared_ptr<StaticMesh> GetModel(const std::string& modelPath, const std::string& texDirectory) {
-        // メモリ内に既に格納しているか検査
-        auto it = m_ModelCache.find(modelPath);
-        if (it != m_ModelCache.end()) {
-            return it->second;
-        }
-
-        // メッシュのシェアードポインタを生成して返す
-        std::shared_ptr<StaticMesh> newModel = std::make_shared<StaticMesh>();
-        newModel->Load(modelPath, texDirectory);
-        m_ModelCache[modelPath] = newModel;
-        return newModel;
-    }
+    static StaticMesh* GetModel(const std::string& modelPath, const std::string& texDirectory);
 
 private:
     // プライベートコンストラクタ
@@ -37,6 +25,6 @@ private:
     ModelManager& operator=(const ModelManager&) = delete;
 
     // 全てのモデルデータを保持
-    std::unordered_map<std::string, std::shared_ptr<StaticMesh>> m_ModelCache;
+    static std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;
 };
 

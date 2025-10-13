@@ -48,7 +48,7 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 		
 		auto terrainObj = GameObjectManager::AddObject(name,"Terrain");
 		auto transform = terrainObj->AddComponent<TransformComponent>();
-		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
+		transform->SetPosition({ data.position.x, data.position.y, 10.0f });
 		transform->SetScale(tS.scale);
 		transform->SetRotation(tS.angle);
 

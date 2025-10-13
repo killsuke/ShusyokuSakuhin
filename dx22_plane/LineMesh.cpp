@@ -5,30 +5,31 @@ using namespace DirectX::SimpleMath;
 LineMesh::LineMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
+	DefaultSetSubset();
 }
 
 std::vector<VERTEX_3D> LineMesh::CreateMeshVertices() {
 	// 頂点データ
 
-	m_vertices.resize(2);
+	m_Vertices.resize(2);
 
-	m_vertices[0].position = Vector3(-1.0f, 1.0f, 1.0f);
-	m_vertices[1].position = Vector3(1.0f, 1.0f, 1.0f);
+	m_Vertices[0].position = Vector3(-1.0f, 1.0f, 1.0f);
+	m_Vertices[1].position = Vector3(1.0f, 1.0f, 1.0f);
 	/*m_vertices[2].position = Vector3(-1.0f, 1.0f, -1.0f);
 	m_vertices[3].position = Vector3(1.0f, 1.0f, -1.0f);*/
 
-	m_vertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	m_vertices[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Vertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Vertices[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	//m_vertices[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	//m_vertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	m_vertices[0].uv = Vector2(0.0f, 0.0f);
-	m_vertices[1].uv = Vector2(1.0f, 0.0f);
+	m_Vertices[0].uv = Vector2(0.0f, 0.0f);
+	m_Vertices[1].uv = Vector2(1.0f, 0.0f);
 	/*m_vertices[2].uv = Vector2(0.0f, 0.5f);
 	m_vertices[3].uv = Vector2(0.33f, 0.5f);*/
 
-	m_vertices[0].normal = Vector3(0.0f, 1.0f, 0.0f);
-	m_vertices[1].normal = Vector3(0.0f, 1.0f, 0.0f);
+	m_Vertices[0].normal = Vector3(0.0f, 1.0f, 0.0f);
+	m_Vertices[1].normal = Vector3(0.0f, 1.0f, 0.0f);
 	//m_vertices[2].normal = Vector3(0.0f, 1.0f, 0.0f);
 	//m_vertices[3].normal = Vector3(0.0f, 1.0f, 0.0f);
 
@@ -137,15 +138,15 @@ std::vector<VERTEX_3D> LineMesh::CreateMeshVertices() {
 	m_vertices[22].normal = Vector3(0.0f, -1.0f, 0.0f);
 	m_vertices[23].normal = Vector3(0.0f, -1.0f, 0.0f);*/
 
-	return m_vertices;
+	return m_Vertices;
 }
 
 std::vector<unsigned int> LineMesh::CreateMeshIndices() {
 	// インデックスバッファ生成
 
-	m_indices.resize(2);
+	m_Indices.resize(2);
 
-	m_indices = {
+	m_Indices = {
 		0,1,/*2,
 		1,3,2,
 
@@ -165,5 +166,5 @@ std::vector<unsigned int> LineMesh::CreateMeshIndices() {
 		23,21,22,*/
 	};
 
-	return m_indices;
+	return m_Indices;
 }

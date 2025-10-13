@@ -2,7 +2,6 @@
 #include "Camera.h"
 #include "Application.h"
 #include "input.h"
-#include "Game.h"
 #include "Transform.h"
 #include <Windows.h>
 
@@ -64,7 +63,7 @@ void Camera::Update()
 			vec3.z -= 1.0f;
 		}
 		if (Input::GetKeyPress(VK_L)) {
-			vec3.x += 1.0f;
+		//	vec3.x += 1.0f;
 		}
 		if (Input::GetKeyPress(VK_I)) {
 			vec3.z += 1.0f;
