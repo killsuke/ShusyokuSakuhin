@@ -59,10 +59,10 @@ void EnemyActionBossComponent::BossAction() {
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
 	auto rend = bullet->AddComponent<Render2DComponent>();
-	SquareMesh squareMesh;
-	rend->SetMesh(squareMesh);
+
+	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rend->SetTexture("assets/texture/bullet.png");
+	rend->ChangeTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(!m_rightLeft);
 
 }

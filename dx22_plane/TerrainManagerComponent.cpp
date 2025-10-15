@@ -61,11 +61,10 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 			move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
 		}
 
-		CubeMesh cubeMesh;
 		auto render = terrainObj->AddComponent<Render3DComponent>();
-		render->SetMesh(cubeMesh);
+		render->CreateMesh<CubeMesh>();
 		render->SetShader(tS.shaderVS,tS.shaderPS);
-		render->SetTexture(tS.texture);
+		render->ChangeTexture(tS.texture);
 
 		//CubeMesh cubeMeshCollider;
 		//auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();

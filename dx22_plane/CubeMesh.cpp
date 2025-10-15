@@ -5,6 +5,8 @@ CubeMesh::CubeMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
 	DefaultSetSubset();
+	DefaultSetMaterial();
+	DefaultSetTexture();
 }
 
 std::vector<VERTEX_3D> CubeMesh::CreateMeshVertices() {

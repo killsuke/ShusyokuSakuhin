@@ -5,6 +5,8 @@ CircleMesh::CircleMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
 	DefaultSetSubset();
+	DefaultSetMaterial();
+	DefaultSetTexture();
 }
 
 std::vector<VERTEX_3D> CircleMesh::CreateMeshVertices() {
@@ -14,8 +16,8 @@ std::vector<VERTEX_3D> CircleMesh::CreateMeshVertices() {
 
 	m_Vertices[0].position = Vector3(0.0f, 0.0f, 0.0f);
 	m_Vertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Vertices[0].uv = Vector2(0.0f, 0.0f);
-	m_Vertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
+	m_Vertices[0].uv = Vector2(0.5f, 0.5f);	// íÜêSÇÕUVÇÃíÜêS
+	m_Vertices[0].normal = Vector3(0.0f, 0.0f, 1.0f);
 
 	for (int i = 1; i < numSegments + 1; ++i) {
 		float theta = (DirectX::XM_2PI * i) / numSegments;
@@ -24,8 +26,8 @@ std::vector<VERTEX_3D> CircleMesh::CreateMeshVertices() {
 
 		m_Vertices[i].position = Vector3(x, y, 0.0f);
 		m_Vertices[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-		m_Vertices[i].uv = Vector2(0.0f, 1.0f);
-		m_Vertices[i].normal = Vector3(0.0f, 0.0f, -1.0f);
+		m_Vertices[i].uv = Vector2(0.5f + cosf(theta) * 0.5f, 0.5f + sinf(theta) * 0.5f);
+		m_Vertices[i].normal = Vector3(0.0f, 0.0f, 1.0f);
 	}
 
 	return m_Vertices;

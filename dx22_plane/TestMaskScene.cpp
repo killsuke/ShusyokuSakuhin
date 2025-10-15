@@ -15,11 +15,11 @@ TestMaskScene::TestMaskScene() {
 	auto testSquareTrans = testSquare->AddComponent<TransformComponent>();
 	testSquareTrans->SetScale({ 100.0f, 100.0f, 1.0f });
 	testSquareTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-	SquareMesh squareMesh;	// 四角形のメッシュ
+
 	auto testSquareRe = testSquare->AddComponent<RenderMask3DComponent>();
-	testSquareRe->SetMesh(squareMesh);
+	testSquareRe->CreateMesh<SquareMesh>();
 	testSquareRe->SetShader("shader/unlitTextureVS.hlsl", "MaskTexturePS.hlsl");
-	testSquareRe->SetTextureAndMask("assets/texture/title_car.png","assets/texture/mask.png");
+//	testSquareRe->SetTextureAndMask("assets/texture/title_car.png","assets/texture/mask.png");
 	testSquareRe->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 

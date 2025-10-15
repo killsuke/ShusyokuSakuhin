@@ -6,6 +6,8 @@ SphereMesh::SphereMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
 	DefaultSetSubset();
+	DefaultSetMaterial();
+	DefaultSetTexture();
 }
 
 std::vector<VERTEX_3D> SphereMesh::CreateMeshVertices() {

@@ -104,9 +104,9 @@ cbuffer MaterialBuffer:register(b6) {
 }
 
 // ‚t‚uÀ•WˆÚ“®s—ñ
-cbuffer MaterialTexBuffer : register(b6) {
-	matrix matrixTex;
-}
+//cbuffer MaterialTexBuffer : register(b6) {
+//	matrix matrixTex;
+//}
 
 cbuffer ConstantBufferBoneComb : register(b8)
 {	

@@ -35,7 +35,7 @@ PS_IN vs_main(in VS_IN input)
 	// output.col.xyz += input.col.xyz * (Light.Ambient.xyz * 0.5f); // アンビエント光を半減(強度変更)
 	output.col.xyz += input.col.xyz * Light.Ambient.xyz; // アンビエント光を加算
 	//output.col.xyz += (Material.Emission.xyz * 2.0f);	// Emissionを倍増
-
+	
 	output.col.xyz += Material.Emission.xyz;	// Emissionを加算
 	output.col.a = input.col.a * Material.Diffuse.a; // アルファ値はそのまま使用
 

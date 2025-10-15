@@ -15,10 +15,9 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	doorUpTransform->SetPosition({ 0.0f,600.0f,-1.0f });
 	doorUpTransform->SetScale({ 700.0f,200.0f,1.0f });
 	doorUpFirstPos = doorUpTransform->GetPosition();
-	SquareMesh squareMeshUP;
 	auto doorUpRender = doorUp->AddComponent<Render2DComponent>();
-	doorUpRender->SetMesh(squareMeshUP);
-	doorUpRender->SetTexture("assets/texture/IronWall.png");
+	doorUpRender->CreateMesh<SquareMesh>();
+	doorUpRender->ChangeTexture("assets/texture/IronWall.png");
 	doorUpRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 
 	doorDown = GameObjectManager::AddUI("doorDOWN", "FadeUI");
@@ -26,10 +25,9 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	doorDownTransform->SetPosition({ 0.0f,-600.0f,-1.0f });
 	doorDownTransform->SetScale({ 700.0f,200.0f,1.0f });
 	doorDownFirstPos = doorDownTransform->GetPosition();
-	SquareMesh squareMeshDOWN;
 	auto doorDownRender = doorDown->AddComponent<Render2DComponent>();
-	doorDownRender->SetMesh(squareMeshDOWN);
-	doorDownRender->SetTexture("assets/texture/IronWall.png");
+	doorDownRender->CreateMesh<SquareMesh>();
+	doorDownRender->ChangeTexture("assets/texture/IronWall.png");
 	doorDownRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 
 	doorUp->SetCarryOverFlag(true);

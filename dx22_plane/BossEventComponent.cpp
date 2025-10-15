@@ -58,11 +58,10 @@ void BossEventComponent::CreateBossWalls() {
 
 	auto collider = terrainObj->AddComponent<ColliderComponent>();
 
-	CubeMesh cubeMesh;
 	auto render = terrainObj->AddComponent<Render3DComponent>();
-	render->SetMesh(cubeMesh);
+	render->CreateMesh<CubeMesh>();
 	render->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-	render->SetTexture("assets/texture/testTerrain.png");
+	render->ChangeTexture("assets/texture/testTerrain.png");
 
 
 	auto boss = GameObjectManager::AddObject("Boss", "Enemy");
@@ -90,11 +89,10 @@ void BossEventComponent::CreateBossWalls() {
 
 	auto enemyAction = boss->AddComponent<EnemyActionBossComponent>();
 
-	SquareMesh cubeMesh2;	// 四角形のメッシュ
 	auto cubeRe = boss->AddComponent<Render2DComponent>();
-	cubeRe->SetMesh(cubeMesh2);
+	cubeRe->CreateMesh<SquareMesh>();
 	cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	cubeRe->SetTexture("assets/texture/bossHo-dai.png");
+	cubeRe->ChangeTexture("assets/texture/bossHo-dai.png");
 
 	//CubeMesh cubeMesh2;
 	//auto cubeRe2 = boss->AddComponent<Render3DColliderAABBComponent>();

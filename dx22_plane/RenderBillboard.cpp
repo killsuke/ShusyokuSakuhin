@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 }
 
 void RenderBillboardComponent::Update()
@@ -17,7 +17,7 @@ void RenderBillboardComponent::Update()
 	auto transform = p_object->GetComponent<TransformComponent>();
 	auto camera = GameObjectManager::GameObjectFindName("camera");
 
-	if (transform != nullptr && camera != nullptr) {
+	if (transform != nullptr && camera != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
@@ -60,25 +60,43 @@ void RenderBillboardComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+	//	m_Texture->SetGPU();
 
-		auto uvs = m_Texture->GetUVSets();
+		auto texture = GetTexture();
+		auto uvs = texture->GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;
 		uvs.z = 1 / uvs.z;
 		uvs.w = 1 / uvs.w;
 
-		cb.matrixTex = m_Texture->MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
+		cb.matrixTex = texture->MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
 		cb.inverse = m_inversionFlag;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-		deviceContext->DrawIndexed(
-			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
-			0,							// 最初のインデックスバッファの位置
-			0);
+		auto subsets = m_Mesh->GetSubsets();
+
+		auto materials = m_Mesh->GetMaterials();
+
+		auto textures = m_Mesh->GetTextures();
+
+		//マテリアル数分ループ 
+		for (int i = 0; i < subsets.size(); i++)
+		{
+			// ここ使う
+			MATERIAL material = materials[subsets[i].MaterialIdx];
+
+			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+
+			textures[subsets[i].MaterialIdx]->SetGPU();
+
+			deviceContext->DrawIndexed(
+				subsets[i].IndexNum,		// 描画するインデックス数
+				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
+				subsets[i].VertexBase);	// 頂点バッファの最初から使用
+		}
 	}
 }

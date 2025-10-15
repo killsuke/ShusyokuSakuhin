@@ -49,11 +49,9 @@ void Stage1Scene::Init()
 	testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 	testTrans->SetScale({ 20.0f,20.0f,20.0f });
 	auto rend = testObj->AddComponent<Render3DComponent>();
-	//CubeMesh cube;
-	//rend->SetMesh(cube);
 	rend->CreateMesh<CubeMesh>();
-	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rend->SetTexture("assets/texture/NoTexture.png");
+	rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	rend->ChangeTexture("assets/texture/NoTexture.png");
 	rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 }
 
@@ -81,10 +79,10 @@ void Stage1Scene::BonePartTest()
 	waistbone->SetStartBonePosition({ 0.0f,0.0f,0.0f });
 	waistbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
 	auto waistrend = waist->AddComponent<Render3DComponent>();
-	SquareMesh waistsquare;
-	waistrend->SetMesh(waistsquare);
+
+	waistrend->CreateMesh<SquareMesh>();
 	waistrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	waistrend->SetTexture("assets/texture/NoTexture.png");
+	waistrend->ChangeTexture("assets/texture/NoTexture.png");
 	waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
 
 	// ‹¹
@@ -100,10 +98,9 @@ void Stage1Scene::BonePartTest()
 	chestbone->SetReferencePoint(waistbone->GetEndPoint());
 
 	auto chestrend = chest->AddComponent<Render3DComponent>();
-	SquareMesh chestsquare;
-	chestrend->SetMesh(chestsquare);
+	chestrend->CreateMesh<SquareMesh>();
 	chestrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	chestrend->SetTexture("assets/texture/NoTexture.png");
+	chestrend->ChangeTexture("assets/texture/NoTexture.png");
 	chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
 	// “ª
@@ -119,10 +116,9 @@ void Stage1Scene::BonePartTest()
 	headbone->SetReferencePoint(chestbone->GetEndPoint());
 
 	auto headrend = head->AddComponent<Render3DComponent>();
-	SquareMesh headsquare;
-	headrend->SetMesh(headsquare);
+	headrend->CreateMesh<SquareMesh>();
 	headrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	headrend->SetTexture("assets/texture/NoTexture.png");
+	headrend->ChangeTexture("assets/texture/NoTexture.png");
 	headrend->SetColor({ 0.0f,0.0f,0.5f,1.0f });
 
 }
@@ -136,7 +132,7 @@ void Stage1Scene::BoneToPartTest() {
 	auto lineRender = lineObj->AddComponent<RenderLineComponent>();
 	lineTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 	lineRender->SetStartAndEndPosition({ 0.0f,0.0f,0.0f }, { 0.0f,100.0f,0.0f });
-	lineRender->SetTexture("assets/texture/NoTexture.png");
+	lineRender->ChangeTexture("assets/texture/NoTexture.png");
 	lineRender->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 	lineRender->SetThickness(5.0f);
 }
@@ -148,9 +144,8 @@ void Stage1Scene::TestBlur() {
 	trans->SetPosition({ 0.0f, 0.0f, 0.0f });
 	trans->SetScale({ 200.0f,200.0f,1.0f });
 	auto rend = obj->AddComponent<RenderBlurComponent>();
-	SquareMesh square;
-	rend->SetMesh(square);
+	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/BlurPS.hlsl");
-	rend->SetTexture("assets/texture/setumei.png");
+	rend->ChangeTexture("assets/texture/setumei.png");
 	rend->SetBlurTextureSize(Vector2(512.0f,512.0f));
 }

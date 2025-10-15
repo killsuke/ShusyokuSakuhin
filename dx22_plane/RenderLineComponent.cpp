@@ -13,10 +13,9 @@ using namespace DirectX::SimpleMath;
 RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 
-	LineMesh line;
-	SetMesh(line);
+	CreateMesh<LineMesh>();
 	// 専用のインプットレイアウトもここで作成予定
 	SetShader("shader/LineVS.hlsl", "shader/unlitTexturePS.hlsl","unlitTexture_GS.hlsl");
 
@@ -25,27 +24,27 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	transS->SetScale({10.0f,10.0f,10.0f});
 	transS->SetPosition({ 0.0f,50.0f,0.0f });
 	auto rendS = p_startObj->AddComponent<RenderBillboardComponent>();
-	CircleMesh cirS;
-	rendS->SetMesh(cirS);
+	
+	rendS->CreateMesh<CircleMesh>();
 	rendS->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rendS->SetTexture("assets/texture/NoTexture.png");
+	rendS->ChangeTexture("assets/texture/NoTexture.png");
 
 	p_endObj = GameObjectManager::AddAbsFront("endPoint","LineObj");
 	auto transE = p_endObj->AddComponent<TransformComponent>();
 	transE->SetScale({ 10.0f,10.0f,10.0f });
 	transE->SetPosition({ 0.0f,-50.0f,0.0f });
 	auto rendE = p_endObj->AddComponent<RenderBillboardComponent>();
-	CircleMesh cirE;
-	rendE->SetMesh(cirE);
+	
+	rendE->CreateMesh<CircleMesh>();
 	rendE->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	rendE->SetTexture("assets/texture/NoTexture.png");
+	rendE->ChangeTexture("assets/texture/NoTexture.png");
 }
 
 void RenderLineComponent::Update()
 {
 	auto transform = p_object->GetComponent<TransformComponent>();	
 
-	if (transform != nullptr) {
+	if (transform != nullptr && m_Mesh != nullptr) {
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
@@ -91,12 +90,29 @@ void RenderLineComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+	//	m_Texture->SetGPU();
 
-		deviceContext->DrawIndexed(
-			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
-			0,							// 最初のインデックスバッファの位置
-			0);
+		auto subsets = m_Mesh->GetSubsets();
+
+		auto materials = m_Mesh->GetMaterials();
+
+		auto textures = m_Mesh->GetTextures();
+
+		//マテリアル数分ループ 
+		for (int i = 0; i < subsets.size(); i++)
+		{
+			// ここ使う
+			MATERIAL material = materials[subsets[i].MaterialIdx];
+
+			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+
+			textures[subsets[i].MaterialIdx]->SetGPU();
+
+			deviceContext->DrawIndexed(
+				subsets[i].IndexNum,		// 描画するインデックス数
+				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
+				subsets[i].VertexBase);	// 頂点バッファの最初から使用
+		}
 	}
 }
 

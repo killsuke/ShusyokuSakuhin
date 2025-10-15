@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 SkyDomeRenderComponent::SkyDomeRenderComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 }
 
 void SkyDomeRenderComponent::Update() {

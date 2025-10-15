@@ -69,11 +69,10 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
 		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
-		SquareMesh squareMesh;
 		auto render = enemyObj->AddComponent<Render2DComponent>();
-		render->SetMesh(squareMesh);
+		render->CreateMesh<SquareMesh>();
 		render->SetShader(eS.shaderVS, eS.shaderPS);
-		render->SetTexture(eS.texture);
+		render->ChangeTexture(eS.texture);
 		render->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
@@ -82,9 +81,9 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		auto pd = enemyObj->AddComponent<PlayerDamageComponent>();
 
 		auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
-		renderColl->SetMesh(squareMesh);
+		renderColl->CreateMesh<SquareMesh>();
 		renderColl->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		renderColl->SetTexture("assets/texture/NoTexture.png");
+		renderColl->ChangeTexture("assets/texture/NoTexture.png");
 		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));
 
 		num++;

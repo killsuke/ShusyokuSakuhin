@@ -71,9 +71,9 @@ void EnemyActionBulletComponent::FiringBullet() {
 
 	// ここが重い（おそらくテクスチャ取得に問題あり？）
 	auto rend = bullet->AddComponent<Render2DComponent>();
-	SquareMesh squareMesh;
-	rend->SetMesh(squareMesh);
+
+	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/Animation2DVS.cso", "shader/unlitTexturePS.cso");
-	rend->SetTexture("assets/texture/bullet.png");
+	rend->ChangeTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(!m_rightLeft);
 }

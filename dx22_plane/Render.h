@@ -33,7 +33,6 @@ class RenderComponent : public Component
 {
 protected:
 	std::unique_ptr<Shader> m_Shader = nullptr;
-	std::unique_ptr<Texture> m_Texture = nullptr;
 	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
 	IndexBuffer m_IndexBuffer = {};
 	std::unique_ptr<Mesh> m_Mesh = nullptr;
@@ -46,17 +45,27 @@ public:
 
 	virtual void Update() = 0;
 	void SetShader(const std::string& vertex, const std::string& pixel, const std::string& geometry = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{}) { m_Shader->Create(vertex, pixel, geometry, lay); };
-	void SetTexture(const std::string& fileName = "assets/texture/NoTexture.png") { m_Texture->LoadTexture(fileName); };
-	void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
+	
+	// テクスチャを変更する（メッシュに装備されたテクスチャが１枚なら）
+	void ChangeTexture(const std::string& fileName = "assets/texture/NoTexture.png") { 
+		if (m_Mesh == nullptr) return;
+
+		m_Mesh->ChangeTexture(fileName);
+	};
+	/*void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
 		m_Texture->Load(fileName);
 		m_Texture->LoadMask(maskFileName);
-	};
-	void SetMesh(Mesh& mesh);
+	};*/
 	void SetColor(const DirectX::SimpleMath::Vector4 color) { m_Color = color; };
 	void SetInversionFlag(const bool flag) { m_inversionFlag = flag; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
-	Texture* GetTexture() { return m_Texture.get(); };
+	Texture* GetTexture() { 
+		if (m_Mesh == nullptr) return nullptr;
+
+		std::vector<Texture*> texs = m_Mesh->GetTextures();
+		return texs[0];
+	};
 
 
 	template<class T>

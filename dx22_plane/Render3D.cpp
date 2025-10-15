@@ -9,14 +9,14 @@ using namespace DirectX::SimpleMath;
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 }
 
 void Render3DComponent::Update()
 {
 	auto transform = p_object->GetComponent<TransformComponent>();
 
-	if (transform != nullptr) {
+	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
@@ -32,23 +32,26 @@ void Render3DComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+		//m_Texture->SetGPU();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
 		auto subsets = m_Mesh->GetSubsets();
 
+		auto materials = m_Mesh->GetMaterials();
+
+		auto textures = m_Mesh->GetTextures();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
-			// マテリアルをセット(サブセット情報の中にあるマテリアルインデックスを使用)
-		//	m_Materiales[m_subsets[i].MaterialIdx]->SetGPU();
+			// ここ使う
+			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-		/*	if (m_Materiales[m_subsets[i].MaterialIdx]->isTextureEnable())
-			{
-				m_Textures[m_subsets[i].MaterialIdx]->SetGPU();
-			}*/
+			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+
+			textures[subsets[i].MaterialIdx]->SetGPU();
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

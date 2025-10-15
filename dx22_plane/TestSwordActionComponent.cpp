@@ -154,11 +154,11 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	else {
 		effectTrans->SetPosition({ pos.x - 7.0f, pos.y, pos.z });
 	}
-	SquareMesh square;
+
 	auto render = effect->AddComponent<RenderBillboardComponent>();
-	render->SetMesh(square);
+	render->CreateMesh<SquareMesh>();
 	render->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-	render->SetTexture("assets/texture/swordEffect.png");
+	render->ChangeTexture("assets/texture/swordEffect.png");
 	render->SetInversionFlag(!m_rightLeft);
 	auto tex = render->GetTexture();
 	tex->SetInitialCut(5.0f, 1.0f);

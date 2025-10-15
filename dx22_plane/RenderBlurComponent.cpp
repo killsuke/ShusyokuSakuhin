@@ -7,14 +7,14 @@ RenderBlurComponent::RenderBlurComponent(GameObject& obj) :RenderComponent(obj) 
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 }
 
 void RenderBlurComponent::Update() {
 
 	TransformComponent* transform = p_object->GetComponent<TransformComponent>();
 
-	if (transform) {
+	if (transform != nullptr && m_Mesh != nullptr) {
 
 		//定数バッファを更新
 		ConstBuffer cb;
@@ -31,7 +31,7 @@ void RenderBlurComponent::Update() {
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+	//	m_Texture->SetGPU();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
@@ -40,9 +40,26 @@ void RenderBlurComponent::Update() {
 		blurSize.textureSize = m_BlurSize;
 		deviceContext->UpdateSubresource(g_pBlurBuffer, 0, NULL, &blurSize, 0, 0);
 
-		deviceContext->DrawIndexed(
-			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）
-			0,							// 最初のインデックスバッファの位置
-			0);
+		auto subsets = m_Mesh->GetSubsets();
+
+		auto materials = m_Mesh->GetMaterials();
+
+		auto textures = m_Mesh->GetTextures();
+
+		//マテリアル数分ループ 
+		for (int i = 0; i < subsets.size(); i++)
+		{
+			// ここ使う
+			MATERIAL material = materials[subsets[i].MaterialIdx];
+
+			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+
+			textures[subsets[i].MaterialIdx]->SetGPU();
+
+			deviceContext->DrawIndexed(
+				subsets[i].IndexNum,		// 描画するインデックス数
+				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
+				subsets[i].VertexBase);	// 頂点バッファの最初から使用
+		}
 	}
 }

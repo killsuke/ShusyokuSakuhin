@@ -6,6 +6,8 @@ LineMesh::LineMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
 	DefaultSetSubset();
+	DefaultSetMaterial();
+	DefaultSetTexture();
 }
 
 std::vector<VERTEX_3D> LineMesh::CreateMeshVertices() {

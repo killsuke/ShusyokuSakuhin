@@ -12,13 +12,13 @@ HumanBoneComponent::HumanBoneComponent(GameObject& obj) : RenderComponent(obj)
 	// 頂点作成と重み付けもするよ
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 
 	CreateBoneMeshVertices();
 	CreateMeshIndices();
 
 	m_Shader->CreateOneSkinAnimation("OneSkinAnimationVS.hlsl", "OneSkinAnimationPS.hlsl");
-	m_Texture->Load("assets/texture/NoTexture.png");
+	//m_Texture->Load("assets/texture/NoTexture.png");
 
 	BoneInit();
 }
@@ -233,7 +233,7 @@ void HumanBoneComponent::Draw() {
 		m_AnimationVertexBuffer.SetGPU();
 
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+		//m_Texture->SetGPU();
 
 		//// デバッグ用に一応単位行列に
 		//for (int i = 0; i < INCH_WORM_BONE_NUM; i++) {

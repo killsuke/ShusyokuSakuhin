@@ -29,6 +29,7 @@ extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11Buffer* g_pHPBarConstantBuffer;
 extern ID3D11Buffer* g_pBlurBuffer;
+extern ID3D11Buffer* m_MaterialBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 // 定数バッファ用構造体
@@ -90,7 +91,6 @@ private:
 	static ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
 	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
 	static ID3D11Buffer* m_LightBuffer;
-	static ID3D11Buffer* m_MaterialBuffer;
 	static CameraMatrix m_CameraMatrix;			// カメラ行列
 	static ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
 

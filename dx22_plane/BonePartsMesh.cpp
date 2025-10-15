@@ -6,5 +6,7 @@ BonePartsMesh::BonePartsMesh() {
 	CreateMeshVertices();
 	CreateMeshIndices();
 	DefaultSetSubset();
+	DefaultSetMaterial();
+	DefaultSetTexture();
 }
 

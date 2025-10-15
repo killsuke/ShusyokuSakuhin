@@ -10,7 +10,7 @@ Bones::Bones(GameObject& obj) : RenderComponent(obj)
 	// 頂点作成と重み付けもするよ
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Texture = std::make_unique<Texture>();
+	//m_Texture = std::make_unique<Texture>();
 
 	m_bones = new Bone[BONE_NUM];	// ボーンの数だけメモリを確保
 
@@ -187,7 +187,7 @@ void Bones::Update() {
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		m_Texture->SetGPU();
+		//m_Texture->SetGPU();
 
 		auto cameraComp = cameraobj->GetComponent<Camera>();
 

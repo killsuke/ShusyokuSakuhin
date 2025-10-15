@@ -31,8 +31,6 @@ ID3D11DepthStencilView* DirectXRender::g_pDepthStencilView = nullptr;
 
 ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
 
-ID3D11Buffer* DirectXRender::m_MaterialBuffer = nullptr;
-
 CameraMatrix DirectXRender::m_CameraMatrix = {};
 
 ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // 線の太さ
@@ -42,29 +40,31 @@ ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
 
 // インプットレイアウト
-ID3D11InputLayout* g_pInputLayout;
+ID3D11InputLayout* g_pInputLayout = nullptr;
 // 頂点シェーダーオブジェクト
-ID3D11VertexShader* g_pUnlitVertexShader;
+ID3D11VertexShader* g_pUnlitVertexShader = nullptr;
 // ピクセルシェーダーオブジェクト
-ID3D11PixelShader* g_pUnlitPixelShader;
+ID3D11PixelShader* g_pUnlitPixelShader = nullptr;
 // サンプラー用変数
-ID3D11SamplerState* g_pSampler;
+ID3D11SamplerState* g_pSampler = nullptr;
 // 定数バッファ用変数
-ID3D11Buffer* g_pConstantBuffer;
+ID3D11Buffer* g_pConstantBuffer = nullptr;
 
 // ボーン用の定数バッファ構造体
-ID3D11Buffer* g_pBoneConstantBuffer;
+ID3D11Buffer* g_pBoneConstantBuffer = nullptr;
 
 // ＨＰバー用の定数バッファ構造体
-ID3D11Buffer* g_pHPBarConstantBuffer;
+ID3D11Buffer* g_pHPBarConstantBuffer = nullptr;
 
 // ブラー用のバッファ
-ID3D11Buffer* g_pBlurBuffer;
+ID3D11Buffer* g_pBlurBuffer = nullptr;
+
+ID3D11Buffer* m_MaterialBuffer = nullptr;
 
 // ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
-ID3D11BlendState* g_BlendStateATC;
+ID3D11BlendState* g_BlendStateATC = nullptr;
 
 //ID3D11Buffer* g_pViewBuffer3D{}; // ビュー行列
 //ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
@@ -104,7 +104,7 @@ HRESULT DirectXRender::Init() {
 	LightSetting();
 
 	MaterialBufferCreate();
-	MaterialSetting();
+	//MaterialSetting();
 
 	SetBlendState(1);
 
@@ -544,7 +544,7 @@ HRESULT DirectXRender::MaterialBufferCreate() {
 		return hr;
 	}
 
-	// ここ２個もいるかね？
+	// 頂点＆ピクセルシェーダー両方にセット
 	m_DeviceContext->VSSetConstantBuffers(6, 1, &m_MaterialBuffer);
 	m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
 

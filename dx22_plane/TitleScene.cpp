@@ -45,11 +45,11 @@ void TitleScene::Init()
 		auto transTitle = titleUI->AddComponent<TransformComponent>();
 		transTitle->SetPosition({ 0.0f,0.0f,1.0f });
 		transTitle->SetScale({ 1080.0f,1000.0f,1.0f });
-		SquareMesh square;
+
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-		rendTitle->SetMesh(square);
+		rendTitle->CreateMesh<SquareMesh>();
 		rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-		rendTitle->SetTexture("assets/texture/NoTexture.png");
+		rendTitle->ChangeTexture("assets/texture/NoTexture.png");
 		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	}
 
@@ -57,11 +57,11 @@ void TitleScene::Init()
 	auto transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
 	transTitle->SetScale({ 400.0f,280.0f,1.0f });
-	SquareMesh square;
+
 	auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-	rendTitle->SetMesh(square);
+	rendTitle->CreateMesh<SquareMesh>();
 	rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-	rendTitle->SetTexture("assets/texture/Slash_Action_2.5D.png");
+	rendTitle->ChangeTexture("assets/texture/Slash_Action_2.5D.png");
 
 	{
 		auto titleUI = GameObjectManager::AddUI("tenmetuUI", "TitleUI");
@@ -71,11 +71,10 @@ void TitleScene::Init()
 		auto blink = titleUI->AddComponent<BlinkingUIComponent>();
 		blink->SetBlinkingSpeed(0.7f);
 
-		SquareMesh square;
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-		rendTitle->SetMesh(square);
+		rendTitle->CreateMesh<SquareMesh>();
 		rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-		rendTitle->SetTexture("assets/texture/please.png");
+		rendTitle->ChangeTexture("assets/texture/please.png");
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 

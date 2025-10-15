@@ -46,15 +46,15 @@ ResultScene::ResultScene()
 	auto transTitle = ResultUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,30.0f,0.0f });
 	transTitle->SetScale({ 700.0f,400.0f,1.0f });
-	SquareMesh square;
+
 	auto rendTitle = ResultUI->AddComponent<Render2DComponent>();
-	rendTitle->SetMesh(square);
+	rendTitle->CreateMesh<SquareMesh>();
 	rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 	if (fadeUI->GetWinLoseFlag() == true) {
-		rendTitle->SetTexture("assets/texture/gameclear.png");
+		rendTitle->ChangeTexture("assets/texture/gameclear.png");
 	}
-	else{
-		rendTitle->SetTexture("assets/texture/gameOver.png");
+	else {
+		rendTitle->ChangeTexture("assets/texture/gameOver.png");
 	}
 
 	{
@@ -65,11 +65,10 @@ ResultScene::ResultScene()
 		auto blink = titleUI->AddComponent<BlinkingUIComponent>();
 		blink->SetBlinkingSpeed(0.7f);
 
-		SquareMesh square;
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-		rendTitle->SetMesh(square);
+		rendTitle->CreateMesh<SquareMesh>();
 		rendTitle->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-		rendTitle->SetTexture("assets/texture/please.png");
+		rendTitle->ChangeTexture("assets/texture/please.png");
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 
@@ -89,7 +88,7 @@ ResultScene::~ResultScene()
 // çXêV
 void ResultScene::Update()
 {
-	
+
 	if ((Input::GetKeyTrigger(VK_L) || Input::GetButtonTrigger(XINPUT_X)))
 	{
 		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
