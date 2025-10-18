@@ -53,7 +53,7 @@ void RenderMask3DComponent::Update()
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 
-			textures[subsets[i].MaterialIdx]->SetGPU();
+			textures[subsets[i].MaterialIdx].SetGPU();
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

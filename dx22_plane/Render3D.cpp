@@ -53,7 +53,7 @@ void Render3DComponent::Update()
 
 			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
 
-				textures[subsets[i].MaterialIdx]->SetGPU();
+				textures[subsets[i].MaterialIdx].SetGPU();
 			}
 
 			deviceContext->DrawIndexed(

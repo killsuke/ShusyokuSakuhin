@@ -6,19 +6,16 @@
 
 class ModelManager {
 public:
-    // シングルトンのインスタンス取得
-    /*static ModelManager& GetInstance() {
-        static ModelManager instance;
-        return instance;
-    }*/
+
+	static void AddModel(const std::string& modelPath, const std::string& texDirectory,const StaticMesh& mesh);
 
     // モデルを取得する関数
     static StaticMesh* GetModel(const std::string& modelPath, const std::string& texDirectory);
 
 private:
     // プライベートコンストラクタ
-    ModelManager() {}
-    ~ModelManager() {}
+	ModelManager() = default;
+	~ModelManager() = default;
 
     // コンストラクタを生成されないように
     ModelManager(const ModelManager&) = delete;

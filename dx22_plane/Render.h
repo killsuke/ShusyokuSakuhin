@@ -61,10 +61,13 @@ public:
 	void SetInversionFlag(const bool flag) { m_inversionFlag = flag; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
-	Texture* GetTexture() { 
-		if (m_Mesh == nullptr) return nullptr;
+	Texture GetTexture() { 
 
-		std::vector<Texture*> texs = m_Mesh->GetTextures();
+		std::vector<Texture> texs = m_Mesh->GetTextures();
+		// 単一テクスチャの場合のみ返す
+		if (texs.size() == 0) {
+			return Texture();
+		}
 		return texs[0];
 	};
 

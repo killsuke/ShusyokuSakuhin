@@ -6,6 +6,26 @@
 
 using namespace DirectX::SimpleMath;
 
+Texture::Texture(const Texture& other)
+	: m_texname(other.m_texname),
+	m_srv(other.m_srv),           // ComPtr は参照カウントが増えるだけ
+	m_srvMask(other.m_srvMask),
+	m_width(other.m_width),
+	m_height(other.m_height),
+	m_bpp(other.m_bpp),
+	m_NumU(other.m_NumU),
+	m_NumV(other.m_NumV),
+	m_SplitX(other.m_SplitX),
+	m_SplitY(other.m_SplitY)
+{
+	// 追加の初期化が必要ならここに
+}
+
+std::unique_ptr<Texture> Texture::Clone() const {
+
+	return std::make_unique<Texture>(*this);
+}
+
 // テクスチャをロード
 bool Texture::Load(const std::string& filename)
 {

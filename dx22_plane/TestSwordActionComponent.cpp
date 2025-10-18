@@ -156,12 +156,11 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	}
 
 	auto render = effect->AddComponent<RenderBillboardComponent>();
-	render->CreateMesh<SquareMesh>();
+	auto mesh = render->CreateMesh<SquareMesh>();
 	render->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/swordEffect.png");
 	render->SetInversionFlag(!m_rightLeft);
-	auto tex = render->GetTexture();
-	tex->SetInitialCut(5.0f, 1.0f);
+	mesh->SetInitialCut(5.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
 }

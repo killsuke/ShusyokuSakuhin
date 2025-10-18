@@ -33,16 +33,16 @@ void Render2DComponent::Update()
 		m_IndexBuffer.SetGPU();
 		//m_Texture->SetGPU();
 
-		auto texture = GetTexture();
+		auto texture = m_Mesh->GetTextures();
 
-		auto uvs = texture->GetUVSets();
+		auto uvs = texture[0].GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;
 		uvs.z = 1 / uvs.z;
 		uvs.w = 1 / uvs.w;
 
-		cb.matrixTex = texture->MakeUV(uvs.x,uvs.y, uvs.z, uvs.w);
+		cb.matrixTex = texture[0].MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
 		cb.inverse = m_inversionFlag;
 
@@ -63,7 +63,7 @@ void Render2DComponent::Update()
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 
-			textures[subsets[i].MaterialIdx]->SetGPU();
+			textures[subsets[i].MaterialIdx].SetGPU();
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

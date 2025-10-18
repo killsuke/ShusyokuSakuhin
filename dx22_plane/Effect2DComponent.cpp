@@ -23,8 +23,10 @@ void Effect2DComponent::Update() {
 			/*if (m_nowCutNumX > m_maxCutNumX) {
 				m_nowCutNumX = 1.0f;
 			}*/
-			auto tex = rendBill->GetTexture();
-			tex->SetCutNum(m_nowCutNumX, 1.0f);
+
+			auto mesh = rendBill->GetMesh();
+			
+			mesh->SetCutNum(m_nowCutNumX, 1.0f);
 			m_cutRecordTime = 0.0f;
 		}
 	}

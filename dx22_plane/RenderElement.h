@@ -2,6 +2,7 @@
 #include <SimpleMath.h>
 #include	<iostream>
 #include	<string.h>
+#include	<memory>
 
 // ３Ｄ頂点データ
 struct VERTEX_3D
@@ -28,6 +29,17 @@ struct SUBSET {
 	unsigned int IndexBase = 0;		// 開始インデックス
 	unsigned int VertexBase = 0;	// 頂点ベース
 	unsigned int MaterialIdx = 0;	// マテリアルの番号
+
+	std::unique_ptr<SUBSET> Clone() const {
+		std::unique_ptr<SUBSET> subset = std::make_unique<SUBSET>();
+		subset->MtrlName = MtrlName;
+		subset->IndexNum = IndexNum;
+		subset->VertexNum = VertexNum;
+		subset->IndexBase = IndexBase;
+		subset->VertexBase = VertexBase;
+		subset->MaterialIdx = MaterialIdx;
+		return subset;
+	}
 };
 
 // マテリアル
@@ -39,5 +51,16 @@ struct MATERIAL {
 	float Shiness = 0.0f;	// 光沢の滑らかさ
 	BOOL TextureEnable = TRUE; // テクスチャを使うか否かのフラグ
 	DirectX::SimpleMath::Vector2 Padding; // パディング
-	//BOOL Dummy[2];
+
+	std::unique_ptr<MATERIAL> Clone() const {
+		std::unique_ptr<MATERIAL> material = std::make_unique<MATERIAL>();
+		material->Ambient = Ambient;
+		material->Diffuse = Diffuse;
+		material->Specular = Specular;
+		material->Emission = Emission;
+		material->Shiness = Shiness;
+		material->TextureEnable = TextureEnable;
+		material->Padding = Padding;
+		return material;
+	}
 };

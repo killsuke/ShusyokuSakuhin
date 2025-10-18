@@ -63,14 +63,14 @@ void RenderBillboardComponent::Update()
 	//	m_Texture->SetGPU();
 
 		auto texture = GetTexture();
-		auto uvs = texture->GetUVSets();
+		auto uvs = texture.GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;
 		uvs.z = 1 / uvs.z;
 		uvs.w = 1 / uvs.w;
 
-		cb.matrixTex = texture->MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
+		cb.matrixTex = texture.MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
 		cb.inverse = m_inversionFlag;
 
@@ -91,7 +91,7 @@ void RenderBillboardComponent::Update()
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 
-			textures[subsets[i].MaterialIdx]->SetGPU();
+			textures[subsets[i].MaterialIdx].SetGPU();
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

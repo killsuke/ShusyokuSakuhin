@@ -5,6 +5,7 @@
 #include	<wrl/client.h> // ComPtrの定義を含むヘッダファイル
 #include	<filesystem>
 #include	<SimpleMath.h>
+#include	<memory>
 
 using Microsoft::WRL::ComPtr;
 
@@ -15,7 +16,7 @@ class Texture
 {
 private:
 
-	std::string m_texname{}; // ファイル名
+	std::string m_texname = ""; // ファイル名
 	ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
 	ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
 
@@ -30,6 +31,13 @@ private:
 	float m_SplitY = 1.0f;
 
 public:
+	Texture() = default;
+	~Texture() = default;
+
+	Texture(const Texture& other);
+
+	std::unique_ptr<Texture> Clone() const;
+
 	bool Load(const std::string& filename);
 	bool LoadMask(const std::string& filename);
 	bool LoadTexture(const std::string& filename);

@@ -45,17 +45,47 @@ void Stage1Scene::Init()
 
 	//TestBlur();
 
-	auto testObj = GameObjectManager::AddObject("testObj", "Test");
-	auto testTrans = testObj->AddComponent<TransformComponent>();
-	testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-	testTrans->SetScale({ 0.5f,0.5f,0.5f });
-	auto rend = testObj->AddComponent<Render3DComponent>();
-	rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj", 
-		"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
-	
-	rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-//	rend->ChangeTexture("assets/texture/NoTexture.png");
-	rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+		testTrans->SetScale({ 0.5f,0.5f,0.5f });
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
+			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//	rend->ChangeTexture("assets/texture/NoTexture.png");
+		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	}
+
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ 0.0f, 20.0f, 0.0f });
+		testTrans->SetScale({ 0.5f,0.5f,0.5f });
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
+			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//	rend->ChangeTexture("assets/texture/NoTexture.png");
+		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	}
+
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ 0.0f, 40.0f, 0.0f });
+		testTrans->SetScale({ 0.5f,0.5f,0.5f });
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
+			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//	rend->ChangeTexture("assets/texture/NoTexture.png");
+		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+	}
 }
 
 //XV

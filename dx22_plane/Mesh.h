@@ -18,12 +18,35 @@ public:
 	Mesh() = default;
 	~Mesh() = default;
 
+	Mesh(const Mesh& other);
+
 	virtual std::vector<VERTEX_3D> CreateMeshVertices() = 0;
 	virtual std::vector<unsigned int> CreateMeshIndices() = 0;
 
 	void DefaultSetSubset();
 	void DefaultSetMaterial();
 	void DefaultSetTexture();
+
+	void SetTextureUV(float nu, float nv, float sx, float sy) {
+		// 単一テクスチャの場合のみ設定可能
+		if(m_Textures.size() == 1) {
+			m_Textures[0]->SetUV(nu, nv, sx, sy);
+		}
+	}
+
+	void SetInitialCut(float sx, float sy) {
+		// 単一テクスチャの場合のみ設定可能
+		if (m_Textures.size() == 1) {
+			m_Textures[0]->SetInitialCut(sx, sy);
+		}
+	}
+
+	void SetCutNum(float nu, float nv) {
+		// 単一テクスチャの場合のみ設定可能
+		if (m_Textures.size() == 1) {
+			m_Textures[0]->SetCutNum(nu, nv);
+		}
+	}
 
 	// 頂点データ取得
 	const std::vector<VERTEX_3D>& GetVertices() {
@@ -55,10 +78,15 @@ public:
 	}
 
 	// テクスチャ情報取得
-	std::vector<Texture*> GetTextures() const {
-		std::vector<Texture*> textures;
+	std::vector<Texture> GetTextures() const {
+		std::vector<Texture> textures;
 		for (const auto& ptr : m_Textures) {
-			textures.push_back(ptr.get());
+			if (ptr == nullptr) {
+				textures.push_back(Texture());
+				continue;
+			}
+
+			textures.push_back(*ptr.get());
 		}
 		return textures;
 	}
