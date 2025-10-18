@@ -196,7 +196,11 @@ bool Texture::LoadTexture(const std::string& filename)
 // テクスチャをGPUにセット
 void Texture::SetGPU()
 {
+	if (m_srv.Get() == nullptr) {
+		return;
+	}
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
+	
 	devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
 }
 

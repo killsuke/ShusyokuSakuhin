@@ -96,7 +96,8 @@ struct MATERIAL {
 	float4 Specular;
 	float4 Emission;
 	float Shininess;
-    float3 Padding;
+    bool TextureEnable;
+    float2 Padding;
 };
 
 cbuffer MaterialBuffer:register(b6) {

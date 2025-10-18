@@ -24,6 +24,7 @@
 #include "IndexBuffer.h"
 #include "Mesh.h"
 #include "BoneData.h"
+#include "StaticMesh.h"
 
 //ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ
 #pragma comment(lib,"directxtk.lib")
@@ -67,13 +68,25 @@ public:
 		return texs[0];
 	};
 
+	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
+
 
 	template<class T>
-	void CreateMesh() {
+	T* CreateMesh() {
 		static_assert(std::is_base_of_v<Mesh, T>, "T must inherit from Mesh");
-		m_Mesh = std::make_unique<T>();
-		m_VertexBuffer.Create(m_Mesh->GetVertices());
-		m_IndexBuffer.Create(m_Mesh->GetIndices());
+		std::unique_ptr<T> mesh = std::make_unique<T>();
+		const std::vector<VERTEX_3D>& vertices = mesh->CreateMeshVertices();
+		const std::vector<unsigned int>& indices = mesh->CreateMeshIndices();
+		if(vertices.empty() == true || indices.empty() == true) {
+			std::cerr << "Error: Mesh creation failed. Vertices or indices are empty." << std::endl;
+			return nullptr;
+		}
+		m_VertexBuffer.Create(vertices);
+		m_IndexBuffer.Create(indices);
+		T* raw = mesh.get();
+		m_Mesh = std::move(mesh);
+		return raw;
 	}
+
 };
 

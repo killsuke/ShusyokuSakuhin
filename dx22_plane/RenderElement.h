@@ -36,9 +36,8 @@ struct MATERIAL {
 	DirectX::SimpleMath::Color Diffuse;	// 拡散反射（ != カラー）
 	DirectX::SimpleMath::Color Specular;// 鏡面反射
 	DirectX::SimpleMath::Color Emission;// 発光
-	float Shiness;	// 光沢の滑らかさ
-	DirectX::SimpleMath::Vector3 Padding; // パディング
-
-	//BOOL TextureEnable; // テクスチャを使うか否かのフラグ
+	float Shiness = 0.0f;	// 光沢の滑らかさ
+	BOOL TextureEnable = TRUE; // テクスチャを使うか否かのフラグ
+	DirectX::SimpleMath::Vector2 Padding; // パディング
 	//BOOL Dummy[2];
 };

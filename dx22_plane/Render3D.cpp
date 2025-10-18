@@ -51,7 +51,10 @@ void Render3DComponent::Update()
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 
-			textures[subsets[i].MaterialIdx]->SetGPU();
+			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
+
+				textures[subsets[i].MaterialIdx]->SetGPU();
+			}
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

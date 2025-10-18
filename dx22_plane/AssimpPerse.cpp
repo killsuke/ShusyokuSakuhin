@@ -15,7 +15,7 @@ namespace AssimpPerse
 	std::vector<MATERIAL> g_materials{};				// マテリアル
 	std::vector<std::unique_ptr<Texture>> g_textures;	// ディフューズテクスチャ群
 
-	// ディフューズTxtureコンテナを返す
+	// ディフューズTextureコンテナを返す
 	std::vector<std::unique_ptr<Texture>> GetTextures()
 	{
 		return std::move(g_textures);
