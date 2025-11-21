@@ -53,5 +53,5 @@ private:
 	static float waitTime;	// シーン遷移を少し待つ
 	static float waitTimeCounter;
 	inline static Sound sound; // サウンド
-
+	static bool m_ActiveGame;
 };

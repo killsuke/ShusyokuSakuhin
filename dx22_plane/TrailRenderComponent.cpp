@@ -85,15 +85,17 @@ void TrailRenderComponent::Update() {
 		// 止めたいときとか
 		if (rollingSpeed != 0.0f) {
 
-			const float color = (1.0f / pointSize) * 1.5f;
-			for (size_t i = 0; i < m_TrailCount; ++i) {
-
-				m_TrailPoints[i].lifeTime += color;
-			}
-
 			// 範囲超えないように
+			for (int i = 0; i < m_AverageSamplingNum; ++i) {
 
-			m_TrailCount++;
+				const float color = (1.0f / pointSize) * 1.5f;
+				for (size_t i = 0; i < m_TrailCount; ++i) {
+
+					m_TrailPoints[i].lifeTime += color;
+				}
+
+				m_TrailCount++;
+			}
 			if (m_TrailCount > pointSize - 1) {
 				m_TrailCount = pointSize - 1;
 			}
@@ -178,6 +180,36 @@ void TrailRenderComponent::Update() {
 
 void TrailRenderComponent::TrailUpdate(const DirectX::SimpleMath::Vector3& base, const DirectX::SimpleMath::Vector3& tip) {
 
+	ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
+	if (arbitraryRotation != nullptr) {
+		const float speed = arbitraryRotation->GetRollingSpeed();
+
+		// スピードが１より下ならそもそも処理しない
+		if (speed >= 1.0f) {
+			if (!m_TrailPoints.empty()) {
+
+				const TrailPoint prev = m_TrailPoints.back();
+				const float dist = (base - prev.basePosition).Length();
+
+				// 一定距離より長い場合は補間
+				const float step = 1.0f / speed;	// スピードに応じて変化
+				if (dist > step) {
+					const int div = static_cast<int>(dist / step);	// サンプリング数を減らして無駄を削る
+					for (int i = 1; i < div; ++i) {
+						const float time = (float)i / div;
+						TrailPoint mid;
+						mid.basePosition = Vector3::Lerp(prev.basePosition, base, time);
+						mid.tipPosition = Vector3::Lerp(prev.tipPosition, tip, time);
+						mid.lifeTime = 0.0f;
+						m_TrailPoints.push_back(mid);
+					}
+
+					m_SampleDivisions.push_back(div);
+				}
+			}
+		}
+	}
+
 	TrailPoint newPoint;
 	newPoint.basePosition = base;
 	newPoint.tipPosition = tip;
@@ -187,6 +219,8 @@ void TrailRenderComponent::TrailUpdate(const DirectX::SimpleMath::Vector3& base,
 }
 
 void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& points) {
+
+	m_SampleDivisions.clear();
 
 	m_TrailCount = 0;
 	m_TrailPoints.clear();
@@ -199,8 +233,6 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 		// ローカル座標取り出し
 		const XMFLOAT3 localPos = point.position;
 		const XMVECTOR quat = point.quaternion;
-
-		const XMFLOAT3 lastWorldPos = points.back().position;
 
 		// クォータニオンを回転行列に変換
 		const XMMATRIX rotationMatrix = XMMatrixRotationQuaternion(quat);
@@ -231,6 +263,20 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 
 		m_VertexBuffer.Create(vertexBuffer);
 		m_IndexBuffer.Create(indexBuffer);
+	}
+
+	int vecSize = (int)m_SampleDivisions.size();
+	// ０で除算するのを防ぐ
+	if (vecSize > 0) {
+		int nums = 0;
+		for (const auto& vec : m_SampleDivisions) {
+			nums += vec;
+		}
+
+		m_AverageSamplingNum = nums / vecSize;
+	}
+	else {
+		m_AverageSamplingNum = 1;
 	}
 }
 

@@ -36,14 +36,14 @@ void EnemyDamageComponent::Update()
 				*collObjOther, *collObjMe)) {
 
 				attack->AttackAction(*objOther);
-				if (attack->GetAttackHitFlag() == true) {
-					std::vector<std::string> targetTags = { "Player","Enemy","Sword","Effect","SkyDome" };
-					for (const auto& tag : targetTags)
-					{
-						HitStopManager::AddTargetTag(tag); // ヒットストップ対象タグを追加
-					}
-					HitStopManager::SetHitStopTime(0.1f); // ヒットストップ時間をセット
-				}
+				//if (attack->GetAttackHitFlag() == true) {
+				//	std::vector<std::string> targetTags = { "Player","Enemy","Sword","Effect","SkyDome" };
+				//	for (const auto& tag : targetTags)
+				//	{
+				//		HitStopManager::AddTargetTag(tag); // ヒットストップ対象タグを追加
+				//	}
+				//	HitStopManager::SetHitStopTime(0.1f); // ヒットストップ時間をセット
+				//}
 			}
 
 		}

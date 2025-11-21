@@ -184,7 +184,7 @@ LoadStageScene::LoadStageScene() {
 		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
-		effectRender->ChangeTexture("assets/texture/background2.png");
+		effectRender->ChangeTexture("assets/texture/baran.png");
 
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();

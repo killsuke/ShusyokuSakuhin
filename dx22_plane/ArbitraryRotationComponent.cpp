@@ -76,7 +76,7 @@ void ArbitraryRotationComponent::Update() {
 	}
 	if (reached) {
 		m_rollingActive = false;
-		//m_activeFlag = false;
+		m_activeFlag = false;
 
 		// 誤差を完全に抑えて、角度を目標値に固定
 		m_nowAngleRadian = XMConvertToRadians(m_EndAngle - m_StartAngle);

@@ -579,7 +579,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::unor
 	result.insert(result.end(), absfrontMatches.begin(), absfrontMatches.end());
 
 	// ベクター配列内が空なら空のベクターを返す
-	return matchingObjects; // 一致するオブジェクトのベクターを返す
+	return result; // 一致するオブジェクトのベクターを返す
 }
 
 // 容量が足りなくなった場合追加

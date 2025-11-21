@@ -2,54 +2,54 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\dx22_plane.exe</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\dx22_plane.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\MaskTexturePS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\MaskTexturePS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\OneSkinAnimationPS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\OneSkinAnimationPS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\OneSkinAnimationVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\OneSkinAnimationVS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\OverVertexMoveVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\OverVertexMoveVS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\Animation2DVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\Animation2DVS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\BlurPS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\BlurPS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\Fighter2DPS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\Fighter2DPS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\LineVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\LineVS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\unlitTexturePS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTexturePS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\unlitTextureVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTextureVS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\unlitTextureVS2D.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTextureVS2D.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\unlitTextureVSSkyDome.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTextureVSSkyDome.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\unlitTexture_GS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\unlitTexture_GS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\litTexturePS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\litTexturePS.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\whgmt\Desktop\project_Main_Delta\x64\Release\litTextureVS.cso</FullPath>
+      <FullPath>C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\litTextureVS.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
