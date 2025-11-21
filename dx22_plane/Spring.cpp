@@ -16,8 +16,8 @@ void SpringComponent::Update()
 
 void SpringComponent::SpringAction2D()
 {
-	auto transformP1 = p_object->GetComponent<TransformComponent>();
-	auto rigidBodyP1 = p_object->GetComponent<RigidBodyComponent>();
+	auto transformP1 = m_Object->GetComponent<TransformComponent>();
+	auto rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
 
 	auto transformP2 = m_springPartner->GetComponent<TransformComponent>();
 	auto rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
@@ -70,8 +70,8 @@ void SpringComponent::SpringAction2D()
 
 void SpringComponent::SpringAction3D()
 {
-	auto transformP1 = p_object->GetComponent<TransformComponent>();
-	auto rigidBodyP1 = p_object->GetComponent<RigidBodyComponent>();
+	auto transformP1 = m_Object->GetComponent<TransformComponent>();
+	auto rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
 
 	auto transformP2 = m_springPartner->GetComponent<TransformComponent>();
 	auto rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
@@ -120,7 +120,7 @@ void SpringComponent::Setrestlng(float restLength) {
 
 // ダンピング定数を作成する
 void SpringComponent::MakeDamping() {
-	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
 	// m_DAMPING = 0.0f; だと、減衰がないのでバネ挙動を続ける
 	m_DAMPING = -ComputeCriticalDamping(rigid->GetMass(), m_K);
 }

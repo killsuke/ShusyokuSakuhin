@@ -2,28 +2,29 @@
 #include "Component.h"
 #include <SimpleMath.h>
 #include <iostream>
-#include "QuaternionToEuler.h"
+#include "HelpMath.h"
+#include "XMFLOAT_Helper.h"
 
 struct Transform {
 	// SRT情報（ワールド行列、姿勢情報）
 	DirectX::SimpleMath::Vector3 m_Scale = DirectX::SimpleMath::Vector3::One;
-	DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 m_Rotation = { 0.0f, 0.0f, 0.0f };
 	DirectX::SimpleMath::Vector3 m_Position = DirectX::SimpleMath::Vector3::Zero;
 
 	// SRT情報（ローカル行列、姿勢情報）
 	DirectX::SimpleMath::Vector3 m_LocalScale = DirectX::SimpleMath::Vector3::One;
-	DirectX::SimpleMath::Vector3 m_LocalRotation = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 m_LocalRotation = { 0.0f, 0.0f, 0.0f };
 	DirectX::SimpleMath::Vector3 m_LocalPosition = DirectX::SimpleMath::Vector3::Zero;
 
-	DirectX::SimpleMath::Quaternion m_Quaternion = DirectX::SimpleMath::Quaternion::Identity; // クォータニオン
+	DirectX::XMVECTOR m_Quaternion = DirectX::XMQuaternionIdentity();
 
-	DirectX::SimpleMath::Quaternion m_LocalQuaternion = DirectX::SimpleMath::Quaternion::Identity; // ローカルクォータニオン
+	DirectX::XMVECTOR m_LocalQuaternion = DirectX::SimpleMath::Quaternion::Identity; // ローカルクォータニオン（左手系）
 
 	// ワールド行列
-	DirectX::SimpleMath::Matrix worldMatrix = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX worldMatrix = DirectX::SimpleMath::Matrix::Identity;
 
 	// ローカル行列
-	DirectX::SimpleMath::Matrix localMatrix = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX localMatrix = DirectX::SimpleMath::Matrix::Identity;
 };
 
 class TransformComponent : public Component
@@ -39,76 +40,96 @@ public:
 	void Update() override;
 
 	inline void SetPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position = position; };
-	void SetRotation(const DirectX::SimpleMath::Vector3& rotation) { 
+	void SetRotation(const DirectX::XMFLOAT3& rotation) { 
 		m_transform.m_Rotation = rotation;
 	
-		float pitch = DirectX::XMConvertToRadians(rotation.x);
-		float yaw = DirectX::XMConvertToRadians(rotation.y);
-		float roll = DirectX::XMConvertToRadians(rotation.z);
+		const float pitch = DirectX::XMConvertToRadians(rotation.x);
+		const float yaw = DirectX::XMConvertToRadians(rotation.y);
+		const float roll = DirectX::XMConvertToRadians(rotation.z);
 
-		m_transform.m_Quaternion = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+		m_transform.m_Quaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
 	};
 	inline void SetScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_Scale = scale; };
-	inline void SetQuaternion(const DirectX::SimpleMath::Quaternion& quaternion) { 
-		m_transform.m_Quaternion = quaternion; 
-		m_transform.m_Rotation = QuaternionToEulerRad(quaternion) * (180.0f / DirectX::XM_PI);
+	inline void SetQuaternion(const DirectX::XMVECTOR& quaternion) { 
+		m_transform.m_Quaternion = quaternion;
+
+		// 左手系に変換
+		m_transform.m_Rotation = QuaternionToEulerDeg(m_transform.m_Quaternion);
 	};
 
 	inline void SetLocalPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_LocalPosition = position; };
-	void SetLocalRotation(const DirectX::SimpleMath::Vector3& rotation) { 
+	void SetLocalRotation(const DirectX::XMFLOAT3& rotation) {
 		m_transform.m_LocalRotation = rotation; 
 
-		float pitch = DirectX::XMConvertToRadians(rotation.x);
-		float yaw = DirectX::XMConvertToRadians(rotation.y);
-		float roll = DirectX::XMConvertToRadians(rotation.z);
+		const float pitch = DirectX::XMConvertToRadians(rotation.x);
+		const float yaw = DirectX::XMConvertToRadians(rotation.y);
+		const float roll = DirectX::XMConvertToRadians(rotation.z);
 
-		m_transform.m_LocalQuaternion = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+		m_transform.m_LocalQuaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
 	};
 	inline void SetLocalScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_LocalScale = scale; };
-	inline void SetLocalQuaternion(const DirectX::SimpleMath::Quaternion& quaternion) { 
-		m_transform.m_LocalQuaternion = quaternion; 
-		m_transform.m_LocalRotation = QuaternionToEulerRad(quaternion) * (180.0f / DirectX::XM_PI);
+	inline void SetLocalQuaternion(const DirectX::XMVECTOR& quaternion) {
+		m_transform.m_LocalQuaternion = quaternion;
+
+		// 左手系に変換
+		m_transform.m_LocalRotation = QuaternionToEulerRad(m_transform.m_LocalQuaternion) * (180.0f / DirectX::XM_PI);
 	};
 
 	inline DirectX::SimpleMath::Vector3 GetPosition() const { return m_transform.m_Position; };
-	inline DirectX::SimpleMath::Vector3 GetRotation() const { return m_transform.m_Rotation; };
+	inline DirectX::XMFLOAT3 GetRotation() const { return m_transform.m_Rotation; };
 	inline DirectX::SimpleMath::Vector3 GetScale() const { return m_transform.m_Scale; };
-	inline DirectX::SimpleMath::Quaternion GetQuaternion() const { return m_transform.m_Quaternion; };
+	inline DirectX::XMVECTOR GetQuaternion() const { return m_transform.m_Quaternion; };
 
 	inline DirectX::SimpleMath::Vector3 GetLocalPosition() const { return m_transform.m_LocalPosition; };
-	inline DirectX::SimpleMath::Vector3 GetLocalRotation() const { return m_transform.m_LocalRotation; };
+	inline DirectX::XMFLOAT3 GetLocalRotation() const { return m_transform.m_LocalRotation; };
 	inline DirectX::SimpleMath::Vector3 GetLocalScale() const { return m_transform.m_LocalScale; };
-	inline DirectX::SimpleMath::Quaternion GetLocalQuaternion() const { return m_transform.m_LocalQuaternion; };
+	inline DirectX::XMVECTOR GetLocalQuaternion() const { return m_transform.m_LocalQuaternion; };
 
-	inline DirectX::SimpleMath::Matrix GetWorldMatrix() const { return m_transform.worldMatrix; };
-	inline DirectX::SimpleMath::Matrix GetLocalMatrix() const { return m_transform.localMatrix; };
+	inline DirectX::XMMATRIX GetWorldMatrix() const { return m_transform.worldMatrix; };
+	inline DirectX::XMMATRIX GetLocalMatrix() const { return m_transform.localMatrix; };
 
 	inline void AddPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_Position += position; };
-	inline void AddRotation(const DirectX::SimpleMath::Vector3& rotation) { 
+	inline void AddRotation(const DirectX::XMFLOAT3& rotation) {
 		m_transform.m_Rotation += rotation;
 		
-		float pitch = DirectX::XMConvertToRadians(m_transform.m_Rotation.x);
-		float yaw = DirectX::XMConvertToRadians(m_transform.m_Rotation.y);
-		float roll = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);
+		const float pitch = DirectX::XMConvertToRadians(m_transform.m_Rotation.x);
+		const float yaw = DirectX::XMConvertToRadians(m_transform.m_Rotation.y);
+		const float roll = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);
 
-		m_transform.m_Quaternion = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+		m_transform.m_Quaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
 	};
 	inline void AddScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_Scale += scale; };
 
 	inline void AddLocalPosition(const DirectX::SimpleMath::Vector3& position) { m_transform.m_LocalPosition += position; };
-	inline void AddLocalRotation(const DirectX::SimpleMath::Vector3& rotation) { 
+	inline void AddLocalRotation(const DirectX::XMFLOAT3& rotation) {
 		m_transform.m_LocalRotation += rotation; 
 
-		float pitch = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.x);
-		float yaw = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.y);
-		float roll = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.z);
+		const float pitch = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.x);
+		const float yaw = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.y);
+		const float roll = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.z);
 
-		m_transform.m_LocalQuaternion = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+		m_transform.m_LocalQuaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
 	};
 	inline void AddLocalScale(const DirectX::SimpleMath::Vector3& scale) { m_transform.m_LocalScale += scale; };
 
-	DirectX::SimpleMath::Matrix MakeWorldMatrix();
-	DirectX::SimpleMath::Matrix MakeLocalMatrix();
+	DirectX::XMMATRIX MakeWorldMatrix();
+	DirectX::XMMATRIX MakeLocalMatrix();
 
 	void MakeChildWorld();
 

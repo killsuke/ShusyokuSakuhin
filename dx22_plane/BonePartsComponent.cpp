@@ -8,7 +8,7 @@ BonePartsComponent::BonePartsComponent(GameObject& obj) : Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // É\Å[Égî‘çÜÇê›íË
 
 	myPart.attachBone = std::make_unique<TestBone>();
-	rlcom = p_object->AddComponent<RenderLineComponent>();
+	rlcom = m_Object->AddComponent<RenderLineComponent>();
 	rlcom->SetStartAndEndPosition(startBonePos, endBonePos);
 	rlcom->ChangeTexture("assets/texture/NoTexture.png");
 	rlcom->SetColor({ 1.0f,0.0f,0.0f,1.0f });
@@ -27,7 +27,7 @@ BonePartsComponent::BonePartsComponent(GameObject& obj) : Component(obj) {
 
 void BonePartsComponent::Update() {
 
-	auto trans = p_object->GetComponent<TransformComponent>();
+	auto trans = m_Object->GetComponent<TransformComponent>();
 
 	if (Input::GetKeyPress(VK_O)) {
 		rote += 0.5f;

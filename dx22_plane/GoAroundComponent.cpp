@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include <SimpleMath.h>
 #include "GameObjectManager.h"
+#include "HelpMath.h"
 #include <iostream>
 
 using namespace DirectX::SimpleMath;
@@ -13,7 +14,7 @@ GoAroundComponent::GoAroundComponent(GameObject& obj) : Component(obj)
 
 void GoAroundComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 	auto rollingObjPos = transform->GetPosition();
 
 	auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
@@ -49,21 +50,30 @@ void GoAroundComponent::Update()
 		m_nowAngleRadian = 0.0f;
 	}
 
-	Vector3 rotatedOffset = Vector3(
-		cosf(totalAngle) * m_radius,
-		sinf(totalAngle) * m_radius,
-		0.0f
-	);
+	Vector3 baseOffset = Vector3(m_radius, 0.0f, 0.0f);
+	Vector3 axis = m_RotationAxis;	// ‰ñ“]Ž²‚ðÝ’è
+	axis.Normalize();
 
-	Vector3 directionToCenter = centerPos - (centerPos + rotatedOffset);
+	Quaternion rotationQuat = Quaternion::CreateFromAxisAngle(axis, totalAngle);
+
+	Vector3 rotatedOffset = Vector3::Transform(baseOffset, rotationQuat);
+
+	Vector3 directionToCenter = rotatedOffset;
 	directionToCenter.Normalize();
 
-	// ‚yŽ²‰ñ“]i‚Q‚c•½–Êãj‚ð‘z’è‚µ‚Ä‚xŽ²‚ðã‚É‚µ‚½‚¢ê‡
-	float angleToCenter = atan2f(directionToCenter.y, directionToCenter.x);
+	// ”¼Œa•ûŒü (’†S ¨ ƒIƒuƒWƒFƒNƒgj
+	Vector3 radial = rotatedOffset;
+	radial.Normalize();
 
-	transform->SetRotation(Vector3(0.0f, 0.0f, DirectX::XMConvertToDegrees(angleToCenter)));
+	// Úü•ûŒüi‰ñ“]•ûŒü‚É‚’¼Eis•ûŒüj
+	Vector3 tangent = axis.Cross(radial);
+	tangent.Normalize();
+
+	rotationQuat = Quaternion(-rotationQuat.x, -rotationQuat.y, -rotationQuat.z, rotationQuat.w);
+
+	Vector3 rotDeg = QuaternionToEulerDeg(rotationQuat);
+
+	transform->SetRotation(Vector3(rotDeg.x + m_LockRotation.x, rotDeg.y + m_LockRotation.y, rotDeg.z + m_LockRotation.z));
 
 	transform->SetPosition(centerPos + rotatedOffset);
-
-	//std::cout << transform->GetRotation().z << std::endl;
 }

@@ -114,6 +114,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +140,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,6 +167,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ArbitraryRotationComponent.cpp" />
     <ClCompile Include="AssimpPerse.cpp" />
     <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="AttackOneTimeComponent.cpp" />
@@ -178,7 +183,7 @@
     <ClCompile Include="CameraMoveComponent.cpp" />
     <ClCompile Include="CameraPointComponent.cpp" />
     <ClCompile Include="CameraTargetComponent.cpp" />
-    <ClCompile Include="CircleMesh.cpp" />
+    <ClCompile Include="Mesh\CircleMesh.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentTypeManager.cpp" />
@@ -193,34 +198,39 @@
     <ClCompile Include="EnemyJsonComponent.cpp" />
     <ClCompile Include="EnemyManagerComponent.cpp" />
     <ClCompile Include="FollowPositionComponent.cpp" />
+    <ClCompile Include="HighwayScene.cpp" />
+    <ClCompile Include="HitFlashComponent.cpp" />
+    <ClCompile Include="HitStopManager.cpp" />
     <ClCompile Include="HumanBoneComponent.cpp" />
     <ClCompile Include="JsonComponent.cpp" />
-    <ClCompile Include="LineMesh.cpp" />
+    <ClCompile Include="LeapToCenterCarComponent.cpp" />
+    <ClCompile Include="Mesh\LineMesh.cpp" />
     <ClCompile Include="LoadStageScene.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mesh\Mesh.cpp" />
+    <ClCompile Include="MoveCarComponent.cpp" />
     <ClCompile Include="MoveTerrainComponent.cpp" />
+    <ClCompile Include="Mesh\PlaneMesh.cpp" />
     <ClCompile Include="PlayerDamageComponent.cpp" />
-    <ClCompile Include="QuaternionToEuler.cpp" />
+    <ClCompile Include="HelpMath.cpp" />
     <ClCompile Include="RenderBlurComponent.cpp" />
     <ClCompile Include="RenderLineComponent.cpp" />
-    <ClCompile Include="SkyDomeMesh.cpp" />
+    <ClCompile Include="Mesh\SkyDomeMesh.cpp" />
     <ClCompile Include="SkyDomeRenderComponent.cpp" />
     <ClCompile Include="StageLoadCSVComponent.cpp" />
     <ClCompile Include="TerrainJsonComponent.cpp" />
     <ClCompile Include="TerrainManagerComponent.cpp" />
-    <ClCompile Include="CubeMesh.cpp" />
+    <ClCompile Include="Mesh\CubeMesh.cpp" />
     <ClCompile Include="DebugCout.cpp" />
     <ClCompile Include="DirectXRender.cpp" />
     <ClCompile Include="dx11helper.cpp" />
     <ClCompile Include="EnemyDamageComponent.cpp" />
-    <ClCompile Include="EntityDeleter.cpp" />
-    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FighterComponent.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GoAroundComponent.cpp" />
     <ClCompile Include="HPBarMoveComponent.cpp" />
     <ClCompile Include="InchWorm_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="input.cpp" />
     <ClCompile Include="JumpComponent.cpp" />
@@ -239,52 +249,26 @@
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Singleton.cpp" />
-    <ClCompile Include="SkyBox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="SkyDome.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="sound.cpp" />
-    <ClCompile Include="SphereMesh.cpp" />
+    <ClCompile Include="Mesh\SphereMesh.cpp" />
     <ClCompile Include="Spring.cpp" />
-    <ClCompile Include="SquareMesh.cpp" />
+    <ClCompile Include="Mesh\SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="SystemBase.cpp" />
-    <ClCompile Include="SystemManager.cpp" />
-    <ClCompile Include="TestBoard.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TestCube.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="TestExtrusionJudgeComponent.cpp" />
     <ClCompile Include="TestMaskScene.cpp" />
-    <ClCompile Include="TestMoveComponent.cpp" />
+    <ClCompile Include="PlayerOperationComponent.cpp" />
     <ClCompile Include="TestStageScene.cpp" />
     <ClCompile Include="TestSwordActionComponent.cpp" />
-    <ClCompile Include="Test_Transparent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Texture2D.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Mesh\TrailMesh.cpp" />
+    <ClCompile Include="TrailRenderComponent.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
@@ -298,6 +282,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ArbitraryRotationComponent.h" />
     <ClInclude Include="AssimpPerse.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="AttackOneTimeComponent.h" />
@@ -315,7 +300,7 @@
     <ClInclude Include="CameraPattern.h" />
     <ClInclude Include="CameraPointComponent.h" />
     <ClInclude Include="CameraTargetComponent.h" />
-    <ClInclude Include="CircleMesh.h" />
+    <ClInclude Include="Mesh\CircleMesh.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentTypeManager.h" />
@@ -331,28 +316,32 @@
     <ClInclude Include="EnemyJsonComponent.h" />
     <ClInclude Include="EnemyManagerComponent.h" />
     <ClInclude Include="FollowPositionComponent.h" />
+    <ClInclude Include="HighwayScene.h" />
+    <ClInclude Include="HitFlashComponent.h" />
+    <ClInclude Include="HitStopManager.h" />
     <ClInclude Include="HumanBoneComponent.h" />
     <ClInclude Include="JsonComponent.h" />
-    <ClInclude Include="LineMesh.h" />
+    <ClInclude Include="LeapToCenterCarComponent.h" />
+    <ClInclude Include="Mesh\LineMesh.h" />
+    <ClInclude Include="MoveCarComponent.h" />
     <ClInclude Include="MoveTerrainComponent.h" />
     <ClInclude Include="ObjectStatus.h" />
     <ClInclude Include="LoadStageScene.h" />
+    <ClInclude Include="Mesh\PlaneMesh.h" />
     <ClInclude Include="PlayerDamageComponent.h" />
-    <ClInclude Include="QuaternionToEuler.h" />
+    <ClInclude Include="HelpMath.h" />
     <ClInclude Include="RenderBlurComponent.h" />
     <ClInclude Include="RenderLineComponent.h" />
-    <ClInclude Include="SkyDomeMesh.h" />
+    <ClInclude Include="Mesh\SkyDomeMesh.h" />
     <ClInclude Include="SkyDomeRenderComponent.h" />
     <ClInclude Include="StageLoadCSVComponent.h" />
     <ClInclude Include="TerrainJsonComponent.h" />
     <ClInclude Include="TerrainManagerComponent.h" />
-    <ClInclude Include="CubeMesh.h" />
+    <ClInclude Include="Mesh\CubeMesh.h" />
     <ClInclude Include="DebugCout.h" />
     <ClInclude Include="DirectXRender.h" />
     <ClInclude Include="dx11helper.h" />
     <ClInclude Include="EnemyDamageComponent.h" />
-    <ClInclude Include="EntityDeleter.h" />
-    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="FighterComponent.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GoAroundComponent.h" />
@@ -360,11 +349,12 @@
     <ClInclude Include="HPParam.h" />
     <ClInclude Include="InchWorm_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="input.h" />
     <ClInclude Include="JumpComponent.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -383,67 +373,34 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneList.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SkyBox.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="SkyDome.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="sound.h" />
-    <ClInclude Include="SphereMesh.h" />
+    <ClInclude Include="Mesh\SphereMesh.h" />
     <ClInclude Include="Spring.h" />
-    <ClInclude Include="SquareMesh.h" />
+    <ClInclude Include="Mesh\SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="SystemBase.h" />
-    <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="TestBoard.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="TestBoneData.h" />
-    <ClInclude Include="TestCube.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TestExtrusionJudgeComponent.h" />
     <ClInclude Include="TestMaskScene.h" />
-    <ClInclude Include="TestMoveComponent.h" />
+    <ClInclude Include="PlayerOperationComponent.h" />
     <ClInclude Include="TestStageScene.h" />
     <ClInclude Include="TestSwordActionComponent.h" />
-    <ClInclude Include="Test_Transparent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="Texture2D.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Mesh\TrailMesh.h" />
+    <ClInclude Include="TrailRenderComponent.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Animation2DVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
-    </FxCompile>
     <FxCompile Include="MaskTexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -476,6 +433,12 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
+    <FxCompile Include="shader\Animation2DVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
+    </FxCompile>
     <FxCompile Include="shader\BlurPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -485,6 +448,12 @@
     <FxCompile Include="shader\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\Fighter2DPS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="shader\LineVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

@@ -22,7 +22,7 @@
 #include "Texture.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
-#include "Mesh.h"
+#include "Mesh/Mesh.h"
 #include "BoneData.h"
 #include "StaticMesh.h"
 
@@ -37,8 +37,8 @@ protected:
 	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
 	IndexBuffer m_IndexBuffer = {};
 	std::unique_ptr<Mesh> m_Mesh = nullptr;
-	DirectX::SimpleMath::Vector4 m_Color = DirectX::SimpleMath::Vector4::One; // 色
-	bool m_inversionFlag = false;
+	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f, 1.0f, 1.0f }; // 色
+	bool m_InversionFlag = false;
 
 	RenderComponent(GameObject& obj);
 	~RenderComponent() = default;
@@ -46,9 +46,9 @@ public:
 
 	virtual void Update() = 0;
 	void SetShader(const std::string& vertex, const std::string& pixel, const std::string& geometry = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{}) { m_Shader->Create(vertex, pixel, geometry, lay); };
-	
+
 	// テクスチャを変更する（メッシュに装備されたテクスチャが１枚なら）
-	void ChangeTexture(const std::string& fileName = "assets/texture/NoTexture.png") { 
+	void ChangeTexture(const std::string& fileName = "assets/texture/NoTexture.png") {
 		if (m_Mesh == nullptr) return;
 
 		m_Mesh->ChangeTexture(fileName);
@@ -57,13 +57,13 @@ public:
 		m_Texture->Load(fileName);
 		m_Texture->LoadMask(maskFileName);
 	};*/
-	void SetColor(const DirectX::SimpleMath::Vector4 color) { m_Color = color; };
-	void SetInversionFlag(const bool flag) { m_inversionFlag = flag; };
+	void SetColor(const DirectX::XMFLOAT4& color) { m_Color = color; };
+	void SetInversionFlag(const bool flag) { m_InversionFlag = flag; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
-	Texture GetTexture() { 
+	Texture GetTexture() {
 
-		std::vector<Texture> texs = m_Mesh->GetTextures();
+		const std::vector<Texture> texs = m_Mesh->GetTextures();
 		// 単一テクスチャの場合のみ返す
 		if (texs.size() == 0) {
 			return Texture();
@@ -80,7 +80,7 @@ public:
 		std::unique_ptr<T> mesh = std::make_unique<T>();
 		const std::vector<VERTEX_3D>& vertices = mesh->CreateMeshVertices();
 		const std::vector<unsigned int>& indices = mesh->CreateMeshIndices();
-		if(vertices.empty() == true || indices.empty() == true) {
+		if (vertices.empty() == true || indices.empty() == true) {
 			std::cerr << "Error: Mesh creation failed. Vertices or indices are empty." << std::endl;
 			return nullptr;
 		}

@@ -5,8 +5,7 @@
 #include	<vector>
 #include	<memory>
 #include	"Texture.h"
-#include	"Mesh.h"
-#include	"renderer.h"
+#include	"Mesh/Mesh.h"
 
 class StaticMesh : public Mesh {
 public:

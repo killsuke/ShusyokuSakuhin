@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "CameraPattern.h"
 #include <SimpleMath.h>
 
 class CameraMoveComponent : public Component
@@ -7,6 +8,7 @@ class CameraMoveComponent : public Component
 private:
 	GameObject* m_moveTarget = nullptr; // カメラの移動ターゲット
 	float m_chaseHeight = 0.0f;	// この値の高さにプレイヤー達すると追従を始める
+	CameraPattern m_CameraPattern = CameraPattern::CAMERA_NONE;
 
 public:
 	CameraMoveComponent(GameObject& obj);
@@ -15,6 +17,7 @@ public:
 	void Update() override;
 
 	void ChaseCamera(GameObject& cameraObj, GameObject& player);
+	void ChaseXAndYCamera(GameObject& cameraObj, GameObject& player);
 	void Chase_XCamera(GameObject& cameraObj, GameObject& player);
 	void Chase_YCamera(GameObject& cameraObj, GameObject& player);
 	void SpringCamera(GameObject& cameraObj);
@@ -22,6 +25,8 @@ public:
 
 	inline void SetChaseHeight(const float height) { m_chaseHeight = height; };
 	void SetMoveTarget(GameObject& target) { m_moveTarget = &target; };
+
+	CameraPattern GetCameraPattern() const { return m_CameraPattern; };
 };
 
 // カメラのスクロールを制御

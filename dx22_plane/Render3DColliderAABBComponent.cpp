@@ -2,25 +2,30 @@
 #include "DirectXRender.h"
 #include "Collider.h"
 #include "GameObjectManager.h"
+#include "Mesh/CubeMesh.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
+	m_Shader->Create("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	CreateMesh<CubeMesh>();
+	m_Color = Vector4(0.0f, 1.0f, 0.0f, 0.3f); // 緑色
 	//m_Texture = std::make_unique<Texture>();
 }
 
 void Render3DColliderAABBComponent::Update()
 {
 #ifdef _DEBUG
-	auto colliderAABB = p_object->GetComponent<ColliderComponent>();
+	auto colliderAABB = m_Object->GetComponent<ColliderComponent>();
 
 	if (colliderAABB != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = colliderAABB->GetWorldAABBMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(colliderAABB->GetWorldAABBMatrix());
 
 		cb.color = Vector4(m_Color);
 

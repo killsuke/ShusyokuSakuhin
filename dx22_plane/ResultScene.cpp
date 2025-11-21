@@ -2,15 +2,15 @@
 #include "Camera.h"
 #include "GameObjectManager.h"
 #include "Transform.h"
-#include "CubeMesh.h"
-#include "SquareMesh.h"
-#include "CircleMesh.h"
-#include "SphereMesh.h"
+#include "Mesh/CubeMesh.h"
+#include "Mesh/SquareMesh.h"
+#include "Mesh/CircleMesh.h"
+#include "Mesh/SphereMesh.h"
 #include "Render3D.h"
 #include "Render2D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Collider.h"
-#include "TestMoveComponent.h"
+#include "PlayerOperationComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "Input.h"
@@ -89,7 +89,7 @@ ResultScene::~ResultScene()
 void ResultScene::Update()
 {
 
-	if ((Input::GetKeyTrigger(VK_L) || Input::GetButtonTrigger(XINPUT_X)))
+	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X)))
 	{
 		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();

@@ -5,3 +5,4 @@
 #include "TestStageScene.h"
 #include "TestMaskScene.h"
 #include "LoadStageScene.h"
+#include "HighwayScene.h"

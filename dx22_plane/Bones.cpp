@@ -168,7 +168,7 @@ Bones::~Bones()
 }
 
 void Bones::Update() {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && cameraobj != nullptr) {

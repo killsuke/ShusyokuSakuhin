@@ -10,7 +10,7 @@
 #include "AttackOneTimeComponent.h"
 #include "FighterComponent.h"
 #include "PlayerDamageComponent.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 
 #include <iostream>
 
@@ -24,8 +24,8 @@ void EnemyActionBulletComponent::Update() {
 
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
-	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
-	auto rend = p_object->GetComponent<Render2DComponent>();
+	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
+	auto rend = m_Object->GetComponent<Render2DComponent>();
 
 	if (myPos.x > playPos.x) {
 		m_rightLeft = false;
@@ -37,14 +37,15 @@ void EnemyActionBulletComponent::Update() {
 	rend->SetInversionFlag(!m_rightLeft);
 
 	if (m_recordTime > 3.0f) {
-		FiringBullet();	// ‚±‚±‚ªˆÓŠO‚Æd‚¢
+
+		FiringBullet();
 		m_recordTime = 0.0f;
 	}
 }
 
 void EnemyActionBulletComponent::FiringBullet() {
-	
-	auto myTrans = p_object->GetComponent<TransformComponent>();
+
+	auto myTrans = m_Object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
 	auto bullet = GameObjectManager::AddObject("bullet", "Bullets");

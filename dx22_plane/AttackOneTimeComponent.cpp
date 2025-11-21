@@ -8,7 +8,7 @@ AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponen
 }
 
 void AttackOneTimeComponent::Update() {
-	auto collObj = p_object->GetComponent<ColliderComponent>();
+	auto collObj = m_Object->GetComponent<ColliderComponent>();
 	if (collObj->GetActiveColliderFlag() == false) {
 		m_attackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;
@@ -20,7 +20,7 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 
 	// 攻撃処理の実装
 		// ここでは仮の実装として、攻撃力を表示するだけ
-	auto fighter = p_object->GetComponent<FighterComponent>();
+	auto fighter = m_Object->GetComponent<FighterComponent>();
 	auto targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {

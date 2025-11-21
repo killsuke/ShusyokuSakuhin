@@ -25,6 +25,13 @@ enum EBlendState {
 	MAX_BLENDSTATE
 };
 
+enum class ERasterizerState {
+	RS_NONE = 0,							// カリング無し
+	RS_CULL_BACK,							// 裏面カリング
+	RS_CULL_FRONT,							// 表面カリング
+	MAX_RASTERIZERSTATE
+};
+
 extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11Buffer* g_pHPBarConstantBuffer;
@@ -38,9 +45,9 @@ struct ConstBuffer
 	// 頂点カラー行列
 	DirectX::SimpleMath::Vector4 color = DirectX::SimpleMath::Vector4::Zero;;
 	// UV座標移動行列
-	DirectX::SimpleMath::Matrix matrixTex = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixTex = DirectX::SimpleMath::Matrix::Identity;
 	// ワールド変換行列
-	DirectX::SimpleMath::Matrix matrixWorld = DirectX::SimpleMath::Matrix();
+	DirectX::XMMATRIX matrixWorld = DirectX::XMMatrixIdentity();
 
 	BOOL inverse = FALSE; // 反転フラグ
 
@@ -51,21 +58,21 @@ struct CameraMatrix
 {
 	// ３Ｄオブジェクト用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixView3D = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixView3D = DirectX::SimpleMath::Matrix::Identity;
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjection3D = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixProjection3D = DirectX::SimpleMath::Matrix::Identity;
 
 	// ２Ｄオブジェクト用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixView2D = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixView2D = DirectX::SimpleMath::Matrix::Identity;
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjection2D = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixProjection2D = DirectX::SimpleMath::Matrix::Identity;
 
 	// スカイドーム用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixViewSkyDome = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixViewSkyDome = DirectX::SimpleMath::Matrix::Identity;
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix();
+	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix::Identity;
 };
 
 struct LineThickness
@@ -77,6 +84,13 @@ struct LineThickness
 struct BlurBuffer {
 	DirectX::SimpleMath::Vector2 textureSize = DirectX::SimpleMath::Vector2::Zero;
 	DirectX::SimpleMath::Vector2 blurPad = DirectX::SimpleMath::Vector2::Zero;
+};
+
+struct HitFlashBuffer {
+	DirectX::SimpleMath::Vector3 hitFlashColor = DirectX::SimpleMath::Vector3::Zero;
+	float hitFlashPower = 0.0f;
+	BOOL isHit = false;
+	DirectX::SimpleMath::Vector3 pad = DirectX::SimpleMath::Vector3::Zero;
 };
 
 class DirectXRender
@@ -93,6 +107,14 @@ private:
 	static ID3D11Buffer* m_LightBuffer;
 	static CameraMatrix m_CameraMatrix;			// カメラ行列
 	static ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
+
+	// ヒットフラッシュ用のバッファ
+	static ID3D11Buffer* m_HitFlashBuffer;
+
+	// ラスタライザーステート
+	static ID3D11RasterizerState* m_RasterizerNone;
+	static ID3D11RasterizerState* m_RasterizerCullBack;
+	static ID3D11RasterizerState* m_RasterizerCullFront;
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -125,6 +147,8 @@ public:
 	static HRESULT Init();
 	static void UnInit();
 
+	static ID3D11Buffer* GetHitFlashBuffer();
+
 	static void DrawBegin();
 	static void DrawEnd();
 
@@ -137,6 +161,8 @@ public:
 	static void GPU_UpdateViewAndProj();
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
+	static void SetRasterizerState(const ERasterizerState& state);
+
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
 	static ID3D11RenderTargetView* GetRenderTargetView() { return g_pRenderTargetView; };

@@ -1,10 +1,14 @@
 #pragma once
 #include "Component.h"
+#include "MoveCarComponent.h"
+#include <string>
+
 class TestExtrusionJudgeComponent : public Component
 {
 private:
 	bool m_isGround = false; // 地面にいるかどうかのフラグ
 	bool m_isCeiling = false; // 天井にいるかどうかのフラグ
+	std::string m_MoveCarObjName = ""; // MoveCarComponentがアタッチされているオブジェクトの名前
 
 public:
 	TestExtrusionJudgeComponent(GameObject& obj);
@@ -16,4 +20,6 @@ public:
 
 	inline void SetIsCeiling(const bool isCeiling) { m_isCeiling = isCeiling; } // 天井にいるかどうかを設定
 	inline bool GetIsCeiling() const { return m_isCeiling; } // 天井にいるかどうかを取得
+
+	void SetMoveCarObjectByName(const std::string& name) { m_MoveCarObjName = name; }
 };

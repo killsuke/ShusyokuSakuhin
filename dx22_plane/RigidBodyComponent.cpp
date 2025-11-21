@@ -4,8 +4,12 @@
 
 using namespace DirectX::SimpleMath;
 
+namespace {
+	constexpr float FIXED_DELTATIME = 1.0f / 60.0f; // 固定フレームレート（60 FPS相当）
+}
+
 // Transformより、XMFLOAT3の方が良いのでは？
-RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, m_mass(1.0f), Component(obj){
+RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, m_mass(1.0f), Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RIGIDBODY"); // ソート番号を設定
 	lastTime = std::chrono::high_resolution_clock::now();
 }
@@ -15,10 +19,14 @@ void RigidBodyComponent::Update() {
 		UseGravity(true);
 	}
 
-	auto transform = p_object->GetComponent<TransformComponent>();
+	UpdateVelocity();
+}
+
+void RigidBodyComponent::UpdateVelocity() {
+
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
-		const float fixedDeltaTime = 1.0f / 60.0f;  // 固定フレームレート（60 FPS相当）
 
 		// 力から加速度を更新
 		m_acceleration.x = m_totalForce.x / m_mass; // 合力を質量で割って加速度を計算
@@ -26,31 +34,36 @@ void RigidBodyComponent::Update() {
 		m_acceleration.z = m_totalForce.z / m_mass; // 合力を質量で割って加速度を計算
 
 		// 加速度から速度を更新
-		m_velocity.x += m_acceleration.x * fixedDeltaTime;
-		m_velocity.y += m_acceleration.y * fixedDeltaTime;
-		m_velocity.z += m_acceleration.z * fixedDeltaTime;
+		m_velocity.x += m_acceleration.x * FIXED_DELTATIME;
+		m_velocity.y += m_acceleration.y * FIXED_DELTATIME;
+		m_velocity.z += m_acceleration.z * FIXED_DELTATIME;
+
+		// 速度制限
+		if (m_LimitVelocity.x != 0.0f && fabsf(m_velocity.x) > fabsf(m_LimitVelocity.x)) {
+			m_velocity.x = (m_velocity.x > 0) ? m_LimitVelocity.x : -m_LimitVelocity.x;
+		}
+		if (m_LimitVelocity.y != 0.0f && fabsf(m_velocity.y) > fabsf(m_LimitVelocity.y)) {
+			m_velocity.y = (m_velocity.y > 0) ? m_LimitVelocity.y : -m_LimitVelocity.y;
+		}
+		if (m_LimitVelocity.z != 0.0f && fabsf(m_velocity.z) > fabsf(m_LimitVelocity.z)) {
+			m_velocity.z = (m_velocity.z > 0) ? m_LimitVelocity.z : -m_LimitVelocity.z;
+		}
+
 
 		Vector3 newPos = {};
 
 		// 速度からTransformの位置を更新
-		newPos.x += m_velocity.x * fixedDeltaTime;
-		newPos.y += m_velocity.y * fixedDeltaTime;
-		newPos.z += m_velocity.z * fixedDeltaTime;
+		newPos.x += m_velocity.x * FIXED_DELTATIME;
+		newPos.y += m_velocity.y * FIXED_DELTATIME;
+		newPos.z += m_velocity.z * FIXED_DELTATIME;
 
 		transform->AddPosition(newPos); // 位置を更新
-		//transform->MakeWorldMatrix(); // ワールド行列を更新
+		CheckStopVelocity();
 
 		// 毎フレーム加速度をリセット（次のフレームの外力のみ反映）
 		m_acceleration = { 0.0f, 0.0f, 0.0f };
 		m_totalForce = { 0.0f, 0.0f, 0.0f }; // 合力もリセット
 
-		// 時間の更新
-		auto now = std::chrono::high_resolution_clock::now();
-		//m_deltaTime = std::chrono::duration<float>(now - lastTime).count();
-		lastTime = now;
-
-		// しきい値を下回ったら止める
-		CheckStopVelocity();
 	}
 }
 
@@ -125,7 +138,7 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 
 	if (gravityFlag == true) {
-		auto transform = p_object->GetComponent<TransformComponent>();
+		auto transform = m_Object->GetComponent<TransformComponent>();
 
 		m_totalForce.y = -GRAVITY * m_fallMagnification;	// 重力の加速度を設定
 
@@ -146,7 +159,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 		pos.y += m_velocity.y * m_deltaTime;	// ポジションを更新
 
 		transform->AddPosition(pos);	// 位置を更新
-	//	transform->MakeWorldMatrix();	// ワールド行列を更新
+		//	transform->MakeWorldMatrix();	// ワールド行列を更新
 	}
 	else {
 		m_velocity.y = 0.0f;	// 地面に着いた状態では速度を０にする

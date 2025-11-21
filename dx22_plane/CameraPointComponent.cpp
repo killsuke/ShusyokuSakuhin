@@ -18,7 +18,7 @@ void CameraPointComponent::Update() {
 	auto camMove = camera->GetComponent<CameraMoveComponent>();
 	auto camRigid = camera->GetComponent<RigidBodyComponent>();
 
-	auto camColl = p_object->GetComponent<ColliderComponent>();
+	auto camColl = m_Object->GetComponent<ColliderComponent>();
 	auto player = GameObjectManager::GameObjectFindName("Player");
 	if (player == nullptr) {
 		return;

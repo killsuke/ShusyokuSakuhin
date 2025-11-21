@@ -4,6 +4,8 @@
 #include "Transform.h"
 #include "GameObjectManager.h"
 
+using namespace DirectX;
+
 RenderOneSkinAnimation::RenderOneSkinAnimation(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
@@ -12,13 +14,13 @@ RenderOneSkinAnimation::RenderOneSkinAnimation(GameObject& obj) : RenderComponen
 
 void RenderOneSkinAnimation::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		CBBoneMatrix cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
 		//cb.color = DirectX::XMFLOAT4(m_Color);
 

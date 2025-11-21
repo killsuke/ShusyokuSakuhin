@@ -86,6 +86,13 @@ struct LIGHT {
 	float4 Ambient;		// 環境光用の光の強さ
 };
 
+cbuffer HitFlashBuffer:register(b4) {
+    float3 FlashColor;
+	float HitFlashPower; // ヒットフラッシュの強さ 0.0～1.0
+    bool IsHitFlash; // ヒットフラッシュを行うかどうか
+    float3 _padding;
+}
+
 cbuffer LightBuffer:register(b5) {
 	LIGHT Light;
 }

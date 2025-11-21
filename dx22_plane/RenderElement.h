@@ -7,17 +7,17 @@
 // ３Ｄ頂点データ
 struct VERTEX_3D
 {
-	DirectX::SimpleMath::Vector3 position;
-	DirectX::SimpleMath::Vector3 normal;
-	DirectX::SimpleMath::Color color;
-	DirectX::SimpleMath::Vector2 uv;
+	DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 normal = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Color color = DirectX::SimpleMath::Vector4::Zero;
+	DirectX::SimpleMath::Vector2 uv = DirectX::SimpleMath::Vector2::Zero;
 };
 
 // 平行光源
 struct LIGHT {
-	DirectX::SimpleMath::Vector4 Direction;	// 平行光源の方向
-	DirectX::SimpleMath::Color Diffuse;		// 平行光源の強さと色
-	DirectX::SimpleMath::Color Ambient;		// 環境光の強さと色
+	DirectX::SimpleMath::Vector4 Direction = DirectX::SimpleMath::Vector4::Zero;	// 平行光源の方向
+	DirectX::SimpleMath::Color Diffuse = DirectX::SimpleMath::Vector4::Zero;		// 平行光源の強さと色
+	DirectX::SimpleMath::Color Ambient = DirectX::SimpleMath::Vector4::Zero;		// 環境光の強さと色
 
 };
 
@@ -44,13 +44,13 @@ struct SUBSET {
 
 // マテリアル
 struct MATERIAL {
-	DirectX::SimpleMath::Color Ambient;	// 環境反射
-	DirectX::SimpleMath::Color Diffuse;	// 拡散反射（ != カラー）
-	DirectX::SimpleMath::Color Specular;// 鏡面反射
-	DirectX::SimpleMath::Color Emission;// 発光
+	DirectX::SimpleMath::Color Ambient  = DirectX::SimpleMath::Vector4::Zero;	// 環境反射
+	DirectX::SimpleMath::Color Diffuse  = DirectX::SimpleMath::Vector4::Zero;	// 拡散反射（ != カラー）
+	DirectX::SimpleMath::Color Specular = DirectX::SimpleMath::Vector4::Zero;// 鏡面反射
+	DirectX::SimpleMath::Color Emission = DirectX::SimpleMath::Vector4::Zero;// 発光
 	float Shiness = 0.0f;	// 光沢の滑らかさ
 	BOOL TextureEnable = TRUE; // テクスチャを使うか否かのフラグ
-	DirectX::SimpleMath::Vector2 Padding; // パディング
+	DirectX::SimpleMath::Vector2 Padding = DirectX::SimpleMath::Vector2::Zero; // パディング
 
 	std::unique_ptr<MATERIAL> Clone() const {
 		std::unique_ptr<MATERIAL> material = std::make_unique<MATERIAL>();

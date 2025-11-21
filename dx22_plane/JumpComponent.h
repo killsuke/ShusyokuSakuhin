@@ -46,4 +46,6 @@ public:
 
 //	void SetJumpTrigger(const bool trigger) { m_jumpTrigger = trigger; };
 	void SetJumpPress(const bool press) { m_jumpPress = press; };
+
+	void SetAttenuationUp(const float attenuation) { m_attenuationUp = attenuation; };
 };

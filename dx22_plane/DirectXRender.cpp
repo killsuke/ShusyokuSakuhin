@@ -35,6 +35,10 @@ CameraMatrix DirectXRender::m_CameraMatrix = {};
 
 ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // 線の太さ
 
+ID3D11RasterizerState* DirectXRender::m_RasterizerNone = nullptr;
+ID3D11RasterizerState* DirectXRender::m_RasterizerCullBack = nullptr;
+ID3D11RasterizerState* DirectXRender::m_RasterizerCullFront = nullptr;
+
 ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
 ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
@@ -60,6 +64,9 @@ ID3D11Buffer* g_pHPBarConstantBuffer = nullptr;
 ID3D11Buffer* g_pBlurBuffer = nullptr;
 
 ID3D11Buffer* m_MaterialBuffer = nullptr;
+
+// ヒットフラッシュ用のバッファ
+ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
 
 // ブレンドステート用変数（アルファブレンディング）
 ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
@@ -110,33 +117,6 @@ HRESULT DirectXRender::Init() {
 
 	VeiwProjConstantCreate();
 
-	// シェーダーオブジェクトを作る
-	// 定数バッファ構造体を作る
-	// 定数バッファとかけて描画できるようにする
-
-
-
-
-	//bufferDesc.ByteWidth = sizeof(MATERIAL);
-	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(6, 1, &m_MaterialBuffer);
-	//m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
-	//if (FAILED(hr)) return;
-
-	//// マテリアル初期化
-	//MATERIAL material{};
-	//material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	//material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	//SetMaterial(material);
-
-	//bufferDesc.ByteWidth = sizeof(Matrix);
-	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_TextureBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(7, 1, &m_TextureBuffer);
-	//if (FAILED(hr)) return;
-
-	//// ＵＶ初期化
-	//SetUV(0, 0, 1, 1);
-
 	return S_OK;
 }
 
@@ -165,6 +145,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pBlurBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
+	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
 			SAFE_RELEASE(g_BlendState[i]);
@@ -182,6 +163,10 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pLineThicknessBuffer);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
+}
+
+ID3D11Buffer* DirectXRender::GetHitFlashBuffer() {
+	return m_HitFlashBuffer;
 }
 
 //=======================================
@@ -315,17 +300,20 @@ HRESULT DirectXRender::RasterizerSetting() {
 	D3D11_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;	// 試してみよう
-	//rasterizerDesc.CullMode = D3D11_CULL_BACK;	 // 裏面を表示しない
-	rasterizerDesc.CullMode = D3D11_CULL_NONE; // 裏面も表示する
-	//rasterizerDesc.CullMode = D3D11_CULL_FRONT;
 	rasterizerDesc.DepthClipEnable = TRUE;
 	rasterizerDesc.MultisampleEnable = FALSE;
 
-	ID3D11RasterizerState* rs;
-	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &rs);
+	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerCullFront);
+	if (FAILED(hr)) return hr;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerNone);
+	if (FAILED(hr)) return hr;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerCullBack);
 	if (FAILED(hr)) return hr;
 
-	m_DeviceContext->RSSetState(rs);
+	m_DeviceContext->RSSetState(m_RasterizerCullBack);
 
 	return hr;
 }
@@ -775,7 +763,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	bufferDesc.ByteWidth = sizeof(LineThickness);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
-	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	//	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
 	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
 
 	bufferDesc.ByteWidth = sizeof(BlurBuffer);
@@ -784,9 +772,14 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
 	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
 
+	bufferDesc.ByteWidth = sizeof(HitFlashBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
+	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_HitFlashBuffer);
+
 	// ここ後で１番に変更
 	if (FAILED(hr)) return hr;
-	
+
 	return hr;
 }
 
@@ -795,7 +788,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 //=======================================
 void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-//	DirectX::SimpleMath::Matrix view;
+	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView3D = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
@@ -807,7 +800,7 @@ void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-//	DirectX::SimpleMath::Matrix projection;
+	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection3D = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
@@ -819,7 +812,7 @@ void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-//	DirectX::SimpleMath::Matrix view;
+	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView2D = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
@@ -831,7 +824,7 @@ void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-//	DirectX::SimpleMath::Matrix projection;
+	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection2D = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
@@ -843,7 +836,7 @@ void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix)
 {
-//	DirectX::SimpleMath::Matrix view;
+	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixViewSkyDome = *ViewMatrix; // 転置
 
 	// ビュー行列をGPU側へ送る
@@ -855,7 +848,7 @@ void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix
 //=======================================
 void DirectXRender::SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix)
 {
-//	DirectX::SimpleMath::Matrix projection;
+	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjectionSkyDome = *ProjectionMatrix; // 転置
 
 	// プロジェクション行列をGPU側へ送る
@@ -920,5 +913,23 @@ void DirectXRender::SetBlendState(int nBlendState)
 	if (nBlendState >= 0 && nBlendState < MAX_BLENDSTATE) {
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		m_DeviceContext->OMSetBlendState(g_BlendState[nBlendState], blendFactor, 0xffffffff);
+	}
+}
+
+void DirectXRender::SetRasterizerState(const ERasterizerState& state) {
+
+	switch (state)
+	{
+	case ERasterizerState::RS_NONE:
+		m_DeviceContext->RSSetState(m_RasterizerNone);
+		break;
+	case ERasterizerState::RS_CULL_BACK:
+		m_DeviceContext->RSSetState(m_RasterizerCullBack);
+		break;
+	case ERasterizerState::RS_CULL_FRONT:
+		m_DeviceContext->RSSetState(m_RasterizerCullFront);
+		break;
+	default:
+		break;
 	}
 }

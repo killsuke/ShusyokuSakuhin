@@ -8,7 +8,7 @@ BulletComponent::BulletComponent(GameObject& obj) : Component(obj) {
 }
 
 void BulletComponent::Update() {
-	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
 
 	auto newVelocity = m_firingVector * m_firingSpeed;
 
@@ -17,6 +17,6 @@ void BulletComponent::Update() {
 	m_rimitTime -= m_deltaTime;
 
 	if (m_rimitTime <= 0.0f) {
-		p_object->SetDeleteFg(true);
+		m_Object->SetDeleteFg(true);
 	}
 }

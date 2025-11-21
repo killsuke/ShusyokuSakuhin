@@ -44,7 +44,8 @@ PS_IN vs_main(in VS_IN input)
 	output.tex = input.tex;
    // output.col.a = vertexColor.a;
 	// output.tex = input.tex * 2.0;	// テクスチャ２倍？
-
+	
+    output.col *= vertexColor; // 定数バッファの頂点色を乗算
+		
 	return output;
 }
-

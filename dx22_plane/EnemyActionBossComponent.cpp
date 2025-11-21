@@ -8,7 +8,7 @@
 #include "AttackOneTimeComponent.h"
 #include "PlayerDamageComponent.h"
 #include "Collider.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ðÝ’è
@@ -18,8 +18,8 @@ void EnemyActionBossComponent::Update() {
 	m_recordTime += m_deltaTime;
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
-	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
-	auto rend = p_object->GetComponent<Render2DComponent>();
+	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
+	auto rend = m_Object->GetComponent<Render2DComponent>();
 	if (myPos.x > playPos.x) {
 		m_rightLeft = false;
 	}
@@ -34,7 +34,7 @@ void EnemyActionBossComponent::Update() {
 }
 
 void EnemyActionBossComponent::BossAction() {
-	auto myTrans = p_object->GetComponent<TransformComponent>();
+	auto myTrans = m_Object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
 	auto bullet = GameObjectManager::AddObject("bullet", "Enemy");
@@ -61,7 +61,7 @@ void EnemyActionBossComponent::BossAction() {
 	auto rend = bullet->AddComponent<Render2DComponent>();
 
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rend->ChangeTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(!m_rightLeft);
 

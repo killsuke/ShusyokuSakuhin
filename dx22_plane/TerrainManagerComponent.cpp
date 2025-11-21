@@ -4,8 +4,9 @@
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
+#include "RigidBodyComponent.h"
 #include "GameObjectManager.h"
-#include "CubeMesh.h"
+#include "Mesh/CubeMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
 
@@ -57,9 +58,12 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 
 		if (kind == "T_Move") {
 			auto move = terrainObj->AddComponent<MoveTerrainComponent>();
-			move->SetMoveSpeed(0.8f);
+			move->SetMoveSpeed(80.0f);
 			move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
 		}
+
+		auto rigid = terrainObj->AddComponent<RigidBodyComponent>();
+		rigid->SetMass(2.0f);
 
 		auto render = terrainObj->AddComponent<Render3DComponent>();
 		render->CreateMesh<CubeMesh>();

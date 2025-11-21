@@ -5,6 +5,7 @@
 #include "input.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 // ボーンのコンストラクタ
 HumanBoneComponent::HumanBoneComponent(GameObject& obj) : RenderComponent(obj)
@@ -212,14 +213,14 @@ void HumanBoneComponent::GPU_Update() {
 }
 
 void HumanBoneComponent::Draw() {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && cameraobj != nullptr) {
 		//定数バッファを更新
 		CBBoneMatrix cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
 		//		cb.color = DirectX::XMFLOAT4(m_Color);
 

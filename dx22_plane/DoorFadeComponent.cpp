@@ -4,7 +4,7 @@
 #include "SceneManager.h"
 #include "GameObjectManager.h"
 #include "Input.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 #include <iostream>
 
 DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)

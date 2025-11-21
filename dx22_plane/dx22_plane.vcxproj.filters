@@ -39,13 +39,7 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="TestCube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
@@ -63,37 +57,7 @@
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="sound.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityDeleter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyBox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyDome.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="TestBoard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Test_Transparent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DirectXRender.cpp">
@@ -153,7 +117,7 @@
     <ClCompile Include="Render3DColliderAABBComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TestMoveComponent.cpp">
+    <ClCompile Include="PlayerOperationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
@@ -168,19 +132,19 @@
     <ClCompile Include="ResultScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="SquareMesh.cpp">
+    <ClCompile Include="Mesh\SquareMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="StaticMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="CubeMesh.cpp">
+    <ClCompile Include="Mesh\CubeMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="CircleMesh.cpp">
+    <ClCompile Include="Mesh\CircleMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="SphereMesh.cpp">
+    <ClCompile Include="Mesh\SphereMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Bones.cpp">
@@ -273,7 +237,7 @@
     <ClCompile Include="TestExtrusionJudgeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="SkyDomeMesh.cpp">
+    <ClCompile Include="Mesh\SkyDomeMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="SkyDomeRenderComponent.cpp">
@@ -342,7 +306,7 @@
     <ClCompile Include="HumanBoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="LineMesh.cpp">
+    <ClCompile Include="Mesh\LineMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="RenderLineComponent.cpp">
@@ -357,14 +321,41 @@
     <ClCompile Include="FollowPositionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="QuaternionToEuler.cpp">
+    <ClCompile Include="HelpMath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="RenderBlurComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="Mesh\Mesh.cpp">
       <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="HighwayScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="LeapToCenterCarComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCarComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HitFlashComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HitStopManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailRenderComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\TrailMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\PlaneMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ArbitraryRotationComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -383,13 +374,7 @@
     <ClInclude Include="main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TestCube.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
@@ -416,37 +401,7 @@
     <ClInclude Include="input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="sound.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemBase.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityDeleter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyBox.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyDome.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TestBoard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Test_Transparent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="DirectXRender.h">
@@ -512,7 +467,7 @@
     <ClInclude Include="Render3DColliderAABBComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestMoveComponent.h">
+    <ClInclude Include="PlayerOperationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="SceneList.h">
@@ -530,22 +485,22 @@
     <ClInclude Include="ResultScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="CubeMesh.h">
+    <ClInclude Include="Mesh\CubeMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SquareMesh.h">
+    <ClInclude Include="Mesh\SquareMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="StaticMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="Mesh\Mesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="CircleMesh.h">
+    <ClInclude Include="Mesh\CircleMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SphereMesh.h">
+    <ClInclude Include="Mesh\SphereMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="BoneData.h">
@@ -653,7 +608,7 @@
     <ClInclude Include="TestExtrusionJudgeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="SkyDomeMesh.h">
+    <ClInclude Include="Mesh\SkyDomeMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="SkyDomeRenderComponent.h">
@@ -722,7 +677,7 @@
     <ClInclude Include="HumanBoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="LineMesh.h">
+    <ClInclude Include="Mesh\LineMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="RenderLineComponent.h">
@@ -737,11 +692,41 @@
     <ClInclude Include="TestBoneData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="QuaternionToEuler.h">
+    <ClInclude Include="HelpMath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="RenderBlurComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HighwayScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="LeapToCenterCarComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCarComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HitFlashComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HitStopManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TrailRenderComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\TrailMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\PlaneMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ArbitraryRotationComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="XMFLOAT_Helper.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -772,9 +757,6 @@
     <FxCompile Include="unlitTextureVSSkyDome.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Animation2DVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="shader\litTextureVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
@@ -788,6 +770,12 @@
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="shader\BlurPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\Animation2DVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\Fighter2DPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>

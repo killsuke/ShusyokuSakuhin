@@ -26,6 +26,7 @@ private:
 	DirectX::SimpleMath::Vector3 m_velocity{};	 // 速度
 	DirectX::SimpleMath::Vector3 m_acceleration{};// 加速度
 	DirectX::SimpleMath::Vector3 m_totalForce{};              // 合力
+	DirectX::SimpleMath::Vector3 m_LimitVelocity{};         // 速度制限
 	float m_mass = 1.0f;				 // 質量
 	//	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
 	bool m_fallFlag = false;		 	 // 落下のフラグ 
@@ -47,8 +48,14 @@ public:
 
 	void Update()override;
 
+	void UpdateVelocity();
+
 	// 速度返す
 	inline void SetVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_velocity = velocity; };
+	inline void SetLimitVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_LimitVelocity = velocity; };
+	inline void SetLimitVelocity_X(const float velocity) { m_LimitVelocity.x = velocity; };
+	inline void SetLimitVelocity_Y(const float velocity) { m_LimitVelocity.y = velocity; };
+	inline void SetLimitVelocity_Z(const float velocity) { m_LimitVelocity.z = velocity; };
 	inline DirectX::SimpleMath::Vector3 GetVelocity()const { return m_velocity; };
 	inline void AddVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_velocity += velocity; };
 

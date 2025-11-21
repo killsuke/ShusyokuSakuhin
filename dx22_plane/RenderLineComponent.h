@@ -2,7 +2,7 @@
 #include "Render.h"
 #include "TestBoneData.h"
 #include <SimpleMath.h>
-#include "QuaternionToEuler.h"
+#include "HelpMath.h"
 
 class RenderLineComponent : public RenderComponent
 {

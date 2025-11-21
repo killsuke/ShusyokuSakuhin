@@ -1,11 +1,11 @@
 #include "Collider.h"
-#include "Transform.h"
 #include "RigidBodyComponent.h"
 #include <algorithm>  // std::min, std::maxのためのヘッダー
 #include <cmath>     // fabsのためのヘッダー
 #include <iostream>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("COLLIDER"); // ソート番号を設定
@@ -15,19 +15,19 @@ void ColliderComponent::Update()
 {
 	beforeColl_ab = coll_ab; // 前回のAABBの当たり判定用を保存
 
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 	transform->MakeChildWorld(); // ワールド行列を更新
 
 	auto pos = transform->GetPosition();
 	auto scale = transform->GetScale();
-	auto rot = transform->GetRotation();
+	auto rot = transform->GetQuaternion();
 
-	auto childRot = transform->GetLocalRotation();
+	auto childRot = transform->GetLocalQuaternion();
 
 	SetColliderSize_AABB(pos, scale);
 
 	// 親がいる場合はローカル回転を使用
-	if (p_object->GetParent() != nullptr) {
+	if (m_Object->GetParent() != nullptr) {
 		SetColliderSize_OBB(pos, scale, childRot);
 	}
 	else {
@@ -51,33 +51,25 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
 
 	// クォータニオン作成
-	Quaternion q = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, 0.0f);
+	const XMVECTOR quat = XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f);
 
 	// SRT情報作成
-	Matrix r = Matrix::CreateFromQuaternion(q);
-	Matrix s = Matrix::CreateScale(outSize);
-	Matrix t = Matrix::CreateTranslation(outCenter);
+	const XMMATRIX r = XMMatrixRotationQuaternion(quat);
+	const XMVECTOR scale = XMVectorSet(outSize.x, outSize.y, outSize.z, 1.0f);
+	const XMMATRIX s = XMMatrixScalingFromVector(scale);
+	const XMVECTOR pos = XMVectorSet(outCenter.x, outCenter.y, outCenter.z, 1.0f);
+	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	// ワールド行列を作成し、保存
 	coll_ab.worldAABBMatrix = s * r * t;
-	//	coll_ab.worldAABBMatrix = coll_ab.worldAABBMatrix.Transpose(); // 行列を転置
 }
 
 void ColliderComponent::MakeWorldOBBMatrix() {
-
-	Vector3 outCenter = coll_ob.rotation;
 
 	/*outCenter.x -= coll_ob.offsetRotation.x;
 	outCenter.y -= coll_ob.offsetRotation.y;
 	outCenter.z -= coll_ob.offsetRotation.z;*/
 
-	// ここについては協議の必要アリ
-	float PitchRadians = DirectX::XMConvertToRadians(outCenter.x); // X軸回転
-	float YawRadians = DirectX::XMConvertToRadians(outCenter.y);     // Y軸回転
-	float RollRadians = DirectX::XMConvertToRadians(outCenter.z);   // Z軸回転
-
-	// クォータニオン作成
-	Quaternion q = Quaternion::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
 
 	/*Vector3 outSize = coll_ob.size;
 	outSize.x -= coll_ob.offsetSize.x;
@@ -89,10 +81,13 @@ void ColliderComponent::MakeWorldOBBMatrix() {
 	outPos.y -= coll_ob.offsetCenter.y;
 	outPos.z -= coll_ob.offsetCenter.z;*/
 
+	
 	// SRT情報作成
-	Matrix r = Matrix::CreateFromQuaternion(q);
-	Matrix s = Matrix::CreateScale(coll_ob.size);
-	Matrix t = Matrix::CreateTranslation(coll_ob.center);
+	const XMMATRIX r = XMMatrixRotationQuaternion(coll_ob.rotation);
+	const XMVECTOR scale = XMVectorSet(coll_ob.size.x, coll_ob.size.y, coll_ob.size.z, 1.0f);
+	const XMMATRIX s = XMMatrixScalingFromVector(scale);
+	const XMVECTOR pos = XMVectorSet(coll_ob.center.x, coll_ob.center.y, coll_ob.center.z, 1.0f);
+	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	// ワールド行列を作成し、保存
 	coll_ob.worldOBBMatrix = s * r * t;
@@ -105,7 +100,7 @@ void ColliderComponent::MakeWorldOBBMatrix() {
 	//Quaternion offsetQ = Quaternion::CreateFromYawPitchRoll(offsetYawRadians, offsetPitchRadians, offsetRollRadians);
 
 	//Vector3 offsetSize = {1.0f,1.0f,1.0f};
-	
+
 	//if (offsetSize.x == 0.0f) {
 	//	offsetSize.x = 1.0f;
 	//}
@@ -123,9 +118,9 @@ void ColliderComponent::MakeWorldOBBMatrix() {
 
 	auto offsetMatrix = offsetS * offsetR * offsetT;*/
 
-//	coll_ob.worldOBBMatrix = offsetMatrix * coll_ob.worldOBBMatrix;
+	//	coll_ob.worldOBBMatrix = offsetMatrix * coll_ob.worldOBBMatrix;
 
-	//	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
+		//	coll_ob.worldOBBMatrix = coll_ob.worldOBBMatrix.Transpose(); // 行列を転置
 }
 
 //==================================
@@ -175,7 +170,7 @@ bool ColliderComponent::CheckHit(const Line& line, const TrianglePolygon& polygo
 	if (fabs(denom) < 1e-6f) {
 		return false; // 交差なし
 	}
-	
+
 	// 線上の交点を計算
 	float d = Dot(normal, polygon.p0);
 	float t = (d - Dot(normal, line.point)) / denom;
@@ -440,7 +435,7 @@ bool ColliderComponent::CheckHit(Sphere sphere1, Sphere sphere2, Vector3& contac
 // AABBとAABBの当たり判定
 //==================================
 bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2) {
-	if(p1.m_activeColliderFlag == false || p2.m_activeColliderFlag == false) {
+	if (p1.m_activeColliderFlag == false || p2.m_activeColliderFlag == false) {
 		return false; // コライダーが無効な場合は衝突しない
 	}
 
@@ -650,7 +645,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	if (check == true) {
 
 		auto returnDir = Vector3::Zero;
-		auto it = touchObjects.find(p1.p_object);
+		auto it = touchObjects.find(p1.m_Object);
 		if (it != touchObjects.end()) {
 
 			if (it->second != Vector3::Zero) {
@@ -734,11 +729,11 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		}
 
 		// 挿入
-		touchObjects.insert({ p1.p_object,hitNormal });
-		touchObjects[p1.p_object] = hitNormal;
+		touchObjects.insert({ p1.m_Object,hitNormal });
+		touchObjects[p1.m_Object] = hitNormal;
 
 		// 位置補正をして、SRT情報を再計算
-		auto transform = p_object->GetComponent<TransformComponent>();
+		auto transform = m_Object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
 		//		transform->MakeWorldMatrix();
 
@@ -749,7 +744,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	}
 	else {
 		// 存在確認をして、second情報をリセット上書き
-		auto it = touchObjects.find(p1.p_object);
+		auto it = touchObjects.find(p1.m_Object);
 		if (it != touchObjects.end()) {
 			it->second = Vector3::Zero;
 		}
@@ -926,7 +921,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		float iyMax = std::min(coll1.max.y, coll2.max.y);
 
 		Vector2 result1 = Vector2::Zero;
-	//	Vector2 result2 = Vector2::Zero;
+		//	Vector2 result2 = Vector2::Zero;
 		Vector2 result3 = Vector2::Zero;
 		Vector2 result4 = Vector2::Zero;
 
@@ -941,7 +936,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 			// AABBの上底に対してベクトルを引く
 			if (coll1.max.x > coll2.max.x && coll1.min.x < coll2.min.x) {
 				result1.y = 1.0f;	// 上に押し出す
-			//	result2.y = 1.0f;	// 上に押し出す
+				//	result2.y = 1.0f;	// 上に押し出す
 				result3.y = 1.0f;	// 上に押し出す
 				result4.y = 1.0f;	// 上に押し出す
 			}
@@ -1069,7 +1064,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		}
 
 		// 位置補正をして、SRT情報を再計算
-		auto transform = p_object->GetComponent<TransformComponent>();
+		auto transform = m_Object->GetComponent<TransformComponent>();
 		transform->AddPosition({ pushBack });
 
 		auto pos = transform->GetPosition();
@@ -1212,78 +1207,86 @@ bool ColliderComponent::CheckHit_SphereAndCube_NoTrigger3D(const Sphere& p1, con
 
 // 触れているかどうかだけを調べる
 bool ColliderComponent::CubeAndCubeCheck_OBB(const OBB& col1, const OBB& col2) {
-	DirectX::BoundingOrientedBox obb1;
-	DirectX::BoundingOrientedBox obb2;
+	//DirectX::BoundingOrientedBox obb1;
+	//DirectX::BoundingOrientedBox obb2;
 
-	// 回転角をラジアンに変換
-	float col1PitchRadians = DirectX::XMConvertToRadians(col1.rotation.x); // X軸回転
-	float col1YawRadians = DirectX::XMConvertToRadians(col1.rotation.y);     // Y軸回転
-	float col1RollRadians = DirectX::XMConvertToRadians(col1.rotation.z);   // Z軸回転
+	//// 回転角をラジアンに変換
+	//float col1PitchRadians = DirectX::XMConvertToRadians(col1.rotation.x); // X軸回転
+	//float col1YawRadians = DirectX::XMConvertToRadians(col1.rotation.y);     // Y軸回転
+	//float col1RollRadians = DirectX::XMConvertToRadians(col1.rotation.z);   // Z軸回転
 
-	float col2PitchRadians = DirectX::XMConvertToRadians(col2.rotation.x); // X軸回転
-	float col2YawRadians = DirectX::XMConvertToRadians(col2.rotation.y);     // Y軸回転
-	float col2RollRadians = DirectX::XMConvertToRadians(col2.rotation.z);   // Z軸回転
+	//float col2PitchRadians = DirectX::XMConvertToRadians(col2.rotation.x); // X軸回転
+	//float col2YawRadians = DirectX::XMConvertToRadians(col2.rotation.y);     // Y軸回転
+	//float col2RollRadians = DirectX::XMConvertToRadians(col2.rotation.z);   // Z軸回転
 
-	// OBB1の設定
-	obb1.Center = DirectX::XMFLOAT3(col1.center.x, col1.center.y, col1.center.z);
-	obb1.Extents = DirectX::XMFLOAT3(col1.size.x / 2.0f, col1.size.y / 2.0f, col1.size.z / 2.0f);
+	//// OBB1の設定
+	//obb1.Center = DirectX::XMFLOAT3(col1.center.x, col1.center.y, col1.center.z);
+	//obb1.Extents = DirectX::XMFLOAT3(col1.size.x / 2.0f, col1.size.y / 2.0f, col1.size.z / 2.0f);
 
-	// OBB1の回転
-	DirectX::XMVECTOR quaternion1 = DirectX::XMQuaternionNormalize(
-		DirectX::XMQuaternionRotationRollPitchYaw(col1PitchRadians, col1YawRadians, col1RollRadians)
-	);
-	DirectX::XMStoreFloat4(&obb1.Orientation, quaternion1);
+	//// OBB1の回転
+	//DirectX::XMVECTOR quaternion1 = DirectX::XMQuaternionNormalize(
+	//	DirectX::XMQuaternionRotationRollPitchYaw(col1PitchRadians, col1YawRadians, col1RollRadians)
+	//);
+	//DirectX::XMStoreFloat4(&obb1.Orientation, quaternion1);
 
-	// OBB2の設定
-	obb2.Center = DirectX::XMFLOAT3(col2.center.x, col2.center.y, col2.center.z);
-	obb2.Extents = DirectX::XMFLOAT3(col2.size.x / 2.0f, col2.size.y / 2.0f, col2.size.z / 2.0f);
+	//// OBB2の設定
+	//obb2.Center = DirectX::XMFLOAT3(col2.center.x, col2.center.y, col2.center.z);
+	//obb2.Extents = DirectX::XMFLOAT3(col2.size.x / 2.0f, col2.size.y / 2.0f, col2.size.z / 2.0f);
 
-	// OBB2の回転
-	DirectX::XMVECTOR quaternion2 = DirectX::XMQuaternionNormalize(
-		DirectX::XMQuaternionRotationRollPitchYaw(col2PitchRadians, col2YawRadians, col2RollRadians)
-	);
-	DirectX::XMStoreFloat4(&obb2.Orientation, quaternion2);
+	//// OBB2の回転
+	//DirectX::XMVECTOR quaternion2 = DirectX::XMQuaternionNormalize(
+	//	DirectX::XMQuaternionRotationRollPitchYaw(col2PitchRadians, col2YawRadians, col2RollRadians)
+	//);
+	//DirectX::XMStoreFloat4(&obb2.Orientation, quaternion2);
 
-	// 衝突判定
-	return obb1.Intersects(obb2);
+	//// 衝突判定
+	//return obb1.Intersects(obb2);
+
+	// 使うかどうかわからないので一度コメントアウト
+
+	return false;
 }
 
 // 触れているかを調べ、めり込みを直す
 bool ColliderComponent::CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2) {
-	DirectX::BoundingOrientedBox obb1;
-	DirectX::BoundingOrientedBox obb2;
+	//DirectX::BoundingOrientedBox obb1;
+	//DirectX::BoundingOrientedBox obb2;
 
-	// 回転角をラジアンに変換
-	float col1PitchRadians = DirectX::XMConvertToRadians(col1.rotation.x); // X軸回転
-	float col1YawRadians = DirectX::XMConvertToRadians(col1.rotation.y);     // Y軸回転
-	float col1RollRadians = DirectX::XMConvertToRadians(col1.rotation.z);   // Z軸回転
+	//// 回転角をラジアンに変換
+	//float col1PitchRadians = DirectX::XMConvertToRadians(col1.rotation.x); // X軸回転
+	//float col1YawRadians = DirectX::XMConvertToRadians(col1.rotation.y);     // Y軸回転
+	//float col1RollRadians = DirectX::XMConvertToRadians(col1.rotation.z);   // Z軸回転
 
-	float col2PitchRadians = DirectX::XMConvertToRadians(col2.rotation.x); // X軸回転
-	float col2YawRadians = DirectX::XMConvertToRadians(col2.rotation.y);     // Y軸回転
-	float col2RollRadians = DirectX::XMConvertToRadians(col2.rotation.z);   // Z軸回転
+	//float col2PitchRadians = DirectX::XMConvertToRadians(col2.rotation.x); // X軸回転
+	//float col2YawRadians = DirectX::XMConvertToRadians(col2.rotation.y);     // Y軸回転
+	//float col2RollRadians = DirectX::XMConvertToRadians(col2.rotation.z);   // Z軸回転
 
-	// OBB1の設定
-	obb1.Center = DirectX::XMFLOAT3(col1.center.x, col1.center.y, col1.center.z);
-	obb1.Extents = DirectX::XMFLOAT3(col1.size.x / 2.0f, col1.size.y / 2.0f, col1.size.z / 2.0f);
+	//// OBB1の設定
+	//obb1.Center = DirectX::XMFLOAT3(col1.center.x, col1.center.y, col1.center.z);
+	//obb1.Extents = DirectX::XMFLOAT3(col1.size.x / 2.0f, col1.size.y / 2.0f, col1.size.z / 2.0f);
 
-	// OBB1の回転
-	DirectX::XMVECTOR quaternion1 = DirectX::XMQuaternionNormalize(
-		DirectX::XMQuaternionRotationRollPitchYaw(col1PitchRadians, col1YawRadians, col1RollRadians)
-	);
-	DirectX::XMStoreFloat4(&obb1.Orientation, quaternion1);
+	//// OBB1の回転
+	//DirectX::XMVECTOR quaternion1 = DirectX::XMQuaternionNormalize(
+	//	DirectX::XMQuaternionRotationRollPitchYaw(col1PitchRadians, col1YawRadians, col1RollRadians)
+	//);
+	//DirectX::XMStoreFloat4(&obb1.Orientation, quaternion1);
 
-	// OBB2の設定
-	obb2.Center = DirectX::XMFLOAT3(col2.center.x, col2.center.y, col2.center.z);
-	obb2.Extents = DirectX::XMFLOAT3(col2.size.x / 2.0f, col2.size.y / 2.0f, col2.size.z / 2.0f);
+	//// OBB2の設定
+	//obb2.Center = DirectX::XMFLOAT3(col2.center.x, col2.center.y, col2.center.z);
+	//obb2.Extents = DirectX::XMFLOAT3(col2.size.x / 2.0f, col2.size.y / 2.0f, col2.size.z / 2.0f);
 
-	// OBB2の回転
-	DirectX::XMVECTOR quaternion2 = DirectX::XMQuaternionNormalize(
-		DirectX::XMQuaternionRotationRollPitchYaw(col2PitchRadians, col2YawRadians, col2RollRadians)
-	);
-	DirectX::XMStoreFloat4(&obb2.Orientation, quaternion2);
+	//// OBB2の回転
+	//DirectX::XMVECTOR quaternion2 = DirectX::XMQuaternionNormalize(
+	//	DirectX::XMQuaternionRotationRollPitchYaw(col2PitchRadians, col2YawRadians, col2RollRadians)
+	//);
+	//DirectX::XMStoreFloat4(&obb2.Orientation, quaternion2);
 
-	// 衝突判定
-	return obb1.Intersects(obb2);
+	//// 衝突判定
+	//return obb1.Intersects(obb2);
+	
+	// 使うかどうかわからないので一度コメントアウト
+
+	return false;
 }
 
 bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent& aabb, const ColliderComponent& obb) {

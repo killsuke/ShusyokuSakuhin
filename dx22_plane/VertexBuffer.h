@@ -65,7 +65,7 @@ public:
 		}
 	}
 
-	ID3D11Buffer* Get() const {
+	ID3D11Buffer* GetBuffer() const {
 		return m_VertexBuffer.Get();
 	}
 };

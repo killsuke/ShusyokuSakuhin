@@ -25,35 +25,43 @@ void CameraMoveComponent::Update()
 
 	//AdjustmentHeight(*cameraObj,*player); // プレイヤーの高さに合わせてカメラの高さを調整
 
-	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
+	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 
 	//std::cout << "CameraPos:" << pos.x << "," << pos.y << std::endl;
 
-	CameraPattern nowCp = CAMERA_NONE;
+	m_CameraPattern = CameraPattern::CAMERA_NONE;
 
 	if (m_moveTarget != nullptr) {
 
-		nowCp = m_moveTarget->GetComponent<CameraTargetComponent>()->GetCameraPattern();
+		m_CameraPattern = m_moveTarget->GetComponent<CameraTargetComponent>()->GetCameraPattern();
 	}
 
-	switch (nowCp)
+	// 一旦プレイヤー追従にしておく
+	// ブロックは一度動かしてみて、
+	// バッタがちゃんと目的地に移動できるか試す
+//	nowCp = CameraPattern::CHASE_XANDY;
+
+	switch (m_CameraPattern)
 	{
-	case CAMERA_NONE:
+	case CameraPattern::CAMERA_NONE:
 		// 何もしない
 		break;
-	case CHASE:
+	case CameraPattern::CHASE:
 		ChaseCamera(*cameraObj, *player);
 		break;
-	case CHASE_X:
+	case CameraPattern::CHASE_XANDY:
+		ChaseXAndYCamera(*cameraObj, *player);
+		break;
+	case CameraPattern::CHASE_X:
 		Chase_XCamera(*cameraObj, *player);
 		break;
-	case CHASE_Y:
+	case CameraPattern::CHASE_Y:
 		Chase_YCamera(*cameraObj, *player);
 		break;
-	case SPRING_CHASE:
+	case CameraPattern::SPRING_CHASE:
 		SpringCamera(*cameraObj);
 		break;
-	case CAMERA_MAX:
+	case CameraPattern::CAMERA_MAX:
 		break;
 	default:
 		break;
@@ -75,8 +83,20 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 	auto playerPos = playerTrans->GetPosition();
 
 	cameraTrans->SetPosition({ playerPos.x, cameraTrans->GetPosition().y, cameraTrans->GetPosition().z });
-//	cameraTrans->MakeWorldMatrix();
 	cameraComp->SetTarget({ playerPos.x,cameraComp->GetTarget().y,cameraComp->GetTarget().z });
+}
+
+void CameraMoveComponent::ChaseXAndYCamera(GameObject& cameraObj, GameObject& player)
+{
+	auto cameraComp = cameraObj.GetComponent<Camera>();
+	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
+
+	auto playerTrans = player.GetComponent<TransformComponent>();
+	auto playerPos = playerTrans->GetPosition();
+
+//	cameraTrans->SetRotation({ 60.0f,0.0f,0.0f });
+	cameraTrans->SetPosition({ playerPos.x, playerPos.y, cameraTrans->GetPosition().z });
+	cameraComp->SetTarget({ playerPos.x,playerPos.y,cameraComp->GetTarget().z });
 }
 
 void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& player) {
@@ -91,7 +111,7 @@ void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& playe
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
-
+	
 	cameraTrans->SetPosition({ playerPos.x, cameraTrans->GetPosition().y, cameraTrans->GetPosition().z });
 //	cameraTrans->MakeWorldMatrix();
 	cameraComp->SetTarget({ playerPos.x,cameraComp->GetTarget().y,cameraComp->GetTarget().z });

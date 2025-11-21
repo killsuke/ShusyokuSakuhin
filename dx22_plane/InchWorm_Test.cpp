@@ -194,7 +194,7 @@ void InchWorm_Test::GPU_Update() {
 }
 
 void InchWorm_Test::Draw() {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 	auto cameraobj = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && cameraobj != nullptr) {

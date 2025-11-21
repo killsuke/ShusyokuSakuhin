@@ -15,11 +15,10 @@ void TextureManager::UnInit() {
 
 // テクスチャの読み込み関数
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(const std::string& filename) {
-	auto device = DirectXRender::GetDevice();
-	auto deviceContext = DirectXRender::GetDeviceContext();
+	ID3D11Device* device = DirectXRender::GetDevice();
+    ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
-    // ファイルネームに「asset」追加と「L」の省略処理
-    std::wstring wfilename = ShortConversion(filename);
+    const std::wstring wfilename = ShortConversion(filename);
     
     auto it = textureMap.find(wfilename);
     if (it != textureMap.end()) {
@@ -45,7 +44,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 
 // テクスチャの取得関数
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(const std::string& filename) {
-    std::wstring wfilename = ShortConversion(filename);
+    const std::wstring wfilename = ShortConversion(filename);
 	auto it = textureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
 	if (it != textureMap.end()) { // 要素が見つかった場合
 		return it->second; // 対応するテクスチャを返す

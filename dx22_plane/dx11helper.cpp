@@ -333,10 +333,10 @@ bool CreateIndexBuffer(
 	D3D11_SUBRESOURCE_DATA InitData;
 
 	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;								// バッファ使用方
+	bd.Usage = D3D11_USAGE_DYNAMIC;								// バッファ使用方
 	bd.ByteWidth = sizeof(unsigned int) * indexnum;				// バッファの大きさ
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;						// インデックスバッファ
-	bd.CPUAccessFlags = 0;										// CPUアクセス不要
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;										// CPUアクセス不要
 
 	ZeroMemory(&InitData, sizeof(InitData));
 	InitData.pSysMem = indexdata;

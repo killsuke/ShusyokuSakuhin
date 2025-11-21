@@ -5,6 +5,7 @@
 #include <DDSTextureLoader.h>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 SkyDomeRenderComponent::SkyDomeRenderComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -14,13 +15,16 @@ SkyDomeRenderComponent::SkyDomeRenderComponent(GameObject& obj) : RenderComponen
 
 void SkyDomeRenderComponent::Update() {
 
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
+
+		transform->AddRotation({ 0.0f, 0.05f, 0.0f });
+
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
 		cb.color = Vector4(m_Color);
 

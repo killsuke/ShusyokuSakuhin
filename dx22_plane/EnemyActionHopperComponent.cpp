@@ -10,11 +10,11 @@
 #include "FighterComponent.h"
 #include "PlayerDamageComponent.h"
 #include "TestExtrusionJudgeComponent.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ðÝ’è
-	auto jump = p_object->AddComponent<JumpComponent>();
+	auto jump = m_Object->AddComponent<JumpComponent>();
 	jump->SetJumpPower(60.0f);
 }
 
@@ -22,8 +22,8 @@ void EnemyActionHopperComponent::Update() {
 
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
-	auto myPos = p_object->GetComponent<TransformComponent>()->GetPosition();
-	auto rend = p_object->GetComponent<Render2DComponent>();
+	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
+	auto rend = m_Object->GetComponent<Render2DComponent>();
 	bool jumpFlag = false;
 
 	float length = (playPos - myPos).Length();
@@ -58,9 +58,9 @@ void EnemyActionHopperComponent::Update() {
 }
 
 void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
-	auto jump = p_object->GetComponent<JumpComponent>();
-	auto rigid = p_object->GetComponent<RigidBodyComponent>();
-	auto testExtrusion = p_object->GetComponent<TestExtrusionJudgeComponent>();
+	auto jump = m_Object->GetComponent<JumpComponent>();
+	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
+	auto testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
 
 	bool isGround = testExtrusion->GetIsGround();
 

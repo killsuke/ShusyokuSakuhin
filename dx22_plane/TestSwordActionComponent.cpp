@@ -1,16 +1,32 @@
 #include "TestSwordActionComponent.h"
-#include "TestMoveComponent.h"
-#include "GoAroundComponent.h"
+#include "PlayerOperationComponent.h"
+#include "ArbitraryRotationComponent.h"
 #include "Transform.h"
-#include "input.h"
 #include "GameObjectManager.h"
 #include "Collider.h"
 #include "Effect2DComponent.h"
 #include "RenderBillboard.h"
 #include "AttackOneTimeComponent.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 #include "SceneManager.h"
+#include "TrailRenderComponent.h"
 #include <iostream>
+#include <SimpleMath.h>
+
+using namespace DirectX::SimpleMath;
+using namespace DirectX;
+
+namespace {
+	// Œ•‚Ì‰ñ“]‚ÌŽ²
+	constexpr XMFLOAT3 Slash1st = XMFLOAT3(0.0f, 1.0f, 1.0f);
+	constexpr XMFLOAT3 Slash2nd = XMFLOAT3(0.0f, 1.0f, -1.0f);
+	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	// Œ•‚ÌŠp“x
+	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(-45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ƒ\[ƒg”Ô†‚ðÝ’èA‚Ì‚¿‚ÉŠ®¬‚µ‚½‚ç‚¿‚á‚ñ‚Æ•Ï‚¦‚é
@@ -21,72 +37,119 @@ TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(o
 
 void TestSwordActionComponent::Update() {
 
-	if (m_holder == nullptr) {
+	if (m_Holder == nullptr) {
 		return;
 	}
 
-	auto goAround = p_object->GetComponent<GoAroundComponent>();
-	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
+	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
+	auto moveComp = m_Holder->GetComponent<PlayerOperationComponent>();
 	auto sound = SceneManager::GetSound();
 
-	bool keyEnter = Input::GetKeyTrigger(VK_L) || Input::GetButtonPress(XINPUT_X);
+	if (goAround == nullptr) {
+		return;
+	}
+
+	const bool isAroundActive = goAround->GetRollingActive();
 
 	// Œ•‚ðU‚é
-	if (keyEnter == true) {
-		if( m_swordAction == false ) {
+	if (m_IsAction == true) {
+
+		m_IsAction = false;
+		if (isAroundActive == false) {
 			sound.Play(SOUND_LABEL::SOUND_LABEL_SE000);
+
+			TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
+			goAround->SetActiveFlag(true);
+
+			const bool isRightLeft = moveComp->GetRightLeft();
+
+			// ŠÈˆÕŽÀ‘•
+			if (m_TestSlashCount == 0) {
+				m_SwordActionState = ESwordActionState::SLASH_1ST;
+			}
+			else if (m_TestSlashCount == 1) {
+				m_SwordActionState = ESwordActionState::SLASH_2ND;
+			}
+			else if (m_TestSlashCount == 2) {
+				m_SwordActionState = ESwordActionState::SLASH_3RD;
+			}
+
+			m_TestSlashCount++;
+			if (m_TestSlashCount > 2) {
+				m_TestSlashCount = 0;
+			}
+
+			ChoiceSlashPattern(isRightLeft);
+
+			goAround->SetArbitraryAxis(m_SwordActionPattern.arbitraryAxis);
+
+			goAround->SetLockAngle(m_SwordActionPattern.lockAngle);
+
+			//goAround->SetActiveFlag(true);
+			goAround->SetRollingActive(true);
+			goAround->ResetNowAngle_Degree();
+			goAround->ResetNowAngle_Radian();
+
+			if (isRightLeft == true) {
+				goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
+			}
+			else {
+				goAround->SetStartAndEndAngle(60.0f, -60.0f, false);
+			}
+
+			goAround->SimulationMove();
 		}
 
-		m_swordAction = true;
-		goAround->SetActiveFlag(true);
-		goAround->SetRollingActive(true);
+		//m_swordAction = true;
 
-		p_object->SetDrawContainerChangeFlag(DrawContainer::AbsFront, true);
+
+		m_Object->SetDrawContainerChangeFlag(DrawContainer::AbsFront, true);
 	}
 	// U‚Á‚Ä‚¢‚È‚¢
-	else if(keyEnter == false && m_swordAction == false){
-		p_object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
+	else if (m_IsAction == false && isAroundActive == false) {
+
+		TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
+		if (trail != nullptr) {
+			trail->ClearTrail();
+			trail->SetActiveFlag(false);
+		}
+
+		auto collider = m_Object->GetComponent<ColliderComponent>();
+		collider->SetActiveColliderFlag(false);
+
+		m_Object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
 		goAround->SetActiveFlag(false);
-		auto holderTrans = m_holder->GetComponent<TransformComponent>();
+		auto holderTrans = m_Holder->GetComponent<TransformComponent>();
 		auto holderPos = holderTrans->GetPosition();
-		auto objTrans = p_object->GetComponent<TransformComponent>();
+		auto objTrans = m_Object->GetComponent<TransformComponent>();
 
 		if (moveComp->GetRightLeft() == true) {	// ‰E
-			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
+			objTrans->SetRotation({ 0.0f,0.0f,-50.0f });
 			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 		else {									// ¶
-			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
+			objTrans->SetRotation({ 0.0f,0.0f,-130.0f });
 			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,3.0f });
 		}
 	}
 
-	if (m_swordAction == true) {
+	if (isAroundActive == true) {
 		SwordAction();
 	}
 
-	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
-
-	//std::cout << pos.z << std::endl;
-
-	//if(p_object->GetDrawContainer() == DrawContainer::AbsFront ) {
-	//	std::cout << "AbsFront" << std::endl;
-
-	//}
-	//else if( p_object->GetDrawContainer() == DrawContainer::Default ) {
-	//	std::cout << "Default" << std::endl;
-	//}
-
+	// Œü‚«”½“]—p
+	const bool direction = moveComp->GetRightLeft();
+	m_BeforeDirection = direction;
 }
 
 void TestSwordActionComponent::SwordAction() {
 	auto sound = SceneManager::GetSound();
-	auto goAround = p_object->GetComponent<GoAroundComponent>();
-	auto collider = p_object->GetComponent<ColliderComponent>();
-	auto atkComp = p_object->GetComponent<AttackOneTimeComponent>();
+	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
+	auto collider = m_Object->GetComponent<ColliderComponent>();
+	auto atkComp = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	// ‚±‚±‚ÌƒvƒŒƒCƒ„[Žæ“¾‚Í‚Ì‚¿‚É•Ê‚Ì‚à‚Ì‚É•ÏX
-	auto moveComp = m_holder->GetComponent<TestMoveComponent>();
+	auto moveComp = m_Holder->GetComponent<PlayerOperationComponent>();
 
 	if (goAround == nullptr || collider == nullptr) {
 		return;
@@ -95,42 +158,36 @@ void TestSwordActionComponent::SwordAction() {
 	collider->SetActiveColliderFlag(true);
 
 	// ¶‰E‚ÌŒü‚«•Ï‚í‚Á‚½‚çAŒ»ÝŠp“x‚É{90“x‚µ‚Ä¶‰E”½“]Aã‹L‚ÌŽ~‚ß‚éˆ—‚à‚¿‚å‚¢‚Æ•Ï‚¦‚éHƒ^ƒCƒ€•ûŽ®‚Æ‚©‚É
-	bool direction = moveComp->GetRightLeft();
+	const bool direction = moveComp->GetRightLeft();
 
-	// ‚±‚±‚ÅŽ~‚ß‚éˆ—
-	if ((goAround->GetNowAngleDegree() < 0.0f && direction == true) || (goAround->GetNowAngleDegree() > 180.0f && direction == false)) {
-		goAround->SetRollingActive(false);
-		goAround->ResetNowAngle_Radian();
-		goAround->ResetNowAngle_Degree();
-		collider->SetActiveColliderFlag(false);
-		m_swordAction = false;
-		p_object->SetDrawContainerChangeFlag(DrawContainer::Default,true);
-		auto holderTrans = m_holder->GetComponent<TransformComponent>();
-		auto holderPos = holderTrans->GetPosition();
-		auto objTrans = p_object->GetComponent<TransformComponent>();
+	TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
 
-		if (moveComp->GetRightLeft() == true) {
-			objTrans->SetRotation({ 0.0f,0.0f,130.0f });
-			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,3.0f });
-		}
-		else {
-			objTrans->SetRotation({ 0.0f,0.0f,50.0f });
-			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,3.0f });
-		}
-		goAround->SetActiveFlag(false);
-
-		return;
+	if (trail != nullptr) {
+		trail->SetActiveFlag(true);
 	}
 
-	if (direction == true && m_beforeDirection == false) { // ‰EŒü‚«
+	// •ûŒü‚ª•Ï‚í‚Á‚½‚ç”½“]ˆ—
+	if (direction == true && m_BeforeDirection == false) { // ‰EŒü‚«
 		goAround->SetClockwise(true);
 		goAround->SetFlipRequested(true);
-		m_rightLeft = true;
+
+		if (trail != nullptr) {
+			trail->SetActiveFlag(true);
+			trail->RequestInversion();
+		}
+
+		m_RightLeft = true;
 	}
-	else if (direction == false && m_beforeDirection == true) { // ¶Œü‚«
+	else if (direction == false && m_BeforeDirection == true) { // ¶Œü‚«
 		goAround->SetClockwise(false);
 		goAround->SetFlipRequested(true);
-		m_rightLeft = false;
+
+		if (trail != nullptr) {
+			trail->SetActiveFlag(true);
+			trail->RequestInversion();
+		}
+
+		m_RightLeft = false;
 	}
 
 	if (atkComp->GetAttackHitFlag() == true) {
@@ -139,16 +196,15 @@ void TestSwordActionComponent::SwordAction() {
 		sound.Play(SOUND_LABEL::SOUND_LABEL_SE001);
 	}
 
-	m_beforeDirection = direction;
 }
 
 void TestSwordActionComponent::CreateSwordEffect() {
-	auto pos = p_object->GetComponent<TransformComponent>()->GetPosition();
+	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
 	effectTrans->SetScale({ 15.0f,15.0f,5.0f });
-	if( m_rightLeft == true ) {
+	if (m_RightLeft == true) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
 	}
 	else {
@@ -157,10 +213,61 @@ void TestSwordActionComponent::CreateSwordEffect() {
 
 	auto render = effect->AddComponent<RenderBillboardComponent>();
 	auto mesh = render->CreateMesh<SquareMesh>();
-	render->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/swordEffect.png");
-	render->SetInversionFlag(!m_rightLeft);
+	render->SetInversionFlag(!m_RightLeft);
 	mesh->SetInitialCut(5.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
+}
+
+void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {
+
+	switch (m_SwordActionState)
+	{
+	case ESwordActionState::NONE:
+		break;
+	case ESwordActionState::SLASH_1ST:
+		if (m_RightLeft == true) {
+			m_SwordActionPattern.startAngle = 120.0f;
+			m_SwordActionPattern.endAngle = -120.0f;
+		}
+		else {
+			m_SwordActionPattern.startAngle = 60.0f;
+			m_SwordActionPattern.endAngle = -60.0f;
+		}
+		m_SwordActionPattern.arbitraryAxis = Slash1st;
+		m_SwordActionPattern.lockAngle = LockAngle1st;
+
+		break;
+	case ESwordActionState::SLASH_2ND:
+		if (m_RightLeft == true) {
+			m_SwordActionPattern.startAngle = 120.0f;
+			m_SwordActionPattern.endAngle = -120.0f;
+		}
+		else {
+			m_SwordActionPattern.startAngle = 60.0f;
+			m_SwordActionPattern.endAngle = -60.0f;
+		}
+		m_SwordActionPattern.arbitraryAxis = Slash2nd;
+		m_SwordActionPattern.lockAngle = LockAngle2nd;
+
+		break;
+	case ESwordActionState::SLASH_3RD:
+		if (m_RightLeft == true) {
+			m_SwordActionPattern.startAngle = 120.0f;
+			m_SwordActionPattern.endAngle = -120.0f;
+		}
+		else {
+			m_SwordActionPattern.startAngle = 60.0f;
+			m_SwordActionPattern.endAngle = -60.0f;
+		}
+		m_SwordActionPattern.arbitraryAxis = Slash3rd;
+		m_SwordActionPattern.lockAngle = LockAngle3rd;
+
+		break;
+	default:
+		break;
+	}
+
 }

@@ -2,16 +2,17 @@
 #include "Camera.h"
 #include "GameObjectManager.h"
 #include "Transform.h"
-#include "CubeMesh.h"
-#include "SquareMesh.h"
-#include "CircleMesh.h"
-#include "SphereMesh.h"
+#include "Mesh/CubeMesh.h"
+#include "Mesh/SquareMesh.h"
+#include "Mesh/CircleMesh.h"
+#include "Mesh/SphereMesh.h"
+#include "Mesh/PlaneMesh.h"
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
 #include "Render2D.h"
 #include "Collider.h"
-#include "TestMoveComponent.h"
+#include "PlayerOperationComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "EnemyDamageComponent.h"
@@ -21,7 +22,7 @@
 #include "CameraMoveComponent.h"
 #include "CameraPointComponent.h"
 #include "CameraTargetComponent.h"
-#include "GoAroundComponent.h"
+#include "ArbitraryRotationComponent.h"
 #include "HPBarMoveComponent.h"
 #include "Spring.h"
 #include "StageLoadCSVComponent.h"
@@ -30,13 +31,17 @@
 #include "TerrainJsonComponent.h"
 #include "EnemyJsonComponent.h"
 #include "TestExtrusionJudgeComponent.h"
-#include "SkyDomeMesh.h"
+#include "Mesh/SkyDomeMesh.h"
 #include "SkyDomeRenderComponent.h"
 #include "TestSwordActionComponent.h"
 #include "DoorFadeComponent.h"
 #include "BossEventComponent.h"
 #include "RenderBlurComponent.h"
 #include "ModelManager.h"
+#include "HitFlashComponent.h"
+#include "TrailRenderComponent.h"
+
+using namespace DirectX::SimpleMath;
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
@@ -82,12 +87,30 @@ LoadStageScene::LoadStageScene() {
 		enM->CreateEnemies(enemyStatus); // 読み込んだJSONからEnemyを生成
 	}
 
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ -30.0f, 30.0f, 10.0f });
+		testTrans->SetScale({ 30.0f,30.0f,30.0f });
+		testTrans->SetRotation({ 90.0f,0.0f,0.0f });
+		//	auto collider = testObj->AddComponent<ColliderComponent>();
+		//	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
+		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/Tree/uploads_files_4857495_Tree.fbx",
+			"assets/model/Tree");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//	rend->ChangeTexture("assets/texture/NoTexture.png");
+		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+
 	GameObject* playOBJ = nullptr;
 	{
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
-		
-		player->AddComponent<TestMoveComponent>();
+
+		player->AddComponent<PlayerOperationComponent>();
 
 		auto playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
@@ -100,6 +123,10 @@ LoadStageScene::LoadStageScene() {
 		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 		cubeRigid->SetGravityFlag(true);
+
+		HitFlashComponent* hitFlash = player->AddComponent<HitFlashComponent>();
+		hitFlash->SetHitFlashColor(Vector3(1.0f, 1.0f, 1.0f));
+		hitFlash->SetHitFlashPower(0.8f);
 
 		player->AddComponent<TestExtrusionJudgeComponent>();
 
@@ -117,36 +144,32 @@ LoadStageScene::LoadStageScene() {
 
 		auto cubeRe = player->AddComponent<Render2DComponent>();
 		cubeRe->CreateMesh<SquareMesh>();
-		cubeRe->SetShader("Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetShader("shader/Animation2DVS.hlsl", "shader/Fighter2DPS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/aka.png");
 
-		auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
-		cubeRe2->CreateMesh<CubeMesh>();
-		cubeRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		cubeRe2->ChangeTexture("assets/texture/NoTexture.png");
-		cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
+		/*	auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
+			cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
 
 
-		//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+			//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
 		rollingTrans->SetPosition({ 30.0f,-9.0f,3.0f });
-		rollingTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
+	//	rollingTrans->SetRotation({ 90.0f,0.0f,0.0f });
 
 		auto rollingColl = rolling->AddComponent<ColliderComponent>();
-		rollingColl->SetOffsetSizeOBB({ -3.0f,0.0f,3.0f });
-		rollingColl->SetOffsetCenterOBB({ -3.0f,0.0f,0.0f });
+		rollingColl->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
+		rollingColl->SetOffsetCenterOBB({ 5.0f,0.0f,0.0f });
 
 		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
 		testAction->SetHolder(player);
 
-		auto rollingGoAround = rolling->AddComponent<GoAroundComponent>();
+		auto rollingGoAround = rolling->AddComponent<ArbitraryRotationComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
 		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
-		rollingGoAround->SetInitialAngle(90.0f);
-		rollingGoAround->SetRotationSpeed(7.0f); // 回転速度を設定
+		rollingGoAround->SetRotationSpeed(11.5f); // 回転速度を設定
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
 
@@ -158,16 +181,22 @@ LoadStageScene::LoadStageScene() {
 
 		auto rollingED = rolling->AddComponent<EnemyDamageComponent>();
 
+		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
+		effectRender->SetTipPoint(10.0f);
+		effectRender->SetBasePoint(-1.5f);
+		effectRender->ChangeTexture("assets/texture/background2.png");
+
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingRender->ChangeTexture("assets/texture/sword.png");
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
-		rollingCollRend->CreateMesh<SquareMesh>();
+		rollingCollRend->CreateMesh<CubeMesh>();
 		rollingCollRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingCollRend->ChangeTexture("assets/texture/NoTexture.png");
 		rollingCollRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+
 
 
 		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
@@ -230,7 +259,7 @@ LoadStageScene::LoadStageScene() {
 	}
 
 	// ブラーのテスト
-	auto blur = GameObjectManager::AddUI("blur", "BlurUI");
+	/*auto blur = GameObjectManager::AddUI("blur", "BlurUI");
 	auto transBlur = blur->AddComponent<TransformComponent>();
 	transBlur->SetPosition({ 0.0f, 15.0f, 220.0f });
 	transBlur->SetScale({ 50.0f, 50.0f, 1.0f });
@@ -239,7 +268,7 @@ LoadStageScene::LoadStageScene() {
 	blurRend->CreateMesh<SquareMesh>();
 	blurRend->SetShader("shader/litTextureVS.hlsl", "shader/blurPS.hlsl");
 	blurRend->ChangeTexture("assets/texture/title_car.png");
-	blurRend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(200.0f,200.0f));
+	blurRend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(200.0f,200.0f));*/
 
 
 	// モデルテスト
@@ -289,7 +318,7 @@ LoadStageScene::LoadStageScene() {
 	if (!fade.empty()) {
 		auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 		fadeUI->SetBootDoor(true);
-	//	fadeUI->SetNextSceneName();
+		//	fadeUI->SetNextSceneName();
 	}
 	else {
 		auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
@@ -301,7 +330,7 @@ LoadStageScene::LoadStageScene() {
 }
 
 LoadStageScene::~LoadStageScene() {
-//	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
+	//	GameObjectManager::ListClear(); // ゲームオブジェクトのリストをクリア
 	GameObjectManager::OtherThanClear(); // 指定したタグ以外のゲームオブジェクトのリストをクリア
 }
 
@@ -319,7 +348,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa1 = target1->AddComponent<RigidBodyComponent>();
 		rigidTa1->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget1 = target1->AddComponent<CameraTargetComponent>();
-		cameratarget1->SetCameraPattern(SPRING_CHASE);
+		cameratarget1->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget1->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend1 = target1->AddComponent<Render3DComponent>();
 
@@ -336,7 +365,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa2 = target2->AddComponent<RigidBodyComponent>();
 		rigidTa2->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget2 = target2->AddComponent<CameraTargetComponent>();
-		cameratarget2->SetCameraPattern(SPRING_CHASE);
+		cameratarget2->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget2->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 
@@ -352,7 +381,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa3 = target3->AddComponent<RigidBodyComponent>();
 		rigidTa3->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget3 = target3->AddComponent<CameraTargetComponent>();
-		cameratarget3->SetCameraPattern(SPRING_CHASE);
+		cameratarget3->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget3->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend3 = target3->AddComponent<Render3DComponent>();
 
@@ -368,7 +397,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa4 = target4->AddComponent<RigidBodyComponent>();
 		rigidTa4->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget4 = target4->AddComponent<CameraTargetComponent>();
-		cameratarget4->SetCameraPattern(SPRING_CHASE);
+		cameratarget4->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget4->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend4 = target4->AddComponent<Render3DComponent>();
 
@@ -384,7 +413,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa5 = target5->AddComponent<RigidBodyComponent>();
 		rigidTa5->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget5 = target5->AddComponent<CameraTargetComponent>();
-		cameratarget5->SetCameraPattern(SPRING_CHASE);
+		cameratarget5->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget5->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend5 = target5->AddComponent<Render3DComponent>();
 
@@ -400,10 +429,10 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa6 = target6->AddComponent<RigidBodyComponent>();
 		rigidTa6->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget6 = target6->AddComponent<CameraTargetComponent>();
-		cameratarget6->SetCameraPattern(SPRING_CHASE);
+		cameratarget6->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget6->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend6 = target6->AddComponent<Render3DComponent>();
-		
+
 		targetRend6->CreateMesh<CircleMesh>();
 		targetRend6->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
@@ -416,10 +445,10 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa7 = target7->AddComponent<RigidBodyComponent>();
 		rigidTa7->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget7 = target7->AddComponent<CameraTargetComponent>();
-		cameratarget7->SetCameraPattern(SPRING_CHASE);
+		cameratarget7->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget7->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend7 = target7->AddComponent<Render3DComponent>();
-	
+
 		targetRend7->CreateMesh<CircleMesh>();
 		targetRend7->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
@@ -432,7 +461,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto rigidTa8 = target8->AddComponent<RigidBodyComponent>();
 		rigidTa8->SetActiveFlag(false); // 物理演算を無効にする
 		auto cameratarget8 = target8->AddComponent<CameraTargetComponent>();
-		cameratarget8->SetCameraPattern(SPRING_CHASE);
+		cameratarget8->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget8->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend8 = target8->AddComponent<Render3DComponent>();
 
@@ -470,9 +499,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl1 = point1->AddComponent<ColliderComponent>();
 
 		auto pointRend1 = point1->AddComponent<Render3DColliderAABBComponent>();
-		pointRend1->CreateMesh<CubeMesh>();
-		pointRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend1->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend1->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera1->SetBeforeAndNextTargetObj(*target1, *target2);
 		pointCamera1->SetScrollDirection(SCROLL_IN_LEFT);
@@ -485,9 +511,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl2 = point2->AddComponent<ColliderComponent>();
 
 		auto pointRend2 = point2->AddComponent<Render3DColliderAABBComponent>();
-		pointRend2->CreateMesh<CubeMesh>();
-		pointRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend2->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera2->SetBeforeAndNextTargetObj(*target2, *target3);
 		pointCamera2->SetScrollDirection(SCROLL_IN_UP);
@@ -500,9 +523,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl3 = point3->AddComponent<ColliderComponent>();
 
 		auto pointRend3 = point3->AddComponent<Render3DColliderAABBComponent>();
-		pointRend3->CreateMesh<CubeMesh>();
-		pointRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend3->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera3->SetBeforeAndNextTargetObj(*target3, *target4);
 		pointCamera3->SetScrollDirection(SCROLL_IN_UP);
@@ -515,9 +535,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl4 = point4->AddComponent<ColliderComponent>();
 
 		auto pointRend4 = point4->AddComponent<Render3DColliderAABBComponent>();
-		pointRend4->CreateMesh<CubeMesh>();
-		pointRend4->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend4->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend4->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera4->SetBeforeAndNextTargetObj(*target4, *target5);
 		pointCamera4->SetScrollDirection(SCROLL_IN_LEFT);
@@ -530,9 +547,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl5 = point5->AddComponent<ColliderComponent>();
 
 		auto pointRend5 = point5->AddComponent<Render3DColliderAABBComponent>();
-		pointRend5->CreateMesh<CubeMesh>();
-		pointRend5->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend5->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend5->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera5->SetBeforeAndNextTargetObj(*target5, *target6);
 		pointCamera5->SetScrollDirection(SCROLL_IN_LEFT);
@@ -545,9 +559,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto pointColl6 = point6->AddComponent<ColliderComponent>();
 
 		auto pointRend6 = point6->AddComponent<Render3DColliderAABBComponent>();
-		pointRend6->CreateMesh<CubeMesh>();
-		pointRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend6->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend6->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera6->SetBeforeAndNextTargetObj(*target6, *target7);
 		pointCamera6->SetScrollDirection(SCROLL_IN_LEFT);
@@ -561,9 +572,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto bossEvent = point7->AddComponent<BossEventComponent>();
 
 		auto pointRend7 = point7->AddComponent<Render3DColliderAABBComponent>();
-		pointRend7->CreateMesh<CubeMesh>();
-		pointRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		pointRend7->ChangeTexture("assets/texture/NoTexture.png");
 		pointRend7->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera7->SetBeforeAndNextTargetObj(*target7, *target8);
 		pointCamera7->SetScrollDirection(SCROLL_IN_LEFT);

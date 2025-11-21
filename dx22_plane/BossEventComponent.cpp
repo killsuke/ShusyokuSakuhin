@@ -5,14 +5,14 @@
 #include "Render2D.h"
 #include "Render3D.h"
 #include "GameObjectManager.h"
-#include "CubeMesh.h"
+#include "Mesh/CubeMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
 #include "RigidBodyComponent.h"
 #include "JumpComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "FighterComponent.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 #include "EnemyActionBossComponent.h"
 #include "DoorFadeComponent.h"
 #include "GameObjectManager.h"
@@ -22,7 +22,7 @@ BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 }
 
 void BossEventComponent::Update() {
-	auto point = p_object->GetComponent<CameraPointComponent>();
+	auto point = m_Object->GetComponent<CameraPointComponent>();
 	if (point != nullptr)
 	{
 		if (point->GetScrollDir() == 1) {
@@ -85,7 +85,7 @@ void BossEventComponent::CreateBossWalls() {
 	fighterPlayer->SetHp(50);
 	fighterPlayer->SetMaxHp(50);
 	fighterPlayer->SetAtk(10);
-	fighterPlayer->SetUseInvincible(true);
+	//fighterPlayer->SetUseInvincible(true);	// ˆê’U••ˆói‚Ì‚¿‚Éƒ{ƒX‚ð–³“GŽžŠÔ“ü‚ê‚Â‚Â“|‚¹‚é‚æ‚¤‚É‚·‚éj
 
 	auto enemyAction = boss->AddComponent<EnemyActionBossComponent>();
 

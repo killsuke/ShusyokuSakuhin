@@ -12,7 +12,7 @@ void BlinkingUIComponent::Update() {
 		return; // “_–Åƒtƒ‰ƒO‚ªfalse‚È‚ç‰½‚à‚µ‚È‚¢
 	}
 	m_recordTime += m_deltaTime;
-	auto rend = p_object->GetComponent<Render2DComponent>();
+	auto rend = m_Object->GetComponent<Render2DComponent>();
 	if (rend == nullptr) {
 		return;
 	}

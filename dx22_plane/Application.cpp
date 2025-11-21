@@ -287,8 +287,6 @@ void Application::MainLoop()
 	// ゲームループ
 	while (1)
 	{
-		TimeManager::Update();
-
 		float num = 0.0f;
 		// 新たにメッセージがあれば
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -359,6 +357,9 @@ void Application::MainLoop()
 			m_accumulatorTime += deltaTime;
 
 			while (m_accumulatorTime >= 0.016) {
+
+				TimeManager::Update();
+
 				SceneManager::Update(); // シーンの更新
 
 				m_accumulatorTime -= 0.016;

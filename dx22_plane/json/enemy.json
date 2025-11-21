@@ -15,8 +15,8 @@
             "atk": 10,
             "hp": 15,
             "texture": "assets/texture/ho-dai.png",
-            "shaderVS": "Animation2DVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderVS": "shader/Animation2DVS.hlsl",
+            "shaderPS": "shader/Fighter2DPS.hlsl"
         },
         {
             "kind": "E_Hopper",
@@ -33,8 +33,8 @@
             "atk": 5,
             "hp": 20,
             "texture": "assets/texture/hopper.png",
-            "shaderVS": "Animation2DVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderVS": "shader/Animation2DVS.hlsl",
+            "shaderPS": "shader/Fighter2DPS.hlsl"
         },
         {
             "kind": "E_dice",

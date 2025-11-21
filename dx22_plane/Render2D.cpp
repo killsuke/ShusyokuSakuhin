@@ -4,6 +4,7 @@
 #include "GameObjectManager.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 Render2DComponent::Render2DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -13,15 +14,15 @@ Render2DComponent::Render2DComponent(GameObject& obj) : RenderComponent(obj) {
 
 void Render2DComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
@@ -44,7 +45,7 @@ void Render2DComponent::Update()
 
 		cb.matrixTex = texture[0].MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_inversionFlag;
+		cb.inverse = m_InversionFlag;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

@@ -15,40 +15,74 @@ std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
 std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
+std::vector<TagAndID> 
+GameObjectManager::m_TagAndIDList;
 
 // リストにゲームオブジェクトを追加
 GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(DrawContainer::Default, _name, _tag);
+	GameObject* ptr = HelperAddObject(DrawContainer::Default, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::GameObjectManager::AddChild(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(DrawContainer::Child, _name, _tag);
+	GameObject* ptr = HelperAddObject(DrawContainer::Child, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddUI(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(DrawContainer::UI, _name, _tag);
+	GameObject* ptr = HelperAddObject(DrawContainer::UI, _name, _tag);
 
 	return ptr;
 }
 
 GameObject* GameObjectManager::AddAbsFront(const std::string& _name, const std::string& _tag) {
 
-	auto ptr = HelperAddObject(DrawContainer::AbsFront, _name, _tag);
+	GameObject* ptr = HelperAddObject(DrawContainer::AbsFront, _name, _tag);
 
 	return ptr;
 }
 
-GameObject* GameObjectManager::HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag) {
-	temporaryContainer.push_back(std::make_unique<GameObject>(_name, _tag));
+// タグとIDの登録
+uint16_t GameObjectManager::TagToIDRegister(const std::string& tag) {
+	
+	const uint16_t id = TagToIDGet(tag);
 
-	auto ptr = temporaryContainer.back().get();
+	if(id != UINT16_MAX ) {
+		// 既に登録されている場合は何もしない
+		return id;
+	}
+
+	uint16_t newID = static_cast<uint16_t>(m_TagAndIDList.size());
+	m_TagAndIDList.push_back({ tag, newID });
+
+	return newID;
+}
+
+uint16_t GameObjectManager::TagToIDGet(const std::string& tag) {
+
+	for (const TagAndID& tagAndId : m_TagAndIDList) {
+		if (tagAndId.tag == tag) {
+			return tagAndId.id; // タグに対応するIDを返す
+		}
+	}
+
+	return UINT16_MAX; // 見つからなかった場合のエラー値
+}
+
+GameObject* GameObjectManager::HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag) {
+	temporaryContainer.push_back(std::make_unique<GameObject>(_name));
+
+	GameObject* ptr = temporaryContainer.back().get();
+
+	// タグとIDの登録
+	const uint16_t id = TagToIDRegister(_tag);
+	ptr->SetTag(_tag);
+	ptr->SetID(id);
 
 	ptr->SetDrawContainer(dc);
 
@@ -62,9 +96,10 @@ void GameObjectManager::HelperRemoveObject(std::vector<std::unique_ptr<GameObjec
 		});
 }
 
-void GameObjectManager::HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const std::string& tag) {
+void GameObjectManager::HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& id) {
+		
 	for (const auto& obj : objs) { // objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
+		if (obj->GetID() == id) { // タグが一致するかチェック
 			obj->SetDeleteFg(true);
 		}
 	}
@@ -112,8 +147,6 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 				std::unique_ptr<GameObject> movingObj = std::move(*it);
 				it = objs.erase(it);	// 現在のコンテナから削除
 
-				//	std::cout << "ここ通った？" << std::endl;
-
 				switch (hdc)
 				{
 				case DrawContainer::Default:
@@ -137,6 +170,47 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 
 		++it;
 	}
+}
+
+std::vector<GameObject*> GameObjectManager::HelperFindTags(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids) {
+
+	std::vector<GameObject*> matchingObjects;
+	matchingObjects.clear();
+
+	for (const auto& obj : objs) { // objects をループで探索
+		if (ids.contains(obj->GetID())) { // タグが一致するかチェック
+			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
+		}
+	}
+
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
+}
+
+std::vector<GameObject*> GameObjectManager::HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids) {
+
+	std::vector<GameObject*> matchingObjects;
+	matchingObjects.clear();
+
+	for (const auto& obj : objs) { // objects をループで探索
+		if (!ids.contains(obj->GetID())) { // タグが一致するかチェック
+			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
+		}
+	}
+
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
+}
+
+std::vector<GameObject*> GameObjectManager::HelperFindTag(const std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& id) {
+
+	std::vector<GameObject*> matchingObjects;
+	for (const auto& obj : objs) { // objects をループで探索
+		if (obj->GetID() == id) { // タグが一致するかチェック
+			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
+		}
+	}
+
+	// ベクター配列内が空なら空のベクターを返す
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
 }
 
 void GameObjectManager::TransferAddObjects() {
@@ -183,10 +257,12 @@ void GameObjectManager::RemoveObject() {
 
 void GameObjectManager::RemoveTagObject(const std::string& tag) {
 
-	HelperRemoveTagObject(objects, tag);
-	HelperRemoveTagObject(child_Objects, tag);
-	HelperRemoveTagObject(objects_UI, tag);
-	HelperRemoveTagObject(objects_Absfront, tag);
+	uint16_t id = TagToIDGet(tag);
+
+	HelperRemoveTagObject(objects, id);
+	HelperRemoveTagObject(child_Objects, id);
+	HelperRemoveTagObject(objects_UI, id);
+	HelperRemoveTagObject(objects_Absfront, id);
 }
 
 // 更新
@@ -312,9 +388,12 @@ GameObject* GameObjectManager::GameObjectFindName(const std::string& name) {
 
 // 検索したオブジェクトを複数返すが、存在しない場合は止まるので注意
 std::vector<GameObject*> GameObjectManager::GameObjectFindTag(const std::string& tag) {
+	
+	uint16_t id = TagToIDGet(tag);
+	
 	std::vector<GameObject*> matchingObjects;
 	for (const auto& obj : objects) { // objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
+		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
 	}
@@ -337,9 +416,12 @@ GameObject* GameObjectManager::GameObjectFindNameUI(const std::string& name) {
 
 // 検索したオブジェクトを複数返すが、存在しない場合は止まるので注意
 std::vector<GameObject*> GameObjectManager::GameObjectFindTagUI(const std::string& tag) {
+	
+	uint16_t id = TagToIDGet(tag);
+
 	std::vector<GameObject*> matchingObjects;
 	for (const auto& obj : objects_UI) { // objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
+		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
 	}
@@ -362,12 +444,139 @@ GameObject* GameObjectManager::GameObjectFindNameAbsFront(const std::string& nam
 
 // 検索したオブジェクトを複数返すが、存在しない場合は止まるので注意
 std::vector<GameObject*> GameObjectManager::GameObjectFindTagAbsFront(const std::string& tag) {
+	
+	uint16_t id = TagToIDGet(tag);
+
 	std::vector<GameObject*> matchingObjects;
 	for (const auto& obj : objects_Absfront) { // objects をループで探索
-		if (obj->GetTag() == tag) { // タグが一致するかチェック
+		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
 	}
+
+	// ベクター配列内が空なら空のベクターを返す
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
+}
+
+std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::string& tag) {
+
+	uint16_t id = TagToIDGet(tag);
+
+	std::vector<GameObject*> matchingObjects = HelperFindTag(objects, id);
+	std::vector<GameObject*> childMatches = HelperFindTag(child_Objects, id);
+	std::vector<GameObject*> uiMatches = HelperFindTag(objects_UI, id);
+	std::vector<GameObject*> absfrontMatches = HelperFindTag(objects_Absfront, id);
+
+	std::vector<GameObject*> result;
+
+	result.reserve(
+		matchingObjects.size() +
+		childMatches.size() +
+		uiMatches.size() +
+		absfrontMatches.size()
+	);
+
+	if (result.capacity() == 0) {
+		return result; // 空のベクターを返す
+	}
+	
+	result.insert(result.end(), matchingObjects.begin(), matchingObjects.end());
+	result.insert(result.end(), childMatches.begin(), childMatches.end());
+	result.insert(result.end(), uiMatches.begin(), uiMatches.end());
+	result.insert(result.end(), absfrontMatches.begin(), absfrontMatches.end());
+
+	// ベクター配列内が空なら空のベクターを返す
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
+}
+
+std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::vector<std::string>& tags) {
+
+	std::vector<uint16_t> ids;
+
+	for (const auto& tag : tags) {
+		
+		uint16_t id = TagToIDGet(tag);
+		ids.push_back(id);
+	}
+
+	std::vector<GameObject*> matchingObjects;
+	std::vector<GameObject*> childMatches;	
+	std::vector<GameObject*> uiMatches;	
+	std::vector<GameObject*> absfrontMatches;
+	
+	for (const auto& id : ids) {
+		matchingObjects = HelperFindTag(objects, id);
+		childMatches = HelperFindTag(child_Objects, id);
+		uiMatches = HelperFindTag(objects_UI, id);
+		absfrontMatches = HelperFindTag(objects_Absfront, id);
+	}
+		
+	std::vector<GameObject*> result;
+
+	result.reserve(
+		matchingObjects.size() +
+		childMatches.size() +
+		uiMatches.size() +
+		absfrontMatches.size()
+	);
+
+	if (result.capacity() == 0) {
+		return result; // 空のベクターを返す
+	}
+
+	result.insert(result.end(), matchingObjects.begin(), matchingObjects.end());
+	result.insert(result.end(), childMatches.begin(), childMatches.end());
+	result.insert(result.end(), uiMatches.begin(), uiMatches.end());
+	result.insert(result.end(), absfrontMatches.begin(), absfrontMatches.end());
+
+	// ベクター配列内が空なら空のベクターを返す
+	return matchingObjects; // 一致するオブジェクトのベクターを返す
+}
+
+std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::unordered_set<std::string>& tags) {
+
+	std::vector<uint16_t> ids;
+
+	for (const auto& tag : tags) {
+
+		uint16_t id = TagToIDGet(tag);
+		ids.push_back(id);
+	}
+
+	std::vector<GameObject*> matchingObjects;
+	std::vector<GameObject*> childMatches;
+	std::vector<GameObject*> uiMatches;
+	std::vector<GameObject*> absfrontMatches;
+
+	for (const auto& id : ids) {
+
+		std::vector<GameObject*> result1 = HelperFindTag(objects, id);
+		matchingObjects.insert(matchingObjects.end(), result1.begin(), result1.end());
+		std::vector<GameObject*> result2 = HelperFindTag(child_Objects, id);
+		childMatches.insert(childMatches.end(), result2.begin(), result2.end());
+		std::vector<GameObject*> result3 = HelperFindTag(objects_UI, id);
+		uiMatches.insert(uiMatches.end(), result3.begin(), result3.end());
+		std::vector<GameObject*> result4 = HelperFindTag(objects_Absfront, id);
+		absfrontMatches.insert(absfrontMatches.end(), result4.begin(), result4.end());
+	}
+
+	std::vector<GameObject*> result;
+
+	result.reserve(
+		matchingObjects.size() +
+		childMatches.size() +
+		uiMatches.size() +
+		absfrontMatches.size()
+	);
+
+	if (result.capacity() == 0) {
+		return result; // 空のベクターを返す
+	}
+
+	result.insert(result.end(), matchingObjects.begin(), matchingObjects.end());
+	result.insert(result.end(), childMatches.begin(), childMatches.end());
+	result.insert(result.end(), uiMatches.begin(), uiMatches.end());
+	result.insert(result.end(), absfrontMatches.begin(), absfrontMatches.end());
 
 	// ベクター配列内が空なら空のベクターを返す
 	return matchingObjects; // 一致するオブジェクトのベクターを返す

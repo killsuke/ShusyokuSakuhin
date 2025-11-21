@@ -6,7 +6,7 @@
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
 #include "GameObjectManager.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 #include "EnemyJsonComponent.h"
 #include "RigidBodyComponent.h"
 #include "TestExtrusionJudgeComponent.h"
@@ -15,6 +15,7 @@
 #include "EnemyActionHopperComponent.h"
 #include "AttackTimingComponent.h"
 #include "PlayerDamageComponent.h"
+#include "HitFlashComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -76,15 +77,19 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		render->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
-		atk->SetCoolDownTime(1.0f);
+		atk->SetCoolDownTime(0.1f);
+
+		HitFlashComponent* hitFlash = enemyObj->AddComponent<HitFlashComponent>();
+		hitFlash->SetHitFlashColor(Vector3(1.0f, 1.0f, 1.0f));
+		hitFlash->SetHitFlashPower(0.8f);
 
 		auto pd = enemyObj->AddComponent<PlayerDamageComponent>();
 
-		auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
+		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
 		renderColl->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		renderColl->ChangeTexture("assets/texture/NoTexture.png");
-		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));
+		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));*/
 
 		num++;
 	}

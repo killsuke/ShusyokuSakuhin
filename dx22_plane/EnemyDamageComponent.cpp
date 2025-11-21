@@ -4,6 +4,7 @@
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
 #include "GameObjectManager.h"
+#include "HitStopManager.h"
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 {
@@ -13,7 +14,7 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 void EnemyDamageComponent::Update()
 {
 	//auto transform = p_object->GetComponent<TransformComponent>();
-	auto collObjMe = p_object->GetComponent<ColliderComponent>();
+	auto collObjMe = m_Object->GetComponent<ColliderComponent>();
 	auto objOthers = GameObjectManager::GameObjectFindTag("Enemy");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
@@ -23,7 +24,7 @@ void EnemyDamageComponent::Update()
 		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
 	//auto attack = p_object->GetComponent<AttackTimingComponent>();
-	auto attack = p_object->GetComponent<AttackOneTimeComponent>();
+	auto attack = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	attack->ReSetAttackHitFlag();	// 攻撃が当たったかどうかのフラグをリセット
 
@@ -33,7 +34,16 @@ void EnemyDamageComponent::Update()
 			auto collObjOther = objOther->GetComponent<ColliderComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
+
 				attack->AttackAction(*objOther);
+				if (attack->GetAttackHitFlag() == true) {
+					std::vector<std::string> targetTags = { "Player","Enemy","Sword","Effect","SkyDome" };
+					for (const auto& tag : targetTags)
+					{
+						HitStopManager::AddTargetTag(tag); // ヒットストップ対象タグを追加
+					}
+					HitStopManager::SetHitStopTime(0.1f); // ヒットストップ時間をセット
+				}
 			}
 
 		}

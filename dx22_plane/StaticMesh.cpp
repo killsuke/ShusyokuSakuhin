@@ -83,8 +83,6 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 		m_Subset.emplace_back(std::move(subset));
 	}
 
-	// 次はこのマテリアルを使う処理作成である
-
 	// マテリアルデータ作成
 	for (const auto& m : materials) {
 		std::unique_ptr material = std::make_unique<MATERIAL>();

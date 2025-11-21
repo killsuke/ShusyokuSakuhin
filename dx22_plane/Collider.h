@@ -4,6 +4,7 @@
 #include <directxcollision.h>	// Collision の変更を一部する、XMFLOAT4で扱うのが本当は良いらしい。クオータニオンの始まりか？
 #include <unordered_map>
 #include "Component.h"
+#include "Transform.h"
 
 // ライン（無限の長さの線）
 struct Line {
@@ -59,18 +60,18 @@ struct PushNormalize {
 
 // BOX定義
 struct AABB {
-	DirectX::SimpleMath::Vector3 min = {};
-	DirectX::SimpleMath::Vector3 max = {};
-	DirectX::SimpleMath::Vector3 offsetCenter = {};
-	DirectX::SimpleMath::Vector3 offsetSize = {};
+	DirectX::SimpleMath::Vector3 min = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 max = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 offsetCenter = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 offsetSize = DirectX::SimpleMath::Vector3::Zero;
 
-	DirectX::SimpleMath::Vector3 beforeMin = {};
-	DirectX::SimpleMath::Vector3 beforeMax = {};
-	DirectX::SimpleMath::Vector3 beforeOffsetCenter = {};
-	DirectX::SimpleMath::Vector3 beforeOffsetSize = {};
+	DirectX::SimpleMath::Vector3 beforeMin = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 beforeMax = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 beforeOffsetCenter = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 beforeOffsetSize = DirectX::SimpleMath::Vector3::Zero;
 
 	// ワールド行列
-	DirectX::SimpleMath::Matrix worldAABBMatrix = {};
+	DirectX::XMMATRIX worldAABBMatrix = DirectX::XMMatrixIdentity();
 
 	/*bool none = false;
 	bool left = false;
@@ -83,17 +84,20 @@ struct AABB {
 
 // 当たり判定でのみ使う
 struct OBB {
-	DirectX::SimpleMath::Vector3 center = {};
-	DirectX::SimpleMath::Vector3 size = {};
-	DirectX::SimpleMath::Vector3 rotation = {};
-	DirectX::SimpleMath::Vector3 offsetCenter = {};
-	DirectX::SimpleMath::Vector3 offsetSize = {};
-	DirectX::SimpleMath::Vector3 offsetRotation = {};
-	DirectX::SimpleMath::Vector3 axisX = {};
-	DirectX::SimpleMath::Vector3 axisY = {};
-	DirectX::SimpleMath::Vector3 axisZ = {};
+	DirectX::SimpleMath::Vector3 center = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 size = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMVECTOR rotation = { 0.0f,0.0f,0.0f,1.0f };
+	DirectX::SimpleMath::Vector3 offsetCenter = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 offsetSize = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMVECTOR offsetQuat = {0.0f,0.0f,0.0f,1.0f};
+	DirectX::SimpleMath::Vector3 axisX = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 axisY = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 axisZ = DirectX::SimpleMath::Vector3::Zero;
 
-	DirectX::SimpleMath::Matrix worldOBBMatrix = {}; // ワールド行列
+	DirectX::SimpleMath::Vector3 drawCenter = DirectX::SimpleMath::Vector3::Zero;
+
+	DirectX::XMVECTOR axisQuat = {};
+	DirectX::XMMATRIX worldOBBMatrix = DirectX::XMMatrixIdentity();
 };
 
 class ColliderComponent : public Component{
@@ -218,24 +222,16 @@ public:
 
 	// セッター
 	inline void SetColliderSize_OBB(const DirectX::SimpleMath::Vector3& pos,
-		const DirectX::SimpleMath::Vector3& size, const DirectX::SimpleMath::Vector3& angle) {
-		
-		DirectX::SimpleMath::Vector3 offsetCenter = { pos.x + coll_ob.offsetCenter.x,
-							 pos.y + coll_ob.offsetCenter.y,
-							 pos.z + coll_ob.offsetCenter.z };
+		const DirectX::SimpleMath::Vector3& size, const DirectX::XMVECTOR& angle) {
 
 		DirectX::SimpleMath::Vector3 offsetSize = { size.x + coll_ob.offsetSize.x,
 									 size.y + coll_ob.offsetSize.y,
 									 size.z + coll_ob.offsetSize.z };
 
-		DirectX::SimpleMath::Vector3 offsetRotation = { angle.x + coll_ob.offsetRotation.x,
-									 angle.y + coll_ob.offsetRotation.y,
-									 angle.z + coll_ob.offsetRotation.z };
-		
 		// 位置
-		coll_ob.center.x = offsetCenter.x;
-		coll_ob.center.y = offsetCenter.y;
-		coll_ob.center.z = offsetCenter.z;
+		coll_ob.center.x = pos.x;
+		coll_ob.center.y = pos.y;
+		coll_ob.center.z = pos.z;
 
 		// サイズ
 		coll_ob.size.x = offsetSize.x;
@@ -243,22 +239,26 @@ public:
 		coll_ob.size.z = offsetSize.z;
 
 		// アングル
-		coll_ob.rotation.x = offsetRotation.x;
-		coll_ob.rotation.y = offsetRotation.y;
-		coll_ob.rotation.z = offsetRotation.z;
+		coll_ob.axisQuat = angle;
+		coll_ob.axisQuat = DirectX::XMQuaternionMultiply(coll_ob.axisQuat, coll_ob.offsetQuat);
 
-		float PitchRadians = DirectX::XMConvertToRadians(coll_ob.rotation.x); // X軸回転
-		float YawRadians = DirectX::XMConvertToRadians(coll_ob.rotation.y);     // Y軸回転
-		float RollRadians = DirectX::XMConvertToRadians(coll_ob.rotation.z);   // Z軸回転
+		coll_ob.rotation = coll_ob.axisQuat;
 
-		// 軸
-		DirectX::SimpleMath::Matrix mtx = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(YawRadians, PitchRadians, RollRadians);
-		coll_ob.axisX = DirectX::SimpleMath::Vector3(mtx._11, mtx._12, mtx._13);
-		coll_ob.axisY = DirectX::SimpleMath::Vector3(mtx._21, mtx._22, mtx._23);
-		coll_ob.axisZ = DirectX::SimpleMath::Vector3(mtx._31, mtx._32, mtx._33);
+		DirectX::XMMATRIX mtx = DirectX::XMMatrixRotationQuaternion(coll_ob.axisQuat);
 
-		DirectX::SimpleMath::Vector3 worldOffset = DirectX::SimpleMath::Vector3::TransformNormal(coll_ob.offsetCenter, mtx);
-		coll_ob.center = pos + worldOffset;
+		DirectX::XMStoreFloat3(&coll_ob.axisX, mtx.r[0]); // X軸
+		DirectX::XMStoreFloat3(&coll_ob.axisY, mtx.r[1]); // Y軸
+		DirectX::XMStoreFloat3(&coll_ob.axisZ, mtx.r[2]); // Z軸
+
+		// 4. ワールド中心座標の決定 (オフセットの位置を回転後に適用)
+		DirectX::XMFLOAT3 offsetPos = DirectX::XMFLOAT3(coll_ob.offsetCenter.x, coll_ob.offsetCenter.y, coll_ob.offsetCenter.z);
+		DirectX::XMVECTOR vOffsetCenter = XMLoadFloat3(&offsetPos);
+
+		DirectX::XMVECTOR vPos = XMLoadFloat3(&coll_ob.center); // posをロード
+
+		DirectX::XMVECTOR vWorldOffset = DirectX::XMVector3TransformNormal(vOffsetCenter, mtx);
+		DirectX::XMVECTOR vFinalCenter = DirectX::XMVectorAdd(vPos, vWorldOffset);
+		DirectX::XMStoreFloat3(&coll_ob.center, vFinalCenter); // 最終的なワールド中心座標を coll_ob.center に上書き
 	};
 
 	inline void SetColliderSize_AABB(const DirectX::SimpleMath::Vector3& pos,
@@ -283,6 +283,14 @@ public:
 		coll_ab.max.z = offsetCenter.z + offsetSize.z;
 	};
 
+	inline void SetColliderSize_AABB(const TransformComponent& trans) {
+
+		DirectX::SimpleMath::Vector3 pos = trans.GetPosition();
+		DirectX::SimpleMath::Vector3 scale = trans.GetScale();
+
+		SetColliderSize_AABB(pos, scale);
+	};
+
 	inline void SetColliderSize_Sphere(const DirectX::XMFLOAT3& pos, const float radius) {
 		this->coll_sp.center = pos;
 		this->coll_sp.radius = radius;
@@ -293,7 +301,19 @@ public:
 	
 	inline void SetOffsetCenterOBB(const DirectX::SimpleMath::Vector3& offset) { coll_ob.offsetCenter = offset; };
 	inline void SetOffsetSizeOBB(const DirectX::SimpleMath::Vector3& offset) { coll_ob.offsetSize = offset; };
-	inline void SetOffsetRotationOBB(const DirectX::SimpleMath::Vector3& offset) { coll_ob.offsetRotation = offset; };
+	inline void SetOffsetRotationOBB(const DirectX::XMFLOAT3& offset) { 
+		
+		float pitch = DirectX::XMConvertToRadians(offset.x);	// X軸回転
+		float yaw = DirectX::XMConvertToRadians(offset.y);     // Y軸回転
+		float roll = DirectX::XMConvertToRadians(offset.z);    // Z軸回転
+
+		DirectX::XMVECTOR quat = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
+
+		coll_ob.offsetQuat = quat; };
 
 	inline void SetActiveColliderFlag(bool flag) { this->m_activeColliderFlag = flag; };
 
@@ -308,8 +328,8 @@ public:
 	inline DirectX::SimpleMath::Vector3 GetOffsetSizeAABB() const { return coll_ab.offsetSize; };
 //	inline DirectX::SimpleMath::Vector3 GetOffsetRotation() const { return offsetRotation; };	
 
-	inline DirectX::SimpleMath::Matrix GetWorldAABBMatrix() const { return coll_ab.worldAABBMatrix; };
-	inline DirectX::SimpleMath::Matrix GetWorldOBBMatrix() const { return coll_ob.worldOBBMatrix; };
+	inline DirectX::XMMATRIX GetWorldAABBMatrix() const { return coll_ab.worldAABBMatrix; };
+	inline DirectX::XMMATRIX GetWorldOBBMatrix() const { return coll_ob.worldOBBMatrix; };
 
 	inline bool GetActiveColliderFlag() const { return this->m_activeColliderFlag; };
 

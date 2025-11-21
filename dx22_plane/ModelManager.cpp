@@ -19,12 +19,5 @@ StaticMesh* ModelManager::GetModel(const std::string& modelPath, const std::stri
         return (it->second).get();
     }
 
-    // メッシュの生ポインタを生成して返す
-  /*  std::unique_ptr<StaticMesh> newModel = std::make_unique<StaticMesh>();
-    newModel->Load(modelPath, texDirectory);
-    m_ModelCache[modelPath] = std::move(newModel);
-
-    return m_ModelCache[modelPath].get();*/
-
     return nullptr;
 }

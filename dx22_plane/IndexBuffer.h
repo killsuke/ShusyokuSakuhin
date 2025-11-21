@@ -48,4 +48,8 @@ public:
 	}
 
 	unsigned int GetIndexSize() const { return m_IndexSize; };
+
+	ID3D11Buffer* GetBuffer() {
+		return m_IndexBuffer.Get();
+	}
 };

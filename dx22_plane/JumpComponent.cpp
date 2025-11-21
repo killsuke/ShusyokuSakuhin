@@ -24,7 +24,7 @@ void JumpComponent::Update() {
 
 void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
-	auto rigid = p_object->GetComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
 	Vector3 velocity = rigid->GetVelocity();
 

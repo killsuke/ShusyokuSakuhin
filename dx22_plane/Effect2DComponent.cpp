@@ -6,13 +6,13 @@ Effect2DComponent::Effect2DComponent(GameObject& obj) :Component(obj) {
 }
 
 void Effect2DComponent::Update() {
-	auto rendBill = p_object->GetComponent<RenderBillboardComponent>();
+	auto rendBill = m_Object->GetComponent<RenderBillboardComponent>();
 
 	m_cutRecordTime += m_deltaTime;
 	m_recordTime += m_deltaTime;
 
 	if (m_recordTime > m_maxTime) {
-		p_object->SetDeleteFg(true);
+		m_Object->SetDeleteFg(true);
 		return;
 	}
 

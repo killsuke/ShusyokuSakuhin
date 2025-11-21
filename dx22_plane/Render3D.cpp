@@ -2,9 +2,10 @@
 #include "DirectXRender.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
-#include "CubeMesh.h"
+#include "Mesh/CubeMesh.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -14,13 +15,13 @@ Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 
 void Render3DComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
+	auto transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = transform->GetWorldMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
 		cb.color = Vector4(m_Color);
 

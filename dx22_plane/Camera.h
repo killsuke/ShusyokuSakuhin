@@ -44,12 +44,7 @@ public:
 	Camera(GameObject& obj);
 	~Camera() = default;
 
-	void Init();
-	void Update();
-	void Draw();
-	void Uninit();
-
-//	void SetCamera(int mode);	// ƒJƒƒ‰‚ğİ’è
+	void Update() override;
 
 	inline void SetTarget(const DirectX::SimpleMath::Vector3& target) { m_Target = target; };
 

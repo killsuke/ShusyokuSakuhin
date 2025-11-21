@@ -4,6 +4,7 @@
 #include "GameObjectManager.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : RenderComponent(obj) {
 	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // ソート番号を設定
@@ -14,13 +15,13 @@ Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : Re
 void Render3DColliderOBBComponent::Update()
 {
 #ifdef _DEBUG
-	auto colliderOBB = p_object->GetComponent<ColliderComponent>();
+	auto colliderOBB = m_Object->GetComponent<ColliderComponent>();
 
 	if (colliderOBB != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = colliderOBB->GetWorldOBBMatrix().Transpose();
+		cb.matrixWorld = XMMatrixTranspose(colliderOBB->GetWorldOBBMatrix());
 
 		cb.color = Vector4(m_Color);
 

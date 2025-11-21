@@ -139,7 +139,6 @@ bool Texture::LoadMask(const std::string& filename)
 	return true;
 }
 
-// これに関してはモデル読み込むってなるとエラーになるはずなので注意
 // テクスチャをメモリからロード
 bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 

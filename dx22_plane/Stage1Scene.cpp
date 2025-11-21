@@ -5,10 +5,10 @@
 #include "Render2D.h"
 #include "RenderBillboard.h"
 #include "GameObjectManager.h"
-#include "CircleMesh.h"
-#include "LineMesh.h"
-#include "CubeMesh.h"
-#include "SquareMesh.h"
+#include "Mesh/CircleMesh.h"
+#include "Mesh/LineMesh.h"
+#include "Mesh/CubeMesh.h"
+#include "Mesh/SquareMesh.h"
 #include "HumanBoneComponent.h"
 #include "RenderLineComponent.h"
 #include "BonePartsComponent.h"
@@ -16,6 +16,9 @@
 #include "RenderBlurComponent.h"
 #include "input.h"
 #include "ModelManager.h"
+#include "Collider.h"
+#include "Render3DColliderAABBComponent.h"
+#include "TrailRenderComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -46,45 +49,79 @@ void Stage1Scene::Init()
 	//TestBlur();
 
 	{
+		//auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		//auto testTrans = testObj->AddComponent<TransformComponent>();
+		//testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+		//testTrans->SetScale({ 0.1f,0.1f,0.1f });
+		//testTrans->SetRotation({ 0.0f,90.0f,0.0f });
+		//auto collider = testObj->AddComponent<ColliderComponent>();
+		//collider->SetOffsetSizeAABB({100.0f,100.0f,100.0f});
+		//collider->SetOffsetCenterAABB({ 0.0f,0.0f,-50.0f });
+		//auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
+		//auto rend = testObj->AddComponent<Render3DComponent>();
+		//rend->LoadModelMesh("assets/model/Mountain/uploads_files_4307558_Mountain.fbx",
+		//	"assets/model/Mountain");
+
+		//rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		////	rend->ChangeTexture("assets/texture/NoTexture.png");
+		//rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+
+	{
+		//auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		//auto testTrans = testObj->AddComponent<TransformComponent>();
+		//testTrans->SetPosition({ -100.0f, 0.0f, 150.0f });
+		//testTrans->SetScale({ 0.1f,0.1f,0.1f });
+		//testTrans->SetRotation({ 0.0f,90.0f,0.0f });
+		//auto rend = testObj->AddComponent<Render3DComponent>();
+		//rend->LoadModelMesh("assets/model/NewCar/uploads_files_3262252_r8.fbx",
+		//	"assets/model/NewCar");
+
+		//rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		////	rend->ChangeTexture("assets/texture/NoTexture.png");
+		//rend->SetColor({ 1.0f,1.0f,0.0f,1.0f });
+	}
+
+	{
 		auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+		testTrans->SetScale({ 10.0f,10.0f,10.0f });
+		auto rend = testObj->AddComponent<TrailRenderComponent>();
+		rend->SetBasePoint(-5.0f);
+		rend->SetTipPoint(5.0f);
+		//rend->CreateMesh<SquareMesh>();
+//		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	//	rend->ChangeTexture("assets/texture/ranks.png");
+//		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+
+	{
+	/*	auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ 400.0f, 0.0f, 0.0f });
 		testTrans->SetScale({ 0.5f,0.5f,0.5f });
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
-			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
+		rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
+			"assets/model/Container");
 
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-		//	rend->ChangeTexture("assets/texture/NoTexture.png");
-		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		rend->CreateMesh<SquareMesh>();
+		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });*/
 	}
 
 	{
 		auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetPosition({ 0.0f, 20.0f, 0.0f });
+		testTrans->SetPosition({ 600.0f, 0.0f, 0.0f });
 		testTrans->SetScale({ 0.5f,0.5f,0.5f });
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
-			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
+		rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
+			"assets/model/Container");
 
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 		//	rend->ChangeTexture("assets/texture/NoTexture.png");
-		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-	}
-
-	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
-		auto testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetPosition({ 0.0f, 40.0f, 0.0f });
-		testTrans->SetScale({ 0.5f,0.5f,0.5f });
-		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26/12281_Container_v2_L2.obj",
-			"assets/model/Container_v2_L2.123cfad69282-d455-4551-a996-7e6c7b178e26");
-
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-		//	rend->ChangeTexture("assets/texture/NoTexture.png");
-		rend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 }
 

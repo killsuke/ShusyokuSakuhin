@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "RenderMask3D.h"
-#include "SquareMesh.h"
+#include "Mesh/SquareMesh.h"
 
 TestMaskScene::TestMaskScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");

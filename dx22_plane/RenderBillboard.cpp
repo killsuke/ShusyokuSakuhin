@@ -14,16 +14,16 @@ RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComp
 
 void RenderBillboardComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();
-	auto camera = GameObjectManager::GameObjectFindName("camera");
+	const auto transform = m_Object->GetComponent<TransformComponent>();
+	const auto camera = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && camera != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		auto pos = transform->GetPosition();
-		auto scale = transform->GetScale();
-		auto cameraView3D = camera->GetComponent<Camera>()->GetView3D();
+		const auto pos = transform->GetPosition();
+		const auto scale = transform->GetScale();
+		const auto cameraView3D = camera->GetComponent<Camera>()->GetView3D();
 
 		Matrix rotationOnly = cameraView3D;
 
@@ -43,8 +43,8 @@ void RenderBillboardComponent::Update()
 		rotationOnly._42 = 0.0f;
 		rotationOnly._43 = 0.0f;
 
-		Matrix t = Matrix::CreateTranslation(pos.x, pos.y, pos.z);
-		Matrix s = Matrix::CreateScale(scale.x, scale.y, scale.z);
+		const Matrix t = Matrix::CreateTranslation(pos.x, pos.y, pos.z);
+		const Matrix s = Matrix::CreateScale(scale.x, scale.y, scale.z);
 
 		rotationOnly = rotationOnly.Transpose();	// 転置行列にすることで逆行列にするより処理が軽い
 
@@ -52,7 +52,7 @@ void RenderBillboardComponent::Update()
 
 		cb.color = Vector4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -60,10 +60,9 @@ void RenderBillboardComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-	//	m_Texture->SetGPU();
 
-		auto texture = GetTexture();
-		auto uvs = texture.GetUVSets();
+		Texture texture = GetTexture();
+		Vector4 uvs = texture.GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;
@@ -72,22 +71,22 @@ void RenderBillboardComponent::Update()
 
 		cb.matrixTex = texture.MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_inversionFlag;
+		cb.inverse = m_InversionFlag;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		//マテリアル数分ループ 
-		for (int i = 0; i < subsets.size(); i++)
+		for (unsigned int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 

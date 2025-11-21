@@ -17,7 +17,9 @@ private:
 	bool m_flipRequested = false; // 反転要求フラグ
 
 	GameObject* m_CenterObject = nullptr; // 中心となるオブジェクト
-	DirectX::SimpleMath::Vector3 m_initialOffset = {}; // 中心と回転するオブジェクトの差分
+	DirectX::SimpleMath::Vector3 m_initialOffset = DirectX::SimpleMath::Vector3::Zero; // 中心と回転するオブジェクトの差分
+	DirectX::SimpleMath::Vector3 m_RotationAxis = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::SimpleMath::Vector3 m_LockRotation = DirectX::SimpleMath::Vector3::Zero;
 
 public:
 	GoAroundComponent(GameObject& obj);
@@ -37,9 +39,13 @@ public:
 		m_radius = DirectX::SimpleMath::Vector2(m_initialOffset.x, m_initialOffset.y).Length();
 	}
 
-	inline void SetClockwise(bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
-	inline void SetRollingActive(bool active) { m_rollingActive = active; } // 回転の停止・再開
-	inline void SetFlipRequested(bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
+	inline void SetClockwise(const bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
+	inline void SetRollingActive(const bool active) { m_rollingActive = active; } // 回転の停止・再開
+	inline void SetFlipRequested(const bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
+	inline void SetRotationAxis(const DirectX::SimpleMath::Vector3& axis) { m_RotationAxis = axis; };
+	inline void SetLockRotation_X(const float x) { m_LockRotation.x = x; };
+	inline void SetLockRotation_Y(const float y) { m_LockRotation.y = y; };
+	inline void SetLockRotation_Z(const float z) { m_LockRotation.z = z; };
 	inline void ResetNowAngle_Radian() { m_nowAngleRadian = 0.0f; } // 角度をリセット（ラジアン）
 	inline void ResetNowAngle_Degree() { m_nowAngleDegree = 0.0f; } // 角度をリセット（ディグリー）
 	inline void RollingStop() { m_rollingActive = false; } // 回転を停止

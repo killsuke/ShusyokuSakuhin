@@ -15,6 +15,7 @@ void StageLoadCSVComponent::Update() {
 }
 
 void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject& terrainManager) {
+	
 	const float firstPointX = -100.0f; // 初期X座標
 	const float firstPointY = 100.0f; // 初期X座標
 
@@ -124,4 +125,12 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 	if(enemyMn != nullptr) {
 		enemyMn->SetCsvObjData(std::move(result_Enemies)); // EnemyObjectManagerComponentにデータをセット
 	}
+}
+
+void StageLoadCSVComponent::WriteStageCSV(const std::string& fileName) {
+
+}
+
+void StageLoadCSVComponent::CSVToBinary(const std::string& csvFileName, const std::string& binaryFileName) {
+
 }

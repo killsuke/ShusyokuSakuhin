@@ -3,8 +3,8 @@
 #include "Transform.h"
 #include "GameObjectManager.h"
 #include "RenderBillboard.h"
-#include "CircleMesh.h"
-#include "LineMesh.h"
+#include "Mesh/CircleMesh.h"
+#include "Mesh/LineMesh.h"
 #include "input.h"
 #include "FollowPositionComponent.h"
 
@@ -42,13 +42,13 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 
 void RenderLineComponent::Update()
 {
-	auto transform = p_object->GetComponent<TransformComponent>();	
+	auto transform = m_Object->GetComponent<TransformComponent>();	
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
-		deviceContext->Map(m_VertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+		deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
@@ -76,7 +76,7 @@ void RenderLineComponent::Update()
 		vtx[1].color = m_Color;
 		vtx[1].uv = Vector2(1.0f, 0.0f);
 
-		deviceContext->Unmap(m_VertexBuffer.Get(), 0);
+		deviceContext->Unmap(m_VertexBuffer.GetBuffer(), 0);
 
 		LineThickness thick;
 		thick.thickness = m_thickness;

@@ -3,6 +3,9 @@
 #include "Component.h"
 #include <memory>
 #include <string>
+#include <vector>
+#include <cstdint>
+#include <algorithm>
 
 enum class ActiveState {
 	ACTIVE,
@@ -21,6 +24,12 @@ enum class DrawContainer {
 	Max
 };
 
+struct TagAndID
+{
+	std::string tag = "";
+	uint16_t id = 0;
+};
+
 class Component; // 前方宣言
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
@@ -29,7 +38,7 @@ private:
 	std::vector<std::unique_ptr<Component>> renderComponents;
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
 	GameObject* parent = nullptr;	// 親オブジェクトを持つことができる
-	std::string tag = "";	// タグを付けて識別する
+	TagAndID m_TagAndID = {}; // タグとIDのペア
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
@@ -40,9 +49,8 @@ private:
 
 public:
 
-	//GameObject();
-	GameObject(const std::string& _name, const std::string& _tag)
-		: name(_name), tag(_tag) {
+	GameObject(const std::string& _name)
+		: name(_name) {
 		components.reserve(20);
 		renderComponents.reserve(4);
 	}; // 名前とタグを指定して初期化
@@ -54,16 +62,23 @@ public:
 
 	// セッター
 	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };
-	inline void SetTag(const std::string& tag) { this->tag = tag; };
+	inline void SetTag(const std::string& tag) { m_TagAndID.tag = tag; };
+	inline void SetID(const uint16_t& id) { m_TagAndID.id = id; };
 	inline void SetName(const std::string& name) { this->name = name; };
-	inline void SetChild(GameObject* obj) { 
-		children.push_back(obj); 
+	inline void SetChild(GameObject* obj) {
+
+		auto childObj = std::find(children.begin(), children.end(), obj);
+		if (childObj != children.end()) {
+			return; // すでに子オブジェクトとして登録されている場合は何もしない
+		}
+
+		children.push_back(obj);
 		obj->parent = this;	// 親オブジェクトを設定
 	};
-	inline void SetActiveState(ActiveState as) { activeState = as; };
-	inline void SetDrawContainer(DrawContainer dc) { drawContainer = dc; };
-	inline void SetDrawContainerChangeFlag(DrawContainer dc, bool dccFlag) { 
-		hopeDrawContainer = dc; 
+	inline void SetActiveState(const ActiveState& as) { activeState = as; };
+	inline void SetDrawContainer(const DrawContainer& dc) { drawContainer = dc; };
+	inline void SetDrawContainerChangeFlag(const DrawContainer& dc,const bool dccFlag) {
+		hopeDrawContainer = dc;
 		drawContainerChangeFlag = dccFlag;
 	};
 
@@ -71,8 +86,9 @@ public:
 
 	// ゲッター
 	inline bool GetDeleteFg()const { return deletefg; };
-	inline std::string& GetTag() { return tag; };
-	inline std::string& GetName() { return name; };
+	inline std::string GetTag()const { return m_TagAndID.tag; };
+	inline uint16_t GetID()const { return m_TagAndID.id; };
+	inline std::string GetName()const { return name; };
 	inline GameObject* GetParent() { return parent; };
 	inline std::vector<GameObject*>& GetChildren() { return children; };
 	inline ActiveState GetActiveState()const { return activeState; };
@@ -104,10 +120,28 @@ public:
 		return nullptr; // 指定された型がなかった場合nullptr
 	}
 
+	template<typename T2>
+	std::vector<T2*> GetComponents() {
+		std::vector<T2*> comps;
+		comps.clear();
+
+		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+				comps.push_back(ptr);
+			}
+		}
+		for (auto& component : renderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+				comps.push_back(ptr);
+			}
+		}
+		return comps; // 指定された型のコンポーネント群を返す
+	}
+
 	// コンポーネントを追加する
 	// 実体はinlファイルに記述して、インクルードによる循環参照を防ぐ（保険程度）
-	template<typename T2>
-	T2* AddComponent();
+	template<typename T3>
+	T3* AddComponent();
 };
 
 #include "GameObjectTemplate.inl"

@@ -1,5 +1,5 @@
 #pragma once
-#include "Mesh.h"
+#include "Mesh/Mesh.h"
 class BonePartsMesh : public Mesh
 {
 public:
