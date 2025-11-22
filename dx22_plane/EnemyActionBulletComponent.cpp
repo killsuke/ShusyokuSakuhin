@@ -8,7 +8,6 @@
 #include "Render3DColliderAABBComponent.h"
 #include "BulletComponent.h"
 #include "AttackOneTimeComponent.h"
-#include "FighterComponent.h"
 #include "PlayerDamageComponent.h"
 #include "Mesh/SquareMesh.h"
 
@@ -26,15 +25,22 @@ void EnemyActionBulletComponent::Update() {
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = m_Object->GetComponent<Render2DComponent>();
+	auto fighter = m_Object->GetComponent<FighterComponent>();
+
+	const bool isAttacked = fighter->GetIsAttacked();
+
+	if (isAttacked == true) {
+		CreateDamageEffect();
+	}
 
 	if (myPos.x > playPos.x) {
-		m_rightLeft = false;
+		m_IsRightLeft = false;
 	}
 	else {
-		m_rightLeft = true;
+		m_IsRightLeft = true;
 	}
 
-	rend->SetInversionFlag(!m_rightLeft);
+	rend->SetInversionFlag(!m_IsRightLeft);
 
 	if (m_recordTime > 3.0f) {
 
@@ -54,7 +60,7 @@ void EnemyActionBulletComponent::FiringBullet() {
 	trans->SetScale({ 5.0f,5.0f,1.0f });
 	auto rigid = bullet->AddComponent<RigidBodyComponent>();
 	auto bull = bullet->AddComponent<BulletComponent>();
-	if (m_rightLeft == false) {
+	if (m_IsRightLeft == false) {
 		bull->SetFiringVector({ -1.0f, 0.0f, 0.0f });
 	}
 	else {
@@ -70,11 +76,11 @@ void EnemyActionBulletComponent::FiringBullet() {
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
 
-	// ここが重い（おそらくテクスチャ取得に問題あり？）
+	// 毎回シェーダー生成をしているから重い。
 	auto rend = bullet->AddComponent<Render2DComponent>();
 
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/Animation2DVS.cso", "shader/unlitTexturePS.cso");
 	rend->ChangeTexture("assets/texture/bullet.png");
-	rend->SetInversionFlag(!m_rightLeft);
+	rend->SetInversionFlag(!m_IsRightLeft);
 }

@@ -20,13 +20,22 @@ void EnemyActionBossComponent::Update() {
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = m_Object->GetComponent<Render2DComponent>();
+
+	auto fighter = m_Object->GetComponent<FighterComponent>();
+
+	const bool isAttacked = fighter->GetIsAttacked();
+
+	if (isAttacked == true) {
+		CreateDamageEffect();
+	}
+
 	if (myPos.x > playPos.x) {
-		m_rightLeft = false;
+		m_IsRightLeft = false;
 	}
 	else {
-		m_rightLeft = true;
+		m_IsRightLeft = true;
 	}
-	rend->SetInversionFlag(!m_rightLeft);
+	rend->SetInversionFlag(!m_IsRightLeft);
 	if (m_recordTime > 1.0f) {
 		BossAction();
 		m_recordTime = 0.0f;
@@ -43,7 +52,7 @@ void EnemyActionBossComponent::BossAction() {
 	trans->SetScale({ 10.0f,10.0f,1.0f });
 	auto rigid = bullet->AddComponent<RigidBodyComponent>();
 	auto bull = bullet->AddComponent<BulletComponent>();
-	if (m_rightLeft == false) {
+	if (m_IsRightLeft == false) {
 		bull->SetFiringVector({ -1.0f, 0.0f, 0.0f });
 	}
 	else {
@@ -63,6 +72,6 @@ void EnemyActionBossComponent::BossAction() {
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rend->ChangeTexture("assets/texture/bullet.png");
-	rend->SetInversionFlag(!m_rightLeft);
+	rend->SetInversionFlag(!m_IsRightLeft);
 
 }

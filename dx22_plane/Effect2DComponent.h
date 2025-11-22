@@ -20,6 +20,8 @@ public:
 
 	//inline void SetOnePieceTime(const float time) { m_onePieceTime = time; };
 	//inline void SetMaxCutNumX(const float num) { m_maxCutNumX = num; };
+	
+	// テクスチャの最大時間と分割数を設定
 	inline void SetMaxTimeAndCut_X(const float time,const float cut) { 
 		m_maxTime = time; 
 		m_maxCutNumX = cut;

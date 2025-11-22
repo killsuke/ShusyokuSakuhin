@@ -13,7 +13,6 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 
 void EnemyDamageComponent::Update()
 {
-	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = m_Object->GetComponent<ColliderComponent>();
 	auto objOthers = GameObjectManager::GameObjectFindTag("Enemy");
 
@@ -36,6 +35,7 @@ void EnemyDamageComponent::Update()
 				*collObjOther, *collObjMe)) {
 
 				attack->AttackAction(*objOther);
+
 				//if (attack->GetAttackHitFlag() == true) {
 				//	std::vector<std::string> targetTags = { "Player","Enemy","Sword","Effect","SkyDome" };
 				//	for (const auto& tag : targetTags)

@@ -6,7 +6,7 @@ Effect2DComponent::Effect2DComponent(GameObject& obj) :Component(obj) {
 }
 
 void Effect2DComponent::Update() {
-	auto rendBill = m_Object->GetComponent<RenderBillboardComponent>();
+	RenderBillboardComponent* rendBill = m_Object->GetComponent<RenderBillboardComponent>();
 
 	m_cutRecordTime += m_deltaTime;
 	m_recordTime += m_deltaTime;
@@ -24,7 +24,7 @@ void Effect2DComponent::Update() {
 				m_nowCutNumX = 1.0f;
 			}*/
 
-			auto mesh = rendBill->GetMesh();
+			Mesh* mesh = rendBill->GetMesh();
 			
 			mesh->SetCutNum(m_nowCutNumX, 1.0f);
 			m_cutRecordTime = 0.0f;

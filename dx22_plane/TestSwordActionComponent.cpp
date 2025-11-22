@@ -50,6 +50,8 @@ void TestSwordActionComponent::Update() {
 	}
 
 	const bool isAroundActive = goAround->GetRollingActive();
+	const bool isRightLeft = moveComp->GetRightLeft();
+	m_RightLeft = isRightLeft;
 
 	// Œ•‚ðU‚é
 	if (m_IsAction == true) {
@@ -60,8 +62,6 @@ void TestSwordActionComponent::Update() {
 
 			TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
 			goAround->SetActiveFlag(true);
-
-			const bool isRightLeft = moveComp->GetRightLeft();
 
 			// ŠÈˆÕŽÀ‘•
 			if (m_TestSlashCount == 0) {
@@ -133,13 +133,13 @@ void TestSwordActionComponent::Update() {
 		}
 	}
 
+
 	if (isAroundActive == true) {
 		SwordAction();
 	}
 
 	// Œü‚«”½“]—p
-	const bool direction = moveComp->GetRightLeft();
-	m_BeforeDirection = direction;
+	m_BeforeDirection = isRightLeft;
 }
 
 void TestSwordActionComponent::SwordAction() {
@@ -176,7 +176,7 @@ void TestSwordActionComponent::SwordAction() {
 			trail->RequestInversion();
 		}
 
-		m_RightLeft = true;
+	//	m_RightLeft = true;
 	}
 	else if (direction == false && m_BeforeDirection == true) { // ¶Œü‚«
 		goAround->SetClockwise(false);
@@ -187,7 +187,7 @@ void TestSwordActionComponent::SwordAction() {
 			trail->RequestInversion();
 		}
 
-		m_RightLeft = false;
+	//	m_RightLeft = false;
 	}
 
 	if (atkComp->GetAttackHitFlag() == true) {
@@ -214,11 +214,13 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	auto render = effect->AddComponent<RenderBillboardComponent>();
 	auto mesh = render->CreateMesh<SquareMesh>();
 	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+//	render->ChangeTexture("assets/texture/Blood_Splatter.png");
 	render->ChangeTexture("assets/texture/swordEffect.png");
 	render->SetInversionFlag(!m_RightLeft);
 	mesh->SetInitialCut(5.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
+//	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
 }
 
 void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {

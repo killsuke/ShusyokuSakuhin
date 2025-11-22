@@ -38,10 +38,10 @@ void EnemyActionHopperComponent::Update() {
 	m_recordTime += m_deltaTime;
 
 	if (myPos.x > playPos.x) {
-		m_rightLeft = false;
+		m_IsRightLeft = false;
 	}
 	else {
-		m_rightLeft = true;
+		m_IsRightLeft = true;
 	}
 
 	if (m_recordTime < 2.0f) {
@@ -52,7 +52,7 @@ void EnemyActionHopperComponent::Update() {
 		jumpFlag = false;
 	}
 
-	rend->SetInversionFlag(!m_rightLeft);
+	rend->SetInversionFlag(!m_IsRightLeft);
 
 	HopperAction(jumpFlag);
 }
@@ -61,14 +61,21 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	auto jump = m_Object->GetComponent<JumpComponent>();
 	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
 	auto testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
-
 	bool isGround = testExtrusion->GetIsGround();
+
+	auto fighter = m_Object->GetComponent<FighterComponent>();
+
+	const bool isAttacked = fighter->GetIsAttacked();
+
+	if (isAttacked == true) {
+		CreateDamageEffect();
+	}
 
 	if (isGround == true) {
 		rigid->ReduceVelocity_X(0.5f);
 	}
 	else {
-		if (m_rightLeft == false) {
+		if (m_IsRightLeft == false) {
 			rigid->ConstantVelocity_X(-30.0f);
 		}
 		else {
