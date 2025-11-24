@@ -19,7 +19,6 @@ void SceneManager::Init() {
 }
 
 void SceneManager::UnInit() {
-	//TextureManager::ReleaseAllTextures();	// 各シーンのテクスチャーをまとめて破棄する
 
 	GameObjectManager::UnInit();	// ゲームオブジェクトのマネージャーを終了
 
@@ -33,10 +32,6 @@ void SceneManager::UnInit() {
 // 更新
 void SceneManager::Update() {
 	Input::Update();
-
-	//if (waitTime != 0.0f) {
-	//	waitTimeCounter += 0.016f;
-	//}
 
 	// 即席ポーズ画面実装
 	if (Input::GetKeyTrigger(VK_CONTROL) == true) {
@@ -87,15 +82,24 @@ void SceneManager::Update() {
 
 // 描画
 void SceneManager::Draw() {
+
+#if _DEBUG
+
 	ImGui::Render();
+
+#endif
 
 	// 描画前処理
 	DirectXRender::DrawBegin();
 
 	GameObjectManager::Draw();
 
+#if _DEBUG
+
 	// ImGuiの描画
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+#endif
 
 	// 描画後処理
 	DirectXRender::DrawEnd();

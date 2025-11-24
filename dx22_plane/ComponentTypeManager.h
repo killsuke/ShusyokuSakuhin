@@ -11,7 +11,7 @@
 #include <vector>
 #include <Windows.h>
 
-class ComponentTypeManager
+class ComponentTypeManager final
 {
 private:
 	static std::unordered_map<std::string, uint32_t> nameToId;

@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "Render.h"
+#include "Components/Render.h"
 #include <iostream>
 
 //¡‚Ì‚Æ‚±‚ë‹Lq“à—e‚Í–³‚µ

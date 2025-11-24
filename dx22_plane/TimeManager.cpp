@@ -23,7 +23,7 @@ void TimeManager::Update() {
 	LARGE_INTEGER counter;
 	QueryPerformanceCounter(&counter);
 
-	double currentTime = static_cast<double>(counter.QuadPart) / m_frequency.QuadPart;
+	const double currentTime = static_cast<double>(counter.QuadPart) / m_frequency.QuadPart;
 	m_deltaTime = static_cast<float>(currentTime - m_prevTime);
 	m_prevTime = currentTime;
 }

@@ -90,34 +90,34 @@
     <ClCompile Include="Ray.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Collider.cpp">
+    <ClCompile Include="Components\Collider.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Components\Camera.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="Components\Component.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="JumpComponent.cpp">
+    <ClCompile Include="Components\JumpComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="RigidBodyComponent.cpp">
+    <ClCompile Include="Components\RigidBodyComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Render.cpp">
+    <ClCompile Include="Components\Render.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Render3D.cpp">
+    <ClCompile Include="Components\Render3D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
+    <ClCompile Include="Components\Transform.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Render3DColliderAABBComponent.cpp">
+    <ClCompile Include="Components\Render3DColliderAABBComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerOperationComponent.cpp">
+    <ClCompile Include="Components\PlayerOperationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
@@ -150,7 +150,7 @@
     <ClCompile Include="Bones.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RenderOneSkinAnimation.cpp">
+    <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="BonePartsMesh.cpp">
@@ -159,88 +159,88 @@
     <ClCompile Include="InchWorm_Test.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Render2D.cpp">
+    <ClCompile Include="Components\Render2D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="RenderBillboard.cpp">
+    <ClCompile Include="Components\RenderBillboard.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BoneComponent.cpp">
+    <ClCompile Include="Components\BoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="TestStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="FighterComponent.cpp">
+    <ClCompile Include="Components\FighterComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AttackTimingComponent.cpp">
+    <ClCompile Include="Components\AttackTimingComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyDamageComponent.cpp">
+    <ClCompile Include="Components\EnemyDamageComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CameraMoveComponent.cpp">
+    <ClCompile Include="Components\CameraMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Spring.cpp">
+    <ClCompile Include="Components\Spring.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CameraPointComponent.cpp">
+    <ClCompile Include="Components\CameraPointComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CameraTargetComponent.cpp">
+    <ClCompile Include="Components\CameraTargetComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="TestMaskScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="RenderMask3D.cpp">
+    <ClCompile Include="Components\RenderMask3D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Render3DColliderOBBComponent.cpp">
+    <ClCompile Include="Components\Render3DColliderOBBComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="GoAroundComponent.cpp">
+    <ClCompile Include="Components\GoAroundComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="HPBarMoveComponent.cpp">
+    <ClCompile Include="Components\HPBarMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="StageLoadCSVComponent.cpp">
+    <ClCompile Include="Components\StageLoadCSVComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="LoadStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainJsonComponent.cpp">
+    <ClCompile Include="Components\TerrainJsonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AttackComponent.cpp">
+    <ClCompile Include="Components\AttackComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AttackOneTimeComponent.cpp">
+    <ClCompile Include="Components\AttackOneTimeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="JsonComponent.cpp">
+    <ClCompile Include="Components\JsonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyJsonComponent.cpp">
+    <ClCompile Include="Components\EnemyJsonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CSVObjectManagerComponent.cpp">
+    <ClCompile Include="Components\CSVObjectManagerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManagerComponent.cpp">
+    <ClCompile Include="Components\EnemyManagerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TestExtrusionJudgeComponent.cpp">
+    <ClCompile Include="Components\TestExtrusionJudgeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\SkyDomeMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="SkyDomeRenderComponent.cpp">
+    <ClCompile Include="Components\SkyDomeRenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
@@ -261,70 +261,70 @@
     <ClCompile Include="ComponentTypeManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TestSwordActionComponent.cpp">
+    <ClCompile Include="Components\TestSwordActionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="DoorFadeComponent.cpp">
+    <ClCompile Include="Components\DoorFadeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainManagerComponent.cpp">
+    <ClCompile Include="Components\TerrainManagerComponent.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyActionComponent.cpp">
+    <ClCompile Include="Components\EnemyActionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyActionBulletComponent.cpp">
+    <ClCompile Include="Components\EnemyActionBulletComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BulletComponent.cpp">
+    <ClCompile Include="Components\BulletComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerDamageComponent.cpp">
+    <ClCompile Include="Components\PlayerDamageComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyActionHopperComponent.cpp">
+    <ClCompile Include="Components\EnemyActionHopperComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Effect2DComponent.cpp">
+    <ClCompile Include="Components\Effect2DComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="MoveTerrainComponent.cpp">
+    <ClCompile Include="Components\MoveTerrainComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BossEventComponent.cpp">
+    <ClCompile Include="Components\BossEventComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyActionBossComponent.cpp">
+    <ClCompile Include="Components\EnemyActionBossComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BlinkingUIComponent.cpp">
+    <ClCompile Include="Components\BlinkingUIComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="DeathBlockComponent.cpp">
+    <ClCompile Include="Components\DeathBlockComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="HumanBoneComponent.cpp">
+    <ClCompile Include="Components\HumanBoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\LineMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="RenderLineComponent.cpp">
+    <ClCompile Include="Components\RenderLineComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="utility.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BonePartsComponent.cpp">
+    <ClCompile Include="Components\BonePartsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="FollowPositionComponent.cpp">
+    <ClCompile Include="Components\FollowPositionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="HelpMath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RenderBlurComponent.cpp">
+    <ClCompile Include="Components\RenderBlurComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\Mesh.cpp">
@@ -333,16 +333,16 @@
     <ClCompile Include="HighwayScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="LeapToCenterCarComponent.cpp">
+    <ClCompile Include="Components\LeapToCenterCarComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="MoveCarComponent.cpp">
+    <ClCompile Include="Components\MoveCarComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="HitFlashComponent.cpp">
+    <ClCompile Include="Components\HitFlashComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TrailRenderComponent.cpp">
+    <ClCompile Include="Components\TrailRenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\TrailMesh.cpp">
@@ -351,11 +351,14 @@
     <ClCompile Include="Mesh\PlaneMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="ArbitraryRotationComponent.cpp">
+    <ClCompile Include="Components\ArbitraryRotationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="HitStopManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\TrailMakeComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,34 +443,34 @@
     <ClInclude Include="RenderElement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Components\Camera.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
+    <ClInclude Include="Components\Collider.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="JumpComponent.h">
+    <ClInclude Include="Components\JumpComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Render.h">
+    <ClInclude Include="Components\Render.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Render3D.h">
+    <ClInclude Include="Components\Render3D.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="RigidBodyComponent.h">
+    <ClInclude Include="Components\RigidBodyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
+    <ClInclude Include="Components\Transform.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="Components\Component.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Render3DColliderAABBComponent.h">
+    <ClInclude Include="Components\Render3DColliderAABBComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerOperationComponent.h">
+    <ClInclude Include="Components\PlayerOperationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="SceneList.h">
@@ -509,7 +512,7 @@
     <ClInclude Include="Bones.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RenderOneSkinAnimation.h">
+    <ClInclude Include="Components\RenderOneSkinAnimation.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BonePartsMesh.h">
@@ -518,61 +521,61 @@
     <ClInclude Include="InchWorm_Test.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Render2D.h">
+    <ClInclude Include="Components\Render2D.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="RenderBillboard.h">
+    <ClInclude Include="Components\RenderBillboard.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BoneComponent.h">
+    <ClInclude Include="Components\BoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="TestStageScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="FighterComponent.h">
+    <ClInclude Include="Components\FighterComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="AttackTimingComponent.h">
+    <ClInclude Include="Components\AttackTimingComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyDamageComponent.h">
+    <ClInclude Include="Components\EnemyDamageComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CameraMoveComponent.h">
+    <ClInclude Include="Components\CameraMoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Spring.h">
+    <ClInclude Include="Components\Spring.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CameraPointComponent.h">
+    <ClInclude Include="Components\CameraPointComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="CameraPattern.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CameraTargetComponent.h">
+    <ClInclude Include="Components\CameraTargetComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="TestMaskScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="RenderMask3D.h">
+    <ClInclude Include="Components\RenderMask3D.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Render3DColliderOBBComponent.h">
+    <ClInclude Include="Components\Render3DColliderOBBComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="GoAroundComponent.h">
+    <ClInclude Include="Components\GoAroundComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="HPParam.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HPBarMoveComponent.h">
+    <ClInclude Include="Components\HPBarMoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="StageLoadCSVComponent.h">
+    <ClInclude Include="Components\StageLoadCSVComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="LoadStageScene.h">
@@ -581,37 +584,37 @@
     <ClInclude Include="CSV_Data.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainJsonComponent.h">
+    <ClInclude Include="Components\TerrainJsonComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ObjectStatus.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="AttackComponent.h">
+    <ClInclude Include="Components\AttackComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="AttackOneTimeComponent.h">
+    <ClInclude Include="Components\AttackOneTimeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="JsonComponent.h">
+    <ClInclude Include="Components\JsonComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyJsonComponent.h">
+    <ClInclude Include="Components\EnemyJsonComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CSVObjectManagerComponent.h">
+    <ClInclude Include="Components\CSVObjectManagerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyManagerComponent.h">
+    <ClInclude Include="Components\EnemyManagerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestExtrusionJudgeComponent.h">
+    <ClInclude Include="Components\TestExtrusionJudgeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\SkyDomeMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SkyDomeRenderComponent.h">
+    <ClInclude Include="Components\SkyDomeRenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
@@ -632,61 +635,61 @@
     <ClInclude Include="TimeManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TestSwordActionComponent.h">
+    <ClInclude Include="Components\TestSwordActionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="DoorFadeComponent.h">
+    <ClInclude Include="Components\DoorFadeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainManagerComponent.h">
+    <ClInclude Include="Components\TerrainManagerComponent.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyActionComponent.h">
+    <ClInclude Include="Components\EnemyActionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyActionBulletComponent.h">
+    <ClInclude Include="Components\EnemyActionBulletComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BulletComponent.h">
+    <ClInclude Include="Components\BulletComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerDamageComponent.h">
+    <ClInclude Include="Components\PlayerDamageComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyActionHopperComponent.h">
+    <ClInclude Include="Components\EnemyActionHopperComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Effect2DComponent.h">
+    <ClInclude Include="Components\Effect2DComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="MoveTerrainComponent.h">
+    <ClInclude Include="Components\MoveTerrainComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BossEventComponent.h">
+    <ClInclude Include="Components\BossEventComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyActionBossComponent.h">
+    <ClInclude Include="Components\EnemyActionBossComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BlinkingUIComponent.h">
+    <ClInclude Include="Components\BlinkingUIComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="DeathBlockComponent.h">
+    <ClInclude Include="Components\DeathBlockComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="HumanBoneComponent.h">
+    <ClInclude Include="Components\HumanBoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\LineMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="RenderLineComponent.h">
+    <ClInclude Include="Components\RenderLineComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BonePartsComponent.h">
+    <ClInclude Include="Components\BonePartsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="FollowPositionComponent.h">
+    <ClInclude Include="Components\FollowPositionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="TestBoneData.h">
@@ -695,22 +698,22 @@
     <ClInclude Include="HelpMath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RenderBlurComponent.h">
+    <ClInclude Include="Components\RenderBlurComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="HighwayScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="LeapToCenterCarComponent.h">
+    <ClInclude Include="Components\LeapToCenterCarComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="MoveCarComponent.h">
+    <ClInclude Include="Components\MoveCarComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="HitFlashComponent.h">
+    <ClInclude Include="Components\HitFlashComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TrailRenderComponent.h">
+    <ClInclude Include="Components\TrailRenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\TrailMesh.h">
@@ -719,7 +722,7 @@
     <ClInclude Include="Mesh\PlaneMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="ArbitraryRotationComponent.h">
+    <ClInclude Include="Components\ArbitraryRotationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="XMFLOAT_Helper.h">
@@ -727,6 +730,9 @@
     </ClInclude>
     <ClInclude Include="HitStopManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\TrailMakeComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

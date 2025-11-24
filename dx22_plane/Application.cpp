@@ -7,8 +7,11 @@
 #include "ComponentTypeManager.h"
 #include "TimeManager.h"
 
+#if _DEBUG
+
 // Application.cppの先頭などにこれを追加すればOK
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#endif
 
 const auto ClassName = TEXT("2024 framework ひな型");     //!< ウィンドウクラス名.
 const auto WindowName = TEXT("2024 framework ひな型(フィールド描画)");    //!< ウィンドウ名.
@@ -148,69 +151,6 @@ bool Application::InitWnd()
 	// ウィンドウにフォーカスを設定.
 	SetFocus(m_hWnd);
 
-
-
-	// ウィンドウの設定.
-	//WNDCLASSEX wc2 = {};
-	//wc2.cbSize = sizeof(WNDCLASSEX);
-	//wc2.style = CS_HREDRAW | CS_VREDRAW;
-	//wc2.lpfnWndProc = WndProc;
-	//wc2.hIcon = LoadIcon(hInst, IDI_APPLICATION);
-	//wc2.hCursor = LoadCursor(hInst, IDC_ARROW);
-	//wc2.hbrBackground = GetSysColorBrush(COLOR_BACKGROUND);
-	//wc2.lpszMenuName = nullptr;
-	//wc2.lpszClassName = ClassName;
-	//wc2.hIconSm = LoadIcon(hInst, IDI_APPLICATION);
-
-	//// ウィンドウの登録.
-	//if (!RegisterClassEx(&wc2))
-	//{
-	//	return false;
-	//}
-
-	//// インスタンスハンドル設定.
-	//m_hInst = hInst;
-
-	//// ウィンドウのサイズを設定.
-	//RECT rc2 = {};
-	//rc2.right = static_cast<LONG>(m_Width);
-	//rc2.bottom = static_cast<LONG>(m_Height);
-
-	//// ウィンドウサイズを調整.
-	//auto style2 = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
-	//AdjustWindowRect(&rc2, style2, FALSE);
-
-	//// ウィンドウを生成.
-	//m_hWnd2 = CreateWindowEx(
-	//	0,
-	//	//        WS_EX_TOPMOST,
-	//	ClassName,
-	//	WindowName,
-	//	style2,
-	//	CW_USEDEFAULT,
-	//	CW_USEDEFAULT,
-	//	rc2.right - rc2.left,
-	//	rc2.bottom - rc2.top,
-	//	nullptr,
-	//	nullptr,
-	//	m_hInst,
-	//	nullptr);
-
-	//if (m_hWnd2 == nullptr)
-	//{
-	//	return false;
-	//}
-
-	//// ウィンドウを表示.
-	//ShowWindow(m_hWnd2, SW_SHOWNORMAL);
-
-	//// ウィンドウを更新.
-	//UpdateWindow(m_hWnd2);
-
-	//// ウィンドウにフォーカスを設定.
-	//SetFocus(m_hWnd2);
-
-	// 正常終了.
 	return true;
 }
 
@@ -219,10 +159,14 @@ bool Application::InitWnd()
 //-----------------------------------------------------------------------------
 void Application::TermWnd()
 {
+#if _DEBUG
+
 	// Cleanup
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+#endif
 
 	// ウィンドウの登録を解除.
 	if (m_hInst != nullptr)
@@ -232,7 +176,6 @@ void Application::TermWnd()
 
 	m_hInst = nullptr;
 	m_hWnd = nullptr;
-	//	m_hWnd2 = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -249,10 +192,10 @@ void Application::MainLoop()
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
 
-	//ComponentTypeManager::MakeSampleJson();
-
 	auto deviceContext = DirectXRender::GetDeviceContext();
 	auto device = DirectXRender::GetDevice();
+
+#if _DEBUG
 
 	// ImGuiコンテキストの作成
 	IMGUI_CHECKVERSION();
@@ -267,7 +210,7 @@ void Application::MainLoop()
 	// デバイスやウィンドウへのバインド
 	ImGui_ImplWin32_Init(m_hWnd);  // hwnd: ウィンドウハンドル
 	ImGui_ImplDX11_Init(device, deviceContext);
-
+#endif
 
 	// FPS計測用変数
 	int fpsCounter = 0;
@@ -302,27 +245,7 @@ void Application::MainLoop()
 		}
 		else
 		{
-
-
-			//QueryPerformanceCounter(&liWork);// 現在時間を取得
-			//nowCount = liWork.QuadPart;
-
-			// 前回フレームからの経過時間（秒）を計算
-			//double elapsedSec = (double)(nowCount - oldCount) / frequency;
-
-			//// 60FPS = 1フレーム約16.666ms = 約0.0166秒
-			//// 経過時間がそれ未満なら、CPUをスリープさせる
-			//if (elapsedSec < 1.0 / 60.0) {
-
-			//	// 足りない時間をミリ秒に換算してSleeo
-			//	DWORD sleepTime = (DWORD)(((1.0 / 60.0) - elapsedSec) * 1000.0);
-
-			//	if (sleepTime > 0) {
-			//		Sleep(sleepTime);	// 最小単位は1ms。Sleep(0)は意味がないので除外
-			//	}
-			//	continue;	// 次のループへ
-
-			//}
+#if _DEBUG
 
 			// ImGuiのフレーム開始
 			ImGui_ImplDX11_NewFrame();
@@ -351,7 +274,7 @@ void Application::MainLoop()
 			draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
 
 			ImGui::End();
-
+#endif
 			double deltaTime = 0.016;
 
 			m_accumulatorTime += deltaTime;
@@ -368,8 +291,6 @@ void Application::MainLoop()
 			SceneManager::Draw();   // シーンの描画
 
 			fpsCounter++; // ゲーム処理を実行したら＋１する
-			//oldCount = nowCount;
-
 
 			nowTick = GetTickCount64();// 現在時間を取得
 			// 前回計測から1000ミリ秒が経過したか？
@@ -380,7 +301,6 @@ void Application::MainLoop()
 				char str[64];
 				wsprintfA(str, "FPS : %d", fpsCounter);
 				SetWindowTextA(m_hWnd, str);
-				//std::cout << "ここFPS" << std::endl; // コンソールに出力
 
 #endif // デバッグモードならFPSをウィンドウタイトルに表示
 				// カウンターリセット
@@ -432,9 +352,13 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
 	default:
 	{
+#if _DEBUG
+
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
 			return true;
 		}
+
+#endif
 		// 受け取ったメッセージに対してデフォルトの処理を実行
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 		break;

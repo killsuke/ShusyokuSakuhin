@@ -104,25 +104,29 @@
             "name": "TRANSFORM",
             "ID": 25
         },
-        {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
+	{
+            "name": "TRAILMAKE",
             "ID": 26
         },
         {
-	    "name": "HIT_FLASH",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 27
+        },
+        {
+	    "name": "HIT_FLASH",
+            "ID": 28
 	},
         {
             "name": "RENDER",
-            "ID": 28
-        },
-        {
-            "name": "RENDER_DEBUG",
             "ID": 29
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DEBUG",
             "ID": 30
+        },
+        {
+            "name": "MAX",
+            "ID": 31
         }
     ]
 }

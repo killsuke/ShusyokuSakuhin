@@ -1,8 +1,8 @@
 #include "TestMaskScene.h"
 #include "GameObjectManager.h"
-#include "Transform.h"
-#include "Camera.h"
-#include "RenderMask3D.h"
+#include "Components/Transform.h"
+#include "Components/Camera.h"
+#include "Components/RenderMask3D.h"
 #include "Mesh/SquareMesh.h"
 
 TestMaskScene::TestMaskScene() {

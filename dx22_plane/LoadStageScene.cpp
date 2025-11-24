@@ -1,45 +1,45 @@
 #include "LoadStageScene.h"
-#include "Camera.h"
+#include "Components/Camera.h"
 #include "GameObjectManager.h"
-#include "Transform.h"
+#include "Components/Transform.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/CircleMesh.h"
 #include "Mesh/SphereMesh.h"
 #include "Mesh/PlaneMesh.h"
-#include "Render3D.h"
-#include "Render3DColliderAABBComponent.h"
-#include "Render3DColliderOBBComponent.h"
-#include "Render2D.h"
-#include "Collider.h"
-#include "PlayerOperationComponent.h"
-#include "RigidBodyComponent.h"
-#include "JumpComponent.h"
-#include "EnemyDamageComponent.h"
-#include "FighterComponent.h"
-#include "AttackTimingComponent.h"
-#include "AttackOneTimeComponent.h"
-#include "CameraMoveComponent.h"
-#include "CameraPointComponent.h"
-#include "CameraTargetComponent.h"
-#include "ArbitraryRotationComponent.h"
-#include "HPBarMoveComponent.h"
-#include "Spring.h"
-#include "StageLoadCSVComponent.h"
-#include "TerrainManagerComponent.h"
-#include "EnemyManagerComponent.h"
-#include "TerrainJsonComponent.h"
-#include "EnemyJsonComponent.h"
-#include "TestExtrusionJudgeComponent.h"
+#include "Components/Render3D.h"
+#include "Components/Render3DColliderAABBComponent.h"
+#include "Components/Render3DColliderOBBComponent.h"
+#include "Components/Render2D.h"
+#include "Components/Collider.h"
+#include "Components/PlayerOperationComponent.h"
+#include "Components/RigidBodyComponent.h"
+#include "Components/JumpComponent.h"
+#include "Components/EnemyDamageComponent.h"
+#include "Components/FighterComponent.h"
+#include "Components/AttackTimingComponent.h"
+#include "Components/AttackOneTimeComponent.h"
+#include "Components/CameraMoveComponent.h"
+#include "Components/CameraPointComponent.h"
+#include "Components/CameraTargetComponent.h"
+#include "Components/ArbitraryRotationComponent.h"
+#include "Components/HPBarMoveComponent.h"
+#include "Components/Spring.h"
+#include "Components/StageLoadCSVComponent.h"
+#include "Components/TerrainManagerComponent.h"
+#include "Components/EnemyManagerComponent.h"
+#include "Components/TerrainJsonComponent.h"
+#include "Components/EnemyJsonComponent.h"
+#include "Components/TestExtrusionJudgeComponent.h"
 #include "Mesh/SkyDomeMesh.h"
-#include "SkyDomeRenderComponent.h"
-#include "TestSwordActionComponent.h"
-#include "DoorFadeComponent.h"
-#include "BossEventComponent.h"
-#include "RenderBlurComponent.h"
+#include "Components/SkyDomeRenderComponent.h"
+#include "Components/TestSwordActionComponent.h"
+#include "Components/DoorFadeComponent.h"
+#include "Components/BossEventComponent.h"
+#include "Components/RenderBlurComponent.h"
 #include "ModelManager.h"
-#include "HitFlashComponent.h"
-#include "TrailRenderComponent.h"
+#include "Components/HitFlashComponent.h"
+#include "Components/TrailRenderComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -169,7 +169,7 @@ LoadStageScene::LoadStageScene() {
 		auto rollingGoAround = rolling->AddComponent<ArbitraryRotationComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
 		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
-		rollingGoAround->SetRotationSpeed(11.5f); // 回転速度を設定
+		rollingGoAround->SetRotationSpeed(15.5f); // 回転速度を設定
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
 
@@ -184,7 +184,7 @@ LoadStageScene::LoadStageScene() {
 		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
-		effectRender->ChangeTexture("assets/texture/baran.png");
+		effectRender->ChangeTexture("assets/texture/background2.png");
 
 		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
@@ -351,12 +351,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget1->SetCameraPattern(CameraPattern::SPRING_CHASE);
 		cameratarget1->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend1 = target1->AddComponent<Render3DComponent>();
+#if _DEBUG
 
 		targetRend1->CreateMesh<CircleMesh>();
 		targetRend1->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend1->ChangeTexture("assets/texture/NoTexture.png");
-
+#endif
 
 		auto target2 = GameObjectManager::AddObject("target2", "Target");
 		auto targetTrans2 = target2->AddComponent<TransformComponent>();
@@ -369,10 +370,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget2->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend2->CreateMesh<CircleMesh>();
 		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend2->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target3 = GameObjectManager::AddObject("target3", "Target");
 		auto targetTrans3 = target3->AddComponent<TransformComponent>();
@@ -385,10 +389,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget3->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend3 = target3->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend3->CreateMesh<CircleMesh>();
 		targetRend3->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend3->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target4 = GameObjectManager::AddObject("target4", "Target");
 		auto targetTrans4 = target4->AddComponent<TransformComponent>();
@@ -401,10 +408,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget4->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend4 = target4->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend4->CreateMesh<CircleMesh>();
 		targetRend4->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend4->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend4->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target5 = GameObjectManager::AddObject("target5", "Target");
 		auto targetTrans5 = target5->AddComponent<TransformComponent>();
@@ -417,10 +427,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget5->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend5 = target5->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend5->CreateMesh<CircleMesh>();
 		targetRend5->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend5->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend5->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target6 = GameObjectManager::AddObject("target6", "Target");
 		auto targetTrans6 = target6->AddComponent<TransformComponent>();
@@ -433,10 +446,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget6->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend6 = target6->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend6->CreateMesh<CircleMesh>();
 		targetRend6->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend6->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend6->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target7 = GameObjectManager::AddObject("target7", "Target");
 		auto targetTrans7 = target7->AddComponent<TransformComponent>();
@@ -449,10 +465,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget7->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend7 = target7->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend7->CreateMesh<CircleMesh>();
 		targetRend7->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend7->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend7->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		auto target8 = GameObjectManager::AddObject("target8", "Target");
 		auto targetTrans8 = target8->AddComponent<TransformComponent>();
@@ -465,10 +484,13 @@ void LoadStageScene::TargetAndScroolCreate() {
 		cameratarget8->SetSpringK(30.0f); // ばね定数をセット
 		auto targetRend8 = target8->AddComponent<Render3DComponent>();
 
+#if _DEBUG
+
 		targetRend8->CreateMesh<CircleMesh>();
 		targetRend8->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend8->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		targetRend8->ChangeTexture("assets/texture/NoTexture.png");
+#endif
 
 		//auto circle = GameObjectManager::AddObject("Scroll", "Scroll");
 		//auto circleTrans = circle->AddComponent<TransformComponent>();

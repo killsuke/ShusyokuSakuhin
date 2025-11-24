@@ -1,6 +1,6 @@
 #pragma once
 #include <filesystem>
-#include "Component.h"
+#include "Components/Component.h"
 #include <memory>
 #include <string>
 #include <vector>
