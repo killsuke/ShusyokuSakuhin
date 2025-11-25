@@ -25,7 +25,6 @@ private:
 	DirectX::SimpleMath::Vector3 m_TargetBeforePos = DirectX::SimpleMath::Vector3::Zero; // 追従対象の前回位置
 	float m_TipOffset = 0.0f;	// 先端のオフセット
 	float m_BaseOffset = 0.0f; // 根元のオフセット
-	float m_CumulativeSpeed = 0.0f;
 	bool m_RightLeftFlag = true; // 右向きか左向きか
 	int m_TrailCount = 0;
 	int m_AverageSamplingNum = 0;
@@ -39,12 +38,13 @@ public:
 
 	void Update()override;
 
+	void TrailCountUp();
 	void TrailUpdate();
 	void AddTrailPoints(const DirectX::XMFLOAT3& center, const DirectX::XMVECTOR& quaternion, const float trailSpeed);
 	void ClearTrail() {
 		m_TrailPoints.clear();
 		m_TrailCount = 0;
-		m_CumulativeSpeed = 0.0f;
+
 	};
 
 	void SetTrailPoint(const std::vector<PosAndQuaternion>& points);

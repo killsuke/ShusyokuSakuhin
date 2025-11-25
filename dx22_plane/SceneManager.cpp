@@ -52,8 +52,6 @@ void SceneManager::Update() {
 		}
 	}
 
-	GameObjectManager::Update();
-
 	if (m_ActiveGame == true) {
 		HitStopManager::Update();
 
@@ -78,6 +76,8 @@ void SceneManager::Update() {
 
 		}
 	}
+
+	GameObjectManager::Update();
 };
 
 // •`‰æ

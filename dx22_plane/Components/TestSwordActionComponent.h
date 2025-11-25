@@ -25,6 +25,7 @@ private:
 	bool m_BeforeDirection = true;	// 前フレームのプレイヤーの向き
 	bool m_RightLeft = true; // プレイヤーの向き、trueが右、falseが左
 	bool m_IsAction = false; // 剣を振っているかどうか
+	bool m_IsUseTrailFlag = false; // トレイルエフェクトを使うかどうか
 
 	int m_TestSlashCount = 0;
 	float m_DeltaTime = 0.016f;

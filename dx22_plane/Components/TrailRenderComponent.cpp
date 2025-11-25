@@ -26,14 +26,12 @@ TrailRenderComponent::TrailRenderComponent(GameObject& obj) : RenderComponent(ob
 void TrailRenderComponent::Update() {
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
-	//ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
-	//const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
 
-	int pointSize = static_cast<int>(m_TrailPoints.size());
+	const int pointSize = static_cast<int>(m_TrailPoints.size());
 
 	if (transform != nullptr) {
 
-		if (pointSize < 2) return;
+		TrailUpdate();
 
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
@@ -90,6 +88,41 @@ void TrailRenderComponent::Update() {
 		deviceContext->DrawIndexed(m_TrailIndex, 0, 0);
 		DirectXRender::SetRasterizerState(ERasterizerState::RS_CULL_BACK);
 	}
+
+//	std::cout << "RenderC" << std::endl;
+}
+
+void TrailRenderComponent::TrailCountUp() {
+
+	const int pointSize = static_cast<int>(m_TrailPoints.size());
+
+	// 範囲超えないように
+	for (int i = 0; i < m_AverageSamplingNum; ++i) {
+
+		if (m_TrailCount > pointSize - 1) {
+			break;
+		}
+		// ここのlifeTimeの調整は後に
+		const float subtractLife = (1.0f / pointSize) * 1.5f;
+		for (size_t i = 0; i < m_TrailCount; ++i) {
+
+			m_TrailPoints[i].lifeTime += subtractLife;
+		}
+
+		m_TrailCount++;
+	}
+	if (m_TrailCount > pointSize - 1) {
+		m_TrailCount = pointSize - 1;
+	}
+
+	// lifeTime 更新の後に実行
+	while (!m_TrailPoints.empty() && m_TrailPoints.front().lifeTime >= 1.0f) {
+		m_TrailPoints.erase(m_TrailPoints.begin());
+		// 削除したのでカウントも調整
+		if (m_TrailCount > 0) {
+			m_TrailCount--;
+		}
+	}
 }
 
 void TrailRenderComponent::TrailUpdate() {
@@ -107,38 +140,10 @@ void TrailRenderComponent::TrailUpdate() {
 	vertices.reserve(pointSize * 2);
 	indices.reserve((pointSize - 1) * 6);
 
-	if (rollingSpeed != 0.0f) {
+	// ここにTraiCountUpがあった
 
-		// 範囲超えないように
-		for (int i = 0; i < m_AverageSamplingNum; ++i) {
 
-			if (m_TrailCount > pointSize - 1) {
-				break;
-			}
-			// ここのlifeTimeの調整は後に
-			const float subtractLife = (1.0f / pointSize) * 1.5f;
-			for (size_t i = 0; i < m_TrailCount; ++i) {
-
-				m_TrailPoints[i].lifeTime += subtractLife;
-			}
-
-			m_TrailCount++;
-		}
-		if (m_TrailCount > pointSize - 1) {
-			m_TrailCount = pointSize - 1;
-		}
-
-		// lifeTime 更新の後に実行
-		while (!m_TrailPoints.empty() && m_TrailPoints.front().lifeTime >= 1.0f) {
-			m_TrailPoints.erase(m_TrailPoints.begin());
-			// 削除したのでカウントも調整
-			if (m_TrailCount > 0) {
-				m_TrailCount--;
-			}
-		}
-	}
-
-	for (size_t i = 0; i + 1 < m_TrailCount; ++i) {
+	for (int i = 0; i + 1 < m_TrailCount; ++i) {
 
 		const TrailPoint p0 = m_TrailPoints[i];
 		const TrailPoint p1 = m_TrailPoints[i + 1];
@@ -182,6 +187,9 @@ void TrailRenderComponent::TrailUpdate() {
 	}
 
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
+
+//	auto back = vertices.back();
+//	std::cout << back.position.x << "," << back.position.y << "," << back.position.z << std::endl;
 
 	D3D11_MAPPED_SUBRESOURCE mappedVB;
 	HRESULT hr = deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
@@ -276,6 +284,9 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 	m_TrailCount = 0;
 	m_TrailPoints.clear();
 
+	m_AverageSamplingNum = 0;
+	m_TrailIndex = 0;
+
 	ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
 	const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
 
@@ -287,7 +298,7 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 		const XMVECTOR quat = point.quaternion;
 
 		// 頂点となる候補を追加
-		AddTrailPoints(localPos, quat,rollingSpeed);
+		AddTrailPoints(localPos, quat, rollingSpeed);
 	}
 
 	ID3D11Buffer* vertexBuffer = m_VertexBuffer.GetBuffer();
@@ -296,16 +307,19 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 	vertexBuffer->Release();
 	indexBuffer->Release();
 
+	m_VertexBuffer.BufferReset();
+	m_IndexBuffer.BufferReset();
+
 	const int pointSize = static_cast<int>(m_TrailPoints.size());
 
 	TrailMesh* trailMesh = dynamic_cast<TrailMesh*>(m_Mesh.get());
 	if (trailMesh != nullptr) {
 
-		std::vector<VERTEX_3D> vertexBuffer = trailMesh->CreateMeshVertices(pointSize * VertexNumSquare);
-		std::vector<unsigned int> indexBuffer = trailMesh->CreateMeshIndices(pointSize * IndexNumSquare);
+		std::vector<VERTEX_3D> vertices = trailMesh->CreateMeshVertices(pointSize * VertexNumSquare);
+		std::vector<unsigned int> indices = trailMesh->CreateMeshIndices(pointSize * IndexNumSquare);
 
-		m_VertexBuffer.Create(vertexBuffer);
-		m_IndexBuffer.Create(indexBuffer);
+		m_VertexBuffer.Create(vertices);
+		m_IndexBuffer.Create(indices);
 	}
 
 	const int vecSize = (int)m_SampleDivisions.size();

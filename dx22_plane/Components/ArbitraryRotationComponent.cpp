@@ -12,7 +12,7 @@ namespace {
 
 ArbitraryRotationComponent::ArbitraryRotationComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ƒ\[ƒg”Ô†‚ðÝ’è
-	m_ArbitraryAxis = XMVectorSet(0.0f,0.0f,1.0f,1.0f);
+	m_ArbitraryAxis = XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
 void ArbitraryRotationComponent::Update() {
@@ -24,7 +24,7 @@ void ArbitraryRotationComponent::Update() {
 
 	// ”½“]—v‹‚ª‚ ‚ê‚ÎAŒ»Ý‚ÌŠp“x‚ð”½“]
 	if (m_flipRequested == true) {
-		
+
 		float angle1 = XMConvertToDegrees(m_nowAngleRadian);
 		m_nowAngleRadian = -m_nowAngleRadian;
 		float angle2 = XMConvertToDegrees(m_nowAngleRadian);
@@ -49,12 +49,13 @@ void ArbitraryRotationComponent::Update() {
 	// ‰ñ“]‚Ì‚Ý‚ð’âŽ~AˆÊ’uXV‚Í‚·‚é
 	if (m_rollingActive == true) {
 
+		const float rotationSpeed = DeltaTime * m_rotationSpeed;
 		// ŽžŒv‰ñ‚è‚©”½ŽžŒv‰ñ‚è‚©
 		if (m_clockwise == true) {
-			m_nowAngleRadian -= DeltaTime * m_rotationSpeed; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
+			m_nowAngleRadian -= rotationSpeed; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
 		}
 		else {
-			m_nowAngleRadian += DeltaTime * m_rotationSpeed; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
+			m_nowAngleRadian += rotationSpeed; // Šp“x‚ðXVŠÔŠuŽžŠÔ‚ÉŠî‚Ã‚¢‚ÄŒvŽZ
 		}
 	}
 
@@ -115,7 +116,7 @@ void ArbitraryRotationComponent::Update() {
 		roll
 	);
 
-	rotationQuat = XMQuaternionMultiply(localQuat,rotationQuat);
+	rotationQuat = XMQuaternionMultiply(localQuat, rotationQuat);
 
 	transform->SetQuaternion(rotationQuat);
 
@@ -189,11 +190,15 @@ void ArbitraryRotationComponent::SimulationMove() {
 		XMFLOAT3 newPos = {};
 		XMStoreFloat3(&newPos, rotatedOffset);
 		m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
+
+	//	std::cout << newPos.x << "," << newPos.y << "," << newPos.z << std::endl;
 	}
 
 	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
-	
+
 	if (trailRender != nullptr) {
 		trailRender->SetTrailPoint(m_worldPosQuats);
 	}
+
+//	std::cout << std::endl;
 }

@@ -65,6 +65,10 @@ public:
 		}
 	}
 
+	void BufferReset() {
+		m_VertexBuffer = nullptr;
+	}
+
 	ID3D11Buffer* GetBuffer() const {
 		return m_VertexBuffer.Get();
 	}

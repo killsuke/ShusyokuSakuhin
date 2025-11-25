@@ -59,8 +59,13 @@ void TestSwordActionComponent::Update() {
 	// Œ•‚ðU‚é
 	if (m_IsAction == true) {
 
-		m_IsAction = false;
 		if (isAroundActive == false || isFinished == true) {
+
+			m_IsUseTrailFlag = true;
+			if (isFinished == true) {
+				m_IsUseTrailFlag = false;
+			}
+
 			sound.Play(SOUND_LABEL::SOUND_LABEL_SE000);
 
 			TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
@@ -73,6 +78,7 @@ void TestSwordActionComponent::Update() {
 			// ‚±‚±‚ÅUŒ‚‘ÎÌ‚ðƒNƒŠƒA
 			AttackOneTimeComponent* atkComp = m_Object->GetComponent<AttackOneTimeComponent>();
 			atkComp->ClearAttackObjs();
+
 
 			// ŠÈˆÕŽÀ‘•
 			if (m_TestSlashCount == 0) {
@@ -111,8 +117,6 @@ void TestSwordActionComponent::Update() {
 			goAround->SimulationMove();
 		}
 
-
-
 		m_Object->SetDrawContainerChangeFlag(DrawContainer::AbsFront, true);
 	}
 	// U‚Á‚Ä‚¢‚È‚¢
@@ -125,7 +129,7 @@ void TestSwordActionComponent::Update() {
 		TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
 		TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
 		if (trail != nullptr && trailMake != nullptr) {
-			trail->ClearTrail();
+			//	trail->ClearTrail();
 			trail->SetActiveFlag(false);
 			trailMake->SetActiveFlag(false);
 		}
@@ -134,6 +138,7 @@ void TestSwordActionComponent::Update() {
 		collider->SetActiveColliderFlag(false);
 
 		m_Object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
+		goAround->ResetIsFinished();
 		goAround->SetActiveFlag(false);
 		auto holderTrans = m_Holder->GetComponent<TransformComponent>();
 		auto holderPos = holderTrans->GetPosition();
@@ -156,9 +161,11 @@ void TestSwordActionComponent::Update() {
 
 	// Œü‚«”½“]—p
 	m_BeforeDirection = isRightLeft;
+	m_IsAction = false;
 }
 
 void TestSwordActionComponent::SwordAction() {
+
 	auto sound = SceneManager::GetSound();
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
 	auto collider = m_Object->GetComponent<ColliderComponent>();
@@ -175,13 +182,22 @@ void TestSwordActionComponent::SwordAction() {
 
 	// ¶‰E‚ÌŒü‚«•Ï‚í‚Á‚½‚çAŒ»ÝŠp“x‚É{90“x‚µ‚Ä¶‰E”½“]Aã‹L‚ÌŽ~‚ß‚éˆ—‚à‚¿‚å‚¢‚Æ•Ï‚¦‚éHƒ^ƒCƒ€•ûŽ®‚Æ‚©‚É
 	const bool direction = moveComp->GetRightLeft();
+	//const bool isFinished = goAround->GetIsFinished();
 
 	TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
 	TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
 
 	if (trail != nullptr && trailMake != nullptr) {
-		trail->SetActiveFlag(true);
-		trailMake->SetActiveFlag(true);
+		if (m_IsUseTrailFlag == true) {
+			trail->SetActiveFlag(true);
+			trailMake->SetActiveFlag(true);
+		}
+		else {	// ˜A‘±UŒ‚‚ÌŽž‚Ì‹OÕ‚ÌƒYƒŒ‚ð’¼‚·‚½‚ß‚É‚±‚±‚Åˆê“xƒIƒt‚É‚·‚é
+			trail->SetActiveFlag(false);
+			trailMake->SetActiveFlag(false);
+			goAround->ResetIsFinished();
+			m_IsUseTrailFlag = true;
+		}
 	}
 
 	// •ûŒü‚ª•Ï‚í‚Á‚½‚ç”½“]ˆ—
@@ -190,12 +206,13 @@ void TestSwordActionComponent::SwordAction() {
 		goAround->SetFlipRequested(true);
 
 		if (trail != nullptr) {
+
 			trail->SetActiveFlag(true);
 			trailMake->SetActiveFlag(true);
 			trail->RequestInversion();
 		}
 
-	//	m_RightLeft = true;
+		//	m_RightLeft = true;
 	}
 	else if (direction == false && m_BeforeDirection == true) { // ¶Œü‚«
 		goAround->SetClockwise(false);
@@ -207,7 +224,7 @@ void TestSwordActionComponent::SwordAction() {
 			trail->RequestInversion();
 		}
 
-	//	m_RightLeft = false;
+		//	m_RightLeft = false;
 	}
 
 	if (atkComp->GetAttackHitFlag() == true) {
@@ -234,13 +251,13 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	auto render = effect->AddComponent<RenderBillboardComponent>();
 	auto mesh = render->CreateMesh<SquareMesh>();
 	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-//	render->ChangeTexture("assets/texture/Blood_Splatter.png");
+	//	render->ChangeTexture("assets/texture/Blood_Splatter.png");
 	render->ChangeTexture("assets/texture/swordEffect.png");
 	render->SetInversionFlag(!m_RightLeft);
 	mesh->SetInitialCut(5.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
-//	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
+	//	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
 }
 
 void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {

@@ -47,6 +47,10 @@ public:
 
 	}
 
+	void BufferReset() {
+		m_IndexBuffer = nullptr;
+	}
+
 	unsigned int GetIndexSize() const { return m_IndexSize; };
 
 	ID3D11Buffer* GetBuffer() {

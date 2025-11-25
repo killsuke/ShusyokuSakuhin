@@ -3,6 +3,7 @@
 #include "DirectXRender.h"
 #include "Mesh/TrailMesh.h"
 #include <vector>
+#include <iostream>
 
 namespace {
 	constexpr float DeltaTime = 0.016f;
@@ -19,5 +20,7 @@ void TrailMakeComponent::Update() {
 	if(m_TrailRenderComponent == nullptr) {
 		return;
 	}
-	m_TrailRenderComponent->TrailUpdate();
+	m_TrailRenderComponent->TrailCountUp();
+
+//	std::cout << "TrailMakeComponent" << std::endl;
 }
