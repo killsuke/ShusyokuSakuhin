@@ -52,4 +52,9 @@ public:
 	ID3D11Buffer* GetBuffer() {
 		return m_IndexBuffer.Get();
 	}
+
+	// ƒTƒCƒYæ“¾
+	size_t size() const {
+		return m_IndexSize;
+	}
 };

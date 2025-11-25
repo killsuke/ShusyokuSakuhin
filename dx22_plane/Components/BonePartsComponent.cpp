@@ -5,7 +5,7 @@
 using namespace DirectX::SimpleMath;
 
 BonePartsComponent::BonePartsComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // ソート番号を設定
 
 	myPart.attachBone = std::make_unique<TestBone>();
 	rlcom = m_Object->AddComponent<RenderLineComponent>();

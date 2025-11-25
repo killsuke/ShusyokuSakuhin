@@ -5,7 +5,7 @@ using namespace DirectX::SimpleMath;
 using namespace std::filesystem;
 
 TerrainJsonComponent::TerrainJsonComponent(GameObject& obj) :JsonComponent(obj) {
-    m_sortNum = ComponentTypeManager::GetID_FromName("JSON"); // ソート番号を設定
+    m_SortNum = ComponentTypeManager::GetID_FromName("JSON"); // ソート番号を設定
 }
 
 void TerrainJsonComponent::Update() {

@@ -3,7 +3,7 @@
 
 FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ソート番号を設定
 }
 
 void FighterComponent::Update() {

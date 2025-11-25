@@ -4,7 +4,7 @@
 #include <iostream>
 
 BulletComponent::BulletComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定、仮にGO_AROUNDを設置
+	m_SortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定、仮にGO_AROUNDを設置
 }
 
 void BulletComponent::Update() {

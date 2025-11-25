@@ -5,7 +5,7 @@ using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderBlurComponent::RenderBlurComponent(GameObject& obj) :RenderComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 
 	m_Shader = std::make_unique<Shader>();
 	//m_Texture = std::make_unique<Texture>();

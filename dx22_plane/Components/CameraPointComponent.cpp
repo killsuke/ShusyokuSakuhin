@@ -10,7 +10,7 @@ using namespace DirectX::SimpleMath;
 
 CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA_POINT"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA_POINT"); // ソート番号を設定
 }
 
 void CameraPointComponent::Update() {

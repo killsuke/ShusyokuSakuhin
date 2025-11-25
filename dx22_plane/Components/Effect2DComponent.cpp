@@ -2,7 +2,7 @@
 #include "RenderBillboard.h"
 
 Effect2DComponent::Effect2DComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("EFFECT"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("EFFECT"); // ソート番号を設定
 }
 
 void Effect2DComponent::Update() {

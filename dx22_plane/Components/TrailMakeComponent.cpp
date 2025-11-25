@@ -11,11 +11,13 @@ namespace {
 }
 
 TrailMakeComponent::TrailMakeComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("TRAILMAKE"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("TRAILMAKE"); // ソート番号を設定
 }
 
 void TrailMakeComponent::Update() {
 
-
-
+	if(m_TrailRenderComponent == nullptr) {
+		return;
+	}
+	m_TrailRenderComponent->TrailUpdate();
 }

@@ -2,7 +2,7 @@
 #include "Transform.h"
 
 RenderComponent::RenderComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 }
 
 StaticMesh* RenderComponent::LoadModelMesh(const std::string& filename, const std::string& texturedirectory) {

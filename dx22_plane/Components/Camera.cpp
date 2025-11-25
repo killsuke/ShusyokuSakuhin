@@ -12,7 +12,7 @@ using namespace std;
 
 Camera::Camera(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ソート番号を設定
 
 	auto transform = m_Object->GetComponent<TransformComponent>();
 

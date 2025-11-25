@@ -11,7 +11,7 @@
 #include "Mesh/SquareMesh.h"
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
 }
 
 void EnemyActionBossComponent::Update() {

@@ -14,6 +14,8 @@ struct TrailPoint
 	float lifeTime = 0.0f;	// 生存時間（フェード用）
 };
 
+class TrailMakeComponent;
+
 class TrailRenderComponent final : public RenderComponent
 {
 private:
@@ -27,6 +29,7 @@ private:
 	bool m_RightLeftFlag = true; // 右向きか左向きか
 	int m_TrailCount = 0;
 	int m_AverageSamplingNum = 0;
+	unsigned int m_TrailIndex = 0;
 	TrailMakeComponent* m_TrailMakeComponent = nullptr;
 
 public:
@@ -36,7 +39,8 @@ public:
 
 	void Update()override;
 
-	void TrailUpdate(const DirectX::XMFLOAT3& center, const DirectX::XMVECTOR& quaternion, const float trailSpeed);
+	void TrailUpdate();
+	void AddTrailPoints(const DirectX::XMFLOAT3& center, const DirectX::XMVECTOR& quaternion, const float trailSpeed);
 	void ClearTrail() {
 		m_TrailPoints.clear();
 		m_TrailCount = 0;

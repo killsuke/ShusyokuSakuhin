@@ -7,7 +7,7 @@
 using namespace DirectX;
 
 RenderOneSkinAnimation::RenderOneSkinAnimation(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_ONE_SKIN_ANIMATION"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
 	//m_Texture = std::make_unique<Texture>();
 }

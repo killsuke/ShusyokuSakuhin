@@ -15,7 +15,7 @@ namespace {
 
 LeapToCenterCarComponent::LeapToCenterCarComponent(GameObject& obj) :Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定、仮にMOVE_TERRAINを設置
+	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定、仮にMOVE_TERRAINを設置
 }
 
 void LeapToCenterCarComponent::Update() {

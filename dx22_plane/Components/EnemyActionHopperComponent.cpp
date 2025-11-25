@@ -13,7 +13,7 @@
 #include "Mesh/SquareMesh.h"
 
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
 	auto jump = m_Object->AddComponent<JumpComponent>();
 	jump->SetJumpPower(60.0f);
 }

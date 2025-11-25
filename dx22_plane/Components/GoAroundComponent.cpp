@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 
 GoAroundComponent::GoAroundComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定
 }
 
 void GoAroundComponent::Update()

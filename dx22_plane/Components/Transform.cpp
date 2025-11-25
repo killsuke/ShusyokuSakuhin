@@ -4,7 +4,7 @@ using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 TransformComponent::TransformComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("TRANSFORM"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("TRANSFORM"); // ソート番号を設定
 }
 
 // 更新処理

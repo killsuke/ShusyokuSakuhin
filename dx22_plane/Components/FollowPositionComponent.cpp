@@ -4,7 +4,7 @@
 using namespace DirectX::SimpleMath;
 
 FollowPositionComponent::FollowPositionComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("ANIMATION_TRANSFORM"); // ソート番号を設定
 }
 
 void FollowPositionComponent::Update() {

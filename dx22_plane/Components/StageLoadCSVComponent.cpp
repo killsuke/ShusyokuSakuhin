@@ -7,7 +7,7 @@
 using namespace DirectX::SimpleMath;
 
 StageLoadCSVComponent::StageLoadCSVComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("STAGE_LOAD_CSV"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("STAGE_LOAD_CSV"); // ソート番号を設定
 }
 
 void StageLoadCSVComponent::Update() {

@@ -9,7 +9,7 @@
 
 DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // 更新の優先度を設定（数値が小さいほど優先して更新される）
+	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // 更新の優先度を設定（数値が小さいほど優先して更新される）
 	doorUp = GameObjectManager::AddUI("doorUP", "FadeUI");
 	auto doorUpTransform = doorUp->AddComponent<TransformComponent>();
 	doorUpTransform->SetPosition({ 0.0f,600.0f,-1.0f });

@@ -4,7 +4,7 @@
 
 HitFlashComponent::HitFlashComponent(GameObject& obj) : RenderComponent(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("HIT_FLASH"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("HIT_FLASH"); // ソート番号を設定
 }
 
 void HitFlashComponent::Update() {

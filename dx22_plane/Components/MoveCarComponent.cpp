@@ -7,7 +7,7 @@ using namespace DirectX::SimpleMath;
 
 MoveCarComponent::MoveCarComponent(GameObject& obj) :Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("MOVE_CAR"); // ソート番号を設定、仮にMOVE_TERRAINを設置
+	m_SortNum = ComponentTypeManager::GetID_FromName("MOVE_CAR"); // ソート番号を設定、仮にMOVE_TERRAINを設置
 }
 
 void MoveCarComponent::Update()

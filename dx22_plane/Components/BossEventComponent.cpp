@@ -18,7 +18,7 @@
 #include "GameObjectManager.h"
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
+	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
 }
 
 void BossEventComponent::Update() {

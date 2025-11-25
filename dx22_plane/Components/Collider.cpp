@@ -8,7 +8,7 @@ using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("COLLIDER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("COLLIDER"); // ソート番号を設定
 }
 
 void ColliderComponent::Update()

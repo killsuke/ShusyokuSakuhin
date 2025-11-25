@@ -109,7 +109,7 @@ public:
 	inline float GetRollingSpeed()const {
 
 		ActiveState activeState = m_Object->GetActiveState();
-		if (m_activeFlag == false || activeState == ActiveState::ALL_STOP || activeState == ActiveState::UPDATE_STOP) {
+		if (m_IsActiveFlag == false || activeState == ActiveState::ALL_STOP || activeState == ActiveState::UPDATE_STOP) {
 			return 0.0f;
 		}
 		return m_rotationSpeed;

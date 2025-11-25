@@ -68,4 +68,11 @@ public:
 	ID3D11Buffer* GetBuffer() const {
 		return m_VertexBuffer.Get();
 	}
+
+	// ƒTƒCƒYŽæ“¾
+	size_t GetSize() const {
+		D3D11_BUFFER_DESC desc;
+		m_VertexBuffer->GetDesc(&desc);
+		return desc.ByteWidth;
+	}
 };

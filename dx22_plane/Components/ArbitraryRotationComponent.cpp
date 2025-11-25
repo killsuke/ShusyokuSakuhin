@@ -11,7 +11,7 @@ namespace {
 }
 
 ArbitraryRotationComponent::ArbitraryRotationComponent(GameObject& obj) : Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定
 	m_ArbitraryAxis = XMVectorSet(0.0f,0.0f,1.0f,1.0f);
 }
 
@@ -82,7 +82,7 @@ void ArbitraryRotationComponent::Update() {
 		}
 		else {
 			m_rollingActive = false;
-			m_activeFlag = false;
+			m_IsActiveFlag = false;
 		}
 
 		// 目標角度に到達したら、正確に目標角度に合わせる

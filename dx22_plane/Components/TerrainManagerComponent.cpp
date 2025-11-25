@@ -13,7 +13,7 @@
 using namespace DirectX::SimpleMath;
 
 TerrainManagerComponent::TerrainManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ソート番号を設定
 }
 
 void TerrainManagerComponent::Update() {

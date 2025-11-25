@@ -15,18 +15,19 @@ namespace {
 }
 
 TrailRenderComponent::TrailRenderComponent(GameObject& obj) : RenderComponent(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
 	CreateMesh<TrailMesh>();
 	SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	m_TrailMakeComponent = m_Object->AddComponent<TrailMakeComponent>();
+	m_TrailMakeComponent->SetTrailRenderComponent(this);
 }
 
 void TrailRenderComponent::Update() {
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
-	ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
-	const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
+	//ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
+	//const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
 
 	int pointSize = static_cast<int>(m_TrailPoints.size());
 
@@ -34,104 +35,7 @@ void TrailRenderComponent::Update() {
 
 		if (pointSize < 2) return;
 
-		InversionEvent();
-
-		std::vector<VERTEX_3D> vertices;
-		std::vector<unsigned int> indices;
-
-		vertices.reserve(pointSize * 2);
-		indices.reserve((pointSize - 1) * 6);
-
-		for (size_t i = 0; i + 1 < m_TrailCount; ++i) {
-
-			const TrailPoint p0 = m_TrailPoints[i];
-			const TrailPoint p1 = m_TrailPoints[i + 1];
-
-			const Vector4 color0 = Color(1.0f, 1.0f, 1.0f, 1.0f - p0.lifeTime); // ポイントの生存時間に基づいて透明度を設定
-			const Vector4 color1 = Color(1.0f, 1.0f, 1.0f, 1.0f - p1.lifeTime); // ポイントの生存時間に基づいて透明度を設定
-
-			const DirectX::SimpleMath::Vector3 normal(0.0f, 1.0f, 0.0f);
-
-			// UVは縦方向に時間または距離で割り当てるとする
-			const float v0 = static_cast<float>(i) / static_cast<float>(pointSize);
-			const float v1 = static_cast<float>(i + 1) / static_cast<float>(pointSize);
-
-			vertices.push_back({ p0.basePosition,normal,color0 ,{0.0f,v0} });
-			vertices.push_back({ p0.tipPosition,normal,color0 ,{1.0f,v0} });
-			vertices.push_back({ p1.basePosition,normal,color1 ,{0.0f,v1} });
-			vertices.push_back({ p1.tipPosition,normal,color1 ,{1.0f,v1} });
-
-			const unsigned int start = static_cast<unsigned int>(i) * 4;
-
-			if (m_RightLeftFlag == false) {
-
-				// 表
-				indices.push_back(start + 1);
-				indices.push_back(start + 0);
-				indices.push_back(start + 2);
-				indices.push_back(start + 1);
-				indices.push_back(start + 2);
-				indices.push_back(start + 3);
-			}
-			else {
-
-				// 反転（表裏逆に）
-				indices.push_back(start + 0);
-				indices.push_back(start + 1);
-				indices.push_back(start + 2);
-				indices.push_back(start + 2);
-				indices.push_back(start + 1);
-				indices.push_back(start + 3);
-			}
-		}
-
-		// 止めたいときとか
-		if (rollingSpeed != 0.0f) {
-
-			// 範囲超えないように
-			for (int i = 0; i < m_AverageSamplingNum; ++i) {
-
-				if(m_TrailCount > pointSize - 1) {
-					break;
-				}
-				// ここのlifeTimeの調整は後に
-				const float subtractLife = (1.0f / pointSize) * 1.5f;
-				for (size_t i = 0; i < m_TrailCount; ++i) {
-
-					m_TrailPoints[i].lifeTime += subtractLife;
-				}
-
-				m_TrailCount++;
-			}
-			if (m_TrailCount > pointSize - 1) {
-				m_TrailCount = pointSize - 1;
-			}
-
-			// lifeTime 更新の後に実行
-			while (!m_TrailPoints.empty() && m_TrailPoints.front().lifeTime >= 1.0f) {
-				m_TrailPoints.erase(m_TrailPoints.begin());
-				// 削除したのでカウントも調整
-				if (m_TrailCount > 0) {
-					m_TrailCount--;
-				}
-			}
-		}
-	
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
-
-		D3D11_MAPPED_SUBRESOURCE mappedVB;
-		HRESULT hr = deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
-		if (SUCCEEDED(hr)) {
-			memcpy(mappedVB.pData, vertices.data(), sizeof(VERTEX_3D) * vertices.size());
-			deviceContext->Unmap(m_VertexBuffer.GetBuffer(), 0);
-		}
-
-		D3D11_MAPPED_SUBRESOURCE mappedIB;
-		hr = deviceContext->Map(m_IndexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedIB);
-		if (SUCCEEDED(hr)) {
-			memcpy(mappedIB.pData, indices.data(), sizeof(unsigned int) * indices.size());
-			deviceContext->Unmap(m_IndexBuffer.GetBuffer(), 0);
-		}
 
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
 		m_Shader->SetGPU();
@@ -183,14 +87,122 @@ void TrailRenderComponent::Update() {
 
 		DirectXRender::SetRasterizerState(ERasterizerState::RS_NONE);
 
-		deviceContext->DrawIndexed((unsigned int)indices.size(), 0, 0);
+		deviceContext->DrawIndexed(m_TrailIndex, 0, 0);
 		DirectXRender::SetRasterizerState(ERasterizerState::RS_CULL_BACK);
 	}
 }
 
+void TrailRenderComponent::TrailUpdate() {
+
+	ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
+	const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
+
+	int pointSize = static_cast<int>(m_TrailPoints.size());
+
+	InversionEvent();
+
+	std::vector<VERTEX_3D> vertices;
+	std::vector<unsigned int> indices;
+
+	vertices.reserve(pointSize * 2);
+	indices.reserve((pointSize - 1) * 6);
+
+	if (rollingSpeed != 0.0f) {
+
+		// 範囲超えないように
+		for (int i = 0; i < m_AverageSamplingNum; ++i) {
+
+			if (m_TrailCount > pointSize - 1) {
+				break;
+			}
+			// ここのlifeTimeの調整は後に
+			const float subtractLife = (1.0f / pointSize) * 1.5f;
+			for (size_t i = 0; i < m_TrailCount; ++i) {
+
+				m_TrailPoints[i].lifeTime += subtractLife;
+			}
+
+			m_TrailCount++;
+		}
+		if (m_TrailCount > pointSize - 1) {
+			m_TrailCount = pointSize - 1;
+		}
+
+		// lifeTime 更新の後に実行
+		while (!m_TrailPoints.empty() && m_TrailPoints.front().lifeTime >= 1.0f) {
+			m_TrailPoints.erase(m_TrailPoints.begin());
+			// 削除したのでカウントも調整
+			if (m_TrailCount > 0) {
+				m_TrailCount--;
+			}
+		}
+	}
+
+	for (size_t i = 0; i + 1 < m_TrailCount; ++i) {
+
+		const TrailPoint p0 = m_TrailPoints[i];
+		const TrailPoint p1 = m_TrailPoints[i + 1];
+
+		const Vector4 color0 = Color(1.0f, 1.0f, 1.0f, 1.0f - p0.lifeTime); // ポイントの生存時間に基づいて透明度を設定
+		const Vector4 color1 = Color(1.0f, 1.0f, 1.0f, 1.0f - p1.lifeTime); // ポイントの生存時間に基づいて透明度を設定
+
+		const DirectX::SimpleMath::Vector3 normal(0.0f, 1.0f, 0.0f);
+
+		// UVは縦方向に時間または距離で割り当てるとする
+		const float v0 = static_cast<float>(i) / static_cast<float>(pointSize);
+		const float v1 = static_cast<float>(i + 1) / static_cast<float>(pointSize);
+
+		vertices.push_back({ p0.basePosition,normal,color0 ,{0.0f,v0} });
+		vertices.push_back({ p0.tipPosition,normal,color0 ,{1.0f,v0} });
+		vertices.push_back({ p1.basePosition,normal,color1 ,{0.0f,v1} });
+		vertices.push_back({ p1.tipPosition,normal,color1 ,{1.0f,v1} });
+
+		const unsigned int start = static_cast<unsigned int>(i) * 4;
+
+		if (m_RightLeftFlag == false) {
+
+			// 表
+			indices.push_back(start + 1);
+			indices.push_back(start + 0);
+			indices.push_back(start + 2);
+			indices.push_back(start + 1);
+			indices.push_back(start + 2);
+			indices.push_back(start + 3);
+		}
+		else {
+
+			// 反転（表裏逆に）
+			indices.push_back(start + 0);
+			indices.push_back(start + 1);
+			indices.push_back(start + 2);
+			indices.push_back(start + 2);
+			indices.push_back(start + 1);
+			indices.push_back(start + 3);
+		}
+	}
+
+	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
+
+	D3D11_MAPPED_SUBRESOURCE mappedVB;
+	HRESULT hr = deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
+	if (SUCCEEDED(hr)) {
+		memcpy(mappedVB.pData, vertices.data(), sizeof(VERTEX_3D) * vertices.size());
+		deviceContext->Unmap(m_VertexBuffer.GetBuffer(), 0);
+	}
+
+	D3D11_MAPPED_SUBRESOURCE mappedIB;
+	hr = deviceContext->Map(m_IndexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedIB);
+	if (SUCCEEDED(hr)) {
+		memcpy(mappedIB.pData, indices.data(), sizeof(unsigned int) * indices.size());
+		deviceContext->Unmap(m_IndexBuffer.GetBuffer(), 0);
+	}
+
+	m_TrailIndex = (unsigned int)indices.size();
+}
+
 // トレイルのポイントを追加・補間する関数
 // サイン関数を使って、中央が一番大きく、端が小さくなるようにオフセットを調整
-void TrailRenderComponent::TrailUpdate(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {
+void TrailRenderComponent::AddTrailPoints(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {
 
 	if (!m_TrailPoints.empty()) {
 		const TrailPoint& prev = m_TrailPoints.back();
@@ -275,7 +287,7 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 		const XMVECTOR quat = point.quaternion;
 
 		// 頂点となる候補を追加
-		TrailUpdate(localPos, quat,rollingSpeed);
+		AddTrailPoints(localPos, quat,rollingSpeed);
 	}
 
 	ID3D11Buffer* vertexBuffer = m_VertexBuffer.GetBuffer();

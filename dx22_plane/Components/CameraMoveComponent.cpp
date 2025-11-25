@@ -10,7 +10,7 @@ using namespace DirectX::SimpleMath;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
-	m_sortNum = ComponentTypeManager::GetID_FromName("CAMERA_MOVE"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA_MOVE"); // ソート番号を設定
 	m_chaseHeight = 25.0f; // 初期の追従高さは0
 }
 

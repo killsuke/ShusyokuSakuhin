@@ -29,7 +29,7 @@ namespace {
 }
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
-	m_sortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
+	m_SortNum = ComponentTypeManager::GetID_FromName("BONE"); // ソート番号を設定、のちに完成したらちゃんと変える
 }
 
 // 左右への位置を反転処理（入力があれば）
@@ -123,9 +123,11 @@ void TestSwordActionComponent::Update() {
 		m_TestSlashCount = 0;
 
 		TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
-		if (trail != nullptr) {
+		TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
+		if (trail != nullptr && trailMake != nullptr) {
 			trail->ClearTrail();
 			trail->SetActiveFlag(false);
+			trailMake->SetActiveFlag(false);
 		}
 
 		auto collider = m_Object->GetComponent<ColliderComponent>();
@@ -175,9 +177,11 @@ void TestSwordActionComponent::SwordAction() {
 	const bool direction = moveComp->GetRightLeft();
 
 	TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
+	TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
 
-	if (trail != nullptr) {
+	if (trail != nullptr && trailMake != nullptr) {
 		trail->SetActiveFlag(true);
+		trailMake->SetActiveFlag(true);
 	}
 
 	// 方向が変わったら反転処理
@@ -187,6 +191,7 @@ void TestSwordActionComponent::SwordAction() {
 
 		if (trail != nullptr) {
 			trail->SetActiveFlag(true);
+			trailMake->SetActiveFlag(true);
 			trail->RequestInversion();
 		}
 
@@ -198,6 +203,7 @@ void TestSwordActionComponent::SwordAction() {
 
 		if (trail != nullptr) {
 			trail->SetActiveFlag(true);
+			trailMake->SetActiveFlag(true);
 			trail->RequestInversion();
 		}
 

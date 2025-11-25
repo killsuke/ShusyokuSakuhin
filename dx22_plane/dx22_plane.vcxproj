@@ -176,7 +176,7 @@
     <ClCompile Include="Components\BoneComponent.cpp" />
     <ClCompile Include="Components\BonePartsComponent.cpp" />
     <ClCompile Include="BonePartsMesh.cpp" />
-    <ClCompile Include="Bones.cpp" />
+    <ClCompile Include="Components\Bones.cpp" />
     <ClCompile Include="Components\BossEventComponent.cpp" />
     <ClCompile Include="Components\BulletComponent.cpp" />
     <ClCompile Include="Components\Camera.cpp" />
@@ -293,7 +293,7 @@
     <ClInclude Include="BoneData.h" />
     <ClInclude Include="Components\BonePartsComponent.h" />
     <ClInclude Include="BonePartsMesh.h" />
-    <ClInclude Include="Bones.h" />
+    <ClInclude Include="Components\Bones.h" />
     <ClInclude Include="Components\BossEventComponent.h" />
     <ClInclude Include="Components\BulletComponent.h" />
     <ClInclude Include="Components\Camera.h" />
