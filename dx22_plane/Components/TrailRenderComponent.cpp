@@ -29,6 +29,10 @@ void TrailRenderComponent::Update() {
 
 	const int pointSize = static_cast<int>(m_TrailPoints.size());
 
+	if (pointSize == 0) {
+		return;
+	}
+
 	if (transform != nullptr) {
 
 		TrailUpdate();
@@ -93,6 +97,13 @@ void TrailRenderComponent::Update() {
 void TrailRenderComponent::TrailCountUp() {
 
 	const int pointSize = static_cast<int>(m_TrailPoints.size());
+	float subtractLife = (1.0f / pointSize);
+	ArbitraryRotationComponent* arbitrary = m_Object->GetComponent<ArbitraryRotationComponent>();
+	if (arbitrary == nullptr) {
+		return;
+	}
+
+	const bool isFinish = arbitrary->GetIsFinished();
 
 	// 範囲超えないように
 	for (int i = 0; i < m_AverageSamplingNum; ++i) {
@@ -101,14 +112,45 @@ void TrailRenderComponent::TrailCountUp() {
 			break;
 		}
 		// ここのlifeTimeの調整は後に
-		const float subtractLife = (1.0f / pointSize) * 1.5f;
-		for (size_t i = 0; i < m_TrailCount; ++i) {
+		//float subtractLife = (1.0f / pointSize);
+		//ArbitraryRotationComponent* arbitrary = m_Object->GetComponent<ArbitraryRotationComponent>();
+		//if (arbitrary != nullptr) {
+		//	// 全ての軌跡のパーツが揃っている場合、全てのライフポイントを引いてしまう問題がある
+		//	
 
-			m_TrailPoints[i].lifeTime += subtractLife;
-		}
+		//	const bool isFinish = arbitrary->GetIsFinished();
 
-		m_TrailCount++;
+		//	if (isFinish == true) {
+		//		subtractLife *= 10.0f;
+		//	}
+		//	else {
+		//		subtractLife *= 1.5f;
+		//	}
+		//}
+		//for (size_t j = 0; j < m_TrailCount; ++j) {
+
+		//	m_TrailPoints[j].lifeTime += subtractLife;
+		//}
+
+		// これをもし使いたいなら、到達判定が出たフレームは処理しないとバグる
+//		if (isFinish == false) {
+			m_TrailCount++;
+	//	}
 	}
+
+
+	if (isFinish == true) {
+		subtractLife *= 50.0f;
+	}
+	else {
+		subtractLife *= 80.0f;
+	}
+
+	for (size_t j = 0; j < m_TrailCount; ++j) {
+
+		m_TrailPoints[j].lifeTime += subtractLife;
+	}
+
 	if (m_TrailCount > pointSize - 1) {
 		m_TrailCount = pointSize - 1;
 	}
@@ -134,6 +176,10 @@ void TrailRenderComponent::TrailUpdate() {
 
 	std::vector<VERTEX_3D> vertices;
 	std::vector<unsigned int> indices;
+
+	if (pointSize == 0) {
+		return;
+	}
 
 	vertices.reserve(pointSize * 2);
 	indices.reserve((pointSize - 1) * 6);

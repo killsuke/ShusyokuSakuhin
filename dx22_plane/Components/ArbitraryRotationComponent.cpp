@@ -63,12 +63,6 @@ void ArbitraryRotationComponent::Update() {
 	const float startRad = XMConvertToRadians(m_StartAngle);
 	const float endRad = XMConvertToRadians(m_EndAngle);
 
-	float totalAngle = m_nowAngleRadian + startRad;
-
-	totalAngle = NormalizeAngleRadian(totalAngle);
-
-	m_nowAngleDegree = totalAngle * (Deg180 / XM_PI);	// ラジアン → ディグリー
-
 	bool reached = false;
 
 	// 到達判定
@@ -94,6 +88,12 @@ void ArbitraryRotationComponent::Update() {
 			m_nowAngleRadian = m_TargetRotationAmount;
 		}
 	}
+
+	float totalAngle = m_nowAngleRadian + startRad;
+
+	totalAngle = NormalizeAngleRadian(totalAngle);
+
+	m_nowAngleDegree = XMConvertToDegrees(totalAngle);	// ラジアン → ディグリー
 
 	XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
 	XMVECTOR axis = m_ArbitraryAxis;	// 回転軸を設定
@@ -172,9 +172,21 @@ void ArbitraryRotationComponent::SimulationMove() {
 
 	// 剣の軌跡用の挙動の予測
 	// １フレーム分軌跡が足りないのでここで足す
-	while (fabs(simulationRad) < m_TargetRotationAmount + fabs(rotationSpeed)) {
+	while (fabs(simulationRad) < m_TargetRotationAmount/* + fabs(rotationSpeed)*/) {
 
 		simulationRad += rotationSpeed; // 角度を更新間隔時間に基づいて計算
+
+		// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
+		// なので後に修正
+		//if (fabs(simulationRad) > m_TargetRotationAmount) {
+		//	// 目標角度に到達したら、正確に目標角度に合わせる
+		//	if (m_clockwise == true) {
+		//		simulationRad = -m_TargetRotationAmount;
+		//	}
+		//	else {
+		//		simulationRad = m_TargetRotationAmount;
+		//	}
+		//}
 
 		float totalAngle = simulationRad + startRad;
 		totalAngle = NormalizeAngleRadian(totalAngle);
