@@ -83,13 +83,11 @@ void TrailRenderComponent::Update() {
 
 		texture[0].SetGPU();
 
-		DirectXRender::SetRasterizerState(ERasterizerState::RS_NONE);
+		DirectXRender::SetCullingState(ECullingState::CULLING_NONE);
 
 		deviceContext->DrawIndexed(m_TrailIndex, 0, 0);
-		DirectXRender::SetRasterizerState(ERasterizerState::RS_CULL_BACK);
+		DirectXRender::SetCullingState(ECullingState::CULLING_BACK);
 	}
-
-//	std::cout << "RenderC" << std::endl;
 }
 
 void TrailRenderComponent::TrailCountUp() {
@@ -187,9 +185,6 @@ void TrailRenderComponent::TrailUpdate() {
 	}
 
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
-
-//	auto back = vertices.back();
-//	std::cout << back.position.x << "," << back.position.y << "," << back.position.z << std::endl;
 
 	D3D11_MAPPED_SUBRESOURCE mappedVB;
 	HRESULT hr = deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedVB);
@@ -337,6 +332,7 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 	}
 }
 
+// îΩì]ÇµÇΩç€Ç…í∏ì_Ç‡ç∂âEîΩì]Ç≥ÇπÇÈ
 void TrailRenderComponent::InversionEvent() {
 
 	if (m_InversionFlag == true) {

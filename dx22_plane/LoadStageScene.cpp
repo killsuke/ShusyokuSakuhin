@@ -197,8 +197,6 @@ LoadStageScene::LoadStageScene() {
 		rollingCollRend->ChangeTexture("assets/texture/NoTexture.png");
 		rollingCollRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
-
-
 		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
 
 		//auto rollingTrans2 = rolling2->AddComponent<TransformComponent>();

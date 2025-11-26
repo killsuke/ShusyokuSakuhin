@@ -35,9 +35,16 @@ CameraMatrix DirectXRender::m_CameraMatrix = {};
 
 ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // 線の太さ
 
-ID3D11RasterizerState* DirectXRender::m_RasterizerNone = nullptr;
-ID3D11RasterizerState* DirectXRender::m_RasterizerCullBack = nullptr;
-ID3D11RasterizerState* DirectXRender::m_RasterizerCullFront = nullptr;
+ID3D11RasterizerState* DirectXRender::m_SolidRasterizerNone = nullptr;
+ID3D11RasterizerState* DirectXRender::m_SolidRasterizerCullBack = nullptr;
+ID3D11RasterizerState* DirectXRender::m_SolidRasterizerCullFront = nullptr;
+
+ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerNone = nullptr;
+ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerCullBack = nullptr;
+ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerCullFront = nullptr;
+
+ECullingState DirectXRender::m_CullingState = ECullingState::CULLING_NONE;
+EFillMode DirectXRender::m_FillMode = EFillMode::FILL_SOLID;
 
 ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
 
@@ -299,21 +306,35 @@ HRESULT DirectXRender::RasterizerSetting() {
 	// ラスタライザステート設定
 	D3D11_RASTERIZER_DESC rasterizerDesc{};
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	//rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;	// 試してみよう
 	rasterizerDesc.DepthClipEnable = TRUE;
 	rasterizerDesc.MultisampleEnable = FALSE;
 
 	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
-	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerCullFront);
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_SolidRasterizerCullFront);
 	if (FAILED(hr)) return hr;
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;
-	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerNone);
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_SolidRasterizerNone);
 	if (FAILED(hr)) return hr;
 	rasterizerDesc.CullMode = D3D11_CULL_BACK;
-	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_RasterizerCullBack);
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_SolidRasterizerCullBack);
 	if (FAILED(hr)) return hr;
 
-	m_DeviceContext->RSSetState(m_RasterizerCullBack);
+	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;	// 試してみよう
+
+	rasterizerDesc.CullMode = D3D11_CULL_FRONT;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_WireFrameRasterizerCullFront);
+	if (FAILED(hr)) return hr;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_WireFrameRasterizerNone);
+	if (FAILED(hr)) return hr;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	hr = m_Device->CreateRasterizerState(&rasterizerDesc, &m_WireFrameRasterizerCullBack);
+	if (FAILED(hr)) return hr;
+
+	m_CullingState = ECullingState::CULLING_BACK;
+	m_FillMode = EFillMode::FILL_SOLID;
+
+	m_DeviceContext->RSSetState(m_SolidRasterizerCullBack);
 
 	return hr;
 }
@@ -916,20 +937,91 @@ void DirectXRender::SetBlendState(int nBlendState)
 	}
 }
 
-void DirectXRender::SetRasterizerState(const ERasterizerState& state) {
+void DirectXRender::SetCullingState(const ECullingState& state) {
 
 	switch (state)
 	{
-	case ERasterizerState::RS_NONE:
-		m_DeviceContext->RSSetState(m_RasterizerNone);
+	case ECullingState::CULLING_NONE:
+
+		if (m_FillMode == EFillMode::FILL_WIREFRAME) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerNone);
+		}
+		else if (m_FillMode == EFillMode::FILL_SOLID) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerNone);
+		}
+
+		m_CullingState = ECullingState::CULLING_NONE;
 		break;
-	case ERasterizerState::RS_CULL_BACK:
-		m_DeviceContext->RSSetState(m_RasterizerCullBack);
+	case ECullingState::CULLING_BACK:
+
+		if (m_FillMode == EFillMode::FILL_WIREFRAME) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerCullBack);
+		}
+		else if (m_FillMode == EFillMode::FILL_SOLID) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerCullBack);
+		}
+
+		m_CullingState = ECullingState::CULLING_BACK;
 		break;
-	case ERasterizerState::RS_CULL_FRONT:
-		m_DeviceContext->RSSetState(m_RasterizerCullFront);
+	case ECullingState::CULLING_FRONT:
+
+		if (m_FillMode == EFillMode::FILL_WIREFRAME) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerCullFront);
+		}
+		else if (m_FillMode == EFillMode::FILL_SOLID) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerCullFront);
+		}
+
+		m_CullingState = ECullingState::CULLING_FRONT;
 		break;
 	default:
 		break;
+	}
+}
+
+void DirectXRender::SetFillMode(const EFillMode& fillMode) {
+
+	switch (fillMode)
+	{
+	case EFillMode::FILL_SOLID:
+
+		if (m_CullingState == ECullingState::CULLING_NONE) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerNone);
+		}
+		else if (m_CullingState == ECullingState::CULLING_BACK) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerCullBack);
+		}
+		else if (m_CullingState == ECullingState::CULLING_FRONT) {
+			m_DeviceContext->RSSetState(m_SolidRasterizerCullFront);
+		}
+
+		m_FillMode = EFillMode::FILL_SOLID;
+		break;
+	case EFillMode::FILL_WIREFRAME:
+
+		if (m_CullingState == ECullingState::CULLING_NONE) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerNone);
+		}
+		else if (m_CullingState == ECullingState::CULLING_BACK) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerCullBack);
+		}
+		else if (m_CullingState == ECullingState::CULLING_FRONT) {
+			m_DeviceContext->RSSetState(m_WireFrameRasterizerCullFront);
+		}
+
+		m_FillMode = EFillMode::FILL_WIREFRAME;
+		break;
+	default:
+		break;
+	}
+}
+
+void DirectXRender::SwitchingFillMode() {
+
+	if(m_FillMode == EFillMode::FILL_SOLID) {
+		SetFillMode(EFillMode::FILL_WIREFRAME);
+	}
+	else if (m_FillMode == EFillMode::FILL_WIREFRAME) {
+		SetFillMode(EFillMode::FILL_SOLID);
 	}
 }

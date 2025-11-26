@@ -21,6 +21,4 @@ void TrailMakeComponent::Update() {
 		return;
 	}
 	m_TrailRenderComponent->TrailCountUp();
-
-//	std::cout << "TrailMakeComponent" << std::endl;
 }

@@ -25,11 +25,17 @@ enum EBlendState {
 	MAX_BLENDSTATE
 };
 
-enum class ERasterizerState {
-	RS_NONE = 0,							// カリング無し
-	RS_CULL_BACK,							// 裏面カリング
-	RS_CULL_FRONT,							// 表面カリング
+enum class ECullingState {
+	CULLING_NONE = 0,							// カリング無し
+	CULLING_BACK,							// 裏面カリング
+	CULLING_FRONT,							// 表面カリング
 	MAX_RASTERIZERSTATE
+};
+
+enum class EFillMode {
+	FILL_SOLID = 0,
+	FILL_WIREFRAME,
+	MAX_FILL
 };
 
 extern ID3D11Buffer* g_pConstantBuffer;
@@ -112,9 +118,16 @@ private:
 	static ID3D11Buffer* m_HitFlashBuffer;
 
 	// ラスタライザーステート
-	static ID3D11RasterizerState* m_RasterizerNone;
-	static ID3D11RasterizerState* m_RasterizerCullBack;
-	static ID3D11RasterizerState* m_RasterizerCullFront;
+	static ID3D11RasterizerState* m_SolidRasterizerNone;
+	static ID3D11RasterizerState* m_SolidRasterizerCullBack;
+	static ID3D11RasterizerState* m_SolidRasterizerCullFront;
+
+	static ID3D11RasterizerState* m_WireFrameRasterizerNone;
+	static ID3D11RasterizerState* m_WireFrameRasterizerCullBack;
+	static ID3D11RasterizerState* m_WireFrameRasterizerCullFront;
+
+	static ECullingState m_CullingState;
+	static EFillMode m_FillMode;
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -161,7 +174,6 @@ public:
 	static void GPU_UpdateViewAndProj();
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
-	static void SetRasterizerState(const ERasterizerState& state);
 
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
@@ -177,5 +189,9 @@ public:
 	// ブレンド ステート設定
 	//=============================================================================
 	static void SetBlendState(int nBlendState);
+
+	static void SetCullingState(const ECullingState& state);
+	static void SetFillMode(const EFillMode& fillMode);
+	static void SwitchingFillMode();
 };
 

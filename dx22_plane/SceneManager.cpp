@@ -33,6 +33,13 @@ void SceneManager::UnInit() {
 void SceneManager::Update() {
 	Input::Update();
 
+#if _DEBUG
+
+	if (Input::GetKeyTrigger(VK_INSERT)) {
+		DirectXRender::SwitchingFillMode();
+	}
+#endif
+
 	// ë¶ê»É|Å[ÉYâÊñ é¿ëï
 	if (Input::GetKeyTrigger(VK_CONTROL) == true) {
 		m_ActiveGame = !m_ActiveGame;
