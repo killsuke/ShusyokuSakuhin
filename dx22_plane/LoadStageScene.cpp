@@ -171,7 +171,7 @@ LoadStageScene::LoadStageScene() {
 		auto rollingGoAround = rolling->AddComponent<ArbitraryRotationComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
 		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
-		rollingGoAround->SetRotationSpeed(15.5f); // 回転速度を設定
+		rollingGoAround->SetRotationSpeed(20.0f); // 回転速度を設定
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
 

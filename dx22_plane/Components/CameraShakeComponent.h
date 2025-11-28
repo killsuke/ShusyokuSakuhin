@@ -10,6 +10,10 @@ private:
 	float m_ShakePower = 0.0f;	// 揺れの大きさ（周波数）
 	float m_ShakeSpeed = 0.0f;	// 揺れの速さ（振幅）
 
+	float m_QuarterRequestTime = 0.0f;
+	DirectX::XMVECTOR m_ShakeVector = { 0.0f,0.0f,0.0f,0.0f };	// ランダムな方向に揺らすために使う
+	DirectX::XMVECTOR m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };	// ランダムな方向に揺らすために使う
+
 public:
 
 	CameraShakeComponent(GameObject& obj);
@@ -25,5 +29,5 @@ public:
 	DirectX::XMFLOAT3 WidthShake(const DirectX::XMMATRIX& view);
 	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view);
 	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view);
-
+	DirectX::XMFLOAT3 RandomShake2D(const DirectX::XMMATRIX& view);
 };

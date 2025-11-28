@@ -134,8 +134,8 @@ void TrailRenderComponent::TrailCountUp() {
 
 		// これをもし使いたいなら、到達判定が出たフレームは処理しないとバグる
 //		if (isFinish == false) {
-			m_TrailCount++;
-	//	}
+		m_TrailCount++;
+		//	}
 	}
 
 
@@ -171,8 +171,6 @@ void TrailRenderComponent::TrailUpdate() {
 	const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
 
 	int pointSize = static_cast<int>(m_TrailPoints.size());
-
-	InversionEvent();
 
 	std::vector<VERTEX_3D> vertices;
 	std::vector<unsigned int> indices;
@@ -364,14 +362,27 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 	}
 
 	const int vecSize = (int)m_SampleDivisions.size();
-	// ０で除算するのを防ぐ
+
 	if (vecSize > 0) {
-		int nums = 0;
-		for (const auto& vec : m_SampleDivisions) {
-			nums += vec;
+
+		std::unordered_map<int, int> freq;
+		int mode = m_SampleDivisions[0];
+		int maxCount = 0;
+
+		// 最頻値を求める
+		for (int x : m_SampleDivisions) {
+
+			// freq[x] はキーx がなければ{x,0}を作って返してくれる
+			// 既に存在するキーであるならば、++freq[x]でインクリメントしてくれる
+
+			int count = ++freq[x];	// インクリメントしてカウントを取得
+			if (count > maxCount) {	// 最大数を更新
+				maxCount = count;
+				mode = x;
+			}
 		}
 
-		m_AverageSamplingNum = nums / vecSize;
+		m_AverageSamplingNum = mode;
 	}
 	else {
 		m_AverageSamplingNum = 1;

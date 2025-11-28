@@ -178,15 +178,15 @@ void ArbitraryRotationComponent::SimulationMove() {
 
 		// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
 		// なので後に修正
-		//if (fabs(simulationRad) > m_TargetRotationAmount) {
-		//	// 目標角度に到達したら、正確に目標角度に合わせる
-		//	if (m_clockwise == true) {
-		//		simulationRad = -m_TargetRotationAmount;
-		//	}
-		//	else {
-		//		simulationRad = m_TargetRotationAmount;
-		//	}
-		//}
+		if (fabs(simulationRad) > m_TargetRotationAmount) {
+			// 目標角度に到達したら、正確に目標角度に合わせる
+			if (m_clockwise == true) {
+				simulationRad = -m_TargetRotationAmount;
+			}
+			else {
+				simulationRad = m_TargetRotationAmount;
+			}
+		}
 
 		float totalAngle = simulationRad + startRad;
 		totalAngle = NormalizeAngleRadian(totalAngle);

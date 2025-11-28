@@ -21,4 +21,5 @@ void TrailMakeComponent::Update() {
 		return;
 	}
 	m_TrailRenderComponent->TrailCountUp();
+	m_TrailRenderComponent->InversionEvent();
 }

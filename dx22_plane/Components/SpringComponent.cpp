@@ -123,8 +123,8 @@ void SpringComponent::SpringActionTransform() {
 
 	const Vector3 direction = delta / distance;   // 正規化
 
-	m_K = 12.0f;
-	m_DAMPING = 20 * sqrt(0.05f);  // 0.447
+	m_K = 15.0f;
+	m_DAMPING = 20 * sqrt(0.05f);
 
 
 	// フックの法則

@@ -3,6 +3,7 @@
 #include "ArbitraryRotationComponent.h"
 #include "TrailMakeComponent.h"
 #include <vector>
+#include <map>
 #include <SimpleMath.h>
 
 struct TrailPoint
