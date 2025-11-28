@@ -147,9 +147,6 @@
     <ClCompile Include="Mesh\SphereMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Bones.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -183,7 +180,7 @@
     <ClCompile Include="Components\CameraMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Spring.cpp">
+    <ClCompile Include="Components\SpringComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\CameraPointComponent.cpp">
@@ -360,6 +357,12 @@
     <ClCompile Include="Components\TrailMakeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Bones.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\CameraShakeComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -509,9 +512,6 @@
     <ClInclude Include="BoneData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Bones.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Components\RenderOneSkinAnimation.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -545,7 +545,7 @@
     <ClInclude Include="Components\CameraMoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Spring.h">
+    <ClInclude Include="Components\SpringComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\CameraPointComponent.h">
@@ -732,6 +732,12 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Components\TrailMakeComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bones.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\CameraShakeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

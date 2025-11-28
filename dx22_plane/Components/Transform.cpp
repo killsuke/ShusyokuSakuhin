@@ -74,7 +74,17 @@ XMMATRIX TransformComponent::MakeLocalMatrix() {
 void TransformComponent::MakeChildWorld() {
 	GameObject* parent = m_Object->GetParent(); // 親オブジェクトを取得
 	if (parent != nullptr) {
-		auto parentMtx = parent->GetComponent<TransformComponent>()->MakeWorldMatrix(); // 親のワールド行列を更新
+		TransformComponent* parentTrans = parent->GetComponent<TransformComponent>();
+
+		XMMATRIX parentMtx = XMMatrixIdentity();
+
+		if (parentTrans == nullptr) {
+			parentTrans->MakeWorldMatrix(); // 親のワールド行列を更新
+		}
+		else {
+			parentMtx = parentTrans->GetWorldMatrix(); // 親のワールド行列を取得
+		}
+
 		m_transform.worldMatrix = MakeLocalMatrix() * parentMtx; // 親のワールド行列とローカル行列を掛け合わせて子のワールド行列を計算
 
 		XMVECTOR scale;

@@ -5,6 +5,7 @@
 #include "AttackOneTimeComponent.h"
 #include "GameObjectManager.h"
 #include "HitStopManager.h"
+#include "CameraShakeComponent.h"
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 {
@@ -43,6 +44,13 @@ void EnemyDamageComponent::Update()
 						HitStopManager::AddTargetTag(tag); // ヒットストップ対象タグを追加
 					}
 					HitStopManager::SetHitStopTime(0.1f); // ヒットストップ時間をセット
+					GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+					if (camera != nullptr) {
+						CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
+						
+						// 画面揺れ開始
+						shake->ShakingPreparation(30.0f,1.0f,0.2f);
+					}
 				}
 			}
 

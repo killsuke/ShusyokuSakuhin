@@ -23,7 +23,7 @@
 #include "Components/GoAroundComponent.h"
 #include "Components/HPBarMoveComponent.h"
 #include "Components/TestExtrusionJudgeComponent.h"
-#include "Components/Spring.h"
+#include "Components/SpringComponent.h"
 
 TestStageScene::TestStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");

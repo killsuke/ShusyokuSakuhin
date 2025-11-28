@@ -8,6 +8,7 @@
 #include <Windows.h>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 using namespace std;
 
 Camera::Camera(GameObject& obj) : Component(obj)
@@ -95,7 +96,7 @@ void Camera::Update()
 		// 座標更新
 		transform->AddPosition(move);
 
-		Vector3 rot = transform->GetRotation();
+		XMFLOAT3 rot = transform->GetRotation();
 		Vector3 nowPos = transform->GetPosition();
 
 		if (move != Vector3::Zero) {
@@ -179,7 +180,7 @@ void Camera::Update2D() {
 	Vector3 pos = { 0.0f,0.0f,-10.0f };
 	Vector3 tgt = { 0.0f,0.0f,1.0f };
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	DirectX::SimpleMath::Matrix viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
+	XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
 
 	m_ViewMatrix2D = viewMatrix;
 
@@ -189,7 +190,7 @@ void Camera::Update2D() {
 	float nearPlane = 1.0f;       // ニアクリップ
 	float farPlane = 1000.0f;      // ファークリップ
 
-	Matrix projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
+	XMMATRIX projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
 
 	m_ProjectionMatrix2D = projectionMatrix;
 
@@ -202,7 +203,7 @@ void Camera::Update3D() {
 
 	// ビュー変換後列作成
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	Matrix viewMatrix;
+	XMMATRIX viewMatrix;
 	viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
@@ -221,7 +222,7 @@ void Camera::Update3D() {
 	float farPlane = 1000.0f;      // ファークリップ
 
 	//プロジェクション行列の生成
-	Matrix projectionMatrix;
+	XMMATRIX projectionMatrix;
 	projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意

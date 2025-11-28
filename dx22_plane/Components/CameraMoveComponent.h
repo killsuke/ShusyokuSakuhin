@@ -24,7 +24,9 @@ public:
 	void AdjustmentHeight(GameObject& cameraObj,GameObject& player);
 
 	inline void SetChaseHeight(const float height) { m_chaseHeight = height; };
-	void SetMoveTarget(GameObject& target) { m_moveTarget = &target; };
+	// カメラの移動ターゲットをセット
+	// スプリング目的であれば、差分位置のリセット処理を行う
+	void SetMoveTarget(GameObject& target);
 
 	CameraPattern GetCameraPattern() const { return m_CameraPattern; };
 };

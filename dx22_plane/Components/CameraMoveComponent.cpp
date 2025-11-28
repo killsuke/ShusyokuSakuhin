@@ -1,7 +1,7 @@
 #include "CameraMoveComponent.h"
 #include "Transform.h"
 #include "Camera.h"
-#include "Spring.h"
+#include "SpringComponent.h"
 #include "GameObjectManager.h"
 #include "CameraTargetComponent.h"
 #include "RigidBodyComponent.h"
@@ -34,6 +34,13 @@ void CameraMoveComponent::Update()
 	if (m_moveTarget != nullptr) {
 
 		m_CameraPattern = m_moveTarget->GetComponent<CameraTargetComponent>()->GetCameraPattern();
+	}
+
+	if (m_CameraPattern == CameraPattern::CAMERA_NONE) {
+	//	std::cout << "None" << std::endl;
+	}
+	else if (m_CameraPattern == CameraPattern::SPRING_CHASE) {
+		//std::cout << "Spring" << std::endl;
 	}
 
 	// 一旦プレイヤー追従にしておく
@@ -151,7 +158,9 @@ void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 		cameraSpring->SetSpringPartner(m_moveTarget);
 		cameraSpring->SetK(m_moveTarget->GetComponent<CameraTargetComponent>()->GetSpringK());
 		cameraSpring->MakeDamping(); // ダンピングを作成
-		cameraSpring->SpringAction2D(); // 2Dのばね挙動を行う
+		//cameraSpring->SpringAction2D(); // 2Dのばね挙動を行う
+
+		cameraSpring->SpringActionTransform();
 	}
 }
 
@@ -168,5 +177,17 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
 	//	cameraTrans->MakeWorldMatrix();
 		cameraComp->SetTarget({ cameraTrans->GetPosition().x,playerPos.y + 15.0f,cameraComp->GetTarget().z });
+	}
+}
+
+void CameraMoveComponent::SetMoveTarget(GameObject& target) {
+	m_moveTarget = &target; 
+	
+	auto cameraObj = GameObjectManager::GameObjectFindName("camera");
+	auto cameraSpring = cameraObj->GetComponent<SpringComponent>();
+
+	if (cameraSpring != nullptr)
+	{
+		cameraSpring->PreviousDistanceReset();
 	}
 }

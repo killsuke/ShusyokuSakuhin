@@ -22,9 +22,10 @@
 #include "Components/CameraMoveComponent.h"
 #include "Components/CameraPointComponent.h"
 #include "Components/CameraTargetComponent.h"
+#include "Components/CameraShakeComponent.h"
 #include "Components/ArbitraryRotationComponent.h"
 #include "Components/HPBarMoveComponent.h"
-#include "Components/Spring.h"
+#include "Components/SpringComponent.h"
 #include "Components/StageLoadCSVComponent.h"
 #include "Components/TerrainManagerComponent.h"
 #include "Components/EnemyManagerComponent.h"
@@ -51,6 +52,7 @@ LoadStageScene::LoadStageScene() {
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
 	auto cameraComp = camera->AddComponent<Camera>();
 	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	CameraShakeComponent* cameraShake = camera->AddComponent<CameraShakeComponent>();
 
 	camera->AddComponent<SpringComponent>();
 

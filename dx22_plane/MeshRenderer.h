@@ -1,7 +1,7 @@
 #pragma once
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
-#include "Mesh.h"
+#include "Mesh/Mesh.h"
 #include "DirectXRender.h"
 
 class MeshRenderer {

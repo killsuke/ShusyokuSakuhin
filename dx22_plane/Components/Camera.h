@@ -14,14 +14,14 @@ private:
 
 	DirectX::SimpleMath::Vector3	m_Target{};
 
-	DirectX::SimpleMath::Matrix		m_ViewMatrix2D{};
-	DirectX::SimpleMath::Matrix		m_ProjectionMatrix2D{};
+	DirectX::XMMATRIX		m_ViewMatrix2D{};
+	DirectX::XMMATRIX		m_ProjectionMatrix2D{};
 
-	DirectX::SimpleMath::Matrix		m_ViewMatrix3D{};
-	DirectX::SimpleMath::Matrix		m_ProjectionMatrix3D{};
+	DirectX::XMMATRIX		m_ViewMatrix3D{};
+	DirectX::XMMATRIX		m_ProjectionMatrix3D{};
 
-	DirectX::SimpleMath::Matrix		m_ViewMatrixSky{};
-	DirectX::SimpleMath::Matrix		m_ProjectionMatrixSky{};
+	DirectX::XMMATRIX		m_ViewMatrixSky{};
+	DirectX::XMMATRIX		m_ProjectionMatrixSky{};
 
 	//float m_CameraDirection = 0; // ÉJÉÅÉâÇÃï˚å¸
 
@@ -47,13 +47,13 @@ public:
 	void Update() override;
 
 	inline void SetTarget(const DirectX::SimpleMath::Vector3& target) { m_Target = target; };
-
+	inline void AddTarget(const DirectX::SimpleMath::Vector3& target) { m_Target += target; };
 	inline DirectX::SimpleMath::Vector3 GetTarget() const { return m_Target; }
 
 	// ì]íuÇµÇƒÇ¢Ç»Ç¢èÛë‘ÇÃÉÇÉmÇï‘Ç∑
-	inline DirectX::SimpleMath::Matrix GetView2D() const { return m_ViewMatrix2D; };
-	inline DirectX::SimpleMath::Matrix GetView3D() const { return m_ViewMatrix3D; };
+	inline DirectX::XMMATRIX GetView2D() const { return m_ViewMatrix2D; };
+	inline DirectX::XMMATRIX GetView3D() const { return m_ViewMatrix3D; };
 
-	inline DirectX::SimpleMath::Matrix GetProj2D() const { return m_ProjectionMatrix2D; };
-	inline DirectX::SimpleMath::Matrix GetProj3D() const { return m_ProjectionMatrix3D; };
+	inline DirectX::XMMATRIX GetProj2D() const { return m_ProjectionMatrix2D; };
+	inline DirectX::XMMATRIX GetProj3D() const { return m_ProjectionMatrix3D; };
 };

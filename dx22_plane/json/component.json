@@ -48,85 +48,89 @@
             "name": "CAMERA_MOVE",
             "ID": 11
         },
-        {
-            "name": "CAMERA",
+	{
+            "name": "CAMERASHAKE",
             "ID": 12
         },
         {
-            "name": "BONE",
+            "name": "CAMERA",
             "ID": 13
         },
         {
-            "name": "GO_AROUND",
+            "name": "BONE",
             "ID": 14
         },
         {
-            "name": "ENEMY_ACTION",
+            "name": "GO_AROUND",
             "ID": 15
         },
         {
-            "name": "HP_BAR_MOVE",
+            "name": "ENEMY_ACTION",
             "ID": 16
+        },
+        {
+            "name": "HP_BAR_MOVE",
+            "ID": 17
         },
 	{
             "name": "EFFECT",
-            "ID": 17
-        },
-        {
-            "name": "COLLIDER",
             "ID": 18
         },
         {
-            "name": "TEST_JUDGE_EXTRUSION",
+            "name": "COLLIDER",
             "ID": 19
         },
         {
-            "name": "ATTACK",
+            "name": "TEST_JUDGE_EXTRUSION",
             "ID": 20
         },
         {
-            "name": "DAMAGE",
+            "name": "ATTACK",
             "ID": 21
         },
         {
-            "name": "FIGHTER",
+            "name": "DAMAGE",
             "ID": 22
+        },
+        {
+            "name": "FIGHTER",
+            "ID": 23
         },
 	{
 	    "name": "DOOR_FADE",
-            "ID": 23
+            "ID": 24
 	},
 	{
 	    "name": "ANIMATION_TRANSFORM",
-            "ID": 24
+            "ID": 25
 	},
         {
             "name": "TRANSFORM",
-            "ID": 25
+            "ID": 26
         },
 	{
             "name": "TRAILMAKE",
-            "ID": 26
-        },
-        {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 27
         },
         {
-	    "name": "HIT_FLASH",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 28
+        },
+        {
+	    "name": "HIT_FLASH",
+            "ID": 29
 	},
         {
             "name": "RENDER",
-            "ID": 29
-        },
-        {
-            "name": "RENDER_DEBUG",
             "ID": 30
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DEBUG",
             "ID": 31
+        },
+        {
+            "name": "MAX",
+            "ID": 32
         }
     ]
 }

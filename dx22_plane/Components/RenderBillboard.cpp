@@ -5,6 +5,7 @@
 #include "Camera.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -14,41 +15,45 @@ RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComp
 
 void RenderBillboardComponent::Update()
 {
-	const auto transform = m_Object->GetComponent<TransformComponent>();
-	const auto camera = GameObjectManager::GameObjectFindName("camera");
+	const TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 
 	if (transform != nullptr && camera != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		const auto pos = transform->GetPosition();
-		const auto scale = transform->GetScale();
-		const auto cameraView3D = camera->GetComponent<Camera>()->GetView3D();
+		const Vector3 pos = transform->GetPosition();
+		const Vector3 scale = transform->GetScale();
+		Camera* cameraComp = camera->GetComponent<Camera>();
+		const XMMATRIX cameraView3D = cameraComp->GetView3D();
 
-		Matrix rotationOnly = cameraView3D;
+		XMMATRIX rotationOnly = cameraView3D;
 
 		// 万が一カメラのサイズが変わってしまった場合の保険の処理
 		// ３×３行列として計算することで、位置情報を含まない ＝ 純粋に、回転を正規化してベクトルのみを取り出すことができる
 		for (int i = 0; i < 3; ++i) {
-			Vector3 axis(cameraView3D.m[0][i], cameraView3D.m[1][i], cameraView3D.m[2][i]);
-			axis.Normalize();
+			XMVECTOR axis = XMVectorSet(
+				cameraView3D.r[0].m128_f32[i],
+				cameraView3D.r[1].m128_f32[i],
+				cameraView3D.r[2].m128_f32[i],
+				0.0f);
+			axis = XMVector3Normalize(axis);
 
 			// 各軸を正規化して上書き
-			rotationOnly.m[0][i] = axis.x;
-			rotationOnly.m[1][i] = axis.y;
-			rotationOnly.m[2][i] = axis.z;
+			rotationOnly.r[0].m128_f32[i] = XMVectorGetX(axis);
+			rotationOnly.r[1].m128_f32[i] = XMVectorGetY(axis);
+			rotationOnly.r[2].m128_f32[i] = XMVectorGetZ(axis);
 		}
 
-		rotationOnly._41 = 0.0f; // ビルボードの位置をカメラの位置に合わせる
-		rotationOnly._42 = 0.0f;
-		rotationOnly._43 = 0.0f;
+		// ビルボードの位置をカメラの位置に合わせる
+		rotationOnly.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
-		const Matrix t = Matrix::CreateTranslation(pos.x, pos.y, pos.z);
-		const Matrix s = Matrix::CreateScale(scale.x, scale.y, scale.z);
+		const XMMATRIX t = XMMatrixTranslation(pos.x, pos.y, pos.z);
+		const XMMATRIX s = XMMatrixScaling(scale.x, scale.y, scale.z);
 
-		rotationOnly = rotationOnly.Transpose();	// 転置行列にすることで逆行列にするより処理が軽い
+		rotationOnly = XMMatrixTranspose(rotationOnly);	// 転置行列にすることで逆行列にするより処理が軽い
 
-		cb.matrixWorld = (s * rotationOnly * t).Transpose();
+		cb.matrixWorld = XMMatrixTranspose(s * rotationOnly * t);
 
 		cb.color = Vector4(m_Color);
 

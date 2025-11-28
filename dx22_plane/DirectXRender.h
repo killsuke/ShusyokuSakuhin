@@ -51,7 +51,7 @@ struct ConstBuffer
 	// 頂点カラー行列
 	DirectX::SimpleMath::Vector4 color = DirectX::SimpleMath::Vector4::Zero;;
 	// UV座標移動行列
-	DirectX::SimpleMath::Matrix matrixTex = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixTex = DirectX::XMMatrixIdentity();
 	// ワールド変換行列
 	DirectX::XMMATRIX matrixWorld = DirectX::XMMatrixIdentity();
 
@@ -64,21 +64,21 @@ struct CameraMatrix
 {
 	// ３Ｄオブジェクト用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixView3D = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixView3D = DirectX::XMMatrixIdentity();
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjection3D = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixProjection3D = DirectX::XMMatrixIdentity();
 
 	// ２Ｄオブジェクト用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixView2D = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixView2D = DirectX::XMMatrixIdentity();
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjection2D = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixProjection2D = DirectX::XMMatrixIdentity();
 
 	// スカイドーム用
 	// ビュー変換行列
-	DirectX::SimpleMath::Matrix matrixViewSkyDome = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixViewSkyDome = DirectX::XMMatrixIdentity();
 	// 射影変換行列
-	DirectX::SimpleMath::Matrix matrixProjectionSkyDome = DirectX::SimpleMath::Matrix::Identity;
+	DirectX::XMMATRIX matrixProjectionSkyDome = DirectX::XMMatrixIdentity();
 };
 
 struct LineThickness
@@ -165,12 +165,12 @@ public:
 	static void DrawBegin();
 	static void DrawEnd();
 
-	static void SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix);
-	static void SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix);
-	static void SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix);
-	static void SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
-	static void SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix);
-	static void SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix);
+	static void SetViewMatrix3D(DirectX::XMMATRIX* ViewMatrix);
+	static void SetViewMatrix2D(DirectX::XMMATRIX* ViewMatrix);
+	static void SetViewMatrixSkyDome(DirectX::XMMATRIX* ViewMatrix);
+	static void SetProjectionMatrix3D(DirectX::XMMATRIX* ProjectionMatrix);
+	static void SetProjectionMatrix2D(DirectX::XMMATRIX* ProjectionMatrix);
+	static void SetProjectionMatrixSkyDome(DirectX::XMMATRIX* ProjectionMatrix);
 	static void GPU_UpdateViewAndProj();
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);

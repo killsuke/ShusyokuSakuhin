@@ -167,6 +167,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
     <ClCompile Include="AssimpPerse.cpp" />
     <ClCompile Include="Components\AttackComponent.cpp" />
@@ -251,7 +252,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Mesh\SphereMesh.cpp" />
-    <ClCompile Include="Components\Spring.cpp" />
+    <ClCompile Include="Components\SpringComponent.cpp" />
     <ClCompile Include="Mesh\SquareMesh.cpp" />
     <ClCompile Include="Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />
     <ClInclude Include="AssimpPerse.h" />
     <ClInclude Include="Components\AttackComponent.h" />
@@ -376,7 +378,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Mesh\SphereMesh.h" />
-    <ClInclude Include="Components\Spring.h" />
+    <ClInclude Include="Components\SpringComponent.h" />
     <ClInclude Include="Mesh\SquareMesh.h" />
     <ClInclude Include="Stage1Scene.h" />
     <ClInclude Include="StaticMesh.h" />

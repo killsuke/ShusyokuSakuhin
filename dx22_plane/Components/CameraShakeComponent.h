@@ -1,0 +1,29 @@
+#pragma once
+#include "Component.h"
+#include <SimpleMath.h>
+
+class CameraShakeComponent : public Component
+{
+private:
+	float m_RecordTime = 0.0f;
+	float m_RequestTime = 0.0f;
+	float m_ShakePower = 0.0f;	// —h‚ê‚Ì‘å‚«‚³iü”g”j
+	float m_ShakeSpeed = 0.0f;	// —h‚ê‚Ì‘¬‚³iU•j
+
+public:
+
+	CameraShakeComponent(GameObject& obj);
+	~CameraShakeComponent() = default;
+
+	void Update() override;
+	void ShakingPreparation(const float power,const float speed, const float time) {
+		m_ShakePower = power;
+		m_ShakeSpeed = speed;
+		m_RequestTime = time;
+	};
+
+	DirectX::XMFLOAT3 WidthShake(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view);
+
+};

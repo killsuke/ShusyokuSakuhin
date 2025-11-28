@@ -7,7 +7,7 @@
 #include "Components/Render2D.h"
 #include "Components/Render3D.h"
 #include "Components/Render3DColliderAABBComponent.h"
-#include "Components/Spring.h"
+#include "Components/SpringComponent.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Components/TestExtrusionJudgeComponent.h"

@@ -11,6 +11,7 @@
 #include <string.h>
 #include "HPParam.h"
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 D3D_FEATURE_LEVEL      m_FeatureLevel;
 
@@ -807,7 +808,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 //=======================================
 // ビュー行列を設定（３Ｄ）
 //=======================================
-void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
+void DirectXRender::SetViewMatrix3D(DirectX::XMMATRIX* ViewMatrix)
 {
 	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView3D = *ViewMatrix; // 転置
@@ -819,7 +820,7 @@ void DirectXRender::SetViewMatrix3D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 // プロジェクション行列を設定（３Ｄ）
 //=======================================
-void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+void DirectXRender::SetProjectionMatrix3D(DirectX::XMMATRIX* ProjectionMatrix)
 {
 	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection3D = *ProjectionMatrix; // 転置
@@ -831,7 +832,7 @@ void DirectXRender::SetProjectionMatrix3D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 // ビュー行列を設定（２Ｄ）
 //=======================================
-void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
+void DirectXRender::SetViewMatrix2D(DirectX::XMMATRIX* ViewMatrix)
 {
 	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView2D = *ViewMatrix; // 転置
@@ -843,7 +844,7 @@ void DirectXRender::SetViewMatrix2D(DirectX::SimpleMath::Matrix* ViewMatrix)
 //=======================================
 // プロジェクション行列を設定（２Ｄ）
 //=======================================
-void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+void DirectXRender::SetProjectionMatrix2D(DirectX::XMMATRIX* ProjectionMatrix)
 {
 	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection2D = *ProjectionMatrix; // 転置
@@ -855,7 +856,7 @@ void DirectXRender::SetProjectionMatrix2D(DirectX::SimpleMath::Matrix* Projectio
 //=======================================
 // ビュー行列を設定（スカイドーム用）
 //=======================================
-void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix)
+void DirectXRender::SetViewMatrixSkyDome(DirectX::XMMATRIX* ViewMatrix)
 {
 	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixViewSkyDome = *ViewMatrix; // 転置
@@ -867,7 +868,7 @@ void DirectXRender::SetViewMatrixSkyDome(DirectX::SimpleMath::Matrix* ViewMatrix
 //=======================================
 // プロジェクション行列を設定（スカイドーム用）
 //=======================================
-void DirectXRender::SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* ProjectionMatrix)
+void DirectXRender::SetProjectionMatrixSkyDome(DirectX::XMMATRIX* ProjectionMatrix)
 {
 	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjectionSkyDome = *ProjectionMatrix; // 転置
@@ -881,12 +882,12 @@ void DirectXRender::SetProjectionMatrixSkyDome(DirectX::SimpleMath::Matrix* Proj
 //=======================================
 void DirectXRender::GPU_UpdateViewAndProj() {
 	CameraMatrix mtx = m_CameraMatrix;
-	mtx.matrixView3D = m_CameraMatrix.matrixView3D.Transpose();
-	mtx.matrixProjection3D = m_CameraMatrix.matrixProjection3D.Transpose();
-	mtx.matrixView2D = m_CameraMatrix.matrixView2D.Transpose();
-	mtx.matrixProjection2D = m_CameraMatrix.matrixProjection2D.Transpose();
-	mtx.matrixViewSkyDome = m_CameraMatrix.matrixViewSkyDome.Transpose();
-	mtx.matrixProjectionSkyDome = m_CameraMatrix.matrixProjectionSkyDome.Transpose();
+	mtx.matrixView3D = XMMatrixTranspose(m_CameraMatrix.matrixView3D);
+	mtx.matrixProjection3D = XMMatrixTranspose(m_CameraMatrix.matrixProjection3D);
+	mtx.matrixView2D = XMMatrixTranspose(m_CameraMatrix.matrixView2D);
+	mtx.matrixProjection2D = XMMatrixTranspose(m_CameraMatrix.matrixProjection2D);
+	mtx.matrixViewSkyDome = XMMatrixTranspose(m_CameraMatrix.matrixViewSkyDome);
+	mtx.matrixProjectionSkyDome = XMMatrixTranspose(m_CameraMatrix.matrixProjectionSkyDome);
 
 	// カメラ情報をGPU側へ送る
 	m_DeviceContext->UpdateSubresource(g_pCameraInformationBuffer, 0, NULL, &mtx, 0, 0);
