@@ -16,6 +16,6 @@ public:
 	
 	virtual void Update() = 0;
 
-	void CreateDamageEffect();
+	void CreateDamageEffect(const HitEvent& event);
 	bool GetRightLeft()const { return m_IsRightLeft; };
 };

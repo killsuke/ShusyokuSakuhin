@@ -21,14 +21,6 @@ void EnemyActionBossComponent::Update() {
 	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 	auto rend = m_Object->GetComponent<Render2DComponent>();
 
-	auto fighter = m_Object->GetComponent<FighterComponent>();
-
-	const bool isAttacked = fighter->GetIsAttacked();
-
-	if (isAttacked == true) {
-		CreateDamageEffect();
-	}
-
 	if (myPos.x > playPos.x) {
 		m_IsRightLeft = false;
 	}

@@ -63,14 +63,6 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	auto testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
 	bool isGround = testExtrusion->GetIsGround();
 
-	auto fighter = m_Object->GetComponent<FighterComponent>();
-
-	const bool isAttacked = fighter->GetIsAttacked();
-
-	if (isAttacked == true) {
-		CreateDamageEffect();
-	}
-
 	if (isGround == true) {
 		rigid->ReduceVelocity_X(0.5f);
 	}

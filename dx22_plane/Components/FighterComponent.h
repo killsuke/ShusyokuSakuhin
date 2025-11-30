@@ -19,7 +19,6 @@ private:
 	bool m_invincibleFlag = false; // 無敵フラグ
 	bool m_deadFlag = false; // 死亡フラグ
 	bool m_useDeadFlag = true; // 死亡フラグそのものを使うか
-	bool m_IsAttacked = false;	// 攻撃された場合のフラグ
 
 public:
 	FighterComponent(GameObject& obj);
@@ -38,7 +37,6 @@ public:
 	inline void SetUseInvincible(const bool flag) { m_useInvincible = flag; }; // 無敵を使うかどうかを設定
 	inline void SetInvincibleFlag(const bool flag) { m_invincibleFlag = flag; }; // 無敵フラグを設定
 	inline void SetUseDeadFlag(const bool flag) { m_useDeadFlag = flag; }; // 死亡フラグを設定
-	inline void SetIsAttacked(const bool flag) { m_IsAttacked = flag; };
 
 	inline int GetAtk() const { return m_atk; } // 攻撃力を取得
 	inline int GetHp() const { return m_hp; } // ヒットポイントを取得
@@ -47,7 +45,6 @@ public:
 	inline bool GetUseInvincible() const { return m_useInvincible; }; // 無敵を使うかどうかを取得
 	inline bool GetInvincibleFlag() const { return m_invincibleFlag; }; // 無敵フラグを取得
 	inline bool GetDeadFlag() const { return m_deadFlag; }; // 死亡フラグを取得
-	inline bool GetIsAttacked() const { return m_IsAttacked; };
 
 	inline void AddAtk(const int atk) { m_atk += atk; } // 攻撃力を加算
 	inline void AddHp(const int hp) { m_hp += hp; } // ヒットポイントを加算
@@ -57,6 +54,7 @@ public:
 		}
 	};
 
+	void DamageProcess();
 	// 本当にヒットしたかどうかのテストコード
 	void OnHit(const HitEvent& event);
 };

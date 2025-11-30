@@ -13,7 +13,7 @@ void EventBusManager::Init()
 void EventBusManager::Update()
 {
 	if(queuedEvents.size() == 0 || m_Listeners.size() == 0){
-		return; // キューが空なら何もしない
+		return; // 中身が空なら何もしない
 	}
 	
 	// キューに溜まったイベントを処理

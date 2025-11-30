@@ -1,6 +1,7 @@
 #include "EnemyActionComponent.h"
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include "RenderBillboard.h"
 #include "Mesh/SquareMesh.h"
 #include "Effect2DComponent.h"
@@ -13,13 +14,20 @@ namespace {
 
 EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // É\Å[Égî‘çÜÇê›íË
+	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		CreateDamageEffect(e);
+		});
 }
 
 void EnemyActionComponent::Update() {
 
 }
 
-void EnemyActionComponent::CreateDamageEffect() {
+void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
+
+	if(event.target != m_Object) {
+		return;
+	}
 
 	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 

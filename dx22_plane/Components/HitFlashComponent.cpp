@@ -1,10 +1,13 @@
 #include "HitFlashComponent.h"
 #include "DirectXRender.h"
-#include "FighterComponent.h"
+#include "Manager/EventBusManager.h"
 
 HitFlashComponent::HitFlashComponent(GameObject& obj) : RenderComponent(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("HIT_FLASH"); // ソート番号を設定
+	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		OnHitFlash(e);
+		});
 }
 
 void HitFlashComponent::Update() {
@@ -24,9 +27,12 @@ void HitFlashComponent::Update() {
 		if (useInvincible == true) {
 			cb.isHit = fighter->GetInvincibleFlag();
 		}
-		else {
-			// もっとダメージフラッシュの時間を延ばしてもいいかも
-			cb.isHit = fighter->GetIsAttacked();
+
+		// ヒットフラッシュが発生したらフラグを立てる
+		// 基本エネミー用
+		if (m_IsFlash == true) {
+			cb.isHit = m_IsFlash;
+			m_IsFlash = false;
 		}
 
 		// コンスタントバッファ更新
@@ -35,5 +41,16 @@ void HitFlashComponent::Update() {
 		ID3D11Buffer* buffer = DirectXRender::GetHitFlashBuffer();
 
 		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
+
+		//m_IsFlash = false;
 	}
+}
+
+void HitFlashComponent::OnHitFlash(const HitEvent& event) {
+
+	if(event.target != m_Object) {
+		return;
+	}
+
+	m_IsFlash = true;
 }

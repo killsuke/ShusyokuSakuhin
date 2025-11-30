@@ -4,7 +4,9 @@
 #include "RigidBodyComponent.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
+#include "FighterComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include <SimpleMath.h>
 
 using namespace DirectX::SimpleMath;
@@ -57,6 +59,12 @@ void PlayerDamageComponent::Update()
 						playerRigid->AddVelocity(Vector3(-80.0f, 0.0f, 0.0f));
 					}
 				}*/
+
+
+				HitEvent he = { m_Object,objOther };
+
+				// ヒット時の通知テスト
+				EventBusManager::Push(he);
 
 				if (attack_O != nullptr) {
 					attack_O->AttackAction(*objOther);
