@@ -1,6 +1,6 @@
 #include "HumanBoneComponent.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "DirectXRender.h"
 #include "input.h"
 

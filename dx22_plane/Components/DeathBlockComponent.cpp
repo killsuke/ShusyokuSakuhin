@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "FighterComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 
 DeathBlockComponent::DeathBlockComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ƒ\[ƒg”Ô†‚ğİ’è

@@ -19,12 +19,13 @@ void HitFlashComponent::Update() {
 		cb.hitFlashPower = m_HitFlashPower;
 
 		// 無敵時間を使用するかどうかでフラグを変える
-		bool useInvincible = fighter->GetUseInvincible();
+		const bool useInvincible = fighter->GetUseInvincible();
 
 		if (useInvincible == true) {
 			cb.isHit = fighter->GetInvincibleFlag();
 		}
 		else {
+			// もっとダメージフラッシュの時間を延ばしてもいいかも
 			cb.isHit = fighter->GetIsAttacked();
 		}
 
@@ -35,5 +36,4 @@ void HitFlashComponent::Update() {
 
 		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
 	}
-	
 }

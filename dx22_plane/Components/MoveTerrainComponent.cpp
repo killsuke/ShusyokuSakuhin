@@ -1,7 +1,7 @@
 #include "MoveTerrainComponent.h"
 #include "Transform.h"
 #include "Collider.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "PlayerOperationComponent.h"
 #include "RigidBodyComponent.h"
 #include <cmath>

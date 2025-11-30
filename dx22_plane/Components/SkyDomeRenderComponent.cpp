@@ -1,7 +1,7 @@
 #include "SkyDomeRenderComponent.h"
 #include "DirectXRender.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include <DDSTextureLoader.h>
 
 using namespace DirectX::SimpleMath;

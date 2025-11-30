@@ -1,13 +1,19 @@
 #pragma once
 #include "Component.h"
-class FighterComponent : public Component
+
+// テストコード用のヒットイベント構造体
+struct HitEvent {
+	GameObject* attacker; // 攻撃者のGameObjectへのポインタ
+	GameObject* target;   // 被攻撃者のGameObjectへのポインタ
+};
+
+class FighterComponent final : public Component
 {
 private:
 	int m_atk = 0; // 攻撃力
 	int m_hp = 0; // ヒットポイント
 	int m_maxHp = 0; // 最大ヒットポイント
 	int m_totalDamage = 0;	// ダメージ
-	const float m_deltaTime = 0.016f; // 仮のデルタタイム
 	float m_recordTime = 0.0f; // 経過時間
 	bool m_useInvincible = false; // 無敵を使うかどうか
 	bool m_invincibleFlag = false; // 無敵フラグ
@@ -50,5 +56,8 @@ public:
 			m_totalDamage += damage;
 		}
 	};
+
+	// 本当にヒットしたかどうかのテストコード
+	void OnHit(const HitEvent& event);
 };
 

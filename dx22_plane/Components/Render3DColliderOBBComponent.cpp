@@ -1,7 +1,7 @@
 #include "Render3DColliderOBBComponent.h"
 #include "DirectXRender.h"
 #include "Collider.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;

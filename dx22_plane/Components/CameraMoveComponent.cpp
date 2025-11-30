@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "SpringComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "CameraTargetComponent.h"
 #include "RigidBodyComponent.h"
 #include <iostream>

@@ -1,6 +1,6 @@
 #include "Bones.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Camera.h"
 using namespace DirectX::SimpleMath;
 

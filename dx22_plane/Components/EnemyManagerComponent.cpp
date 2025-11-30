@@ -5,7 +5,7 @@
 #include "Render2D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/SquareMesh.h"
 #include "EnemyJsonComponent.h"
 #include "RigidBodyComponent.h"

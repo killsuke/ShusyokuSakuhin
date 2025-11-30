@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "RigidBodyComponent.h"
 #include "TimeManager.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "TestExtrusionJudgeComponent.h"
 #include <iostream>
 

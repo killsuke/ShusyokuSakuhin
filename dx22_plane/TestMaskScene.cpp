@@ -1,5 +1,5 @@
 #include "TestMaskScene.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/RenderMask3D.h"

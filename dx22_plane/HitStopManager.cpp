@@ -1,5 +1,5 @@
 #include "HitStopManager.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "GameObject.h"
 #include <vector>
 

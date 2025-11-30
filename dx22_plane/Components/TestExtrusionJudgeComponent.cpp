@@ -2,7 +2,7 @@
 #include "Collider.h"
 #include "RigidBodyComponent.h"
 #include <SimpleMath.h>
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "JumpComponent.h"
 #include "Transform.h"
 #include "PlayerOperationComponent.h"

@@ -1,9 +1,19 @@
 #include "FighterComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
+#include <iostream>
+#include <string>
+#include "Manager/EventBusManager.h"
+
+namespace {
+	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
+}
 
 FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ソート番号を設定
+	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		OnHit(e);
+		});
 }
 
 void FighterComponent::Update() {
@@ -33,7 +43,7 @@ void FighterComponent::Update() {
 
 		// 無敵の経過時間を加算
 		if(m_invincibleFlag == true){
-			m_recordTime += m_deltaTime;
+			m_recordTime += DeltaTime;
 		}
 	}
 	else {
@@ -57,4 +67,15 @@ void FighterComponent::Update() {
 		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 
+}
+
+void FighterComponent::OnHit(const HitEvent& event) {
+
+	if(event.target != m_Object) {
+		return; // 自分宛じゃないなら無視
+	}
+
+	// ここでアクセス違反発生
+	std::string name = m_Object->GetName();
+	std::cout << "当たった！私の名前は：" << name << " です！" << std::endl;
 }

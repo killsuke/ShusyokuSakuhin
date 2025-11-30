@@ -5,7 +5,7 @@
 #include "Render3D.h"
 #include "HPBarMoveComponent.h"
 #include "JumpComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "DoorFadeComponent.h"
 #include "Transform.h"
 #include "input.h"

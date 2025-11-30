@@ -3,9 +3,11 @@
 #include "Transform.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include "HitStopManager.h"
 #include "CameraShakeComponent.h"
+#include "FighterComponent.h"
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 {
@@ -48,8 +50,13 @@ void EnemyDamageComponent::Update()
 					if (camera != nullptr) {
 						CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
 						
+						HitEvent he = { m_Object,objOther };
+
+						// ヒット時の通知テスト
+						EventBusManager::Push(he);
+
 						// 画面揺れ開始
-						shake->ShakingPreparation(30.0f,1.0f,0.2f);
+						shake->ShakingPreparation(50.0f,1.5f,0.2f);
 					}
 				}
 			}

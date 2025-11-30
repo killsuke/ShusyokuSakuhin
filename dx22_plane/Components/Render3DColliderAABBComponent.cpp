@@ -1,7 +1,7 @@
 #include "Render3DColliderAABBComponent.h"
 #include "DirectXRender.h"
 #include "Collider.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
 
 using namespace DirectX::SimpleMath;

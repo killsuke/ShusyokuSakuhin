@@ -1,7 +1,7 @@
 #include "RenderLineComponent.h"
 #include "DirectXRender.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "RenderBillboard.h"
 #include "Mesh/CircleMesh.h"
 #include "Mesh/LineMesh.h"

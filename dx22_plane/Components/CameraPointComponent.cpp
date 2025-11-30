@@ -1,6 +1,6 @@
 #include "CameraPointComponent.h"
 #include "CameraMoveComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Collider.h"
 #include "RigidBodyComponent.h"
 #include "CameraTargetComponent.h"

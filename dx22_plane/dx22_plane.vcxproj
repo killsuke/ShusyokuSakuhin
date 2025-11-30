@@ -167,6 +167,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Manager\EventBusManager.cpp" />
     <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
     <ClCompile Include="AssimpPerse.cpp" />
@@ -187,7 +188,7 @@
     <ClCompile Include="Mesh\CircleMesh.cpp" />
     <ClCompile Include="Components\Collider.cpp" />
     <ClCompile Include="Components\Component.cpp" />
-    <ClCompile Include="ComponentTypeManager.cpp" />
+    <ClCompile Include="Manager\ComponentTypeManager.cpp" />
     <ClCompile Include="Components\CSVObjectManagerComponent.cpp" />
     <ClCompile Include="Components\DeathBlockComponent.cpp" />
     <ClCompile Include="Components\DoorFadeComponent.cpp" />
@@ -226,7 +227,7 @@
     <ClCompile Include="dx11helper.cpp" />
     <ClCompile Include="Components\EnemyDamageComponent.cpp" />
     <ClCompile Include="Components\FighterComponent.cpp" />
-    <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Components\GoAroundComponent.cpp" />
     <ClCompile Include="Components\HPBarMoveComponent.cpp" />
     <ClCompile Include="InchWorm_Test.cpp">
@@ -249,7 +250,7 @@
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Components\RigidBodyComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Mesh\SphereMesh.cpp" />
     <ClCompile Include="Components\SpringComponent.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Manager\EventBusManager.h" />
     <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />
     <ClInclude Include="AssimpPerse.h" />
@@ -306,7 +308,7 @@
     <ClInclude Include="Mesh\CircleMesh.h" />
     <ClInclude Include="Components\Collider.h" />
     <ClInclude Include="Components\Component.h" />
-    <ClInclude Include="ComponentTypeManager.h" />
+    <ClInclude Include="Manager\ComponentTypeManager.h" />
     <ClInclude Include="Components\CSVObjectManagerComponent.h" />
     <ClInclude Include="CSV_Data.h" />
     <ClInclude Include="Components\DeathBlockComponent.h" />
@@ -346,7 +348,7 @@
     <ClInclude Include="dx11helper.h" />
     <ClInclude Include="Components\EnemyDamageComponent.h" />
     <ClInclude Include="Components\FighterComponent.h" />
-    <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Components\GoAroundComponent.h" />
     <ClInclude Include="Components\HPBarMoveComponent.h" />
     <ClInclude Include="HPParam.h" />
@@ -375,7 +377,7 @@
     <ClInclude Include="Components\RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneList.h" />
-    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Mesh\SphereMesh.h" />
     <ClInclude Include="Components\SpringComponent.h" />

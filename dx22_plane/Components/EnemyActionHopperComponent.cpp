@@ -3,7 +3,7 @@
 #include "Collider.h"
 #include "Render2D.h"
 #include "RigidBodyComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Render3DColliderAABBComponent.h"
 #include "JumpComponent.h"
 #include "AttackOneTimeComponent.h"

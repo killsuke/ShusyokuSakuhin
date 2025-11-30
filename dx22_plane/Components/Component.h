@@ -2,7 +2,7 @@
 
 #include <cstdint>
 #include "GameObject.h"
-#include "ComponentTypeManager.h"
+#include "Manager/ComponentTypeManager.h"
 
 class GameObject; // ‘O•ûéŒ¾
 

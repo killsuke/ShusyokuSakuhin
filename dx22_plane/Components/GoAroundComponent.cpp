@@ -1,7 +1,7 @@
 #include "GoAroundComponent.h"
 #include "Transform.h"
 #include <SimpleMath.h>
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "HelpMath.h"
 #include <iostream>
 

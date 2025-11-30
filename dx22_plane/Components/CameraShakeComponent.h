@@ -2,7 +2,7 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
-class CameraShakeComponent : public Component
+class CameraShakeComponent final : public Component
 {
 private:
 	float m_RecordTime = 0.0f;
@@ -13,6 +13,11 @@ private:
 	float m_QuarterRequestTime = 0.0f;
 	DirectX::XMVECTOR m_ShakeVector = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
 	DirectX::XMVECTOR m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
+
+	DirectX::XMFLOAT3 WidthShake(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 RandomShake2D(const DirectX::XMMATRIX& view);
 
 public:
 
@@ -25,9 +30,4 @@ public:
 		m_ShakeSpeed = speed;
 		m_RequestTime = time;
 	};
-
-	DirectX::XMFLOAT3 WidthShake(const DirectX::XMMATRIX& view);
-	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view);
-	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view);
-	DirectX::XMFLOAT3 RandomShake2D(const DirectX::XMMATRIX& view);
 };

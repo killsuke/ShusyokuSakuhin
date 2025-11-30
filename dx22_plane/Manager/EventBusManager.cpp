@@ -1,0 +1,38 @@
+#include "EventBusManager.h"
+
+std::vector<QueuedEvent> EventBusManager::queuedEvents;
+std::unordered_map<std::type_index, std::vector<std::function<void(const void*)>>> EventBusManager::m_Listeners;
+
+void EventBusManager::Init()
+{
+	// 初期化処理
+	queuedEvents.clear();
+	m_Listeners.clear();
+}
+
+void EventBusManager::Update()
+{
+	if(queuedEvents.size() == 0 || m_Listeners.size() == 0){
+		return; // キューが空なら何もしない
+	}
+	
+	// キューに溜まったイベントを処理
+	for (const auto& item : queuedEvents) {
+		auto it = m_Listeners.find(item.type);
+		if (it != m_Listeners.end()) {
+			// 登録されているリスナーを呼び出す
+			for (const auto& listener : it->second) {
+				listener(item.eventData);
+			}
+		}
+		delete item.eventData;
+	}
+	queuedEvents.clear();
+}
+
+void EventBusManager::UnInit()
+{
+	// キューに残っているイベントデータを解放
+	queuedEvents.clear();
+	m_Listeners.clear();
+}

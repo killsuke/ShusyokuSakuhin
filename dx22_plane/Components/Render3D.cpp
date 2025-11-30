@@ -1,7 +1,7 @@
 #include "Render3D.h"
 #include "DirectXRender.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
 
 using namespace DirectX::SimpleMath;

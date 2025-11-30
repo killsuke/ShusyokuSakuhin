@@ -2,9 +2,10 @@
 #include <thread>
 #include "Application.h"
 #include "DirectXRender.h"
-#include "GameObjectManager.h"
-#include "SceneManager.h"
-#include "ComponentTypeManager.h"
+#include "Manager/GameObjectManager.h"
+#include "Manager/SceneManager.h"
+#include "Manager/ComponentTypeManager.h"
+#include "Manager/EventBusManager.h"
 #include "TimeManager.h"
 
 #if _DEBUG
@@ -191,6 +192,7 @@ void Application::MainLoop()
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
+	EventBusManager::Init();
 
 	auto deviceContext = DirectXRender::GetDeviceContext();
 	auto device = DirectXRender::GetDevice();
@@ -311,6 +313,8 @@ void Application::MainLoop()
 	}
 
 	ComponentTypeManager::UnInit();
+
+	EventBusManager::UnInit();
 
 	// 終了処理
 	SceneManager::UnInit();

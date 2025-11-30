@@ -2,13 +2,13 @@
 #include "PlayerOperationComponent.h"
 #include "ArbitraryRotationComponent.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Collider.h"
 #include "Effect2DComponent.h"
 #include "RenderBillboard.h"
 #include "AttackOneTimeComponent.h"
 #include "Mesh/SquareMesh.h"
-#include "SceneManager.h"
+#include "Manager/SceneManager.h"
 #include "TrailRenderComponent.h"
 #include <iostream>
 #include <SimpleMath.h>

@@ -4,7 +4,7 @@
 #include "Components/Render3D.h"
 #include "Components/Render2D.h"
 #include "Components/RenderBillboard.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/CircleMesh.h"
 #include "Mesh/LineMesh.h"
 #include "Mesh/CubeMesh.h"

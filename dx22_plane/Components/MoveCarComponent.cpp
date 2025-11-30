@@ -1,7 +1,7 @@
 #include "MoveCarComponent.h"
 #include "Transform.h"
 #include "RigidBodyComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 
 using namespace DirectX::SimpleMath;
 

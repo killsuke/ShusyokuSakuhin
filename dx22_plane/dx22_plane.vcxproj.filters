@@ -240,10 +240,10 @@
     <ClCompile Include="Components\SkyDomeRenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
+    <ClCompile Include="Manager\SceneManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectManager.cpp">
+    <ClCompile Include="Manager\GameObjectManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="ModelManager.cpp">
@@ -255,7 +255,7 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentTypeManager.cpp">
+    <ClCompile Include="Manager\ComponentTypeManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Components\TestSwordActionComponent.cpp">
@@ -362,6 +362,9 @@
     </ClCompile>
     <ClCompile Include="Components\CameraShakeComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\EventBusManager.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -617,13 +620,13 @@
     <ClInclude Include="Components\SkyDomeRenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
+    <ClInclude Include="Manager\SceneManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectManager.h">
+    <ClInclude Include="Manager\GameObjectManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentTypeManager.h">
+    <ClInclude Include="Manager\ComponentTypeManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
@@ -739,6 +742,9 @@
     </ClInclude>
     <ClInclude Include="Components\CameraShakeComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\EventBusManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

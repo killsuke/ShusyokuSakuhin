@@ -1,8 +1,8 @@
 #include "DoorFadeComponent.h"
 #include "Transform.h"
 #include "Render2D.h"
-#include "SceneManager.h"
-#include "GameObjectManager.h"
+#include "Manager/SceneManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Input.h"
 #include "Mesh/SquareMesh.h"
 #include <iostream>

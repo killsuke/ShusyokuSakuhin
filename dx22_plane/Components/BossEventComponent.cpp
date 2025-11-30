@@ -4,7 +4,7 @@
 #include "Collider.h"
 #include "Render2D.h"
 #include "Render3D.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
@@ -15,7 +15,6 @@
 #include "Mesh/SquareMesh.h"
 #include "EnemyActionBossComponent.h"
 #include "DoorFadeComponent.h"
-#include "GameObjectManager.h"
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを

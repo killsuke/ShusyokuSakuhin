@@ -4,7 +4,7 @@
 #include "RigidBodyComponent.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include <SimpleMath.h>
 
 using namespace DirectX::SimpleMath;

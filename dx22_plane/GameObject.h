@@ -38,7 +38,7 @@ private:
 	std::vector<std::unique_ptr<Component>> renderComponents;
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
 	GameObject* parent = nullptr;	// 親オブジェクトを持つことができる
-	TagAndID m_TagAndID = {}; // タグとIDのペア
+	TagAndID m_TagAndID = { "",0 }; // タグとIDのペア
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
@@ -77,7 +77,7 @@ public:
 	};
 	inline void SetActiveState(const ActiveState& as) { activeState = as; };
 	inline void SetDrawContainer(const DrawContainer& dc) { drawContainer = dc; };
-	inline void SetDrawContainerChangeFlag(const DrawContainer& dc,const bool dccFlag) {
+	inline void SetDrawContainerChangeFlag(const DrawContainer& dc, const bool dccFlag) {
 		hopeDrawContainer = dc;
 		drawContainerChangeFlag = dccFlag;
 	};

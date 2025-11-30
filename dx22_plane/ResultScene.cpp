@@ -1,6 +1,6 @@
 #include "ResultScene.h"
 #include "Components/Camera.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Components/Transform.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
@@ -14,7 +14,7 @@
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
 #include "Input.h"
-#include "SceneManager.h"
+#include "Manager/SceneManager.h"
 #include "Components/DoorFadeComponent.h"
 #include "Components/BlinkingUIComponent.h"
 

@@ -1,6 +1,6 @@
 #include "EnemyActionComponent.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "RenderBillboard.h"
 #include "Mesh/SquareMesh.h"
 #include "Effect2DComponent.h"

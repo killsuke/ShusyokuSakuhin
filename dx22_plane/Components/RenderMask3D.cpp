@@ -1,7 +1,7 @@
 #include "RenderMask3D.h"
 #include "DirectXRender.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;

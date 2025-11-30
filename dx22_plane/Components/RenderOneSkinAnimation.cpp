@@ -2,7 +2,7 @@
 #include "DirectXRender.h"
 #include "BoneData.h"
 #include "Transform.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 
 using namespace DirectX;
 

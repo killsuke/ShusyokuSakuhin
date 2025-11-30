@@ -1,6 +1,6 @@
 #include "LoadStageScene.h"
 #include "Components/Camera.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Components/Transform.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"

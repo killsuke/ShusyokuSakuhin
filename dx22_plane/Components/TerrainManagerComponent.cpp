@@ -5,7 +5,7 @@
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
 #include "RigidBodyComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"

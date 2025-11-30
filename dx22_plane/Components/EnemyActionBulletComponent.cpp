@@ -4,7 +4,7 @@
 #include "Render2D.h"
 #include "Render3D.h"
 #include "RigidBodyComponent.h"
-#include "GameObjectManager.h"
+#include "Manager/GameObjectManager.h"
 #include "Render3DColliderAABBComponent.h"
 #include "BulletComponent.h"
 #include "AttackOneTimeComponent.h"
