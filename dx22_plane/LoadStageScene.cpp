@@ -299,9 +299,22 @@ LoadStageScene::LoadStageScene() {
 		uiTex->SetInitialCut(2.0f, 2.0f);*/
 	}
 
+	{
+		auto hp = GameObjectManager::AddUI("hpFrameUI", "HP_UI");
+		auto hpTrans = hp->AddComponent<TransformComponent>();
+		hpTrans->SetPosition({ -570.0f, 150.0f, 0.0f });
+		hpTrans->SetScale({ 45.0f, 150.0f, 1.0f });
+
+		auto hpRender = hp->AddComponent<Render3DComponent>();
+		hpRender->CreateMesh<SquareMesh>();
+		hpRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->ChangeTexture("assets/texture/hp_bar.png");
+		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
 	auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
 	auto hpTrans = hp->AddComponent<TransformComponent>();
-	hpTrans->SetPosition({ -570.0f, 70.0f, 0.0f });
+	hpTrans->SetPosition({ -570.0f, 120.0f, 0.0f });
 	hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
 
 	auto hpBar = hp->AddComponent<HPBarMoveComponent>();

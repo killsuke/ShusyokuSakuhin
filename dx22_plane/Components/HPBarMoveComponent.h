@@ -6,7 +6,7 @@ class HPBarMoveComponent : public Component
 {
 private:
 	GameObject* referenceHpObj = nullptr;
-	float hpScale = 5.0f; // HPの値「１」辺りの縦のサイズ
+	float hpScale = 3.3f; // HPの値「１」辺りの縦のサイズ
 public:
 	HPBarMoveComponent(GameObject& obj);
 	~HPBarMoveComponent() = default;
