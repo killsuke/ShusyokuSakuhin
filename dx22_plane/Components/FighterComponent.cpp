@@ -18,7 +18,6 @@ FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 
 void FighterComponent::Update() {
 
-
 	if (m_atk < 0) {
 		m_atk = 0; // 攻撃力が0以下になったら0にする
 	}
@@ -70,6 +69,17 @@ void FighterComponent::DamageProcess() {
 			m_totalDamage = 0;
 		}
 	}
+
+	if (m_hp <= 0) {
+		m_hp = 0; // ヒットポイントが0以下になったら0にする
+		m_deadFlag = true; // 死亡フラグを立てる
+
+		// これがボスであった場合はどうするかを考えてみる
+		if (m_useDeadFlag == false) {
+			return; // 死亡フラグがfalseなら何もしない
+		}
+		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+	}
 }
 
 void FighterComponent::OnHit(const HitEvent& event) {
@@ -77,10 +87,6 @@ void FighterComponent::OnHit(const HitEvent& event) {
 	if (event.target != m_Object) {
 		return; // 自分宛じゃないなら無視
 	}
-
-	// ここでアクセス違反発生
-	std::string name = m_Object->GetName();
-	std::cout << "当たった！私の名前は：" << name << " です！" << std::endl;
 
 	DamageProcess();
 }

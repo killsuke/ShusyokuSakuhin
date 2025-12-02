@@ -17,11 +17,13 @@ void EventBusManager::Update()
 	}
 	
 	// キューに溜まったイベントを処理
-	for (const auto& item : queuedEvents) {
-		auto it = m_Listeners.find(item.type);
+	for (const QueuedEvent& item : queuedEvents) {
+		std::unordered_map<std::type_index, std::vector<std::function<void(const void*)>>>::iterator it =
+			m_Listeners.find(item.type);
+
 		if (it != m_Listeners.end()) {
 			// 登録されているリスナーを呼び出す
-			for (const auto& listener : it->second) {
+			for (const std::function<void(const void*)>& listener : it->second) {
 				listener(item.eventData);
 			}
 		}

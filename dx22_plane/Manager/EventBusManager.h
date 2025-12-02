@@ -4,6 +4,8 @@
 #include <vector>
 #include <typeindex>
 
+// 通知で誰と誰に影響させるかを入れて実行して対象者のみに影響させるさせる方法をやるとかは？
+
 struct QueuedEvent{
 	std::type_index type;
 	void* eventData;

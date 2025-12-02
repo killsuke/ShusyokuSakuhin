@@ -37,13 +37,6 @@ void EnemyActionHopperComponent::Update() {
 
 	m_recordTime += m_deltaTime;
 
-	if (myPos.x > playPos.x) {
-		m_IsRightLeft = false;
-	}
-	else {
-		m_IsRightLeft = true;
-	}
-
 	if (m_recordTime < 2.0f) {
 		jumpFlag = true;
 	}
@@ -52,9 +45,21 @@ void EnemyActionHopperComponent::Update() {
 		jumpFlag = false;
 	}
 
+	// ここの向き変更はジャンプ開始のみ
+	if (m_IsBeforeJump == false && jumpFlag == true) {
+		if (myPos.x > playPos.x) {
+			m_IsRightLeft = false;
+		}
+		else {
+			m_IsRightLeft = true;
+		}
+	}
+
 	rend->SetInversionFlag(!m_IsRightLeft);
 
 	HopperAction(jumpFlag);
+
+	m_IsBeforeJump = jumpFlag;
 }
 
 void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {

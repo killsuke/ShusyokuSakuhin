@@ -364,7 +364,10 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Manager\EventBusManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MeshCut2DComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -744,7 +747,10 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Manager\EventBusManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshCut2DComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -109,28 +109,32 @@
             "ID": 26
         },
 	{
-            "name": "TRAILMAKE",
+            "name": "MESH_CUT_2D",
             "ID": 27
         },
-        {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
+	{
+            "name": "TRAILMAKE",
             "ID": 28
         },
         {
-	    "name": "HIT_FLASH",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 29
+        },
+        {
+	    "name": "HIT_FLASH",
+            "ID": 30
 	},
         {
             "name": "RENDER",
-            "ID": 30
-        },
-        {
-            "name": "RENDER_DEBUG",
             "ID": 31
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DEBUG",
             "ID": 32
+        },
+        {
+            "name": "MAX",
+            "ID": 33
         }
     ]
 }

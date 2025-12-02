@@ -43,6 +43,7 @@ void TestSwordActionComponent::Update() {
 
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
 	auto moveComp = m_Holder->GetComponent<PlayerOperationComponent>();
+	auto objTrans = m_Object->GetComponent<TransformComponent>();
 	auto sound = SceneManager::GetSound();
 
 	if (goAround == nullptr) {
@@ -68,7 +69,6 @@ void TestSwordActionComponent::Update() {
 
 			sound.Play(SOUND_LABEL::SOUND_LABEL_SE000);
 
-			TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
 			goAround->SetActiveFlag(true);
 
 			// 念のため一度コライダーをオフ
@@ -142,7 +142,6 @@ void TestSwordActionComponent::Update() {
 		goAround->SetActiveFlag(false);
 		auto holderTrans = m_Holder->GetComponent<TransformComponent>();
 		auto holderPos = holderTrans->GetPosition();
-		auto objTrans = m_Object->GetComponent<TransformComponent>();
 
 		if (moveComp->GetRightLeft() == true) {	// 右
 			objTrans->SetRotation({ 0.0f,0.0f,-50.0f });
@@ -158,6 +157,11 @@ void TestSwordActionComponent::Update() {
 	if (isAroundActive == true) {
 		SwordAction();
 	}
+
+	/*Vector3 nowPos = objTrans->GetPosition();
+	if (nowPos.z < 0.0f) {
+		m_Object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
+	}*/
 
 	// 向き反転用
 	m_BeforeDirection = isRightLeft;
