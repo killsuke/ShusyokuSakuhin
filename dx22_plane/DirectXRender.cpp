@@ -81,16 +81,9 @@ ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 ID3D11BlendState* g_BlendStateATC = nullptr;
 
-//ID3D11Buffer* g_pViewBuffer3D{}; // ビュー行列
-//ID3D11Buffer* g_pProjectionBuffer3D{}; // プロジェクション行列
-//
-//ID3D11Buffer* g_pViewBuffer2D{}; // ビュー行列
-//ID3D11Buffer* g_pProjectionBuffer2D{}; // プロジェクション行列
-//
-//ID3D11Buffer* g_pViewBufferSkyDome{}; // ビュー行列
-//ID3D11Buffer* g_pProjectionBufferSkyDome{}; // プロジェクション行列
-
 ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
+
+XMFLOAT4 DirectXRender::m_ClearColor = { 0.5f,0.5f, 0.5f, 1.0f };
 
 DirectXRender::DirectXRender() {
 
@@ -182,7 +175,7 @@ ID3D11Buffer* DirectXRender::GetHitFlashBuffer() {
 //=======================================
 void DirectXRender::DrawBegin() {
 	// 塗りつぶしたい色
-	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	float clearColor[4] = { m_ClearColor.x,m_ClearColor.y,m_ClearColor.z,m_ClearColor.w };
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	// レンダーターゲットとデプスステンシルビューを設定
@@ -416,10 +409,12 @@ HRESULT DirectXRender::SamplerCreate() {
 	// サンプラーステート設定
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	//	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.MaxAnisotropy = 4;
+	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	//	ID3D11SamplerState* samplerState{};
@@ -750,33 +745,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = sizeof(float);
 
-	//hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_WorldBuffer);
-	//m_DeviceContext->VSSetConstantBuffers(0, 1, &m_WorldBuffer);
-	//if (FAILED(hr)) return;
 
-	/*hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer3D);
-	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pViewBuffer3D);
-	if (FAILED(hr)) return hr;
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer3D);
-	m_DeviceContext->VSSetConstantBuffers(2, 1, &g_pProjectionBuffer3D);
-	if (FAILED(hr)) return hr;
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBuffer2D);
-	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pViewBuffer2D);
-	if (FAILED(hr)) return hr;
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBuffer2D);
-	m_DeviceContext->VSSetConstantBuffers(4, 1, &g_pProjectionBuffer2D);
-	if (FAILED(hr)) return hr;
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pViewBufferSkyDome);
-	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pViewBufferSkyDome);
-	if (FAILED(hr)) return hr;
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pProjectionBufferSkyDome);
-	m_DeviceContext->VSSetConstantBuffers(11, 1, &g_pProjectionBufferSkyDome);
-	if (FAILED(hr)) return hr;*/
 	bufferDesc.ByteWidth = sizeof(CameraMatrix);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
@@ -810,11 +779,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 //=======================================
 void DirectXRender::SetViewMatrix3D(DirectX::XMMATRIX* ViewMatrix)
 {
-	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView3D = *ViewMatrix; // 転置
-
-	// ビュー行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pViewBuffer3D, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -822,11 +787,7 @@ void DirectXRender::SetViewMatrix3D(DirectX::XMMATRIX* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix3D(DirectX::XMMATRIX* ProjectionMatrix)
 {
-	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection3D = *ProjectionMatrix; // 転置
-
-	// プロジェクション行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer3D, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================
@@ -834,11 +795,7 @@ void DirectXRender::SetProjectionMatrix3D(DirectX::XMMATRIX* ProjectionMatrix)
 //=======================================
 void DirectXRender::SetViewMatrix2D(DirectX::XMMATRIX* ViewMatrix)
 {
-	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixView2D = *ViewMatrix; // 転置
-
-	// ビュー行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pViewBuffer2D, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -846,11 +803,7 @@ void DirectXRender::SetViewMatrix2D(DirectX::XMMATRIX* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrix2D(DirectX::XMMATRIX* ProjectionMatrix)
 {
-	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjection2D = *ProjectionMatrix; // 転置
-
-	// プロジェクション行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pProjectionBuffer2D, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================
@@ -858,11 +811,7 @@ void DirectXRender::SetProjectionMatrix2D(DirectX::XMMATRIX* ProjectionMatrix)
 //=======================================
 void DirectXRender::SetViewMatrixSkyDome(DirectX::XMMATRIX* ViewMatrix)
 {
-	//	DirectX::SimpleMath::Matrix view;
 	m_CameraMatrix.matrixViewSkyDome = *ViewMatrix; // 転置
-
-	// ビュー行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pViewBufferSkyDome, 0, NULL, &view, 0, 0);
 }
 
 //=======================================
@@ -870,11 +819,7 @@ void DirectXRender::SetViewMatrixSkyDome(DirectX::XMMATRIX* ViewMatrix)
 //=======================================
 void DirectXRender::SetProjectionMatrixSkyDome(DirectX::XMMATRIX* ProjectionMatrix)
 {
-	//	DirectX::SimpleMath::Matrix projection;
 	m_CameraMatrix.matrixProjectionSkyDome = *ProjectionMatrix; // 転置
-
-	// プロジェクション行列をGPU側へ送る
-//	m_DeviceContext->UpdateSubresource(g_pProjectionBufferSkyDome, 0, NULL, &projection, 0, 0);
 }
 
 //=======================================
@@ -1019,7 +964,7 @@ void DirectXRender::SetFillMode(const EFillMode& fillMode) {
 
 void DirectXRender::SwitchingFillMode() {
 
-	if(m_FillMode == EFillMode::FILL_SOLID) {
+	if (m_FillMode == EFillMode::FILL_SOLID) {
 		SetFillMode(EFillMode::FILL_WIREFRAME);
 	}
 	else if (m_FillMode == EFillMode::FILL_WIREFRAME) {

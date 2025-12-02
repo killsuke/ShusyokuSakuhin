@@ -2,8 +2,8 @@
 #include "GameObjectManager.h"
 #include "sound.h"
 #include "Input.h"
-#include "Scene.h"
-#include "SceneList.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneList.h"
 #include <memory>
 #include "sound.h"
 

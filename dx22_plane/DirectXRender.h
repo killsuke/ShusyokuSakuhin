@@ -129,6 +129,8 @@ private:
 	static ECullingState m_CullingState;
 	static EFillMode m_FillMode;
 
+	static DirectX::XMFLOAT4 m_ClearColor;
+
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
 	static HRESULT DepthStencilCreate();
@@ -184,6 +186,8 @@ public:
 	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
 
 	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
+
+	static DirectX::XMFLOAT4 GetClearColor() { return m_ClearColor; };
 
 	//=============================================================================
 	// ブレンド ステート設定

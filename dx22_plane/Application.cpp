@@ -19,7 +19,6 @@ const auto WindowName = TEXT("2024 framework ひな型(フィールド描画)");
 
 HINSTANCE  Application::m_hInst;        // インスタンスハンドル
 HWND       Application::m_hWnd;         // ウィンドウハンドル
-HWND       Application::m_hWnd2;         // ウィンドウハンドル
 uint32_t   Application::m_Width;        // ウィンドウの横幅
 uint32_t   Application::m_Height;       // ウィンドウの縦幅
 double	   Application::m_accumulatorTime = 0.0;
@@ -187,15 +186,19 @@ void Application::MainLoop()
 	MSG msg = {};
 
 	// 描画初期化
-	DirectXRender::Init();
+	HRESULT hr = DirectXRender::Init();
+	if (FAILED(hr)) {
+		DirectXRender::UnInit();
+		return;
+	}
 	TimeManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
 	EventBusManager::Init();
 
-	auto deviceContext = DirectXRender::GetDeviceContext();
-	auto device = DirectXRender::GetDevice();
+	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
 #if _DEBUG
 
@@ -312,6 +315,8 @@ void Application::MainLoop()
 		}
 	}
 
+	// 片付け
+
 	ComponentTypeManager::UnInit();
 
 	EventBusManager::UnInit();
@@ -319,7 +324,6 @@ void Application::MainLoop()
 	// 終了処理
 	SceneManager::UnInit();
 
-	// 描画初期化
 	DirectXRender::UnInit();
 }
 

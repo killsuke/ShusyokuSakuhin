@@ -120,16 +120,16 @@
     <ClCompile Include="Components\PlayerOperationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="Scene\Scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Stage1Scene.cpp">
+    <ClCompile Include="Scene\Stage1Scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
+    <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="ResultScene.cpp">
+    <ClCompile Include="Scene\ResultScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\SquareMesh.cpp">
@@ -165,7 +165,7 @@
     <ClCompile Include="Components\BoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TestStageScene.cpp">
+    <ClCompile Include="Scene\TestStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Components\FighterComponent.cpp">
@@ -189,7 +189,7 @@
     <ClCompile Include="Components\CameraTargetComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TestMaskScene.cpp">
+    <ClCompile Include="Scene\TestMaskScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Components\RenderMask3D.cpp">
@@ -207,7 +207,7 @@
     <ClCompile Include="Components\StageLoadCSVComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="LoadStageScene.cpp">
+    <ClCompile Include="Scene\LoadStageScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Components\TerrainJsonComponent.cpp">
@@ -327,7 +327,7 @@
     <ClCompile Include="Mesh\Mesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="HighwayScene.cpp">
+    <ClCompile Include="Scene\HighwayScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Components\LeapToCenterCarComponent.cpp">
@@ -367,6 +367,9 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Components\MeshCut2DComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\RenderMotionBlurComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -482,19 +485,19 @@
     <ClInclude Include="Components\PlayerOperationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="SceneList.h">
+    <ClInclude Include="Scene\SceneList.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Scene\Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Stage1Scene.h">
+    <ClInclude Include="Scene\Stage1Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
+    <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="ResultScene.h">
+    <ClInclude Include="Scene\ResultScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\CubeMesh.h">
@@ -536,7 +539,7 @@
     <ClInclude Include="Components\BoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestStageScene.h">
+    <ClInclude Include="Scene\TestStageScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Components\FighterComponent.h">
@@ -563,7 +566,7 @@
     <ClInclude Include="Components\CameraTargetComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestMaskScene.h">
+    <ClInclude Include="Scene\TestMaskScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderMask3D.h">
@@ -584,7 +587,7 @@
     <ClInclude Include="Components\StageLoadCSVComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="LoadStageScene.h">
+    <ClInclude Include="Scene\LoadStageScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="CSV_Data.h">
@@ -707,7 +710,7 @@
     <ClInclude Include="Components\RenderBlurComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="HighwayScene.h">
+    <ClInclude Include="Scene\HighwayScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Components\LeapToCenterCarComponent.h">
@@ -750,6 +753,9 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Components\MeshCut2DComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\RenderMotionBlurComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
