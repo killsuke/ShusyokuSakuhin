@@ -71,6 +71,9 @@ ID3D11Buffer* g_pHPBarConstantBuffer = nullptr;
 // ブラー用のバッファ
 ID3D11Buffer* g_pBlurBuffer = nullptr;
 
+// モーションブラー用のバッファ
+ID3D11Buffer* g_pMotionBlurBuffer = nullptr;
+
 ID3D11Buffer* m_MaterialBuffer = nullptr;
 
 // ヒットフラッシュ用のバッファ
@@ -83,7 +86,7 @@ ID3D11BlendState* g_BlendStateATC = nullptr;
 
 ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
 
-XMFLOAT4 DirectXRender::m_ClearColor = { 0.5f,0.5f, 0.5f, 1.0f };
+FLOAT DirectXRender::m_ClearColor[4] = {0.5f,0.5f, 0.5f, 1.0f};
 
 DirectXRender::DirectXRender() {
 
@@ -144,6 +147,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pBoneConstantBuffer);
 	SAFE_RELEASE(g_pHPBarConstantBuffer);
 	SAFE_RELEASE(g_pBlurBuffer);
+	SAFE_RELEASE(g_pMotionBlurBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
@@ -174,14 +178,12 @@ ID3D11Buffer* DirectXRender::GetHitFlashBuffer() {
 //描画開始
 //=======================================
 void DirectXRender::DrawBegin() {
-	// 塗りつぶしたい色
-	float clearColor[4] = { m_ClearColor.x,m_ClearColor.y,m_ClearColor.z,m_ClearColor.w };
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	// レンダーターゲットとデプスステンシルビューを設定
 	m_DeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 	// 描画先キャンバスを塗りつぶす
-	m_DeviceContext->ClearRenderTargetView(g_pRenderTargetView, clearColor);
+	m_DeviceContext->ClearRenderTargetView(g_pRenderTargetView, m_ClearColor);
 	// 深度バッファをリセットする
 	m_DeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	// 	インプットレイアウト（GPUに渡す頂点データのフォーマットを定義）を設定
@@ -758,7 +760,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
 
 	bufferDesc.ByteWidth = sizeof(BlurBuffer);
-
+	
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
 	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
 	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
@@ -767,6 +769,13 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
 	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_HitFlashBuffer);
+
+	bufferDesc.ByteWidth = sizeof(MotionBlurBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurBuffer);
+	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+
 
 	// ここ後で１番に変更
 	if (FAILED(hr)) return hr;

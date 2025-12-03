@@ -42,6 +42,7 @@ extern ID3D11Buffer* g_pConstantBuffer;
 extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11Buffer* g_pHPBarConstantBuffer;
 extern ID3D11Buffer* g_pBlurBuffer;
+extern ID3D11Buffer* g_pMotionBlurBuffer;
 extern ID3D11Buffer* m_MaterialBuffer;
 extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
@@ -92,6 +93,11 @@ struct BlurBuffer {
 	DirectX::SimpleMath::Vector2 blurPad = DirectX::SimpleMath::Vector2::Zero;
 };
 
+struct MotionBlurBuffer {
+	DirectX::SimpleMath::Vector2 velocity = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::SimpleMath::Vector2 pad = DirectX::SimpleMath::Vector2::Zero;
+};
+
 struct HitFlashBuffer {
 	DirectX::SimpleMath::Vector3 hitFlashColor = DirectX::SimpleMath::Vector3::Zero;
 	float hitFlashPower = 0.0f;
@@ -129,7 +135,7 @@ private:
 	static ECullingState m_CullingState;
 	static EFillMode m_FillMode;
 
-	static DirectX::XMFLOAT4 m_ClearColor;
+	static FLOAT m_ClearColor[4];
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -187,7 +193,7 @@ public:
 
 	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
 
-	static DirectX::XMFLOAT4 GetClearColor() { return m_ClearColor; };
+	static FLOAT* GetClearColor() { return m_ClearColor; };
 
 	//=============================================================================
 	// ブレンド ステート設定

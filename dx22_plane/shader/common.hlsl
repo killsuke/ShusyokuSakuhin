@@ -42,6 +42,7 @@ cbuffer BlurBuffer : register(b3)
     float2 blurPad; // ブラーをかける方向
 }
 
+
 struct VS_IN
 {
     float3 pos : POSITION0;
@@ -111,10 +112,11 @@ cbuffer MaterialBuffer:register(b6) {
 	MATERIAL Material;
 }
 
-// ＵＶ座標移動行列
-//cbuffer MaterialTexBuffer : register(b6) {
-//	matrix matrixTex;
-//}
+cbuffer MotionBlurBuffer : register(b7)
+{
+    float2 velocity; // ピクセル単位の速度（前フレーム座標との差分など）
+    float2 pad2;
+}
 
 cbuffer ConstantBufferBoneComb : register(b8)
 {	

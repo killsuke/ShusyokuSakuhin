@@ -808,6 +808,9 @@
     <FxCompile Include="shader\Fighter2DPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="shader\MotionBlurPS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">

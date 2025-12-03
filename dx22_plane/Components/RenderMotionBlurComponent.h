@@ -1,18 +1,18 @@
 #pragma once
 #include "Render.h"
+#include <SimpleMath.h>
 
 class RenderMotionBlurComponent : public RenderComponent
 {
 private:
-	ID3D11Texture2D* m_BlurTexture = nullptr;
-	ID3D11Texture2D* m_DepthTexture = nullptr;
-	ID3D11RenderTargetView* m_BlurRTV = nullptr;
-	ID3D11ShaderResourceView* m_BlurSRV = nullptr;
-	ID3D11DepthStencilView* m_BlurDSV = nullptr;
+	DirectX::SimpleMath::Vector2 m_BlurVelocity = DirectX::SimpleMath::Vector2::Zero;
+
 
 public:
 	RenderMotionBlurComponent(GameObject& obj);
-	~RenderMotionBlurComponent();
+	~RenderMotionBlurComponent() = default;
 
 	void Update()override;
+
+	void SetBlurVelocity(const DirectX::SimpleMath::Vector2& vel) { m_BlurVelocity = vel; };
 };

@@ -41,6 +41,7 @@
 #include "ModelManager.h"
 #include "Components/HitFlashComponent.h"
 #include "Components/TrailRenderComponent.h"
+#include "Components/RenderMotionBlurComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -188,10 +189,12 @@ LoadStageScene::LoadStageScene() {
 		effectRender->SetBasePoint(-1.5f);
 		effectRender->ChangeTexture("assets/texture/baran.png");
 
-		auto rollingRender = rolling->AddComponent<Render3DComponent>();
+	//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
+		auto rollingRender = rolling->AddComponent<RenderMotionBlurComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
-		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
 		rollingRender->ChangeTexture("assets/texture/sword.png");
+		rollingRender->SetBlurVelocity({ 0.0f,0.3f });
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();

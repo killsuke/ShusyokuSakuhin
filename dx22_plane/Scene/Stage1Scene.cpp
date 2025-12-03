@@ -14,6 +14,7 @@
 #include "Components/BonePartsComponent.h"
 #include "Components/GoAroundComponent.h"
 #include "Components/RenderBlurComponent.h"
+#include "Components/RenderMotionBlurComponent.h"
 #include "input.h"
 #include "ModelManager.h"
 #include "Components/Collider.h"
@@ -43,7 +44,7 @@ void Stage1Scene::Init()
 	cameraTrans->SetPosition({ 0.0f, 0.0f, -500.0f });
 
 	//BonePartTest();
-	
+
 	//BoneToPartTest();
 
 	//TestBlur();
@@ -83,13 +84,13 @@ void Stage1Scene::Init()
 	}
 
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		/*auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 		testTrans->SetScale({ 10.0f,10.0f,10.0f });
 		auto rend = testObj->AddComponent<TrailRenderComponent>();
 		rend->SetBasePoint(-5.0f);
-		rend->SetTipPoint(5.0f);
+		rend->SetTipPoint(5.0f);*/
 		//rend->CreateMesh<SquareMesh>();
 //		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	//	rend->ChangeTexture("assets/texture/ranks.png");
@@ -97,17 +98,30 @@ void Stage1Scene::Init()
 	}
 
 	{
-	/*	auto testObj = GameObjectManager::AddObject("testObj", "Test");
-		auto testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetPosition({ 400.0f, 0.0f, 0.0f });
-		testTrans->SetScale({ 0.5f,0.5f,0.5f });
-		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
-			"assets/model/Container");
+		/*	auto testObj = GameObjectManager::AddObject("testObj", "Test");
+			auto testTrans = testObj->AddComponent<TransformComponent>();
+			testTrans->SetPosition({ 400.0f, 0.0f, 0.0f });
+			testTrans->SetScale({ 0.5f,0.5f,0.5f });
+			auto rend = testObj->AddComponent<Render3DComponent>();
+			rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
+				"assets/model/Container");
 
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-		rend->CreateMesh<SquareMesh>();
-		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });*/
+			rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+			rend->CreateMesh<SquareMesh>();
+			rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });*/
+	}
+
+	// モーションブラー用
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetScale({ 30.0f,30.0f,30.0f });
+		auto rend = testObj->AddComponent<RenderMotionBlurComponent>();
+		rend->CreateMesh<CubeMesh>();
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
+		rend->ChangeTexture("assets/texture/dice.png");
+		rend->SetBlurVelocity({ 0.5f,0.0f });
+
 	}
 
 	{
@@ -217,5 +231,5 @@ void Stage1Scene::TestBlur() {
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/BlurPS.hlsl");
 	rend->ChangeTexture("assets/texture/setumei.png");
-	rend->SetBlurTextureSize(Vector2(512.0f,512.0f));
+	rend->SetBlurTextureSize(Vector2(512.0f, 512.0f));
 }
