@@ -53,55 +53,55 @@ float ArbitraryRotationComponent::NormalizeAngleRadian(float rad) {
 	return result;
 }
 
-void ArbitraryRotationComponent::SimulationMove() {
-
-	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
-
-	if (trailRender != nullptr) {
-		m_worldPosQuats.clear();
-		auto transform = m_Object->GetComponent<TransformComponent>();
-		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
-		const auto centerPos = centerTrans->GetPosition();
-		const auto centerQuat = centerTrans->GetQuaternion();
-
-		// ラジアンに変換
-		const float startRad = XMConvertToRadians(m_StartAngle);
-		const float endRad = XMConvertToRadians(m_EndAngle);
-
-		// 分割ステップ
-		const float stepRad = (endRad - startRad) / m_SampleDivisions;
-
-		for (int i = 0; i <= m_SampleDivisions; ++i) {
-
-			float totalAngle = startRad + stepRad * i;
-			totalAngle = NormalizeAngleRadian(totalAngle);
-
-			// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
-			// なので後に修正
-			//if (fabs(simulationRad) > m_TargetRotationAmount) {
-			//	// 目標角度に到達したら、正確に目標角度に合わせる
-			//	if (m_clockwise == true) {
-			//		simulationRad = -m_TargetRotationAmount;
-			//	}
-			//	else {
-			//		simulationRad = m_TargetRotationAmount;
-			//	}
-			//}
-
-			const XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
-			XMVECTOR axis = XMVector3Normalize(m_ArbitraryAxis); 	// 回転軸を設定
-
-			const XMVECTOR rotationQuat = XMQuaternionRotationAxis(axis, totalAngle);
-			const XMVECTOR rotatedOffset = XMVector3Rotate(baseOffset, rotationQuat);
-
-			XMFLOAT3 newPos = {};
-			XMStoreFloat3(&newPos, rotatedOffset);
-			m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
-		}
-
-		trailRender->SetTrailPoint(m_worldPosQuats);
-	}
-}
+//void ArbitraryRotationComponent::SimulationMove() {
+//
+//	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
+//
+//	if (trailRender != nullptr) {
+//		m_worldPosQuats.clear();
+//		auto transform = m_Object->GetComponent<TransformComponent>();
+//		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
+//		const auto centerPos = centerTrans->GetPosition();
+//		const auto centerQuat = centerTrans->GetQuaternion();
+//
+//		// ラジアンに変換
+//		const float startRad = XMConvertToRadians(m_StartAngle);
+//		const float endRad = XMConvertToRadians(m_EndAngle);
+//
+//		// 分割ステップ
+//		const float stepRad = (endRad - startRad) / m_SampleDivisions;
+//
+//		for (int i = 0; i <= m_SampleDivisions; ++i) {
+//
+//			float totalAngle = startRad + stepRad * i;
+//			totalAngle = NormalizeAngleRadian(totalAngle);
+//
+//			// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
+//			// なので後に修正
+//			//if (fabs(simulationRad) > m_TargetRotationAmount) {
+//			//	// 目標角度に到達したら、正確に目標角度に合わせる
+//			//	if (m_clockwise == true) {
+//			//		simulationRad = -m_TargetRotationAmount;
+//			//	}
+//			//	else {
+//			//		simulationRad = m_TargetRotationAmount;
+//			//	}
+//			//}
+//
+//			const XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
+//			XMVECTOR axis = XMVector3Normalize(m_ArbitraryAxis); 	// 回転軸を設定
+//
+//			const XMVECTOR rotationQuat = XMQuaternionRotationAxis(axis, totalAngle);
+//			const XMVECTOR rotatedOffset = XMVector3Rotate(baseOffset, rotationQuat);
+//
+//			XMFLOAT3 newPos = {};
+//			XMStoreFloat3(&newPos, rotatedOffset);
+//			m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
+//		}
+//
+//		trailRender->SetTrailPoint(m_worldPosQuats);
+//	}
+//}
 
 void ArbitraryRotationComponent::DefaultRollingMove() {
 	auto transform = m_Object->GetComponent<TransformComponent>();
@@ -350,67 +350,67 @@ void ArbitraryRotationComponent::SwordSlashMove() {
 
 }
 
-//void ArbitraryRotationComponent::SimulationMove() {
-//
-//	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
-//
-//	if (trailRender != nullptr) {
-//		m_worldPosQuats.clear();
-//		auto transform = m_Object->GetComponent<TransformComponent>();
-//		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
-//		const auto centerPos = centerTrans->GetPosition();
-//		const auto centerQuat = centerTrans->GetQuaternion();
-//
-//		// ラジアンに変換
-//		const float startRad = XMConvertToRadians(m_StartAngle);
-//		const float endRad = XMConvertToRadians(m_EndAngle);
-//
-//		float rotationSpeed = 0.0f;
-//
-//		// 時計回りか反時計回りか
-//		if (m_clockwise == true) {
-//			rotationSpeed = -DeltaTime * m_rotationSpeed;
-//		}
-//		else {
-//			rotationSpeed = DeltaTime * m_rotationSpeed;
-//		}
-//
-//		float simulationRad = m_nowAngleRadian;
-//
-//		// 剣の軌跡用の挙動の予測
-//		// １フレーム分軌跡が足りないのでここで足す
-//		while (fabs(simulationRad) < m_TargetRotationAmount) {
-//
-//			simulationRad += rotationSpeed; // 角度を更新間隔時間に基づいて計算
-//
-//			// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
-//			// なので後に修正
-//			if (fabs(simulationRad) > m_TargetRotationAmount) {
-//				// 目標角度に到達したら、正確に目標角度に合わせる
-//				if (m_clockwise == true) {
-//					simulationRad = -m_TargetRotationAmount;
-//				}
-//				else {
-//					simulationRad = m_TargetRotationAmount;
-//				}
-//			}
-//
-//			float totalAngle = simulationRad + startRad;
-//			totalAngle = NormalizeAngleRadian(totalAngle);
-//
-//			const XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
-//			XMVECTOR axis = m_ArbitraryAxis;	// 回転軸を設定
-//			axis = XMVector3Normalize(axis);
-//
-//			const XMVECTOR rotationQuat = XMQuaternionRotationAxis(axis, totalAngle);
-//
-//			const XMVECTOR rotatedOffset = XMVector3Rotate(baseOffset, rotationQuat);
-//
-//			XMFLOAT3 newPos = {};
-//			XMStoreFloat3(&newPos, rotatedOffset);
-//			m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
-//		}
-//
-//		trailRender->SetTrailPoint(m_worldPosQuats);
-//	}
-//}
+void ArbitraryRotationComponent::SimulationMove() {
+
+	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
+
+	if (trailRender != nullptr) {
+		m_worldPosQuats.clear();
+		auto transform = m_Object->GetComponent<TransformComponent>();
+		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
+		const auto centerPos = centerTrans->GetPosition();
+		const auto centerQuat = centerTrans->GetQuaternion();
+
+		// ラジアンに変換
+		const float startRad = XMConvertToRadians(m_StartAngle);
+		const float endRad = XMConvertToRadians(m_EndAngle);
+
+		float rotationSpeed = 0.0f;
+
+		// 時計回りか反時計回りか
+		if (m_clockwise == true) {
+			rotationSpeed = -DeltaTime * m_rotationSpeed;
+		}
+		else {
+			rotationSpeed = DeltaTime * m_rotationSpeed;
+		}
+
+		float simulationRad = m_nowAngleRadian;
+
+		// 剣の軌跡用の挙動の予測
+		// １フレーム分軌跡が足りないのでここで足す
+		while (fabs(simulationRad) < m_TargetRotationAmount) {
+
+			simulationRad += rotationSpeed; // 角度を更新間隔時間に基づいて計算
+
+			// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
+			// なので後に修正
+			if (fabs(simulationRad) > m_TargetRotationAmount) {
+				// 目標角度に到達したら、正確に目標角度に合わせる
+				if (m_clockwise == true) {
+					simulationRad = -m_TargetRotationAmount;
+				}
+				else {
+					simulationRad = m_TargetRotationAmount;
+				}
+			}
+
+			float totalAngle = simulationRad + startRad;
+			totalAngle = NormalizeAngleRadian(totalAngle);
+
+			const XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
+			XMVECTOR axis = m_ArbitraryAxis;	// 回転軸を設定
+			axis = XMVector3Normalize(axis);
+
+			const XMVECTOR rotationQuat = XMQuaternionRotationAxis(axis, totalAngle);
+
+			const XMVECTOR rotatedOffset = XMVector3Rotate(baseOffset, rotationQuat);
+
+			XMFLOAT3 newPos = {};
+			XMStoreFloat3(&newPos, rotatedOffset);
+			m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
+		}
+
+		trailRender->SetTrailPoint(m_worldPosQuats);
+	}
+}

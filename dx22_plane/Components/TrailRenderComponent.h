@@ -28,6 +28,7 @@ private:
 	bool m_RightLeftFlag = true; // ‰EŒü‚«‚©¶Œü‚«‚©
 	int m_TrailCount = 0;
 	int m_AverageSamplingNum = 0;
+	int m_TrailDivisionsCount = 1;
 	unsigned int m_TrailIndex = 0;
 	TrailMakeComponent* m_TrailMakeComponent = nullptr;
 
@@ -51,6 +52,7 @@ public:
 	void SetTipPoint(const float tip) { m_TipOffset = tip; };
 	void SetBasePoint(const float base) { m_BaseOffset = base; };
 	void SetRightLeftFlag(const bool flag) { m_RightLeftFlag = flag; };
+	void SetTrailDivisionsCount(const int count = 1) { m_TrailDivisionsCount = count; };
 
 	void ResetTrailCount() { m_TrailCount = 0; };
 	void RequestInversion() { m_InversionFlag = true; };

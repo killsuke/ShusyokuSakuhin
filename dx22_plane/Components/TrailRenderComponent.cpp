@@ -249,71 +249,73 @@ void TrailRenderComponent::TrailUpdate() {
 
 // トレイルのポイントを追加・補間する関数
 // サイン関数を使って、中央が一番大きく、端が小さくなるようにオフセットを調整
-void TrailRenderComponent::AddTrailPoints(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {
-
-	if (!m_TrailPoints.empty()) {
-		const TrailPoint& prev = m_TrailPoints.back();
-		const XMVECTOR quatPrev = prev.localQuat;
-
-		// SLERPで補間
-		const float step = 0.1f;
-		const XMVECTOR centerPrev = XMLoadFloat3(&prev.centerLocalPosition);
-		const XMVECTOR centerNow = XMLoadFloat3(&center);
-
-		// 前と次のセンターの距離を測って、一定距離ごとに補間点を追加
-		const float length = XMVectorGetX(XMVector3Length(centerNow - centerPrev));
-		const int div = std::max(1, (int)(length / step));
-
-		for (int i = 1; i < div; ++i) {
-			const float t = (float)i / div;
-
-			// SLERPで回転補間
-			const XMVECTOR quatInterp = XMQuaternionSlerp(quatPrev, quaternion, t);
-			const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quatInterp);
-			const XMVECTOR right = rotMtx.r[0];
-
-			float offsetValue = 0.0f;
-			// 速度に応じてオフセット量を調整
-			if (trailSpeed >= 1.0f) {
-				offsetValue = trailSpeed * (trailSpeed * 0.001f);
-			}
-
-			// sinでずらし量を調整（πを掛けると中央が最大になる）
-			float offsetScale = sinf(t * XM_PI) * offsetValue;
-			XMVECTOR newCenter = XMVectorLerp(centerPrev, centerNow, t);
-			const XMVECTOR offsetDir = XMVector3Normalize(newCenter - centerPrev);
-
-			// 向きに合わせてオフセットでズラす
-			newCenter += right * offsetScale;
-
-			const XMVECTOR basePos = newCenter + right * m_BaseOffset;
-			const XMVECTOR tipPos = newCenter + right * m_TipOffset;
-
-			TrailPoint mid;
-			XMStoreFloat3(&mid.centerLocalPosition, newCenter);
-			XMStoreFloat3(&mid.basePosition, basePos);
-			XMStoreFloat3(&mid.tipPosition, tipPos);
-			mid.localQuat = quatInterp;
-			mid.lifeTime = 0.0f;
-			m_TrailPoints.push_back(mid);
-		}
-
-		m_SampleDivisions.push_back(div);
-	}
-
-	// 最後に今フレームの点を push
-	const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quaternion);
-	const XMVECTOR right = rotMtx.r[0];
-	const XMVECTOR centerVec = XMLoadFloat3(&center);
-
-	TrailPoint newPoint;
-	XMStoreFloat3(&newPoint.centerLocalPosition, centerVec);
-	XMStoreFloat3(&newPoint.basePosition, centerVec + right * m_BaseOffset);
-	XMStoreFloat3(&newPoint.tipPosition, centerVec + right * m_TipOffset);
-	newPoint.localQuat = quaternion;
-	newPoint.lifeTime = 0.0f;
-	m_TrailPoints.push_back(newPoint);
-}
+//void TrailRenderComponent::AddTrailPoints(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {
+//
+//	if (!m_TrailPoints.empty()) {
+//		const TrailPoint& prev = m_TrailPoints.back();
+//		const XMVECTOR quatPrev = prev.localQuat;
+//
+//		// SLERPで補間
+//		const float step = 0.1f;
+//		const XMVECTOR centerPrev = XMLoadFloat3(&prev.centerLocalPosition);
+//		const XMVECTOR centerNow = XMLoadFloat3(&center);
+//
+//		// 前と次のセンターの距離を測って、一定距離ごとに補間点を追加
+//		const float length = XMVectorGetX(XMVector3Length(centerNow - centerPrev));
+//	//	const int div = std::max(1, (int)(length / step));
+//
+//		const int div = std::max(1, m_TrailDivisionsCount);
+//
+//		for (int i = 1; i < div; ++i) {
+//			const float t = (float)i / div;
+//
+//			// SLERPで回転補間
+//			const XMVECTOR quatInterp = XMQuaternionSlerp(quatPrev, quaternion, t);
+//			const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quatInterp);
+//			const XMVECTOR right = rotMtx.r[0];
+//
+//			float offsetValue = 0.0f;
+//			// 速度に応じてオフセット量を調整
+//			if (trailSpeed >= 1.0f) {
+//				offsetValue = trailSpeed * (trailSpeed * 0.001f);
+//			}
+//
+//			// sinでずらし量を調整（πを掛けると中央が最大になる）
+//			float offsetScale = sinf(t * XM_PI) * offsetValue;
+//			XMVECTOR newCenter = XMVectorLerp(centerPrev, centerNow, t);
+//
+//			// 一旦見づらいので封印
+//			// 向きに合わせてオフセットでズラす
+//			newCenter += right * offsetScale;
+//
+//			const XMVECTOR basePos = newCenter + right * m_BaseOffset;
+//			const XMVECTOR tipPos = newCenter + right * m_TipOffset;
+//
+//			TrailPoint mid;
+//			XMStoreFloat3(&mid.centerLocalPosition, newCenter);
+//			XMStoreFloat3(&mid.basePosition, basePos);
+//			XMStoreFloat3(&mid.tipPosition, tipPos);
+//			mid.localQuat = quatInterp;
+//			mid.lifeTime = 0.0f;
+//			m_TrailPoints.push_back(mid);
+//		}
+//
+//		m_SampleDivisions.push_back(div);
+//	}
+//
+//	// 最後に今フレームの点を push
+//	const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quaternion);
+//	const XMVECTOR right = rotMtx.r[0];
+//	const XMVECTOR centerVec = XMLoadFloat3(&center);
+//
+//	TrailPoint newPoint;
+//	XMStoreFloat3(&newPoint.centerLocalPosition, centerVec);
+//	XMStoreFloat3(&newPoint.basePosition, centerVec + right * m_BaseOffset);
+//	XMStoreFloat3(&newPoint.tipPosition, centerVec + right * m_TipOffset);
+//	newPoint.localQuat = quaternion;
+//	newPoint.lifeTime = 0.0f;
+//	m_TrailPoints.push_back(newPoint);
+//}
 
 
 void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& points) {
@@ -382,7 +384,7 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 			}
 		}
 
-		m_AverageSamplingNum = mode;
+		m_AverageSamplingNum = mode/* + (vecSize / 4)*/;
 	}
 	else {
 		m_AverageSamplingNum = 1;
@@ -401,4 +403,71 @@ void TrailRenderComponent::InversionEvent() {
 
 		m_InversionFlag = false;
 	}
+}
+
+void TrailRenderComponent::AddTrailPoints(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {
+
+	if (!m_TrailPoints.empty()) {
+		const TrailPoint& prev = m_TrailPoints.back();
+		const XMVECTOR quatPrev = prev.localQuat;
+
+		// SLERPで補間
+		const float step = 0.1f;
+		const XMVECTOR centerPrev = XMLoadFloat3(&prev.centerLocalPosition);
+		const XMVECTOR centerNow = XMLoadFloat3(&center);
+
+		// 前と次のセンターの距離を測って、一定距離ごとに補間点を追加
+		const float length = XMVectorGetX(XMVector3Length(centerNow - centerPrev));
+		const int div = std::max(1, (int)(length / step));
+
+		for (int i = 1; i < div; ++i) {
+			const float t = (float)i / div;
+
+			// SLERPで回転補間
+			const XMVECTOR quatInterp = XMQuaternionSlerp(quatPrev, quaternion, t);
+			const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quatInterp);
+			const XMVECTOR right = rotMtx.r[0];
+
+			float offsetValue = 0.0f;
+			// 速度に応じてオフセット量を調整
+			if (trailSpeed >= 1.0f) {
+				offsetValue = trailSpeed * (trailSpeed * 0.001f);
+			}
+
+			// sinでずらし量を調整（πを掛けると中央が最大になる）
+			float offsetScale = sinf(t * XM_PI) * offsetValue;
+			XMVECTOR newCenter = XMVectorLerp(centerPrev, centerNow, t);
+			const XMVECTOR offsetDir = XMVector3Normalize(newCenter - centerPrev);
+
+			// 一旦見づらいので封印
+			// 向きに合わせてオフセットでズラす
+			newCenter += right * offsetScale;
+
+			const XMVECTOR basePos = newCenter + right * m_BaseOffset;
+			const XMVECTOR tipPos = newCenter + right * m_TipOffset;
+
+			TrailPoint mid;
+			XMStoreFloat3(&mid.centerLocalPosition, newCenter);
+			XMStoreFloat3(&mid.basePosition, basePos);
+			XMStoreFloat3(&mid.tipPosition, tipPos);
+			mid.localQuat = quatInterp;
+			mid.lifeTime = 0.0f;
+			m_TrailPoints.push_back(mid);
+		}
+
+		m_SampleDivisions.push_back(div);
+	}
+
+	// 最後に今フレームの点を push
+	const XMMATRIX rotMtx = XMMatrixRotationQuaternion(quaternion);
+	const XMVECTOR right = rotMtx.r[0];
+	const XMVECTOR centerVec = XMLoadFloat3(&center);
+
+	TrailPoint newPoint;
+	XMStoreFloat3(&newPoint.centerLocalPosition, centerVec);
+	XMStoreFloat3(&newPoint.basePosition, centerVec + right * m_BaseOffset);
+	XMStoreFloat3(&newPoint.tipPosition, centerVec + right * m_TipOffset);
+	newPoint.localQuat = quaternion;
+	newPoint.lifeTime = 0.0f;
+	m_TrailPoints.push_back(newPoint);
 }

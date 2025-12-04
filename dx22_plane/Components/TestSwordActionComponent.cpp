@@ -106,14 +106,20 @@ void TestSwordActionComponent::Update() {
 			//goAround->SetActiveFlag(true);
 			goAround->ResetVariables();
 
-			goAround->SetSampleDivisions(100);
+			goAround->SetSampleDivisions(14);
+
+			TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
+			if (trail != nullptr) {
+				trail->SetTrailDivisionsCount(100);
+			}
 
 			if (isRightLeft == true) {
-				goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
-				//	goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
+				//goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
+					goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
 			}
 			else {
-				goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
+			//	goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
+				goAround->SetStartAndEndAngle(60.0f, -60.0f, false);
 			}
 
 			// 回転の動きのシミュレーション（軌跡用）
@@ -156,7 +162,7 @@ void TestSwordActionComponent::Update() {
 		}
 	}
 
-
+	const bool isAroundActive2 = goAround->GetRollingActive();
 	if (isAroundActive == true) {
 		SwordAction();
 	}
