@@ -194,7 +194,7 @@ LoadStageScene::LoadStageScene() {
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
 		rollingRender->ChangeTexture("assets/texture/sword.png");
-		rollingRender->SetBlurVelocity({ 0.0f,0.3f });
+		rollingRender->SetBlurVelocity({ 0.0f,0.0f });
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();

@@ -106,11 +106,14 @@ void TestSwordActionComponent::Update() {
 			//goAround->SetActiveFlag(true);
 			goAround->ResetVariables();
 
+			goAround->SetSampleDivisions(100);
+
 			if (isRightLeft == true) {
-				goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
+				goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
+				//	goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
 			}
 			else {
-				goAround->SetStartAndEndAngle(60.0f, -60.0f, false);
+				goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
 			}
 
 			// 回転の動きのシミュレーション（軌跡用）
