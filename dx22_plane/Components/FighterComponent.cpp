@@ -87,6 +87,6 @@ void FighterComponent::OnHit(const HitEvent& event) {
 	if (event.target != m_Object) {
 		return; // ©•ªˆ¶‚¶‚á‚È‚¢‚È‚ç–³‹
 	}
-
+	// ƒ_ƒ[ƒW‚ğó‚¯‚éˆ—
 	DamageProcess();
 }

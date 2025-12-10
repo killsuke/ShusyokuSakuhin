@@ -756,7 +756,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	bufferDesc.ByteWidth = sizeof(LineThickness);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
-	//	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
 	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
 
 	bufferDesc.ByteWidth = sizeof(BlurBuffer);

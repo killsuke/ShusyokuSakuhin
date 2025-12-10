@@ -167,6 +167,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Manager\EventBusManager.cpp" />
     <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="DebugSystem\DebugSystem.h" />
     <ClInclude Include="Manager\EventBusManager.h" />
     <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />

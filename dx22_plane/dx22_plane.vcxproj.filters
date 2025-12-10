@@ -28,6 +28,9 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{011f208d-19b8-413c-a3de-e9e9e6037bca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DebugSystem">
+      <UniqueIdentifier>{22874ba1-41bd-4134-9802-4f0c51d0015c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dx11helper.cpp">
@@ -371,6 +374,9 @@
     </ClCompile>
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugSystem\DebugSystem.cpp">
+      <Filter>DebugSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -757,6 +763,9 @@
     </ClInclude>
     <ClInclude Include="Components\RenderMotionBlurComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugSystem\DebugSystem.h">
+      <Filter>DebugSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -188,6 +188,7 @@ LoadStageScene::LoadStageScene() {
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
 		effectRender->ChangeTexture("assets/texture/baran.png");
+	//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		auto rollingRender = rolling->AddComponent<RenderMotionBlurComponent>();

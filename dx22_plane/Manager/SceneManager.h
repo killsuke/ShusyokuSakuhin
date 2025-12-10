@@ -44,6 +44,7 @@ public:
 	static bool GetSCFrag() { return sceneChangeFg; };
 	
 	static Sound GetSound() { return sound; };
+	static Scene* GetScene() { return m_pScene.get(); };
 
 private:
 	static std::unique_ptr<Scene> m_pScene;		// 現在のシーン
@@ -53,5 +54,4 @@ private:
 	static float waitTime;	// シーン遷移を少し待つ
 	static float waitTimeCounter;
 	inline static Sound sound; // サウンド
-	static bool m_ActiveGame;
 };

@@ -3,10 +3,10 @@
 #include "GameObjectManager.h"
 #include "HitStopManager.h"
 #include "Application.h"
+#include "DebugSystem/DebugSystem.h"
 
 std::unique_ptr<Scene> SceneManager::m_pScene;	// ここで書くことでちゃんと定義できる
 bool SceneManager::sceneChangeFg = false;	// シーンチェンジのフラグ
-bool SceneManager::m_ActiveGame = true;
 float SceneManager::waitTime = 0.0f;	// シーンチェンジの待ち時間
 float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
 
@@ -33,54 +33,16 @@ void SceneManager::UnInit() {
 void SceneManager::Update() {
 	Input::Update();
 
-#if _DEBUG
+	DebugSystem::Update();
 
-	if (Input::GetKeyTrigger(VK_INSERT)) {
-		DirectXRender::SwitchingFillMode();
-	}
-#endif
+	if (m_pScene != nullptr) {
 
-	// 即席ポーズ画面実装
-	if (Input::GetKeyTrigger(VK_CONTROL) == true) {
-		m_ActiveGame = !m_ActiveGame;
-
-		std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("Camera");
-
-		if (m_ActiveGame == false) {
-			for (const auto& obj : objs) {
-				obj->SetActiveState(ActiveState::UPDATE_STOP);
-			}
-		}
-		else {
-			for (const auto& obj : objs)
-			{
-				obj->SetActiveState(ActiveState::ACTIVE);
-			}
-		}
-	}
-
-	if (m_ActiveGame == true) {
-		HitStopManager::Update();
-
-		// ポインタ内に入ってるシーンの更新
-		m_pScene->Update();
-	}
-	else {
-		if (Input::GetKeyTrigger(VK_TAB) == true) {
-			std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("Camera");
-
-			for (const auto& obj : objs) {
-
-				obj->SetActiveState(ActiveState::ACTIVE);
-				obj->Update();
-				obj->SetActiveState(ActiveState::UPDATE_STOP);
-			}
-
+		if (m_pScene->GetSceneActive() == true)
+		{
 			HitStopManager::Update();
 
 			// ポインタ内に入ってるシーンの更新
 			m_pScene->Update();
-
 		}
 	}
 

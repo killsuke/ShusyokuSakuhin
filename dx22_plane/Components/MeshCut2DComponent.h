@@ -14,5 +14,5 @@ public:
 	~MeshCut2DComponent() = default;
 	void Update() override;
 
-
+	
 };

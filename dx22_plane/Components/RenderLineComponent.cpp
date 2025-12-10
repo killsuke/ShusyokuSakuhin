@@ -9,6 +9,7 @@
 #include "FollowPositionComponent.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -42,10 +43,10 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 
 void RenderLineComponent::Update()
 {
-	auto transform = m_Object->GetComponent<TransformComponent>();	
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
 		deviceContext->Map(m_VertexBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
@@ -53,24 +54,27 @@ void RenderLineComponent::Update()
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
 		// ここで全頂点データを更新
-		auto pos_S = p_startObj->GetComponent<TransformComponent>()->GetPosition();
-		auto pos_E = p_endObj->GetComponent<TransformComponent>()->GetPosition();
-		auto start_Q = p_startObj->GetComponent<TransformComponent>()->GetQuaternion();
+		Vector3 pos_S = p_startObj->GetComponent<TransformComponent>()->GetPosition();
+		Vector3 pos_E = p_endObj->GetComponent<TransformComponent>()->GetPosition();
+//		XMVECTOR start_Q = p_startObj->GetComponent<TransformComponent>()->GetQuaternion();
 
-		float length = Vector3::Distance(pos_S, pos_E);
+	//	float length = Vector3::Distance(pos_S, pos_E);
 
-		Vector3 rotation = transform->GetRotation();
+	//	XMFLOAT3 rotation = transform->GetRotation();
 
-		Vector3 dir = Vector3::Transform(Vector3(1.0f, 0.0f, 0.0f), start_Q);
+		//XMVECTOR dir = XMVector3Rotate(
+		//	XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f),	// 回転させたいベクトル
+		//	start_Q									// クォータニオン
+		//);
 
 
-		pos_S.z -= 4.0f;
+	//	pos_S.z -= 4.0f;
 		vtx[0].position = pos_S;
 		vtx[0].normal = Vector3(0.0f, 1.0f, 0.0f);
 		vtx[0].color = m_Color;
 		vtx[0].uv = Vector2(0.0f, 0.0f);
 
-		pos_E.z -= 4.0f;
+//		pos_E.z -= 4.0f;
 		vtx[1].position = pos_E;
 		vtx[1].normal = Vector3(0.0f, 1.0f, 0.0f);
 		vtx[1].color = m_Color;
@@ -78,6 +82,7 @@ void RenderLineComponent::Update()
 
 		deviceContext->Unmap(m_VertexBuffer.GetBuffer(), 0);
 
+		// 線の太さ
 		LineThickness thick;
 		thick.thickness = m_thickness;
 
@@ -99,7 +104,7 @@ void RenderLineComponent::Update()
 		auto textures = m_Mesh->GetTextures();
 
 		//マテリアル数分ループ 
-		for (int i = 0; i < subsets.size(); i++)
+		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];

@@ -113,14 +113,38 @@ void Stage1Scene::Init()
 
 	// モーションブラー用
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+	/*	auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetScale({ 30.0f,30.0f,30.0f });
 		auto rend = testObj->AddComponent<RenderMotionBlurComponent>();
 		rend->CreateMesh<CubeMesh>();
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
 		rend->ChangeTexture("assets/texture/dice.png");
-		rend->SetBlurVelocity({ 0.5f,0.0f });
+		rend->SetBlurVelocity({ 0.5f,0.0f });*/
+
+	}
+
+	// メッシュ接断用
+	{
+		auto meshCutObj = GameObjectManager::AddObject("meshCutObj", "Test");
+		auto meshCutTrans = meshCutObj->AddComponent<TransformComponent>();
+		meshCutTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+		meshCutTrans->SetScale({ 70.0f,70.0f,1.0f });
+		auto meshRend = meshCutObj->AddComponent<Render3DComponent>();
+		meshRend->CreateMesh<SquareMesh>();
+		meshRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		meshRend->SetColor({ 0.0f,0.0f,1.0f,1.0f });
+
+
+		auto testLine = GameObjectManager::AddObject("line","Line");
+		TransformComponent* trans = testLine->AddComponent<TransformComponent>();
+
+		auto lineRender = testLine->AddComponent<RenderLineComponent>();
+		trans->SetPosition({ 0.0f,0.0f,0.0f });
+		lineRender->SetStartAndEndPosition({ 0.0f,70.0f,0.0f }, { 0.0f,-70.0f,0.0f });
+		lineRender->ChangeTexture("assets/texture/NoTexture.png");
+		lineRender->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		lineRender->SetThickness(3.0f);
 
 	}
 
