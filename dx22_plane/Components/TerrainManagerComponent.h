@@ -20,5 +20,5 @@ public:
 	~TerrainManagerComponent() = default;
 
 	void Update() override;
-	void CreateTerrains(std::vector<TerrainStatus> status); // 地形を生成する関数
+	void CreateTerrains(std::vector<TerrainStatus> status,const float centerZ); // 地形を生成する関数
 };

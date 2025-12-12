@@ -86,7 +86,7 @@ ID3D11BlendState* g_BlendStateATC = nullptr;
 
 ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
 
-FLOAT DirectXRender::m_ClearColor[4] = {0.5f,0.5f, 0.5f, 1.0f};
+FLOAT DirectXRender::m_ClearColor[4] = {0.4f,0.75f, 1.0f, 1.0f};
 
 DirectXRender::DirectXRender() {
 
@@ -117,7 +117,7 @@ HRESULT DirectXRender::Init() {
 	MaterialBufferCreate();
 	//MaterialSetting();
 
-	SetBlendState(1);
+	SetBlendState(BS_ALPHABLEND);
 
 	VeiwProjConstantCreate();
 
@@ -518,8 +518,8 @@ void DirectXRender::LightSetting() {
 	LIGHT light{};
 	light.Direction = Vector4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
 	light.Direction.Normalize();
-	light.Diffuse = Color(1.5f, 1.5f, 1.0f, 1.0f);	// 平行光源の強さと色
-	light.Ambient = Color(0.7f, 0.7f, 0.7f, 1.0f);	// 環境光の強さと色
+	light.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);	// 平行光源の強さと色
+	light.Ambient = Color(0.5f, 0.5f, 0.5f, 1.0f);	// 環境光の強さと色
 
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
 }

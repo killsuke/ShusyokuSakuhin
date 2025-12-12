@@ -58,7 +58,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 			}
 
 			
-			// データを行ベクターに追加 
+			// データを行ベクターに追加
 			CSV_Data nowcell = { cellName,Vector2(posx, posy) };	// 位置補正と追加
 			row.push_back(nowcell);
 			// X座標を更新

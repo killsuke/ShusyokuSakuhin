@@ -11,4 +11,6 @@ public:
 	void Update();
 
 	void TargetAndScroolCreate();
+	void BamboosCreate();
+	void BackGroundCreate();
 };

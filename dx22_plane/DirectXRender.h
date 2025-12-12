@@ -32,6 +32,7 @@ enum class ECullingState {
 	MAX_RASTERIZERSTATE
 };
 
+// フィルモード
 enum class EFillMode {
 	FILL_SOLID = 0,
 	FILL_WIREFRAME,

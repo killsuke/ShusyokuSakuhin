@@ -58,14 +58,18 @@ LoadStageScene::LoadStageScene() {
 	camera->AddComponent<SpringComponent>();
 
 	{
-		auto skydome = GameObjectManager::AddObject("skyDome", "SkyDome");
+		/*auto skydome = GameObjectManager::AddObject("skyDome", "SkyDome");
 		auto skyTrans = skydome->AddComponent<TransformComponent>();
 		skyTrans->SetScale({ 1000.0f,500.0f,1000.0f });
 		auto skyRend = skydome->AddComponent<SkyDomeRenderComponent>();
 		skyRend->CreateMesh<SkyDomeMesh>();
 		skyRend->SetShader("unlitTextureVSSkyDome.hlsl", "shader/unlitTexturePS.hlsl");
-		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");
+		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");*/
 	}
+
+	BackGroundCreate();
+
+	
 
 	{
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
@@ -86,27 +90,11 @@ LoadStageScene::LoadStageScene() {
 		//	enemyJson->MakeSampleStatus(); // サンプルの敵キャラ情報を作成
 
 		str->LoadStageCSV("Stage1.csv", *stageRoadCSV); // ステージのCSVを読み込む
-		teM->CreateTerrains(terrainStatus); // 読み込んだCSVからTerrainを生成
+		teM->CreateTerrains(terrainStatus, 10.0f); // 読み込んだCSVからTerrainを生成
 		enM->CreateEnemies(enemyStatus); // 読み込んだJSONからEnemyを生成
 	}
 
-	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
-		auto testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetPosition({ -30.0f, 30.0f, 10.0f });
-		testTrans->SetScale({ 30.0f,30.0f,30.0f });
-		testTrans->SetRotation({ 90.0f,0.0f,0.0f });
-		//	auto collider = testObj->AddComponent<ColliderComponent>();
-		//	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
-		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
-		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Tree/uploads_files_4857495_Tree.fbx",
-			"assets/model/Tree");
-
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-		//	rend->ChangeTexture("assets/texture/NoTexture.png");
-		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-	}
+	BamboosCreate();
 
 	GameObject* playOBJ = nullptr;
 	{
@@ -160,7 +148,7 @@ LoadStageScene::LoadStageScene() {
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
 		rollingTrans->SetPosition({ 30.0f,-9.0f,3.0f });
-	//	rollingTrans->SetRotation({ 90.0f,0.0f,0.0f });
+		//	rollingTrans->SetRotation({ 90.0f,0.0f,0.0f });
 
 		auto rollingColl = rolling->AddComponent<ColliderComponent>();
 		rollingColl->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
@@ -188,9 +176,9 @@ LoadStageScene::LoadStageScene() {
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
 		effectRender->ChangeTexture("assets/texture/baran.png");
-	//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+		//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
-	//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
+		//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		auto rollingRender = rolling->AddComponent<RenderMotionBlurComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
@@ -544,7 +532,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 
 		auto point2 = GameObjectManager::AddObject("CameraPoint2", "CameraPoint");
 		auto pointTrans2 = point2->AddComponent<TransformComponent>();
-		pointTrans2->SetScale({ 30.0f, 5.0f, 10.0f });
+		pointTrans2->SetScale({ 40.0f, 5.0f, 10.0f });
 		pointTrans2->AddPosition({ 305.0f, -30.0f, 0.0f });
 		auto pointCamera2 = point2->AddComponent<CameraPointComponent>();
 		auto pointColl2 = point2->AddComponent<ColliderComponent>();
@@ -569,7 +557,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		auto point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
 		auto pointTrans4 = point4->AddComponent<TransformComponent>();
 		pointTrans4->SetScale({ 10.0f, 90.0f, 10.0f });
-		pointTrans4->AddPosition({ 330.0f, -260.0f, 0.0f });
+		pointTrans4->AddPosition({ 330.0f, -270.0f, 0.0f });
 		auto pointCamera4 = point4->AddComponent<CameraPointComponent>();
 		auto pointColl4 = point4->AddComponent<ColliderComponent>();
 
@@ -614,5 +602,147 @@ void LoadStageScene::TargetAndScroolCreate() {
 		pointRend7->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));
 		pointCamera7->SetBeforeAndNextTargetObj(*target7, *target8);
 		pointCamera7->SetScrollDirection(SCROLL_IN_LEFT);
+	}
+}
+
+void LoadStageScene::BamboosCreate() {
+
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Terrain");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ -90.0f, 10.0f, 10.0f });
+		testTrans->SetScale({ 3.0f,3.0f,80.0f });
+		testTrans->SetRotation({ 90.0f,0.0f,0.0f });
+		auto collider = testObj->AddComponent<ColliderComponent>();
+		collider->SetOffsetSizeAABB({ 5.0f,80.0f,-70.0f });
+		collider->SetOffsetCenterAABB({ 0.0f,30.0f,0.0f });
+
+		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/bamboos/bambooRod1.fbx",
+			"assets/model/bamboos");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	}
+
+	{
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetPosition({ 30.0f, -20.0f, 20.0f });
+		testTrans->SetScale({ 60.0f,60.0f,60.0f });
+		testTrans->SetRotation({ 0.0f,45.0f,0.0f });
+		//	auto collider = testObj->AddComponent<ColliderComponent>();
+		//	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
+		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
+		auto rend = testObj->AddComponent<Render3DComponent>();
+		rend->LoadModelMesh("assets/model/bamboos/bambooGrass1.fbx",
+			"assets/model/bamboos");
+
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	}
+
+
+}
+
+void LoadStageScene::BackGroundCreate() {
+
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ -80.0f,80.0f,400.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 40.0f,60.0f,300.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+	}
+
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 200.0f,80.0f,250.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		trans->SetRotation({ 0.0f,0.0f,5.0f });
+		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//	rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(1000.0f, 1000.0f));
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 400.0f,-270.0f,400.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 650.0f,-300.0f,350.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(900.0f, 900.0f));
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 500.0f,-350.0f,300.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(900.0f, 900.0f));
+	}
+
+	// 設置物をさらに増やす
+	// 三角形と五角形メッシュを作成
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 230.0f,-110.0f,30.0f });
+		trans->SetScale({ 110.0f,90.0f,5.0f });
+		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
+		rend->CreateMesh<CubeMesh>();
+		rend->ChangeTexture("assets/texture/testTerrain.png");
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 250.0f,-250.0f,30.0f });
+		trans->SetScale({ 110.0f,90.0f,5.0f });
+		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
+		rend->CreateMesh<CubeMesh>();
+		rend->ChangeTexture("assets/texture/testTerrain.png");
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 	}
 }

@@ -21,7 +21,7 @@ void TerrainManagerComponent::Update() {
 
 }
 
-void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) {
+void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status, const float centerZ) {
 	// ‚±‚Ì’†‚Å¶¬‚·‚é
 	if(m_csvObjData.empty()) {
 		return; // ƒf[ƒ^‚ª‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
@@ -49,26 +49,29 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status) 
 		
 		auto terrainObj = GameObjectManager::AddObject(name,"Terrain");
 		auto transform = terrainObj->AddComponent<TransformComponent>();
-		transform->SetPosition({ data.position.x, data.position.y, 10.0f });
+		transform->SetPosition({ data.position.x, data.position.y, centerZ });
 		transform->SetScale(tS.scale);
 		transform->SetRotation(tS.angle);
 
-		auto collider = terrainObj->AddComponent<ColliderComponent>();
-		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+		if (kind != "T_Dummy") {
 
-		if (kind == "T_Move") {
-			auto move = terrainObj->AddComponent<MoveTerrainComponent>();
-			move->SetMoveSpeed(80.0f);
-			move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
+			auto collider = terrainObj->AddComponent<ColliderComponent>();
+			collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+
+			if (kind == "T_Move") {
+				auto move = terrainObj->AddComponent<MoveTerrainComponent>();
+				move->SetMoveSpeed(80.0f);
+				move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
+			}
+
+			auto rigid = terrainObj->AddComponent<RigidBodyComponent>();
+			rigid->SetMass(2.0f);
+
+			auto render = terrainObj->AddComponent<Render3DComponent>();
+			render->CreateMesh<CubeMesh>();
+			render->SetShader(tS.shaderVS, tS.shaderPS);
+			render->ChangeTexture(tS.texture);
 		}
-
-		auto rigid = terrainObj->AddComponent<RigidBodyComponent>();
-		rigid->SetMass(2.0f);
-
-		auto render = terrainObj->AddComponent<Render3DComponent>();
-		render->CreateMesh<CubeMesh>();
-		render->SetShader(tS.shaderVS,tS.shaderPS);
-		render->ChangeTexture(tS.texture);
 
 		//CubeMesh cubeMeshCollider;
 		//auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();

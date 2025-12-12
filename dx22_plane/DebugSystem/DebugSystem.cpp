@@ -11,6 +11,8 @@
 #include <string>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
+
 namespace {
 
 	Vector3 DebugUIScale = Vector3(60.0f, 30.0f, 1.0f);
@@ -156,11 +158,21 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		if (scene != nullptr) {
 			scene->SetSceneActive(false);
 		}
+
+		// デバッグUIの色変更
+		Render3DComponent* dbRender = m_DebugUI_F2->GetComponent<Render3DComponent>();
+		dbRender->SetColor(XMFLOAT4(1.0f, 0.5f, 0.5f, 1.0f));
+	}
+	else {
+		// デバッグUIの色変更
+		Render3DComponent* dbRender = m_DebugUI_F2->GetComponent<Render3DComponent>();
+		dbRender->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 
 void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 
+	// コマ送り
 	if (Input::GetKeyTrigger(VK_F3) && m_ScreenStop == true) {
 		for (const auto& obj : objs) {
 

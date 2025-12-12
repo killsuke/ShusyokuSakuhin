@@ -49,6 +49,22 @@
             "shaderPS": "shader/litTexturePS.hlsl"
         },
 	{
+            "kind": "T_BigFloor",
+            "scale": {
+                "x": 115.0,
+                "y": 100.0,
+                "z": 20.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/testTerrain.png",
+            "shaderVS": "shader/litTextureVS.hlsl",
+            "shaderPS": "shader/litTexturePS.hlsl"
+        },
+	{
             "kind": "T_ShortFloor",
             "scale": {
                 "x": 85.0,
@@ -102,6 +118,22 @@
                 "x": 20.0,
                 "y": 5.0,
                 "z": 20.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "assets/texture/testTerrain.png",
+            "shaderVS": "shader/litTextureVS.hlsl",
+            "shaderPS": "shader/litTexturePS.hlsl"
+        },
+	{
+            "kind": "T_Dummy",
+            "scale": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "angle": {
                 "x": 0.0,
