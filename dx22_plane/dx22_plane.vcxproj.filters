@@ -378,6 +378,9 @@
     <ClCompile Include="DebugSystem\DebugSystem.cpp">
       <Filter>DebugSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Components\ProjectileMotionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -766,6 +769,9 @@
     </ClInclude>
     <ClInclude Include="DebugSystem\DebugSystem.h">
       <Filter>DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ProjectileMotionComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

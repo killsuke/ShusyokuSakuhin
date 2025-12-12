@@ -203,6 +203,7 @@
     <ClCompile Include="Components\EnemyManagerComponent.cpp" />
     <ClCompile Include="Components\FollowPositionComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp" />
+    <ClCompile Include="Components\ProjectileMotionComponent.cpp" />
     <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
     <ClCompile Include="HitStopManager.cpp" />
@@ -327,6 +328,7 @@
     <ClInclude Include="Components\EnemyManagerComponent.h" />
     <ClInclude Include="Components\FollowPositionComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurComponent.h" />
+    <ClInclude Include="Components\ProjectileMotionComponent.h" />
     <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
     <ClInclude Include="HitStopManager.h" />

@@ -1,10 +1,12 @@
 #include "EnemyActionComponent.h"
 #include "Transform.h"
+#include "Collider.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "RenderBillboard.h"
 #include "Mesh/SquareMesh.h"
 #include "Effect2DComponent.h"
+#include "ProjectileMotionComponent.h"
 
 using namespace DirectX;
 
@@ -16,6 +18,10 @@ EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // É\Å[Égî‘çÜÇê›íË
 	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		CreateDamageEffect(e);
+		});
+
+	EventBusManager::Subscribe<DeadEvent>([&](const DeadEvent& e) {
+		ActionOff(e);
 		});
 }
 
@@ -49,4 +55,24 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 	mesh->SetInitialCut(6.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
+}
+
+void EnemyActionComponent::ActionOff(const DeadEvent& event) {
+
+	if (event.target != m_Object) {
+		return; // é©ï™à∂Ç∂Ç·Ç»Ç¢Ç»ÇÁñ≥éã
+	}
+
+	ColliderComponent* coll = m_Object->GetComponent<ColliderComponent>();
+	if (coll != nullptr) {
+		coll->SetActiveColliderFlag(false);
+	}
+
+	ProjectileMotionComponent* proj = m_Object->GetComponent<ProjectileMotionComponent>();
+	if (proj != nullptr) {
+		proj->InitProjectile(XMFLOAT3(0.5f,1.0f,-1.0f), XMFLOAT3(0.0f,0.0f,10.0f), 25.0f);
+	}
+
+	m_IsActiveFlag = false;
+
 }

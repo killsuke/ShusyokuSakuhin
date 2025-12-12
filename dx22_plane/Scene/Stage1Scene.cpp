@@ -20,6 +20,8 @@
 #include "Components/Collider.h"
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/TrailRenderComponent.h"
+#include "Components/ProjectileMotionComponent.h"
+#include "Components/RigidBodyComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -126,7 +128,7 @@ void Stage1Scene::Init()
 
 	// ƒƒbƒVƒ…Ú’f—p
 	{
-		auto meshCutObj = GameObjectManager::AddObject("meshCutObj", "Test");
+	/*	auto meshCutObj = GameObjectManager::AddObject("meshCutObj", "Test");
 		auto meshCutTrans = meshCutObj->AddComponent<TransformComponent>();
 		meshCutTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 		meshCutTrans->SetScale({ 70.0f,70.0f,1.0f });
@@ -144,7 +146,7 @@ void Stage1Scene::Init()
 		lineRender->SetStartAndEndPosition({ 0.0f,70.0f,0.0f }, { 0.0f,-70.0f,0.0f });
 		lineRender->ChangeTexture("assets/texture/NoTexture.png");
 		lineRender->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-		lineRender->SetThickness(3.0f);
+		lineRender->SetThickness(3.0f);*/
 
 	}
 
@@ -164,6 +166,22 @@ void Stage1Scene::Init()
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 		//	rend->ChangeTexture("assets/texture/NoTexture.png");
 		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+	}
+
+	{
+		GameObject* testObj = GameObjectManager::AddObject("testObj", "Test");
+		TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
+		testTrans->SetScale({10.0f,10.0f,1.0f});
+		RigidBodyComponent* rigid = testObj->AddComponent<RigidBodyComponent>();
+		rigid->SetGravityFlag(true);
+		rigid->SetMass(2.0f);
+		ProjectileMotionComponent* proj = testObj->AddComponent<ProjectileMotionComponent>();
+		proj->SetProjectilePower(25.0f);
+		proj->SetProjectileDirection({0.0f,1.0f,-1.0f});
+		Render3DComponent* rend = testObj->AddComponent<Render3DComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+
 	}
 }
 

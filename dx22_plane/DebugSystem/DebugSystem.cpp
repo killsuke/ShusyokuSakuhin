@@ -104,7 +104,7 @@ void DebugSystem::Update() {
 	}
 
 	// 新しいオブジェクトが出来た時にちゃんと止められるか確認
-	std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("Camera", "DebugUI");
+	const std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("Camera", "DebugUI");
 
 	// デバッグ機能の処理
 	DebugUI();

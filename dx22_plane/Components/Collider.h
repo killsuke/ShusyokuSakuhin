@@ -315,14 +315,14 @@ public:
 
 		coll_ob.offsetQuat = quat; };
 
-	inline void SetActiveColliderFlag(bool flag) { this->m_activeColliderFlag = flag; };
+	inline void SetActiveColliderFlag(const bool flag) { this->m_activeColliderFlag = flag; };
 
 	//	inline void SetOffsetRotation(const DirectX::SimpleMath::Vector3& offset) { this->offsetRotation = offset; };
 
 	// ƒQƒbƒ^[
-	inline OBB& GetColliderSize_OBB() { return this->coll_ob; };
-	inline AABB& GetColliderSize_AABB() { return this->coll_ab; };
-	inline Sphere& GetColliderSize_Sphere() { return this->coll_sp; };
+	inline OBB& GetColliderSize_OBB() { return coll_ob; };
+	inline AABB& GetColliderSize_AABB() { return coll_ab; };
+	inline Sphere& GetColliderSize_Sphere() { return coll_sp; };
 
 	inline DirectX::SimpleMath::Vector3 GetOffsetCenterAABB() const { return coll_ab.offsetCenter; };
 	inline DirectX::SimpleMath::Vector3 GetOffsetSizeAABB() const { return coll_ab.offsetSize; };

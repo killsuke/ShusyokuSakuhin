@@ -52,7 +52,7 @@ void EnemyDamageComponent::Update()
 						
 						HitEvent he = { m_Object,objOther };
 
-						// ヒット時の通知テスト
+						// ヒット時の通知
 						EventBusManager::Push(he);
 
 						// 画面揺れ開始

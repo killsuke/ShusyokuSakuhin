@@ -2,6 +2,7 @@
 #include "Manager/GameObjectManager.h"
 #include <iostream>
 #include <string>
+#include "EnemyActionComponent.h"
 #include "Manager/EventBusManager.h"
 
 namespace {
@@ -35,12 +36,18 @@ void FighterComponent::Update() {
 
 	if (m_hp <= 0) {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする
-		m_deadFlag = true; // 死亡フラグを立てる
 
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {
+
+			if (m_deadFlag == false) {
+				m_deadFlag = true; // 死亡フラグを立てる
+
+			}
 			return; // 死亡フラグがfalseなら何もしない
 		}
+
+		m_deadFlag = true; // 死亡フラグを立てる
 		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
@@ -72,12 +79,21 @@ void FighterComponent::DamageProcess() {
 
 	if (m_hp <= 0) {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする
-		m_deadFlag = true; // 死亡フラグを立てる
 
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {
+
+			if (m_deadFlag == false) {
+				m_deadFlag = true; // 死亡フラグを立てる
+				DeadEvent de = { m_Object };
+
+				// ヒット時の通知テスト
+				EventBusManager::Push(de);
+			}
 			return; // 死亡フラグがfalseなら何もしない
 		}
+
+		m_deadFlag = true; // 死亡フラグを立てる
 		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }

@@ -11,11 +11,22 @@ struct QueuedEvent{
 	void* eventData;
 };
 
+enum class ActiveQueue {
+	QUEUE_NONE = -1,
+	QUEUE_A,
+	QUEUE_B
+};
+
 class EventBusManager
 {
 private:
 
-	static std::vector<QueuedEvent> queuedEvents;
+	static std::vector<QueuedEvent> m_QueuedEventsA;
+	static std::vector<QueuedEvent> m_QueuedEventsB;
+	static inline ActiveQueue m_ActiveQueue = ActiveQueue::QUEUE_A;
+
+	static constexpr int MAX_LOOP = 1000;
+
 	static std::unordered_map<std::type_index, std::vector<std::function<void(const void*)>>> m_Listeners;
 
 	EventBusManager() = default;
@@ -31,7 +42,13 @@ public:
 	// ようするに、イベントを発生させる通知処理
 	template<typename EventType>
 	static void Push(const EventType& event) {
-		queuedEvents.push_back({ typeid(EventType), new EventType(event) });
+
+		if (m_ActiveQueue == ActiveQueue::QUEUE_A) {
+			m_QueuedEventsA.push_back({ typeid(EventType), new EventType(event) });
+		}
+		else if (m_ActiveQueue == ActiveQueue::QUEUE_B) {
+			m_QueuedEventsB.push_back({ typeid(EventType), new EventType(event) });
+		}
 	}
 
 	// イベントリスナーを登録

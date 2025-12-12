@@ -2,6 +2,10 @@
 #include "Component.h"
 #include "FighterComponent.h"
 
+struct DeadEvent {
+	GameObject* target;   // ”íUŒ‚Ò‚ÌGameObject‚Ö‚Ìƒ|ƒCƒ“ƒ^
+};
+
 class EnemyActionComponent : public Component
 {
 protected:
@@ -17,5 +21,6 @@ public:
 	virtual void Update() = 0;
 
 	void CreateDamageEffect(const HitEvent& event);
+	void ActionOff(const DeadEvent& event);
 	bool GetRightLeft()const { return m_IsRightLeft; };
 };
