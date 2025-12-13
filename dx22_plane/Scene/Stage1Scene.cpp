@@ -9,6 +9,7 @@
 #include "Mesh/LineMesh.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
+#include "Mesh/TriangleMesh.h"
 #include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
 #include "Components/BonePartsComponent.h"
@@ -172,14 +173,15 @@ void Stage1Scene::Init()
 		GameObject* testObj = GameObjectManager::AddObject("testObj", "Test");
 		TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetScale({10.0f,10.0f,1.0f});
-		RigidBodyComponent* rigid = testObj->AddComponent<RigidBodyComponent>();
+		/*RigidBodyComponent* rigid = testObj->AddComponent<RigidBodyComponent>();
 		rigid->SetGravityFlag(true);
 		rigid->SetMass(2.0f);
 		ProjectileMotionComponent* proj = testObj->AddComponent<ProjectileMotionComponent>();
 		proj->SetProjectilePower(25.0f);
-		proj->SetProjectileDirection({0.0f,1.0f,-1.0f});
+		proj->SetProjectileDirection({0.0f,1.0f,-1.0f});*/
 		Render3DComponent* rend = testObj->AddComponent<Render3DComponent>();
-		rend->CreateMesh<SquareMesh>();
+		rend->CreateMesh<TriangleMesh>();
+		rend->ChangeTexture("assets/texture/background1.png");
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 
 	}

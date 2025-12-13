@@ -15,6 +15,7 @@ private:
 	int m_maxHp = 0; // 最大ヒットポイント
 	int m_totalDamage = 0;	// ダメージ
 	float m_recordTime = 0.0f; // 経過時間
+	float m_DeadRecordTime = 0.0f;
 	bool m_useInvincible = false; // 無敵を使うかどうか
 	bool m_invincibleFlag = false; // 無敵フラグ
 	bool m_deadFlag = false; // 死亡フラグ

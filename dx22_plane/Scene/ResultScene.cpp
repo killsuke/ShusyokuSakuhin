@@ -89,7 +89,7 @@ ResultScene::~ResultScene()
 void ResultScene::Update()
 {
 
-	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X)))
+	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)))
 	{
 		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();

@@ -204,6 +204,7 @@
     <ClCompile Include="Components\FollowPositionComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp" />
     <ClCompile Include="Components\ProjectileMotionComponent.cpp" />
+    <ClCompile Include="Mesh\PentagonMesh.cpp" />
     <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
     <ClCompile Include="HitStopManager.cpp" />
@@ -277,6 +278,7 @@
     <ClCompile Include="Components\TrailMakeComponent.cpp" />
     <ClCompile Include="Components\TrailRenderComponent.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
+    <ClCompile Include="Mesh\TriangleMesh.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +331,7 @@
     <ClInclude Include="Components\FollowPositionComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurComponent.h" />
     <ClInclude Include="Components\ProjectileMotionComponent.h" />
+    <ClInclude Include="Mesh\PentagonMesh.h" />
     <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
     <ClInclude Include="HitStopManager.h" />
@@ -410,6 +413,7 @@
     <ClInclude Include="Components\TrailMakeComponent.h" />
     <ClInclude Include="Components\TrailRenderComponent.h" />
     <ClInclude Include="Components\Transform.h" />
+    <ClInclude Include="Mesh\TriangleMesh.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />

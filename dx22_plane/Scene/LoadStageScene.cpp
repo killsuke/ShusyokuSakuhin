@@ -697,6 +697,19 @@ void LoadStageScene::BackGroundCreate() {
 		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
 	}
 
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 1100.0f,-250.0f,400.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+	}
+
 	{
 		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
@@ -713,6 +726,18 @@ void LoadStageScene::BackGroundCreate() {
 		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
 		trans->SetPosition({ 500.0f,-350.0f,300.0f });
+		trans->SetScale({ 384.0f,216.0f,1.0f });
+		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/blurPS.hlsl");
+		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(900.0f, 900.0f));
+	}
+
+	{
+		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
+		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
+		trans->SetPosition({ 700.0f,-350.0f,300.0f });
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();

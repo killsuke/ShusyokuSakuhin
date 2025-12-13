@@ -97,7 +97,7 @@ void TitleScene::Init()
 void TitleScene::Update()
 {
 	// エンターキーを押してステージ1へ
-	if ((Input::GetKeyTrigger(VK_RETURN) ))
+	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetKeyTrigger(XINPUT_A)))
 	{
 		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
 		auto door = fade->GetComponent<DoorFadeComponent>();

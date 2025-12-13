@@ -37,6 +37,13 @@ void FighterComponent::Update() {
 	if (m_hp <= 0) {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする
 
+		// 遅れて死ぬ
+		m_DeadRecordTime += DeltaTime;
+		if (m_DeadRecordTime > 5.0f) {
+			m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+		}
+
+
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {
 
