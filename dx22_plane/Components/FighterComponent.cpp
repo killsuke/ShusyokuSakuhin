@@ -12,9 +12,13 @@ namespace {
 FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ソート番号を設定
-	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnHit(e);
 		});
+}
+
+FighterComponent::~FighterComponent() {
+	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
 }
 
 void FighterComponent::Update() {
@@ -55,6 +59,7 @@ void FighterComponent::Update() {
 		}
 
 		m_deadFlag = true; // 死亡フラグを立てる
+
 		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
@@ -92,7 +97,8 @@ void FighterComponent::DamageProcess() {
 
 			if (m_deadFlag == false) {
 				m_deadFlag = true; // 死亡フラグを立てる
-				DeadEvent de = { m_Object };
+				const uint32_t id = m_Object->GetInstanceID();
+				const DeadEvent de = { id };
 
 				// ヒット時の通知テスト
 				EventBusManager::Push(de);
@@ -101,13 +107,19 @@ void FighterComponent::DamageProcess() {
 		}
 
 		m_deadFlag = true; // 死亡フラグを立てる
-		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+	//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
 
 void FighterComponent::OnHit(const HitEvent& event) {
 
-	if (event.target != m_Object) {
+	if (m_Object == nullptr) {
+		return;
+	}
+
+	const uint32_t id = m_Object->GetInstanceID();
+	
+	if (event.targetID != id) {
 		return; // 自分宛じゃないなら無視
 	}
 	// ダメージを受ける処理

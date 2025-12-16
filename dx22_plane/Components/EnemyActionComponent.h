@@ -3,7 +3,7 @@
 #include "FighterComponent.h"
 
 struct DeadEvent {
-	GameObject* target;   // 被攻撃者のGameObjectへのポインタ
+	uint32_t deadID; // 死亡したオブジェクトのインスタンスID
 };
 
 class EnemyActionComponent : public Component
@@ -12,9 +12,11 @@ protected:
 	const float m_deltaTime = 0.016f;
 	float m_recordTime = 0.0f;
 	bool m_IsRightLeft = true; // 左右の移動フラグ、初期は右向き(true:右、false:左)
+	uint64_t m_listenerID_HitEvent = 0;
+	uint64_t m_listenerID_DeadEvent = 0;
 
 	EnemyActionComponent(GameObject& obj);
-	~EnemyActionComponent() = default;
+	~EnemyActionComponent();
 
 public:
 	

@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+
+// 任意の最低値と最大値の間でサイン波で透明・不透明にしよう
 class BlinkingUIComponent : public Component
 {
 private:

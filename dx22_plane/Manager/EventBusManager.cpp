@@ -9,7 +9,8 @@
 
 std::vector<QueuedEvent> EventBusManager::m_QueuedEventsA;
 std::vector<QueuedEvent> EventBusManager::m_QueuedEventsB;
-std::unordered_map<std::type_index, std::vector<std::function<void(const void*)>>> EventBusManager::m_Listeners;
+std::unordered_map<std::type_index, std::vector<ListenerEntry>> EventBusManager::m_Listeners;
+uint64_t EventBusManager::m_NextListenerID = 1;
 
 void EventBusManager::Init()
 {
@@ -40,23 +41,22 @@ void EventBusManager::Update()
 		// 処理するキューを選択
 		std::vector<QueuedEvent>& currentQueue =
 			(m_ActiveQueue == ActiveQueue::QUEUE_A) ? m_QueuedEventsA : m_QueuedEventsB;
-		std::vector<QueuedEvent>& nextQueue =
-			(m_ActiveQueue == ActiveQueue::QUEUE_A) ? m_QueuedEventsB : m_QueuedEventsA;
+	/*	std::vector<QueuedEvent>& nextQueue =
+			(m_ActiveQueue == ActiveQueue::QUEUE_A) ? m_QueuedEventsB : m_QueuedEventsA;*/
 
 		// 次は反対のキューをアクティブにする
 		m_ActiveQueue = (m_ActiveQueue == ActiveQueue::QUEUE_A) ? ActiveQueue::QUEUE_B : ActiveQueue::QUEUE_A;
 
 		// キューに溜まったイベントを処理
 		for (const QueuedEvent& item : currentQueue) {
-			std::unordered_map<std::type_index, std::vector<std::function<void(const void*)>>>::iterator it =
+			std::unordered_map<std::type_index, std::vector<ListenerEntry>>::iterator it =
 				m_Listeners.find(item.type);
 			if (it != m_Listeners.end()) {
 				// 登録されているリスナーを呼び出す
-				for (const std::function<void(const void*)>& listener : it->second) {
-					listener(item.eventData);
+				for (const ListenerEntry& listener : it->second) {
+					listener.func(item.eventData);
 				}
 			}
-			delete item.eventData;
 		}
 		currentQueue.clear();
 	}
@@ -67,13 +67,6 @@ void EventBusManager::Update()
 
 void EventBusManager::UnInit()
 {
-	for(auto & item : m_QueuedEventsA) {
-		delete item.eventData;
-	}
-	for(auto & item : m_QueuedEventsB) {
-		delete item.eventData;
-	}
-
 	// キューに残っているイベントデータを解放
 	m_QueuedEventsA.clear();
 	m_QueuedEventsB.clear();

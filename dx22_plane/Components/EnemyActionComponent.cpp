@@ -16,13 +16,19 @@ namespace {
 
 EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ğİ’è
-	EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		CreateDamageEffect(e);
 		});
 
-	EventBusManager::Subscribe<DeadEvent>([&](const DeadEvent& e) {
+	m_listenerID_DeadEvent = EventBusManager::Subscribe<DeadEvent>([&](const DeadEvent& e) {
 		ActionOff(e);
 		});
+}
+
+EnemyActionComponent::~EnemyActionComponent() {
+
+	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_listenerID_DeadEvent);
 }
 
 void EnemyActionComponent::Update() {
@@ -31,7 +37,9 @@ void EnemyActionComponent::Update() {
 
 void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 
-	if(event.target != m_Object) {
+	const uint32_t targetID = m_Object->GetInstanceID();
+
+	if(event.targetID != targetID) {
 		return;
 	}
 
@@ -59,7 +67,9 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 
 void EnemyActionComponent::ActionOff(const DeadEvent& event) {
 
-	if (event.target != m_Object) {
+	const uint32_t deadID = m_Object->GetInstanceID();
+
+	if (event.deadID != deadID) {
 		return; // ©•ªˆ¶‚¶‚á‚È‚¢‚È‚ç–³‹
 	}
 

@@ -218,6 +218,7 @@ private:
 
 	static uint16_t TagToIDRegister(const std::string& tag);
 	static uint16_t TagToIDGet(const std::string& tag);
+	static inline uint32_t m_NextID = 0;
 
 	static GameObject* HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag);
 	static void HelperRemoveObject(std::vector<std::unique_ptr<GameObject>>& objs);

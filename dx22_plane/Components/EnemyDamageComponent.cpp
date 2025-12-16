@@ -50,7 +50,10 @@ void EnemyDamageComponent::Update()
 					if (camera != nullptr) {
 						CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
 						
-						HitEvent he = { m_Object,objOther };
+						const uint32_t myID = m_Object->GetInstanceID();
+						const uint32_t otherID = objOther->GetInstanceID();
+
+						const HitEvent he = { myID,otherID };
 
 						// ƒqƒbƒgŽž‚Ì’Ê’m
 						EventBusManager::Push(he);

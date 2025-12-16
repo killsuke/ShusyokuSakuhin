@@ -60,8 +60,10 @@ void PlayerDamageComponent::Update()
 					}
 				}*/
 
+				const uint32_t myID = m_Object->GetInstanceID();
+				const uint32_t otherID = objOther->GetInstanceID();
 
-				HitEvent he = { m_Object,objOther };
+				HitEvent he = { myID,otherID };
 
 				// ヒット時の通知テスト
 				EventBusManager::Push(he);

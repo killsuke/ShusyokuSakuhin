@@ -3,8 +3,10 @@
 
 // テストコード用のヒットイベント構造体
 struct HitEvent {
-	GameObject* attacker; // 攻撃者のGameObjectへのポインタ
-	GameObject* target;   // 被攻撃者のGameObjectへのポインタ
+	// ここはIDで判断した方が良いかも
+	// ダングリングポインタを避けるために
+	uint32_t attackerID; // 攻撃者のインスタンスID
+	uint32_t targetID;   // 被攻撃者のインスタンスID
 };
 
 class FighterComponent final : public Component
@@ -20,10 +22,11 @@ private:
 	bool m_invincibleFlag = false; // 無敵フラグ
 	bool m_deadFlag = false; // 死亡フラグ
 	bool m_useDeadFlag = true; // 死亡フラグそのものを使うか
+	uint64_t m_listenerID_HitEvent = 0; // ヒットイベントのリスナーID
 
 public:
 	FighterComponent(GameObject& obj);
-	~FighterComponent() = default;
+	~FighterComponent();
 
 	void Update() override;
 

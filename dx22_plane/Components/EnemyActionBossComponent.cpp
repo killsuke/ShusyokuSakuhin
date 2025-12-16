@@ -38,6 +38,7 @@ void EnemyActionBossComponent::BossAction() {
 	auto myTrans = m_Object->GetComponent<TransformComponent>();
 	auto myPos = myTrans->GetPosition();
 
+	// ‚±‚±‚ª’eì¬ˆ—
 	auto bullet = GameObjectManager::AddObject("bullet", "Enemy");
 	auto trans = bullet->AddComponent<TransformComponent>();
 	trans->SetPosition({ myPos.x + 10.0f,myPos.y,myPos.z });

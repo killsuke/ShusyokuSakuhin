@@ -39,6 +39,7 @@ private:
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
 	GameObject* parent = nullptr;	// 親オブジェクトを持つことができる
 	TagAndID m_TagAndID = { "",0 }; // タグとIDのペア
+	uint32_t m_InstanceID = 0; // インスタンスID
 	std::string name = "";	// オブジェクトの名前
 	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
@@ -49,8 +50,8 @@ private:
 
 public:
 
-	GameObject(const std::string& _name)
-		: name(_name) {
+	GameObject(const std::string& _name,const uint32_t& id)
+		: name(_name),m_InstanceID(id) {
 		components.reserve(20);
 		renderComponents.reserve(4);
 	}; // 名前とタグを指定して初期化
@@ -96,6 +97,7 @@ public:
 	inline DrawContainer GetHopeDrawContainer()const { return hopeDrawContainer; };
 	inline bool GetDrawContainerChangeFlag()const { return drawContainerChangeFlag; };
 	inline bool GetCarryOverFlag()const { return carryOverFlag; };
+	inline uint32_t GetInstanceID()const { return m_InstanceID; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();

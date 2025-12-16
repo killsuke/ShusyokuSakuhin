@@ -626,19 +626,19 @@ void LoadStageScene::BamboosCreate() {
 	}
 
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
-		auto testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetPosition({ 30.0f, -20.0f, 20.0f });
-		testTrans->SetScale({ 60.0f,60.0f,60.0f });
-		testTrans->SetRotation({ 0.0f,45.0f,0.0f });
-		//	auto collider = testObj->AddComponent<ColliderComponent>();
-		//	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
-		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
-		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/bamboos/bambooGrass1.fbx",
-			"assets/model/bamboos");
+		//auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		//auto testTrans = testObj->AddComponent<TransformComponent>();
+		//testTrans->SetPosition({ 30.0f, -20.0f, 20.0f });
+		//testTrans->SetScale({ 60.0f,60.0f,60.0f });
+		//testTrans->SetRotation({ 0.0f,45.0f,0.0f });
+		////	auto collider = testObj->AddComponent<ColliderComponent>();
+		////	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
+		//auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
+		//auto rend = testObj->AddComponent<Render3DComponent>();
+		//rend->LoadModelMesh("assets/model/bamboos/bambooGrass1.fbx",
+		//	"assets/model/bamboos");
 
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 	}
 
 
@@ -701,7 +701,7 @@ void LoadStageScene::BackGroundCreate() {
 	{
 		GameObject* backGround = GameObjectManager::AddObject("backGround", "BackGround");
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
-		trans->SetPosition({ 1100.0f,-250.0f,400.0f });
+		trans->SetPosition({ 1100.0f,-270.0f,400.0f });
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
