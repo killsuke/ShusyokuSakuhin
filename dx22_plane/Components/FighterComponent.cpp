@@ -113,10 +113,6 @@ void FighterComponent::DamageProcess() {
 
 void FighterComponent::OnHit(const HitEvent& event) {
 
-	if (m_Object == nullptr) {
-		return;
-	}
-
 	const uint32_t id = m_Object->GetInstanceID();
 	
 	if (event.targetID != id) {

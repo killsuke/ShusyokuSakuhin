@@ -41,8 +41,6 @@ void EventBusManager::Update()
 		// 処理するキューを選択
 		std::vector<QueuedEvent>& currentQueue =
 			(m_ActiveQueue == ActiveQueue::QUEUE_A) ? m_QueuedEventsA : m_QueuedEventsB;
-	/*	std::vector<QueuedEvent>& nextQueue =
-			(m_ActiveQueue == ActiveQueue::QUEUE_A) ? m_QueuedEventsB : m_QueuedEventsA;*/
 
 		// 次は反対のキューをアクティブにする
 		m_ActiveQueue = (m_ActiveQueue == ActiveQueue::QUEUE_A) ? ActiveQueue::QUEUE_B : ActiveQueue::QUEUE_A;

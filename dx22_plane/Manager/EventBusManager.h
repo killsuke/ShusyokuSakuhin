@@ -93,10 +93,3 @@ public:
 	}
 
 };
-
-// テストコード、
-// 例：ダメージイベントなら、構造体に自分と相手あてのIDとダメージ量を持たせるなど
-//void DamageComponent::OnHit(const HitEvent& e) {
-//	if (e.targetID != ownerID) return; // ← 自分宛じゃないなら無視
-//	hp -= e.damage;
-//}
