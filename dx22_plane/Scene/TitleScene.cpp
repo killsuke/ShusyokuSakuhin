@@ -6,17 +6,19 @@
 #include "Mesh/SquareMesh.h"
 #include "Mesh/CircleMesh.h"
 #include "Mesh/SphereMesh.h"
+#include "Mesh/LineMesh.h"
 #include "Components/Render3D.h"
 #include "Components/Render2D.h"
+#include "Components/RenderLine2DComponent.h"
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/Collider.h"
 #include "Components/PlayerOperationComponent.h"
 #include "Components/RigidBodyComponent.h"
-#include "Components/JumpComponent.h"
 #include "Input.h"
 #include "Manager/SceneManager.h"
 #include "Components/DoorFadeComponent.h"
 #include "Components/BlinkingUIComponent.h"
+#include "Components/TitleAnimationControlComponent.h"
 
 // コンストラクタ
 TitleScene::TitleScene()
@@ -77,6 +79,10 @@ void TitleScene::Init()
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
 
+	GameObject* titleAnimation = GameObjectManager::AddObject("titleAnim", "TitleUI");
+	TransformComponent* titleAnimTrans = titleAnimation->AddComponent<TransformComponent>();
+	TitleAnimationControlComponent* titleAnimComp = titleAnimation->AddComponent<TitleAnimationControlComponent>();
+
 	auto fadeFake = GameObjectManager::GameObjectFindNameUI("fade");
 	if(fadeFake != nullptr) {
 		auto fade =  fadeFake->GetComponent<DoorFadeComponent>();
@@ -117,6 +123,8 @@ void TitleScene::Update()
 
 	//	setumeiFg = true;
 	//}
+
+
 
 
 }

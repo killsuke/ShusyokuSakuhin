@@ -7,9 +7,9 @@
 class RenderLineComponent : public RenderComponent
 {
 private:
-	GameObject* p_startObj = nullptr;
-	GameObject* p_endObj = nullptr;
-	float m_thickness = 1.0f;
+	GameObject* m_StartObj = nullptr;
+	GameObject* m_EndObj = nullptr;
+	float m_Thickness = 1.0f;
 	//DirectX::SimpleMath::Vector3 m_Rotation = DirectX::SimpleMath::Vector3::Zero;
 	//DirectX::SimpleMath::Quaternion m_Quaternion = DirectX::SimpleMath::Quaternion::Identity;
 
@@ -23,9 +23,10 @@ public:
 	void SetEndPosition(const DirectX::SimpleMath::Vector3& endPos);
 	void SetStartAndEndPosition(const DirectX::SimpleMath::Vector3& startPos, const DirectX::SimpleMath::Vector3& endPos);
 	void SetStartAndEndFollowObject(GameObject* objS, GameObject* objE);
-	void SetStartActive(const ActiveState as) { p_startObj->SetActiveState(as); };
-	void SetEndActive(const ActiveState as) { p_endObj->SetActiveState(as); };
-	void SetThickness(const float thickness) { m_thickness = thickness; };
+	void SetStartAndEndDrawContainer(const DrawContainer& dcS, const DrawContainer& dcE);
+	void SetStartActive(const ActiveState& as) { m_StartObj->SetActiveState(as); };
+	void SetEndActive(const ActiveState& as) { m_EndObj->SetActiveState(as); };
+	void SetThickness(const float thickness) { m_Thickness = thickness; };
 	//void SetRotation(const DirectX::SimpleMath::Vector3& rotation) { 
 	//	m_Rotation = rotation; 
 	//	float pitch = DirectX::XMConvertToRadians(rotation.x);
@@ -38,6 +39,6 @@ public:
 	//	m_Rotation = QuaternionToEulerDeg(quaternion);
 	//};
 
-	GameObject* GetStartPoint()const { return p_startObj; };
-	GameObject* GetEndPoint()const { return p_endObj; };
+	GameObject* GetStartPoint()const { return m_StartObj; };
+	GameObject* GetEndPoint()const { return m_EndObj; };
 };

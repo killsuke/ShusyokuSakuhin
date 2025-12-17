@@ -168,6 +168,8 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
+    <ClCompile Include="Components\VectorMoveComponent.cpp" />
+    <ClCompile Include="Components\FliesMoveComponent.cpp" />
     <ClCompile Include="Manager\EventBusManager.cpp" />
     <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
@@ -205,6 +207,8 @@
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp" />
     <ClCompile Include="Components\ProjectileMotionComponent.cpp" />
     <ClCompile Include="Mesh\PentagonMesh.cpp" />
+    <ClCompile Include="Components\RenderLine2DComponent.cpp" />
+    <ClCompile Include="Components\RenderParticlesComponent.cpp" />
     <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
     <ClCompile Include="HitStopManager.cpp" />
@@ -279,6 +283,8 @@
     <ClCompile Include="Components\TrailRenderComponent.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
     <ClCompile Include="Mesh\TriangleMesh.cpp" />
+    <ClCompile Include="Components\TimeSpawnParticlesComponent.cpp" />
+    <ClCompile Include="Components\TitleAnimationControlComponent.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +298,8 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="DebugSystem\DebugSystem.h" />
+    <ClInclude Include="Components\VectorMoveComponent.h" />
+    <ClInclude Include="Components\FliesMoveComponent.h" />
     <ClInclude Include="Manager\EventBusManager.h" />
     <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />
@@ -332,6 +340,8 @@
     <ClInclude Include="Components\RenderMotionBlurComponent.h" />
     <ClInclude Include="Components\ProjectileMotionComponent.h" />
     <ClInclude Include="Mesh\PentagonMesh.h" />
+    <ClInclude Include="Components\RenderLine2DComponent.h" />
+    <ClInclude Include="Components\RenderParticlesComponent.h" />
     <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
     <ClInclude Include="HitStopManager.h" />
@@ -414,6 +424,8 @@
     <ClInclude Include="Components\TrailRenderComponent.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="Mesh\TriangleMesh.h" />
+    <ClInclude Include="Components\TimeSpawnParticlesComponent.h" />
+    <ClInclude Include="Components\TitleAnimationControlComponent.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
@@ -514,6 +526,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="unlitTexture2D_GS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gs_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gs_main</EntryPointName>
     </FxCompile>
     <FxCompile Include="unlitTextureVS2D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

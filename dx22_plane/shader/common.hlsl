@@ -3,6 +3,62 @@
 //	matrix World;
 //}
 
+struct VS_IN
+{
+    float3 pos : POSITION0;
+    float3 nrm : NORMAL0;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD0;
+};
+
+struct VS_ANIMATION
+{
+    float4 col : COLOR0;
+    uint4 idx : BLENDINDICES;
+
+    float3 pos : POSITION;
+//    float4 nrm : NORMAL0;
+    float pad : PAD;
+//    float2 tex : TEXCOORD0;
+    float4 weight : BLENDWEIGHT0;
+	
+//    float dummy : PADDING; // 明示的に 4B を埋める
+};
+
+struct VS_OUTPUT
+{
+    float4 pos : SV_POSITION;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD;
+    float4 wpos : TEXCOORD1;
+    float4 nrm : TEXCOORD2;
+};
+
+struct PS_IN
+{
+    float4 pos : SV_POSITION;
+    float4 col : COLOR0;
+    float2 tex : TEXCOORD0;
+};
+
+struct LIGHT
+{
+    float4 Direction; // 方向
+    float4 Diffuse; // 拡散反射用の光の強さ
+    float4 Ambient; // 環境光用の光の強さ
+};
+
+struct MATERIAL
+{
+    float4 Ambient;
+    float4 Diffuse;
+    float4 Specular;
+    float4 Emission;
+    float Shininess;
+    bool TextureEnable;
+    float2 Padding;
+};
+
 // 定数バッファ受け取り
 cbuffer ConstBuffer : register(b0) 
 {
@@ -42,51 +98,6 @@ cbuffer BlurBuffer : register(b3)
     float2 blurPad; // ブラーをかける方向
 }
 
-
-struct VS_IN
-{
-    float3 pos : POSITION0;
-	float3 nrm : NORMAL0;
-    float4 col : COLOR0;
-    float2 tex : TEXCOORD0;
-};
-
-struct VS_ANIMATION
-{
-    float4 col : COLOR0;
-    uint4 idx : BLENDINDICES;
-
-    float3 pos : POSITION;
-//    float4 nrm : NORMAL0;
-	float pad : PAD;
-//    float2 tex : TEXCOORD0;
-    float4 weight : BLENDWEIGHT0;
-	
-//    float dummy : PADDING; // 明示的に 4B を埋める
-};
-
-struct VS_OUTPUT
-{
-    float4 pos : SV_POSITION;
-    float4 col : COLOR0;
-    float2 tex : TEXCOORD;
-    float4 wpos : TEXCOORD1;
-    float4 nrm : TEXCOORD2;
-};
-
-struct PS_IN
-{
-	float4 pos : SV_POSITION;
-	float4 col : COLOR0;
-	float2 tex : TEXCOORD0;
-};
-
-struct LIGHT {
-	float4 Direction;	// 方向
-	float4 Diffuse;		// 拡散反射用の光の強さ
-	float4 Ambient;		// 環境光用の光の強さ
-};
-
 cbuffer HitFlashBuffer:register(b4) {
     float3 FlashColor;
 	float HitFlashPower; // ヒットフラッシュの強さ 0.0～1.0
@@ -97,16 +108,6 @@ cbuffer HitFlashBuffer:register(b4) {
 cbuffer LightBuffer:register(b5) {
 	LIGHT Light;
 }
-
-struct MATERIAL {
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
-	float4 Emission;
-	float Shininess;
-    bool TextureEnable;
-    float2 Padding;
-};
 
 cbuffer MaterialBuffer:register(b6) {
 	MATERIAL Material;
@@ -138,3 +139,4 @@ cbuffer UIParam : register(b9)
     float hpScale;
     float2 padding; // 必要なら
 };
+

@@ -45,7 +45,6 @@ extern ID3D11Buffer* g_pHPBarConstantBuffer;
 extern ID3D11Buffer* g_pBlurBuffer;
 extern ID3D11Buffer* g_pMotionBlurBuffer;
 extern ID3D11Buffer* m_MaterialBuffer;
-extern ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 // 定数バッファ用構造体
 struct ConstBuffer
@@ -88,6 +87,12 @@ struct LineThickness
 	float thickness = 1.0f;
 	float pad[3] = { 0.0f };
 };
+
+// パーティクル用（一度描画して処理負荷を考えてから使う）
+//struct PointPosition {
+//	DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Zero;
+//	float pad = 0.0f;
+//};
 
 struct BlurBuffer {
 	DirectX::SimpleMath::Vector2 textureSize = DirectX::SimpleMath::Vector2::Zero;
@@ -137,6 +142,8 @@ private:
 	static EFillMode m_FillMode;
 
 	static FLOAT m_ClearColor[4];
+
+	static ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();

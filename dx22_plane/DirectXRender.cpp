@@ -80,7 +80,7 @@ ID3D11Buffer* m_MaterialBuffer = nullptr;
 ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
 
 // ブレンドステート用変数（アルファブレンディング）
-ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
+ID3D11BlendState* DirectXRender::g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
 
 ID3D11BlendState* g_BlendStateATC = nullptr;
 
