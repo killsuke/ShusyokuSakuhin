@@ -31,7 +31,7 @@ void DebugSystem::Init() {
 
 		Render3DComponent* dbRender = m_DebugUI_F1->AddComponent<Render3DComponent>();
 		dbRender->CreateMesh<SquareMesh>();
-		dbRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		dbRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		dbRender->ChangeTexture("assets/texture/debugUI.png");
 	}
 
@@ -44,7 +44,7 @@ void DebugSystem::Init() {
 
 		Render3DComponent* dbRender = m_DebugUI_F2->AddComponent<Render3DComponent>();
 		dbRender->CreateMesh<SquareMesh>();
-		dbRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		dbRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		dbRender->ChangeTexture("assets/texture/debugUI_F2.png");
 	}
 
@@ -57,7 +57,7 @@ void DebugSystem::Init() {
 
 		Render3DComponent* dbRender = m_DebugUI_F3->AddComponent<Render3DComponent>();
 		dbRender->CreateMesh<SquareMesh>();
-		dbRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		dbRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		dbRender->ChangeTexture("assets/texture/debugUI_F3.png");
 	}
 
@@ -70,7 +70,7 @@ void DebugSystem::Init() {
 
 		Render3DComponent* dbRender = m_DebugUI_F4->AddComponent<Render3DComponent>();
 		dbRender->CreateMesh<SquareMesh>();
-		dbRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		dbRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		dbRender->ChangeTexture("assets/texture/debugUI_F4.png");
 	}
 

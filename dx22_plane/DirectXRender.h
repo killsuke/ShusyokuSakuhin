@@ -190,6 +190,12 @@ public:
 	static void GPU_UpdateViewAndProj();
 	static void SetDepthEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
+	static void SetClearColor(const FLOAT colors[4]) {
+		m_ClearColor[0] = colors[0];
+		m_ClearColor[1] = colors[1];
+		m_ClearColor[2] = colors[2];
+		m_ClearColor[3] = colors[3];
+	}
 
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };

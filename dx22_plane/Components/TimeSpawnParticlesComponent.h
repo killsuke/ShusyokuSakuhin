@@ -13,6 +13,7 @@ public:
 	~TimeSpawnParticlesComponent() = default;
 	TimeSpawnParticlesComponent(GameObject& obj);
 	void Update();
+	void SetTextureName(const std::string& texname) { m_TextureName = texname; };
 	void SetSpawnInterval(const float interval) { 
 		m_SpawnInterval = fabsf(interval);
 		m_InitInterval = m_SpawnInterval;

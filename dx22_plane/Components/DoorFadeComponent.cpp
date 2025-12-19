@@ -18,7 +18,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	auto doorUpRender = doorUp->AddComponent<Render2DComponent>();
 	doorUpRender->CreateMesh<SquareMesh>();
 	doorUpRender->ChangeTexture("assets/texture/IronWall.png");
-	doorUpRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	doorUpRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 
 	doorDown = GameObjectManager::AddUI("doorDOWN", "FadeUI");
 	auto doorDownTransform = doorDown->AddComponent<TransformComponent>();
@@ -28,7 +28,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	auto doorDownRender = doorDown->AddComponent<Render2DComponent>();
 	doorDownRender->CreateMesh<SquareMesh>();
 	doorDownRender->ChangeTexture("assets/texture/IronWall.png");
-	doorDownRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	doorDownRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 
 	doorUp->SetCarryOverFlag(true);
 	doorDown->SetCarryOverFlag(true);

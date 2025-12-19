@@ -176,9 +176,11 @@ void Camera::Update()
 }
 
 void Camera::Update2D() {
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	Vector3 camPos = transform->GetPosition();
 	// ƒrƒ…[•ÏŠ·Œã—ñì¬
-	Vector3 pos = { 0.0f,0.0f,-10.0f };
-	Vector3 tgt = { 0.0f,0.0f,1.0f };
+	Vector3 pos = { 0.0f,0.0f,camPos.z };
+	Vector3 tgt = { 0.0f,0.0f,m_Target.z };
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 	XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
 

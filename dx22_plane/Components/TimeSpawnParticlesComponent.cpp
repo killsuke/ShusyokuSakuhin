@@ -33,7 +33,7 @@ void TimeSpawnParticlesComponent::Update() {
 		RenderParticlesComponent* renderComp = particleObj->AddComponent<RenderParticlesComponent>();
 		renderComp->SetVanishTime(3.0f);
 		renderComp->CreateMesh<SquareMesh>();
-		renderComp->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		renderComp->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		renderComp->ChangeTexture("assets/texture/shine.png");
 		renderComp->SetColor({0.3f,0.8f,1.0f,1.0f});
 

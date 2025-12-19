@@ -284,7 +284,7 @@ TestStageScene::TestStageScene() {
 
 		auto hpUnderlayRender = hpUnderlay->AddComponent<Render3DComponent>();
 		hpUnderlayRender->CreateMesh<SquareMesh>();
-		hpUnderlayRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpUnderlayRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		hpUnderlayRender->ChangeTexture("assets/texture/NoTexture.png");
 		hpUnderlayRender->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 

@@ -159,16 +159,16 @@ void Stage1Scene::Init()
 		auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ 600.0f, 0.0f, 0.0f });
-		testTrans->SetScale({ 10.5f,10.5f,150.5f });
-		testTrans->SetRotation({90.0f,0.0f,0.0f});
+		testTrans->SetScale({ 100.5f,100.5f,150.5f });
+		//testTrans->SetRotation({90.0f,0.0f,0.0f});
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/bamboos/bambooRod1.fbx",
-			"assets/model/bamboos");
+		rend->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
+			"assets/model/Copilot3D");
 
 		//rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 		//	"assets/model/Container");
 
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		//	rend->ChangeTexture("assets/texture/NoTexture.png");
 		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}

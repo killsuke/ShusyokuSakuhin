@@ -6,12 +6,18 @@ using namespace DirectX::SimpleMath;
 
 namespace {
 	constexpr float FIXED_DELTATIME = 1.0f / 60.0f; // 固定フレームレート（60 FPS相当）
+	constexpr float DEFAULT_GRAVITY_STOP = 100.0f; // 重力固定パワー（デフォルト）
+	constexpr float DEFAULT_FIRSTFALLMAGNIFICATION = 120.0f; // 初回の落下倍率（デフォルト）
+	constexpr float DEFAULT_FALLMAGNIFICATION = 12.0f; // 落下倍率（デフォルト）
 }
 
 // Transformより、XMFLOAT3の方が良いのでは？
 RigidBodyComponent::RigidBodyComponent(GameObject& obj) : m_velocity{ 0.0f,0.0f,0.0f }, m_acceleration{ 0.0f,0.0f,0.0f }, m_mass(1.0f), Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RIGIDBODY"); // ソート番号を設定
 	lastTime = std::chrono::high_resolution_clock::now();
+	m_StopGravity = DEFAULT_GRAVITY_STOP;
+	m_FirstFallMagnification = DEFAULT_FIRSTFALLMAGNIFICATION;
+	m_FallMagnification = DEFAULT_FALLMAGNIFICATION;
 }
 
 void RigidBodyComponent::Update() {
@@ -140,18 +146,18 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 	if (gravityFlag == true) {
 		auto transform = m_Object->GetComponent<TransformComponent>();
 
-		m_totalForce.y = -GRAVITY * m_fallMagnification;	// 重力の加速度を設定
+		m_totalForce.y = -GRAVITY * m_FallMagnification;	// 重力の加速度を設定
 
 		if (m_beforeGravityFlag == false && gravityFlag == true) {
-			m_velocity.y += (-GRAVITY * m_firstFallMagnification) * m_deltaTime;			// 重力の初速を設定
+			m_velocity.y += (-GRAVITY * m_FirstFallMagnification) * m_deltaTime;			// 重力の初速を設定
 		}
 
 		// 速度を加速度から更新
 		m_velocity.y += m_totalForce.y * m_deltaTime;	// 速度を更新、0.016fは1/60秒の固定値
 
 		// 最大落下速度の制限
-		if (m_velocity.y < -GRAVITY_STOP) {	// 重力加速度を一定にする
-			m_velocity.y = -GRAVITY_STOP;
+		if (m_velocity.y < -m_StopGravity) {	// 重力加速度を一定にする
+			m_velocity.y = -m_StopGravity;
 		}
 
 		Vector3 pos = Vector3::Zero;	// 現在の位置を取得

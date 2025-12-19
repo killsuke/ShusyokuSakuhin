@@ -12,7 +12,6 @@
 #include <chrono>	// 時間を計測してくれる
 
 #define GRAVITY (9.80665f)	  // 重力
-#define GRAVITY_STOP (100.0f) // 重力を止めるためのしきい値、これ以上の速度が出たら重力を止める
 #define FRICTION (0.1f)		  // 摩擦係数
 #define RESTITUTION (0.8f)	  // 反発係数（０～１ぐらいが一般的らしい）、この値が大きいほど反発も大きくなる
 #define AIRRESISTANCE (0.05f) // 空気抵抗係数
@@ -34,8 +33,9 @@ private:
 	bool m_timeFlag = false;			 // 落下タイミングのフラグ
 	bool m_beforeGravityFlag = false;	 // 重力を有効にするかどうか
 	const float m_deltaTime = 0.016f;		 // 前回の時間からの経過時間
-	float m_firstFallMagnification = 120.0f; // 初回の落下倍率
-	float m_fallMagnification = 12.0f;	 // 落下倍率
+	float m_FirstFallMagnification = 0.0f; // 初回の落下倍率
+	float m_FallMagnification = 0.0f;	 // 落下倍率
+	float m_StopGravity = 0.0f;	 // 重力固定パワー
 
 	std::chrono::high_resolution_clock::time_point startTime;	// 計測開始時間
 	std::chrono::high_resolution_clock::time_point lastTime;	// 最後の時間
@@ -82,11 +82,13 @@ public:
 	inline void SetGravityFlag(const bool flag) { m_gravityFlag = flag; }	// 重力を有効にするかどうかのフラグを設定
 	inline bool GetGravityFlag() const { return m_gravityFlag; }	// 重力を有効にするかどうかのフラグを取得
 
-	inline void SetFirstFallMagnification(const float magnification) { m_firstFallMagnification = magnification; }	// 初回の落下倍率を設定
-	inline float GetFirstFallMagnification() const { return m_firstFallMagnification; }	// 初回の落下倍率を取得
+	inline void SetFirstFallMagnification(const float magnification) { m_FirstFallMagnification = magnification; }	// 初回の落下倍率を設定
+	inline float GetFirstFallMagnification() const { return m_FirstFallMagnification; }	// 初回の落下倍率を取得
 
-	inline void SetFallMagnification(const float magnification) { m_fallMagnification = magnification; }	// 落下倍率を設定
-	inline float GetFallMagnification() const { return m_fallMagnification; }	// 落下倍率を取得
+	inline void SetFallMagnification(const float magnification) { m_FallMagnification = magnification; }	// 落下倍率を設定
+	inline float GetFallMagnification() const { return m_FallMagnification; }	// 落下倍率を取得
+
+	inline void SetStopGravity(const float stopGravity) { m_StopGravity = fabsf(stopGravity); }	// 重力固定パワーを設定
 
 	//	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
 	float UseGravity(const bool gravityFlag);		// 重力

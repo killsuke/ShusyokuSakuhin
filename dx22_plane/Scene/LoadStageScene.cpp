@@ -67,6 +67,9 @@ LoadStageScene::LoadStageScene() {
 		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");*/
 	}
 
+	FLOAT clearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
+	DirectXRender::SetClearColor(clearColor);
+
 	BackGroundCreate();
 
 	
@@ -285,7 +288,7 @@ LoadStageScene::LoadStageScene() {
 		testUIRend->CreateMesh(square);
 		testUIRend->SetTexture("assets/texture/3count.png");
 		testUIRend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-		testUIRend->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		testUIRend->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		// ここのテクスチャはメッシュ経由でやろう
 		auto uiTex = testUIRend->GetTexture();
 		uiTex->SetInitialCut(2.0f, 2.0f);*/
@@ -299,7 +302,7 @@ LoadStageScene::LoadStageScene() {
 
 		auto hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->CreateMesh<SquareMesh>();
-		hpRender->SetShader("unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
 		hpRender->ChangeTexture("assets/texture/hp_bar.png");
 		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	}

@@ -838,7 +838,7 @@
     <FxCompile Include="OneSkinAnimationPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="unlitTextureVS2D.hlsl">
+    <FxCompile Include="shader\unlitTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="MaskTexturePS.hlsl">
@@ -877,6 +877,7 @@
     <FxCompile Include="unlitTexture2D_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="shader\litTextureVS2D.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">
