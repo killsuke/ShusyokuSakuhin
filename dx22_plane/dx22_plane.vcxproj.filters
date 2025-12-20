@@ -832,22 +832,22 @@
     <FxCompile Include="shader\unlitTextureVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="OneSkinAnimationVS.hlsl">
+    <FxCompile Include="shader\OneSkinAnimationVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="OneSkinAnimationPS.hlsl">
+    <FxCompile Include="shader\OneSkinAnimationPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="shader\unlitTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="MaskTexturePS.hlsl">
+    <FxCompile Include="shader\MaskTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="OverVertexMoveVS.hlsl">
+    <FxCompile Include="shader\OverVertexMoveVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="unlitTextureVSSkyDome.hlsl">
+    <FxCompile Include="shader\unlitTextureVSSkyDome.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="shader\litTextureVS.hlsl">
@@ -856,7 +856,7 @@
     <FxCompile Include="shader\litTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="unlitTexture_GS.hlsl">
+    <FxCompile Include="shader\unlitTexture_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="shader\LineVS.hlsl">
@@ -874,7 +874,7 @@
     <FxCompile Include="shader\MotionBlurPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="unlitTexture2D_GS.hlsl">
+    <FxCompile Include="shader\unlitTexture2D_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="shader\litTextureVS2D.hlsl" />

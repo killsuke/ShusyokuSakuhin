@@ -35,7 +35,7 @@ void TimeSpawnParticlesComponent::Update() {
 		renderComp->CreateMesh<SquareMesh>();
 		renderComp->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		renderComp->ChangeTexture("assets/texture/shine.png");
-		renderComp->SetColor({0.3f,0.8f,1.0f,1.0f});
+		renderComp->SetColor({0.3f,0.8f,1.0f,2.0f});
 
 		m_SpawnInterval = m_InitInterval; // インターバルをリセット（例として1秒に設定）
 		return;

@@ -67,15 +67,7 @@ void TitleScene::Init()
 // 更新
 void TitleScene::Update()
 {
-	// エンターキーを押してステージ1へ
-	if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)))
-	{
-		auto fade = GameObjectManager::GameObjectFindNameUI("fade");
-		auto door = fade->GetComponent<DoorFadeComponent>();
-
-		door->SetBootDoor(true);
-		//SceneManager::SceneChange<LoadStageScene>();
-	}
+	
 
 	//else if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)) && setumeiFg == false)
 	//{

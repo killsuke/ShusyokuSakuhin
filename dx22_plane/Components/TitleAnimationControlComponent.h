@@ -11,6 +11,12 @@ private:
 	GameObject* m_Triangle2 = nullptr;
 	GameObject* m_Triangle3 = nullptr;
 	GameObject* m_Triangle4 = nullptr;
+	GameObject* m_TitleRogo = nullptr;
+	GameObject* m_Sword3D = nullptr;
+	GameObject* m_StartUI = nullptr;
+	GameObject* m_EndUI = nullptr;
+	GameObject* m_MiniSword3D = nullptr;
+	bool m_IsMiniSwordUpDown = true;
 
 public:
 	TitleAnimationControlComponent(GameObject& obj);

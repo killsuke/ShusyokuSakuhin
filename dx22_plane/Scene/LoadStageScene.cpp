@@ -63,7 +63,7 @@ LoadStageScene::LoadStageScene() {
 		skyTrans->SetScale({ 1000.0f,500.0f,1000.0f });
 		auto skyRend = skydome->AddComponent<SkyDomeRenderComponent>();
 		skyRend->CreateMesh<SkyDomeMesh>();
-		skyRend->SetShader("unlitTextureVSSkyDome.hlsl", "shader/unlitTexturePS.hlsl");
+		skyRend->SetShader("shader/unlitTextureVSSkyDome.hlsl", "shader/unlitTexturePS.hlsl");
 		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");*/
 	}
 
@@ -318,7 +318,7 @@ LoadStageScene::LoadStageScene() {
 
 	auto hpRender = hp->AddComponent<Render3DComponent>();
 	hpRender->CreateMesh<SquareMesh>();
-	hpRender->SetShader("OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+	hpRender->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
 	hpRender->ChangeTexture("assets/texture/NoTexture.png");
 	hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 

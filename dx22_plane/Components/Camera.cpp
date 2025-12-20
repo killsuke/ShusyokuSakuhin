@@ -221,7 +221,7 @@ void Camera::Update3D() {
 
 	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
 	float nearPlane = 1.0f;       // ニアクリップ
-	float farPlane = 1000.0f;      // ファークリップ
+	float farPlane = 5000.0f;      // ファークリップ
 
 	//プロジェクション行列の生成
 	XMMATRIX projectionMatrix;

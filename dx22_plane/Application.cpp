@@ -314,6 +314,10 @@ void Application::MainLoop()
 				fpsCounter = 0;
 				oldTick = nowTick;
 			}
+
+			if (m_IsEndGame == true) {
+				break;
+			}
 		}
 	}
 

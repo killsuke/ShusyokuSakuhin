@@ -36,6 +36,10 @@ public:
         return m_hWnd;
     }
 
+    static void GameEnd() {
+        m_IsEndGame = true;
+    }
+
 private:
     static HINSTANCE   m_hInst;        // インスタンスハンドル
     static HWND        m_hWnd;         // ウィンドウハンドル
@@ -43,6 +47,7 @@ private:
     static uint32_t    m_Height;       // ウィンドウの縦幅
 	const double m_fixedDeltaTime = 1.0 / 60.0; // 固定更新の時間
 	static double m_accumulatorTime;       // 固定更新用のアキュムレータ
+    static inline bool m_IsEndGame = false; // ゲームを終了させるフラグ
 
     static bool InitApp();
     static void TermApp();

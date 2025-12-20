@@ -299,7 +299,7 @@ TestStageScene::TestStageScene() {
 
 		auto hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->CreateMesh<SquareMesh>();
-		hpRender->SetShader("OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
 		hpRender->ChangeTexture("assets/texture/NoTexture.png");
 		hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 

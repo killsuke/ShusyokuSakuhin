@@ -8,8 +8,11 @@
 #include "ProjectileMotionComponent.h"
 #include "RigidBodyComponent.h"
 #include "BlinkingUIComponent.h"
+#include "DoorFadeComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/TriangleMesh.h"
+#include "Application.h"
+#include "input.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -20,43 +23,65 @@ namespace {
 TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
 
-	/*GameObject* sword3D = GameObjectManager::AddUI("sword3D", "TitleUI");
-	TransformComponent* transSword = sword3D->AddComponent<TransformComponent>();
-	transSword->SetPosition({ 0.0f,0.0f,1.0f });
-	transSword->SetScale({ 40.0f,400.0f,400.0f });
-	transSword->SetRotation({ 0.0f,-90.0f,0.0f });
-	Render3DComponent* rendSword = sword3D->AddComponent<Render3DComponent>();
-	rendSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
-		"assets/model/Copilot3D");
-	rendSword->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");*/
+	
 
 	GameObject* titleUI = GameObjectManager::AddObject("titleUI", "TitleUI");
 	TransformComponent* transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
-	transTitle->SetScale({ 400.0f,280.0f,1.0f });
+	transTitle->SetScale({ 350.0f,200.0f,1.0f });
+//	transTitle->SetRotation({ 0.0f,30.0f,0.0f });
 	Render3DComponent* rendTitle = titleUI->AddComponent<Render3DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
 	rendTitle->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rendTitle->ChangeTexture("assets/texture/Slash_Action_Title.png");
+	m_TitleRogo = titleUI;
 
-	/*{
-		auto titleUI = GameObjectManager::AddUI("tenmetuUI", "TitleUI");
-		auto transTitle = titleUI->AddComponent<TransformComponent>();
-		transTitle->SetPosition({ 0.0f,-200.0f,-0.5f });
-		transTitle->SetScale({ 200.0f,100.0f,1.0f });
-		auto blink = titleUI->AddComponent<BlinkingUIComponent>();
-		blink->SetBlinkingSpeed(0.7f);
+	GameObject* sword3D = GameObjectManager::AddUI("sword3D", "TitleUI");
+	TransformComponent* transSword = sword3D->AddComponent<TransformComponent>();
+	transSword->SetPosition({ -1000.0f,-200.0f,-8.0f });
+	transSword->SetScale({ 10.0f,500.0f,500.0f });
+	transSword->SetRotation({ 0.0f,90.0f,0.0f });
+	Render3DComponent* rendSword = sword3D->AddComponent<Render3DComponent>();
+	rendSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
+		"assets/model/Copilot3D");
+	rendSword->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	m_Sword3D = sword3D;
 
-		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-		rendTitle->CreateMesh<SquareMesh>();
-		rendTitle->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
-		rendTitle->ChangeTexture("assets/texture/please.png");
-		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-	}*/
+	GameObject* startUI = GameObjectManager::AddObject("start", "TitleUI");
+	TransformComponent* startTrans = startUI->AddComponent<TransformComponent>();
+	startTrans->SetPosition({ 0.0f,-200.0f,-8.0f });
+	startTrans->SetScale({ 130.0f,30.0f,1.0f });
+	Render3DComponent* startRend = startUI->AddComponent<Render3DComponent>();
+	startRend->CreateMesh<SquareMesh>();
+	startRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	startRend->ChangeTexture("assets/texture/start.png");
+	m_StartUI = startUI;
+	m_StartUI->SetActiveState(ActiveState::ALL_STOP);
 
+	GameObject* endUI = GameObjectManager::AddObject("end", "TitleUI");
+	TransformComponent* endTrans = endUI->AddComponent<TransformComponent>();
+	endTrans->SetPosition({ 0.0f,-290.0f,-8.0f });
+	endTrans->SetScale({ 80.0f,30.0f,1.0f });
+	Render3DComponent* endRend = endUI->AddComponent<Render3DComponent>();
+	endRend->CreateMesh<SquareMesh>();
+	endRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	endRend->ChangeTexture("assets/texture/end.png");
+	m_EndUI = endUI;
+	m_EndUI->SetActiveState(ActiveState::ALL_STOP);
 
-	// これを4枚分作って前に飛び出しながら回転するとか？
-	// 位置・サイズを調整
+	GameObject* miniSword = GameObjectManager::AddObject("miniSword", "TitleUI");
+	TransformComponent* transMiniSword = miniSword->AddComponent<TransformComponent>();
+	transMiniSword->SetPosition({ -200.0f,-200.0f,-8.0f });
+	transMiniSword->SetScale({ 150.0f,150.0f,150.0f });
+	transMiniSword->SetRotation({ 0.0f,90.0f,0.0f });
+	Render3DComponent* rendMiniSword = miniSword->AddComponent<Render3DComponent>();
+	rendMiniSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
+		"assets/model/Copilot3D");
+	rendMiniSword->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	m_MiniSword3D = miniSword;
+	m_MiniSword3D->SetActiveState(ActiveState::ALL_STOP);
+
+	// 割れる三角形４つ
 	{
 		GameObject* triangle1 = GameObjectManager::AddObject("triangle1", "TitleUI");
 		TransformComponent* transTri1 = triangle1->AddComponent<TransformComponent>();
@@ -171,16 +196,67 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	rendSlashLine2->ChangeTexture("assets/texture/LightLine.png");
 	m_SlashUI2 = slashLineUI2;
 	m_SlashUI2->SetActiveState(ActiveState::UPDATE_STOP);
-
-	
-
 }
 
 void TitleAnimationControlComponent::Update() {
 
-	// 仮おき
-	// 終了時間
-	if (m_RecordTime > 2.2f) {
+	const bool IsEnter = (Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A));
+	const bool IsUporDown = (Input::GetKeyTrigger(VK_W) || Input::GetKeyTrigger(VK_S) || Input::GetKeyTrigger(VK_UP) || Input::GetKeyTrigger(VK_DOWN)
+		|| Input::GetButtonTrigger(XINPUT_UP) || Input::GetButtonTrigger(XINPUT_DOWN));
+
+	// ここで一連のアニメーション終了後の処理
+	if (m_RecordTime > 5.9f) {
+		m_StartUI->SetActiveState(ActiveState::ACTIVE);
+		m_EndUI->SetActiveState(ActiveState::ACTIVE);
+		m_MiniSword3D->SetActiveState(ActiveState::ACTIVE);
+
+		TransformComponent* trans = m_MiniSword3D->GetComponent<TransformComponent>();
+		trans->AddRotation({0.0f,0.0f,2.0f});
+
+		// ここで十字キー上下とかで選択
+		if (IsUporDown == true) {
+			m_IsMiniSwordUpDown = !m_IsMiniSwordUpDown;
+		}
+
+		if (m_IsMiniSwordUpDown == true) {
+			trans->SetPosition({ -200.0f,-200.0f,-8.0f });
+			// エンターキーを押してステージ1へ
+			if (IsEnter == true)
+			{
+				auto fade = GameObjectManager::GameObjectFindNameUI("fade");
+				auto door = fade->GetComponent<DoorFadeComponent>();
+				door->SetBootDoor(true);
+			}
+		}
+		else {
+			trans->SetPosition({ -150.0f,-290.0f,-8.0f });
+			if (IsEnter == true) {
+				Application::GameEnd();
+			}
+		}
+	}
+	// 出現させた剣をロゴの後ろに移動させる
+	else if (m_RecordTime > 5.0f) {
+		TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
+		trans->AddPosition({-20.0f,-20.0f,0.0f});
+	}
+	// ロゴ回転
+	else if (m_RecordTime > 4.7f) {
+		TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
+		trans->AddRotation({0.0f,2.0f,0.0f});
+
+		TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
+		transSword->SetPosition({ 1200.0f,1200.0f,-30.0f });
+		transSword->SetRotation({45.0f,-50.0f,0.0f});
+		transSword->SetScale({ 10.0f,500.0f,800.0f });
+	}
+	// 剣出現
+	else if (m_RecordTime > 3.8) {
+		TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
+		trans->AddPosition({ 40.0f,0.0f,0.0f });
+	}
+	// 三角形飛ばす、画面割れ
+	else if (m_RecordTime > 2.2f) {
 		RigidBodyComponent* rigid1 = m_Triangle1->GetComponent<RigidBodyComponent>();
 		rigid1->SetActiveFlag(true);
 		RigidBodyComponent* rigid2 = m_Triangle2->GetComponent<RigidBodyComponent>();

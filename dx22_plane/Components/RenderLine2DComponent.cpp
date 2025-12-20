@@ -18,7 +18,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 
 	CreateMesh<LineMesh>();
 	// 専用のインプットレイアウトもここで作成予定
-	SetShader("shader/LineVS.hlsl", "shader/unlitTexturePS.hlsl", "unlitTexture2D_GS.hlsl");
+	SetShader("shader/LineVS.hlsl", "shader/unlitTexturePS.hlsl", "shader/unlitTexture2D_GS.hlsl");
 
 	m_StartObj = GameObjectManager::AddAbsFront("startPoint", "LineObj");
 	TransformComponent* transS = m_StartObj->AddComponent<TransformComponent>();
