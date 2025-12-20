@@ -24,6 +24,7 @@
 #include "Components/ProjectileMotionComponent.h"
 #include "Components/RigidBodyComponent.h"
 #include "Components/FliesMoveComponent.h"
+#include "Components/MeshCut2DComponent.h"
 
 //#include "Effekseer.h"
 //#include "EffekseerRendererDX11.h"
@@ -176,9 +177,10 @@ void Stage1Scene::Init()
 	{
 		GameObject* testObj = GameObjectManager::AddObject("testObj", "Test");
 		TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetScale({10.0f,10.0f,1.0f});
-		FliesMoveComponent* flies = testObj->AddComponent<FliesMoveComponent>();
-		flies->SetMovePower(2.0f);
+		testTrans->SetScale({50.0f,50.0f,1.0f});
+		MeshCut2DComponent* meshCut = testObj->AddComponent<MeshCut2DComponent>();
+	/*	FliesMoveComponent* flies = testObj->AddComponent<FliesMoveComponent>();
+		flies->SetMovePower(2.0f);*/
 	/*	RigidBodyComponent* rigid = testObj->AddComponent<RigidBodyComponent>();
 		rigid->SetGravityFlag(true);
 		rigid->SetMass(2.0f);
@@ -188,7 +190,7 @@ void Stage1Scene::Init()
 		proj->SetProjectileRotation({ 0.0f,0.0f,10.0f });*/
 		Render3DComponent* rend = testObj->AddComponent<Render3DComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/background1.png");
+	//	rend->ChangeTexture("assets/texture/background1.png");
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 
 	}

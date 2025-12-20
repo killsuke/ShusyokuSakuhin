@@ -47,6 +47,24 @@ public:
 
 	}
 
+	// インデックスバッファを書き換える
+	void Modify(const std::vector<unsigned int>& vertices)
+	{
+		auto deviceContext = DirectXRender::GetDeviceContext();
+
+		//頂点データ書き換え
+		D3D11_MAPPED_SUBRESOURCE msr;
+		HRESULT hr = deviceContext->Map(
+			m_IndexBuffer.Get(),
+			0,
+			D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+		if (SUCCEEDED(hr)) {
+			memcpy(msr.pData, vertices.data(), vertices.size() * sizeof(unsigned int));
+			deviceContext->Unmap(m_IndexBuffer.Get(), 0);
+		}
+	}
+
 	void BufferReset() {
 		m_IndexBuffer = nullptr;
 	}
