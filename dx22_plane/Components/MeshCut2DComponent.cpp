@@ -42,6 +42,9 @@ void MeshCut2DComponent::Update()
 		return;
 	}
 
+	Texture texture = rendComp->GetTexture();
+	std::string texName = texture.GetTexname();
+
 	// 取り敢えず縦に左右に半分にカットする処理を書く
 	// こんどは頂点バッファを書き換える処理を書く
 	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
@@ -58,7 +61,8 @@ void MeshCut2DComponent::Update()
 	Render3DComponent* leftRend = leftObj->AddComponent<Render3DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
 	leftRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-	
+	leftRend->ChangeTexture(texName);
+
 	GameObject* rightObj = GameObjectManager::AddObject("CutRight", "CutPart");
 	TransformComponent* rightTrans = rightObj->AddComponent<TransformComponent>();
 	rightTrans->SetPosition(pos + Vector3(size.x * 0.5f, pos.y, pos.z));
@@ -69,6 +73,7 @@ void MeshCut2DComponent::Update()
 	Render3DComponent* rightRend = rightObj->AddComponent<Render3DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
 	rightRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	rightRend->ChangeTexture(texName);
 
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
 
@@ -89,8 +94,8 @@ void MeshCut2DComponent::Update()
 	leftVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 	leftVertices[0].uv = Vector2(0.0f, 1.0f);
-	leftVertices[1].uv = Vector2(1.0f, 1.0f);
-	leftVertices[2].uv = Vector2(1.0f, 0.0f);
+	leftVertices[1].uv = Vector2(0.5f, 1.0f);
+	leftVertices[2].uv = Vector2(0.5f, 0.0f);
 	leftVertices[3].uv = Vector2(0.0f, 0.0f);
 
 	leftVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
@@ -111,10 +116,10 @@ void MeshCut2DComponent::Update()
 	rightVertices[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	rightVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	rightVertices[0].uv = Vector2(0.0f, 1.0f);
+	rightVertices[0].uv = Vector2(0.5f, 1.0f);
 	rightVertices[1].uv = Vector2(1.0f, 1.0f);
 	rightVertices[2].uv = Vector2(1.0f, 0.0f);
-	rightVertices[3].uv = Vector2(0.0f, 0.0f);
+	rightVertices[3].uv = Vector2(0.5f, 0.0f);
 
 	rightVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
 	rightVertices[1].normal = Vector3(0.0f, 0.0f, -1.0f);

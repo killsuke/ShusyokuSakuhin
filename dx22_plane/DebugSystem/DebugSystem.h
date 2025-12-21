@@ -1,15 +1,14 @@
 #pragma once
 #include "GameObject.h"
 #include <vector>
+#include <string>
 
 class DebugSystem
 {
 private:
 
-	static inline GameObject* m_DebugUI_F1 = nullptr;
-	static inline GameObject* m_DebugUI_F2 = nullptr;
-	static inline GameObject* m_DebugUI_F3 = nullptr;
-	static inline GameObject* m_DebugUI_F4 = nullptr;
+	static inline std::vector<GameObject*> m_DebugUIs = { nullptr };
+	static inline std::vector<std::string> m_DebugUITextureNames = { "" };
 
 	static inline bool m_IsDebugUI = true; // デバッグUIの表示非表示フラグ
 	static inline bool m_ScreenStop = false; // 画面停止のフラグ

@@ -16,7 +16,7 @@ class Texture
 {
 private:
 
-	std::string m_texname = ""; // ファイル名
+	std::string m_Texname = ""; // ファイル名
 	ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
 	ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
 
@@ -66,6 +66,8 @@ public:
 
 		return uvs;
 	};
+
+	std::string GetTexname() const { return m_Texname; };
 
 	inline void SetInitialCut(float sx, float sy) {
 		m_SplitX = sx;

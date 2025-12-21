@@ -7,7 +7,7 @@
 using namespace DirectX::SimpleMath;
 
 Texture::Texture(const Texture& other)
-	: m_texname(other.m_texname),
+	: m_Texname(other.m_Texname),
 	m_srv(other.m_srv),           // ComPtr は参照カウントが増えるだけ
 	m_srvMask(other.m_srvMask),
 	m_width(other.m_width),
@@ -200,6 +200,7 @@ bool Texture::LoadTexture(const std::string& filename)
 	auto tex = TextureManager::LoadTexture(filename);
 
 	if (tex != nullptr) {
+		m_Texname = filename;
 		m_srv = tex;
 		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 		devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());

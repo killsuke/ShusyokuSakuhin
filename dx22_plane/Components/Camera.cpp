@@ -179,8 +179,8 @@ void Camera::Update2D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	Vector3 camPos = transform->GetPosition();
 	// ビュー変換後列作成
-	Vector3 pos = { 0.0f,0.0f,camPos.z };
-	Vector3 tgt = { 0.0f,0.0f,m_Target.z };
+	Vector3 pos = { 0.0f,0.0f,-10.0f };
+	Vector3 tgt = { 0.0f,0.0f,0.0f };
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 	XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
 
@@ -219,6 +219,7 @@ void Camera::Update3D() {
 	//プロジェクション行列の生成
 	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
 
+	// 後にここは調整できるようにしておく
 	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
 	float nearPlane = 1.0f;       // ニアクリップ
 	float farPlane = 5000.0f;      // ファークリップ
