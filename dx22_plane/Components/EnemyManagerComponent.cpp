@@ -17,6 +17,8 @@
 #include "PlayerDamageComponent.h"
 #include "HitFlashComponent.h"
 #include "ProjectileMotionComponent.h"
+#include "MeshCut2DComponent.h"
+#include "EnemyDeathEventComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -66,6 +68,10 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		CreateKind(eS.kind, *enemyObj);
 
 		ProjectileMotionComponent* proj = enemyObj->AddComponent<ProjectileMotionComponent>();
+
+		MeshCut2DComponent* meshCut = enemyObj->AddComponent<MeshCut2DComponent>();
+
+		EnemyDeathEventComponent* deathEvent = enemyObj->AddComponent<EnemyDeathEventComponent>();
 
 		auto fighter = enemyObj->AddComponent<FighterComponent>();
 		fighter->SetUseDeadFlag(false);

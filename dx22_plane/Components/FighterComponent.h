@@ -59,7 +59,7 @@ public:
 	};
 
 	void DamageProcess();
-	// 本当にヒットしたかどうかのテストコード
+	// ヒットした際のイベント
 	void OnHit(const HitEvent& event);
 };
 

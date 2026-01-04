@@ -17,6 +17,10 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		layout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,			0,	D3D11_APPEND_ALIGNED_ELEMENT,   D3D11_INPUT_PER_VERTEX_DATA, 0 });
 	}
 
+	m_ShaderNames.push_back(vs);
+	m_ShaderNames.push_back(ps);
+	m_ShaderNames.push_back(gs);
+
 	unsigned int numElements = static_cast<unsigned int>(layout.size());
 
 	ID3D11Device* device = DirectXRender::GetDevice();

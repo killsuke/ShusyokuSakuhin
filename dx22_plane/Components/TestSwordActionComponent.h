@@ -47,5 +47,6 @@ public:
 	void SetIsAction(const bool action) { m_IsAction = action; };
 
 	GameObject* GetHolder() { return m_Holder; };
+	ESwordActionState GetSwordActionState() const { return m_SwordActionState; };
 };
 

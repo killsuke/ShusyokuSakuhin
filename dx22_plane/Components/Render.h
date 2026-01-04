@@ -73,6 +73,8 @@ public:
 
 	VertexBuffer<VERTEX_3D>* GetVertexBuffer() { return &m_VertexBuffer; };
 	IndexBuffer* GetIndexBuffer() { return &m_IndexBuffer; };
+	bool GetInversionFlag()const { return m_InversionFlag; };
+	Shader* GetShader()const { return m_Shader.get(); };
 
 	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
 

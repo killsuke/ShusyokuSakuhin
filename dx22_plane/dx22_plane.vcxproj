@@ -170,6 +170,7 @@
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
     <ClCompile Include="Components\FliesMoveComponent.cpp" />
+    <ClCompile Include="Components\EnemyDeathEventComponent.cpp" />
     <ClCompile Include="Manager\EventBusManager.cpp" />
     <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
@@ -211,7 +212,7 @@
     <ClCompile Include="Components\RenderParticlesComponent.cpp" />
     <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
-    <ClCompile Include="HitStopManager.cpp" />
+    <ClCompile Include="Manager\HitStopManager.cpp" />
     <ClCompile Include="Components\HumanBoneComponent.cpp" />
     <ClCompile Include="Components\JsonComponent.cpp" />
     <ClCompile Include="Components\LeapToCenterCarComponent.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="DebugSystem\DebugSystem.h" />
     <ClInclude Include="Components\VectorMoveComponent.h" />
     <ClInclude Include="Components\FliesMoveComponent.h" />
+    <ClInclude Include="Components\EnemyDeathEventComponent.h" />
     <ClInclude Include="Manager\EventBusManager.h" />
     <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />
@@ -344,7 +346,7 @@
     <ClInclude Include="Components\RenderParticlesComponent.h" />
     <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
-    <ClInclude Include="HitStopManager.h" />
+    <ClInclude Include="Manager\HitStopManager.h" />
     <ClInclude Include="Components\HumanBoneComponent.h" />
     <ClInclude Include="Components\JsonComponent.h" />
     <ClInclude Include="Components\LeapToCenterCarComponent.h" />

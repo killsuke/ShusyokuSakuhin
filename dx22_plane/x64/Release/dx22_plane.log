@@ -1,18 +1,7 @@
-﻿  Application.cpp
-  ArbitraryRotationComponent.cpp
-  DoorFadeComponent.cpp
-  EnemyDamageComponent.cpp
-  GameObjectManager.cpp
-  LoadStageScene.cpp
-  ResultScene.cpp
-  SceneManager.cpp
-  Stage1Scene.cpp
-  TestSwordActionComponent.cpp
-  TitleScene.cpp
-  TrailRenderComponent.cpp
+﻿  FighterComponent.cpp
   コード生成しています。
-  275 of 9695 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
-    124 functions were new in current compilation
-    443 functions had inline decision re-evaluated but remain unchanged
+  5 of 9903 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    33 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   dx22_plane.vcxproj -> C:\Users\whgmt\Desktop\ModFile\ShusyokuSakuhin\x64\Release\dx22_plane.exe

@@ -354,7 +354,7 @@
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="HitStopManager.cpp">
+    <ClCompile Include="Manager\HitStopManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Components\TrailMakeComponent.cpp">
@@ -404,6 +404,9 @@
     </ClCompile>
     <ClCompile Include="Components\RenderParticlesComponent.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\EnemyDeathEventComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -770,7 +773,7 @@
     <ClInclude Include="XMFLOAT_Helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HitStopManager.h">
+    <ClInclude Include="Manager\HitStopManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Components\TrailMakeComponent.h">
@@ -820,6 +823,9 @@
     </ClInclude>
     <ClInclude Include="Components\RenderParticlesComponent.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\EnemyDeathEventComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

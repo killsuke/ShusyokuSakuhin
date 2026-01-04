@@ -217,6 +217,17 @@ std::vector<GameObject*> GameObjectManager::HelperFindTag(const std::vector<std:
 	return matchingObjects; // 一致するオブジェクトのベクターを返す
 }
 
+GameObject* GameObjectManager::HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id) {
+
+	for (const auto& obj : objs) { // objects をループで探索
+		if (obj->GetInstanceID() == id) { // タグが一致するかチェック
+			return obj.get(); // 一致するオブジェクトを返す
+		}
+	}
+	
+	return nullptr; // 見つからなかった場合はnullptrを返す
+}
+
 void GameObjectManager::TransferAddObjects() {
 
 	for (auto& p : temporaryContainer)

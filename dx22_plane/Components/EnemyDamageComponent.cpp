@@ -5,9 +5,15 @@
 #include "AttackOneTimeComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
-#include "HitStopManager.h"
+#include "Manager/HitStopManager.h"
 #include "CameraShakeComponent.h"
 #include "FighterComponent.h"
+
+namespace {
+	constexpr float FirstStopTime = 0.1f; // 最初のヒットストップ時間
+	constexpr float SecondStopTime = 0.3f; // ２回目のヒットストップ時間
+	constexpr float ThirdStopTime = 0.5f; // ３回目のヒットストップ時間
+}
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 {
@@ -40,16 +46,23 @@ void EnemyDamageComponent::Update()
 				attack->AttackAction(*objOther);
 
 				if (attack->GetAttackHitFlag() == true) {
-					std::vector<std::string> targetTags = { "Player","Enemy","Sword","Effect","SkyDome" };
-					for (const auto& tag : targetTags)
-					{
-						HitStopManager::AddTargetTag(tag); // ヒットストップ対象タグを追加
+
+					TestSwordActionComponent* swordComp = m_Object->GetComponent<TestSwordActionComponent>();
+
+					// ヒットストップ時間の選択
+					float stopTime = FirstStopTime;
+					if (swordComp != nullptr) {
+						ESwordActionState state = swordComp->GetSwordActionState();
+						stopTime = ChoiceStopTime(state);
 					}
-					HitStopManager::SetHitStopTime(0.1f); // ヒットストップ時間をセット
+
+					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome" });
+					HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
+
 					GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 					if (camera != nullptr) {
 						CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
-						
+
 						const uint32_t myID = m_Object->GetInstanceID();
 						const uint32_t otherID = objOther->GetInstanceID();
 
@@ -59,11 +72,31 @@ void EnemyDamageComponent::Update()
 						EventBusManager::Push(he);
 
 						// 画面揺れ開始
-						shake->ShakingPreparation(50.0f,1.5f,0.2f);
+						shake->ShakingPreparation(50.0f, 1.5f, 0.2f);
 					}
 				}
 			}
-
 		}
+	}
+}
+
+float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState state) {
+
+	switch (state)
+	{
+	case ESwordActionState::SLASH_1ST:
+		return FirstStopTime;
+		break;
+
+	case ESwordActionState::SLASH_2ND:
+		return SecondStopTime;
+		break;
+
+	case ESwordActionState::SLASH_3RD:
+		return ThirdStopTime;
+		break;
+	default:
+		return FirstStopTime;
+		break;
 	}
 }

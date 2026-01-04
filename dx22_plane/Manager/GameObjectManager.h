@@ -205,6 +205,10 @@ public:
 		return 	result; // 一致するオブジェクトのベクターを返す
 	}
 
+	static GameObject* GameObjectFindInstanceID(const uint32_t& id) { // インスタンスID検索でゲームオブジェクトを持ってくるか考える
+		return HelperFindInstanceID(objects, id);
+	}
+
 private:
 
 	static std::vector<std::unique_ptr<GameObject>> objects;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
@@ -229,5 +233,6 @@ private:
 	static std::vector<GameObject*> HelperFindTag(const std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& id);
 	static std::vector<GameObject*> HelperFindTags(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
 	static std::vector<GameObject*> HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
+	static GameObject* HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id);
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "TestSwordActionComponent.h"
 
 class EnemyDamageComponent : public Component
 {
@@ -10,4 +11,6 @@ public:
 	~EnemyDamageComponent() = default;
 
 	void Update() override;
+
+	float ChoiceStopTime(const ESwordActionState state);
 };

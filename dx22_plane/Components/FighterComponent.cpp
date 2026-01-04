@@ -2,7 +2,10 @@
 #include "Manager/GameObjectManager.h"
 #include <iostream>
 #include <string>
+#include <SimpleMath.h>
 #include "EnemyActionComponent.h"
+//#include "MeshCut2DComponent.h"
+#include "Transform.h"
 #include "Manager/EventBusManager.h"
 
 namespace {
@@ -47,6 +50,7 @@ void FighterComponent::Update() {
 			m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 		}
 
+		m_Object->SetActiveState(ActiveState::DRAW_STOP);
 
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {
@@ -60,7 +64,7 @@ void FighterComponent::Update() {
 
 		m_deadFlag = true; // 死亡フラグを立てる
 
-		m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+	//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
 
@@ -98,9 +102,8 @@ void FighterComponent::DamageProcess() {
 			if (m_deadFlag == false) {
 				m_deadFlag = true; // 死亡フラグを立てる
 				const uint32_t id = m_Object->GetInstanceID();
-				const DeadEvent de = { id };
-
-				// ヒット時の通知テスト
+				const DeathEvent de = { id };
+				
 				EventBusManager::Push(de);
 			}
 			return; // 死亡フラグがfalseなら何もしない

@@ -188,7 +188,7 @@ void Stage1Scene::Init()
 		proj->SetProjectilePower(1.0f);
 		proj->SetProjectileDirection({0.0f,1.0f,0.0f});
 		proj->SetProjectileRotation({ 0.0f,0.0f,10.0f });*/
-		Render3DComponent* rend = testObj->AddComponent<Render3DComponent>();
+		Render2DComponent* rend = testObj->AddComponent<Render2DComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/background1.png");
 		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");

@@ -126,13 +126,6 @@ HRESULT DirectXRender::Init() {
 
 void DirectXRender::UnInit() {
 
-	/*m_WorldBuffer->Release();
-	m_ViewBuffer->Release();
-	m_ProjectionBuffer->Release();*/
-
-	//m_LightBuffer->Release();
-	//m_MaterialBuffer->Release();
-
 	m_DeviceContext->ClearState();
 	SAFE_RELEASE(g_pRenderTargetView);
 	SAFE_RELEASE(g_pDepthStencilView);
@@ -158,12 +151,6 @@ void DirectXRender::UnInit() {
 		}
 	}
 	SAFE_RELEASE(g_BlendStateATC);
-	/*SAFE_RELEASE(g_pViewBuffer3D);
-	SAFE_RELEASE(g_pProjectionBuffer3D);
-	SAFE_RELEASE(g_pViewBuffer2D);
-	SAFE_RELEASE(g_pProjectionBuffer2D);
-	SAFE_RELEASE(g_pViewBufferSkyDome);
-	SAFE_RELEASE(g_pProjectionBufferSkyDome);*/
 	SAFE_RELEASE(g_pCameraInformationBuffer);
 	SAFE_RELEASE(g_pLineThicknessBuffer);
 	SAFE_RELEASE(m_DeviceContext);

@@ -1,7 +1,7 @@
 #include "DebugSystem.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameObjectManager.h"
-#include "HitStopManager.h"
+#include "Manager/HitStopManager.h"
 #include "Components/Transform.h"
 #include "Components/Render3D.h"
 #include "Mesh/SquareMesh.h"
@@ -127,7 +127,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		for (const auto& obj : objs) {
 			// 更新停止中か全停止中のオブジェクトはスルー
 			const ActiveState currentState = obj->GetActiveState();
-			if(currentState == ActiveState::UPDATE_STOP || currentState == ActiveState::ALL_STOP) {
+			if(currentState != ActiveState::ACTIVE) {
 				continue;
 			}
 

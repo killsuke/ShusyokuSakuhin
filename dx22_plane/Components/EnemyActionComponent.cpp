@@ -4,6 +4,7 @@
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "RenderBillboard.h"
+#include "RigidBodyComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Effect2DComponent.h"
 #include "ProjectileMotionComponent.h"
@@ -20,7 +21,7 @@ EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 		CreateDamageEffect(e);
 		});
 
-	m_listenerID_DeadEvent = EventBusManager::Subscribe<DeadEvent>([&](const DeadEvent& e) {
+	m_listenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
 		ActionOff(e);
 		});
 }
@@ -28,7 +29,7 @@ EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 EnemyActionComponent::~EnemyActionComponent() {
 
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
-	EventBusManager::Unsubscribe(m_listenerID_DeadEvent);
+	EventBusManager::Unsubscribe(m_listenerID_DeathEvent);
 }
 
 void EnemyActionComponent::Update() {
@@ -65,7 +66,7 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
 }
 
-void EnemyActionComponent::ActionOff(const DeadEvent& event) {
+void EnemyActionComponent::ActionOff(const DeathEvent& event) {
 
 	const uint32_t deadID = m_Object->GetInstanceID();
 
@@ -78,10 +79,16 @@ void EnemyActionComponent::ActionOff(const DeadEvent& event) {
 		coll->SetActiveColliderFlag(false);
 	}
 
-	ProjectileMotionComponent* proj = m_Object->GetComponent<ProjectileMotionComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	if (rigid != nullptr) {
+		rigid->ClearVelocity();
+		rigid->SetActiveFlag(false);
+	}
+
+	/*ProjectileMotionComponent* proj = m_Object->GetComponent<ProjectileMotionComponent>();
 	if (proj != nullptr) {
 		proj->InitProjectile(XMFLOAT3(0.5f,1.0f,-1.0f), XMFLOAT3(0.0f,0.0f,10.0f), 25.0f);
-	}
+	}*/
 
 	m_IsActiveFlag = false;
 

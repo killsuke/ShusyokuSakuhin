@@ -1,11 +1,12 @@
 #include "MeshCut2DComponent.h"
 #include "Mesh/SquareMesh.h"
-#include "Render3D.h"
+#include "Render2D.h"
 #include "Transform.h"
 #include "VectorMoveComponent.h"
 #include "input.h"
 #include "Manager/GameObjectManager.h"
 #include "DirectXRender.h"
+#include "Manager/EventBusManager.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -14,10 +15,19 @@ MeshCut2DComponent::MeshCut2DComponent(GameObject& obj) : Component(obj)
 {
 	// コンポーネントのソート番号を設定（あとで）
 	m_SortNum = ComponentTypeManager::GetID_FromName("MESH_CUT_2D"); // ソート番号を設定
+
+	m_listenerID_CutEvent = EventBusManager::Subscribe<CutEvent>([&](const CutEvent& e) {
+		MeshCutAction(e);
+		});
+}
+
+MeshCut2DComponent::~MeshCut2DComponent() {
+	EventBusManager::Unsubscribe(m_listenerID_CutEvent);
 }
 
 void MeshCut2DComponent::Update()
 {
+
 }
 
 // 切断後の頂点の位置計算
@@ -34,9 +44,19 @@ void MeshCut2DComponent::MakeCutPoints(float& vL, float& vR, const float ratio) 
 	vR = 0.5f - value2;
 }
 
-void MeshCut2DComponent::MeshCutAction() {
+void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 
-	Render3DComponent* rendComp = m_Object->GetComponent<Render3DComponent>();
+	const uint32_t id = m_Object->GetInstanceID();
+
+	if (event.targetID != id) {
+		return; // 自分宛じゃないなら無視
+	}
+
+	m_CutDirection = event.cutDirection;
+	m_CutRatio1 = event.ratio1;
+	m_CutRatio2 = event.ratio2;
+
+	Render2DComponent* rendComp = m_Object->GetComponent<Render2DComponent>();
 	if (rendComp == nullptr) {
 		return;
 	}
@@ -51,14 +71,11 @@ void MeshCut2DComponent::MeshCutAction() {
 		return;
 	}
 
-	const bool cutKey = Input::GetKeyTrigger(VK_RETURN);
-
-	if (cutKey == false) {
-		return;
-	}
-
 	Texture texture = rendComp->GetTexture();
 	std::string texName = texture.GetTexname();
+	const bool isInversion = rendComp->GetInversionFlag();
+	Shader* shader = rendComp->GetShader();
+	std::vector<std::string> shaderName = shader->GetShaderNames();
 
 	// 取り敢えず縦に左右に半分にカットする処理を書く
 	// こんどは頂点バッファを書き換える処理を書く
@@ -66,31 +83,31 @@ void MeshCut2DComponent::MeshCutAction() {
 	Vector3 pos = trans->GetPosition();
 	Vector3 size = trans->GetScale();
 
-	GameObject* leftObj = GameObjectManager::AddObject("CutLeft", "CutPart");
-	TransformComponent* leftTrans = leftObj->AddComponent<TransformComponent>();
-	leftTrans->SetPosition(pos + Vector3(pos.x, size.y * 0.5f, pos.z));
+	m_CutObj1 = GameObjectManager::AddObject("CutLeft", "CutPart");
+	TransformComponent* leftTrans = m_CutObj1->AddComponent<TransformComponent>();
 	leftTrans->SetScale(Vector3(size.x, size.y, size.z));
-	VectorMoveComponent* leftMove = leftObj->AddComponent<VectorMoveComponent>();
-	leftMove->SetMoveDirection({ -1.0f,0.0f,0.0f });
-	leftMove->SetMovePower(0.1f);
-	Render3DComponent* leftRend = leftObj->AddComponent<Render3DComponent>();
+	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
+	//leftMove->SetMoveDirection({ -1.0f,0.0f,0.0f });
+	//leftMove->SetMovePower(0.1f);
+	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
-	leftRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	leftRend->SetShader(shaderName[0], shaderName[1], shaderName[2]);
 	leftRend->ChangeTexture(texName);
+	leftRend->SetInversionFlag(isInversion);
+	m_CutObj1ID = m_CutObj1->GetInstanceID();
 
-	GameObject* rightObj = GameObjectManager::AddObject("CutRight", "CutPart");
-	TransformComponent* rightTrans = rightObj->AddComponent<TransformComponent>();
-	rightTrans->SetPosition(pos + Vector3(pos.x, -size.y * 0.5f, pos.z));
+	m_CutObj2 = GameObjectManager::AddObject("CutRight", "CutPart");
+	TransformComponent* rightTrans = m_CutObj2->AddComponent<TransformComponent>();
 	rightTrans->SetScale(Vector3(size.x, size.y, size.z));
-	VectorMoveComponent* rightMove = rightObj->AddComponent<VectorMoveComponent>();
-	rightMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
-	rightMove->SetMovePower(0.1f);
-	Render3DComponent* rightRend = rightObj->AddComponent<Render3DComponent>();
+	VectorMoveComponent* rightMove = m_CutObj2->AddComponent<VectorMoveComponent>();
+	//rightMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
+	//rightMove->SetMovePower(0.1f);
+	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
-	rightRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+	rightRend->SetShader(shaderName[0], shaderName[1], shaderName[2]);
 	rightRend->ChangeTexture(texName);
-
-	m_Object->SetActiveState(ActiveState::ALL_STOP);
+	rightRend->SetInversionFlag(isInversion);
+	m_CutObj2ID = m_CutObj2->GetInstanceID();
 
 	std::vector<VERTEX_3D> leftVertices;
 	std::vector<VERTEX_3D> rightVertices;
@@ -99,6 +116,9 @@ void MeshCut2DComponent::MeshCutAction() {
 	rightVertices.resize(4);
 
 	if (m_CutDirection == CutDirection::HORIZONTAL) { // HORIZONTAL
+
+		leftTrans->SetPosition(Vector3(pos.x, pos.y + (size.y * 0.5f), pos.z));
+		rightTrans->SetPosition(Vector3(pos.x, pos.y + (-size.y * 0.5f), pos.z));
 
 		float vDLeft = 0.0f;
 		float vDRight = 0.0f;
@@ -159,6 +179,8 @@ void MeshCut2DComponent::MeshCutAction() {
 
 	}
 	else {// VERTICAL
+		leftTrans->SetPosition(Vector3(pos.x + (-size.x * 0.5f), pos.y, pos.z));
+		rightTrans->SetPosition(Vector3(pos.x + (size.x * 0.5f), pos.y, pos.z));
 
 		float vLTop = 0.0f;
 		float vRTop = 0.0f;
@@ -242,6 +264,4 @@ void MeshCut2DComponent::MeshCutAction() {
 
 	VertexBuffer<VERTEX_3D>* vRBuffer = rightRend->GetVertexBuffer();
 	vRBuffer->Modify(rightVertices);
-
-
 }
