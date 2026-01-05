@@ -1,8 +1,8 @@
 #include	<iostream>
 #include	"Texture.h"
 #include	"stb_image.h"
-#include	"DirectXRender.h"
-#include	"TextureManager.h"
+#include	"System/DirectXRender.h"
+#include	"Manager/TextureManager.h"
 
 using namespace DirectX::SimpleMath;
 

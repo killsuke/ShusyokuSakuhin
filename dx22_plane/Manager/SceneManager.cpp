@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "GameObjectManager.h"
 #include "HitStopManager.h"
-#include "Application.h"
+#include "System/Application.h"
 #include "DebugSystem/DebugSystem.h"
 
 std::unique_ptr<Scene> SceneManager::m_pScene;	// ここで書くことでちゃんと定義できる
@@ -12,6 +12,7 @@ float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
 
 void SceneManager::Init() {
 	sound.Init();	// サウンドの初期化
+	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
 	//m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン

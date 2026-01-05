@@ -17,7 +17,7 @@
 #include "Components/RenderBlurComponent.h"
 #include "Components/RenderMotionBlurComponent.h"
 #include "input.h"
-#include "ModelManager.h"
+#include "Manager/ModelManager.h"
 #include "Components/Collider.h"
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/TrailRenderComponent.h"

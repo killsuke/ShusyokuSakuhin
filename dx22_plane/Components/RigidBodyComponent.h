@@ -5,8 +5,7 @@
 // -------------------------------------------
 
 #pragma once
-#include <DirectXMath.h> // DirextXの数学関連のヘッダーファイル
-#include <SimpleMath.h> // DirectX::SimpleMathを使うためのヘッダーファイル
+#include "Transform.h"
 #include "Component.h"
 #include <cmath>
 #include <chrono>	// 時間を計測してくれる
@@ -22,10 +21,10 @@
 class RigidBodyComponent final : public Component
 {
 private:
-	DirectX::SimpleMath::Vector3 m_velocity{};	 // 速度
-	DirectX::SimpleMath::Vector3 m_acceleration{};// 加速度
-	DirectX::SimpleMath::Vector3 m_totalForce{};              // 合力
-	DirectX::SimpleMath::Vector3 m_LimitVelocity{};         // 速度制限
+	DirectX::XMFLOAT3 m_velocity{};	 // 速度
+	DirectX::XMFLOAT3 m_acceleration{};// 加速度
+	DirectX::XMFLOAT3 m_totalForce{};              // 合力
+	DirectX::XMFLOAT3 m_LimitVelocity{};         // 速度制限
 	float m_mass = 1.0f;				 // 質量
 	//	float elapsedTime = 0.0f;		 // 落下中の時間、これで自由落下の計算をする
 	bool m_fallFlag = false;		 	 // 落下のフラグ 
@@ -51,25 +50,25 @@ public:
 	void UpdateVelocity();
 
 	// 速度返す
-	inline void SetVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_velocity = velocity; };
-	inline void SetLimitVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_LimitVelocity = velocity; };
+	inline void SetVelocity(const DirectX::XMFLOAT3& velocity) { m_velocity = velocity; };
+	inline void SetLimitVelocity(const DirectX::XMFLOAT3& velocity) { m_LimitVelocity = velocity; };
 	inline void SetLimitVelocity_X(const float velocity) { m_LimitVelocity.x = velocity; };
 	inline void SetLimitVelocity_Y(const float velocity) { m_LimitVelocity.y = velocity; };
 	inline void SetLimitVelocity_Z(const float velocity) { m_LimitVelocity.z = velocity; };
-	inline DirectX::SimpleMath::Vector3 GetVelocity()const { return m_velocity; };
-	inline void AddVelocity(const DirectX::SimpleMath::Vector3& velocity) { m_velocity += velocity; };
+	inline DirectX::XMFLOAT3 GetVelocity()const { return m_velocity; };
+	inline void AddVelocity(const DirectX::XMFLOAT3& velocity) { m_velocity += velocity; };
 
-	void ConstantVelocity(const DirectX::SimpleMath::Vector3& velocity);	// 等速運動
+	void ConstantVelocity(const DirectX::XMFLOAT3& velocity);	// 等速運動
 	void ConstantVelocity_X(const float velocity);	// 等速運動
 	void ConstantVelocity_Y(const float velocity);	// 等速運動
 	void ConstantVelocity_Z(const float velocity);	// 等速運動
 
-	void ReduceVelocity(const DirectX::SimpleMath::Vector3& velocity = DirectX::SimpleMath::Vector3{ DAMPINGFACTOR,DAMPINGFACTOR,DAMPINGFACTOR });		// 速度減らし
+	void ReduceVelocity(const DirectX::XMFLOAT3& velocity = DirectX::XMFLOAT3{ DAMPINGFACTOR,DAMPINGFACTOR,DAMPINGFACTOR });		// 速度減らし
 	void ReduceVelocity_X(const float velocity = DAMPINGFACTOR);		// 速度減らし
 	void ReduceVelocity_Y(const float velocity = DAMPINGFACTOR);		// 速度減らし
 	void ReduceVelocity_Z(const float velocity = DAMPINGFACTOR);		// 速度減らし
 
-	inline void ClearVelocity() { m_velocity = DirectX::SimpleMath::Vector3::Zero; };
+	inline void ClearVelocity() { m_velocity = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };
 
 	inline void SetMass(const float mass) { m_mass = mass; };
 	inline float GetMass()const { return m_mass; };
@@ -92,13 +91,13 @@ public:
 
 	//	DirectX::XMFLOAT3& AcceleratorPosition(DirectX::XMFLOAT3& pos);	// 加速度から速度、速度から位置の更新
 	float UseGravity(const bool gravityFlag);		// 重力
-	inline void AddForce(const DirectX::SimpleMath::Vector3& force) { m_totalForce += force; };
-	inline void ClearForce() { m_totalForce = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f); };	// 合力をクリア
-	inline DirectX::SimpleMath::Vector3 GetTotalForce() const { return m_totalForce; }	// 合力を返す
+	inline void AddForce(const DirectX::XMFLOAT3& force) { m_totalForce += force; };
+	inline void ClearForce() { m_totalForce = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };	// 合力をクリア
+	inline DirectX::XMFLOAT3 GetTotalForce() const { return m_totalForce; }	// 合力を返す
 
-	inline void ClearAcceleration() { m_acceleration = DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f); };	// 加速度をクリア
+	inline void ClearAcceleration() { m_acceleration = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };	// 加速度をクリア
 
-	void ApplyForce(const DirectX::SimpleMath::Vector3& force);	// 外力を加える、構造体かfloatか
+	void ApplyForce(const DirectX::XMFLOAT3& force);	// 外力を加える、構造体かfloatか
 	void ApplyFriction_X();	// 摩擦力
 	void ApplyFriction_Y();	// 摩擦力
 	void ApplyAirRessistance();	// 空気抵抗

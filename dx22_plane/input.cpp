@@ -1,5 +1,5 @@
 #include "input.h"
-#include "Application.h"
+#include "System/Application.h"
 
 BYTE Input::keyState[256] = {};
 BYTE Input::keyState_old[256] = {};
@@ -78,7 +78,7 @@ bool Input::GetKeyRelease(int key) //リリース
 }
 
 //左アナログスティック
-DirectX::SimpleMath::Vector2 Input::GetLeftAnalogStick(void)
+DirectX::XMFLOAT2 Input::GetLeftAnalogStick(void)
 {
 	SHORT x = controllerState.Gamepad.sThumbLX; // -32768～32767
 	SHORT y = controllerState.Gamepad.sThumbLY; // -32768～32767
@@ -89,7 +89,7 @@ DirectX::SimpleMath::Vector2 Input::GetLeftAnalogStick(void)
 	return res;
 }
 //右アナログスティック
-DirectX::SimpleMath::Vector2 Input::GetRightAnalogStick(void)
+DirectX::XMFLOAT2 Input::GetRightAnalogStick(void)
 {
 	SHORT x = controllerState.Gamepad.sThumbRX; // -32768～32767
 	SHORT y = controllerState.Gamepad.sThumbRY; // -32768～32767
@@ -144,9 +144,9 @@ void Input::SetVibration(int frame, float powor)
 }
 
 // マウスの座標情報を返す
-DirectX::SimpleMath::Vector2 Input::GetMousePositionNormalize() {
+DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 	static POINT prevPt = { -1,-1 };	// 前フレームのマウスの座標
-	static DirectX::SimpleMath::Vector2 vec2 = {};		// 前フレームの正規化された座標
+	static DirectX::XMFLOAT2 vec2 = {};		// 前フレームの正規化された座標
 
 	POINT pt;	// マウスの座標取得（宣言）
 

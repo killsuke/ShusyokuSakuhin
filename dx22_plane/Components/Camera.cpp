@@ -1,13 +1,11 @@
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Camera.h"
 #include "CameraPattern.h"
 #include "CameraMoveComponent.h"
-#include "Application.h"
+#include "System/Application.h"
 #include "input.h"
-#include "Transform.h"
 #include <Windows.h>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 using namespace std;
 
@@ -15,10 +13,10 @@ Camera::Camera(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ソート番号を設定
 
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
-		auto pos = transform->GetPosition();
+		XMFLOAT3 pos = transform->GetPosition();
 
 		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
@@ -26,7 +24,7 @@ Camera::Camera(GameObject& obj) : Component(obj)
 		}
 	}
 
-	m_Target = Vector3::Zero;
+	m_Target = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 
@@ -35,26 +33,31 @@ Camera::Camera(GameObject& obj) : Component(obj)
 //=======================================
 void Camera::Update()
 {
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
-		Vector3 pos = transform->GetPosition();
+		XMFLOAT3 pos = transform->GetPosition();
 
 		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
 			assert(false); // もしくは throw などで止める
 		}
 
-		Vector3 forward = m_Target - pos;
-		const float distance = forward.Length();
-		forward.Normalize();
+		XMFLOAT3 forward = m_Target - pos;
+		XMVECTOR forwardVec = XMLoadFloat3(&forward);
+		const float distance = XMVectorGetX(XMVector3Length(forwardVec));
+		XMVECTOR forwardNorm = XMVector3Normalize(forwardVec);
+		XMStoreFloat3(&forward, forwardNorm);
 
-		Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-		Vector3 right = forward.Cross(up);
-		right.Normalize();
+		XMFLOAT3 up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+		XMVECTOR upVec = XMLoadFloat3(&up);
 
+		XMFLOAT3 right = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		XMVECTOR rightVec = XMVector3Cross(forwardVec, upVec);
+		rightVec = XMVector3Normalize(rightVec);
+		XMStoreFloat3(&right, rightVec);
 
-		Vector3 move = {};	// 初期化
+		XMFLOAT3 move = XMFLOAT3(0.0f, 0.0f, 0.0f);	// 初期化
 
 #if _DEBUG
 
@@ -81,8 +84,12 @@ void Camera::Update()
 			m_Target.y = pos.y;
 		}
 
-		if (move.LengthSquared() > 0.0f) {
-			move.Normalize();
+		XMVECTOR moveVec = XMLoadFloat3(&move);
+		const float distSq = XMVectorGetX(XMVector3LengthSq(moveVec));
+
+		if (distSq > 0.0f) {
+			moveVec = XMVector3Normalize(moveVec);
+			XMStoreFloat3(&move, moveVec);
 			if (Input::GetKeyPress(VK_DELETE)) {
 				move *= 0.5f; // 移動速度
 			}
@@ -97,16 +104,16 @@ void Camera::Update()
 		transform->AddPosition(move);
 
 		XMFLOAT3 rot = transform->GetRotation();
-		Vector3 nowPos = transform->GetPosition();
+		XMFLOAT3 nowPos = transform->GetPosition();
 
-		if (move != Vector3::Zero) {
+		if (move != XMFLOAT3(0.0f, 0.0f, 0.0f)) {
 			// ターゲット計算
 			m_Target = nowPos + forward * distance;
 		}
 
 
 		// マウスの座標を取得
-		Vector2 mouseVec2 = Input::GetMousePositionNormalize();
+		XMFLOAT2 mouseVec2 = Input::GetMousePositionNormalize();
 
 #if _DEBUG
 
@@ -130,25 +137,27 @@ void Camera::Update()
 			rot2.x = std::clamp(rot2.x, -85.0f, 85.0f);
 
 			// ラジアンに変換
-			float PitchRadians = DirectX::XMConvertToRadians(rot2.x); // X軸回転
-			float YawRadians = DirectX::XMConvertToRadians(rot2.y);     // Y軸回転
-			float RollRadians = DirectX::XMConvertToRadians(rot2.z);   // Z軸回転
+			float PitchRadians = XMConvertToRadians(rot2.x); // X軸回転
+			float YawRadians = XMConvertToRadians(rot2.y);     // Y軸回転
+			float RollRadians = XMConvertToRadians(rot2.z);   // Z軸回転
 
 			// クォータニオンを構成（ピッチ・ヨーを個別に回転軸に適用）
-			DirectX::XMVECTOR qPitch = DirectX::XMQuaternionRotationAxis(DirectX::XMVectorSet(1, 0, 0, 0), PitchRadians);
-			DirectX::XMVECTOR qYaw = DirectX::XMQuaternionRotationAxis(DirectX::XMVectorSet(0, 1, 0, 0), YawRadians);
+			XMVECTOR qPitch = XMQuaternionRotationAxis(XMVectorSet(1, 0, 0, 0), PitchRadians);
+			XMVECTOR qYaw = XMQuaternionRotationAxis(XMVectorSet(0, 1, 0, 0), YawRadians);
 
 			// 合成（順番注意：Yawを先にかけると、カメラが左右中心に回る）
-			DirectX::XMVECTOR qRotation = DirectX::XMQuaternionMultiply(qPitch, qYaw);
+			XMVECTOR qRotation = XMQuaternionMultiply(qPitch, qYaw);
 
 			// 回転行列に変換
-			DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationQuaternion(qRotation);
+			XMMATRIX rotMat = XMMatrixRotationQuaternion(qRotation);
 
 			// 前方ベクトル回転
-			DirectX::XMVECTOR forward = DirectX::XMVector3TransformNormal(DirectX::XMVectorSet(0, 0, 1, 0), rotMat);
+			XMVECTOR forward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), rotMat);
 
 			// ターゲット計算
-			m_Target = DirectX::XMVectorAdd(nowPos, forward);
+			const XMVECTOR nowPosV = XMLoadFloat3(&nowPos);
+			const XMVECTOR targetV = XMVectorAdd(nowPosV, forwardVec);
+			XMStoreFloat3(&m_Target, targetV);
 		}
 
 #endif
@@ -177,12 +186,17 @@ void Camera::Update()
 
 void Camera::Update2D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
-	Vector3 camPos = transform->GetPosition();
+	XMFLOAT3 camPos = transform->GetPosition();
 	// ビュー変換後列作成
-	Vector3 pos = { 0.0f,0.0f,-10.0f };
-	Vector3 tgt = { 0.0f,0.0f,0.0f };
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(pos, tgt, up);
+	XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, -10.0f);
+	XMVECTOR posV = XMLoadFloat3(&pos);
+
+	XMFLOAT3 tgt = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMVECTOR tgtV = XMLoadFloat3(&tgt);
+
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	XMMATRIX viewMatrix = XMMatrixLookAtLH(posV, tgtV, up);
 
 	m_ViewMatrix2D = viewMatrix;
 
@@ -192,7 +206,7 @@ void Camera::Update2D() {
 	float nearPlane = 1.0f;       // ニアクリップ
 	float farPlane = 1000.0f;      // ファークリップ
 
-	XMMATRIX projectionMatrix = DirectX::XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
+	XMMATRIX projectionMatrix = XMMatrixOrthographicLH(static_cast<float>(Application::GetWidth()), static_cast<float>(Application::GetHeight()), nearPlane, farPlane);
 
 	m_ProjectionMatrix2D = projectionMatrix;
 
@@ -200,13 +214,18 @@ void Camera::Update2D() {
 }
 
 void Camera::Update3D() {
-	auto transform = m_Object->GetComponent<TransformComponent>();
-	auto pos = transform->GetPosition();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	XMFLOAT3 pos = transform->GetPosition();
 
 	// ビュー変換後列作成
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX viewMatrix;
-	viewMatrix = DirectX::XMMatrixLookAtLH(pos, m_Target, up); // 左手系にした　20230511 by suzuki.tomoki
+
+	XMVECTOR posV = XMLoadFloat3(&pos);
+	XMVECTOR targetV = XMLoadFloat3(&m_Target);
+
+
+	viewMatrix = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
@@ -217,7 +236,7 @@ void Camera::Update3D() {
 	DirectXRender::SetViewMatrix3D(&viewMatrix);
 
 	//プロジェクション行列の生成
-	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+	constexpr float fieldOfView = XMConvertToRadians(45.0f);    // 視野角
 
 	// 後にここは調整できるようにしておく
 	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
@@ -226,11 +245,11 @@ void Camera::Update3D() {
 
 	//プロジェクション行列の生成
 	XMMATRIX projectionMatrix;
-	projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
-	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+	// projectionMatrix = SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
 	m_ProjectionMatrix3D = projectionMatrix;
 
@@ -239,8 +258,11 @@ void Camera::Update3D() {
 
 void Camera::UpdateSky() {
 	//// ビュー変換後列作成
-	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
-	m_ViewMatrixSky = DirectX::XMMatrixLookAtLH(DirectX::SimpleMath::Vector3(0.0f, 0.0f, 0.0f), DirectX::SimpleMath::Vector3(0.0f, 0.0f, 1.0f), up); // 左手系にした　20230511 by suzuki.tomoki
+	XMVECTOR up = XMVectorSet(0.0f,1.0f,0.0f,0.0f);
+	XMVECTOR posV = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR targetV = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+
+	m_ViewMatrixSky = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
@@ -249,7 +271,7 @@ void Camera::UpdateSky() {
 	DirectXRender::SetViewMatrixSkyDome(&m_ViewMatrixSky);
 
 	//プロジェクション行列の生成
-	constexpr float fieldOfView = DirectX::XMConvertToRadians(45.0f);    // 視野角
+	constexpr float fieldOfView = XMConvertToRadians(45.0f);    // 視野角
 
 	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
 	float nearPlane = 1.0f;       // ニアクリップ
@@ -257,14 +279,14 @@ void Camera::UpdateSky() {
 
 	//プロジェクション行列の生成
 
-	m_ProjectionMatrixSky = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	m_ProjectionMatrixSky = XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
 
 	DirectXRender::SetProjectionMatrixSkyDome(&m_ProjectionMatrixSky);
 
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す
-	// projectionMatrix = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+	// projectionMatrix = SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
 
-	//projectionMtxSky = DirectX::XMMatrixTranspose(projectionMatrix);
+	//projectionMtxSky = XMMatrixTranspose(projectionMatrix);
 }

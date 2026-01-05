@@ -166,7 +166,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
     <ClCompile Include="Components\FliesMoveComponent.cpp" />
@@ -174,7 +174,7 @@
     <ClCompile Include="Manager\EventBusManager.cpp" />
     <ClCompile Include="Components\CameraShakeComponent.cpp" />
     <ClCompile Include="Components\ArbitraryRotationComponent.cpp" />
-    <ClCompile Include="AssimpPerse.cpp" />
+    <ClCompile Include="System\AssimpPerse.cpp" />
     <ClCompile Include="Components\AttackComponent.cpp" />
     <ClCompile Include="Components\AttackOneTimeComponent.cpp" />
     <ClCompile Include="Components\AttackTimingComponent.cpp" />
@@ -232,8 +232,8 @@
     <ClCompile Include="Components\TerrainJsonComponent.cpp" />
     <ClCompile Include="Components\TerrainManagerComponent.cpp" />
     <ClCompile Include="Mesh\CubeMesh.cpp" />
-    <ClCompile Include="DebugCout.cpp" />
-    <ClCompile Include="DirectXRender.cpp" />
+    <ClCompile Include="System\DebugCout.cpp" />
+    <ClCompile Include="System\DirectXRender.cpp" />
     <ClCompile Include="dx11helper.cpp" />
     <ClCompile Include="Components\EnemyDamageComponent.cpp" />
     <ClCompile Include="Components\FighterComponent.cpp" />
@@ -246,7 +246,7 @@
     </ClCompile>
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Components\JumpComponent.cpp" />
-    <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="Manager\ModelManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Components\Render.cpp" />
@@ -268,7 +268,7 @@
     <ClCompile Include="Scene\Stage1Scene.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="System\main.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Components\TestExtrusionJudgeComponent.cpp" />
     <ClCompile Include="Scene\TestMaskScene.cpp" />
@@ -276,8 +276,8 @@
     <ClCompile Include="Scene\TestStageScene.cpp" />
     <ClCompile Include="Components\TestSwordActionComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="Manager\TextureManager.cpp" />
+    <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Mesh\TrailMesh.cpp" />
     <ClCompile Include="Components\TrailMakeComponent.cpp" />
@@ -297,7 +297,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
-    <ClInclude Include="Application.h" />
+    <ClInclude Include="System\Application.h" />
     <ClInclude Include="DebugSystem\DebugSystem.h" />
     <ClInclude Include="Components\VectorMoveComponent.h" />
     <ClInclude Include="Components\FliesMoveComponent.h" />
@@ -305,7 +305,7 @@
     <ClInclude Include="Manager\EventBusManager.h" />
     <ClInclude Include="Components\CameraShakeComponent.h" />
     <ClInclude Include="Components\ArbitraryRotationComponent.h" />
-    <ClInclude Include="AssimpPerse.h" />
+    <ClInclude Include="System\AssimpPerse.h" />
     <ClInclude Include="Components\AttackComponent.h" />
     <ClInclude Include="Components\AttackOneTimeComponent.h" />
     <ClInclude Include="Components\AttackTimingComponent.h" />
@@ -366,8 +366,8 @@
     <ClInclude Include="Components\TerrainJsonComponent.h" />
     <ClInclude Include="Components\TerrainManagerComponent.h" />
     <ClInclude Include="Mesh\CubeMesh.h" />
-    <ClInclude Include="DebugCout.h" />
-    <ClInclude Include="DirectXRender.h" />
+    <ClInclude Include="System\DebugCout.h" />
+    <ClInclude Include="System\DirectXRender.h" />
     <ClInclude Include="dx11helper.h" />
     <ClInclude Include="Components\EnemyDamageComponent.h" />
     <ClInclude Include="Components\FighterComponent.h" />
@@ -383,8 +383,11 @@
     <ClInclude Include="Components\JumpComponent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh\Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="MeshRenderer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Manager\ModelManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Components\Render.h" />
@@ -418,8 +421,8 @@
     <ClInclude Include="Scene\TestStageScene.h" />
     <ClInclude Include="Components\TestSwordActionComponent.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="Manager\TextureManager.h" />
+    <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Mesh\TrailMesh.h" />
     <ClInclude Include="Components\TrailMakeComponent.h" />

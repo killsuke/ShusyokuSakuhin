@@ -11,7 +11,7 @@
 #include "DoorFadeComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/TriangleMesh.h"
-#include "Application.h"
+#include "System/Application.h"
 #include "input.h"
 
 using namespace DirectX::SimpleMath;

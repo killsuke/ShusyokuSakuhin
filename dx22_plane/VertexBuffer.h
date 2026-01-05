@@ -2,7 +2,7 @@
 #include	<vector>
 #include	<wrl/client.h>
 #include	"dx11helper.h"
-#include	"DirectXRender.h"
+#include	"System/DirectXRender.h"
 
 using Microsoft::WRL::ComPtr;
 

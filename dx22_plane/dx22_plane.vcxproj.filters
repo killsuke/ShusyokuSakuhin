@@ -36,10 +36,10 @@
     <ClCompile Include="dx11helper.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="System\Application.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="System\main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
@@ -51,7 +51,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="AssimpPerse.cpp">
+    <ClCompile Include="System\AssimpPerse.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -63,7 +63,7 @@
     <ClCompile Include="sound.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXRender.cpp">
+    <ClCompile Include="System\DirectXRender.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\imgui\imgui\Include\imgui.cpp">
@@ -87,7 +87,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="DebugCout.cpp">
+    <ClCompile Include="System\DebugCout.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ray.cpp">
@@ -249,13 +249,13 @@
     <ClCompile Include="Manager\GameObjectManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
+    <ClCompile Include="Manager\ModelManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
+    <ClCompile Include="Manager\TimeManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
+    <ClCompile Include="Manager\TextureManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Manager\ComponentTypeManager.cpp">
@@ -413,7 +413,7 @@
     <ClInclude Include="dx11helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="System\Application.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
@@ -434,7 +434,7 @@
     <ClInclude Include="Texture.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="AssimpPerse.h">
+    <ClInclude Include="System\AssimpPerse.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
@@ -455,7 +455,7 @@
     <ClInclude Include="sound.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXRender.h">
+    <ClInclude Include="System\DirectXRender.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\imgui\imgui\Include\imconfig.h">
@@ -482,7 +482,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="DebugCout.h">
+    <ClInclude Include="System\DebugCout.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ray.h">
@@ -671,13 +671,13 @@
     <ClInclude Include="Manager\ComponentTypeManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
+    <ClInclude Include="Manager\ModelManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
+    <ClInclude Include="Manager\TextureManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
+    <ClInclude Include="Manager\TimeManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Components\TestSwordActionComponent.h">

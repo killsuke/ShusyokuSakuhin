@@ -1,6 +1,6 @@
 #include "HPBarMoveComponent.h"
 #include "FighterComponent.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include <iostream>
 
 HPBarMoveComponent::HPBarMoveComponent(GameObject& obj) : Component(obj) {

@@ -5,8 +5,9 @@
 #include "RigidBodyComponent.h"
 #include "CameraTargetComponent.h"
 #include <iostream>
+#include <SimpleMath.h>
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 {
@@ -14,17 +15,17 @@ CameraPointComponent::CameraPointComponent(GameObject& obj) : Component(obj)
 }
 
 void CameraPointComponent::Update() {
-	auto camera = GameObjectManager::GameObjectFindName("camera");
-	auto camMove = camera->GetComponent<CameraMoveComponent>();
-	auto camRigid = camera->GetComponent<RigidBodyComponent>();
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+	CameraMoveComponent* camMove = camera->GetComponent<CameraMoveComponent>();
+	RigidBodyComponent* camRigid = camera->GetComponent<RigidBodyComponent>();
 
-	auto camColl = m_Object->GetComponent<ColliderComponent>();
-	auto player = GameObjectManager::GameObjectFindName("Player");
+	ColliderComponent* camColl = m_Object->GetComponent<ColliderComponent>();
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
 	if (player == nullptr) {
 		return;
 	}
 
-	auto playerColl = player->GetComponent<ColliderComponent>();
+	ColliderComponent* playerColl = player->GetComponent<ColliderComponent>();
 
 	if (!camMove)
 		return;
@@ -32,14 +33,15 @@ void CameraPointComponent::Update() {
 	// ここで当たり判定でリリースがあればこれ以降の処理を実行
 	beforeTouched = afterTouched; // 前に触れたかどうかのフラグを更新
 
-	Vector3 dir = {};
+	DirectX::SimpleMath::Vector3 dir = {};
+	XMFLOAT3 dir2 = {};
 	if (camColl->CheckHit_CubeAndCube_IsTrigger2D_Normal(*camColl, *playerColl, dir)) {
 
 		// プレイヤーが入ってきた方向をセット
-		if (m_inserDirection == Vector3::Zero) {
-			m_exitDirection = Vector3::Zero;
-			m_inserDirection = dir;
-		//	std::cout << "IN：" << dir.x << "：" << dir.y << "：" << dir.z << std::endl;
+		if (m_inserDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
+			m_exitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
+			dir2 = XMFLOAT3(dir.x, dir.y, dir.z);
+			m_inserDirection = dir2;
 		}
 
 		m_frame2BeforeDirection = m_beforeDirection; // 2フレーム前のプレイヤーが抜けたベクトルを更新
@@ -55,17 +57,19 @@ void CameraPointComponent::Update() {
 	// リリースでとる
 	if (beforeTouched == true && afterTouched == false) {
 
-		//std::cout << "OUT：" << m_beforeDirection.x << "：" << m_beforeDirection.y << "：" << m_beforeDirection.z << std::endl;
-
-		if (m_beforeDirection == Vector3::Zero) {
+		if (m_beforeDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
 			m_beforeDirection = m_frame2BeforeDirection;
 		}
 
 		// プレイヤーが抜けた方向をセット
 		m_exitDirection = m_beforeDirection;
 
-		auto dirIn1 = m_scrollDirection.Dot(m_inserDirection);
-		auto dirIn2 = m_inserDirection.Dot(m_exitDirection);
+		const XMVECTOR scVec = XMLoadFloat3(&m_scrollDirection);
+		const XMVECTOR inVec = XMLoadFloat3(&m_inserDirection);
+		const XMVECTOR exVec = XMLoadFloat3(&m_exitDirection);
+
+		const float dirIn1 = XMVectorGetX(XMVector3Dot(scVec,inVec));
+		const float dirIn2 = XMVectorGetX(XMVector3Dot(inVec,exVec));
 
 		// プレイヤーが入ってきた方向と抜けた方向が同じなら
 		if (dirIn1 == -1.0f && dirIn2 == -1.0f) {
@@ -83,13 +87,13 @@ void CameraPointComponent::Update() {
 
 		camRigid->ClearVelocity(); // プレイヤーが抜けたらカメラの速度をリセット
 		camRigid->ClearForce();
-		m_inserDirection = Vector3::Zero;
-		m_beforeDirection = Vector3::Zero; // 初期化
-		m_frame2BeforeDirection = Vector3::Zero; // 初期化
+		m_inserDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		m_beforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
+		m_frame2BeforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
 	}
 
 	// ポイントから抜けたら処理を行う
-	if (m_exitDirection != Vector3::Zero) {
+	if (m_exitDirection != XMFLOAT3(0.0f, 0.0f, 0.0f)) {
 
 		if (m_nextTargetPoint != nullptr && m_isScrollDir == 1) {
 			camMove->SetMoveTarget(*m_nextTargetPoint);
@@ -98,6 +102,6 @@ void CameraPointComponent::Update() {
 			camMove->SetMoveTarget(*m_beforeTargetObj);
 		}
 
-		m_exitDirection = Vector3::Zero; // 初期化
+		m_exitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
 	}
 }

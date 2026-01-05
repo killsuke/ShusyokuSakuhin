@@ -5,7 +5,7 @@
 #include "VectorMoveComponent.h"
 #include "input.h"
 #include "Manager/GameObjectManager.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Manager/EventBusManager.h"
 
 using namespace DirectX;

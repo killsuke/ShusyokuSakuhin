@@ -1,6 +1,6 @@
 #include	"StaticMesh.h"
-#include	"AssimpPerse.h"
-#include	"ModelManager.h"
+#include	"System/AssimpPerse.h"
+#include	"Manager/ModelManager.h"
 
 StaticMesh::StaticMesh(const StaticMesh& other) : Mesh(other) {
 
@@ -19,15 +19,15 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 		// 既に読み込まれている場合はそれを使用
 		m_Vertices = getModel->GetVertices();
 		m_Indices = getModel->GetIndices();
-		for (const auto& sub : getModel->GetSubsets()) {
+		for (const SUBSET& sub : getModel->GetSubsets()) {
 			m_Subset.emplace_back(std::make_unique<SUBSET>(sub));
 		}
 
-		for (const auto& mat : getModel->GetMaterials()) {
+		for (const MATERIAL& mat : getModel->GetMaterials()) {
 			m_Materiales.emplace_back(std::make_unique<MATERIAL>(mat));
 		}
 
-		for (const auto& tex : getModel->GetTextures()) {
+		for (const Texture& tex : getModel->GetTextures()) {
 			m_Textures.emplace_back(std::make_unique<Texture>(tex));
 		}
 
@@ -45,9 +45,9 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 	m_Textures = AssimpPerse::GetTextures();	// テクスチャ情報取得	
 	
 	// 頂点データ作成
-	for (const auto& mv : vertices)
+	for (const std::vector<AssimpPerse::VERTEX>& mv : vertices)
 	{
-		for (auto& v : mv)
+		for (const AssimpPerse::VERTEX& v : mv)
 		{
 			VERTEX_3D vertex{};
 			vertex.position = DirectX::SimpleMath::Vector3(v.pos.x, v.pos.y, v.pos.z);
@@ -60,16 +60,16 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 	}
 
 	// インデックスデータ作成
-	for (const auto& mi : indices)
+	for (const std::vector<unsigned int>& mi : indices)
 	{
-		for (auto& index : mi)
+		for (const unsigned int index : mi)
 		{
 			m_Indices.emplace_back(index);
 		}
 	}
 
 	// サブセットデータ作成
-	for (const auto& sub : subsets)
+	for (const AssimpPerse::SUBSET& sub : subsets)
 	{
 		std::unique_ptr subset = std::make_unique<SUBSET>();
 
@@ -84,7 +84,7 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 	}
 
 	// マテリアルデータ作成
-	for (const auto& m : materials) {
+	for (const AssimpPerse::MATERIAL& m : materials) {
 		std::unique_ptr material = std::make_unique<MATERIAL>();
 
 		material->Ambient = DirectX::SimpleMath::Color(m.Ambient.r, m.Ambient.g, m.Ambient.b, m.Ambient.a);

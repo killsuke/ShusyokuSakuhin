@@ -3,7 +3,6 @@
 #include    "RigidBodyComponent.h"
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 SpringComponent::SpringComponent(GameObject& obj) : Component(obj) {
@@ -23,11 +22,11 @@ void SpringComponent::SpringAction2D()
 	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
 
-	auto posP1 = transformP1->GetPosition();
-	auto posP2 = transformP2->GetPosition();
+	XMFLOAT3 posP1 = transformP1->GetPosition();
+	XMFLOAT3 posP2 = transformP2->GetPosition();
 
-	auto velocityP1 = rigidBodyP1->GetVelocity();
-	auto velocityP2 = rigidBodyP2->GetVelocity();
+	XMFLOAT3 velocityP1 = rigidBodyP1->GetVelocity();
+	XMFLOAT3 velocityP2 = rigidBodyP2->GetVelocity();
 
 	// 2Dなのでz座標は無視
 	posP1.z = 0.0f;
@@ -35,22 +34,28 @@ void SpringComponent::SpringAction2D()
 	velocityP1.z = 0.0f;
 	velocityP2.z = 0.0f;
 
-	Vector3 delta = posP1 - posP2;
-	float distance = delta.Length();
+	XMFLOAT3 delta = posP1 - posP2;
+
+	const XMVECTOR targetPosVec = XMLoadFloat3(&delta);
+	const float distance = XMVectorGetX(XMVector3Length(targetPosVec));
 
 	if (distance < 1e-6f) return;           // ゼロ除算対策
 
-	Vector3 direction = delta / distance;   // 正規化
+	XMFLOAT3 direction = delta / distance;   // 正規化
 	// フックの法則
 	float springForceMagnitude = (distance - m_restLength) * m_K;
 
 	// 減衰（相対速度に沿った力）
-	Vector3 relativeVelocity = velocityP1 - velocityP2;
+	XMFLOAT3 relativeVelocity = velocityP1 - velocityP2;
 
-	float dampingForceMagnitude = m_DAMPING * relativeVelocity.Dot(direction);
+	relativeVelocity = relativeVelocity * m_DAMPING;
+	XMVECTOR vec1 = XMLoadFloat3(&relativeVelocity);
+	XMVECTOR vec2 = XMLoadFloat3(&direction);
+
+	const float dampingForceMagnitude = XMVectorGetX(XMVector3Dot(vec1,vec2));
 
 	// 合力
-	Vector3 force = direction * (springForceMagnitude - dampingForceMagnitude);
+	XMFLOAT3 force = direction * (springForceMagnitude - dampingForceMagnitude);
 
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
@@ -58,9 +63,18 @@ void SpringComponent::SpringAction2D()
 	//	std::cout << force.Length() << std::endl;
 
 // 強制停止チェック
-	Vector3 diff = posP2 - posP1;
-	if (diff.Length() < 1.0f && velocityP1.Length() < 1.0f && force.Length() < 1.0f) {
-		rigidBodyP1->SetVelocity(Vector3(0, 0, 0));
+	const XMFLOAT3 diff = posP2 - posP1;
+	const XMVECTOR diffVec = XMLoadFloat3(&diff);
+	const float diffLength = XMVectorGetX(XMVector3Length(diffVec));
+
+	const XMVECTOR velcityVec1 = XMLoadFloat3(&velocityP1);
+	const float velocityLength1 = XMVectorGetX(XMVector3Length(velcityVec1));
+
+	const XMVECTOR forceVec = XMLoadFloat3(&force);
+	const float forceLength = XMVectorGetX(XMVector3Length(forceVec));
+
+	if (diffLength < 1.0f && velocityLength1 < 1.0f && forceLength < 1.0f) {
+		rigidBodyP1->SetVelocity(XMFLOAT3(0, 0, 0));
 
 		transformP1->SetPosition({ posP2.x,posP2.y,transformP1->GetPosition().z }); // ← ここでスナップ
 		m_finSpringAction = true;
@@ -83,22 +97,29 @@ void SpringComponent::SpringAction3D()
 	auto velocityP1 = rigidBodyP1->GetVelocity();
 	auto velocityP2 = rigidBodyP2->GetVelocity();
 
-	Vector3 delta = posP1 - posP2;
-	float distance = delta.Length();
+	XMFLOAT3 delta = posP1 - posP2;
+
+	const XMVECTOR targetPosVec = XMLoadFloat3(&delta);
+	const float distance = XMVectorGetX(XMVector3Length(targetPosVec));
 
 	if (distance < 1e-6f) return;           // ゼロ除算対策
 
-	Vector3 direction = delta / distance;   // 正規化
+	XMFLOAT3 direction = delta / distance;   // 正規化
 	// フックの法則
 	float springForceMagnitude = (distance - m_restLength) * m_K;
 
 	// 減衰（相対速度に沿った力）
-	Vector3 relativeVelocity = velocityP1 - velocityP2;
+	XMFLOAT3 relativeVelocity = velocityP1 - velocityP2;
 
-	float dampingForceMagnitude = m_DAMPING * relativeVelocity.Dot(direction);
+	relativeVelocity = relativeVelocity * m_DAMPING;
+
+	XMVECTOR vec1 = XMLoadFloat3(&relativeVelocity);
+	XMVECTOR vec2 = XMLoadFloat3(&direction);
+
+	const float dampingForceMagnitude = XMVectorGetX(XMVector3Dot(vec1, vec2));
 
 	// 合力
-	Vector3 force = direction * (springForceMagnitude - dampingForceMagnitude);
+	XMFLOAT3 force = direction * (springForceMagnitude - dampingForceMagnitude);
 
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
@@ -109,19 +130,20 @@ void SpringComponent::SpringActionTransform() {
 	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
 	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
 
-	Vector3 posP1 = transformP1->GetPosition();
-	Vector3 posP2 = transformP2->GetPosition();
+	XMFLOAT3 posP1 = transformP1->GetPosition();
+	XMFLOAT3 posP2 = transformP2->GetPosition();
 
 	// 2Dなのでz座標は無視
 	posP1.z = 0.0f;
 	posP2.z = 0.0f;
 
-	Vector3 delta = posP1 - posP2;
-	const float distance = delta.Length();
+	XMFLOAT3 delta = posP1 - posP2;
+	const XMVECTOR targetPosVec = XMLoadFloat3(&delta);
+	const float distance = XMVectorGetX(XMVector3Length(targetPosVec));
 
 	if (distance < 1e-6f) return;           // ゼロ除算対策
 
-	const Vector3 direction = delta / distance;   // 正規化
+	const XMFLOAT3 direction = delta / distance;   // 正規化
 
 	m_K = 15.0f;
 	m_DAMPING = 20 * sqrt(0.05f);
@@ -129,7 +151,7 @@ void SpringComponent::SpringActionTransform() {
 
 	// フックの法則
 	const float springForceMagnitude = distance - m_restLength;
-	const Vector3 springOffsest = -direction * (springForceMagnitude * m_K);
+	const XMFLOAT3 springOffsest = -direction * (springForceMagnitude * m_K);
 
 
 //	XMFLOAT3 velAndOffset = m_SpringVelocity + XMFLOAT3(springOffsest.x, springOffsest.y, springOffsest.z);
@@ -152,17 +174,21 @@ void SpringComponent::SpringActionTransform() {
 	transformP1->AddPosition(newPos);
 
 	float prevDistance = m_PreviousDistance;
-	float dist = (transformP1->GetPosition() - posP2).Length();
 
-	if (dist > prevDistance && prevDistance != 0.0f) {
+	const XMFLOAT3 delta2 = transformP1->GetPosition() - posP2;
+
+	const XMVECTOR targetPosVec2 = XMLoadFloat3(&delta2);
+	const float distance2 = XMVectorGetX(XMVector3Length(targetPosVec2));
+
+	if (distance2 > prevDistance && prevDistance != 0.0f) {
 		transformP1->SetPosition({ posP2.x, posP2.y, transformP1->GetPosition().z });
-		m_SpringVelocity = Vector3(0, 0, 0);
+		m_SpringVelocity = XMFLOAT3(0, 0, 0);
 		m_finSpringAction = true;
 		m_PreviousDistance = 0.0f;
 		return;
 	}
 
-	m_PreviousDistance = dist;
+	m_PreviousDistance = distance2;
 }
 
 // ばね定数をセットする

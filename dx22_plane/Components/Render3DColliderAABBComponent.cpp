@@ -1,5 +1,5 @@
 #include "Render3DColliderAABBComponent.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Collider.h"
 #include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"

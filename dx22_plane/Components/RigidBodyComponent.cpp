@@ -1,8 +1,7 @@
 #include "RigidBodyComponent.h"
-#include "Transform.h"
-#include "TimeManager.h"
+#include "Manager/TimeManager.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 namespace {
 	constexpr float FIXED_DELTATIME = 1.0f / 60.0f; // 固定フレームレート（60 FPS相当）
@@ -56,7 +55,7 @@ void RigidBodyComponent::UpdateVelocity() {
 		}
 
 
-		Vector3 newPos = {};
+		XMFLOAT3 newPos = {};
 
 		// 速度からTransformの位置を更新
 		newPos.x += m_velocity.x * FIXED_DELTATIME;
@@ -79,13 +78,13 @@ void RigidBodyComponent::UpdateVelocity() {
 //}
 
 // 力を加える
-void RigidBodyComponent::ApplyForce(const Vector3& force) {
+void RigidBodyComponent::ApplyForce(const XMFLOAT3& force) {
 	m_acceleration.x += force.x / m_mass;
 	m_acceleration.y += force.y / m_mass;
 	m_acceleration.z += force.z / m_mass;
 }
 
-void RigidBodyComponent::ConstantVelocity(const Vector3& velocity) {
+void RigidBodyComponent::ConstantVelocity(const XMFLOAT3& velocity) {
 	m_velocity.x = velocity.x / m_mass;
 	m_velocity.y = velocity.y / m_mass;
 	m_velocity.z = velocity.z / m_mass;
@@ -103,7 +102,7 @@ void RigidBodyComponent::ConstantVelocity_Z(const float velocity) {
 	m_velocity.z = velocity / m_mass;
 }
 
-void RigidBodyComponent::ReduceVelocity(const Vector3& velocity) {
+void RigidBodyComponent::ReduceVelocity(const XMFLOAT3& velocity) {
 
 	m_velocity.x *= velocity.x;
 	m_velocity.y *= velocity.y;
@@ -160,7 +159,7 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 			m_velocity.y = -m_StopGravity;
 		}
 
-		Vector3 pos = Vector3::Zero;	// 現在の位置を取得
+		XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, 0.0f);	// 現在の位置を取得
 		// 位置を速度で更新
 		pos.y += m_velocity.y * m_deltaTime;	// ポジションを更新
 

@@ -3,7 +3,7 @@
 #include	<vector>
 #include	<wrl/client.h>
 #include	"dx11helper.h"
-#include	"DirectXRender.h"
+#include	"System/DirectXRender.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -28,7 +28,7 @@ public:
 		assert(device);
 
 		// インデックスバッファ作成
-		bool sts = CreateIndexBuffer(
+		const bool sts = CreateIndexBuffer(
 			device,										// デバイス
 			m_IndexSize,								// インデックス数
 			(void*)indices.data(),						// インデックスデータ先頭アドレス
@@ -50,7 +50,7 @@ public:
 	// インデックスバッファを書き換える
 	void Modify(const std::vector<unsigned int>& vertices)
 	{
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		//頂点データ書き換え
 		D3D11_MAPPED_SUBRESOURCE msr;

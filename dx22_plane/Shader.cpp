@@ -1,6 +1,6 @@
 #include	"Shader.h"
 #include	"dx11helper.h"
-#include	"DirectXRender.h"
+#include	"System/DirectXRender.h"
 
 //=======================================
 //Shaderì¬

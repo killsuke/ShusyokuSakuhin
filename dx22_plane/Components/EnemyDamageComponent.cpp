@@ -11,8 +11,8 @@
 
 namespace {
 	constexpr float FirstStopTime = 0.1f; // 最初のヒットストップ時間
-	constexpr float SecondStopTime = 0.3f; // ２回目のヒットストップ時間
-	constexpr float ThirdStopTime = 0.5f; // ３回目のヒットストップ時間
+	constexpr float SecondStopTime = 0.2f; // ２回目のヒットストップ時間
+	constexpr float ThirdStopTime = 0.3f; // ３回目のヒットストップ時間
 }
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
@@ -56,6 +56,7 @@ void EnemyDamageComponent::Update()
 						stopTime = ChoiceStopTime(state);
 					}
 
+					// ヒットストップの候補セット
 					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome" });
 					HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
 

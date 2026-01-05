@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 #include "EventBusManager.h"
 #include "Components/Transform.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include <iostream>
 
 // Ã“I‚ÈéŒ¾‚Æ‚µ‚Ä•K—v

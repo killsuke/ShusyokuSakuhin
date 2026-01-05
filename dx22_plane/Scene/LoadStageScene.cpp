@@ -38,7 +38,7 @@
 #include "Components/DoorFadeComponent.h"
 #include "Components/BossEventComponent.h"
 #include "Components/RenderBlurComponent.h"
-#include "ModelManager.h"
+#include "Manager/ModelManager.h"
 #include "Components/HitFlashComponent.h"
 #include "Components/TrailRenderComponent.h"
 #include "Components/RenderMotionBlurComponent.h"
@@ -611,7 +611,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 void LoadStageScene::BamboosCreate() {
 
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Terrain");
+		/*auto testObj = GameObjectManager::AddObject("testObj", "Terrain");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ -90.0f, 10.0f, 10.0f });
 		testTrans->SetScale({ 3.0f,3.0f,80.0f });
@@ -625,7 +625,7 @@ void LoadStageScene::BamboosCreate() {
 		rend->LoadModelMesh("assets/model/bamboos/bambooRod1.fbx",
 			"assets/model/bamboos");
 
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");*/
 	}
 
 	{

@@ -2,7 +2,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Mesh/Mesh.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 
 class MeshRenderer {
 protected:

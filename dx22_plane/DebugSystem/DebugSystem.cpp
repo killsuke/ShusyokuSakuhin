@@ -5,7 +5,7 @@
 #include "Components/Transform.h"
 #include "Components/Render3D.h"
 #include "Mesh/SquareMesh.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "input.h"
 #include <iostream>
 

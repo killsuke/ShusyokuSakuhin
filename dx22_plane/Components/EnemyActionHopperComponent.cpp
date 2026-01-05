@@ -12,6 +12,8 @@
 #include "TestExtrusionJudgeComponent.h"
 #include "Mesh/SquareMesh.h"
 
+using namespace DirectX;
+
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ðÝ’è
 	auto jump = m_Object->AddComponent<JumpComponent>();
@@ -26,7 +28,10 @@ void EnemyActionHopperComponent::Update() {
 	auto rend = m_Object->GetComponent<Render2DComponent>();
 	bool jumpFlag = false;
 
-	float length = (playPos - myPos).Length();
+	XMFLOAT3 delta = playPos - myPos;
+
+	const XMVECTOR deltaVec = XMLoadFloat3(&delta);
+	const float length = XMVectorGetX(XMVector3Length(deltaVec));
 
 	if (length > 100.0f) {
 		m_moveFlag = false;

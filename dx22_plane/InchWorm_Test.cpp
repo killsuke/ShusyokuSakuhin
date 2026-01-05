@@ -1,7 +1,7 @@
 #include "InchWorm_Test.h"
 #include "Transform.h"
 #include "GameObjectManager.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 
 using namespace DirectX::SimpleMath;
 

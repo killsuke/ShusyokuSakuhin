@@ -1,5 +1,5 @@
 #include "HitFlashComponent.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Manager/EventBusManager.h"
 
 HitFlashComponent::HitFlashComponent(GameObject& obj) : RenderComponent(obj)

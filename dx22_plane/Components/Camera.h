@@ -1,8 +1,7 @@
 #pragma once
 
-#include	<SimpleMath.h>
 #include "GameObject.h"
-#include "Component.h"
+#include "Transform.h"
 
 #define CARCAMERA (0.01745f)
 
@@ -12,16 +11,16 @@
 class Camera : public Component {
 private:
 
-	DirectX::SimpleMath::Vector3	m_Target{};
+	DirectX::XMFLOAT3		m_Target = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-	DirectX::XMMATRIX		m_ViewMatrix2D{};
-	DirectX::XMMATRIX		m_ProjectionMatrix2D{};
+	DirectX::XMMATRIX		m_ViewMatrix2D = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX		m_ProjectionMatrix2D = DirectX::XMMatrixIdentity();
 
-	DirectX::XMMATRIX		m_ViewMatrix3D{};
-	DirectX::XMMATRIX		m_ProjectionMatrix3D{};
+	DirectX::XMMATRIX		m_ViewMatrix3D = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX		m_ProjectionMatrix3D = DirectX::XMMatrixIdentity();
 
-	DirectX::XMMATRIX		m_ViewMatrixSky{};
-	DirectX::XMMATRIX		m_ProjectionMatrixSky{};
+	DirectX::XMMATRIX		m_ViewMatrixSky = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX		m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
 
 	//float m_CameraDirection = 0; // カメラの方向
 
@@ -33,7 +32,7 @@ private:
 	//float deltaCamera = 0.0f;
 
 
-	DirectX::SimpleMath::Vector2 prevMouse = {};	// マウス位置記録
+	DirectX::XMFLOAT2 prevMouse = DirectX::XMFLOAT2(0.0f, 0.0f);	// マウス位置記録
 
 	void Update2D();
 	void Update3D();
@@ -46,9 +45,9 @@ public:
 
 	void Update() override;
 
-	inline void SetTarget(const DirectX::SimpleMath::Vector3& target) { m_Target = target; };
-	inline void AddTarget(const DirectX::SimpleMath::Vector3& target) { m_Target += target; };
-	inline DirectX::SimpleMath::Vector3 GetTarget() const { return m_Target; }
+	inline void SetTarget(const DirectX::XMFLOAT3& target) { m_Target = target; };
+	inline void AddTarget(const DirectX::XMFLOAT3& target) { m_Target += target; };
+	inline DirectX::XMFLOAT3 GetTarget() const { return m_Target; }
 
 	// 転置していない状態のモノを返す
 	inline DirectX::XMMATRIX GetView2D() const { return m_ViewMatrix2D; };

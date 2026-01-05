@@ -102,8 +102,8 @@ public:
 	static bool GetKeyRelease(int key); //リリース(押し終わった時)
 
 	//アナログスティック(コントローラー)
-	static DirectX::SimpleMath::Vector2 GetLeftAnalogStick(void);
-	static DirectX::SimpleMath::Vector2 GetRightAnalogStick(void);
+	static DirectX::XMFLOAT2 GetLeftAnalogStick(void);
+	static DirectX::XMFLOAT2 GetRightAnalogStick(void);
 
 	//トリガー(コントローラー)
 	static float GetLeftTrigger(void);
@@ -120,7 +120,7 @@ public:
 	static void SetVibration(int frame = 1, float powor = 1);
 
 	// マウスの座標を返す
-	static DirectX::SimpleMath::Vector2 GetMousePositionNormalize();
+	static DirectX::XMFLOAT2 GetMousePositionNormalize();
 
 	// マウスのクリック
 	static bool IsMouseLeftButtonDown();

@@ -1,6 +1,6 @@
 #include "TrailRenderComponent.h"
 #include "Transform.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Mesh/TrailMesh.h"
 #include <vector>
 #include <iostream>

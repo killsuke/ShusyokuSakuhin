@@ -1,6 +1,6 @@
 #include "SkyDomeMesh.h"
 #include <SimpleMath.h>
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 
 using namespace DirectX::SimpleMath;
 

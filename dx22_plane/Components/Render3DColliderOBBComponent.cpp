@@ -1,5 +1,5 @@
 #include "Render3DColliderOBBComponent.h"
-#include "DirectXRender.h"
+#include "System/DirectXRender.h"
 #include "Collider.h"
 #include "Manager/GameObjectManager.h"
 
