@@ -182,11 +182,11 @@ LoadStageScene::LoadStageScene() {
 		//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
 		//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
-		auto rollingRender = rolling->AddComponent<RenderMotionBlurComponent>();
+		auto rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
-		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
+		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingRender->ChangeTexture("assets/texture/sword.png");
-		rollingRender->SetBlurVelocity({ 0.0f,0.0f });
+	//	rollingRender->SetBlurVelocity({ 0.0f,0.0f });
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();

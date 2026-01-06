@@ -14,8 +14,8 @@ void SceneManager::Init() {
 	sound.Init();	// サウンドの初期化
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
-	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
-	//m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
+	//m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
+	m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
 	//	Debug::DebugFirst();
 }
 

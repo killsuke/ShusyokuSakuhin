@@ -113,32 +113,36 @@
             "ID": 27
         },
 	{
-            "name": "MESH_CUT_2D",
+            "name": "MOTIONBLUR",
             "ID": 28
         },
 	{
-            "name": "TRAILMAKE",
+            "name": "MESH_CUT_2D",
             "ID": 29
         },
-        {
-            "name": "RENDER_ONE_SKIN_ANIMATION",
+	{
+            "name": "TRAILMAKE",
             "ID": 30
         },
         {
-	    "name": "HIT_FLASH",
+            "name": "RENDER_ONE_SKIN_ANIMATION",
             "ID": 31
+        },
+        {
+	    "name": "HIT_FLASH",
+            "ID": 32
 	},
         {
             "name": "RENDER",
-            "ID": 32
-        },
-        {
-            "name": "RENDER_DEBUG",
             "ID": 33
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DEBUG",
             "ID": 34
+        },
+        {
+            "name": "MAX",
+            "ID": 35
         }
     ]
 }

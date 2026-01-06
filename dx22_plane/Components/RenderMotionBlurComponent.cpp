@@ -6,9 +6,9 @@ using namespace DirectX;
 
 RenderMotionBlurComponent::RenderMotionBlurComponent(GameObject& obj) :RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
-
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
+
+	m_MotionBlurController = m_Object->AddComponent<MotionBlurControllerComponent>();
 }
 
 void RenderMotionBlurComponent::Update() {
@@ -24,7 +24,7 @@ void RenderMotionBlurComponent::Update() {
 
 		cb.color = Vector4(m_Color);
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -32,39 +32,62 @@ void RenderMotionBlurComponent::Update() {
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		//	m_Texture->SetGPU();
 
-			// 行列をシェーダーに渡す
+		// モーションブラー用のステート設定
+		// 半透明合成を有効にして、シェル同士が重なるよう深度書き込みをOFFに
+		DirectXRender::SetBlendState(EBlendState::BS_ALPHABLEND);
+		DirectXRender::SetDepthEnable(false);
+
+		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
+		const DirectX::XMMATRIX prevMtx = m_MotionBlurController->GetPrevMatrix();
+		const float blurStrength = m_MotionBlurController->GetBlurStrength();
+		const int shellCount = m_MotionBlurController->GetShellCount();
+		const bool isUse = m_MotionBlurController->GetIsUseBlur();
+
 		MotionBlurBuffer motionBlur;
-		motionBlur.velocity = m_BlurVelocity;
-	
-		deviceContext->UpdateSubresource(g_pMotionBlurBuffer, 0, NULL, &motionBlur, 0, 0);
+		motionBlur.matrixPrevWorld = prevMtx;
+		motionBlur.BlurParams.x = 0.0f;
+		motionBlur.BlurParams.y = (float)shellCount;
+		motionBlur.BlurParams.z = blurStrength;
+		motionBlur.BlurParams.w = (float)isUse;
 
-		auto subsets = m_Mesh->GetSubsets();
+		std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
-		//マテリアル数分ループ 
-		for (int i = 0; i < subsets.size(); i++)
+		// シェル分ループして描画
+		for (int i = 0; i < shellCount; ++i)
 		{
-			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			// シェルインデックスをセット
+			motionBlur.BlurParams.x = (float)i;
+		
+			deviceContext->UpdateSubresource(g_pMotionBlurBuffer, 0, NULL, &motionBlur, 0, 0);
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			//マテリアル数分ループ 
+			for (int i = 0; i < subsets.size(); ++i)
+			{
+				// ここ使う
+				MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
+				deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 
-				textures[subsets[i].MaterialIdx].SetGPU();
+				if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
+
+					textures[subsets[i].MaterialIdx].SetGPU();
+				}
+
+				deviceContext->DrawIndexed(
+					subsets[i].IndexNum,		// 描画するインデックス数
+					subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
+					subsets[i].VertexBase);	// 頂点バッファの最初から使用
 			}
-
-			deviceContext->DrawIndexed(
-				subsets[i].IndexNum,		// 描画するインデックス数
-				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
-				subsets[i].VertexBase);	// 頂点バッファの最初から使用
 		}
+
+		DirectXRender::SetBlendState(EBlendState::BS_NONE);
+		DirectXRender::SetDepthEnable(true);
 	}
 }

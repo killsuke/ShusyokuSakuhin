@@ -17,7 +17,7 @@
 #define SAFE_RELEASE(p) { if( NULL != p ) { p->Release(); p = NULL; } }
 
 // ブレンドステート
-enum EBlendState {
+enum class EBlendState {
 	BS_NONE = 0,							// 半透明合成無し
 	BS_ALPHABLEND,							// 半透明合成
 	BS_ADDITIVE,							// 加算合成
@@ -100,8 +100,11 @@ struct BlurBuffer {
 };
 
 struct MotionBlurBuffer {
-	DirectX::SimpleMath::Vector2 velocity = DirectX::SimpleMath::Vector2::Zero;
-	DirectX::SimpleMath::Vector2 pad = DirectX::SimpleMath::Vector2::Zero;
+	// １フレーム前のワールド変換行列
+	DirectX::XMMATRIX matrixPrevWorld = DirectX::XMMatrixIdentity();
+
+	// シェルのインデックス（x）、シェルの数（y）、ブラー強度（z）、使用・未使用（w）
+	DirectX::XMFLOAT4 BlurParams = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 };
 
 struct HitFlashBuffer {
@@ -143,7 +146,7 @@ private:
 
 	static FLOAT m_ClearColor[4];
 
-	static ID3D11BlendState* g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
+	static ID3D11BlendState* g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ブレンド ステート;
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
@@ -212,7 +215,7 @@ public:
 	//=============================================================================
 	// ブレンド ステート設定
 	//=============================================================================
-	static void SetBlendState(int nBlendState);
+	static void SetBlendState(const EBlendState& nBlendState);
 
 	static void SetCullingState(const ECullingState& state);
 	static void SetFillMode(const EFillMode& fillMode);

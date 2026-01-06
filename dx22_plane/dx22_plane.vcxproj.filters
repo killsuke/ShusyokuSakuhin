@@ -408,6 +408,9 @@
     <ClCompile Include="Components\EnemyDeathEventComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\MotionBlurControllerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -827,6 +830,9 @@
     <ClInclude Include="Components\EnemyDeathEventComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\MotionBlurControllerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
@@ -877,13 +883,15 @@
     <FxCompile Include="shader\Fighter2DPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\MotionBlurPS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="shader\unlitTexture2D_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\litTextureVS2D.hlsl" />
+    <FxCompile Include="shader\MotionBlurVS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\litTextureVS2D.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">

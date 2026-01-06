@@ -25,6 +25,7 @@
 #include "Components/RigidBodyComponent.h"
 #include "Components/FliesMoveComponent.h"
 #include "Components/MeshCut2DComponent.h"
+#include "Components/VectorMoveComponent.h"
 
 //#include "Effekseer.h"
 //#include "EffekseerRendererDX11.h"
@@ -178,21 +179,14 @@ void Stage1Scene::Init()
 		GameObject* testObj = GameObjectManager::AddObject("testObj", "Test");
 		TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetScale({50.0f,50.0f,1.0f});
-		MeshCut2DComponent* meshCut = testObj->AddComponent<MeshCut2DComponent>();
-	/*	FliesMoveComponent* flies = testObj->AddComponent<FliesMoveComponent>();
-		flies->SetMovePower(2.0f);*/
-	/*	RigidBodyComponent* rigid = testObj->AddComponent<RigidBodyComponent>();
-		rigid->SetGravityFlag(true);
-		rigid->SetMass(2.0f);
-		ProjectileMotionComponent* proj = testObj->AddComponent<ProjectileMotionComponent>();
-		proj->SetProjectilePower(1.0f);
-		proj->SetProjectileDirection({0.0f,1.0f,0.0f});
-		proj->SetProjectileRotation({ 0.0f,0.0f,10.0f });*/
-		Render2DComponent* rend = testObj->AddComponent<Render2DComponent>();
+		VectorMoveComponent* vectorMove = testObj->AddComponent<VectorMoveComponent>();
+		vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
+		vectorMove->SetMovePower(5.0f);
+		RenderMotionBlurComponent* rend = testObj->AddComponent<RenderMotionBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/background1.png");
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
-
+		rend->SetShader("shader/MotionBlurVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rend->InitMotionBlurSettings(10, 5.0f, false);		
 	}
 
 	ID3D11Device* device = DirectXRender::GetDevice();

@@ -60,16 +60,16 @@ struct MATERIAL
 };
 
 // 定数バッファ受け取り
-cbuffer ConstBuffer : register(b0) 
+cbuffer ConstBuffer : register(b0)
 {
 	// 頂点カラー
-	float4 vertexColor;
+    float4 vertexColor;
 
 	// UV座標移動行列
-	matrix matrixTex1;
+    matrix matrixTex1;
 
 	// ワールド変換行列
-	matrix matrixWorld;
+    matrix matrixWorld;
 	
     bool isInvertX; // ＵＶ座標のⅩを反転するかどうか
 	
@@ -88,8 +88,8 @@ cbuffer CameraMatrixBuffer : register(b1)
 
 cbuffer LineThicknessBuffer : register(b2)
 {
-	float lineThickness; // 線の太さ
-	float pads[3];
+    float lineThickness; // 線の太さ
+    float pads[3];
 }
 
 cbuffer BlurBuffer : register(b3)
@@ -98,29 +98,35 @@ cbuffer BlurBuffer : register(b3)
     float2 blurPad; // ブラーをかける方向
 }
 
-cbuffer HitFlashBuffer:register(b4) {
+cbuffer HitFlashBuffer : register(b4)
+{
     float3 FlashColor;
-	float HitFlashPower; // ヒットフラッシュの強さ 0.0～1.0
+    float HitFlashPower; // ヒットフラッシュの強さ 0.0～1.0
     bool IsHitFlash; // ヒットフラッシュを行うかどうか
     float3 _padding;
 }
 
-cbuffer LightBuffer:register(b5) {
-	LIGHT Light;
+cbuffer LightBuffer : register(b5)
+{
+    LIGHT Light;
 }
 
-cbuffer MaterialBuffer:register(b6) {
-	MATERIAL Material;
+cbuffer MaterialBuffer : register(b6)
+{
+    MATERIAL Material;
 }
 
 cbuffer MotionBlurBuffer : register(b7)
 {
-    float2 velocity; // ピクセル単位の速度（前フレーム座標との差分など）
-    float2 pad2;
+    // 前フレームのワールド変換行列
+    matrix matrixWorldPrev;
+    
+    // シェルのインデックス（x）、シェルの数（y）、ブラー強度（z）、使用・未使用（w）
+    float4 blurParams;
 }
 
 cbuffer ConstantBufferBoneComb : register(b8)
-{	
+{
 	//	// 頂点カラー
  //   float4 vertexColorB;
 

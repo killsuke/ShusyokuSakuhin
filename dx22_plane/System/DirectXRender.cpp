@@ -80,7 +80,7 @@ ID3D11Buffer* m_MaterialBuffer = nullptr;
 ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
 
 // ブレンドステート用変数（アルファブレンディング）
-ID3D11BlendState* DirectXRender::g_BlendState[MAX_BLENDSTATE]; // ブレンド ステート;
+ID3D11BlendState* DirectXRender::g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ブレンド ステート;
 
 ID3D11BlendState* g_BlendStateATC = nullptr;
 
@@ -117,7 +117,7 @@ HRESULT DirectXRender::Init() {
 	MaterialBufferCreate();
 	//MaterialSetting();
 
-	SetBlendState(BS_ALPHABLEND);
+	SetBlendState(EBlendState::BS_ALPHABLEND);
 
 	VeiwProjConstantCreate();
 
@@ -144,7 +144,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
-	for (int i = 0; i < MAX_BLENDSTATE; ++i) {
+	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
 			SAFE_RELEASE(g_BlendState[i]);
 			//g_BlendState[i] = nullptr;  // 解放後にポインタをクリア
@@ -359,7 +359,7 @@ HRESULT DirectXRender::BlandStateCreate() {
 	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[3]);
 	if (FAILED(hr)) return hr;
 
-	SetBlendState(BS_ALPHABLEND);
+	SetBlendState(EBlendState::BS_ALPHABLEND);
 
 	return hr;
 }
@@ -871,11 +871,30 @@ void DirectXRender::SetATCEnable(bool Enable)
 	}
 }
 
-void DirectXRender::SetBlendState(int nBlendState)
+void DirectXRender::SetBlendState(const EBlendState& nBlendState)
 {
-	if (nBlendState >= 0 && nBlendState < MAX_BLENDSTATE) {
-		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		m_DeviceContext->OMSetBlendState(g_BlendState[nBlendState], blendFactor, 0xffffffff);
+	if (nBlendState < EBlendState::MAX_BLENDSTATE) {
+		const float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		int result = 0;
+
+		switch (nBlendState)
+		{
+			case EBlendState::BS_NONE:
+				break;
+			case EBlendState::BS_ALPHABLEND:
+				result = 1;
+				break;
+			case EBlendState::BS_ADDITIVE:
+				result = 2;
+				break;
+			case EBlendState::BS_SUBTRACTION:
+				result = 3;
+				break;
+		default:
+			break;
+		}
+
+		m_DeviceContext->OMSetBlendState(g_BlendState[result], blendFactor, 0xffffffff);
 	}
 }
 

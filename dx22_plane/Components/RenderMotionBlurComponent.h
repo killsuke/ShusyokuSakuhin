@@ -1,18 +1,23 @@
 #pragma once
 #include "Render.h"
-#include <SimpleMath.h>
+#include "MotionBlurControllerComponent.h"
+#include <DirectXMath.h>
 
 class RenderMotionBlurComponent : public RenderComponent
 {
 private:
-	DirectX::SimpleMath::Vector2 m_BlurVelocity = DirectX::SimpleMath::Vector2::Zero;
-
+	MotionBlurControllerComponent* m_MotionBlurController = nullptr;
 
 public:
 	RenderMotionBlurComponent(GameObject& obj);
 	~RenderMotionBlurComponent() = default;
 
 	void Update()override;
-
-	void SetBlurVelocity(const DirectX::SimpleMath::Vector2& vel) { m_BlurVelocity = vel; };
+	void InitMotionBlurSettings(const int shellCount, const float blurStrength, const bool isUse) {
+		if (m_MotionBlurController != nullptr) {
+			m_MotionBlurController->SetShellCount(shellCount);
+			m_MotionBlurController->SetBlurStrength(blurStrength);
+			m_MotionBlurController->SetIsUseBlur(isUse);
+		}
+	};
 };

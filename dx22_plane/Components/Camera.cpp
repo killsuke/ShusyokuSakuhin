@@ -53,7 +53,7 @@ void Camera::Update()
 		XMVECTOR upVec = XMLoadFloat3(&up);
 
 		XMFLOAT3 right = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		XMVECTOR rightVec = XMVector3Cross(forwardVec, upVec);
+		XMVECTOR rightVec = XMVector3Cross(upVec,forwardVec);
 		rightVec = XMVector3Normalize(rightVec);
 		XMStoreFloat3(&right, rightVec);
 
@@ -68,10 +68,10 @@ void Camera::Update()
 			move -= forward;
 		}
 		if (Input::GetKeyPress(VK_L)) {
-			move -= right;
+			move += right;
 		}
 		if (Input::GetKeyPress(VK_J)) {
-			move += right;
+			move -= right;
 		}
 		if (Input::GetKeyPress(VK_UP)) {
 			move += up;
