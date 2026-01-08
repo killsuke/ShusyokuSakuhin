@@ -1,6 +1,7 @@
 #include "RenderParticlesComponent.h"
 #include "System/DirectXRender.h"
 #include "Transform.h"
+#include "RenderLuminescenceBillboardComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Camera.h"
 
@@ -58,7 +59,7 @@ void RenderParticlesComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(s * rotationOnly * t);
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		// 時間経過に応じてアルファ値を変える
 		const float subtractAlpha = m_RecordTime / m_VanishTime;
@@ -117,4 +118,9 @@ void RenderParticlesComponent::Update()
 	}
 
 	m_RecordTime += DeltaTime;
+
+	RenderLuminescenceBillboardComponent* lumComp = m_Object->GetComponent<RenderLuminescenceBillboardComponent>();
+	if (lumComp != nullptr) {
+		lumComp->AddColor(XMFLOAT4(0.0f, 0.0f, 0.0f, -0.002f));
+	}
 }

@@ -113,36 +113,32 @@
             "ID": 27
         },
 	{
-            "name": "MOTIONBLUR",
+            "name": "RENDER_CONTOROL",
             "ID": 28
-        },
-	{
-            "name": "MESH_CUT_2D",
-            "ID": 29
-        },
-	{
-            "name": "TRAILMAKE",
-            "ID": 30
         },
         {
             "name": "RENDER_ONE_SKIN_ANIMATION",
-            "ID": 31
+            "ID": 29
         },
         {
 	    "name": "HIT_FLASH",
-            "ID": 32
+            "ID": 30
 	},
         {
             "name": "RENDER",
-            "ID": 33
+            "ID": 31
+        },
+        {
+            "name": "RENDER_DELAY",
+            "ID": 32
         },
         {
             "name": "RENDER_DEBUG",
-            "ID": 34
+            "ID": 33
         },
         {
             "name": "MAX",
-            "ID": 35
+            "ID": 34
         }
     ]
 }

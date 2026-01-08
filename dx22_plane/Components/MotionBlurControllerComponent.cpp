@@ -3,7 +3,7 @@
 using namespace DirectX;
 
 MotionBlurControllerComponent::MotionBlurControllerComponent(GameObject& obj) : Component(obj) {
-	m_SortNum = ComponentTypeManager::GetID_FromName("MOTIONBLUR"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 }
 
 void MotionBlurControllerComponent::Update() {
@@ -12,7 +12,7 @@ void MotionBlurControllerComponent::Update() {
 	if(transform == nullptr) {
 		return;
 	}
-	XMMATRIX currentMtx = transform->GetWorldMatrix();
+	const XMMATRIX currentMtx = transform->GetWorldMatrix();
 
 	// 前のフレームの行列を更新
 	m_PrevMtx = m_PrevMtx2;
@@ -21,5 +21,6 @@ void MotionBlurControllerComponent::Update() {
 		m_PrevMtx = XMMatrixTranspose(currentMtx);
 	}
 
+	// 今回の行列をセット
 	m_PrevMtx2 = XMMatrixTranspose(currentMtx);
 }

@@ -76,8 +76,14 @@ public:
 	bool GetInversionFlag()const { return m_InversionFlag; };
 	Shader* GetShader()const { return m_Shader.get(); };
 
-	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
+	void AddColor(const DirectX::XMFLOAT4& addcolor) {
+		m_Color.x += addcolor.x;
+		m_Color.y += addcolor.y;
+		m_Color.z += addcolor.z;
+		m_Color.w += addcolor.w;
+	};
 
+	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
 
 	template<class T>
 	T* CreateMesh() {

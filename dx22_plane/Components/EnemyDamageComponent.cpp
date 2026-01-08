@@ -6,13 +6,16 @@
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/HitStopManager.h"
-#include "CameraShakeComponent.h"
 #include "FighterComponent.h"
 
 namespace {
 	constexpr float FirstStopTime = 0.1f; // 最初のヒットストップ時間
 	constexpr float SecondStopTime = 0.2f; // ２回目のヒットストップ時間
 	constexpr float ThirdStopTime = 0.3f; // ３回目のヒットストップ時間
+
+	const ShakeStatus FirstShake = ShakeStatus(50.0f,1.5f,0.2f);
+	const ShakeStatus SecondShake = ShakeStatus(55.0f,1.8f,0.2f);
+	const ShakeStatus ThirdShake = ShakeStatus(70.0f,2.0f,0.3f);
 }
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
@@ -57,7 +60,7 @@ void EnemyDamageComponent::Update()
 					}
 
 					// ヒットストップの候補セット
-					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome" });
+					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome"});
 					HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
 
 					GameObject* camera = GameObjectManager::GameObjectFindName("camera");
@@ -69,11 +72,18 @@ void EnemyDamageComponent::Update()
 
 						const HitEvent he = { myID,otherID };
 
+						ShakeStatus status = FirstShake;
+
 						// ヒット時の通知
 						EventBusManager::Push(he);
 
+						if (swordComp != nullptr) {
+							ESwordActionState state = swordComp->GetSwordActionState();
+							status = ChoiceShakeStatus(state);
+						}
+
 						// 画面揺れ開始
-						shake->ShakingPreparation(50.0f, 1.5f, 0.2f);
+						shake->ShakingPreparation(status);
 					}
 				}
 			}
@@ -81,7 +91,7 @@ void EnemyDamageComponent::Update()
 	}
 }
 
-float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState state) {
+float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState& state) {
 
 	switch (state)
 	{
@@ -98,6 +108,27 @@ float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState state) {
 		break;
 	default:
 		return FirstStopTime;
+		break;
+	}
+}
+
+ShakeStatus EnemyDamageComponent::ChoiceShakeStatus(const ESwordActionState& state) {
+
+	switch (state)
+	{
+	case ESwordActionState::SLASH_1ST:
+		return FirstShake;
+		break;
+
+	case ESwordActionState::SLASH_2ND:
+		return SecondShake;
+		break;
+
+	case ESwordActionState::SLASH_3RD:
+		return ThirdShake;
+		break;
+	default:
+		return FirstShake;
 		break;
 	}
 }

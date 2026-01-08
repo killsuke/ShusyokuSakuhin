@@ -74,7 +74,12 @@ ID3D11Buffer* g_pBlurBuffer = nullptr;
 // モーションブラー用のバッファ
 ID3D11Buffer* g_pMotionBlurBuffer = nullptr;
 
+// 回転にも対応したモーションブラー
+ID3D11Buffer* g_pMotionBlurCircularBuffer = nullptr;
+
 ID3D11Buffer* m_MaterialBuffer = nullptr;
+
+ID3D11Buffer* g_pGlowBuffer = nullptr;
 
 // ヒットフラッシュ用のバッファ
 ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
@@ -86,7 +91,7 @@ ID3D11BlendState* g_BlendStateATC = nullptr;
 
 ID3D11Buffer* g_pCameraInformationBuffer{}; // カメラ情報
 
-FLOAT DirectXRender::m_ClearColor[4] = {0.4f,0.75f, 1.0f, 1.0f};
+FLOAT DirectXRender::m_ClearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
 
 DirectXRender::DirectXRender() {
 
@@ -141,8 +146,10 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(g_pHPBarConstantBuffer);
 	SAFE_RELEASE(g_pBlurBuffer);
 	SAFE_RELEASE(g_pMotionBlurBuffer);
+	SAFE_RELEASE(g_pMotionBlurCircularBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
+	SAFE_RELEASE(g_pGlowBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
@@ -357,6 +364,13 @@ HRESULT DirectXRender::BlandStateCreate() {
 	// ブレンド ステート生成 (減算合成用)
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
 	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[3]);
+	if (FAILED(hr)) return hr;
+
+	// エフェクト用加算合成
+	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[4]);
 	if (FAILED(hr)) return hr;
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
@@ -747,7 +761,7 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
 
 	bufferDesc.ByteWidth = sizeof(BlurBuffer);
-	
+
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
 	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
 	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
@@ -762,6 +776,18 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurBuffer);
 	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
 	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+
+	bufferDesc.ByteWidth = sizeof(MotionBlurCircularBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurCircularBuffer);
+	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+
+	bufferDesc.ByteWidth = sizeof(GlowBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pGlowBuffer);
+	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
 
 
 	// ここ後で１番に変更
@@ -879,17 +905,20 @@ void DirectXRender::SetBlendState(const EBlendState& nBlendState)
 
 		switch (nBlendState)
 		{
-			case EBlendState::BS_NONE:
-				break;
-			case EBlendState::BS_ALPHABLEND:
-				result = 1;
-				break;
-			case EBlendState::BS_ADDITIVE:
-				result = 2;
-				break;
-			case EBlendState::BS_SUBTRACTION:
-				result = 3;
-				break;
+		case EBlendState::BS_NONE:
+			break;
+		case EBlendState::BS_ALPHABLEND:
+			result = 1;
+			break;
+		case EBlendState::BS_ADDITIVE:
+			result = 2;
+			break;
+		case EBlendState::BS_SUBTRACTION:
+			result = 3;
+			break;
+		case EBlendState::BS_EFFECT:
+			result = 4;
+			break;
 		default:
 			break;
 		}

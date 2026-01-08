@@ -21,6 +21,7 @@
 #include "EnemyDeathEventComponent.h"
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
@@ -84,7 +85,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		render->CreateMesh<SquareMesh>();
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->ChangeTexture(eS.texture);
-		render->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
 		atk->SetCoolDownTime(0.1f);

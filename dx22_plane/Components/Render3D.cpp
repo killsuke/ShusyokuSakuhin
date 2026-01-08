@@ -2,7 +2,6 @@
 #include "System/DirectXRender.h"
 #include "Transform.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
@@ -21,7 +20,7 @@ void Render3DComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = XMFLOAT4(m_Color);
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

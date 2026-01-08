@@ -1,7 +1,7 @@
 #include "BlinkingUIComponent.h"
 #include "Render2D.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 BlinkingUIComponent::BlinkingUIComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
@@ -19,5 +19,5 @@ void BlinkingUIComponent::Update() {
 	// sin波で点滅させる
 	float value = sinf(m_recordTime * m_blinkingSpeed);        // [-1, 1]
 	float normalized = (value + 1.0f) * 0.5f; // [0, 1]
-	rend->SetColor(Vector4(1.0f, 1.0f, 1.0f, normalized));
+	rend->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, normalized));
 }

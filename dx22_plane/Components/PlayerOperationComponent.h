@@ -1,6 +1,16 @@
 #pragma once
 #include "Component.h"
 
+enum class PlayerState
+{
+	NONE,
+	MOVE,
+	JUMP,
+	ATTACK,
+	DAMAGE,
+	DEAD
+};
+
 class PlayerOperationComponent : public Component
 {
 private:

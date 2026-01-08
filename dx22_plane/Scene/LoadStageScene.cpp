@@ -72,7 +72,7 @@ LoadStageScene::LoadStageScene() {
 
 	BackGroundCreate();
 
-	
+
 
 	{
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
@@ -143,8 +143,7 @@ LoadStageScene::LoadStageScene() {
 
 		/*	auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
 			cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
-
-
+	
 			//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
@@ -182,11 +181,13 @@ LoadStageScene::LoadStageScene() {
 		//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
 		//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
-		auto rollingRender = rolling->AddComponent<Render3DComponent>();
+				
+		Render3DComponent* rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingRender->ChangeTexture("assets/texture/sword.png");
-	//	rollingRender->SetBlurVelocity({ 0.0f,0.0f });
+
+		//	rollingRender->SetBlurVelocity({ 0.0f,0.0f });
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();

@@ -14,7 +14,7 @@ using namespace DirectX::SimpleMath;
 MeshCut2DComponent::MeshCut2DComponent(GameObject& obj) : Component(obj)
 {
 	// コンポーネントのソート番号を設定（あとで）
-	m_SortNum = ComponentTypeManager::GetID_FromName("MESH_CUT_2D"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 
 	m_listenerID_CutEvent = EventBusManager::Subscribe<CutEvent>([&](const CutEvent& e) {
 		MeshCutAction(e);

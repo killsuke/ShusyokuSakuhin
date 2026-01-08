@@ -3,6 +3,13 @@
 #include "FighterComponent.h"
 #include "EnemyDeathEventComponent.h"
 
+enum class EEnemyState {
+	WAIT,
+	MOVE,
+	ATTACK,
+	DAMAGED,
+};
+
 class EnemyActionComponent : public Component
 {
 protected:

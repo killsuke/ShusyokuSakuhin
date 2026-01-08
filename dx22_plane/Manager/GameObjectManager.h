@@ -209,6 +209,26 @@ public:
 		return HelperFindInstanceID(objects, id);
 	}
 
+	static GameObject* GameObjectFindInstanceIDAll(const uint32_t& id) { // インスタンスID検索でゲームオブジェクトを持ってくるか考える
+		GameObject* obj = HelperFindInstanceID(objects, id);
+		if (obj != nullptr) {
+			return obj;
+		}
+		obj = HelperFindInstanceID(child_Objects, id);
+		if (obj != nullptr) {
+			return obj;
+		}
+		obj = HelperFindInstanceID(objects_UI, id);
+		if (obj != nullptr) {
+			return obj;
+		}
+		obj = HelperFindInstanceID(objects_Absfront, id);
+		if (obj != nullptr) {
+			return obj;
+		}
+		return nullptr;
+	}
+
 private:
 
 	static std::vector<std::unique_ptr<GameObject>> objects;			 // シーンをnewする度に様々なオブジェクトを格納するようにする

@@ -22,7 +22,7 @@ void RenderMask3DComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

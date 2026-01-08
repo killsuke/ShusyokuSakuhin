@@ -152,11 +152,11 @@ void Camera::Update()
 			XMMATRIX rotMat = XMMatrixRotationQuaternion(qRotation);
 
 			// 前方ベクトル回転
-			XMVECTOR forward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), rotMat);
+			XMVECTOR newForward = XMVector3TransformNormal(XMVectorSet(0, 0, 1, 0), rotMat);
 
 			// ターゲット計算
 			const XMVECTOR nowPosV = XMLoadFloat3(&nowPos);
-			const XMVECTOR targetV = XMVectorAdd(nowPosV, forwardVec);
+			const XMVECTOR targetV = XMVectorAdd(nowPosV, newForward);
 			XMStoreFloat3(&m_Target, targetV);
 		}
 

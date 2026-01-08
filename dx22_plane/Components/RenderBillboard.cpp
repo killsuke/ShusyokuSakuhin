@@ -55,7 +55,7 @@ void RenderBillboardComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(s * rotationOnly * t);
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 

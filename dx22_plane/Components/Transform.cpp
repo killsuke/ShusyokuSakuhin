@@ -1,6 +1,5 @@
 #include "Transform.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 TransformComponent::TransformComponent(GameObject& obj) :Component(obj) {
@@ -12,28 +11,12 @@ void TransformComponent::Update() {
 
 	GameObject* parent = m_Object->GetParent(); // 親オブジェクトを取得
 	if (parent != nullptr) {
-		m_transform.worldMatrix = MakeLocalMatrix() * parent->GetComponent<TransformComponent>()->GetWorldMatrix(); // 親のワールド行列を取得
 
-		XMVECTOR scale;
-		XMVECTOR rotation;
-		XMVECTOR translation;
+		//	m_transform.worldMatrix = MakeLocalMatrix() * parent->GetComponent<TransformComponent>()->GetWorldMatrix(); // 親のワールド行列を取得
 
-		XMFLOAT3 nowScale;
-		XMFLOAT3 nowTranslation;
+		MakeChildMatrix();
 
-		DecomposeMatrix(m_transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
-
-		XMStoreFloat3(&nowScale, scale);
-		XMStoreFloat3(&nowTranslation, translation);
-
-		m_transform.m_Position = nowTranslation; // 位置を更新
-		m_transform.m_Scale = nowScale; // スケールを更新
-		m_transform.m_Quaternion = rotation;
-
-		XMFLOAT3 rad = QuaternionToEulerRad(rotation);
-		rad *= (180.0f / XM_PI);
-
-		m_transform.m_Rotation = rad; // 回転を更新
+		MakeChildWorld();
 	}
 	else {
 		// ワールド行列計算
@@ -79,10 +62,20 @@ void TransformComponent::MakeChildWorld() {
 		XMMATRIX parentMtx = XMMatrixIdentity();
 
 		if (parentTrans == nullptr) {
-			parentTrans->MakeWorldMatrix(); // 親のワールド行列を更新
+			return;
 		}
 		else {
-			parentMtx = parentTrans->GetWorldMatrix(); // 親のワールド行列を取得
+			const XMFLOAT3 parentPos = parentTrans->GetPosition();
+			const XMVECTOR pos = XMVectorSet(parentPos.x, parentPos.y, parentPos.z, 1.0f);
+			const XMMATRIX t = XMMatrixTranslationFromVector(pos);
+			// スケールの影響を受けないようにする
+			const XMVECTOR parentScale = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+			const XMMATRIX s = XMMatrixScalingFromVector(parentScale);
+
+			const XMVECTOR parentQuat = parentTrans->GetQuaternion();
+			const XMMATRIX r = XMMatrixRotationQuaternion(parentQuat);
+
+			parentMtx = s * r * t;
 		}
 
 		m_transform.worldMatrix = MakeLocalMatrix() * parentMtx; // 親のワールド行列とローカル行列を掛け合わせて子のワールド行列を計算
@@ -107,4 +100,38 @@ void TransformComponent::MakeChildWorld() {
 
 		m_transform.m_Rotation = rad; // 回転を更新
 	}
+}
+
+DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
+
+	GameObject* parent = m_Object->GetParent(); // 親オブジェクトを取得
+	if (parent != nullptr) {
+
+		TransformComponent* trans = parent->GetComponent<TransformComponent>();
+
+		if (trans == nullptr) {
+			return XMMatrixIdentity();
+		}
+
+		XMMATRIX childMtx = MakeLocalMatrix();
+
+		XMVECTOR parentQuat = trans->GetQuaternion();
+		XMFLOAT3 parentScale = trans->GetScale();
+		XMFLOAT3 parentPos = trans->GetPosition();
+
+		const XMMATRIX r = XMMatrixRotationQuaternion(parentQuat);
+
+		XMMATRIX s = XMMatrixIdentity();
+		XMVECTOR scale = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		if (m_IsLockScale == false) {
+			scale = XMVectorSet(parentScale.x, parentScale.y, parentScale.z, 1.0f);
+		}
+		s = XMMatrixScalingFromVector(scale);
+		const XMVECTOR pos = XMVectorSet(parentPos.x, parentPos.y, parentPos.z, 1.0f);
+		const XMMATRIX t = XMMatrixTranslationFromVector(pos);
+
+		return	m_transform.worldMatrix = childMtx * (s * r * t);
+	}
+
+	return XMMatrixIdentity();
 }

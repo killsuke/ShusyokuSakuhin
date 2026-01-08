@@ -22,6 +22,7 @@ enum class EBlendState {
 	BS_ALPHABLEND,							// 半透明合成
 	BS_ADDITIVE,							// 加算合成
 	BS_SUBTRACTION,							// 減算合成
+	BS_EFFECT,								// エフェクト用（加算合成）
 	MAX_BLENDSTATE
 };
 
@@ -44,13 +45,15 @@ extern ID3D11Buffer* g_pBoneConstantBuffer;
 extern ID3D11Buffer* g_pHPBarConstantBuffer;
 extern ID3D11Buffer* g_pBlurBuffer;
 extern ID3D11Buffer* g_pMotionBlurBuffer;
+extern ID3D11Buffer* g_pMotionBlurCircularBuffer;
 extern ID3D11Buffer* m_MaterialBuffer;
+extern ID3D11Buffer* g_pGlowBuffer;
 
 // 定数バッファ用構造体
 struct ConstBuffer
 {
 	// 頂点カラー行列
-	DirectX::SimpleMath::Vector4 color = DirectX::SimpleMath::Vector4::Zero;;
+	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 	// UV座標移動行列
 	DirectX::XMMATRIX matrixTex = DirectX::XMMatrixIdentity();
 	// ワールド変換行列
@@ -107,11 +110,31 @@ struct MotionBlurBuffer {
 	DirectX::XMFLOAT4 BlurParams = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 };
 
+struct MotionBlurCircularBuffer {
+	DirectX::XMFLOAT3 centerPos = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	float length = 0.0f;
+
+	DirectX::XMVECTOR prevRot = DirectX::XMQuaternionIdentity();
+	DirectX::XMVECTOR currRot = DirectX::XMQuaternionIdentity();
+
+	int shellCount = 0;
+	DirectX::XMFLOAT3 padding = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+};
+
 struct HitFlashBuffer {
 	DirectX::SimpleMath::Vector3 hitFlashColor = DirectX::SimpleMath::Vector3::Zero;
 	float hitFlashPower = 0.0f;
 	BOOL isHit = false;
 	DirectX::SimpleMath::Vector3 pad = DirectX::SimpleMath::Vector3::Zero;
+};
+
+struct GlowBuffer {
+	DirectX::XMFLOAT4 glowColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT2 ellipseScale = DirectX::XMFLOAT2(0.0f, 0.0f);
+	float glowPower = 0.0f;
+	float glowRadius = 0.0f;
+	float angleRadian = 0.0f;
+	DirectX::XMFLOAT3 paddings = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 };
 
 class DirectXRender

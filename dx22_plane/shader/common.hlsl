@@ -125,6 +125,18 @@ cbuffer MotionBlurBuffer : register(b7)
     float4 blurParams;
 }
 
+cbuffer MotionBlurCircularBuffer : register(b7)
+{
+    float3 centerPos; // 回転の中心位置
+    float lengthBlur; // ブラーの長さ
+    
+    float4 prevRot; // 前フレームの回転（クォータニオン）
+    float4 currentRot; // 今フレームの回転（クォータニオン）
+    
+    int shellCount; // シェルの数
+    float3 padding_3;
+}
+
 cbuffer ConstantBufferBoneComb : register(b8)
 {
 	//	// 頂点カラー
@@ -146,3 +158,12 @@ cbuffer UIParam : register(b9)
     float2 padding; // 必要なら
 };
 
+cbuffer GlowParam : register(b10)
+{
+    float4 GlowColor; // 発光色（白色）
+    float2 EllipseScale; // 楕円スケール
+    float GlowPower; // 発光強度（１～５）
+    float GlowRadius; // 発光範囲（大きいほど広がる）
+    float Angle;
+    float3 Pad3;
+};

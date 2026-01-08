@@ -31,6 +31,8 @@ class TransformComponent final : public Component
 {
 private:
 	Transform m_transform;	// トランスフォーム情報
+	bool m_IsLockScale = false; // スケールロックフラグ
+
 public:
 	TransformComponent(GameObject& obj);
 
@@ -82,6 +84,7 @@ public:
 		// 左手系に変換
 		m_transform.m_LocalRotation = QuaternionToEulerRad(m_transform.m_LocalQuaternion) * (180.0f / DirectX::XM_PI);
 	};
+	inline void SetLockScale(const bool lock) { m_IsLockScale = lock; };
 
 	inline DirectX::XMFLOAT3 GetPosition() const { return m_transform.m_Position; };
 	inline DirectX::XMFLOAT3 GetRotation() const { return m_transform.m_Rotation; };
@@ -130,6 +133,8 @@ public:
 
 	DirectX::XMMATRIX MakeWorldMatrix();
 	DirectX::XMMATRIX MakeLocalMatrix();
+	DirectX::XMMATRIX MakeChildMatrix();
+
 
 	void MakeChildWorld();
 

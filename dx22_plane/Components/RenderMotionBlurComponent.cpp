@@ -22,7 +22,7 @@ void RenderMotionBlurComponent::Update() {
 
 		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
@@ -35,7 +35,6 @@ void RenderMotionBlurComponent::Update() {
 
 		// モーションブラー用のステート設定
 		// 半透明合成を有効にして、シェル同士が重なるよう深度書き込みをOFFに
-		DirectXRender::SetBlendState(EBlendState::BS_ALPHABLEND);
 		DirectXRender::SetDepthEnable(false);
 
 		// 行列をシェーダーに渡す
@@ -53,11 +52,14 @@ void RenderMotionBlurComponent::Update() {
 		motionBlur.BlurParams.z = blurStrength;
 		motionBlur.BlurParams.w = (float)isUse;
 
-		std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
 		std::vector<Texture> textures = m_Mesh->GetTextures();
+
+		deviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+		deviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
 
 		// シェル分ループして描画
 		for (int i = 0; i < shellCount; ++i)
@@ -87,7 +89,6 @@ void RenderMotionBlurComponent::Update() {
 			}
 		}
 
-		DirectXRender::SetBlendState(EBlendState::BS_NONE);
 		DirectXRender::SetDepthEnable(true);
 	}
 }

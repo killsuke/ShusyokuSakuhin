@@ -10,6 +10,8 @@
 #include "Mesh/SquareMesh.h"
 #include "Manager/SceneManager.h"
 #include "TrailRenderComponent.h"
+#include "RenderLuminescenceBillboardComponent.h"
+#include "SlashEffectComponent.h"
 #include <iostream>
 #include <SimpleMath.h>
 
@@ -23,9 +25,9 @@ namespace {
 	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	// 剣の角度
-	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(-45.0f, 0.0f, 0.0f);
-	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(45.0f, 0.0f, 0.0f);
-	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(315.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(90.0f, 0.0f, 0.0f);
 }
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
@@ -251,26 +253,48 @@ void TestSwordActionComponent::SwordAction() {
 void TestSwordActionComponent::CreateSwordEffect() {
 	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 
+	float zAngle = 0.0f;
+	switch (m_SwordActionState)
+	{
+	case ESwordActionState::NONE:
+		break;
+	case ESwordActionState::SLASH_1ST:
+		zAngle = LockAngle1st.x;
+		break;
+	case ESwordActionState::SLASH_2ND:
+		zAngle = LockAngle2nd.x;
+		break;
+	case ESwordActionState::SLASH_3RD:
+		zAngle = LockAngle3rd.x;
+		break;
+	default:
+		break;
+	}
+
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
-	effectTrans->SetScale({ 15.0f,15.0f,5.0f });
+	effectTrans->SetScale({ 30.0f,80.0f,5.0f });
 	if (m_RightLeft == true) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
 	}
 	else {
 		effectTrans->SetPosition({ pos.x - 7.0f, pos.y, pos.z });
 	}
+	effectTrans->SetRotation({ 0.0f,0.0f,zAngle });
 
-	auto render = effect->AddComponent<RenderBillboardComponent>();
-	auto mesh = render->CreateMesh<SquareMesh>();
-	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
-	//	render->ChangeTexture("assets/texture/Blood_Splatter.png");
-	render->ChangeTexture("assets/texture/swordEffect.png");
-	render->SetInversionFlag(!m_RightLeft);
-	mesh->SetInitialCut(5.0f, 1.0f);
-	auto effectComp = effect->AddComponent<Effect2DComponent>();
-	effectComp->SetMaxTimeAndCut_X(0.3f, 5.0f);
-	//	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
+	// 引き延ばしたり縮めたりするエフェクト
+	SlashEffectComponent* slash = effect->AddComponent<SlashEffectComponent>();
+	slash->SetRimitTime(0.5f);
+	slash->SetSizeChange({2.0f, 20.0f});
+
+	// エフェクト用のレンダー
+	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
+	render->CreateMesh<SquareMesh>();
+	render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
+	render->SetGlowPower(0.5f);
+	render->SetGlowRadius(0.2f);
+	render->SetEllipseScale({ 1.0f,1.0f });
 }
 
 void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {

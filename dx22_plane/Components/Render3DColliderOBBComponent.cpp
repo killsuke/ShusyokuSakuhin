@@ -23,7 +23,7 @@ void Render3DColliderOBBComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(colliderOBB->GetWorldOBBMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

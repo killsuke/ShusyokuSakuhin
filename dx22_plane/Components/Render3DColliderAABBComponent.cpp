@@ -4,7 +4,6 @@
 #include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : RenderComponent(obj) {
@@ -12,7 +11,7 @@ Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : 
 	m_Shader = std::make_unique<Shader>();
 	m_Shader->Create("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	CreateMesh<CubeMesh>();
-	m_Color = Vector4(0.0f, 1.0f, 0.0f, 0.3f); // óŒêF
+	m_Color = XMFLOAT4(0.0f, 1.0f, 0.0f, 0.3f); // óŒêF
 	//m_Texture = std::make_unique<Texture>();
 }
 
@@ -27,7 +26,7 @@ void Render3DColliderAABBComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(colliderAABB->GetWorldAABBMatrix());
 
-		cb.color = Vector4(m_Color);
+		cb.color = m_Color;
 
 		auto deviceContext = DirectXRender::GetDeviceContext();
 

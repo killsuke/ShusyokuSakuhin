@@ -12,7 +12,7 @@ namespace {
 }
 
 TrailMakeComponent::TrailMakeComponent(GameObject& obj) : Component(obj) {
-	m_SortNum = ComponentTypeManager::GetID_FromName("TRAILMAKE"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 }
 
 void TrailMakeComponent::Update() {

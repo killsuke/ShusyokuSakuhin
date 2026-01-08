@@ -1,6 +1,6 @@
 #pragma once
-#include "Component.h"
 #include "TestSwordActionComponent.h"
+#include "CameraShakeComponent.h"
 
 class EnemyDamageComponent : public Component
 {
@@ -12,5 +12,6 @@ public:
 
 	void Update() override;
 
-	float ChoiceStopTime(const ESwordActionState state);
+	float ChoiceStopTime(const ESwordActionState& state);
+	ShakeStatus ChoiceShakeStatus(const ESwordActionState& state);
 };

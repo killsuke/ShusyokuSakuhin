@@ -2,11 +2,17 @@
 #include "Component.h"
 #include <SimpleMath.h>
 
+struct ShakeStatus {
+	float power = 0.0f;
+	float speed = 0.0f;
+	float time = 0.0f;
+};
+
 class CameraShakeComponent final : public Component
 {
 private:
 	float m_RecordTime = 0.0f;
-	float m_RequestTime = 0.0f;
+	float m_RequestTime = 0.0f;	// —h‚ê‚ÌŠÔ
 	float m_ShakePower = 0.0f;	// —h‚ê‚Ì‘å‚«‚³iü”g”j
 	float m_ShakeSpeed = 0.0f;	// —h‚ê‚Ì‘¬‚³iU•j
 
@@ -25,9 +31,16 @@ public:
 	~CameraShakeComponent() = default;
 
 	void Update() override;
+
 	void ShakingPreparation(const float power,const float speed, const float time) {
 		m_ShakePower = power;
 		m_ShakeSpeed = speed;
 		m_RequestTime = time;
+	};
+
+	void ShakingPreparation(const ShakeStatus& status) {
+		m_ShakePower = status.power;
+		m_ShakeSpeed = status.speed;
+		m_RequestTime = status.time;
 	};
 };

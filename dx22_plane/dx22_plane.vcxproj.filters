@@ -411,6 +411,18 @@
     <ClCompile Include="Components\MotionBlurControllerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\RenderMotionBlurCircularComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\RenderLuminescenceBillboardComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\LuminescenceBillboardControlComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SlashEffectComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dx11helper.h">
@@ -833,6 +845,18 @@
     <ClInclude Include="Components\MotionBlurControllerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="Components\RenderMotionBlurCircularComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\RenderLuminescenceBillboardComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\LuminescenceBillboardControlComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SlashEffectComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
@@ -892,6 +916,9 @@
     <FxCompile Include="shader\litTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="shader\MotionBlurCircularGS.hlsl" />
+    <FxCompile Include="shader\PassThroughVS.hlsl" />
+    <FxCompile Include="shader\unlitLuminescencePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">
