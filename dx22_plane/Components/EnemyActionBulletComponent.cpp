@@ -27,13 +27,13 @@ void EnemyActionBulletComponent::Update() {
 	auto rend = m_Object->GetComponent<Render2DComponent>();
 
 	if (myPos.x > playPos.x) {
-		m_IsRightLeft = false;
+		m_IsRightLeft = RightLeft::LEFT;
 	}
 	else {
-		m_IsRightLeft = true;
+		m_IsRightLeft = RightLeft::RIGHT;
 	}
 
-	rend->SetInversionFlag(!m_IsRightLeft);
+	rend->SetInversionFlag(m_IsRightLeft);
 
 	if (m_recordTime > 3.0f) {
 
@@ -53,10 +53,10 @@ void EnemyActionBulletComponent::FiringBullet() {
 	trans->SetScale({ 5.0f,5.0f,1.0f });
 	auto rigid = bullet->AddComponent<RigidBodyComponent>();
 	auto bull = bullet->AddComponent<BulletComponent>();
-	if (m_IsRightLeft == false) {
+	if (m_IsRightLeft == RightLeft::LEFT) {
 		bull->SetFiringVector({ -1.0f, 0.0f, 0.0f });
 	}
-	else {
+	else if(m_IsRightLeft == RightLeft::RIGHT){
 		bull->SetFiringVector({ 1.0f, 0.0f, 0.0f });
 	}
 	bull->SetFiringSpeed(100.0f);
@@ -75,5 +75,5 @@ void EnemyActionBulletComponent::FiringBullet() {
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rend->ChangeTexture("assets/texture/bullet.png");
-	rend->SetInversionFlag(!m_IsRightLeft);
+	rend->SetInversionFlag(m_IsRightLeft);
 }

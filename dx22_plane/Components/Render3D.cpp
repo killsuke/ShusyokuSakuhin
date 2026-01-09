@@ -22,6 +22,8 @@ void Render3DComponent::Update()
 
 		cb.color = XMFLOAT4(m_Color);
 
+		cb.inverse = (m_Inversion == RightLeft::RIGHT) ? true : false;
+
 		auto deviceContext = DirectXRender::GetDeviceContext();
 
 		// •`‰æ‚Ìˆ—

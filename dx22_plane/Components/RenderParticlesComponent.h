@@ -1,16 +1,16 @@
 #pragma once
 #include "Render.h"
+#include "ParticlesControlComponent.h"
 
 class RenderParticlesComponent :  public RenderComponent
 {
 private:
-	float m_VanishTime = 0.0f;	// Œv‘ª‚µ‚ÄÁ‚¦‚Ä—~‚µ‚¢ŽžŠÔ
-	float m_RecordTime = 0.0f;
+	ParticlesControlComponent* m_ParticlesControl = nullptr;
 
 public:
 
 	RenderParticlesComponent(GameObject& obj);
 	~RenderParticlesComponent() = default;
 	void Update()override;
-	void SetVanishTime(const float time) { m_VanishTime = fabsf(time); };
+	void SetVanishTime(const float time) { m_ParticlesControl->SetVanishTime(fabsf(time)); };
 };

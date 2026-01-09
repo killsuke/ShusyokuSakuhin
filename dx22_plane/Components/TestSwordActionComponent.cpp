@@ -25,9 +25,14 @@ namespace {
 	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 	// 剣の角度
-	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(45.0f, 0.0f, 0.0f);
-	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(315.0f, 0.0f, 0.0f);
-	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(90.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(-45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+	// 剣のエフェクトの角度
+	constexpr XMFLOAT3 EffectAngle1st = XMFLOAT3(45.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 EffectAngle2nd = XMFLOAT3(315.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 EffectAngle3rd = XMFLOAT3(90.0f, 0.0f, 0.0f);
 }
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
@@ -54,7 +59,7 @@ void TestSwordActionComponent::Update() {
 
 	const bool isAroundActive = goAround->GetRollingActive();
 	const bool isActiveFlag = goAround->GetActiveFlag();
-	const bool isRightLeft = moveComp->GetRightLeft();
+	const RightLeft isRightLeft = moveComp->GetRightLeft();
 	const bool isFinished = goAround->GetIsFinished();
 
 	m_RightLeft = isRightLeft;
@@ -115,12 +120,12 @@ void TestSwordActionComponent::Update() {
 				trail->SetTrailDivisionsCount(100);
 			}
 
-			if (isRightLeft == true) {
+			if (isRightLeft == RightLeft::RIGHT) {
 				//goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
-					goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
+				goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
 			}
-			else {
-			//	goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
+			else if(isRightLeft == RightLeft::LEFT){
+				//	goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
 				goAround->SetStartAndEndAngle(60.0f, -60.0f, false);
 			}
 
@@ -154,11 +159,11 @@ void TestSwordActionComponent::Update() {
 		auto holderTrans = m_Holder->GetComponent<TransformComponent>();
 		auto holderPos = holderTrans->GetPosition();
 
-		if (moveComp->GetRightLeft() == true) {	// 右
+		if (isRightLeft == RightLeft::RIGHT) {	// 右
 			objTrans->SetRotation({ 0.0f,0.0f,-50.0f });
 			objTrans->SetPosition({ holderPos.x - 3.0f,holderPos.y + 3.0f,3.0f });
 		}
-		else {									// 左
+		else if(isRightLeft == RightLeft::LEFT){									// 左
 			objTrans->SetRotation({ 0.0f,0.0f,-130.0f });
 			objTrans->SetPosition({ holderPos.x + 3.0f,holderPos.y + 3.0f,3.0f });
 		}
@@ -196,7 +201,7 @@ void TestSwordActionComponent::SwordAction() {
 	collider->SetActiveColliderFlag(true);
 
 	// 左右の向き変わったら、現在角度に＋90度して左右反転、上記の止める処理もちょいと変える？タイム方式とかに
-	const bool direction = moveComp->GetRightLeft();
+	const RightLeft direction = moveComp->GetRightLeft();
 	//const bool isFinished = goAround->GetIsFinished();
 
 	TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
@@ -216,7 +221,7 @@ void TestSwordActionComponent::SwordAction() {
 	}
 
 	// 方向が変わったら反転処理
-	if (direction == true && m_BeforeDirection == false) { // 右向き
+	if (direction == RightLeft::RIGHT && m_BeforeDirection == RightLeft::LEFT) { // 右向き
 		goAround->SetClockwise(true);
 		goAround->SetFlipRequested(true);
 
@@ -225,11 +230,12 @@ void TestSwordActionComponent::SwordAction() {
 			trail->SetActiveFlag(true);
 			trailMake->SetActiveFlag(true);
 			trail->RequestInversion();
+			trail->InversionEvent();
 		}
 
 		//	m_RightLeft = true;
 	}
-	else if (direction == false && m_BeforeDirection == true) { // 左向き
+	else if (direction == RightLeft::LEFT && m_BeforeDirection == RightLeft::RIGHT) { // 左向き
 		goAround->SetClockwise(false);
 		goAround->SetFlipRequested(true);
 
@@ -237,6 +243,7 @@ void TestSwordActionComponent::SwordAction() {
 			trail->SetActiveFlag(true);
 			trailMake->SetActiveFlag(true);
 			trail->RequestInversion();
+			trail->InversionEvent();
 		}
 
 		//	m_RightLeft = false;
@@ -259,13 +266,13 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	case ESwordActionState::NONE:
 		break;
 	case ESwordActionState::SLASH_1ST:
-		zAngle = LockAngle1st.x;
+		zAngle = EffectAngle1st.x;
 		break;
 	case ESwordActionState::SLASH_2ND:
-		zAngle = LockAngle2nd.x;
+		zAngle = EffectAngle2nd.x;
 		break;
 	case ESwordActionState::SLASH_3RD:
-		zAngle = LockAngle3rd.x;
+		zAngle = EffectAngle3rd.x;
 		break;
 	default:
 		break;
@@ -274,10 +281,10 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
 	effectTrans->SetScale({ 30.0f,80.0f,5.0f });
-	if (m_RightLeft == true) {
+	if (m_RightLeft == RightLeft::RIGHT) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
 	}
-	else {
+	else if (m_RightLeft == RightLeft::LEFT) {
 		effectTrans->SetPosition({ pos.x - 7.0f, pos.y, pos.z });
 	}
 	effectTrans->SetRotation({ 0.0f,0.0f,zAngle });
@@ -285,7 +292,7 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	// 引き延ばしたり縮めたりするエフェクト
 	SlashEffectComponent* slash = effect->AddComponent<SlashEffectComponent>();
 	slash->SetRimitTime(0.5f);
-	slash->SetSizeChange({2.0f, 20.0f});
+	slash->SetSizeChange({ 2.0f, 20.0f });
 
 	// エフェクト用のレンダー
 	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
@@ -297,18 +304,18 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	render->SetEllipseScale({ 1.0f,1.0f });
 }
 
-void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {
+void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxis) {
 
 	switch (m_SwordActionState)
 	{
 	case ESwordActionState::NONE:
 		break;
 	case ESwordActionState::SLASH_1ST:
-		if (m_RightLeft == true) {
+		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
 		}
-		else {
+		else if (m_RightLeft == RightLeft::LEFT) {
 			m_SwordActionPattern.startAngle = 60.0f;
 			m_SwordActionPattern.endAngle = -60.0f;
 		}
@@ -317,11 +324,11 @@ void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {
 
 		break;
 	case ESwordActionState::SLASH_2ND:
-		if (m_RightLeft == true) {
+		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
 		}
-		else {
+		else if (m_RightLeft == RightLeft::LEFT) {
 			m_SwordActionPattern.startAngle = 60.0f;
 			m_SwordActionPattern.endAngle = -60.0f;
 		}
@@ -330,11 +337,11 @@ void TestSwordActionComponent::ChoiceSlashPattern(const bool horizontalAxis) {
 
 		break;
 	case ESwordActionState::SLASH_3RD:
-		if (m_RightLeft == true) {
+		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
 		}
-		else {
+		else if (m_RightLeft == RightLeft::LEFT) {
 			m_SwordActionPattern.startAngle = 60.0f;
 			m_SwordActionPattern.endAngle = -60.0f;
 		}

@@ -73,7 +73,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 
 	Texture texture = rendComp->GetTexture();
 	std::string texName = texture.GetTexname();
-	const bool isInversion = rendComp->GetInversionFlag();
+	const RightLeft isInversion = rendComp->GetInversionFlag();
 	Shader* shader = rendComp->GetShader();
 	std::vector<std::string> shaderName = shader->GetShaderNames();
 

@@ -53,14 +53,14 @@ void EnemyActionHopperComponent::Update() {
 	// ここの向き変更はジャンプ開始のみ
 	if (m_IsBeforeJump == false && jumpFlag == true) {
 		if (myPos.x > playPos.x) {
-			m_IsRightLeft = false;
+			m_IsRightLeft = RightLeft::LEFT;
 		}
 		else {
-			m_IsRightLeft = true;
+			m_IsRightLeft = RightLeft::RIGHT;
 		}
 	}
 
-	rend->SetInversionFlag(!m_IsRightLeft);
+	rend->SetInversionFlag(m_IsRightLeft);
 
 	HopperAction(jumpFlag);
 
@@ -77,10 +77,10 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 		rigid->ReduceVelocity_X(0.5f);
 	}
 	else {
-		if (m_IsRightLeft == false) {
+		if (m_IsRightLeft == RightLeft::LEFT) {
 			rigid->ConstantVelocity_X(-30.0f);
 		}
-		else {
+		else if(m_IsRightLeft == RightLeft::RIGHT){
 			rigid->ConstantVelocity_X(30.0f);
 		}
 	}

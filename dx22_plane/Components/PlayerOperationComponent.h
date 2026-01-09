@@ -1,10 +1,13 @@
 #pragma once
 #include "Component.h"
+#include "RightLeft.h"
 
 enum class PlayerState
 {
 	NONE,
 	MOVE,
+	AIR,
+	GROUND,
 	JUMP,
 	ATTACK,
 	DAMAGE,
@@ -16,10 +19,17 @@ class PlayerOperationComponent : public Component
 private:
 	float m_RecordTime = 0.0f; // 移動している時間を記録する
 
-	bool m_rightLeft = true; // 左右の移動フラグ、初期は右向き(true:右、false:左)
+	RightLeft m_CurrentRightLeft = RightLeft::RIGHT; // 現在の向き管理
 	bool m_beforeMove = false; // 前回のフレームで移動していたかどうかのフラグ
 	bool m_IsMoveFlag = false; // 移動中かどうかのフラグ
 	bool m_isJump = false; // ジャンプ中かどうかのフラグ
+
+	PlayerState m_CurrentState = PlayerState::NONE; // プレイヤーの状態管理
+
+
+	void StateUpdate(); // 状態更新処理
+	void ChangeState(const PlayerState& state); // プレイヤーの状態変更
+	void Move(const bool right, const bool left, const bool dash);
 
 public:
 	PlayerOperationComponent(GameObject& obj);
@@ -28,8 +38,9 @@ public:
 
 	void Update()override;
 
-	bool GetRightLeft() const { return m_rightLeft; } // 左右の移動フラグ取得
+	RightLeft GetRightLeft() const { return m_CurrentRightLeft; } // 左右の移動フラグ取得
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得
 	bool GetIsJump() const { return m_isJump; } // ジャンプ中かどうかのフラグ取得
+
 };
 

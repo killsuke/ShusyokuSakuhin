@@ -10,6 +10,7 @@
 #include "Transform.h"
 #include "input.h"
 #include "TestSwordActionComponent.h"
+#include "TestExtrusionJudgeComponent.h"
 #include <vector>
 #include <iostream>
 
@@ -25,9 +26,10 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 
 // 更新処理
 void PlayerOperationComponent::Update() {
-	bool keyJ = false;
-	bool keyL = false;
-	bool keyW = false;
+	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
+	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
+	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
+
 	bool keyBack = false;
 
 	auto fighter = m_Object->GetComponent<FighterComponent>();
@@ -68,16 +70,12 @@ void PlayerOperationComponent::Update() {
 	}
 
 	m_IsMoveFlag = false; // 毎フレーム初期化	
-	if ((Input::GetKeyPress(VK_A) || Input::GetButtonPress(XINPUT_LEFT)) == true)
+	if (keyLeft)
 	{
-		m_rightLeft = false; // 左向き
-		keyJ = true;
 		nowMove = true;
 		m_IsMoveFlag = true;
 	}
-	if ((Input::GetKeyPress(VK_D) || Input::GetButtonPress(XINPUT_RIGHT)) == true) {
-		m_rightLeft = true; // 右向き
-		keyL = true;
+	if (keyRight) {
 		nowMove = true;
 		m_IsMoveFlag = true;
 	}
@@ -99,7 +97,7 @@ void PlayerOperationComponent::Update() {
 		}
 	}
 
-	rend->SetInversionFlag(!m_rightLeft); // 向きに合わせて反転
+	rend->SetInversionFlag(m_CurrentRightLeft); // 向きに合わせて反転
 
 	if (fighter->GetInvincibleFlag() == true) {
 		// 無敵状態の時間を計測
@@ -124,10 +122,6 @@ void PlayerOperationComponent::Update() {
 	//	isTrigger = true;
 	//}
 
-	if ((Input::GetKeyPress(VK_SPACE) || Input::GetButtonPress(XINPUT_A)) == true) {
-		keyW = true;
-	}
-
 	m_isJump = false;
 	if ((Input::GetKeyTrigger(VK_SPACE) || Input::GetButtonTrigger(XINPUT_A)) == true) {
 		m_isJump = true;
@@ -135,12 +129,12 @@ void PlayerOperationComponent::Update() {
 
 	auto jump = m_Object->GetComponent<JumpComponent>();
 	if (jump != nullptr) {
-		jump->SetJumpPress(keyW);
+		jump->SetJumpPress(keyUp);
 	}
 
 	if (rigid != nullptr) {
 
-		if (keyBack == true && m_rightLeft == false) {
+		/*if (keyBack == true && m_rightLeft == false) {
 			rigid->AddVelocity(Vector3(-200.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(200.0f);
 
@@ -149,27 +143,27 @@ void PlayerOperationComponent::Update() {
 			rigid->AddVelocity(Vector3(200.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(200.0f);
 
-		}
+		}*/
 
-		if (keyBack == false) {
-			if (keyJ == true && keyL == false) {
-				//rigid->ConstantVelocity_X(-150.0f);
-				rigid->AddVelocity(Vector3(-40.0f, 0.0f, 0.0f));
-				rigid->SetLimitVelocity_X(80.0f);
-			}
-			if (keyL == true && keyJ == false) {
-				//rigid->ConstantVelocity_X(150.0f);
-				rigid->AddVelocity(Vector3(40.0f, 0.0f, 0.0f));
-				rigid->SetLimitVelocity_X(80.0f);
-			}
-		}
+		//if (keyBack == false) {
+		//	if (keyLeft && !keyRight) {
+		//		//rigid->ConstantVelocity_X(-150.0f);
+		//		rigid->AddVelocity(Vector3(-40.0f, 0.0f, 0.0f));
+		//		rigid->SetLimitVelocity_X(80.0f);
+		//	}
+		//	if (keyRight && !keyLeft) {
+		//		//rigid->ConstantVelocity_X(150.0f);
+		//		rigid->AddVelocity(Vector3(40.0f, 0.0f, 0.0f));
+		//		rigid->SetLimitVelocity_X(80.0f);
+		//	}
+		//}
 
 		/*if (m_beforeMove == true && nowMove == false) {
 			rigid->ReduceVelocity_X(0.5f);
 		}*/
 
 		// 後で減速の仕方を考える
-		if (keyL == false && keyJ == false) {
+		if (!keyLeft && !keyRight) {
 			rigid->ReduceVelocity_X(0.5f);
 		}
 	}
@@ -196,5 +190,141 @@ void PlayerOperationComponent::Update() {
 			hpRend->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)); // 緑色
 		}
 	}
+
+	StateUpdate();
+
 	m_beforeMove = nowMove;
+}
+
+void PlayerOperationComponent::ChangeState(const PlayerState& state) {
+
+	// 変更前に行う
+	switch (m_CurrentState)
+	{
+	case PlayerState::NONE:
+		break;
+	case PlayerState::MOVE:
+		break;
+	case PlayerState::AIR:
+		break;
+	case PlayerState::GROUND:
+		break;
+	case PlayerState::JUMP:
+		break;
+	case PlayerState::ATTACK:
+		break;
+	case PlayerState::DAMAGE:
+		break;
+	case PlayerState::DEAD:
+		break;
+	default:
+		break;
+	}
+
+	m_CurrentState = state;
+
+	// 変更後すぐに行う処理
+	switch (m_CurrentState)
+	{
+	case PlayerState::NONE:
+		break;
+	case PlayerState::MOVE:
+		break;
+	case PlayerState::AIR:
+		break;
+	case PlayerState::GROUND:
+		break;
+	case PlayerState::JUMP:
+		break;
+	case PlayerState::ATTACK:
+		break;
+	case PlayerState::DAMAGE:
+		break;
+	case PlayerState::DEAD:
+		break;
+	default:
+		break;
+	}
+}
+
+void PlayerOperationComponent::StateUpdate() {
+
+	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
+	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
+	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
+	const bool keyBack = Input::GetKeyPress(VK_BACK) || Input::GetButtonPress(XINPUT_RIGHT_SHOULDER);
+
+
+	switch (m_CurrentState)
+	{
+	case PlayerState::NONE:
+
+		if (keyLeft || keyRight || keyBack)
+		{
+			ChangeState(PlayerState::MOVE);
+		}
+
+		break;
+	case PlayerState::MOVE:
+
+		Move(keyRight, keyLeft, keyBack);
+		break;
+	case PlayerState::AIR:
+		break;
+	case PlayerState::GROUND:
+		break;
+	case PlayerState::JUMP:
+		break;
+	case PlayerState::ATTACK:
+		break;
+	case PlayerState::DAMAGE:
+		break;
+	case PlayerState::DEAD:
+		break;
+	default:
+		break;
+	}
+}
+
+void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash) {
+
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+
+	// 両方押しているか、どちらも押していない場合は移動しない
+	if (rigid == nullptr || (right && left)) {
+		ChangeState(PlayerState::NONE);
+		return;
+	}
+
+	if (right) {
+		m_CurrentRightLeft = RightLeft::RIGHT;
+	}
+	if (left) {
+		m_CurrentRightLeft = RightLeft::LEFT;
+	}
+
+
+	if (dash) {
+
+		if (m_CurrentRightLeft == RightLeft::LEFT) {
+			rigid->AddVelocity(Vector3(-200.0f, 0.0f, 0.0f));
+			rigid->SetLimitVelocity_X(200.0f);
+		}
+		else if (m_CurrentRightLeft == RightLeft::RIGHT) {
+			rigid->AddVelocity(Vector3(200.0f, 0.0f, 0.0f));
+			rigid->SetLimitVelocity_X(200.0f);
+		}
+	}
+	else {
+		if (left) {
+			//rigid->ConstantVelocity_X(-150.0f);
+			rigid->AddVelocity(Vector3(-40.0f, 0.0f, 0.0f));
+			rigid->SetLimitVelocity_X(80.0f);
+		}
+		if (right) {
+			//rigid->ConstantVelocity_X(150.0f);
+			rigid->AddVelocity(Vector3(40.0f, 0.0f, 0.0f));
+			rigid->SetLimitVelocity_X(80.0f);
+		}
+	}
 }

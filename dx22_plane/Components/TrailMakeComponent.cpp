@@ -1,5 +1,6 @@
 #include "TrailMakeComponent.h"
 #include "Transform.h"
+#include "TestSwordActionComponent.h"
 #include "System/DirectXRender.h"
 #include "Mesh/TrailMesh.h"
 #include <vector>
@@ -17,9 +18,11 @@ TrailMakeComponent::TrailMakeComponent(GameObject& obj) : Component(obj) {
 
 void TrailMakeComponent::Update() {
 
-	if(m_TrailRenderComponent == nullptr) {
+	TestSwordActionComponent* sword = m_Object->GetComponent<TestSwordActionComponent>();
+
+	if(m_TrailRenderComponent == nullptr || sword == nullptr) {
 		return;
 	}
 	m_TrailRenderComponent->TrailCountUp();
-	m_TrailRenderComponent->InversionEvent();
+	//m_TrailRenderComponent->InversionEvent();
 }

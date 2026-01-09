@@ -21,6 +21,8 @@ TrailRenderComponent::TrailRenderComponent(GameObject& obj) : RenderComponent(ob
 	SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	m_TrailMakeComponent = m_Object->AddComponent<TrailMakeComponent>();
 	m_TrailMakeComponent->SetTrailRenderComponent(this);
+
+
 }
 
 void TrailRenderComponent::Update() {
@@ -80,7 +82,7 @@ void TrailRenderComponent::Update() {
 
 		cb.matrixTex = texture[0].MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_InversionFlag;
+	//	cb.inverse = m_InversionFlag;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
@@ -394,15 +396,15 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 // 反転した際に頂点も左右反転させる
 void TrailRenderComponent::InversionEvent() {
 
-	if (m_InversionFlag == true) {
+//	if (m_Inversion == RightLeft::LEFT) {
 
 		for (TrailPoint& trail : m_TrailPoints) {
 			trail.basePosition.x *= -1.0f;
 			trail.tipPosition.x *= -1.0f;
 		}
 
-		m_InversionFlag = false;
-	}
+		m_Inversion = RightLeft::RIGHT;
+//	}
 }
 
 void TrailRenderComponent::AddTrailPoints(const XMFLOAT3& center, const XMVECTOR& quaternion, const float trailSpeed) {

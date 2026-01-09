@@ -25,6 +25,7 @@
 #include "Mesh/Mesh.h"
 #include "BoneData.h"
 #include "StaticMesh.h"
+#include "RightLeft.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -38,7 +39,7 @@ protected:
 	IndexBuffer m_IndexBuffer = {};
 	std::unique_ptr<Mesh> m_Mesh = nullptr;
 	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f, 1.0f, 1.0f }; // 色
-	bool m_InversionFlag = false;
+	RightLeft m_Inversion = RightLeft::RIGHT;
 
 	RenderComponent(GameObject& obj);
 	~RenderComponent() = default;
@@ -58,7 +59,7 @@ public:
 		m_Texture->LoadMask(maskFileName);
 	};*/
 	void SetColor(const DirectX::XMFLOAT4& color) { m_Color = color; };
-	void SetInversionFlag(const bool flag) { m_InversionFlag = flag; };
+	void SetInversionFlag(const RightLeft& flag) { m_Inversion = flag; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
 	Texture GetTexture() {
@@ -73,8 +74,9 @@ public:
 
 	VertexBuffer<VERTEX_3D>* GetVertexBuffer() { return &m_VertexBuffer; };
 	IndexBuffer* GetIndexBuffer() { return &m_IndexBuffer; };
-	bool GetInversionFlag()const { return m_InversionFlag; };
+	RightLeft GetInversionFlag()const { return m_Inversion; };
 	Shader* GetShader()const { return m_Shader.get(); };
+	DirectX::XMFLOAT4 GetColor()const { return m_Color; };
 
 	void AddColor(const DirectX::XMFLOAT4& addcolor) {
 		m_Color.x += addcolor.x;

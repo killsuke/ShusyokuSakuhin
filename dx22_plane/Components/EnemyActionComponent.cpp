@@ -49,18 +49,22 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
 	effectTrans->SetScale(BloodSplatterScale);
-	if (m_IsRightLeft == true) {
+	RightLeft direction = RightLeft::RIGHT;
+	if (m_IsRightLeft == RightLeft::LEFT) {
 		effectTrans->SetPosition({ pos.x - 10.0f, pos.y + 5.0f, pos.z });
+		// Œã‚ÉØ‚Á‚½•ûŒü‚É‡‚í‚¹‚æ‚¤‚©
+		direction = RightLeft::RIGHT;
 	}
-	else {
+	else if(m_IsRightLeft == RightLeft::RIGHT){
 		effectTrans->SetPosition({ pos.x + 10.0f, pos.y + 5.0f, pos.z });
+		direction = RightLeft::LEFT;
 	}
 
 	auto render = effect->AddComponent<RenderBillboardComponent>();
 	auto mesh = render->CreateMesh<SquareMesh>();
 	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/Blood_Splatter.png");
-	render->SetInversionFlag(m_IsRightLeft);
+	render->SetInversionFlag(direction);
 	mesh->SetInitialCut(6.0f, 1.0f);
 	auto effectComp = effect->AddComponent<Effect2DComponent>();
 	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);

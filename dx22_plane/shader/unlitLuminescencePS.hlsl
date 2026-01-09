@@ -11,7 +11,7 @@ float4 ps_main(in PS_IN input) : SV_Target
     float2 d = uv - 0.5f;
     
     float s, c;
-    sincos(Angle, s, c); // 45度回転
+    sincos(Angle, s, c); // 回転を使う
     float2x2 rotationMtx = float2x2(c, -s, s, c);
     d = mul(rotationMtx, d);
         
@@ -22,7 +22,7 @@ float4 ps_main(in PS_IN input) : SV_Target
     
     // グロー量（外に行くほど減衰）
     float glow = saturate(1.0f - dist / GlowRadius);
-    glow = pow(glow, 2.0f); // 二乗して中心部を強調
+    glow = glow * glow; // 二乗して中心部を強調
     
     float3 colorRGB = BaseColor + GlowColor.rgb * glow * GlowPower;
     

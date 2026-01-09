@@ -33,7 +33,7 @@ PS_IN vs_main(in VS_IN input)
 	// ‚t‚uÀ•W‚ğˆÚ“®‚³‚¹‚é
     float4 uv;
     uv.xy = input.tex; // s—ñŠ|‚¯Z‚Ì‚½‚ßflaot4Œ^‚ÉˆÚ‚·
-    if (isInvertX == true)
+    if (isInvertX == false)
     {
         uv.x = 1.0f - uv.x; // ‚t‚uÀ•W‚Ì‚w‚ğ”½“]
     }

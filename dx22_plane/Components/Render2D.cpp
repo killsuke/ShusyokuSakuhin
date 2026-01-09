@@ -45,7 +45,7 @@ void Render2DComponent::Update()
 
 		cb.matrixTex = texture[0].MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_InversionFlag;
+		cb.inverse = m_Inversion == RightLeft::RIGHT ? true : false;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);

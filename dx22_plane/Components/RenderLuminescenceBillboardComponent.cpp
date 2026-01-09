@@ -74,7 +74,7 @@ void RenderLuminescenceBillboardComponent::Update()
 
 		cb.matrixTex = texture.MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_InversionFlag;
+		cb.inverse = m_Inversion == RightLeft::RIGHT ? true : false;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
@@ -83,15 +83,13 @@ void RenderLuminescenceBillboardComponent::Update()
 
 		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		std::vector<Texture> textures = m_Mesh->GetTextures();
-
 		DirectXRender::SetBlendState(EBlendState::BS_EFFECT);
 		DirectXRender::SetDepthEnable(false); // 深度テスト無効、書き込み無効
 
 		XMFLOAT3 angles = transform->GetRotation();
 
 		angles.z = XMConvertToRadians(angles.z);
-		
+
 		GlowBuffer gb;
 		gb.glowColor = m_Color;
 		gb.ellipseScale = m_EllipseScale;
@@ -108,8 +106,6 @@ void RenderLuminescenceBillboardComponent::Update()
 			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
-
-			textures[subsets[i].MaterialIdx].SetGPU();
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数

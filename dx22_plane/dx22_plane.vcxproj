@@ -169,7 +169,7 @@
     <ClCompile Include="Components\MotionBlurControllerComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurCircularComponent.cpp" />
     <ClCompile Include="Components\RenderLuminescenceBillboardComponent.cpp" />
-    <ClCompile Include="Components\LuminescenceBillboardControlComponent.cpp" />
+    <ClCompile Include="Components\ParticlesControlComponent.cpp" />
     <ClCompile Include="Components\SlashEffectComponent.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
@@ -305,8 +305,9 @@
     <ClInclude Include="Components\MotionBlurControllerComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurCircularComponent.h" />
     <ClInclude Include="Components\RenderLuminescenceBillboardComponent.h" />
-    <ClInclude Include="Components\LuminescenceBillboardControlComponent.h" />
+    <ClInclude Include="Components\ParticlesControlComponent.h" />
     <ClInclude Include="Components\SlashEffectComponent.h" />
+    <ClInclude Include="RightLeft.h" />
     <ClInclude Include="System\Application.h" />
     <ClInclude Include="DebugSystem\DebugSystem.h" />
     <ClInclude Include="Components\VectorMoveComponent.h" />

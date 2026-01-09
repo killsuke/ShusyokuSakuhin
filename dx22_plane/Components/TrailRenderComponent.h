@@ -55,6 +55,6 @@ public:
 	void SetTrailDivisionsCount(const int count = 1) { m_TrailDivisionsCount = count; };
 
 	void ResetTrailCount() { m_TrailCount = 0; };
-	void RequestInversion() { m_InversionFlag = true; };
+	void RequestInversion() { m_Inversion = RightLeft::RIGHT; };
 	void InversionEvent();
 };

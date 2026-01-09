@@ -5,7 +5,6 @@
 #include "Manager/GameObjectManager.h"
 #include "Camera.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 namespace {
@@ -15,6 +14,7 @@ namespace {
 RenderParticlesComponent::RenderParticlesComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
+	m_ParticlesControl = m_Object->AddComponent<ParticlesControlComponent>();
 }
 
 void RenderParticlesComponent::Update()
@@ -26,8 +26,8 @@ void RenderParticlesComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		const Vector3 pos = transform->GetPosition();
-		const Vector3 scale = transform->GetScale();
+		const XMFLOAT3 pos = transform->GetPosition();
+		const XMFLOAT3 scale = transform->GetScale();
 		Camera* cameraComp = camera->GetComponent<Camera>();
 		const XMMATRIX cameraView3D = cameraComp->GetView3D();
 
@@ -61,10 +61,6 @@ void RenderParticlesComponent::Update()
 
 		cb.color = m_Color;
 
-		// 時間経過に応じてアルファ値を変える
-		const float subtractAlpha = m_RecordTime / m_VanishTime;
-		cb.color.w -= subtractAlpha;
-
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
@@ -75,7 +71,7 @@ void RenderParticlesComponent::Update()
 		m_IndexBuffer.SetGPU();
 
 		Texture texture = GetTexture();
-		Vector4 uvs = texture.GetUVSets();
+		XMFLOAT4 uvs = texture.GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;
@@ -84,7 +80,7 @@ void RenderParticlesComponent::Update()
 
 		cb.matrixTex = texture.MakeUV(uvs.x, uvs.y, uvs.z, uvs.w);
 
-		cb.inverse = m_InversionFlag;
+		cb.inverse = m_Inversion == RightLeft::RIGHT ? true : false;
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
@@ -110,17 +106,5 @@ void RenderParticlesComponent::Update()
 				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
 				subsets[i].VertexBase);	// 頂点バッファの最初から使用
 		}
-	}
-
-	// 余計な行動をさせないために、念のために全部止める
-	if (m_RecordTime > m_VanishTime) {
-		m_Object->SetActiveState(ActiveState::ALL_STOP);
-	}
-
-	m_RecordTime += DeltaTime;
-
-	RenderLuminescenceBillboardComponent* lumComp = m_Object->GetComponent<RenderLuminescenceBillboardComponent>();
-	if (lumComp != nullptr) {
-		lumComp->AddColor(XMFLOAT4(0.0f, 0.0f, 0.0f, -0.002f));
 	}
 }

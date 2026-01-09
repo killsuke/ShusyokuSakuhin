@@ -56,8 +56,8 @@ public:
 		m_SplitY = sy;
 	};
 
-	inline DirectX::SimpleMath::Vector4 GetUVSets() {
-		DirectX::SimpleMath::Vector4 uvs;
+	inline DirectX::XMFLOAT4 GetUVSets() {
+		DirectX::XMFLOAT4 uvs;
 
 		uvs.x = m_NumU;
 		uvs.y = m_NumV;

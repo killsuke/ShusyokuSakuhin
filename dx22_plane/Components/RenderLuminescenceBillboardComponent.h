@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-#include "LuminescenceBillboardControlComponent.h"
+#include "ParticlesControlComponent.h"
 #include <DirectXMath.h>
 
 class RenderLuminescenceBillboardComponent : public RenderComponent

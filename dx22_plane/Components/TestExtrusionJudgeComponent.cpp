@@ -55,7 +55,7 @@ void TestExtrusionJudgeComponent::Update()
 
 					PlayerOperationComponent* testMove = m_Object->GetComponent<PlayerOperationComponent>();
 					if (testMove != nullptr) {
-						bool rightLeft = testMove->GetRightLeft();
+						//RightLeft rightLeft = testMove->GetRightLeft();
 						bool isJump = testMove->GetIsJump();
 						TransformComponent* terrainTrans = terrain->GetComponent<TransformComponent>();
 						// ‚±‚±‚É•Ç‚¯‚è‚Ìˆ—‚ğ“ü‚ê‚é
