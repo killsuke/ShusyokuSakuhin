@@ -69,6 +69,9 @@ public:
 	void ReduceVelocity_Z(const float velocity = DAMPINGFACTOR);		// ë¨ìxå∏ÇÁÇµ
 
 	inline void ClearVelocity() { m_velocity = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };
+	inline void ClearVelocity_X() { m_velocity.x = 0.0f; };
+	inline void ClearVelocity_Y() { m_velocity.y = 0.0f; };
+	inline void ClearVelocity_Z() { m_velocity.z = 0.0f; };
 
 	inline void SetMass(const float mass) { m_mass = mass; };
 	inline float GetMass()const { return m_mass; };

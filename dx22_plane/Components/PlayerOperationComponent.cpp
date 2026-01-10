@@ -29,7 +29,6 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 void PlayerOperationComponent::Update() {
 	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
-	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
 
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
@@ -115,6 +114,8 @@ void PlayerOperationComponent::Update() {
 
 void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 
+	PlayerState previousState = m_CurrentState;
+
 	// 変更前に行う
 	switch (m_CurrentState)
 	{
@@ -197,16 +198,20 @@ void PlayerOperationComponent::StateUpdate() {
 			ChangeState(PlayerState::MOVE);
 		}
 		if (keyUp) {
-			ChangeState(PlayerState::JUMP);
+		//	ChangeState(PlayerState::JUMP);
 		}
 		if (keyAttack) {
-			ChangeState(PlayerState::ATTACK);
+			//	ChangeState(PlayerState::ATTACK);
 		}
+		// ここで攻撃するか否かを判断
+		Attack(keyAttack, isGround);
 
 		break;
 	case PlayerState::MOVE:
 
-		Move(keyRight, keyLeft, keyBack, &isMove);
+		// ここで攻撃するか否かを判断
+		Attack(keyAttack, isGround);
+		Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
 		break;
 	case PlayerState::AIR:
 		break;
@@ -214,12 +219,9 @@ void PlayerOperationComponent::StateUpdate() {
 		break;
 	case PlayerState::JUMP:
 
-		Move(keyRight, keyLeft, keyBack, &isMove);
+		Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
 		break;
 	case PlayerState::ATTACK:
-
-		// 空中か地上かでフラグいるかな
-		Attack(keyAttack, isGround);
 		break;
 	case PlayerState::DAMAGE:
 		break;
@@ -235,11 +237,23 @@ void PlayerOperationComponent::StateUpdate() {
 	}
 
 	m_beforeMove = isMove;
+
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack) {
+		ChangeState(PlayerState::NONE);
+	}
 }
 
-void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash, bool* isMove) {
+void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove) {
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+
+	// 地面の攻撃は移動しない
+	bool isAction = swordAction->GetIsSwordAction();
+	if (isAction && isGround) {
+		rigid->ClearVelocity_X();
+		return;
+	}
 
 	// 移動しない
 	if (rigid == nullptr || (right && left) || (!right && !left)) {
@@ -247,6 +261,7 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 		return;
 	}
 
+	// 移動する
 	*isMove = true;
 	m_IsMoveFlag = true;
 
@@ -285,8 +300,10 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 	}
 }
 
+// これそのものを呼び出すと攻撃する
 void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 
+	// 武器オブジェクトがない場合は終了
 	if (m_WeaponObject == nullptr) {
 		ChangeState(PlayerState::NONE);
 		return;
@@ -295,20 +312,22 @@ void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
 	ArbitraryRotationComponent* swordArb = m_WeaponObject->GetComponent<ArbitraryRotationComponent>();
 
+	// コンポーネントがない場合は終了
 	if (swordAction == nullptr || swordArb == nullptr) {
 		ChangeState(PlayerState::NONE);
 		return;
 	}
 
 	// 剣を振る
-	swordAction->SetIsAction(true);
-	bool isFinish = swordArb->GetIsFinished();
-	// ここで再発動
-	if (isFinish == true) {
-		swordArb->SetRollingActive(false);
-		ChangeState(PlayerState::ATTACK);
-		return;
-	}
+	swordAction->SetIsAction(attack);
 
-	ChangeState(PlayerState::NONE);
+	if (attack == true) {
+
+		bool isFinish = swordArb->GetIsFinished();
+
+		// ここで再発動
+		if (isFinish == true) {
+			swordArb->SetRollingActive(false);
+		}
+	}
 }

@@ -29,7 +29,7 @@ private:
 
 	void StateUpdate(); // 状態更新処理
 	void ChangeState(const PlayerState& state); // プレイヤーの状態変更
-	void Move(const bool right, const bool left, const bool dash, bool* isMove);
+	void Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove);
 	void Attack(const bool attack,const bool isGround);
 
 public:

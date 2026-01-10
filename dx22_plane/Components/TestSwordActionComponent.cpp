@@ -187,7 +187,7 @@ void TestSwordActionComponent::Update() {
 
 	// Œü‚«”½“]—p
 	m_BeforeDirection = isRightLeft;
-	m_IsAction = false;
+	//m_IsAction = false;
 }
 
 void TestSwordActionComponent::SwordAction() {
