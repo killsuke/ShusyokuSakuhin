@@ -157,6 +157,7 @@ void ArbitraryRotationComponent::DefaultRollingMove() {
 	}
 	if (reached) {
 
+		// “ž’BŒã‚Ì—P—\ŽžŠÔ
 		if (m_RecordTime < 0.2f) {
 			m_RecordTime += DeltaTime;
 			m_IsFinished = true;

@@ -104,7 +104,7 @@ LoadStageScene::LoadStageScene() {
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
 
-		player->AddComponent<PlayerOperationComponent>();
+		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
 
 		auto playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
@@ -194,6 +194,8 @@ LoadStageScene::LoadStageScene() {
 		rollingCollRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		rollingCollRend->ChangeTexture("assets/texture/NoTexture.png");
 		rollingCollRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
+
+		playerOperation->SetWeaponObject(rolling);
 
 		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
 

@@ -67,7 +67,9 @@ void TestSwordActionComponent::Update() {
 	// 剣を振る
 	if (m_IsAction == true) {
 
-		if (isAroundActive == false || isFinished == true) {
+		// 先ほどまでは、剣の動き終了後にもう一度振れるようにしていた
+		// それをプレイヤー側の制御に移す
+		if (isAroundActive == false/* || isFinished == true*/) {
 
 			m_IsUseTrailFlag = true;
 			if (isFinished == true) {
@@ -169,9 +171,13 @@ void TestSwordActionComponent::Update() {
 		}
 	}
 
-	const bool isAroundActive2 = goAround->GetRollingActive();
+	//const bool isAroundActive2 = goAround->GetRollingActive();
 	if (isAroundActive == true) {
 		SwordAction();
+		m_IsSwordAction = true;
+	}
+	else {
+		m_IsSwordAction = false;
 	}
 
 	/*Vector3 nowPos = objTrans->GetPosition();

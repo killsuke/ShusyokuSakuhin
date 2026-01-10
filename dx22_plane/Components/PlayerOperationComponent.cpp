@@ -10,6 +10,7 @@
 #include "Transform.h"
 #include "input.h"
 #include "TestSwordActionComponent.h"
+#include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include <vector>
 #include <iostream>
@@ -30,13 +31,15 @@ void PlayerOperationComponent::Update() {
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
 	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
 
-	bool keyBack = false;
+	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	auto fighter = m_Object->GetComponent<FighterComponent>();
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
-	auto rend = m_Object->GetComponent<Render2DComponent>();
-
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	if (fighter == nullptr || rigid == nullptr)
+	{
+		return;
+	}
 
 	if (transform->GetPosition().y < -500.0f) {
 		if (fighter != nullptr) {
@@ -44,56 +47,16 @@ void PlayerOperationComponent::Update() {
 		}
 	}
 
-	bool nowMove = false;
-
-	Vector3 rogg = transform->GetRotation();
-	auto forward = rogg.Forward;
-	auto up = rogg.Up;
-	auto right = rogg.Right;
-
-	auto fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
+	GameObject* fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
 
 	if (fadeObj != nullptr) {
 
-		auto fade = fadeObj->GetComponent<DoorFadeComponent>();
+		DoorFadeComponent* fade = fadeObj->GetComponent<DoorFadeComponent>();
 
 		if (fighter->GetDeadFlag() == true) {
 			fade->SetWinLoseFlag(false);
 			fade->SetNextSceneName("ResultScene");
 			fade->SetBootDoor(true);
-		}
-	}
-
-	if (/*fighter == nullptr || */rigid == nullptr)
-	{
-		return;
-	}
-
-	m_IsMoveFlag = false; // 毎フレーム初期化	
-	if (keyLeft)
-	{
-		nowMove = true;
-		m_IsMoveFlag = true;
-	}
-	if (keyRight) {
-		nowMove = true;
-		m_IsMoveFlag = true;
-	}
-	// ダッシュ
-	if ((Input::GetKeyPress(VK_BACK) || Input::GetButtonPress(XINPUT_RIGHT_SHOULDER)) == true) {
-		keyBack = true;
-		m_IsMoveFlag = true;
-	}
-
-	if (Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X)) {
-
-		std::vector<GameObject*> swords = GameObjectManager::GameObjectFindAllTag("Sword");
-
-		if (swords.size() > 0) {
-			TestSwordActionComponent* swordAction = swords[0]->GetComponent<TestSwordActionComponent>();
-			if (swordAction != nullptr) {
-				swordAction->SetIsAction(true);
-			}
 		}
 	}
 
@@ -116,51 +79,7 @@ void PlayerOperationComponent::Update() {
 		rend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)); // 元に戻す
 	}
 
-	//bool isTrigger = false;
-
-	//if (Input::GetKeyTrigger(VK_W) == true || Input::GetButtonTrigger(XINPUT_A) == true) {
-	//	isTrigger = true;
-	//}
-
-	m_isJump = false;
-	if ((Input::GetKeyTrigger(VK_SPACE) || Input::GetButtonTrigger(XINPUT_A)) == true) {
-		m_isJump = true;
-	}
-
-	auto jump = m_Object->GetComponent<JumpComponent>();
-	if (jump != nullptr) {
-		jump->SetJumpPress(keyUp);
-	}
-
 	if (rigid != nullptr) {
-
-		/*if (keyBack == true && m_rightLeft == false) {
-			rigid->AddVelocity(Vector3(-200.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(200.0f);
-
-		}
-		if (keyBack == true && m_rightLeft == true) {
-			rigid->AddVelocity(Vector3(200.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(200.0f);
-
-		}*/
-
-		//if (keyBack == false) {
-		//	if (keyLeft && !keyRight) {
-		//		//rigid->ConstantVelocity_X(-150.0f);
-		//		rigid->AddVelocity(Vector3(-40.0f, 0.0f, 0.0f));
-		//		rigid->SetLimitVelocity_X(80.0f);
-		//	}
-		//	if (keyRight && !keyLeft) {
-		//		//rigid->ConstantVelocity_X(150.0f);
-		//		rigid->AddVelocity(Vector3(40.0f, 0.0f, 0.0f));
-		//		rigid->SetLimitVelocity_X(80.0f);
-		//	}
-		//}
-
-		/*if (m_beforeMove == true && nowMove == false) {
-			rigid->ReduceVelocity_X(0.5f);
-		}*/
 
 		// 後で減速の仕方を考える
 		if (!keyLeft && !keyRight) {
@@ -168,13 +87,13 @@ void PlayerOperationComponent::Update() {
 		}
 	}
 
-	auto hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
+	GameObject* hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
 	if (hpUI != nullptr) {
 
-		auto hpRend = hpUI->GetComponent<Render3DComponent>();
+		Render3DComponent* hpRend = hpUI->GetComponent<Render3DComponent>();
 
-		auto maxHp = fighter->GetMaxHp();
-		auto hp = fighter->GetHp();
+		const int maxHp = fighter->GetMaxHp();
+		const int hp = fighter->GetHp();
 
 		// HPのカラー変更
 		if (hp == 0) {
@@ -192,8 +111,6 @@ void PlayerOperationComponent::Update() {
 	}
 
 	StateUpdate();
-
-	m_beforeMove = nowMove;
 }
 
 void PlayerOperationComponent::ChangeState(const PlayerState& state) {
@@ -253,7 +170,23 @@ void PlayerOperationComponent::StateUpdate() {
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
 	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
 	const bool keyBack = Input::GetKeyPress(VK_BACK) || Input::GetButtonPress(XINPUT_RIGHT_SHOULDER);
+	const bool keyAttack = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
+	TestExtrusionJudgeComponent* extrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	bool isGround = false;
 
+	// ここで地面か空中か判断
+	if (extrusion != nullptr) {
+		isGround = extrusion->GetIsGround();
+	}
+
+	bool isMove = false;
+
+	m_isJump = false;
+	if (keyUp) {
+		m_isJump = true;
+	}
+
+	m_IsMoveFlag = false; // 毎フレーム初期化	
 
 	switch (m_CurrentState)
 	{
@@ -263,19 +196,30 @@ void PlayerOperationComponent::StateUpdate() {
 		{
 			ChangeState(PlayerState::MOVE);
 		}
+		if (keyUp) {
+			ChangeState(PlayerState::JUMP);
+		}
+		if (keyAttack) {
+			ChangeState(PlayerState::ATTACK);
+		}
 
 		break;
 	case PlayerState::MOVE:
 
-		Move(keyRight, keyLeft, keyBack);
+		Move(keyRight, keyLeft, keyBack, &isMove);
 		break;
 	case PlayerState::AIR:
 		break;
 	case PlayerState::GROUND:
 		break;
 	case PlayerState::JUMP:
+
+		Move(keyRight, keyLeft, keyBack, &isMove);
 		break;
 	case PlayerState::ATTACK:
+
+		// 空中か地上かでフラグいるかな
+		Attack(keyAttack, isGround);
 		break;
 	case PlayerState::DAMAGE:
 		break;
@@ -284,26 +228,37 @@ void PlayerOperationComponent::StateUpdate() {
 	default:
 		break;
 	}
+
+	JumpComponent* jumpComp = m_Object->GetComponent<JumpComponent>();
+	if (jumpComp != nullptr) {
+		jumpComp->SetJumpPress(keyUp);
+	}
+
+	m_beforeMove = isMove;
 }
 
-void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash) {
+void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash, bool* isMove) {
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	// 両方押しているか、どちらも押していない場合は移動しない
-	if (rigid == nullptr || (right && left)) {
+	// 移動しない
+	if (rigid == nullptr || (right && left) || (!right && !left)) {
 		ChangeState(PlayerState::NONE);
 		return;
 	}
 
-	if (right) {
-		m_CurrentRightLeft = RightLeft::RIGHT;
-	}
+	*isMove = true;
+	m_IsMoveFlag = true;
+
+	// 向きの更新
 	if (left) {
 		m_CurrentRightLeft = RightLeft::LEFT;
 	}
+	else if (right) {
+		m_CurrentRightLeft = RightLeft::RIGHT;
+	}
 
-
+	// ダッシュ
 	if (dash) {
 
 		if (m_CurrentRightLeft == RightLeft::LEFT) {
@@ -315,6 +270,7 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 			rigid->SetLimitVelocity_X(200.0f);
 		}
 	}
+	// 普通の移動
 	else {
 		if (left) {
 			//rigid->ConstantVelocity_X(-150.0f);
@@ -327,4 +283,32 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 			rigid->SetLimitVelocity_X(80.0f);
 		}
 	}
+}
+
+void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
+
+	if (m_WeaponObject == nullptr) {
+		ChangeState(PlayerState::NONE);
+		return;
+	}
+
+	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+	ArbitraryRotationComponent* swordArb = m_WeaponObject->GetComponent<ArbitraryRotationComponent>();
+
+	if (swordAction == nullptr || swordArb == nullptr) {
+		ChangeState(PlayerState::NONE);
+		return;
+	}
+
+	// 剣を振る
+	swordAction->SetIsAction(true);
+	bool isFinish = swordArb->GetIsFinished();
+	// ここで再発動
+	if (isFinish == true) {
+		swordArb->SetRollingActive(false);
+		ChangeState(PlayerState::ATTACK);
+		return;
+	}
+
+	ChangeState(PlayerState::NONE);
 }

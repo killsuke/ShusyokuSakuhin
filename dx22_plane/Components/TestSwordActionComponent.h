@@ -22,11 +22,11 @@ struct SwordActionPattern
 class TestSwordActionComponent : public Component
 {
 private:
-	bool m_IsSwordAction = false;
 	RightLeft m_BeforeDirection = RightLeft::RIGHT;	// 前フレームのプレイヤーの向き
 	RightLeft m_RightLeft = RightLeft::RIGHT; // プレイヤーの向き、trueが右、falseが左
 	bool m_IsAction = false; // 剣を振っているかどうか
 	bool m_IsUseTrailFlag = false; // トレイルエフェクトを使うかどうか
+	bool m_IsSwordAction = false;
 
 	int m_TestSlashCount = 0;
 	float m_DeltaTime = 0.016f;
@@ -46,9 +46,11 @@ public:
 	void SwordAction();
 	void SetHolder(GameObject* holder) { m_Holder = holder; };
 	void SetIsAction(const bool action) { m_IsAction = action; };
+	void SetSwordActionState(const ESwordActionState& state) { m_SwordActionState = state; };
 
 	GameObject* GetHolder() { return m_Holder; };
 	ESwordActionState GetSwordActionState() const { return m_SwordActionState; };
 	RightLeft GetRightLeft()const { return m_RightLeft; };
+	bool GetIsSwordAction()const { return m_IsSwordAction; };
 };
 
