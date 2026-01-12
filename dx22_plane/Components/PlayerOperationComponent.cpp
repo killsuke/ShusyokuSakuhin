@@ -15,7 +15,7 @@
 #include <vector>
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 namespace {
 	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
@@ -131,6 +131,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		break;
 	case PlayerState::ATTACK:
 		break;
+	case PlayerState::CHARGE:
+		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -156,6 +158,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		break;
 	case PlayerState::ATTACK:
 		break;
+	case PlayerState::CHARGE:
+		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -172,6 +176,9 @@ void PlayerOperationComponent::StateUpdate() {
 	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
 	const bool keyBack = Input::GetKeyPress(VK_BACK) || Input::GetButtonPress(XINPUT_RIGHT_SHOULDER);
 	const bool keyAttack = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
+	const bool keyCharge = Input::GetKeyPress(VK_RETURN) || Input::GetButtonPress(XINPUT_X);
+	const bool keyCAttack = Input::GetKeyRelease(VK_RETURN) || Input::GetButtonRelease(XINPUT_X);
+
 	TestExtrusionJudgeComponent* extrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
 	bool isGround = false;
 
@@ -197,11 +204,9 @@ void PlayerOperationComponent::StateUpdate() {
 		{
 			ChangeState(PlayerState::MOVE);
 		}
-		if (keyUp) {
-		//	ChangeState(PlayerState::JUMP);
-		}
-		if (keyAttack) {
-			//	ChangeState(PlayerState::ATTACK);
+		if(keyCharge)
+		{
+			ChangeState(PlayerState::CHARGE);
 		}
 		// ここで攻撃するか否かを判断
 		Attack(keyAttack, isGround);
@@ -219,9 +224,12 @@ void PlayerOperationComponent::StateUpdate() {
 		break;
 	case PlayerState::JUMP:
 
-		Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
+		//Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
 		break;
 	case PlayerState::ATTACK:
+		break;
+	case PlayerState::CHARGE:
+		Charge(keyCharge,keyCAttack);
 		break;
 	case PlayerState::DAMAGE:
 		break;
@@ -238,7 +246,7 @@ void PlayerOperationComponent::StateUpdate() {
 
 	m_beforeMove = isMove;
 
-	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack) {
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack) {
 		ChangeState(PlayerState::NONE);
 	}
 }
@@ -249,7 +257,7 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
 
 	// 地面の攻撃は移動しない
-	bool isAction = swordAction->GetIsSwordAction();
+	const bool isAction = swordAction->GetIsSwordAction();
 	if (isAction && isGround) {
 		rigid->ClearVelocity_X();
 		return;
@@ -277,11 +285,11 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 	if (dash) {
 
 		if (m_CurrentRightLeft == RightLeft::LEFT) {
-			rigid->AddVelocity(Vector3(-200.0f, 0.0f, 0.0f));
+			rigid->AddVelocity(XMFLOAT3(-200.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(200.0f);
 		}
 		else if (m_CurrentRightLeft == RightLeft::RIGHT) {
-			rigid->AddVelocity(Vector3(200.0f, 0.0f, 0.0f));
+			rigid->AddVelocity(XMFLOAT3(200.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(200.0f);
 		}
 	}
@@ -289,12 +297,12 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 	else {
 		if (left) {
 			//rigid->ConstantVelocity_X(-150.0f);
-			rigid->AddVelocity(Vector3(-40.0f, 0.0f, 0.0f));
+			rigid->AddVelocity(XMFLOAT3(-40.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(80.0f);
 		}
 		if (right) {
 			//rigid->ConstantVelocity_X(150.0f);
-			rigid->AddVelocity(Vector3(40.0f, 0.0f, 0.0f));
+			rigid->AddVelocity(XMFLOAT3(40.0f, 0.0f, 0.0f));
 			rigid->SetLimitVelocity_X(80.0f);
 		}
 	}
@@ -318,16 +326,47 @@ void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 		return;
 	}
 
-	// 剣を振る
-	swordAction->SetIsAction(attack);
+	if(isGround == true){
+		// 地面の上での攻撃
+		swordAction->SetIsAction(attack);
+	}
+	else {
+		// 空中での攻撃
+		swordAction->SetIsAction(attack,SlashPattern::AIR_SLASH);
+	}
 
+	// 攻撃が終了したかどうかを判定
 	if (attack == true) {
 
-		bool isFinish = swordArb->GetIsFinished();
+		const bool isFinish = swordArb->GetIsFinished();
 
 		// ここで再発動
 		if (isFinish == true) {
 			swordArb->SetRollingActive(false);
 		}
+	}
+}
+
+void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
+
+	if (charge) {
+		if (m_ChargeTime >= m_ChargeCompleteTime) {
+
+			if(attack)
+			{
+				// チャージ攻撃発動
+				std::cout << "チャージ攻撃発動" << std::endl;
+				m_ChargeTime = 0.0f;
+			}
+			else
+			std::cout << "チャージ完了" << std::endl;
+		}
+		else {
+			std::cout << "チャージ中" << std::endl;
+			m_ChargeTime += DeltaTime;
+		}
+	}
+	else {
+		m_ChargeTime = 0.0f;
 	}
 }

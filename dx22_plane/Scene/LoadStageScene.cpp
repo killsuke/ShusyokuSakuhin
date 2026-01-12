@@ -42,6 +42,7 @@
 #include "Components/HitFlashComponent.h"
 #include "Components/TrailRenderComponent.h"
 #include "Components/RenderMotionBlurComponent.h"
+#include "Components/ChargePerformanceComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -135,6 +136,10 @@ LoadStageScene::LoadStageScene() {
 		fighterPlayer->SetAtk(10);
 		fighterPlayer->SetUseInvincible(true);
 		fighterPlayer->SetUseDeadFlag(false);
+
+		ChargePerformanceComponent* chargePerf = player->AddComponent<ChargePerformanceComponent>();
+		chargePerf->InitCreateParticles(20, 10.0f,*player);
+		chargePerf->SetOneParticleActiveTime(1.0f);
 
 		auto cubeRe = player->AddComponent<Render2DComponent>();
 		cubeRe->CreateMesh<SquareMesh>();

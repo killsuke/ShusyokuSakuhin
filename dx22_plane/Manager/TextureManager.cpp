@@ -20,7 +20,9 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 
     const std::wstring wfilename = ShortConversion(filename);
     
-    auto it = textureMap.find(wfilename);
+    std::unordered_map<std::wstring,Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
+        = textureMap.find(wfilename);
+
     if (it != textureMap.end()) {
         return it->second;    // 既存のテクスチャが見つかったら、すぐに返す。
     }
@@ -28,7 +30,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture = nullptr;
 
     // テクスチャの読み込み処理
-    HRESULT hr = DirectX::CreateWICTextureFromFileEx(device, deviceContext, wfilename.c_str(), 0, D3D11_USAGE_DEFAULT,
+    const HRESULT hr = DirectX::CreateWICTextureFromFileEx(device, deviceContext, wfilename.c_str(), 0, D3D11_USAGE_DEFAULT,
                                                      D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &texture);
     // エラーが起きた場合の処理
     if (FAILED(hr) || !texture) {
@@ -45,8 +47,10 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 // テクスチャの取得関数
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(const std::string& filename) {
     const std::wstring wfilename = ShortConversion(filename);
-	auto it = textureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
-	if (it != textureMap.end()) { // 要素が見つかった場合
+    std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
+        = textureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
+	
+    if (it != textureMap.end()) { // 要素が見つかった場合
 		return it->second; // 対応するテクスチャを返す
 	}
     
@@ -63,7 +67,7 @@ void TextureManager::ReleaseAllTextures() {
 // stringをwstringに変換する関数
 std::wstring TextureManager::ShortConversion(const std::string& filename) {
 
-	int len = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, nullptr, 0);
+	const int len = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, nullptr, 0);
     std::wstring result(len -1, wchar_t(0));    // null終端を除外
 	MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, &result[0], len);
 

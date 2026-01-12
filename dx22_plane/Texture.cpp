@@ -4,7 +4,8 @@
 #include	"System/DirectXRender.h"
 #include	"Manager/TextureManager.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
+using Microsoft::WRL::ComPtr;
 
 Texture::Texture(const Texture& other)
 	: m_Texname(other.m_Texname),
@@ -197,7 +198,7 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 
 bool Texture::LoadTexture(const std::string& filename)
 {
-	auto tex = TextureManager::LoadTexture(filename);
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> tex = TextureManager::LoadTexture(filename);
 
 	if (tex != nullptr) {
 		m_Texname = filename;
@@ -230,10 +231,11 @@ void Texture::SetGPU_Mask()
 	devicecontext->PSSetShaderResources(1, 1, m_srvMask.GetAddressOf());
 }
 
-Matrix Texture::MakeUV(float u, float v, float uw, float vh) {
+DirectX::XMMATRIX Texture::MakeUV(const float u,const float v,const float uw,const float vh) {
 	// ÇtÇuÇÃçsóÒçÏê¨
-	Matrix mat = Matrix::CreateScale(uw, vh, 1.0f);
-	mat *= Matrix::CreateTranslation(u, v, 0.0f).Transpose();
+	XMMATRIX scaleMtx = XMMatrixScaling(uw, vh, 1.0f);
+	XMMATRIX transMtx = XMMatrixTranslation(u, v, 0.0f);
+	transMtx = XMMatrixTranspose(transMtx);
 
-	return mat;
+	return scaleMtx * transMtx;
 }

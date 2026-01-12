@@ -10,6 +10,7 @@ enum class PlayerState
 	GROUND,
 	JUMP,
 	ATTACK,
+	CHARGE,
 	DAMAGE,
 	DEAD
 };
@@ -18,6 +19,8 @@ class PlayerOperationComponent : public Component
 {
 private:
 	float m_RecordTime = 0.0f; // 移動している時間を記録する
+	float m_ChargeTime = 0.0f; // チャージしている時間を記録する
+	float m_ChargeCompleteTime = 2.0f; // チャージ完了までの時間
 
 	RightLeft m_CurrentRightLeft = RightLeft::RIGHT; // 現在の向き管理
 	PlayerState m_CurrentState = PlayerState::NONE; // プレイヤーの状態管理
@@ -31,6 +34,7 @@ private:
 	void ChangeState(const PlayerState& state); // プレイヤーの状態変更
 	void Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove);
 	void Attack(const bool attack,const bool isGround);
+	void Charge(const bool charge,const bool attack);
 
 public:
 	PlayerOperationComponent(GameObject& obj);
@@ -40,6 +44,7 @@ public:
 	void Update()override;
 
 	void SetWeaponObject(GameObject* weapon) { m_WeaponObject = weapon; } // 武器オブジェクトのセット
+	void SetChargeCompleteTime(const float time) { m_ChargeCompleteTime = time; } // チャージ完了までの時間セット
 
 	RightLeft GetRightLeft() const { return m_CurrentRightLeft; } // 左右の移動フラグ取得
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得

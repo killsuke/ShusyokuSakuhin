@@ -2,7 +2,6 @@
 #include "Transform.h"
 #include "TrailRenderComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 namespace {

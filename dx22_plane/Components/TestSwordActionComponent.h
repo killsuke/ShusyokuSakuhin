@@ -11,6 +11,13 @@ enum class ESwordActionState
 	SLASH_3RD,
 };
 
+enum class SlashPattern
+{
+	GROUND_SLASH,
+	AIR_SLASH,
+	MAX_SLASH_PATTERN
+};
+
 struct SwordActionPattern
 {
 	float startAngle = 0.0f;
@@ -46,6 +53,23 @@ public:
 	void SwordAction();
 	void SetHolder(GameObject* holder) { m_Holder = holder; };
 	void SetIsAction(const bool action) { m_IsAction = action; };
+	void SetIsAction(const bool action, const SlashPattern& pattern) {
+		m_IsAction = action;
+
+		switch (pattern)
+		{
+		case SlashPattern::GROUND_SLASH:
+			m_SwordActionState = ESwordActionState::SLASH_1ST;
+			break;
+		case SlashPattern::AIR_SLASH:
+			m_SwordActionState = ESwordActionState::SLASH_1ST;
+			break;
+		default:
+			break;
+		}
+
+		m_TestSlashCount = 4;
+	};
 	void SetSwordActionState(const ESwordActionState& state) { m_SwordActionState = state; };
 
 	GameObject* GetHolder() { return m_Holder; };

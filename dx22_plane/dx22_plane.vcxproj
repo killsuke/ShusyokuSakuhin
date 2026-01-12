@@ -166,6 +166,8 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
+    <ClCompile Include="Components\ChargeParticleMoveComponent.cpp" />
+    <ClCompile Include="Components\ChargePerformanceComponent.cpp" />
     <ClCompile Include="Components\MotionBlurControllerComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurCircularComponent.cpp" />
     <ClCompile Include="Components\RenderLuminescenceBillboardComponent.cpp" />
@@ -302,6 +304,8 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
+    <ClInclude Include="Components\ChargeParticleMoveComponent.h" />
+    <ClInclude Include="Components\ChargePerformanceComponent.h" />
     <ClInclude Include="Components\MotionBlurControllerComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurCircularComponent.h" />
     <ClInclude Include="Components\RenderLuminescenceBillboardComponent.h" />

@@ -4,10 +4,8 @@
 #include	<string>
 #include	<wrl/client.h> // ComPtrの定義を含むヘッダファイル
 #include	<filesystem>
-#include	<SimpleMath.h>
+#include	<DirectXMath.h>
 #include	<memory>
-
-using Microsoft::WRL::ComPtr;
 
 //-----------------------------------------------------------------------------
 //Textureクラス
@@ -17,8 +15,8 @@ class Texture
 private:
 
 	std::string m_Texname = ""; // ファイル名
-	ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
-	ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
 
 	int m_width = 0; // 幅
 	int m_height = 0; // 高さ
@@ -47,9 +45,9 @@ public:
 	void SetGPU();
 	void SetGPU_Mask();
 
-	DirectX::SimpleMath::Matrix MakeUV(float u, float v, float uw, float vh);
+	DirectX::XMMATRIX MakeUV(const float u,const float v,const float uw,const float vh);
 
-	void SetUV(float nu,float nv,float sx,float sy) {
+	void SetUV(const float nu,const float nv,const float sx,const float sy) {
 		m_NumU = nu;
 		m_NumV = nv;
 		m_SplitX = sx;
