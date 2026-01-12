@@ -10,7 +10,6 @@ enum class PlayerState
 	GROUND,
 	JUMP,
 	ATTACK,
-	CHARGE,
 	DAMAGE,
 	DEAD
 };

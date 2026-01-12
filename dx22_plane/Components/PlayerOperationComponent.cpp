@@ -12,6 +12,7 @@
 #include "TestSwordActionComponent.h"
 #include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "ChargePerformanceComponent.h"
 #include <vector>
 #include <iostream>
 
@@ -131,8 +132,6 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		break;
 	case PlayerState::ATTACK:
 		break;
-	case PlayerState::CHARGE:
-		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -157,8 +156,6 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	case PlayerState::JUMP:
 		break;
 	case PlayerState::ATTACK:
-		break;
-	case PlayerState::CHARGE:
 		break;
 	case PlayerState::DAMAGE:
 		break;
@@ -204,9 +201,9 @@ void PlayerOperationComponent::StateUpdate() {
 		{
 			ChangeState(PlayerState::MOVE);
 		}
-		if(keyCharge)
+		if (keyCharge)
 		{
-			ChangeState(PlayerState::CHARGE);
+			//	ChangeState(PlayerState::CHARGE);
 		}
 		// ここで攻撃するか否かを判断
 		Attack(keyAttack, isGround);
@@ -228,9 +225,6 @@ void PlayerOperationComponent::StateUpdate() {
 		break;
 	case PlayerState::ATTACK:
 		break;
-	case PlayerState::CHARGE:
-		Charge(keyCharge,keyCAttack);
-		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -238,6 +232,8 @@ void PlayerOperationComponent::StateUpdate() {
 	default:
 		break;
 	}
+
+	Charge(keyCharge, keyCAttack);
 
 	JumpComponent* jumpComp = m_Object->GetComponent<JumpComponent>();
 	if (jumpComp != nullptr) {
@@ -326,18 +322,17 @@ void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 		return;
 	}
 
-	if(isGround == true){
+	if (isGround == true) {
 		// 地面の上での攻撃
 		swordAction->SetIsAction(attack);
 	}
 	else {
 		// 空中での攻撃
-		swordAction->SetIsAction(attack,SlashPattern::AIR_SLASH);
+		swordAction->SetIsAction(attack, SlashPattern::AIR_SLASH);
 	}
 
 	// 攻撃が終了したかどうかを判定
 	if (attack == true) {
-
 		const bool isFinish = swordArb->GetIsFinished();
 
 		// ここで再発動
@@ -349,24 +344,39 @@ void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 
 void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 
+	ChargePerformanceComponent* chargePerf = m_Object->GetComponent<ChargePerformanceComponent>();
+	if (chargePerf == nullptr) {
+		return;
+	}
+
 	if (charge) {
 		if (m_ChargeTime >= m_ChargeCompleteTime) {
 
-			if(attack)
+			if (attack)
 			{
 				// チャージ攻撃発動
-				std::cout << "チャージ攻撃発動" << std::endl;
+//				std::cout << "チャージ攻撃発動" << std::endl;
+
+				chargePerf->SetActiveFlag(false);
+				chargePerf->ResetAllParticles();
+				chargePerf->SetChargeCompleteFlag(false);
 				m_ChargeTime = 0.0f;
 			}
-			else
-			std::cout << "チャージ完了" << std::endl;
+			else {
+				//				std::cout << "チャージ完了" << std::endl;
+				chargePerf->SetChargeCompleteFlag(true);
+			}
 		}
 		else {
-			std::cout << "チャージ中" << std::endl;
+			//			std::cout << "チャージ中" << std::endl;
+			chargePerf->SetActiveFlag(true);
 			m_ChargeTime += DeltaTime;
 		}
 	}
 	else {
 		m_ChargeTime = 0.0f;
+		chargePerf->SetActiveFlag(false);
+		chargePerf->ResetAllParticles();
+		chargePerf->SetChargeCompleteFlag(false);
 	}
 }

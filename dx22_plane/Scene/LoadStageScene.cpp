@@ -138,8 +138,9 @@ LoadStageScene::LoadStageScene() {
 		fighterPlayer->SetUseDeadFlag(false);
 
 		ChargePerformanceComponent* chargePerf = player->AddComponent<ChargePerformanceComponent>();
-		chargePerf->InitCreateParticles(20, 10.0f,*player);
-		chargePerf->SetOneParticleActiveTime(1.0f);
+		chargePerf->InitCreateParticles(10, 20.0f,*player,50.0f,10.0f,20.0f);
+		chargePerf->SetOneParticleActiveTime(0.05f);
+		chargePerf->SetActiveFlag(false);
 
 		auto cubeRe = player->AddComponent<Render2DComponent>();
 		cubeRe->CreateMesh<SquareMesh>();

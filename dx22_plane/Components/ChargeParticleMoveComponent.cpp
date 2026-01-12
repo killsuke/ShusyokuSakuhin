@@ -43,8 +43,22 @@ void ChargeParticleMoveComponent::Update() {
 	if (distanceToTarget <= m_RimitDistance) {
 		m_Object->SetActiveState(ActiveState::ALL_STOP);
 		myTrans->SetLocalPosition(m_StartPosition);
+		myTrans->SetLocalScale(m_InitScale);
 		return;
 	}
 
 	myTrans->SetLocalPosition(myPos);
+	XMFLOAT3 scale = myTrans->GetLocalScale();
+	myTrans->SetLocalScale({ scale.x * 0.9f,scale.y * 0.9f,scale.z });
+}
+
+void ChargeParticleMoveComponent::ResetProcess() {
+
+	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+	if (myTrans == nullptr) {
+		return;
+	}
+	myTrans->SetLocalPosition(m_StartPosition);
+	myTrans->SetLocalScale(m_InitScale);
+	m_Object->SetActiveState(ActiveState::ALL_STOP);
 }
