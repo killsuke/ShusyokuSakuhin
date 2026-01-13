@@ -35,14 +35,14 @@ void EnemyDamageComponent::Update()
 		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
 	//auto attack = p_object->GetComponent<AttackTimingComponent>();
-	auto attack = m_Object->GetComponent<AttackOneTimeComponent>();
+	AttackOneTimeComponent* attack = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	attack->ReSetAttackHitFlag();	// 攻撃が当たったかどうかのフラグをリセット
 
 	if (collObjMe != nullptr) {
 
 		for (auto& objOther : objOthers) {
-			auto collObjOther = objOther->GetComponent<ColliderComponent>();
+			ColliderComponent* collObjOther = objOther->GetComponent<ColliderComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 

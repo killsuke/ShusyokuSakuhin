@@ -51,12 +51,12 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 	effectTrans->SetScale(BloodSplatterScale);
 	RightLeft direction = RightLeft::RIGHT;
 	if (m_IsRightLeft == RightLeft::LEFT) {
-		effectTrans->SetPosition({ pos.x - 10.0f, pos.y + 5.0f, pos.z });
+		effectTrans->SetPosition({ pos.x + 10.0f, pos.y + 5.0f, pos.z });
 		// Œã‚ÉØ‚Á‚½•ûŒü‚É‡‚í‚¹‚æ‚¤‚©
 		direction = RightLeft::RIGHT;
 	}
 	else if(m_IsRightLeft == RightLeft::RIGHT){
-		effectTrans->SetPosition({ pos.x + 10.0f, pos.y + 5.0f, pos.z });
+		effectTrans->SetPosition({ pos.x - 10.0f, pos.y + 5.0f, pos.z });
 		direction = RightLeft::LEFT;
 	}
 

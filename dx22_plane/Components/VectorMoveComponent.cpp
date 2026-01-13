@@ -1,7 +1,6 @@
 #include "VectorMoveComponent.h"
 #include "Transform.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 VectorMoveComponent::VectorMoveComponent(GameObject& obj) : Component(obj)

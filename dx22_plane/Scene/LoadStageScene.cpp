@@ -171,6 +171,7 @@ LoadStageScene::LoadStageScene() {
 		rollingGoAround->SetRotationSpeed(20.0f); // ‰ñ“]‘¬“x‚ðÝ’è
 		rollingGoAround->SetRollingActive(false);
 		rollingGoAround->SetClockwise(true);
+		rollingGoAround->SetStopTime(0.2f);
 
 		auto rollingFT = rolling->AddComponent<FighterComponent>();
 		rollingFT->SetAtk(5);

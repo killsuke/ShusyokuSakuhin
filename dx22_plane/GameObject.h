@@ -41,7 +41,7 @@ private:
 	TagAndID m_TagAndID = { "",0 }; // タグとIDのペア
 	uint32_t m_InstanceID = 0; // インスタンスID
 	std::string name = "";	// オブジェクトの名前
-	bool deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
+	bool m_Deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
 	bool carryOverFlag = false; // シーンを跨いでオブジェクトを持ち越すかどうかのフラグ
 	ActiveState activeState = ActiveState::ACTIVE;
@@ -62,7 +62,7 @@ public:
 	void Draw();
 
 	// セッター
-	inline void SetDeleteFg(const bool deletefg) { this->deletefg = deletefg; };
+	inline void SetDeleteFg(const bool deletefg) { this->m_Deletefg = deletefg; };
 	inline void SetTag(const std::string& tag) { m_TagAndID.tag = tag; };
 	inline void SetID(const uint16_t& id) { m_TagAndID.id = id; };
 	inline void SetName(const std::string& name) { this->name = name; };
@@ -86,7 +86,7 @@ public:
 	inline void SetCarryOverFlag(const bool flag) { carryOverFlag = flag; };
 
 	// ゲッター
-	inline bool GetDeleteFg()const { return deletefg; };
+	inline bool GetDeleteFg()const { return m_Deletefg; };
 	inline std::string GetTag()const { return m_TagAndID.tag; };
 	inline uint16_t GetID()const { return m_TagAndID.id; };
 	inline std::string GetName()const { return name; };
@@ -98,6 +98,8 @@ public:
 	inline bool GetDrawContainerChangeFlag()const { return drawContainerChangeFlag; };
 	inline bool GetCarryOverFlag()const { return carryOverFlag; };
 	inline uint32_t GetInstanceID()const { return m_InstanceID; };
+
+	void Destroy() { m_Deletefg = true; };
 
 	// コンポーネントのソート番号でソート
 	void SortComponents();

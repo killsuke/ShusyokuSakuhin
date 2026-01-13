@@ -13,6 +13,12 @@
 #include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "ChargePerformanceComponent.h"
+#include "Collider.h"
+#include "VectorMoveComponent.h"
+#include "EnemyDamageComponent.h"
+#include "AttackOneTimeComponent.h"
+#include "ChargeSlashComponent.h"
+#include "Mesh/SquareMesh.h"
 #include <vector>
 #include <iostream>
 
@@ -20,6 +26,7 @@ using namespace DirectX;
 
 namespace {
 	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
+	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
 }
 
 PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(obj) {
@@ -186,9 +193,9 @@ void PlayerOperationComponent::StateUpdate() {
 
 	bool isMove = false;
 
-	m_isJump = false;
+	m_IsJump = false;
 	if (keyUp) {
-		m_isJump = true;
+		m_IsJump = true;
 	}
 
 	m_IsMoveFlag = false; // 毎フレーム初期化	
@@ -345,38 +352,90 @@ void PlayerOperationComponent::Attack(const bool attack, const bool isGround) {
 void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 
 	ChargePerformanceComponent* chargePerf = m_Object->GetComponent<ChargePerformanceComponent>();
+	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+
 	if (chargePerf == nullptr) {
 		return;
 	}
 
+	// チャージ攻撃発動
+	if (attack && m_IsChargeComplete)
+	{
+		chargePerf->SetActiveFlag(false);
+		chargePerf->ResetAllParticles();
+		chargePerf->SetChargeCompleteFlag(false);
+		swordAction->SetIsAction(attack, SlashPattern::CHARGE_SLASH);
+		CreateChargeSlash();
+		m_ChargeTime = 0.0f;
+		m_IsChargeComplete = false;
+	}
+
+	// チャージ処理
 	if (charge) {
 		if (m_ChargeTime >= m_ChargeCompleteTime) {
-
-			if (attack)
-			{
-				// チャージ攻撃発動
-//				std::cout << "チャージ攻撃発動" << std::endl;
-
-				chargePerf->SetActiveFlag(false);
-				chargePerf->ResetAllParticles();
-				chargePerf->SetChargeCompleteFlag(false);
-				m_ChargeTime = 0.0f;
-			}
-			else {
-				//				std::cout << "チャージ完了" << std::endl;
+			m_IsChargeComplete = true;
+			// チャージ完了
+			if (!attack) {
 				chargePerf->SetChargeCompleteFlag(true);
 			}
 		}
+		// まだチャージ中
 		else {
-			//			std::cout << "チャージ中" << std::endl;
-			chargePerf->SetActiveFlag(true);
+			// チャージエフェクト開始
+			// 鬱陶しいのでちょっとだけズラす
+			if (m_ChargeTime > ChargeStartTime) {
+				chargePerf->SetActiveFlag(true);
+			}
 			m_ChargeTime += DeltaTime;
 		}
 	}
 	else {
+		m_IsChargeComplete = false;
 		m_ChargeTime = 0.0f;
 		chargePerf->SetActiveFlag(false);
 		chargePerf->ResetAllParticles();
 		chargePerf->SetChargeCompleteFlag(false);
 	}
+}
+
+// チャージスラッシュエフェクト生成
+void PlayerOperationComponent::CreateChargeSlash() {
+
+	TransformComponent* playerTransform = m_Object->GetComponent<TransformComponent>();
+
+	if(playerTransform == nullptr){
+		return;
+	}
+
+	XMFLOAT3 myPos = playerTransform->GetPosition();
+
+	GameObject* chargeSlash = GameObjectManager::AddObject("chargeSlash", "Effect");
+	TransformComponent* slashTransform = chargeSlash->AddComponent<TransformComponent>();
+	slashTransform->SetPosition(myPos);
+	slashTransform->SetScale(XMFLOAT3(20.0f, 40.0f, 1.0f));
+
+	ColliderComponent* slashCollider = chargeSlash->AddComponent<ColliderComponent>();
+	VectorMoveComponent* slashMove = chargeSlash->AddComponent<VectorMoveComponent>();
+	if (m_CurrentRightLeft == RightLeft::RIGHT) {
+		slashMove->SetMoveDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));
+	}
+	else {
+		slashMove->SetMoveDirection(XMFLOAT3(-1.0f, 0.0f, 0.0f));
+	}
+	slashMove->SetMovePower(5.0f);
+	AttackOneTimeComponent* slashAtk = chargeSlash->AddComponent<AttackOneTimeComponent>();
+
+	EnemyDamageComponent* slashED = chargeSlash->AddComponent<EnemyDamageComponent>();
+	FighterComponent* slashFT = chargeSlash->AddComponent<FighterComponent>();
+	slashFT->SetAtk(10);
+	slashFT->SetHp(50);
+
+	ChargeSlashComponent* charge = chargeSlash->AddComponent<ChargeSlashComponent>();
+	charge->SetRimitTime(2.0f);
+
+	Render3DComponent* slashRender = chargeSlash->AddComponent<Render3DComponent>();
+	slashRender->CreateMesh<SquareMesh>();
+	slashRender->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	slashRender->ChangeTexture("assets/texture/charge_slash1.png");
+	slashRender->SetInversionFlag(m_CurrentRightLeft);
 }

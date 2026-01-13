@@ -25,7 +25,8 @@ private:
 	PlayerState m_CurrentState = PlayerState::NONE; // プレイヤーの状態管理
 	bool m_beforeMove = false; // 前回のフレームで移動していたかどうかのフラグ
 	bool m_IsMoveFlag = false; // 移動中かどうかのフラグ
-	bool m_isJump = false; // ジャンプ中かどうかのフラグ
+	bool m_IsJump = false; // ジャンプ中かどうかのフラグ
+	bool m_IsChargeComplete = false; // チャージ完了フラグ
 
 	GameObject* m_WeaponObject = nullptr; // 武器オブジェクトへのポインタ
 
@@ -34,6 +35,7 @@ private:
 	void Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove);
 	void Attack(const bool attack,const bool isGround);
 	void Charge(const bool charge,const bool attack);
+	void CreateChargeSlash();
 
 public:
 	PlayerOperationComponent(GameObject& obj);
@@ -47,7 +49,7 @@ public:
 
 	RightLeft GetRightLeft() const { return m_CurrentRightLeft; } // 左右の移動フラグ取得
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得
-	bool GetIsJump() const { return m_isJump; } // ジャンプ中かどうかのフラグ取得
+	bool GetIsJump() const { return m_IsJump; } // ジャンプ中かどうかのフラグ取得
 
 };
 

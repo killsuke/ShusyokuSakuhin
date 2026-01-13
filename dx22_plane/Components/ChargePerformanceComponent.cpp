@@ -114,7 +114,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 	childRender->CreateMesh<SquareMesh>();
 	childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
 	childRender->SetColor({ 0.3f,0.8f,1.0f,0.8f });
-	childRender->SetGlowPower(1.0f);
+	childRender->SetGlowPower(0.5f);
 	childRender->SetGlowRadius(0.4f);
 	childRender->SetEllipseScale({ 1.0f,1.0f });
 

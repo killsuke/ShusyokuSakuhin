@@ -23,6 +23,7 @@ private:
 	float m_EndAngle = 0.0f;
 	float m_RecordTime = 0.0f;
 	float m_TargetRotationAmount = 0.0f;
+	float m_StopTime = 0.0f;
 
 	GameObject* m_CenterObject = nullptr; // 中心となるオブジェクト
 	float m_rotationSpeed = 0.0f; // 回転速度
@@ -126,6 +127,7 @@ public:
 	inline void SetFlipRequested(const bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
 	inline void SetLockAngle(const DirectX::XMFLOAT3& angle) { m_LockRotation = angle; };
 	inline void SetSampleDivisions(const int sample) { m_SampleDivisions = sample; }
+	inline void SetStopTime(const float time) { m_StopTime = time; }
 	inline void ResetNowAngle_Radian() { m_nowAngleRadian = 0.0f; } // 角度をリセット（ラジアン）
 	inline void ResetNowAngle_Degree() { m_nowAngleDegree = 0.0f; } // 角度をリセット（ディグリー）
 	inline void ResetIsFinished() { m_IsFinished = false; } // 回転完了フラグをリセット

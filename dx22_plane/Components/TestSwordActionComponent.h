@@ -15,6 +15,7 @@ enum class SlashPattern
 {
 	GROUND_SLASH,
 	AIR_SLASH,
+	CHARGE_SLASH,
 	MAX_SLASH_PATTERN
 };
 
@@ -63,6 +64,9 @@ public:
 			break;
 		case SlashPattern::AIR_SLASH:
 			m_SwordActionState = ESwordActionState::SLASH_1ST;
+			break;
+		case SlashPattern::CHARGE_SLASH:
+			m_SwordActionState = ESwordActionState::SLASH_3RD;
 			break;
 		default:
 			break;
