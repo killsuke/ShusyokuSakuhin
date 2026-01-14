@@ -409,7 +409,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 
 	XMFLOAT3 myPos = playerTransform->GetPosition();
 
-	GameObject* chargeSlash = GameObjectManager::AddObject("chargeSlash", "Effect");
+	GameObject* chargeSlash = GameObjectManager::AddAbsFront("chargeSlash", "Effect");
 	TransformComponent* slashTransform = chargeSlash->AddComponent<TransformComponent>();
 	slashTransform->SetPosition(myPos);
 	slashTransform->SetScale(XMFLOAT3(20.0f, 40.0f, 1.0f));

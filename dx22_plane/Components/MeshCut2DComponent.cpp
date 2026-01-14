@@ -7,6 +7,7 @@
 #include "Manager/GameObjectManager.h"
 #include "System/DirectXRender.h"
 #include "Manager/EventBusManager.h"
+#include <array>
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -87,8 +88,6 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	TransformComponent* leftTrans = m_CutObj1->AddComponent<TransformComponent>();
 	leftTrans->SetScale(Vector3(size.x, size.y, size.z));
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
-	//leftMove->SetMoveDirection({ -1.0f,0.0f,0.0f });
-	//leftMove->SetMovePower(0.1f);
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
 	leftRend->SetShader(shaderName[0], shaderName[1], shaderName[2]);
@@ -109,11 +108,11 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	rightRend->SetInversionFlag(isInversion);
 	m_CutObj2ID = m_CutObj2->GetInstanceID();
 
-	std::vector<VERTEX_3D> leftVertices;
-	std::vector<VERTEX_3D> rightVertices;
+	std::vector<VERTEX_3D> CutVertices1;
+	std::vector<VERTEX_3D> CutVertices2;
 
-	leftVertices.resize(4);
-	rightVertices.resize(4);
+	CutVertices1.resize(4);
+	CutVertices2.resize(4);
 
 	if (m_CutDirection == CutDirection::HORIZONTAL) { // HORIZONTAL
 
@@ -128,55 +127,29 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 		MakeCutPoints(vDLeft, vDRight, m_CutRatio1);
 		MakeCutPoints(vTLeft, vTRight, m_CutRatio2);
 
-		// 上の切れた方
+		// 上側 ====================================================
+		CutVertices1[0].position = Vector3(-1.0f, vTRight, 0.0f);
+		CutVertices1[1].position = Vector3(1.0f, vDRight, 0.0f);
+		CutVertices1[2].position = Vector3(1.0f, 0.5f, 0.0f);
+		CutVertices1[3].position = Vector3(-1.0f, 0.5f, 0.0f);
 
-		leftVertices[0].position = Vector3(-1.0f, vTRight, 0.0f);
-		leftVertices[1].position = Vector3(1.0f, vDRight, 0.0f);
-		leftVertices[2].position = Vector3(1.0f, 0.5f, 0.0f);
-		leftVertices[3].position = Vector3(-1.0f, 0.5f, 0.0f);
+		CutVertices1[0].uv = { 0.0f, m_CutRatio1 };
+		CutVertices1[1].uv = { 1.0f, m_CutRatio2 };
+		CutVertices1[2].uv = { 1.0f, 0.0f };
+		CutVertices1[3].uv = { 0.0f, 0.0f };
+		// =========================================================
 
-		const float minYT = std::min(std::min(leftVertices[0].position.y,
-			leftVertices[1].position.y),
-			std::min(leftVertices[2].position.y,
-				leftVertices[3].position.y));
+		// 下側 ====================================================
+		CutVertices2[0].position = Vector3(-1.0f, -0.5f, 0.0f);
+		CutVertices2[1].position = Vector3(1.0f, -0.5f, 0.0f);
+		CutVertices2[2].position = Vector3(1.0f, vDLeft, 0.0f);
+		CutVertices2[3].position = Vector3(-1.0f, vTLeft, 0.0f);
 
-		const float maxYT = std::max(std::max(leftVertices[0].position.y,
-			leftVertices[1].position.y),
-			std::max(leftVertices[2].position.y,
-				leftVertices[3].position.y));
-
-		// 4頂点分のuv値のyを計算
-		for (int i = 0; i < 4; ++i) {
-			const float px = leftVertices[i].position.y;
-			const float t = 1 - ((px - minYT) / (maxYT - minYT)); // 0～1
-			leftVertices[i].uv.y = t * m_CutRatio1;
-		}
-
-		leftVertices[0].uv.x = 0.0f;
-		leftVertices[1].uv.x = 1.0f;
-		leftVertices[2].uv.x = 1.0f;
-		leftVertices[3].uv.x = 0.0f;
-
-		// 下の切れた方
-		rightVertices[0].position = Vector3(-1.0f, -0.5f, 0.0f);
-		rightVertices[1].position = Vector3(1.0f, -0.5f, 0.0f);
-		rightVertices[2].position = Vector3(1.0f, vDLeft, 0.0f);
-		rightVertices[3].position = Vector3(-1.0f, vTLeft, 0.0f);
-
-		float vL3 = leftVertices[2].uv.y;
-		float vL4 = leftVertices[3].uv.y;
-
-		// uv計算（上側のuv.yをスタートとする）
-		rightVertices[0].uv.y = 1.0f;
-		rightVertices[1].uv.y = 1.0f;
-		rightVertices[2].uv.y = 0.5f - vL3;
-		rightVertices[3].uv.y = 0.5f - vL4;
-
-		rightVertices[0].uv.x = 0.0f;
-		rightVertices[1].uv.x = 1.0f;
-		rightVertices[2].uv.x = 1.0f;
-		rightVertices[3].uv.x = 0.0f;
-
+		CutVertices2[0].uv = { 0.0f, 1.0f };
+		CutVertices2[1].uv = { 1.0f, 1.0f };
+		CutVertices2[2].uv = { 1.0f, m_CutRatio2 };
+		CutVertices2[3].uv = { 0.0f, m_CutRatio1 };
+		// =========================================================
 	}
 	else {// VERTICAL
 		leftTrans->SetPosition(Vector3(pos.x + (-size.x * 0.5f), pos.y, pos.z));
@@ -190,78 +163,54 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 		MakeCutPoints(vLTop, vRTop, m_CutRatio1);
 		MakeCutPoints(vLDown, vRDown, m_CutRatio2);
 
-		// 左側の切れた方
-		leftVertices[0].position = Vector3(-0.5f, -1.0f, 0.0f);
-		leftVertices[1].position = Vector3(vLDown, -1.0f, 0.0f);
-		leftVertices[2].position = Vector3(vLTop, 1.0f, 0.0f);
-		leftVertices[3].position = Vector3(-0.5f, 1.0f, 0.0f);
+		// 左側 ====================================================
+		CutVertices1[0].position = Vector3(-0.5f, -1.0f, 0.0f);
+		CutVertices1[1].position = Vector3(vLDown, -1.0f, 0.0f);
+		CutVertices1[2].position = Vector3(vLTop, 1.0f, 0.0f);
+		CutVertices1[3].position = Vector3(-0.5f, 1.0f, 0.0f);
 
-		const float minXL = std::min(std::min(leftVertices[0].position.x,
-			leftVertices[1].position.x),
-			std::min(leftVertices[2].position.x,
-				leftVertices[3].position.x));
+		CutVertices1[0].uv = { 0.0f, 1.0f };
+		CutVertices1[1].uv = { m_CutRatio1, 1.0f };
+		CutVertices1[2].uv = { m_CutRatio2, 0.0f };
+		CutVertices1[3].uv = { 0.0f, 0.0f };
+		// =========================================================
 
-		const float maxXL = std::max(std::max(leftVertices[0].position.x,
-			leftVertices[1].position.x),
-			std::max(leftVertices[2].position.x,
-				leftVertices[3].position.x));
+		// 右側 ====================================================
+		CutVertices2[0].position = Vector3(vRDown, -1.0f, 0.0f);
+		CutVertices2[1].position = Vector3(0.5f, -1.0f, 0.0f);
+		CutVertices2[2].position = Vector3(0.5f, 1.0f, 0.0f);
+		CutVertices2[3].position = Vector3(vRTop, 1.0f, 0.0f);
 
-		// 4頂点分のuv値のxを計算
-		for (int i = 0; i < 4; ++i) {
-			const float px = leftVertices[i].position.x;
-			const float t = (px - minXL) / (maxXL - minXL); // 0～1
-			leftVertices[i].uv.x = t * m_CutRatio1;
-		}
-
-		leftVertices[0].uv.y = 1.0f;
-		leftVertices[1].uv.y = 1.0f;
-		leftVertices[2].uv.y = 0.0f;
-		leftVertices[3].uv.y = 0.0f;
-
-		// 右側の切れた方
-		rightVertices[0].position = Vector3(vRDown, -1.0f, 0.0f);
-		rightVertices[1].position = Vector3(0.5f, -1.0f, 0.0f);
-		rightVertices[2].position = Vector3(0.5f, 1.0f, 0.0f);
-		rightVertices[3].position = Vector3(vRTop, 1.0f, 0.0f);
-
-		float vL2 = leftVertices[1].uv.x;
-		float vL3 = leftVertices[2].uv.x;
-
-		// uv計算（左側のuv.xをスタートとする）
-		rightVertices[0].uv.x = 1.0f - vL3;
-		rightVertices[1].uv.x = 1.0f;
-		rightVertices[2].uv.x = 1.0f;
-		rightVertices[3].uv.x = 1.0f - vL2;
-
-		rightVertices[0].uv.y = 1.0f;
-		rightVertices[1].uv.y = 1.0f;
-		rightVertices[2].uv.y = 0.0f;
-		rightVertices[3].uv.y = 0.0f;
+		CutVertices2[0].uv = { m_CutRatio1, 1.0f };
+		CutVertices2[1].uv = { 1.0f, 1.0f };
+		CutVertices2[2].uv = { 1.0f,  0.0f };
+		CutVertices2[3].uv = { m_CutRatio2, 0.0f };
+		// =========================================================
 	}
 
-	leftVertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	leftVertices[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	leftVertices[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	leftVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	leftVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
-	leftVertices[1].normal = Vector3(0.0f, 0.0f, -1.0f);
-	leftVertices[2].normal = Vector3(0.0f, 0.0f, -1.0f);
-	leftVertices[3].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices1[0].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices1[1].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices1[2].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices1[3].normal = Vector3(0.0f, 0.0f, -1.0f);
 
-	rightVertices[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	rightVertices[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	rightVertices[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	rightVertices[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-	rightVertices[0].normal = Vector3(0.0f, 0.0f, -1.0f);
-	rightVertices[1].normal = Vector3(0.0f, 0.0f, -1.0f);
-	rightVertices[2].normal = Vector3(0.0f, 0.0f, -1.0f);
-	rightVertices[3].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices2[0].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices2[1].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices2[2].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices2[3].normal = Vector3(0.0f, 0.0f, -1.0f);
 
 	VertexBuffer<VERTEX_3D>* vLBuffer = leftRend->GetVertexBuffer();
-	vLBuffer->Modify(leftVertices);
+	vLBuffer->Modify(CutVertices1);
 
 	VertexBuffer<VERTEX_3D>* vRBuffer = rightRend->GetVertexBuffer();
-	vRBuffer->Modify(rightVertices);
+	vRBuffer->Modify(CutVertices2);
 }

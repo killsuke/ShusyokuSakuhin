@@ -7,6 +7,7 @@
 #include "Manager/EventBusManager.h"
 #include "Manager/HitStopManager.h"
 #include "FighterComponent.h"
+#include "EnemyDeathEventComponent.h"
 
 namespace {
 	constexpr float FirstStopTime = 0.1f; // 最初のヒットストップ時間
@@ -50,13 +51,26 @@ void EnemyDamageComponent::Update()
 
 				if (attack->GetAttackHitFlag() == true) {
 
+					std::string tag = m_Object->GetTag();
+
 					TestSwordActionComponent* swordComp = m_Object->GetComponent<TestSwordActionComponent>();
+
+					// チャージ攻撃のことも考えて取り敢えずデフォルト
+					ESwordActionState state = ESwordActionState::NONE;
+					RightLeft dir = RightLeft::RIGHT;
 
 					// ヒットストップ時間の選択
 					float stopTime = FirstStopTime;
 					if (swordComp != nullptr) {
-						ESwordActionState state = swordComp->GetSwordActionState();
+						state = swordComp->GetSwordActionState();
 						stopTime = ChoiceStopTime(state);
+						dir = swordComp->GetRightLeft();
+					}
+
+					// 敵の切られた状態をセット
+					EnemyDeathEventComponent* deathComp = objOther->GetComponent<EnemyDeathEventComponent>();
+					if (deathComp != nullptr) {
+						deathComp->SetHittedState(state, dir);
 					}
 
 					// ヒットストップの候補セット
@@ -77,6 +91,7 @@ void EnemyDamageComponent::Update()
 						// ヒット時の通知
 						EventBusManager::Push(he);
 
+						// 画面揺れステータスの選択
 						if (swordComp != nullptr) {
 							ESwordActionState state = swordComp->GetSwordActionState();
 							status = ChoiceShakeStatus(state);

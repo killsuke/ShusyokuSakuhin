@@ -272,10 +272,20 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	case ESwordActionState::NONE:
 		break;
 	case ESwordActionState::SLASH_1ST:
-		zAngle = EffectAngle1st.x;
+		if(m_RightLeft == RightLeft::RIGHT){
+			zAngle = EffectAngle1st.x;
+		}
+		else if(m_RightLeft == RightLeft::LEFT){
+			zAngle = EffectAngle2nd.x;
+		}
 		break;
 	case ESwordActionState::SLASH_2ND:
-		zAngle = EffectAngle2nd.x;
+		if (m_RightLeft == RightLeft::LEFT) {
+			zAngle = EffectAngle1st.x;
+		}
+		else if (m_RightLeft == RightLeft::RIGHT) {
+			zAngle = EffectAngle2nd.x;
+		}
 		break;
 	case ESwordActionState::SLASH_3RD:
 		zAngle = EffectAngle3rd.x;

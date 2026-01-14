@@ -180,26 +180,32 @@ void Stage1Scene::Init()
 		TransformComponent* parentTrans = parentObj->AddComponent<TransformComponent>();
 		parentTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 		parentTrans->SetScale({ 50.0f,50.0f,1.0f });
+		VectorMoveComponent* vectorMove = parentObj->AddComponent<VectorMoveComponent>();
+		vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
+		vectorMove->SetMovePower(2.0f);
+		MeshCut2DComponent* meshCut = parentObj->AddComponent<MeshCut2DComponent>();
+		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);
 		Render3DComponent* parentRend = parentObj->AddComponent<Render3DComponent>();
 		parentRend->CreateMesh<SquareMesh>();
 		parentRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-		m_testID = parentObj->GetInstanceID();
+		parentRend->ChangeTexture("assets/texture/background1.png");
+	//	m_testID = parentObj->GetInstanceID();
 
-		GameObject* testObj = GameObjectManager::AddChild("testObj", "Test");
-		TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
-		testTrans->SetLocalPosition({ 50.0f, 0.0f, 0.0f });
-		testTrans->SetLocalScale({ 50.0f,50.0f,50.0f });
-		/*VectorMoveComponent* vectorMove = testObj->AddComponent<VectorMoveComponent>();
-		vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
-		vectorMove->SetMovePower(5.0f);*/
+		//GameObject* testObj = GameObjectManager::AddChild("testObj", "Test");
+		//TransformComponent* testTrans = testObj->AddComponent<TransformComponent>();
+		//testTrans->SetLocalPosition({ 50.0f, 0.0f, 0.0f });
+		//testTrans->SetLocalScale({ 50.0f,50.0f,50.0f });
+		///*VectorMoveComponent* vectorMove = testObj->AddComponent<VectorMoveComponent>();
+		//vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
+		//vectorMove->SetMovePower(5.0f);*/
+		////RenderMotionBlurCircularComponent* rend = testObj->AddComponent<RenderMotionBlurCircularComponent>();
 		//RenderMotionBlurCircularComponent* rend = testObj->AddComponent<RenderMotionBlurCircularComponent>();
-		RenderMotionBlurCircularComponent* rend = testObj->AddComponent<RenderMotionBlurCircularComponent>();
-		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/background1.png");
-		rend->SetShader("shader/PassThroughVS.hlsl", "shader/unlitTexturePS.hlsl","shader/MotionBlurCircularGS.hlsl");
+		//rend->CreateMesh<SquareMesh>();
+		//rend->ChangeTexture("assets/texture/background1.png");
+		//rend->SetShader("shader/PassThroughVS.hlsl", "shader/unlitTexturePS.hlsl","shader/MotionBlurCircularGS.hlsl");
 
 
-		parentObj->SetChild(testObj);
+		//parentObj->SetChild(testObj);
 	}
 
 	ID3D11Device* device = DirectXRender::GetDevice();

@@ -122,10 +122,50 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 		return; // 自分宛じゃないなら無視
 	}
 
-	const CutEvent ce = {
-					deadID,
-					CutDirection::VERTICAL,
-					0.5f,0.5f };
+	CutEvent ce;
+
+	CutDirection dir = CutDirection::VERTICAL;
+	float ratio1 = 0.5f;
+	float ratio2 = 0.5f;
+
+	// 切断方向と割合を決定
+	// 斜め横切り
+	if (m_SwordActionState == ESwordActionState::SLASH_1ST) {
+		dir = CutDirection::HORIZONTAL;
+		if(m_RightLeft == RightLeft::RIGHT){
+			ratio1 = 0.8f;
+			ratio2 = 0.2f;
+		}
+		else if(m_RightLeft == RightLeft::LEFT){
+			ratio1 = 0.2f;
+			ratio2 = 0.8f;
+		}
+	}
+	// 斜め横切り
+	else if (m_SwordActionState == ESwordActionState::SLASH_2ND) {
+		dir = CutDirection::HORIZONTAL;
+		if (m_RightLeft == RightLeft::RIGHT) {
+			ratio1 = 0.2f;
+			ratio2 = 0.8f;
+		}
+		else if (m_RightLeft == RightLeft::LEFT) {
+			ratio1 = 0.8f;
+			ratio2 = 0.2f;
+		}
+
+	}
+	// 縦切り
+	else if (m_SwordActionState == ESwordActionState::SLASH_3RD || m_SwordActionState == ESwordActionState::NONE) {
+		dir = CutDirection::VERTICAL;
+		ratio1 = 0.5f;
+		ratio2 = 0.5f;
+	}
+
+	ce = CutEvent{
+		deadID,
+		dir,
+		ratio1,ratio2
+	};
 
 	// ヒット時の通知テスト
 	EventBusManager::Push(ce);
