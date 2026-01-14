@@ -45,7 +45,7 @@ void TimeSpawnParticlesComponent::Update() {
 		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
 		childRender->SetColor({ 0.3f,0.8f,1.0f,0.5f });
 		childRender->SetGlowPower(0.5f);
-		childRender->SetGlowRadius(0.2f);
+		childRender->SetGlowRadius(0.5f);
 		childRender->SetEllipseScale({ 1.0f,1.0f });
 
 		m_SpawnInterval = m_InitInterval; // インターバルをリセット（例として1秒に設定）

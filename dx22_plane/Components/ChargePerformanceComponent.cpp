@@ -87,7 +87,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
 		childRender->SetColor({ 0.3f,0.8f,1.0f,0.8f });
 		childRender->SetGlowPower(1.0f);
-		childRender->SetGlowRadius(0.2f);
+		childRender->SetGlowRadius(0.5f);
 		childRender->SetEllipseScale({ 1.0f,1.0f });
 
 		particleObj->SetActiveState(ActiveState::ALL_STOP); // 最初は非アクティブにしておく
@@ -115,7 +115,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 	childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
 	childRender->SetColor({ 0.3f,0.8f,1.0f,0.8f });
 	childRender->SetGlowPower(0.5f);
-	childRender->SetGlowRadius(0.4f);
+	childRender->SetGlowRadius(0.7f);
 	childRender->SetEllipseScale({ 1.0f,1.0f });
 
 	particleObj->SetActiveState(ActiveState::ALL_STOP); // 最初は非アクティブにしておく

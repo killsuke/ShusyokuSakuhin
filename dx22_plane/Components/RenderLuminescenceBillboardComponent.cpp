@@ -86,16 +86,14 @@ void RenderLuminescenceBillboardComponent::Update()
 		DirectXRender::SetBlendState(EBlendState::BS_EFFECT);
 		DirectXRender::SetDepthEnable(false); // 深度テスト無効、書き込み無効
 
-		XMFLOAT3 angles = transform->GetRotation();
-
-		angles.z = XMConvertToRadians(angles.z);
+		const XMFLOAT3 angles = transform->GetRotation();
 
 		GlowBuffer gb;
 		gb.glowColor = m_Color;
 		gb.ellipseScale = m_EllipseScale;
 		gb.glowPower = m_GlowPower;
 		gb.glowRadius = m_GlowRadius;
-		gb.angleRadian = angles.z;
+		gb.angleRadian = XMConvertToRadians(angles.z);
 
 		deviceContext->UpdateSubresource(g_pGlowBuffer, 0, NULL, &gb, 0, 0);
 

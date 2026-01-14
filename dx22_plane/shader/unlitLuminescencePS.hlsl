@@ -6,8 +6,8 @@ float4 ps_main(in PS_IN input) : SV_Target
     float3 BaseColor = input.col.rgb; // 通常色
     
     // uvの中心を基準に距離を計算
-    float2 uv = input.tex;
-    float2 d = uv - 0.5f;
+    float2 uv = input.tex * 2.0f -1.0f; // これで描画可能範囲を広げる
+    float2 d = uv;
     
     float s, c;
     sincos(Angle, s, c); // 回転を使うので行列生成
@@ -18,10 +18,10 @@ float4 ps_main(in PS_IN input) : SV_Target
     d *= EllipseScale;
     
     // 中心から離れれば離れるほどボヤける
-    float dist = dot(d, d);
+    float dist = sqrt(dot(d, d));
     
     // グロー量（外に行くほど減衰）
-    float glow = saturate(1.0f - dist / (GlowRadius * GlowRadius));
+    float glow = saturate(1.0f - dist / GlowRadius);
     glow *= glow; // 二乗して中心部を強調
     
     float3 colorRGB = BaseColor + GlowColor.rgb * glow * GlowPower;

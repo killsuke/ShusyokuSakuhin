@@ -296,7 +296,7 @@ void TestSwordActionComponent::CreateSwordEffect() {
 
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
-	effectTrans->SetScale({ 30.0f,80.0f,5.0f });
+	effectTrans->SetScale({ 36.0f,96.0f,5.0f });
 	if (m_RightLeft == RightLeft::RIGHT) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
 	}
@@ -316,7 +316,7 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
 	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
 	render->SetGlowPower(0.5f);
-	render->SetGlowRadius(0.2f);
+	render->SetGlowRadius(0.6f);
 	render->SetEllipseScale({ 1.0f,1.0f });
 }
 
