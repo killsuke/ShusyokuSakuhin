@@ -1,11 +1,9 @@
 #include "PlayerOperationComponent.h"
 #include "RigidBodyComponent.h"
-#include "FighterComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"
 #include "HPBarMoveComponent.h"
 #include "JumpComponent.h"
-#include "Manager/GameObjectManager.h"
 #include "DoorFadeComponent.h"
 #include "Transform.h"
 #include "input.h"
@@ -19,7 +17,8 @@
 #include "AttackOneTimeComponent.h"
 #include "ChargeSlashComponent.h"
 #include "Mesh/SquareMesh.h"
-#include <vector>
+#include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -27,10 +26,24 @@ using namespace DirectX;
 namespace {
 	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
+	constexpr XMFLOAT3 MoveRightSpeed = XMFLOAT3(1.5f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 MoveLeftSpeed = XMFLOAT3(-1.5f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 DashRightSpeed = XMFLOAT3(5.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 DashLeftSpeed = XMFLOAT3(-5.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 DashRightSlashSpeed = XMFLOAT3(15.0f, 0.0f, 0.0f);	// 壁抜けしなくてちゃんと移動できる限界速度
+	constexpr XMFLOAT3 DashLeftSlashSpeed = XMFLOAT3(-15.0f, 0.0f, 0.0f);	// 壁抜けしなくてちゃんと移動できる限界速度
 }
 
 PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
+
+	/*m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		OnDamageHit(e);
+		});*/
+}
+
+PlayerOperationComponent::~PlayerOperationComponent() {
+//	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
 }
 
 // 更新処理
@@ -39,11 +52,11 @@ void PlayerOperationComponent::Update() {
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
 
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
-	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	//RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	if (fighter == nullptr || rigid == nullptr)
+	if (fighter == nullptr/* || rigid == nullptr*/)
 	{
 		return;
 	}
@@ -71,12 +84,12 @@ void PlayerOperationComponent::Update() {
 
 	if (fighter->GetInvincibleFlag() == true) {
 		// 無敵状態の時間を計測
-		m_RecordTime += DeltaTime;
+		m_BlinkingRecordTime += DeltaTime;
 
-		if (m_RecordTime >= 0.1f) {
+		if (m_BlinkingRecordTime >= 0.1f) {
 			// 無敵状態なら透明にする
 			rend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.0f));
-			m_RecordTime = 0.0f;
+			m_BlinkingRecordTime = 0.0f;
 		}
 		else {
 			rend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -86,13 +99,13 @@ void PlayerOperationComponent::Update() {
 		rend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)); // 元に戻す
 	}
 
-	if (rigid != nullptr) {
+	//if (rigid != nullptr) {
 
-		// 後で減速の仕方を考える
-		if (!keyLeft && !keyRight) {
-			rigid->ReduceVelocity_X(0.5f);
-		}
-	}
+	//	// 後で減速の仕方を考える
+	//	if (!keyLeft && !keyRight) {
+	//		rigid->ReduceVelocity_X(0.5f);
+	//	}
+	//}
 
 	GameObject* hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
 	if (hpUI != nullptr) {
@@ -139,6 +152,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		break;
 	case PlayerState::ATTACK:
 		break;
+	case PlayerState::CHARGE_SLASH:
+		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -164,6 +179,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		break;
 	case PlayerState::ATTACK:
 		break;
+	case PlayerState::CHARGE_SLASH:
+		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -175,9 +192,9 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 
 void PlayerOperationComponent::StateUpdate() {
 
-	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
-	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
-	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetKeyPress(VK_UP) || Input::GetButtonPress(XINPUT_A);
+	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetButtonPress(XINPUT_LEFT);
+	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetButtonPress(XINPUT_RIGHT);
+	const bool keyUp = Input::GetKeyPress(VK_SPACE) || Input::GetButtonPress(XINPUT_A);
 	const bool keyBack = Input::GetKeyPress(VK_BACK) || Input::GetButtonPress(XINPUT_RIGHT_SHOULDER);
 	const bool keyAttack = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
 	const bool keyCharge = Input::GetKeyPress(VK_RETURN) || Input::GetButtonPress(XINPUT_X);
@@ -232,6 +249,10 @@ void PlayerOperationComponent::StateUpdate() {
 		break;
 	case PlayerState::ATTACK:
 		break;
+	case PlayerState::CHARGE_SLASH:
+		// ここで一閃の動きにする
+		FastChageSlash();
+		break;
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
@@ -249,32 +270,28 @@ void PlayerOperationComponent::StateUpdate() {
 
 	m_beforeMove = isMove;
 
-	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack) {
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::CHARGE_SLASH) {
 		ChangeState(PlayerState::NONE);
 	}
 }
 
 void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove) {
 
-	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	//	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
 
 	// 地面の攻撃は移動しない
 	const bool isAction = swordAction->GetIsSwordAction();
 	if (isAction && isGround) {
-		rigid->ClearVelocity_X();
 		return;
 	}
 
 	// 移動しない
-	if (rigid == nullptr || (right && left) || (!right && !left)) {
+	if (transform == nullptr) {
 		ChangeState(PlayerState::NONE);
 		return;
 	}
-
-	// 移動する
-	*isMove = true;
-	m_IsMoveFlag = true;
 
 	// 向きの更新
 	if (left) {
@@ -288,27 +305,33 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 	if (dash) {
 
 		if (m_CurrentRightLeft == RightLeft::LEFT) {
-			rigid->AddVelocity(XMFLOAT3(-200.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(200.0f);
+
+			transform->AddPosition(DashLeftSpeed);
 		}
 		else if (m_CurrentRightLeft == RightLeft::RIGHT) {
-			rigid->AddVelocity(XMFLOAT3(200.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(200.0f);
+			transform->AddPosition(DashRightSpeed);
 		}
 	}
 	// 普通の移動
 	else {
+
+		// 移動しない
+		if (right && left) {
+			ChangeState(PlayerState::NONE);
+			return;
+		}
+
 		if (left) {
-			//rigid->ConstantVelocity_X(-150.0f);
-			rigid->AddVelocity(XMFLOAT3(-40.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(80.0f);
+			transform->AddPosition(MoveLeftSpeed);
 		}
 		if (right) {
-			//rigid->ConstantVelocity_X(150.0f);
-			rigid->AddVelocity(XMFLOAT3(40.0f, 0.0f, 0.0f));
-			rigid->SetLimitVelocity_X(80.0f);
+			transform->AddPosition(MoveRightSpeed);
 		}
 	}
+
+	// 移動する
+	*isMove = true;
+	m_IsMoveFlag = true;
 }
 
 // これそのものを呼び出すと攻撃する
@@ -365,7 +388,10 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		chargePerf->ResetAllParticles();
 		chargePerf->SetChargeCompleteFlag(false);
 		swordAction->SetIsAction(attack, SlashPattern::CHARGE_SLASH);
-		CreateChargeSlash();
+
+		ChangeState(PlayerState::CHARGE_SLASH);
+
+		//CreateChargeSlash();
 		m_ChargeTime = 0.0f;
 		m_IsChargeComplete = false;
 	}
@@ -403,7 +429,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 
 	TransformComponent* playerTransform = m_Object->GetComponent<TransformComponent>();
 
-	if(playerTransform == nullptr){
+	if (playerTransform == nullptr) {
 		return;
 	}
 
@@ -438,4 +464,80 @@ void PlayerOperationComponent::CreateChargeSlash() {
 	slashRender->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	slashRender->ChangeTexture("assets/texture/charge_slash1.png");
 	slashRender->SetInversionFlag(m_CurrentRightLeft);
+}
+
+void PlayerOperationComponent::FastChageSlash() {
+
+
+	// プレイヤーに一閃用の当たり判定用の子オブジェクトを装備させておくか
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+
+	if (transform == nullptr || rigid == nullptr || m_WeaponObject == nullptr)
+	{
+		return;
+	}
+
+	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+	if (swordAction == nullptr) {
+		return;
+	}
+
+	m_ChargeSlashRecordTime += DeltaTime;
+
+	// 一閃の待ち処理終了
+	if (m_ChargeSlashRecordTime > 0.45f) {
+		ChangeState(PlayerState::NONE);
+		rigid->SetGravityFlag(true);
+		m_ChargeSlashRecordTime = 0.0f;
+	}
+	// 一閃時間終了
+	else if (m_ChargeSlashRecordTime > 0.15f) {
+		swordAction->SetIsAction(false);
+	}
+	else {
+		rigid->SetGravityFlag(false);
+		rigid->ClearVelocity();
+
+		if (m_CurrentRightLeft == RightLeft::LEFT) {
+
+			transform->AddPosition(DashLeftSlashSpeed);
+		}
+		else if (m_CurrentRightLeft == RightLeft::RIGHT) {
+			transform->AddPosition(DashRightSlashSpeed);
+		}
+	}
+}
+
+void PlayerOperationComponent::OnDamageHit(const HitEvent& event) {
+
+	const uint32_t targetID = m_Object->GetInstanceID();
+
+	if (event.targetID != targetID) {
+		return; // 自分宛じゃないなら無視
+	}
+
+	GameObject* attacker = GameObjectManager::GameObjectFindInstanceIDAll(event.attackerID);
+
+	if (attacker == nullptr) {
+		return;
+	}
+
+	TransformComponent* atTrans = attacker->GetComponent<TransformComponent>();
+	TransformComponent* taTrans = m_Object->GetComponent<TransformComponent>();
+
+	if (atTrans == nullptr || taTrans == nullptr) {
+		return;
+	}
+
+	XMFLOAT3 atPos = atTrans->GetPosition();
+	XMFLOAT3 taPos = taTrans->GetPosition();
+
+	XMVECTOR atVec = XMLoadFloat3(&atPos);
+	XMVECTOR taVec = XMLoadFloat3(&taPos);
+
+	XMVECTOR delta = taVec - atVec;
+	float lenSq = XMVectorGetX(XMVector3LengthSq(delta));
+
+
 }

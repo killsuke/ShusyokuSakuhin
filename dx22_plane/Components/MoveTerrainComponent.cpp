@@ -9,6 +9,7 @@
 #include <iostream>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 MoveTerrainComponent::MoveTerrainComponent(GameObject& obj) : Component(obj)
 {
@@ -20,6 +21,8 @@ void MoveTerrainComponent::Update() {
 	m_recordTime += m_deltaTime;
 
 	auto transform = m_Object->GetComponent<TransformComponent>();
+	auto myPos = transform->GetPosition();
+
 	auto collider = m_Object->GetComponent<ColliderComponent>();
 
 	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
@@ -47,9 +50,9 @@ void MoveTerrainComponent::Update() {
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
 			if (playerTransform->GetPosition().y > transform->GetPosition().y) {	// プレイヤーが地面に乗っているとき
 
-				if (testMove->GetMoveFlag() == false) {
-					auto rigidP = m_player->GetComponent<RigidBodyComponent>();
-					rigidP->AddVelocity({ newPosX * 0.5f ,0,0});
+				const float delta = myPos.x - m_BeforePos.x;
+				if (testMove->GetMoveFlag() == false) {					
+					playerTransform->AddPosition(XMFLOAT3(delta,0.0f,0.0f));
 				}
 			}
 			
@@ -68,4 +71,6 @@ void MoveTerrainComponent::Update() {
 			}
 		}
 	}
+
+	m_BeforePos = myPos;
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.h"
+#include "FighterComponent.h"
 #include "RightLeft.h"
 
 enum class PlayerState
@@ -10,6 +10,7 @@ enum class PlayerState
 	GROUND,
 	JUMP,
 	ATTACK,
+	CHARGE_SLASH,
 	DAMAGE,
 	DEAD
 };
@@ -17,9 +18,11 @@ enum class PlayerState
 class PlayerOperationComponent : public Component
 {
 private:
-	float m_RecordTime = 0.0f; // 移動している時間を記録する
+	float m_BlinkingRecordTime = 0.0f; // 無敵時間中の点滅の時間を記録
+	float m_ChargeSlashRecordTime = 0.0f;
 	float m_ChargeTime = 0.0f; // チャージしている時間を記録する
 	float m_ChargeCompleteTime = 2.0f; // チャージ完了までの時間
+	uint64_t m_listenerID_HitEvent = 0;
 
 	RightLeft m_CurrentRightLeft = RightLeft::RIGHT; // 現在の向き管理
 	PlayerState m_CurrentState = PlayerState::NONE; // プレイヤーの状態管理
@@ -36,11 +39,13 @@ private:
 	void Attack(const bool attack,const bool isGround);
 	void Charge(const bool charge,const bool attack);
 	void CreateChargeSlash();
+	void FastChageSlash();	// 高速チャージスラッシュ攻撃
+	void OnDamageHit(const HitEvent& event);
 
 public:
 	PlayerOperationComponent(GameObject& obj);
 
-	~PlayerOperationComponent() = default;
+	~PlayerOperationComponent();
 
 	void Update()override;
 

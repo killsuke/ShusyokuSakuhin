@@ -49,13 +49,22 @@ void TitleScene::Init()
 	TitleAnimationControlComponent* titleAnimComp = titleAnimation->AddComponent<TitleAnimationControlComponent>();
 
 	auto fadeFake = GameObjectManager::GameObjectFindNameUI("fade");
-	if(fadeFake != nullptr) {
-		auto fade =  fadeFake->GetComponent<DoorFadeComponent>();
+	if (fadeFake != nullptr) {
+		auto fade = fadeFake->GetComponent<DoorFadeComponent>();
 		fade->SetBootDoor(true);
 		fade->SetNextSceneName("LoadStageScene");
 
 		//return;
 	}
+
+	//for (int num = 0; num < 10000; ++num) {
+	//	GameObject* obj = GameObjectManager::AddObject("test","Test");
+	//	TransformComponent* trans = obj->AddComponent<TransformComponent>();
+	//	trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));
+	//	Render3DComponent* rend = obj->AddComponent<Render3DComponent>();
+	//	rend->CreateMesh<SquareMesh>();
+	//	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	//}
 
 	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
 	fadeUI->SetCarryOverFlag(true);
@@ -67,7 +76,7 @@ void TitleScene::Init()
 // çXêV
 void TitleScene::Update()
 {
-	
+
 
 	//else if ((Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A)) && setumeiFg == false)
 	//{

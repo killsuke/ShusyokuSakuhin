@@ -56,14 +56,14 @@ void TestExtrusionJudgeComponent::Update()
 					PlayerOperationComponent* testMove = m_Object->GetComponent<PlayerOperationComponent>();
 					if (testMove != nullptr) {
 						//RightLeft rightLeft = testMove->GetRightLeft();
-						bool isJump = testMove->GetIsJump();
-						TransformComponent* terrainTrans = terrain->GetComponent<TransformComponent>();
-						// ここに壁けりの処理を入れる
-						Vector3 terrainPos = terrainTrans->GetPosition();
-						Vector3 myPos = transform->GetPosition();
+						//bool isJump = testMove->GetIsJump();
+						//TransformComponent* terrainTrans = terrain->GetComponent<TransformComponent>();
+						//// ここに壁けりの処理を入れる
+						//Vector3 terrainPos = terrainTrans->GetPosition();
+						//Vector3 myPos = transform->GetPosition();
 
 						// この実際の壁けりの処理は分ける（地面と壁を分けるため）
-						if (isJump == true) {
+						/*if (isJump == true) {
 							if (myPos.x < terrainPos.x) {
 								rigid->AddVelocity(Vector3(-400.0f, 100.0f, 0.0f));
 								rigid->SetLimitVelocity_X(400.0f);
@@ -76,7 +76,7 @@ void TestExtrusionJudgeComponent::Update()
 							}
 
 							rigid->UpdateVelocity();
-						}
+						}*/
 						//		std::cout << "左右" << std::endl;
 					}
 				}

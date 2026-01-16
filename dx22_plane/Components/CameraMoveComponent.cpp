@@ -6,7 +6,9 @@
 #include "CameraTargetComponent.h"
 #include "RigidBodyComponent.h"
 #include <iostream>
+
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
@@ -19,13 +21,13 @@ void CameraMoveComponent::Update()
 	auto cameraObj = GameObjectManager::GameObjectFindName("camera");
 	auto player = GameObjectManager::GameObjectFindName("Player");
 
-	auto camerapos = cameraObj->GetComponent<RigidBodyComponent>()->GetVelocity();
+	//	auto camerapos = cameraObj->GetComponent<RigidBodyComponent>()->GetVelocity();
 
-//	std::cout << camerapos.x << "：" << camerapos.y << "：" << std::endl;
+	//	std::cout << camerapos.x << "：" << camerapos.y << "：" << std::endl;
 
-	//AdjustmentHeight(*cameraObj,*player); // プレイヤーの高さに合わせてカメラの高さを調整
+		//AdjustmentHeight(*cameraObj,*player); // プレイヤーの高さに合わせてカメラの高さを調整
 
-	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
+	XMFLOAT3 pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
 
 	//std::cout << "CameraPos:" << pos.x << "," << pos.y << std::endl;
 
@@ -37,16 +39,14 @@ void CameraMoveComponent::Update()
 	}
 
 	if (m_CameraPattern == CameraPattern::CAMERA_NONE) {
-	//	std::cout << "None" << std::endl;
+		//	std::cout << "None" << std::endl;
 	}
 	else if (m_CameraPattern == CameraPattern::SPRING_CHASE) {
 		//std::cout << "Spring" << std::endl;
 	}
 
 	// 一旦プレイヤー追従にしておく
-	// ブロックは一度動かしてみて、
-	// バッタがちゃんと目的地に移動できるか試す
-//	nowCp = CameraPattern::CHASE_XANDY;
+//	m_CameraPattern = CameraPattern::CHASE_XANDY;
 
 	switch (m_CameraPattern)
 	{
@@ -101,9 +101,12 @@ void CameraMoveComponent::ChaseXAndYCamera(GameObject& cameraObj, GameObject& pl
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
 
-//	cameraTrans->SetRotation({ 60.0f,0.0f,0.0f });
-	cameraTrans->SetPosition({ playerPos.x, playerPos.y, cameraTrans->GetPosition().z });
-	cameraComp->SetTarget({ playerPos.x,playerPos.y,cameraComp->GetTarget().z });
+	//	cameraTrans->SetRotation({ 60.0f,0.0f,0.0f });
+
+		// ちょっとだけ上にするが、常に追従というよりは若干遅れるくらいにしたい、かつ、高さで追いかけるかどうかも決めたい
+		// カメラ切替の当たり判定で切替もアリか
+	cameraTrans->SetPosition({ playerPos.x, playerPos.y + 20.0f, cameraTrans->GetPosition().z });
+	cameraComp->SetTarget({ playerPos.x,playerPos.y + 20.0f,cameraComp->GetTarget().z });
 }
 
 void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& player) {
@@ -118,9 +121,9 @@ void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& playe
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
-	
+
 	cameraTrans->SetPosition({ playerPos.x, cameraTrans->GetPosition().y, cameraTrans->GetPosition().z });
-//	cameraTrans->MakeWorldMatrix();
+	//	cameraTrans->MakeWorldMatrix();
 	cameraComp->SetTarget({ playerPos.x,cameraComp->GetTarget().y,cameraComp->GetTarget().z });
 }
 
@@ -134,7 +137,7 @@ void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& playe
 	{
 		// ちょっと上ぐらいがちょうどいい
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
-	//	cameraTrans->MakeWorldMatrix();
+		//	cameraTrans->MakeWorldMatrix();
 		cameraComp->SetTarget({ cameraTrans->GetPosition().x,playerPos.y + 15.0f,cameraComp->GetTarget().z });
 	}
 }
@@ -175,14 +178,14 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 	{
 		// ちょっと上ぐらいがちょうどいい
 		cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
-	//	cameraTrans->MakeWorldMatrix();
+		//	cameraTrans->MakeWorldMatrix();
 		cameraComp->SetTarget({ cameraTrans->GetPosition().x,playerPos.y + 15.0f,cameraComp->GetTarget().z });
 	}
 }
 
 void CameraMoveComponent::SetMoveTarget(GameObject& target) {
-	m_moveTarget = &target; 
-	
+	m_moveTarget = &target;
+
 	auto cameraObj = GameObjectManager::GameObjectFindName("camera");
 	auto cameraSpring = cameraObj->GetComponent<SpringComponent>();
 

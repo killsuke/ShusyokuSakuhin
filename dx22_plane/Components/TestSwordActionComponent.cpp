@@ -23,16 +23,19 @@ namespace {
 	constexpr XMFLOAT3 Slash1st = XMFLOAT3(0.0f, 1.0f, 1.0f);
 	constexpr XMFLOAT3 Slash2nd = XMFLOAT3(0.0f, 1.0f, -1.0f);
 	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	constexpr XMFLOAT3 SlashFast = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	// 剣の角度
 	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(-45.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(45.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngleFast = XMFLOAT3(90.0f, 0.0f, 0.0f);
 
 	// 剣のエフェクトの角度
 	constexpr XMFLOAT3 EffectAngle1st = XMFLOAT3(45.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 EffectAngle2nd = XMFLOAT3(315.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 EffectAngle3rd = XMFLOAT3(90.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 EffectAngleFast = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 TestSwordActionComponent::TestSwordActionComponent(GameObject& obj) :Component(obj) {
@@ -124,11 +127,13 @@ void TestSwordActionComponent::Update() {
 
 			if (isRightLeft == RightLeft::RIGHT) {
 				//goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
-				goAround->SetStartAndEndAngle(120.0f, -120.0f, true);
+				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, true);
+
 			}
 			else if(isRightLeft == RightLeft::LEFT){
 				//	goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
-				goAround->SetStartAndEndAngle(60.0f, -60.0f, false);
+				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, false);
+
 			}
 
 			// 回転の動きのシミュレーション（軌跡用）
@@ -290,13 +295,16 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	case ESwordActionState::SLASH_3RD:
 		zAngle = EffectAngle3rd.x;
 		break;
+	case ESwordActionState::SLASH_FAST:
+		zAngle = EffectAngleFast.x;
+		break;
 	default:
 		break;
 	}
 
 	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
 	auto effectTrans = effect->AddComponent<TransformComponent>();
-	effectTrans->SetScale({ 36.0f,96.0f,5.0f });
+	effectTrans->SetScale({ 45.0f,135.0f,5.0f });
 	if (m_RightLeft == RightLeft::RIGHT) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });
 	}
@@ -335,6 +343,7 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 			m_SwordActionPattern.startAngle = 60.0f;
 			m_SwordActionPattern.endAngle = -60.0f;
 		}
+
 		m_SwordActionPattern.arbitraryAxis = Slash1st;
 		m_SwordActionPattern.lockAngle = LockAngle1st;
 
@@ -363,6 +372,21 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 		}
 		m_SwordActionPattern.arbitraryAxis = Slash3rd;
 		m_SwordActionPattern.lockAngle = LockAngle3rd;
+
+		break;
+	case ESwordActionState::SLASH_FAST:
+
+		if (m_RightLeft == RightLeft::RIGHT) {
+			m_SwordActionPattern.startAngle = 180.0f;
+			m_SwordActionPattern.endAngle = 0.0f;
+		}
+		else if (m_RightLeft == RightLeft::LEFT) {
+			m_SwordActionPattern.startAngle = 0.0f;
+			m_SwordActionPattern.endAngle = 180.0f;
+		}
+
+		m_SwordActionPattern.arbitraryAxis = SlashFast;
+		m_SwordActionPattern.lockAngle = LockAngleFast;
 
 		break;
 	default:

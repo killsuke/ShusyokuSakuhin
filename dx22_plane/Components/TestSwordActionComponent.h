@@ -9,6 +9,7 @@ enum class ESwordActionState
 	SLASH_1ST,
 	SLASH_2ND,
 	SLASH_3RD,
+	SLASH_FAST
 };
 
 enum class SlashPattern
@@ -66,7 +67,7 @@ public:
 			m_SwordActionState = ESwordActionState::SLASH_1ST;
 			break;
 		case SlashPattern::CHARGE_SLASH:
-			m_SwordActionState = ESwordActionState::SLASH_3RD;
+			m_SwordActionState = ESwordActionState::SLASH_FAST;
 			break;
 		default:
 			break;

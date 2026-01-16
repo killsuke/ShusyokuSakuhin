@@ -6,6 +6,7 @@ class MoveTerrainComponent : public Component
 {
 private:
 	DirectX::SimpleMath::Vector3 m_moveVector = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 m_BeforePos = DirectX::XMFLOAT3();
 	float m_moveSpeed = 1.0f;
 	const float m_deltaTime = 0.016f;
 	float m_recordTime = 0.0f;
