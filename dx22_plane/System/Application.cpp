@@ -6,8 +6,9 @@
 #include "Manager/SceneManager.h"
 #include "Manager/ComponentTypeManager.h"
 #include "Manager/EventBusManager.h"
-#include "DebugSystem/DebugSystem.h"
 #include "Manager/TimeManager.h"
+#include "Manager/ShaderManager.h"
+#include "DebugSystem/DebugSystem.h"
 
 #if _DEBUG
 
@@ -197,8 +198,9 @@ void Application::MainLoop()
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
 	EventBusManager::Init();
+	ShaderManager::Init();
 	DebugSystem::Init();
-
+	
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 	ID3D11Device* device = DirectXRender::GetDevice();
 
@@ -321,17 +323,13 @@ void Application::MainLoop()
 		}
 	}
 
-	DebugSystem::UnInit();
 
 	// 片付け
-
+	DebugSystem::UnInit();
 	ComponentTypeManager::UnInit();
-
 	EventBusManager::UnInit();
-
-	// 終了処理
 	SceneManager::UnInit();
-
+	ShaderManager::UnInit();
 	DirectXRender::UnInit();
 }
 

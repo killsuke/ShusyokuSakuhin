@@ -20,7 +20,7 @@ void Render3DComponent::Update()
 
 		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
 
-		cb.color = XMFLOAT4(m_Color);
+		cb.color = m_Color;
 
 		cb.inverse = (m_Inversion == RightLeft::RIGHT) ? true : false;
 

@@ -57,7 +57,7 @@ void TitleScene::Init()
 		//return;
 	}
 
-	//for (int num = 0; num < 10000; ++num) {
+	//for (int num = 0; num < 1000; ++num) {
 	//	GameObject* obj = GameObjectManager::AddObject("test","Test");
 	//	TransformComponent* trans = obj->AddComponent<TransformComponent>();
 	//	trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));

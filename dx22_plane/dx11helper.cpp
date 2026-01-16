@@ -1,6 +1,7 @@
 #include	<vector>
 #include	<string>
 #include	"dx11helper.h"
+#include "Manager/ShaderManager.h"
 
 #pragma comment(lib,"d3dcompiler.lib")
 
@@ -166,7 +167,8 @@ bool CreateVertexShader(
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+
 	if (FAILED(hr))
 	{
 		if (pBlob)pBlob->Release();
@@ -214,7 +216,8 @@ bool CreatePixelShader(ID3D11Device* device,
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+
 	if (FAILED(hr))
 	{
 		return false;
@@ -248,7 +251,8 @@ bool CreateGeometryShader(ID3D11Device* device,
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+
 	if (FAILED(hr))
 	{
 		return false;
