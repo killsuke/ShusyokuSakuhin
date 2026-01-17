@@ -16,6 +16,8 @@
 #include "EnemyDamageComponent.h"
 #include "AttackOneTimeComponent.h"
 #include "ChargeSlashComponent.h"
+#include "SlashEffectComponent.h"
+#include "RenderLuminescenceBillboardComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
@@ -26,6 +28,8 @@ using namespace DirectX;
 namespace {
 	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
+	constexpr float ChargeSlashStopTime = 0.15f; // チャージスラッシュ終了時間
+	constexpr float ChargeSlashEndTime = 0.45f; // チャージスラッシュ終了時間
 	constexpr XMFLOAT3 MoveRightSpeed = XMFLOAT3(1.5f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 MoveLeftSpeed = XMFLOAT3(-1.5f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 DashRightSpeed = XMFLOAT3(5.0f, 0.0f, 0.0f);
@@ -389,9 +393,11 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		chargePerf->SetChargeCompleteFlag(false);
 		swordAction->SetIsAction(attack, SlashPattern::CHARGE_SLASH);
 
-		ChangeState(PlayerState::CHARGE_SLASH);
+		//ChangeState(PlayerState::CHARGE_SLASH);
 
-		//CreateChargeSlash();
+		//CreateSlashEffect();
+
+		CreateChargeSlash();
 		m_ChargeTime = 0.0f;
 		m_IsChargeComplete = false;
 	}
@@ -408,7 +414,6 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		// まだチャージ中
 		else {
 			// チャージエフェクト開始
-			// 鬱陶しいのでちょっとだけズラす
 			if (m_ChargeTime > ChargeStartTime) {
 				chargePerf->SetActiveFlag(true);
 			}
@@ -473,7 +478,7 @@ void PlayerOperationComponent::FastChageSlash() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	if (transform == nullptr || rigid == nullptr || m_WeaponObject == nullptr)
+	if (transform == nullptr || rigid == nullptr || m_WeaponObject == nullptr || m_ChargeSlashObject == nullptr)
 	{
 		return;
 	}
@@ -482,17 +487,24 @@ void PlayerOperationComponent::FastChageSlash() {
 	if (swordAction == nullptr) {
 		return;
 	}
+	
+	AttackOneTimeComponent* attackComp = m_ChargeSlashObject->GetComponent<AttackOneTimeComponent>();
+	if(attackComp == nullptr) {
+		return;
+	}
 
 	m_ChargeSlashRecordTime += DeltaTime;
 
 	// 一閃の待ち処理終了
-	if (m_ChargeSlashRecordTime > 0.45f) {
+	if (m_ChargeSlashRecordTime > ChargeSlashEndTime) {
 		ChangeState(PlayerState::NONE);
 		rigid->SetGravityFlag(true);
 		m_ChargeSlashRecordTime = 0.0f;
+		m_ChargeSlashObject->SetActiveState(ActiveState::ALL_STOP);
+		attackComp->ClearAttackObjs();
 	}
 	// 一閃時間終了
-	else if (m_ChargeSlashRecordTime > 0.15f) {
+	else if (m_ChargeSlashRecordTime > ChargeSlashStopTime) {
 		swordAction->SetIsAction(false);
 	}
 	else {
@@ -506,6 +518,8 @@ void PlayerOperationComponent::FastChageSlash() {
 		else if (m_CurrentRightLeft == RightLeft::RIGHT) {
 			transform->AddPosition(DashRightSlashSpeed);
 		}
+
+		m_ChargeSlashObject->SetActiveState(ActiveState::ACTIVE);
 	}
 }
 
@@ -536,8 +550,33 @@ void PlayerOperationComponent::OnDamageHit(const HitEvent& event) {
 	XMVECTOR atVec = XMLoadFloat3(&atPos);
 	XMVECTOR taVec = XMLoadFloat3(&taPos);
 
+	// ノックバック用のベクトル計算
 	XMVECTOR delta = taVec - atVec;
 	float lenSq = XMVectorGetX(XMVector3LengthSq(delta));
 
 
+}
+
+void PlayerOperationComponent::CreateSlashEffect() {
+
+	TransformComponent* playerTransform = m_Object->GetComponent<TransformComponent>();
+
+	GameObject* effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	TransformComponent* effectTrans = effect->AddComponent<TransformComponent>();
+	effectTrans->SetPosition(playerTransform->GetPosition());
+	effectTrans->SetScale({ 45.0f,45.0f,5.0f });
+
+	// 引き延ばしたり縮めたりするエフェクト
+	SlashEffectComponent* slash = effect->AddComponent<SlashEffectComponent>();
+	slash->SetRimitTime(0.5f);
+	slash->SetSizeChange({ 0.0f, -5.0f });
+
+	// エフェクト用のレンダー
+	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
+	render->CreateMesh<SquareMesh>();
+	render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
+	render->SetGlowPower(0.4f);
+	render->SetGlowRadius(0.2f);
+	render->SetEllipseScale({ 1.0f,1.0f });
 }

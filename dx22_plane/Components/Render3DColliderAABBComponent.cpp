@@ -18,7 +18,7 @@ Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : 
 void Render3DColliderAABBComponent::Update()
 {
 #ifdef _DEBUG
-	auto colliderAABB = m_Object->GetComponent<ColliderComponent>();
+	ColliderComponent* colliderAABB = m_Object->GetComponent<ColliderComponent>();
 
 	if (colliderAABB != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -28,7 +28,7 @@ void Render3DColliderAABBComponent::Update()
 
 		cb.color = m_Color;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）

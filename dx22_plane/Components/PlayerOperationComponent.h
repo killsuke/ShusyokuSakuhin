@@ -32,6 +32,7 @@ private:
 	bool m_IsChargeComplete = false; // チャージ完了フラグ
 
 	GameObject* m_WeaponObject = nullptr; // 武器オブジェクトへのポインタ
+	GameObject* m_ChargeSlashObject = nullptr; // チャージスラッシュオブジェクトへのポインタ
 
 	void StateUpdate(); // 状態更新処理
 	void ChangeState(const PlayerState& state); // プレイヤーの状態変更
@@ -41,6 +42,7 @@ private:
 	void CreateChargeSlash();
 	void FastChageSlash();	// 高速チャージスラッシュ攻撃
 	void OnDamageHit(const HitEvent& event);
+	void CreateSlashEffect();
 
 public:
 	PlayerOperationComponent(GameObject& obj);
@@ -51,10 +53,11 @@ public:
 
 	void SetWeaponObject(GameObject* weapon) { m_WeaponObject = weapon; } // 武器オブジェクトのセット
 	void SetChargeCompleteTime(const float time) { m_ChargeCompleteTime = time; } // チャージ完了までの時間セット
+	void SetChargeSlashObject(GameObject* slashObj) { m_ChargeSlashObject = slashObj; } // チャージスラッシュオブジェクトのセット
 
 	RightLeft GetRightLeft() const { return m_CurrentRightLeft; } // 左右の移動フラグ取得
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得
 	bool GetIsJump() const { return m_IsJump; } // ジャンプ中かどうかのフラグ取得
-
+	PlayerState GetPlayerState()const { return m_CurrentState; };
 };
 

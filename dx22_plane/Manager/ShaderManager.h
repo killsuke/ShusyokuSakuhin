@@ -37,12 +37,14 @@ private:
 	ShaderManager& operator=(const ShaderManager&) = delete;
 	ShaderManager& operator=(ShaderManager&&) = delete;
 
-public:
-	static void Init();
-	static void UnInit();
-	static HRESULT CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model,void** shaderObj,size_t& size, ID3DBlob** blob);
 	static std::string ReplaceExt(const std::string& path, const std::string& newExt);
 	static bool FileExists(const std::string& path);
 	static bool ReadCsoFile(const std::string& path, std::vector<unsigned char>& out);
 	static bool SaveCsoFile(const std::string& path, const void* data, const size_t& size);
+	static std::vector<std::string> GetShaderFiles(const std::string& folder);
+
+public:
+	static void Init();
+	static void UnInit();
+	static HRESULT CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model,void** shaderObj,size_t& size, ID3DBlob** blob);
 };

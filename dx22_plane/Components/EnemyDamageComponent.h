@@ -5,13 +5,12 @@
 class EnemyDamageComponent : public Component
 {
 private:
+	ShakeStatus ChoiceShakeStatus(const ESwordActionState& state);
+	float ChoiceStopTime(const ESwordActionState& state);
 
 public:
 	EnemyDamageComponent(GameObject& obj);
 	~EnemyDamageComponent() = default;
 
 	void Update() override;
-
-	float ChoiceStopTime(const ESwordActionState& state);
-	ShakeStatus ChoiceShakeStatus(const ESwordActionState& state);
 };

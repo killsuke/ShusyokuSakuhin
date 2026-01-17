@@ -94,7 +94,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		hitFlash->SetHitFlashColor(Vector3(1.0f, 1.0f, 1.0f));
 		hitFlash->SetHitFlashPower(0.8f);
 
-		auto pd = enemyObj->AddComponent<PlayerDamageComponent>();
+		
 
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
@@ -108,17 +108,24 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 
 void EnemyManagerComponent::CreateKind(const std::string& kind, GameObject& obj)
 {
+	EnemyActionComponent* enemyAction = nullptr;
+
 	if (kind == "E_Gunner") {
-		auto eab = obj.AddComponent<EnemyActionBulletComponent>();
+		enemyAction = obj.AddComponent<EnemyActionBulletComponent>();
 	}
 	else if(kind == "E_Hopper") {
-		auto eah = obj.AddComponent<EnemyActionHopperComponent>();
+		enemyAction = obj.AddComponent<EnemyActionHopperComponent>();
 	}
 	else if (kind == "E_Oku_No_TEKI") {
-		auto eah = obj.AddComponent<EnemyActionHopperComponent>();
+		enemyAction = obj.AddComponent<EnemyActionHopperComponent>();
 
 		auto trans = obj.GetComponent<TransformComponent>();
 		trans->SetPosition({ 0.0f, 10.0f, 15.0f });
 	}
 
+	PlayerDamageComponent* pd = obj.AddComponent<PlayerDamageComponent>();
+
+	if (enemyAction != nullptr) {
+		pd->SetEnemyActionComponent(enemyAction);
+	}
 }

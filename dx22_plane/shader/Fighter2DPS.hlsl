@@ -13,7 +13,7 @@ float4 ps_main(in PS_IN input) : SV_Target
     
     if(IsHitFlash == true)
     {
-        // これでヒットフラッシュが出来る
+        // これでダメージフラッシュが出来る
         color.rgb = lerp(color.rgb, FlashColor, HitFlashPower);
     }
         

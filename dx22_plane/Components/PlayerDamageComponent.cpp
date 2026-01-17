@@ -1,4 +1,5 @@
 #include "PlayerDamageComponent.h"
+#include "PlayerOperationComponent.h"
 #include "Collider.h"
 #include "Transform.h"
 #include "RigidBodyComponent.h"
@@ -20,7 +21,7 @@ void PlayerDamageComponent::Update()
 {
 	//auto transform = p_object->GetComponent<TransformComponent>();
 	auto collObjMe = m_Object->GetComponent<ColliderComponent>();
-	auto objOthers = GameObjectManager::GameObjectFindTag("Player");
+	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Player");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
 	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");
@@ -46,6 +47,17 @@ void PlayerDamageComponent::Update()
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 
+				if (m_EnemyActionComp != nullptr) {
+
+					PlayerOperationComponent* playerOp = objOther->GetComponent<PlayerOperationComponent>();
+					if (playerOp != nullptr) {
+						// チャージスラッシュ中はダメージを与えない
+						if (playerOp->GetPlayerState() == PlayerState::CHARGE_SLASH) {
+							return;
+						}
+					}
+				}
+
 				/*RigidBodyComponent* playerRigid = objOther->GetComponent<RigidBodyComponent>();
 
 				if (playerRigid != nullptr) {
@@ -59,6 +71,8 @@ void PlayerDamageComponent::Update()
 						playerRigid->AddVelocity(Vector3(-80.0f, 0.0f, 0.0f));
 					}
 				}*/
+
+
 
 				const uint32_t myID = m_Object->GetInstanceID();
 				const uint32_t otherID = objOther->GetInstanceID();

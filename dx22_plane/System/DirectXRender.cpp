@@ -366,11 +366,18 @@ HRESULT DirectXRender::BlandStateCreate() {
 	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[3]);
 	if (FAILED(hr)) return hr;
 
+	// ブレンド ステート生成 (乗算合成用)
+	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_COLOR;
+	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[4]);
+	if (FAILED(hr)) return hr;
+
 	// エフェクト用加算合成
 	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[4]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[5]);
 	if (FAILED(hr)) return hr;
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
@@ -916,8 +923,11 @@ void DirectXRender::SetBlendState(const EBlendState& nBlendState)
 		case EBlendState::BS_SUBTRACTION:
 			result = 3;
 			break;
-		case EBlendState::BS_EFFECT:
+		case EBlendState::BS_MULTIPLY:
 			result = 4;
+			break;
+		case EBlendState::BS_EFFECT:
+			result = 5;
 			break;
 		default:
 			break;

@@ -134,7 +134,7 @@ public:
 	DirectX::XMMATRIX MakeWorldMatrix();
 	DirectX::XMMATRIX MakeLocalMatrix();
 	DirectX::XMMATRIX MakeChildMatrix();
-
+	DirectX::XMMATRIX MakeChildMatrixAndWorld();
 
 	void MakeChildWorld();
 

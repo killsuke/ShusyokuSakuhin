@@ -67,7 +67,7 @@ public:
 			m_SwordActionState = ESwordActionState::SLASH_1ST;
 			break;
 		case SlashPattern::CHARGE_SLASH:
-			m_SwordActionState = ESwordActionState::SLASH_FAST;
+			m_SwordActionState = ESwordActionState::SLASH_3RD;
 			break;
 		default:
 			break;

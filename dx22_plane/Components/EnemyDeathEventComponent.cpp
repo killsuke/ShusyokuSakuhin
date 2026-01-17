@@ -102,8 +102,8 @@ void EnemyDeathEventComponent::Update() {
 		rigid1->SetGravityFlag(false);
 		rigid2->SetGravityFlag(false);
 
-		rigid1->SetMass(2.0f);
-		rigid2->SetMass(2.0f);
+		rigid1->SetMass(5.0f);
+		rigid2->SetMass(5.0f);
 
 		ProjectileMotionComponent* proj1 = meshCutObj1->AddComponent<ProjectileMotionComponent>();
 		ProjectileMotionComponent* proj2 = meshCutObj2->AddComponent<ProjectileMotionComponent>();

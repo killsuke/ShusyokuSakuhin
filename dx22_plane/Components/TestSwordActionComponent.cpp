@@ -23,13 +23,13 @@ namespace {
 	constexpr XMFLOAT3 Slash1st = XMFLOAT3(0.0f, 1.0f, 1.0f);
 	constexpr XMFLOAT3 Slash2nd = XMFLOAT3(0.0f, 1.0f, -1.0f);
 	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	constexpr XMFLOAT3 SlashFast = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	constexpr XMFLOAT3 SlashFast = XMFLOAT3(0.0f, 1.0f, -0.5f);
 
 	// 剣の角度
 	constexpr XMFLOAT3 LockAngle1st = XMFLOAT3(-45.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 LockAngle2nd = XMFLOAT3(45.0f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 LockAngle3rd = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	constexpr XMFLOAT3 LockAngleFast = XMFLOAT3(90.0f, 0.0f, 0.0f);
+	constexpr XMFLOAT3 LockAngleFast = XMFLOAT3(30.0f, 0.0f, 0.0f);
 
 	// 剣のエフェクトの角度
 	constexpr XMFLOAT3 EffectAngle1st = XMFLOAT3(45.0f, 0.0f, 0.0f);
@@ -302,8 +302,8 @@ void TestSwordActionComponent::CreateSwordEffect() {
 		break;
 	}
 
-	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
-	auto effectTrans = effect->AddComponent<TransformComponent>();
+	GameObject* effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	TransformComponent* effectTrans = effect->AddComponent<TransformComponent>();
 	effectTrans->SetScale({ 45.0f,135.0f,5.0f });
 	if (m_RightLeft == RightLeft::RIGHT) {
 		effectTrans->SetPosition({ pos.x + 7.0f, pos.y, pos.z });

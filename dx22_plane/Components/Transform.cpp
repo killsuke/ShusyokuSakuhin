@@ -13,10 +13,7 @@ void TransformComponent::Update() {
 	if (parent != nullptr) {
 
 		//	m_transform.worldMatrix = MakeLocalMatrix() * parent->GetComponent<TransformComponent>()->GetWorldMatrix(); // 親のワールド行列を取得
-
-		MakeChildMatrix();
-
-		MakeChildWorld();
+		MakeChildMatrixAndWorld();
 	}
 	else {
 		// ワールド行列計算
@@ -69,9 +66,12 @@ void TransformComponent::MakeChildWorld() {
 			const XMVECTOR pos = XMVectorSet(parentPos.x, parentPos.y, parentPos.z, 1.0f);
 			const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 			// スケールの影響を受けないようにする
-			const XMVECTOR parentScale = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-			const XMMATRIX s = XMMatrixScalingFromVector(parentScale);
-
+			const XMFLOAT3 parentScale = parentTrans->GetScale();
+			XMVECTOR scale = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+			if (m_IsLockScale == false) {
+				scale = XMVectorSet(parentScale.x, parentScale.y, parentScale.z, 1.0f);
+			}
+			const XMMATRIX s = XMMatrixScalingFromVector(scale);
 			const XMVECTOR parentQuat = parentTrans->GetQuaternion();
 			const XMMATRIX r = XMMatrixRotationQuaternion(parentQuat);
 
@@ -113,20 +113,19 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 			return XMMatrixIdentity();
 		}
 
-		XMMATRIX childMtx = MakeLocalMatrix();
-
-		XMVECTOR parentQuat = trans->GetQuaternion();
-		XMFLOAT3 parentScale = trans->GetScale();
-		XMFLOAT3 parentPos = trans->GetPosition();
+		const XMMATRIX childMtx = MakeLocalMatrix();
+		 
+		const XMVECTOR parentQuat = trans->GetQuaternion();
+		const XMFLOAT3 parentScale = trans->GetScale();
+		const XMFLOAT3 parentPos = trans->GetPosition();
 
 		const XMMATRIX r = XMMatrixRotationQuaternion(parentQuat);
 
-		XMMATRIX s = XMMatrixIdentity();
 		XMVECTOR scale = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		if (m_IsLockScale == false) {
 			scale = XMVectorSet(parentScale.x, parentScale.y, parentScale.z, 1.0f);
 		}
-		s = XMMatrixScalingFromVector(scale);
+		const XMMATRIX s = XMMatrixScalingFromVector(scale);
 		const XMVECTOR pos = XMVectorSet(parentPos.x, parentPos.y, parentPos.z, 1.0f);
 		const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
@@ -134,4 +133,31 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 	}
 
 	return XMMatrixIdentity();
+}
+
+DirectX::XMMATRIX TransformComponent::MakeChildMatrixAndWorld() {
+
+	const XMMATRIX mtx = MakeChildMatrix();
+
+	XMVECTOR scale;
+	XMVECTOR rotation;
+	XMVECTOR translation;
+
+	XMFLOAT3 nowScale;
+	XMFLOAT3 nowTranslation;
+
+	DecomposeMatrix(m_transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
+
+	XMStoreFloat3(&nowScale, scale);
+	XMStoreFloat3(&nowTranslation, translation);
+
+	m_transform.m_Position = nowTranslation; // 位置を更新
+	m_transform.m_Scale = nowScale; // スケールを更新
+
+	XMFLOAT3 rad = QuaternionToEulerRad(rotation);
+	rad *= (180.0f / XM_PI);
+
+	m_transform.m_Rotation = rad; // 回転を更新
+
+	return mtx;
 }

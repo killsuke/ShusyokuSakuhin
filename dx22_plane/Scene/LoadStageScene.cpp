@@ -102,10 +102,23 @@ LoadStageScene::LoadStageScene() {
 
 	GameObject* playOBJ = nullptr;
 	{
+		GameObject* childSlash = GameObjectManager::AddChild("dashSlash", "Child");
+		TransformComponent* childTrans = childSlash->AddComponent<TransformComponent>();
+		childTrans->SetLocalScale({5.0f,1.0f,1.0f});
+		ColliderComponent* childColl = childSlash->AddComponent<ColliderComponent>();
+		AttackOneTimeComponent* childAtk = childSlash->AddComponent<AttackOneTimeComponent>();
+		EnemyDamageComponent* childED = childSlash->AddComponent<EnemyDamageComponent>();
+		FighterComponent* childFT = childSlash->AddComponent<FighterComponent>();
+		childFT->SetAtk(10);
+		childFT->SetHp(5);
+		Render3DColliderAABBComponent* childRend = childSlash->AddComponent<Render3DColliderAABBComponent>();
+		childSlash->SetActiveState(ActiveState::ALL_STOP);
+
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
 
 		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
+		playerOperation->SetChargeSlashObject(childSlash);
 
 		auto playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
@@ -147,10 +160,14 @@ LoadStageScene::LoadStageScene() {
 		cubeRe->SetShader("shader/Animation2DVS.hlsl", "shader/Fighter2DPS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/aka.png");
 
+		player->SetChild(childSlash);
+
 		/*	auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
 			cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
 	
 			//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+
+		// 剣のオブジェクト生成 =============================================================
 		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();

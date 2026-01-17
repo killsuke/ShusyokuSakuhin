@@ -22,6 +22,7 @@ enum class EBlendState {
 	BS_ALPHABLEND,							// 半透明合成
 	BS_ADDITIVE,							// 加算合成
 	BS_SUBTRACTION,							// 減算合成
+	BS_MULTIPLY,							// 乗算合成
 	BS_EFFECT,								// エフェクト用（加算合成）
 	MAX_BLENDSTATE
 };

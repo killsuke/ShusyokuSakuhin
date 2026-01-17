@@ -74,6 +74,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 		TransformComponent* trans = particleObj->AddComponent<TransformComponent>();
 		trans->SetLocalPosition(XMFLOAT3(x, y, myPos.z)); // 生成位置を設定（例として原点に設定）
 		trans->SetLocalScale({ 20.0f,20.0f,1.0f }); // スケールを設定
+		trans->SetLockScale(true);
 
 		ChargeParticleMoveComponent* moveComp = particleObj->AddComponent<ChargeParticleMoveComponent>();
 		moveComp->SetTargetObject(*m_Object); // ターゲットを設定
@@ -108,6 +109,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 	TransformComponent* trans = particleObj->AddComponent<TransformComponent>();
 	trans->SetLocalPosition(XMFLOAT3(myPos.x, myPos.y, myPos.z)); // 生成位置を設定（例として原点に設定）
 	trans->SetLocalScale({ bigRadius,bigRadius,1.0f }); // スケールを設定
+	trans->SetLockScale(true);
 	m_InitScale = XMFLOAT3(bigRadius, bigRadius, 1.0f);
 
 	RenderLuminescenceBillboardComponent* childRender = particleObj->AddComponent<RenderLuminescenceBillboardComponent>();
