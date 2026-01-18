@@ -61,19 +61,20 @@ public:
 		switch (pattern)
 		{
 		case SlashPattern::GROUND_SLASH:
-			m_SwordActionState = ESwordActionState::SLASH_1ST;
+			//m_SwordActionState = ESwordActionState::SLASH_1ST;
+			m_TestSlashCount = 0;
 			break;
 		case SlashPattern::AIR_SLASH:
-			m_SwordActionState = ESwordActionState::SLASH_1ST;
+			//m_SwordActionState = ESwordActionState::SLASH_1ST;
+			m_TestSlashCount = 0;
 			break;
 		case SlashPattern::CHARGE_SLASH:
-			m_SwordActionState = ESwordActionState::SLASH_3RD;
+			//m_SwordActionState = ESwordActionState::SLASH_3RD;
+			m_TestSlashCount = 2;
 			break;
 		default:
 			break;
 		}
-
-		m_TestSlashCount = 4;
 	};
 	void SetSwordActionState(const ESwordActionState& state) { m_SwordActionState = state; };
 

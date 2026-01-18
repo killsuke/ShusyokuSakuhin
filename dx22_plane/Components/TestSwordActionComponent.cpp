@@ -105,7 +105,7 @@ void TestSwordActionComponent::Update() {
 
 			// ŽŸ‚ÌŽa‚è•û‚Ö
 			m_TestSlashCount++;
-			if (m_TestSlashCount > 2) {
+			if (m_TestSlashCount == 2) {
 				m_TestSlashCount = 0;
 			}
 

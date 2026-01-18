@@ -143,7 +143,7 @@ void RigidBodyComponent::ReduceVelocity_Z(const float velocity) {
 float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 
 	if (gravityFlag == true) {
-		auto transform = m_Object->GetComponent<TransformComponent>();
+		TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 		m_totalForce.y = -GRAVITY * m_FallMagnification;	// d—Í‚Ì‰Á‘¬“x‚ğİ’è
 

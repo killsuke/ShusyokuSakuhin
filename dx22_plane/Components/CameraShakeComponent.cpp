@@ -40,7 +40,7 @@ void CameraShakeComponent::Update() {
 	}
 }
 
-DirectX::XMFLOAT3 CameraShakeComponent::WidthShake(const DirectX::XMMATRIX& view) {
+DirectX::XMFLOAT3 CameraShakeComponent::WidthShake(const DirectX::XMMATRIX& view)const {
 
 	XMVECTOR right = view.r[0];	// 1—ñ–Ú
 
@@ -58,7 +58,7 @@ DirectX::XMFLOAT3 CameraShakeComponent::WidthShake(const DirectX::XMMATRIX& view
 	return newPos;
 }
 
-DirectX::XMFLOAT3 CameraShakeComponent::HeightShake(const DirectX::XMMATRIX& view) {
+DirectX::XMFLOAT3 CameraShakeComponent::HeightShake(const DirectX::XMMATRIX& view)const {
 
 	XMVECTOR up = view.r[1];	// 2—ñ–Ú
 
@@ -76,7 +76,7 @@ DirectX::XMFLOAT3 CameraShakeComponent::HeightShake(const DirectX::XMMATRIX& vie
 	return newPos;
 }
 
-DirectX::XMFLOAT3 CameraShakeComponent::DepthShake(const DirectX::XMMATRIX& view) {
+DirectX::XMFLOAT3 CameraShakeComponent::DepthShake(const DirectX::XMMATRIX& view) const {
 
 	XMVECTOR forward = view.r[2];	// 3—ñ–Ú
 
@@ -94,7 +94,7 @@ DirectX::XMFLOAT3 CameraShakeComponent::DepthShake(const DirectX::XMMATRIX& view
 	return newPos;
 }
 
-DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& view) {
+DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& view){
 
 	const float quarterTime = m_RequestTime * 0.2f;
 	

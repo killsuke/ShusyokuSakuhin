@@ -76,7 +76,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	std::string texName = texture.GetTexname();
 	const RightLeft isInversion = rendComp->GetInversionFlag();
 	Shader* shader = rendComp->GetShader();
-	std::vector<std::string> shaderName = shader->GetShaderNames();
+//	std::vector<std::string> shaderName = shader->GetShaderNames();
 
 	// 取り敢えず縦に左右に半分にカットする処理を書く
 	// こんどは頂点バッファを書き換える処理を書く
@@ -90,7 +90,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
-	leftRend->SetShader(shaderName[0], shaderName[1], shaderName[2]);
+	leftRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	leftRend->ChangeTexture(texName);
 	leftRend->SetInversionFlag(isInversion);
 	m_CutObj1ID = m_CutObj1->GetInstanceID();
@@ -103,7 +103,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	//rightMove->SetMovePower(0.1f);
 	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
-	rightRend->SetShader(shaderName[0], shaderName[1], shaderName[2]);
+	rightRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rightRend->ChangeTexture(texName);
 	rightRend->SetInversionFlag(isInversion);
 	m_CutObj2ID = m_CutObj2->GetInstanceID();

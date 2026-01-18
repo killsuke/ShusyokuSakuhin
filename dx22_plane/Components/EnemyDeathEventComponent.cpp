@@ -1,18 +1,22 @@
 #include "EnemyDeathEventComponent.h"
 #include "RigidBodyComponent.h"
 #include "ProjectileMotionComponent.h"
+#include "Render2D.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
 #include <SimpleMath.h>
+#include <random>
 
 using namespace DirectX;
 
 namespace {
 	constexpr float DeltaTime = 0.016f;
+	constexpr float FrontCameraZ = 50.0f;
+	constexpr float CameraUpY = 25.0f;
 }
 
 EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(obj) {
-	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // ソート番号を設定（あとで変えよ）
 
 	m_listenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
 		DeathEventAction(e);
@@ -20,6 +24,20 @@ EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(o
 
 	// 最初は生きているのでフラグをOFFに
 	m_IsActiveFlag = false;
+
+	std::random_device rd;  // 非決定的な乱数の種
+	std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+	std::uniform_real_distribution<float> dist(0.0f, 10.0f); // 範囲指定
+
+	const float value = dist(gen);
+
+	// ランダムで死亡演出を変える
+	if (value > 2.0f) {
+		m_State = EnemyDeathEventState::STICKY;
+	}
+	else {
+		m_State = EnemyDeathEventState::IMMEDIATE;
+	}
 }
 
 EnemyDeathEventComponent::~EnemyDeathEventComponent() {
@@ -156,21 +174,170 @@ void EnemyDeathEventComponent::ImmediateProcess(MeshCut2DComponent* cutComp, Gam
 
 void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2) {
 
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+	if (camera == nullptr) {
+		return;
+	}
+
+	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
+	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
+	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
+
+	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr) {
+		return;
+	}
+
+
+	VectorMoveComponent* move1 = obj1->GetComponent<VectorMoveComponent>();
+	VectorMoveComponent* move2 = obj2->GetComponent<VectorMoveComponent>();
+
+	if (move1 == nullptr || move2 == nullptr) {
+		cutComp->DeleteCutObjs();
+		return;
+	}
+
+
 	// 画面に張り付いたら一瞬だけ大きくしてすぐに収縮
 	// 収縮したら揺らしてからバラけて落ちる
 
 	if (m_RecordTime > 3.0f) {
+		cutComp->DeleteCutObjs();
+	}
+	else if (m_RecordTime > 1.5f) {
+		RigidBodyComponent* rigid1 = obj1->GetComponent<RigidBodyComponent>();
+		RigidBodyComponent* rigid2 = obj2->GetComponent<RigidBodyComponent>();
+
+		rigid1->SetGravityFlag(true);
+		rigid2->SetGravityFlag(true);
+
+		rigid1->SetActiveFlag(true);
+		rigid2->SetActiveFlag(true);
+	}
+	else if (m_RecordTime > 1.3f) {	// 震えを止める
+	}
+	else if (m_RecordTime > 1.0f) {
+
+		XMFLOAT3 camPos = camTrans->GetPosition();
+
+		if (m_IsFirstCamPos == true) {
+			obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
+			obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
+			m_IsFirstCamPos = false;
+
+			// 一応サイズ変更するとどうか検証
+
+			Render2DComponent* render1 = obj1->GetComponent<Render2DComponent>();
+			Render2DComponent* render2 = obj2->GetComponent<Render2DComponent>();
+
+			if (render1 == nullptr || render2 == nullptr) {
+				cutComp->DeleteCutObjs();
+				return;
+			}
+			render1->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+			render2->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+			return;
+		}
+
+		ShakeCutObjects(obj1Trans, obj2Trans);	// 揺らす
+	}
+	else if (m_RecordTime > 0.8f) {	// ここで出てくる
+
+		XMFLOAT3 camPos = camTrans->GetPosition();
+
+		// 最初の一回だけカメラ上部に張り付ける
+		if (m_IsFirstCamPos == false) {
+			move1->SetActiveFlag(false);
+			move2->SetActiveFlag(false);
+			obj1Trans->SetPosition({ camPos.x, camPos.y + CameraUpY, camPos.z + FrontCameraZ });
+			obj2Trans->SetPosition({ camPos.x, camPos.y + CameraUpY, camPos.z + FrontCameraZ });
+			m_IsFirstCamPos = true;
+
+			m_CutObj1Pos.y = CameraUpY;
+			m_CutObj2Pos.y = CameraUpY;
+			return;
+		}
+
+		std::random_device rd;  // 非決定的な乱数の種
+		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+		std::uniform_real_distribution<float> dist(0.0f, 5.0f); // 範囲指定
+
+		const float value = dist(gen);
+
+		m_CutObj1Pos.x -= value;
+		m_CutObj2Pos.x += value;
+
+		m_CutObj1Pos.y -= value;
+		m_CutObj2Pos.y -= value;
+
+		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
+		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
+
 	}
 	else if (m_RecordTime == 0.0f) {
 
-		VectorMoveComponent* move1 = obj1->GetComponent<VectorMoveComponent>();
-		move1->SetMoveDirection({ 0.0f,1.0f,0.0f });
-		move1->SetMovePower(7.0f);
+		std::random_device rd;  // 非決定的な乱数の種
+		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+		std::uniform_real_distribution<float> dist(8.0f, 10.0f); // 範囲指定
 
-		VectorMoveComponent* move2 = obj2->GetComponent<VectorMoveComponent>();
-		move2->SetMoveDirection({ 0.0f,1.0f,0.0f });
-		move2->SetMovePower(7.0f);
+		const float value = dist(gen);
 
+		move1->SetMoveDirection({ 0.2f,1.0f,0.0f });
+		move1->SetMovePower(3.5f);
+		move1->SetRotationValue({ 0.0f,0.0f,value });
 
+		move2->SetMoveDirection({ -0.2f,1.0f,0.0f });
+		move2->SetMovePower(3.5f);
+		move2->SetRotationValue({ 0.0f,0.0f,-value });
+
+		RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
+		RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
+
+		rigid1->SetMass(2.0f);
+		rigid2->SetMass(2.0f);
+
+		rigid1->SetGravityFlag(false);
+		rigid2->SetGravityFlag(false);
+
+		rigid1->SetActiveFlag(false);
+		rigid2->SetActiveFlag(false);
+
+		rigid1->SetFallMagnification(6.0f);
+		rigid2->SetFallMagnification(6.0f);
+
+		rigid1->SetFirstFallMagnification(60.0f);
+		rigid2->SetFirstFallMagnification(60.0f);
 	}
+}
+
+void EnemyDeathEventComponent::ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2) {
+
+	std::random_device rd;  // 非決定的な乱数の種
+	std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+	std::uniform_real_distribution<float> dist(-1.0f, 1.0f); // 範囲指定
+
+	const float rX = dist(gen); // 0.0 ～ 1.0 の乱数
+	const float rY = dist(gen); // 0.0 ～ 1.0 の乱数
+
+	m_ShakeVector = XMVectorSet(rX, rY, 0.0f, 0.0f);
+	m_ShakeVector = XMVector3Normalize(m_ShakeVector);
+
+
+	// ランダム揺れ用オフセット
+	const float offsetX = sinf(m_RecordTime * 50.0f) * 1.5f;
+
+	// 正規化したRightベクトルをオフセットに適用
+	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);
+
+	// 前フレームとの差分を取る
+	// サイン波がゼロに戻るときに差分もゼロになるので、
+	// 最終的に元の位置に戻る
+	const XMVECTOR frameOffset = XMVectorSubtract(offset, m_PrevShakeOffset);
+
+	m_PrevShakeOffset = offset;
+
+	XMFLOAT3 newPos;
+	XMStoreFloat3(&newPos, frameOffset);
+
+	obj1->AddPosition({ newPos.x,newPos.y,0.0f });
+	obj2->AddPosition({ newPos.x,newPos.y,0.0f });
 }
