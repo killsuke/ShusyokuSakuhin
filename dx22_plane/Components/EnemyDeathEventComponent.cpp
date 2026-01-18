@@ -1,6 +1,4 @@
 #include "EnemyDeathEventComponent.h"
-#include "MeshCut2DComponent.h"
-#include "VectorMoveComponent.h"
 #include "RigidBodyComponent.h"
 #include "ProjectileMotionComponent.h"
 #include "Manager/EventBusManager.h"
@@ -31,85 +29,34 @@ EnemyDeathEventComponent::~EnemyDeathEventComponent() {
 void EnemyDeathEventComponent::Update() {
 
 	MeshCut2DComponent* meshCut = m_Object->GetComponent<MeshCut2DComponent>();
+	if (meshCut == nullptr) {
+		return; // メッシュカットコンポーネントがないなら何もしない
+	}
+
 	uint32_t cutObj1ID = meshCut->GetCutObj1ID();
 	uint32_t cutObj2ID = meshCut->GetCutObj2ID();
 	GameObject* meshCutObj1 = GameObjectManager::GameObjectFindInstanceID(cutObj1ID);
 	GameObject* meshCutObj2 = GameObjectManager::GameObjectFindInstanceID(cutObj2ID);
 
-	switch (m_State)
-	{
-		// 切れてから少しズレる処理
-	case EnemyDeathEventState::DELAY:
-
-
-		break;
-
-		// 即座に切れる処理
-	case EnemyDeathEventState::IMMEDIATE:
-
-
-		break;
-	default:
-		break;
-	}
-
 	if (meshCutObj1 == nullptr || meshCutObj2 == nullptr) {
 		return; // 切断オブジェクトが存在しないなら何もしない
 	}
 
-	// 一定時間経過したらオブジェクトを消去する
-	if (m_RecordTime > 1.7f) {
-		meshCut->DeleteCutObjs();
-	}
-	// 一定時間経過したら重力を有効にして放物運動させる
-	else if (m_RecordTime > 0.7f) {
-		VectorMoveComponent* move1 = meshCutObj1->GetComponent<VectorMoveComponent>();
-		VectorMoveComponent* move2 = meshCutObj2->GetComponent<VectorMoveComponent>();
+	switch (m_State)
+	{
+		// 切れてから少しズレる処理
+	case EnemyDeathEventState::IMMEDIATE:
 
-		move1->SetActiveFlag(false);
-		move2->SetActiveFlag(false);
+		ImmediateProcess(meshCut, meshCutObj1, meshCutObj2);
+		break;
 
-		RigidBodyComponent* rigid1 = meshCutObj1->GetComponent<RigidBodyComponent>();
-		RigidBodyComponent* rigid2 = meshCutObj2->GetComponent<RigidBodyComponent>();
+		// 吹っ飛んでから斬れる処理
+	case EnemyDeathEventState::STICKY:
 
-		rigid1->SetGravityFlag(true);
-		rigid2->SetGravityFlag(true);
-
-		ProjectileMotionComponent* proj1 = meshCutObj1->GetComponent<ProjectileMotionComponent>();
-		ProjectileMotionComponent* proj2 = meshCutObj2->GetComponent<ProjectileMotionComponent>();
-
-		proj1->SetProjectilePower(10.0f);
-		proj2->SetProjectilePower(10.0f);
-
-		proj1->SetProjectileRotation({ 0.0f,0.0f,15.0f });
-		proj2->SetProjectileRotation({ 0.0f,0.0f,-15.0f });
-	}
-	// 最初の一回だけ動かす
-	// 切れてズレる
-	else if (m_RecordTime == 0.0f) {
-		VectorMoveComponent* move1 = meshCutObj1->GetComponent<VectorMoveComponent>();
-		VectorMoveComponent* move2 = meshCutObj2->GetComponent<VectorMoveComponent>();
-
-		move1->SetMoveDirection({ 0.0f,1.0f,0.0f });
-		move2->SetMoveDirection({ 0.0f,-1.0f,0.0f });
-
-		move1->SetMovePower(0.1f);
-		move2->SetMovePower(0.1f);
-
-		RigidBodyComponent* rigid1 = meshCutObj1->AddComponent<RigidBodyComponent>();
-		RigidBodyComponent* rigid2 = meshCutObj2->AddComponent<RigidBodyComponent>();
-
-		rigid1->SetGravityFlag(false);
-		rigid2->SetGravityFlag(false);
-
-		rigid1->SetMass(5.0f);
-		rigid2->SetMass(5.0f);
-
-		ProjectileMotionComponent* proj1 = meshCutObj1->AddComponent<ProjectileMotionComponent>();
-		ProjectileMotionComponent* proj2 = meshCutObj2->AddComponent<ProjectileMotionComponent>();
-
-		proj1->SetProjectileDirection({ -0.3f,1.0f,-1.8f });
-		proj2->SetProjectileDirection({ 0.3f,1.0f,-1.8f });
+		StickyProcess(meshCut, meshCutObj1, meshCutObj2);
+		break;
+	default:
+		break;
 	}
 
 	m_RecordTime += DeltaTime;
@@ -132,11 +79,11 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	// 斜め横切り
 	if (m_SwordActionState == ESwordActionState::SLASH_1ST) {
 		dir = CutDirection::HORIZONTAL;
-		if(m_RightLeft == RightLeft::RIGHT){
+		if (m_RightLeft == RightLeft::RIGHT) {
 			ratio1 = 0.8f;
 			ratio2 = 0.2f;
 		}
-		else if(m_RightLeft == RightLeft::LEFT){
+		else if (m_RightLeft == RightLeft::LEFT) {
 			ratio1 = 0.2f;
 			ratio2 = 0.8f;
 		}
@@ -171,4 +118,59 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	EventBusManager::Push(ce);
 
 	m_IsActiveFlag = true;
+}
+
+void EnemyDeathEventComponent::ImmediateProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2) {
+
+
+	// 一定時間経過したらオブジェクトを消去する
+	if (m_RecordTime > 1.7f) {
+		cutComp->DeleteCutObjs();
+	}
+	// 最初の一回だけ動かす
+	// 切れてズレる
+	else if (m_RecordTime == 0.0f) {	// 切れたら即飛ばす！
+
+		RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
+		RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
+
+		rigid1->SetGravityFlag(true);
+		rigid2->SetGravityFlag(true);
+
+		rigid1->SetMass(2.0f);
+		rigid2->SetMass(2.0f);
+
+		ProjectileMotionComponent* proj1 = obj1->AddComponent<ProjectileMotionComponent>();
+		ProjectileMotionComponent* proj2 = obj2->AddComponent<ProjectileMotionComponent>();
+
+		proj1->SetProjectileDirection({ -0.3f,1.0f,-1.8f });
+		proj2->SetProjectileDirection({ 0.3f,1.0f,-1.8f });
+
+		proj1->SetProjectilePower(28.0f);
+		proj2->SetProjectilePower(28.0f);
+
+		proj1->SetProjectileRotation({ 0.0f,0.0f,15.0f });
+		proj2->SetProjectileRotation({ 0.0f,0.0f,-15.0f });
+	}
+}
+
+void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2) {
+
+	// 画面に張り付いたら一瞬だけ大きくしてすぐに収縮
+	// 収縮したら揺らしてからバラけて落ちる
+
+	if (m_RecordTime > 3.0f) {
+	}
+	else if (m_RecordTime == 0.0f) {
+
+		VectorMoveComponent* move1 = obj1->GetComponent<VectorMoveComponent>();
+		move1->SetMoveDirection({ 0.0f,1.0f,0.0f });
+		move1->SetMovePower(7.0f);
+
+		VectorMoveComponent* move2 = obj2->GetComponent<VectorMoveComponent>();
+		move2->SetMoveDirection({ 0.0f,1.0f,0.0f });
+		move2->SetMovePower(7.0f);
+
+
+	}
 }

@@ -16,11 +16,16 @@ void VectorMoveComponent::Update()
 	}
 
 	TransformComponent* trans = m_Object->GetComponent <TransformComponent>();
+	if(trans == nullptr){
+		return;
+	}
 
 	// ”ò‚ñ‚Å‚¢‚­•ûŒü‚ðŒˆ’è
 	const XMVECTOR dir = XMVectorScale(m_MoveDirection, m_MovePower);
 	XMFLOAT3 velocity;
 	XMStoreFloat3(&velocity, dir);
+
+	trans->AddRotation(m_RotationValue);
 
 	trans->AddPosition(velocity);
 }

@@ -76,6 +76,14 @@ public:
 		children.push_back(obj);
 		obj->parent = this;	// 親オブジェクトを設定
 	};
+	inline void RemoveChild(GameObject* obj) {
+		auto childObj = std::find(children.begin(), children.end(), obj);
+		if (childObj != children.end()) {
+			children.erase(childObj);
+			obj->parent = nullptr; // 親オブジェクトを解除
+		}
+	};
+
 	inline void SetActiveState(const ActiveState& as) { activeState = as; };
 	inline void SetDrawContainer(const DrawContainer& dc) { drawContainer = dc; };
 	inline void SetDrawContainerChangeFlag(const DrawContainer& dc, const bool dccFlag) {
