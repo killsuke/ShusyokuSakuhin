@@ -16,8 +16,8 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
 
-const auto ClassName = TEXT("2024 framework ひな型");     //!< ウィンドウクラス名.
-const auto WindowName = TEXT("2024 framework ひな型(フィールド描画)");    //!< ウィンドウ名.
+const auto ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
+const auto WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
 
 HINSTANCE  Application::m_hInst;        // インスタンスハンドル
 HWND       Application::m_hWnd;         // ウィンドウハンドル

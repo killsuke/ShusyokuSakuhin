@@ -2,6 +2,7 @@
 #include "RigidBodyComponent.h"
 #include "ProjectileMotionComponent.h"
 #include "Render2D.h"
+#include "CameraShakeComponent.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
 #include <SimpleMath.h>
@@ -33,10 +34,10 @@ EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(o
 
 	// ランダムで死亡演出を変える
 	if (value > 2.0f) {
-		m_State = EnemyDeathEventState::STICKY;
+		m_State = EnemyDeathEventState::IMMEDIATE;
 	}
 	else {
-		m_State = EnemyDeathEventState::IMMEDIATE;
+		m_State = EnemyDeathEventState::STICKY;
 	}
 }
 
@@ -51,8 +52,8 @@ void EnemyDeathEventComponent::Update() {
 		return; // メッシュカットコンポーネントがないなら何もしない
 	}
 
-	uint32_t cutObj1ID = meshCut->GetCutObj1ID();
-	uint32_t cutObj2ID = meshCut->GetCutObj2ID();
+	const uint32_t cutObj1ID = meshCut->GetCutObj1ID();
+	const uint32_t cutObj2ID = meshCut->GetCutObj2ID();
 	GameObject* meshCutObj1 = GameObjectManager::GameObjectFindInstanceID(cutObj1ID);
 	GameObject* meshCutObj2 = GameObjectManager::GameObjectFindInstanceID(cutObj2ID);
 
@@ -62,13 +63,13 @@ void EnemyDeathEventComponent::Update() {
 
 	switch (m_State)
 	{
-		// 切れてから少しズレる処理
+		// 切れて目の前に飛んで来る
 	case EnemyDeathEventState::IMMEDIATE:
 
 		ImmediateProcess(meshCut, meshCutObj1, meshCutObj2);
 		break;
 
-		// 吹っ飛んでから斬れる処理
+		// 吹っ飛んでから画面に貼りつく
 	case EnemyDeathEventState::STICKY:
 
 		StickyProcess(meshCut, meshCutObj1, meshCutObj2);
@@ -196,14 +197,10 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 		return;
 	}
 
-
-	// 画面に張り付いたら一瞬だけ大きくしてすぐに収縮
-	// 収縮したら揺らしてからバラけて落ちる
-
 	if (m_RecordTime > 3.0f) {
 		cutComp->DeleteCutObjs();
 	}
-	else if (m_RecordTime > 1.5f) {
+	else if (m_RecordTime > 1.5f) {	// 落ちる
 		RigidBodyComponent* rigid1 = obj1->GetComponent<RigidBodyComponent>();
 		RigidBodyComponent* rigid2 = obj2->GetComponent<RigidBodyComponent>();
 
@@ -215,16 +212,14 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 	}
 	else if (m_RecordTime > 1.3f) {	// 震えを止める
 	}
-	else if (m_RecordTime > 1.0f) {
+	else if (m_RecordTime > 1.0f) {	// 貼りついて揺らす
 
-		XMFLOAT3 camPos = camTrans->GetPosition();
+		const XMFLOAT3 camPos = camTrans->GetPosition();
 
 		if (m_IsFirstCamPos == true) {
 			obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
 			obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
 			m_IsFirstCamPos = false;
-
-			// 一応サイズ変更するとどうか検証
 
 			Render2DComponent* render1 = obj1->GetComponent<Render2DComponent>();
 			Render2DComponent* render2 = obj2->GetComponent<Render2DComponent>();
@@ -235,6 +230,13 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 			}
 			render1->SetColor({ 0.3f,0.3f,0.3f,1.0f });
 			render2->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+
+			// 画面揺れ開始
+			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
+			if (camShake != nullptr) {
+				camShake->ShakingPreparation(150.0f, 4.0f, 0.3f);
+				camShake->SetShakeType(ShakeType::RANDOM_DEPTH);
+			}
 			return;
 		}
 
@@ -242,7 +244,7 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 	}
 	else if (m_RecordTime > 0.8f) {	// ここで出てくる
 
-		XMFLOAT3 camPos = camTrans->GetPosition();
+		const XMFLOAT3 camPos = camTrans->GetPosition();
 
 		// 最初の一回だけカメラ上部に張り付ける
 		if (m_IsFirstCamPos == false) {
@@ -273,7 +275,7 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
 
 	}
-	else if (m_RecordTime == 0.0f) {
+	else if (m_RecordTime == 0.0f) { // 天高く飛ばす
 
 		std::random_device rd;  // 非決定的な乱数の種
 		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ

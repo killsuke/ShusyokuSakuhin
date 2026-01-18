@@ -22,7 +22,27 @@ void CameraShakeComponent::Update() {
 	if (camera != nullptr && trans != nullptr && m_RequestTime != 0.0f) {
 		const XMMATRIX view = camera->GetView3D();
 
-		const XMFLOAT3 newPos = RandomShake2D(view);
+		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+		switch (m_ShakeType)
+		{
+		case ShakeType::WIDTH:
+			break;
+		case ShakeType::HEIGHT:
+			break;
+		case ShakeType::DEPTH:
+			break;
+		case ShakeType::RANDOM_2D:
+
+			newPos = RandomShake2D(view);
+			break;
+		case ShakeType::RANDOM_DEPTH:
+
+			newPos = RandomShakeDepth(view);
+			break;
+		default:
+			break;
+		}
 
 		// 位置更新
 		trans->AddPosition(newPos);
@@ -94,10 +114,10 @@ DirectX::XMFLOAT3 CameraShakeComponent::DepthShake(const DirectX::XMMATRIX& view
 	return newPos;
 }
 
-DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& view){
+DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& view) {
 
 	const float quarterTime = m_RequestTime * 0.2f;
-	
+
 	if (m_RecordTime > m_QuarterRequestTime) {
 
 		m_QuarterRequestTime += quarterTime;
@@ -110,6 +130,43 @@ DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& v
 		const float rY = dist(gen); // 0.0 ～ 1.0 の乱数
 
 		m_ShakeVector = XMVectorSet(rX, rY, 0.0f, 0.0f);
+		m_ShakeVector = XMVector3Normalize(m_ShakeVector);
+	}
+
+	// ランダム揺れ用オフセット
+	const float offsetX = sinf(m_RecordTime * m_ShakePower) * m_ShakeSpeed;
+
+	// 正規化したRightベクトルをオフセットに適用
+	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);
+
+	// 前フレームとの差分を取る
+	// サイン波がゼロに戻るときに差分もゼロになるので、
+	// 最終的に元の位置に戻る
+	const XMVECTOR frameOffset = XMVectorSubtract(offset, m_PrevShakeOffset);
+
+	m_PrevShakeOffset = offset;
+
+	XMFLOAT3 newPos;
+	XMStoreFloat3(&newPos, frameOffset);
+
+	return newPos;
+}
+
+DirectX::XMFLOAT3 CameraShakeComponent::RandomShakeDepth(const DirectX::XMMATRIX& view) {
+
+	const float quarterTime = m_RequestTime * 0.2f;
+
+	if (m_RecordTime > m_QuarterRequestTime) {
+
+		m_QuarterRequestTime += quarterTime;
+
+		std::random_device rd;  // 非決定的な乱数の種
+		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+		std::uniform_real_distribution<float> dist(-1.0f, 1.0f); // 範囲指定
+
+		const float rZ = dist(gen); // 0.0 ～ 1.0 の乱数
+
+		m_ShakeVector = XMVectorSet(0.0f, 0.0f, rZ, 0.0f);
 		m_ShakeVector = XMVector3Normalize(m_ShakeVector);
 	}
 

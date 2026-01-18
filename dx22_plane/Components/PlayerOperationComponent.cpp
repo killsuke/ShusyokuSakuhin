@@ -462,7 +462,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 	slashFT->SetHp(50);
 
 	ChargeSlashComponent* charge = chargeSlash->AddComponent<ChargeSlashComponent>();
-	charge->SetRimitTime(2.0f);
+	charge->SetRimitTime(1.0f);
 
 	Render3DComponent* slashRender = chargeSlash->AddComponent<Render3DComponent>();
 	slashRender->CreateMesh<SquareMesh>();

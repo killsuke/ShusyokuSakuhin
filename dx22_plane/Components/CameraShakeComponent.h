@@ -8,6 +8,14 @@ struct ShakeStatus {
 	float time = 0.0f;
 };
 
+enum class ShakeType {
+	WIDTH,
+	HEIGHT,
+	DEPTH,
+	RANDOM_2D,
+	RANDOM_DEPTH
+};
+
 class CameraShakeComponent final : public Component
 {
 private:
@@ -24,6 +32,9 @@ private:
 	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view)const;
 	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view)const;
 	DirectX::XMFLOAT3 RandomShake2D(const DirectX::XMMATRIX& view);
+	DirectX::XMFLOAT3 RandomShakeDepth(const DirectX::XMMATRIX& view);
+
+	ShakeType m_ShakeType = ShakeType::RANDOM_2D;
 
 public:
 
@@ -42,5 +53,9 @@ public:
 		m_ShakePower = status.power;
 		m_ShakeSpeed = status.speed;
 		m_RequestTime = status.time;
+	};
+
+	void SetShakeType(const ShakeType& type) {
+		m_ShakeType = type;
 	};
 };

@@ -99,6 +99,7 @@ void EnemyDamageComponent::Update()
 
 						// ‰æ–Ê—h‚êŠJŽn
 						shake->ShakingPreparation(status);
+						shake->SetShakeType(ShakeType::RANDOM_2D);
 					}
 				}
 			}
