@@ -12,6 +12,12 @@ float4 ps_main(in PS_IN input) : SV_Target
     color = g_Texture.Sample(g_SamplerState, input.tex);    
     color *= input.col;
     
+    // 完全な透明の場合は描かない
+    if (color.a == 0.0f)
+    {
+        discard;
+    }
+    
     return color;
 
     // ピクセルシェーダーが動いているかを確かめたいなら

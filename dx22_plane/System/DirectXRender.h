@@ -49,6 +49,7 @@ extern ID3D11Buffer* g_pMotionBlurBuffer;
 extern ID3D11Buffer* g_pMotionBlurCircularBuffer;
 extern ID3D11Buffer* m_MaterialBuffer;
 extern ID3D11Buffer* g_pGlowBuffer;
+extern ID3D11Buffer* g_pRingGlowBuffer;
 
 // 定数バッファ用構造体
 struct ConstBuffer
@@ -136,6 +137,17 @@ struct GlowBuffer {
 	float glowRadius = 0.0f;
 	float angleRadian = 0.0f;
 	DirectX::XMFLOAT3 paddings = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+};
+
+struct RingGlowBuffer {
+	DirectX::XMFLOAT4 glowColor = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT2 ellipseScale = DirectX::XMFLOAT2(0.0f, 0.0f);
+	float glowPower = 0.0f;
+	float glowRadius = 0.0f;
+	float angleRadian = 0.0f;
+	float ringRadius = 0.0f;
+	float ringWidth = 0.0f;
+	float pad = 0.0f;
 };
 
 class DirectXRender

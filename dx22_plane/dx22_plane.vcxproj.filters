@@ -946,6 +946,7 @@
     <FxCompile Include="shader\MotionBlurCircularGS.hlsl" />
     <FxCompile Include="shader\PassThroughVS.hlsl" />
     <FxCompile Include="shader\unlitLuminescencePS.hlsl" />
+    <FxCompile Include="shader\unlitRingLuminescencePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">

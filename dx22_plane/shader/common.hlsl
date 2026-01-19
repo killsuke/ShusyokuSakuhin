@@ -167,3 +167,15 @@ cbuffer GlowParam : register(b10)
     float Angle;
     float3 Pad3;
 };
+
+cbuffer GlowParam2 : register(b11)
+{
+    float4 GlowColor2; // 発光色（白色）
+    float2 EllipseScale2; // 楕円スケール
+    float GlowPower2; // 発光強度（１～５）
+    float GlowRadius2; // 発光範囲（大きいほど広がる）
+    float Angle2;
+    float RingRadius; // リングの中心半径、0～1.4 ぐらいが目安
+    float RingWidth;  // リングの太さ、0.15 ぐらいが良さげ
+    float pad1;
+};

@@ -444,6 +444,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 	TransformComponent* slashTransform = chargeSlash->AddComponent<TransformComponent>();
 	slashTransform->SetPosition(myPos);
 	slashTransform->SetScale(XMFLOAT3(20.0f, 40.0f, 1.0f));
+	//slashTransform->SetRotation(XMFLOAT3(45.0f,0.0f,0.0f));
 
 	ColliderComponent* slashCollider = chargeSlash->AddComponent<ColliderComponent>();
 	VectorMoveComponent* slashMove = chargeSlash->AddComponent<VectorMoveComponent>();

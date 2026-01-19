@@ -81,6 +81,8 @@ ID3D11Buffer* m_MaterialBuffer = nullptr;
 
 ID3D11Buffer* g_pGlowBuffer = nullptr;
 
+ID3D11Buffer* g_pRingGlowBuffer = nullptr;
+
 // ヒットフラッシュ用のバッファ
 ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
 
@@ -150,6 +152,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
 	SAFE_RELEASE(g_pGlowBuffer);
+	SAFE_RELEASE(g_pRingGlowBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
 		if (g_BlendState[i]) {  // nullptr チェック
@@ -795,7 +798,12 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pGlowBuffer);
 	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
 	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+	
+	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
 
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pRingGlowBuffer);
+	m_DeviceContext->VSSetConstantBuffers(11, 1, &g_pRingGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(11, 1, &g_pRingGlowBuffer);
 
 	// ここ後で１番に変更
 	if (FAILED(hr)) return hr;

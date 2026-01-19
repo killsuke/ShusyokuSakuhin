@@ -147,7 +147,7 @@ void EnemyDeathEventComponent::ImmediateProcess(MeshCut2DComponent* cutComp, Gam
 
 
 	// 一定時間経過したらオブジェクトを消去する
-	if (m_RecordTime > 1.7f) {
+	if (m_RecordTime > 3.0f) {
 		cutComp->DeleteCutObjs();
 	}
 	// 最初の一回だけ動かす
@@ -162,12 +162,12 @@ void EnemyDeathEventComponent::ImmediateProcess(MeshCut2DComponent* cutComp, Gam
 
 		rigid1->SetMass(2.0f);
 		rigid2->SetMass(2.0f);
-
+		
 		ProjectileMotionComponent* proj1 = obj1->AddComponent<ProjectileMotionComponent>();
 		ProjectileMotionComponent* proj2 = obj2->AddComponent<ProjectileMotionComponent>();
 
-		proj1->SetProjectileDirection({ -0.3f,1.0f,-1.8f });
-		proj2->SetProjectileDirection({ 0.3f,1.0f,-1.8f });
+		proj1->SetProjectileDirection({ -0.5f,1.0f,-1.8f });
+		proj2->SetProjectileDirection({ 0.5f,1.0f,1.8f });
 
 		proj1->SetProjectilePower(28.0f);
 		proj2->SetProjectilePower(28.0f);
@@ -425,7 +425,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			std::random_device rd;  // 非決定的な乱数の種
 			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
 			std::uniform_real_distribution<float> dist1(20.0f, 30.0f); // 範囲指定
-			std::uniform_real_distribution<float> dist2(-20.0f, 20.0f); // 範囲指定
+			std::uniform_real_distribution<float> dist2(-15.0f, 20.0f); // 範囲指定
 
 			const float value1 = dist1(gen);
 
