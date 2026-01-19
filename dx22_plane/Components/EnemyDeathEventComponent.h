@@ -13,6 +13,14 @@ enum class EnemyDeathEventState {
 	IMMEDIATE
 };
 
+enum class DeathPattern {
+	NONE = -1,
+	DEFAULT,
+	CHARGE,
+
+	MAX
+};
+
 class EnemyDeathEventComponent : public Component
 {
 private:
@@ -21,11 +29,14 @@ private:
 	bool m_IsFirstCamPos = false;
 	DirectX::XMFLOAT3 m_CutObj1Pos = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 m_CutObj2Pos = { 0.0f,0.0f,0.0f };
+
 	DirectX::XMVECTOR m_ShakeVector = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
 	DirectX::XMVECTOR m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
 	EnemyDeathEventState m_State = EnemyDeathEventState::STICKY;
 	ESwordActionState m_SwordActionState = ESwordActionState::NONE;
 	RightLeft m_RightLeft = RightLeft::RIGHT;
+
+	DeathPattern m_DeathPattern = DeathPattern::NONE;
 
 public:
 	EnemyDeathEventComponent(GameObject& obj);
@@ -45,6 +56,21 @@ public:
 
 	void ImmediateProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
 	void StickyProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
+	void StickyProcess2(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
 
 	void ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2);
+	void SetDeathPattern(const DeathPattern pattern) {
+
+		//if (m_DeathPattern == DeathPattern::NONE) {
+			
+			m_DeathPattern = pattern;
+
+			if (m_DeathPattern == DeathPattern::DEFAULT) {
+				m_State = EnemyDeathEventState::IMMEDIATE;
+			}
+			else if (m_DeathPattern == DeathPattern::CHARGE) {
+				m_State = EnemyDeathEventState::STICKY;
+			}
+		//}
+	};
 };

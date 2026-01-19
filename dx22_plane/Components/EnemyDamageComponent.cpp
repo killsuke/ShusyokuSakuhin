@@ -71,6 +71,16 @@ void EnemyDamageComponent::Update()
 					EnemyDeathEventComponent* deathComp = objOther->GetComponent<EnemyDeathEventComponent>();
 					if (deathComp != nullptr) {
 						deathComp->SetHittedState(state, dir);
+
+						std::string name = m_Object->GetName();
+
+						const DeathPattern pattern = DeathPattern::DEFAULT;
+						if (name == "sword") {
+							deathComp->SetDeathPattern(pattern);
+						}
+						else if(name == "chargeSlash") {
+							deathComp->SetDeathPattern(DeathPattern::CHARGE);
+						}
 					}
 
 					// ヒットストップの候補セット

@@ -33,12 +33,16 @@ EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(o
 	const float value = dist(gen);
 
 	// ランダムで死亡演出を変える
-	if (value > 2.0f) {
+	/*if (value > 3.0f) {
 		m_State = EnemyDeathEventState::IMMEDIATE;
 	}
 	else {
 		m_State = EnemyDeathEventState::STICKY;
-	}
+	}*/
+
+	// チャージスラッシュならSTICKY、
+	// そうでないならIMMEDIATE
+	// にする
 }
 
 EnemyDeathEventComponent::~EnemyDeathEventComponent() {
@@ -72,7 +76,7 @@ void EnemyDeathEventComponent::Update() {
 		// 吹っ飛んでから画面に貼りつく
 	case EnemyDeathEventState::STICKY:
 
-		StickyProcess(meshCut, meshCutObj1, meshCutObj2);
+		StickyProcess2(meshCut, meshCutObj1, meshCutObj2);
 		break;
 	default:
 		break;
@@ -209,6 +213,9 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 
 		rigid1->SetActiveFlag(true);
 		rigid2->SetActiveFlag(true);
+
+		obj1Trans->AddRotation({ 0.0f,0.0f,5.0f });
+		obj2Trans->AddRotation({ 0.0f,0.0f,-5.0f });
 	}
 	else if (m_RecordTime > 1.3f) {	// 震えを止める
 	}
@@ -216,9 +223,10 @@ void EnemyDeathEventComponent::StickyProcess(MeshCut2DComponent* cutComp, GameOb
 
 		const XMFLOAT3 camPos = camTrans->GetPosition();
 
+		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
+		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
+
 		if (m_IsFirstCamPos == true) {
-			obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
-			obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
 			m_IsFirstCamPos = false;
 
 			Render2DComponent* render1 = obj1->GetComponent<Render2DComponent>();
@@ -342,4 +350,159 @@ void EnemyDeathEventComponent::ShakeCutObjects(TransformComponent* obj1, Transfo
 
 	obj1->AddPosition({ newPos.x,newPos.y,0.0f });
 	obj2->AddPosition({ newPos.x,newPos.y,0.0f });
+}
+
+void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2) {
+
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+	if (camera == nullptr) {
+		return;
+	}
+
+	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
+	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
+	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
+
+	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr) {
+		return;
+	}
+
+
+	if (m_RecordTime > 3.0f) {
+		cutComp->DeleteCutObjs();
+	}
+	else if (m_RecordTime > 1.8f) {	// 落ちる
+		RigidBodyComponent* rigid1 = obj1->GetComponent<RigidBodyComponent>();
+		RigidBodyComponent* rigid2 = obj2->GetComponent<RigidBodyComponent>();
+
+		rigid1->SetGravityFlag(true);
+		rigid2->SetGravityFlag(true);
+
+		rigid1->SetActiveFlag(true);
+		rigid2->SetActiveFlag(true);
+
+		obj1Trans->AddRotation({ 0.0f,0.0f,5.0f });
+		obj2Trans->AddRotation({ 0.0f,0.0f,-5.0f });
+	}
+	else if (m_RecordTime > 1.5f) {	// 震えを止める
+	}
+	else if (m_RecordTime > 1.3f) {	// 貼りついて揺らす
+
+		const XMFLOAT3 camPos = camTrans->GetPosition();
+
+		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
+		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
+
+		if (m_IsFirstCamPos == true) {
+			m_IsFirstCamPos = false;
+
+			Render2DComponent* render1 = obj1->GetComponent<Render2DComponent>();
+			Render2DComponent* render2 = obj2->GetComponent<Render2DComponent>();
+
+			if (render1 == nullptr || render2 == nullptr) {
+				cutComp->DeleteCutObjs();
+				return;
+			}
+			render1->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+			render2->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+
+			// 画面揺れ開始
+			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
+			if (camShake != nullptr) {
+				camShake->ShakingPreparation(150.0f, 4.0f, 0.3f);
+				camShake->SetShakeType(ShakeType::RANDOM_DEPTH);
+			}
+			return;
+		}
+
+		ShakeCutObjects(obj1Trans, obj2Trans);	// 揺らす
+	}
+	else if (m_RecordTime >= 0.0f) { // 天高く飛ばす
+
+		if (m_IsFirstCamPos == false) {
+			m_IsFirstCamPos = true;
+
+			std::random_device rd;  // 非決定的な乱数の種
+			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+			std::uniform_real_distribution<float> dist1(20.0f, 30.0f); // 範囲指定
+			std::uniform_real_distribution<float> dist2(-20.0f, 20.0f); // 範囲指定
+
+			const float value1 = dist1(gen);
+
+			const float value2 = dist2(gen);
+			const float value3 = dist2(gen);
+
+			m_CutObj1Pos = XMFLOAT3(value1, value2, FrontCameraZ);
+			m_CutObj2Pos = XMFLOAT3(-value1, value3, FrontCameraZ);
+
+			RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
+			RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
+
+			rigid1->SetMass(2.0f);
+			rigid2->SetMass(2.0f);
+
+			rigid1->SetGravityFlag(false);
+			rigid2->SetGravityFlag(false);
+
+			rigid1->SetActiveFlag(false);
+			rigid2->SetActiveFlag(false);
+
+			rigid1->SetFallMagnification(6.0f);
+			rigid2->SetFallMagnification(6.0f);
+
+			rigid1->SetFirstFallMagnification(60.0f);
+			rigid2->SetFirstFallMagnification(60.0f);
+		}
+
+
+		const XMFLOAT3 camPos = camTrans->GetPosition();
+
+		// 最初の一回だけカメラ上部に張り付ける
+
+		const XMFLOAT3 cut1TargetPos = camPos + m_CutObj1Pos;
+		const XMFLOAT3 cut2TargetPos = camPos + m_CutObj2Pos;
+
+		const XMFLOAT3 obj1Pos = obj1Trans->GetPosition();
+		const XMFLOAT3 obj2Pos = obj2Trans->GetPosition();
+
+		const XMVECTOR obj1CurrentPos = XMLoadFloat3(&obj1Pos);
+		const XMVECTOR obj2CurrentPos = XMLoadFloat3(&obj2Pos);
+		const XMVECTOR obj1TargetPos = XMLoadFloat3(&cut1TargetPos);
+		const XMVECTOR obj2TargetPos = XMLoadFloat3(&cut2TargetPos);
+
+		// 方向ベクトル
+		XMVECTOR dir1 = XMVectorSubtract(obj1TargetPos, obj1CurrentPos);
+		XMVECTOR dir2 = XMVectorSubtract(obj2TargetPos, obj2CurrentPos);
+
+		// 距離チェック
+		const float distance1 = XMVectorGetX(XMVector3Length(dir1));
+		const float distance2 = XMVectorGetX(XMVector3Length(dir2));
+
+		if (distance1 < 10.0f || distance2 < 10.0f) {
+			m_RecordTime = 1.3f; // 次のステップへ
+			return;
+		}
+
+		// 正規化
+		dir1 = XMVector3Normalize(dir1);
+		dir2 = XMVector3Normalize(dir2);
+
+		XMVECTOR moveVec1 = XMVectorScale(dir1, distance1 * 15.0f * DeltaTime);
+		XMVECTOR moveVec2 = XMVectorScale(dir2, distance2 * 15.0f * DeltaTime);
+
+		XMVECTOR pos1 = XMVectorAdd(obj1CurrentPos, moveVec1);
+		XMVECTOR pos2 = XMVectorAdd(obj2CurrentPos, moveVec2);
+
+		XMFLOAT3 newPos1;
+		XMStoreFloat3(&newPos1, pos1);
+
+		XMFLOAT3 newPos2;
+		XMStoreFloat3(&newPos2, pos2);
+
+		obj1Trans->SetPosition(newPos1);
+		obj2Trans->SetPosition(newPos2);
+
+		obj1Trans->AddRotation({ 0.0f,0.0f,30.0f });
+		obj2Trans->AddRotation({ 0.0f,0.0f,-30.0f });
+	}
 }

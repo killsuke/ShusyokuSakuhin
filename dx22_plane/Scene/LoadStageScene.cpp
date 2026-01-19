@@ -168,7 +168,7 @@ LoadStageScene::LoadStageScene() {
 			//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
 
 		// 剣のオブジェクト生成 =============================================================
-		auto rolling = GameObjectManager::AddObject("rolling", "Sword");
+		auto rolling = GameObjectManager::AddObject("sword", "Sword");
 
 		auto rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
