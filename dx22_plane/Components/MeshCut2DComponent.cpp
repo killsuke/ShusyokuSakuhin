@@ -90,7 +90,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
-	leftRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	leftRend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	leftRend->ChangeTexture(texName);
 	leftRend->SetInversionFlag(isInversion);
 	m_CutObj1ID = m_CutObj1->GetInstanceID();
@@ -103,7 +103,7 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	//rightMove->SetMovePower(0.1f);
 	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
-	rightRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rightRend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	rightRend->ChangeTexture(texName);
 	rightRend->SetInversionFlag(isInversion);
 	m_CutObj2ID = m_CutObj2->GetInstanceID();

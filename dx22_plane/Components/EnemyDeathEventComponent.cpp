@@ -25,24 +25,6 @@ EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(o
 
 	// 最初は生きているのでフラグをOFFに
 	m_IsActiveFlag = false;
-
-	std::random_device rd;  // 非決定的な乱数の種
-	std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-	std::uniform_real_distribution<float> dist(0.0f, 10.0f); // 範囲指定
-
-	const float value = dist(gen);
-
-	// ランダムで死亡演出を変える
-	/*if (value > 3.0f) {
-		m_State = EnemyDeathEventState::IMMEDIATE;
-	}
-	else {
-		m_State = EnemyDeathEventState::STICKY;
-	}*/
-
-	// チャージスラッシュならSTICKY、
-	// そうでないならIMMEDIATE
-	// にする
 }
 
 EnemyDeathEventComponent::~EnemyDeathEventComponent() {
