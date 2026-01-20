@@ -168,7 +168,7 @@ cbuffer GlowParam : register(b10)
     float3 Pad3;
 };
 
-cbuffer GlowParam2 : register(b11)
+cbuffer GlowParam2 : register(b10)
 {
     float4 GlowColor2; // 発光色（白色）
     float2 EllipseScale2; // 楕円スケール

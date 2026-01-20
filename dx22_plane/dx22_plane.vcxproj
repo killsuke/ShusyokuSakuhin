@@ -175,6 +175,7 @@
     <ClCompile Include="Components\ParticlesControlComponent.cpp" />
     <ClCompile Include="Components\SlashEffectComponent.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
+    <ClCompile Include="Components\RenderRingLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="Components\RenderLuminescenceBillboardComponent.h" />
     <ClInclude Include="Components\ParticlesControlComponent.h" />
     <ClInclude Include="Components\SlashEffectComponent.h" />
+    <ClInclude Include="Components\RenderRingLuminescenceBillboardComponent.h" />
     <ClInclude Include="RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="System\Application.h" />

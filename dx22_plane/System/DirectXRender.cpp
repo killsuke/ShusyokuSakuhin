@@ -802,8 +802,8 @@ HRESULT DirectXRender::VeiwProjConstantCreate() {
 	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pRingGlowBuffer);
-	m_DeviceContext->VSSetConstantBuffers(11, 1, &g_pRingGlowBuffer);
-	m_DeviceContext->PSSetConstantBuffers(11, 1, &g_pRingGlowBuffer);
+	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
 
 	// Ç±Ç±å„Ç≈ÇPî‘Ç…ïœçX
 	if (FAILED(hr)) return hr;

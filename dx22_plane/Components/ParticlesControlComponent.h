@@ -7,7 +7,6 @@ private:
 	float m_VanishTime = 0.0f;	// Œv‘ª‚µ‚ÄÁ‚¦‚Ä—~‚µ‚¢ŠÔ
 	float m_RecordTime = 0.0f;
 
-
 public:
 	ParticlesControlComponent(GameObject& obj);
 	~ParticlesControlComponent() = default;

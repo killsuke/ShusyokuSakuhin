@@ -14,6 +14,9 @@ namespace {
 	constexpr float DeltaTime = 0.016f;
 	constexpr float FrontCameraZ = 50.0f;
 	constexpr float CameraUpY = 25.0f;
+	constexpr float shakePower = 150.0f;
+	constexpr float shakeSpeed = 5.0f;
+	constexpr float shakeTime = 0.3f;
 }
 
 EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(obj) {
@@ -391,7 +394,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			// ‰æ–Ê—h‚êŠJŽn
 			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
 			if (camShake != nullptr) {
-				camShake->ShakingPreparation(150.0f, 4.0f, 0.3f);
+				camShake->ShakingPreparation(shakePower, shakeSpeed, shakeTime);
 				camShake->SetShakeType(ShakeType::RANDOM_DEPTH);
 			}
 			return;
@@ -399,7 +402,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 		ShakeCutObjects(obj1Trans, obj2Trans);	// —h‚ç‚·
 	}
-	else if (m_RecordTime >= 0.0f) { // “V‚‚­”ò‚Î‚·
+	else if (m_RecordTime >= 0.0f) { // ‘O‚É”ò‚Î‚·
 
 		if (m_IsFirstCamPos == false) {
 			m_IsFirstCamPos = true;
@@ -469,8 +472,8 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 		dir1 = XMVector3Normalize(dir1);
 		dir2 = XMVector3Normalize(dir2);
 
-		XMVECTOR moveVec1 = XMVectorScale(dir1, distance1 * 15.0f * DeltaTime);
-		XMVECTOR moveVec2 = XMVectorScale(dir2, distance2 * 15.0f * DeltaTime);
+		XMVECTOR moveVec1 = XMVectorScale(dir1, distance1 * 10.0f * DeltaTime);
+		XMVECTOR moveVec2 = XMVectorScale(dir2, distance2 * 10.0f * DeltaTime);
 
 		XMVECTOR pos1 = XMVectorAdd(obj1CurrentPos, moveVec1);
 		XMVECTOR pos2 = XMVectorAdd(obj2CurrentPos, moveVec2);

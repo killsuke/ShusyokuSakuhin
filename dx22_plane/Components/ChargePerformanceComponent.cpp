@@ -1,6 +1,7 @@
 #include "ChargePerformanceComponent.h"
 #include "Transform.h"
 #include "RenderLuminescenceBillboardComponent.h"
+#include "RenderRingLuminescenceBillboardComponent.h"
 #include "ChargeParticleMoveComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Mesh/SquareMesh.h"

@@ -7,8 +7,8 @@ class RenderLuminescenceBillboardComponent : public RenderComponent
 {
 private:
 	float m_GlowPower = 1.0f; // 輝度の強さ
-	DirectX::XMFLOAT2 m_EllipseScale = { 1.0f,1.0f }; // 楕円のスケール
 	float m_GlowRadius = 1.0f; // 輝く範囲の大きさ
+	DirectX::XMFLOAT2 m_EllipseScale = { 1.0f,1.0f }; // 楕円のスケール
 
 public:
 

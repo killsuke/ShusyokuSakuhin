@@ -95,6 +95,9 @@ void RenderLuminescenceBillboardComponent::Update()
 		gb.glowRadius = m_GlowRadius;
 		gb.angleRadian = XMConvertToRadians(angles.z);
 
+		deviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+		deviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+
 		deviceContext->UpdateSubresource(g_pGlowBuffer, 0, NULL, &gb, 0, 0);
 
 		//マテリアル数分ループ 
