@@ -83,6 +83,7 @@ void RenderRingLuminescenceBillboardComponent::Update()
 
 		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
+		EBlendState currentBlendState = DirectXRender::GetCurrentBlendState();
 		DirectXRender::SetBlendState(EBlendState::BS_EFFECT);
 		DirectXRender::SetDepthEnable(false); // 深度テスト無効、書き込み無効
 
@@ -116,7 +117,7 @@ void RenderRingLuminescenceBillboardComponent::Update()
 				subsets[i].VertexBase);	// 頂点バッファの最初から使用
 		}
 
-		DirectXRender::SetBlendState(EBlendState::BS_ALPHABLEND);
+		DirectXRender::SetBlendState(currentBlendState);
 		DirectXRender::SetDepthEnable(true);
 	}
 }

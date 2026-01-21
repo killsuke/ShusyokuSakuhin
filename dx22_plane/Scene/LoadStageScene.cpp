@@ -54,6 +54,7 @@ LoadStageScene::LoadStageScene() {
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
 	auto cameraComp = camera->AddComponent<Camera>();
 	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	cameraComp->SetFieldOfView(FieldOfView::WIDE);
 	CameraShakeComponent* cameraShake = camera->AddComponent<CameraShakeComponent>();
 
 	camera->AddComponent<SpringComponent>();

@@ -6,6 +6,7 @@
 std::unordered_set<std::string> HitStopManager::m_TargetTags;
 float HitStopManager::m_HitStopTime = 0.0f;
 float HitStopManager::m_RecordTime = 0.0f;
+bool HitStopManager::m_IsHitStopActive = true;
 
 namespace
 {
@@ -14,6 +15,11 @@ namespace
 
 void HitStopManager::Update()
 {
+	if(m_IsHitStopActive == false)
+	{
+		return;
+	}
+
 	if(m_HitStopTime > 0.0f)
 	{
 		if(m_RecordTime == 0.0f)

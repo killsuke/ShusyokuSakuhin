@@ -66,6 +66,8 @@ void DebugSystem::UnInit() {
 
 void DebugSystem::Update() {
 	
+#ifdef  _DEBUG
+
 	// デバッグUIのオブジェクトが生成されているか確認
 	for (const GameObject* debugUI : m_DebugUIs) {
 		if (debugUI == nullptr) {
@@ -80,7 +82,9 @@ void DebugSystem::Update() {
 	DebugUI();
 	ScreenStopped(objs);
 	FrameAdvance(objs);
-	SwitchingFillMode();
+	SwitchingFillMode(); 
+
+#endif //  _DEBUG
 }
 
 void DebugSystem::DebugUI() {
@@ -101,7 +105,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		m_ScreenStop = !m_ScreenStop;
 
 		if (m_ScreenStop == false) {
-			for (const auto& obj : objs) {
+			for (GameObject* obj : objs) {
 				// 描画停止中か全停止中のオブジェクトはスルー
 				const ActiveState currentState = obj->GetActiveState();
 				if (currentState == ActiveState::DRAW_STOP || currentState == ActiveState::ALL_STOP) {
@@ -124,14 +128,12 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
 	// 画面停止中の処理
 	if (m_ScreenStop == true) {
-		for (const auto& obj : objs) {
+		for (GameObject* obj : objs) {
 			// 更新停止中か全停止中のオブジェクトはスルー
 			const ActiveState currentState = obj->GetActiveState();
-			if(currentState != ActiveState::ACTIVE) {
-				continue;
+			if(currentState == ActiveState::ACTIVE) {
+				obj->SetActiveState(ActiveState::UPDATE_STOP);
 			}
-
-			obj->SetActiveState(ActiveState::UPDATE_STOP);
 		}
 		Scene* scene = SceneManager::GetScene();
 		if (scene != nullptr) {

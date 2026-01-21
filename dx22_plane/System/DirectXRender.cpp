@@ -95,6 +95,8 @@ ID3D11Buffer* g_pCameraInformationBuffer{}; // ƒJƒƒ‰î•ñ
 
 FLOAT DirectXRender::m_ClearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
 
+EBlendState DirectXRender::m_CurrentBlendState = EBlendState::BS_ALPHABLEND;
+
 DirectXRender::DirectXRender() {
 
 }
@@ -941,6 +943,7 @@ void DirectXRender::SetBlendState(const EBlendState& nBlendState)
 			break;
 		}
 
+		m_CurrentBlendState = nBlendState;
 		m_DeviceContext->OMSetBlendState(g_BlendState[result], blendFactor, 0xffffffff);
 	}
 }

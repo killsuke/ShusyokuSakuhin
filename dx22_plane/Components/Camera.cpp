@@ -9,6 +9,12 @@
 using namespace DirectX;
 using namespace std;
 
+namespace {
+	constexpr float DEFAULT_FOV = 45.0f;
+	constexpr float WIDE_FOV = 90.0f;
+	constexpr float TELEPHOTO_FOV = 20.0f;
+}
+
 Camera::Camera(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ソート番号を設定
@@ -236,7 +242,27 @@ void Camera::Update3D() {
 	DirectXRender::SetViewMatrix3D(&viewMatrix);
 
 	//プロジェクション行列の生成
-	constexpr float fieldOfView = XMConvertToRadians(45.0f);    // 視野角
+	float fieldOfView = 0.0f;    // 視野角
+
+	switch (m_FieldOfView)
+	{
+	case FieldOfView::DEFAULT:
+
+		fieldOfView = XMConvertToRadians(DEFAULT_FOV); // 標準
+		break;
+	case FieldOfView::WIDE:
+
+		fieldOfView = XMConvertToRadians(WIDE_FOV); // 広角
+		break;
+	case FieldOfView::TELEPHOTO:
+
+		fieldOfView = XMConvertToRadians(TELEPHOTO_FOV); // 望遠
+		break;
+	case FieldOfView::MAX:
+		break;
+	default:
+		break;
+	}
 
 	// 後にここは調整できるようにしておく
 	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
@@ -245,7 +271,12 @@ void Camera::Update3D() {
 
 	//プロジェクション行列の生成
 	XMMATRIX projectionMatrix;
-	projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
+	projectionMatrix = XMMatrixPerspectiveFovLH(
+		fieldOfView,	// 垂直視野角
+		aspectRatio,	// 画面のアスペクト比
+		nearPlane,		// 前方クリップ面
+		farPlane		// 後方クリップ面
+	);	// 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
 	// このコードは確認テストのために残す

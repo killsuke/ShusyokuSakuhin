@@ -182,6 +182,7 @@ private:
 
 	static FLOAT m_ClearColor[4];
 
+	static EBlendState m_CurrentBlendState;
 	static ID3D11BlendState* g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ブレンド ステート;
 
 	static HRESULT DeviceAndSwapCreate();
@@ -247,6 +248,9 @@ public:
 	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
 
 	static FLOAT* GetClearColor() { return m_ClearColor; };
+
+	static EBlendState GetCurrentBlendState() { return m_CurrentBlendState; };
+	static EFillMode GetFillMode() { return m_FillMode; };
 
 	//=============================================================================
 	// ブレンド ステート設定

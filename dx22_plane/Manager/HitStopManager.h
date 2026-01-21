@@ -9,6 +9,7 @@ private:
 	static std::unordered_set<std::string> m_TargetTags;
 	static float m_RecordTime;
 	static float m_HitStopTime;
+	static bool m_IsHitStopActive;	// このマネージャーのアップデートを有効にするかどうか
 
 public:
 
@@ -24,4 +25,5 @@ public:
 	static void RemoveTargetTag(const std::string& tag) { m_TargetTags.erase(tag); };
 	static void ClearTargetTags() { m_TargetTags.clear(); };
 	static void SetHitStopTime(const float time) { m_HitStopTime = time; };
+	static void SetIsHitStopActive(const bool isActive) { m_IsHitStopActive = isActive; };
 };

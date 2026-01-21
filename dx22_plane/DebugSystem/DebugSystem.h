@@ -16,13 +16,6 @@ private:
 	DebugSystem() = default;
 	~DebugSystem() = default;
 
-public:
-
-	static void Init();
-	static void UnInit();
-
-	static void Update();
-
 	// デバッグ機能のUIのON/OFF
 	static void DebugUI();
 
@@ -35,5 +28,10 @@ public:
 	// ワイヤーフレームとソリッドの切り替え
 	static void SwitchingFillMode();
 
+public:
 
+	static void Init();
+	static void UnInit();
+
+	static void Update();
 };

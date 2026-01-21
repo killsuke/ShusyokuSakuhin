@@ -5,6 +5,14 @@
 
 #define CARCAMERA (0.01745f)
 
+enum class FieldOfView{
+	DEFAULT,	// デフォルト
+	WIDE,		// 広角
+	TELEPHOTO,	// 望遠
+
+	MAX
+};
+
 //-----------------------------------------------------------------------------
 //Cameraクラス
 //-----------------------------------------------------------------------------
@@ -21,6 +29,8 @@ private:
 
 	DirectX::XMMATRIX		m_ViewMatrixSky = DirectX::XMMatrixIdentity();
 	DirectX::XMMATRIX		m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
+
+	FieldOfView m_FieldOfView = FieldOfView::DEFAULT;
 
 	//float m_CameraDirection = 0; // カメラの方向
 
@@ -47,6 +57,9 @@ public:
 
 	inline void SetTarget(const DirectX::XMFLOAT3& target) { m_Target = target; };
 	inline void AddTarget(const DirectX::XMFLOAT3& target) { m_Target += target; };
+
+	inline void SetFieldOfView(const FieldOfView fov) { m_FieldOfView = fov; }
+
 	inline DirectX::XMFLOAT3 GetTarget() const { return m_Target; }
 
 	// 転置していない状態のモノを返す
