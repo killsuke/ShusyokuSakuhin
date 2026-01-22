@@ -222,13 +222,16 @@ void Camera::Update2D() {
 void Camera::Update3D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	XMFLOAT3 pos = transform->GetPosition();
+	pos += m_OffsetPosition;
 
 	// ƒrƒ…[•ÏŠ·Œã—ñì¬
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX viewMatrix;
 
 	XMVECTOR posV = XMLoadFloat3(&pos);
-	XMVECTOR targetV = XMLoadFloat3(&m_Target);
+
+	XMFLOAT3 target = m_Target + m_OffsetTarget;
+	XMVECTOR targetV = XMLoadFloat3(&target);
 
 
 	viewMatrix = XMMatrixLookAtLH(posV, targetV, up); // ¶èŒn‚É‚µ‚½@20230511 by suzuki.tomoki

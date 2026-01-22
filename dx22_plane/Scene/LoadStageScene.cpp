@@ -49,11 +49,11 @@ using namespace DirectX::SimpleMath;
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
+	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -70.0f));
 	camera->AddComponent<RigidBodyComponent>();
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
 	auto cameraComp = camera->AddComponent<Camera>();
-	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 100.0f));
 	cameraComp->SetFieldOfView(FieldOfView::WIDE);
 	CameraShakeComponent* cameraShake = camera->AddComponent<CameraShakeComponent>();
 

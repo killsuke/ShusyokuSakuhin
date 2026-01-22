@@ -12,10 +12,10 @@ using namespace DirectX;
 
 namespace {
 	constexpr float DeltaTime = 0.016f;
-	constexpr float FrontCameraZ = 50.0f;
+	constexpr float FrontCameraZ = 20.0f;
 	constexpr float CameraUpY = 25.0f;
-	constexpr float shakePower = 150.0f;
-	constexpr float shakeSpeed = 5.0f;
+	constexpr float shakePower = 10.0f;
+	constexpr float shakeSpeed = 2.5f;
 	constexpr float shakeTime = 0.3f;
 }
 
@@ -395,12 +395,12 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
 			if (camShake != nullptr) {
 				camShake->ShakingPreparation(shakePower, shakeSpeed, shakeTime);
-				camShake->SetShakeType(ShakeType::RANDOM_DEPTH);
+				camShake->SetShakeType(ShakeType::RANDOM_DEPTH_ATTENUATION);
 			}
 			return;
 		}
 
-		ShakeCutObjects(obj1Trans, obj2Trans);	// —h‚ç‚·
+		//ShakeCutObjects(obj1Trans, obj2Trans);	// —h‚ç‚·
 	}
 	else if (m_RecordTime >= 0.0f) { // ‘O‚É”ò‚Î‚·
 
@@ -417,8 +417,8 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			const float value2 = dist2(gen);
 			const float value3 = dist2(gen);
 
-			m_CutObj1Pos = XMFLOAT3(value1, value2, FrontCameraZ);
-			m_CutObj2Pos = XMFLOAT3(-value1, value3, FrontCameraZ);
+			m_CutObj1Pos = XMFLOAT3(-value1, value2, FrontCameraZ);
+			m_CutObj2Pos = XMFLOAT3(value1, value3, FrontCameraZ);
 
 			RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
 			RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();

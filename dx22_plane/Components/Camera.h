@@ -19,16 +19,19 @@ enum class FieldOfView{
 class Camera : public Component {
 private:
 
-	DirectX::XMFLOAT3		m_Target = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT3 m_Target = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-	DirectX::XMMATRIX		m_ViewMatrix2D = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX		m_ProjectionMatrix2D = DirectX::XMMatrixIdentity();
+	DirectX::XMFLOAT3 m_OffsetPosition = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT3 m_OffsetTarget = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-	DirectX::XMMATRIX		m_ViewMatrix3D = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX		m_ProjectionMatrix3D = DirectX::XMMatrixIdentity();
-
-	DirectX::XMMATRIX		m_ViewMatrixSky = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX		m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX m_ViewMatrix2D = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX m_ProjectionMatrix2D = DirectX::XMMatrixIdentity();
+					  
+	DirectX::XMMATRIX m_ViewMatrix3D = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX m_ProjectionMatrix3D = DirectX::XMMatrixIdentity();
+					  
+	DirectX::XMMATRIX m_ViewMatrixSky = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
 
 	FieldOfView m_FieldOfView = FieldOfView::DEFAULT;
 
@@ -59,6 +62,8 @@ public:
 	inline void AddTarget(const DirectX::XMFLOAT3& target) { m_Target += target; };
 
 	inline void SetFieldOfView(const FieldOfView fov) { m_FieldOfView = fov; }
+	inline void SetOffsetPosition(const DirectX::XMFLOAT3& offsetPos) { m_OffsetPosition = offsetPos; }
+	inline void SetOffsetTarget(const DirectX::XMFLOAT3& offsetTgt) { m_OffsetTarget = offsetTgt; }
 
 	inline DirectX::XMFLOAT3 GetTarget() const { return m_Target; }
 

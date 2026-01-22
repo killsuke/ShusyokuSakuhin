@@ -17,9 +17,8 @@ CameraShakeComponent::CameraShakeComponent(GameObject& obj) : Component(obj) {
 void CameraShakeComponent::Update() {
 
 	Camera* camera = m_Object->GetComponent<Camera>();
-	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
 
-	if (camera != nullptr && trans != nullptr && m_RequestTime != 0.0f) {
+	if (camera != nullptr && m_RequestTime != 0.0f) {
 		const XMMATRIX view = camera->GetView3D();
 
 		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -40,13 +39,17 @@ void CameraShakeComponent::Update() {
 
 			newPos = RandomShakeDepth(view);
 			break;
+		case ShakeType::RANDOM_DEPTH_ATTENUATION:
+
+			newPos = RandomShakeDepthAttenuation(view);
+			break;
 		default:
 			break;
 		}
 
 		// 位置更新
-		trans->AddPosition(newPos);
-		camera->AddTarget(newPos);
+		camera->SetOffsetPosition(newPos);
+		camera->SetOffsetTarget(newPos);
 
 		m_RecordTime += DeltaTime;
 		if (m_RecordTime > m_RequestTime) {
@@ -54,7 +57,6 @@ void CameraShakeComponent::Update() {
 			m_RequestTime = 0.0f;
 			m_ShakePower = 0.0f;
 			m_ShakeSpeed = 0.0f;
-			m_QuarterRequestTime = 0.0f;
 			m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };
 		}
 	}
@@ -116,11 +118,7 @@ DirectX::XMFLOAT3 CameraShakeComponent::DepthShake(const DirectX::XMMATRIX& view
 
 DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& view) {
 
-	const float quarterTime = m_RequestTime * 0.2f;
-
-	if (m_RecordTime > m_QuarterRequestTime) {
-
-		m_QuarterRequestTime += quarterTime;
+	if (m_RecordTime < m_RequestTime) {
 
 		std::random_device rd;  // 非決定的な乱数の種
 		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
@@ -154,11 +152,7 @@ DirectX::XMFLOAT3 CameraShakeComponent::RandomShake2D(const DirectX::XMMATRIX& v
 
 DirectX::XMFLOAT3 CameraShakeComponent::RandomShakeDepth(const DirectX::XMMATRIX& view) {
 
-	const float quarterTime = m_RequestTime * 0.2f;
-
-	if (m_RecordTime > m_QuarterRequestTime) {
-
-		m_QuarterRequestTime += quarterTime;
+	if (m_RecordTime < m_RequestTime) {
 
 		std::random_device rd;  // 非決定的な乱数の種
 		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
@@ -172,6 +166,52 @@ DirectX::XMFLOAT3 CameraShakeComponent::RandomShakeDepth(const DirectX::XMMATRIX
 
 	// ランダム揺れ用オフセット
 	const float offsetX = sinf(m_RecordTime * m_ShakePower) * m_ShakeSpeed;
+
+	// 正規化したRightベクトルをオフセットに適用
+	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);
+
+	// 前フレームとの差分を取る
+	// サイン波がゼロに戻るときに差分もゼロになるので、
+	// 最終的に元の位置に戻る
+	const XMVECTOR frameOffset = XMVectorSubtract(offset, m_PrevShakeOffset);
+
+	m_PrevShakeOffset = offset;
+
+	XMFLOAT3 newPos;
+	XMStoreFloat3(&newPos, frameOffset);
+
+	return newPos;
+}
+
+DirectX::XMFLOAT3 CameraShakeComponent::RandomShakeDepthAttenuation(const DirectX::XMMATRIX& view) {
+
+	float offsetX = 0.0f;
+	if (m_RecordTime < m_RequestTime) {
+
+		float t = m_RecordTime / m_RequestTime; // 0.0f～1.0f
+		t = std::clamp(t, 0.0f, 1.0f);
+
+		// 揺れの減衰カーブ
+		float attenuation = 1.0f - (t * t);
+
+		// 実際の揺れ強度
+		float amplitude = m_ShakePower * attenuation;
+
+		// 揺れ本体
+		offsetX = sinf(m_RecordTime * m_ShakeSpeed) * amplitude;
+
+		std::random_device rd;  // 非決定的な乱数の種
+		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+		std::uniform_real_distribution<float> dist(-1.0f, 1.0f); // 範囲指定
+
+		const float rZ = dist(gen); // 0.0 ～ 1.0 の乱数
+
+		m_ShakeVector = XMVectorSet(0.0f, 0.0f, rZ, 0.0f);
+		m_ShakeVector = XMVector3Normalize(m_ShakeVector);
+	}
+
+	// ランダム揺れ用オフセット
+//	const float offsetX = sinf(m_RecordTime * m_ShakePower) * m_ShakeSpeed;
 
 	// 正規化したRightベクトルをオフセットに適用
 	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);
