@@ -11,13 +11,16 @@ T3* GameObject::AddComponent() {
 
 	Component* p_comp = comp.get();
 
+	// Œ^ID‚Å“o˜^
+	m_ComponentMap[typeid(T3)] = p_comp;
+
 	bool renderFlag = ComponentCheck(p_comp);
 
 	if (renderFlag == true) {
-		renderComponents.emplace_back(std::move(comp));
+		m_RenderComponents.emplace_back(std::move(comp));
 	}
 	else {
-		components.emplace_back(std::move(comp));
+		m_Components.emplace_back(std::move(comp));
 	}
 
 	SortComponents();

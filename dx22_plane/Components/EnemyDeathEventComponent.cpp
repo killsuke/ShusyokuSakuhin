@@ -3,6 +3,7 @@
 #include "ProjectileMotionComponent.h"
 #include "Render2D.h"
 #include "CameraShakeComponent.h"
+#include "Mesh/SquareMesh.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
 #include <SimpleMath.h>
@@ -147,7 +148,7 @@ void EnemyDeathEventComponent::ImmediateProcess(MeshCut2DComponent* cutComp, Gam
 
 		rigid1->SetMass(2.0f);
 		rigid2->SetMass(2.0f);
-		
+
 		ProjectileMotionComponent* proj1 = obj1->AddComponent<ProjectileMotionComponent>();
 		ProjectileMotionComponent* proj2 = obj2->AddComponent<ProjectileMotionComponent>();
 
@@ -397,6 +398,35 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 				camShake->ShakingPreparation(shakePower, shakeSpeed, shakeTime);
 				camShake->SetShakeType(ShakeType::RANDOM_DEPTH_ATTENUATION);
 			}
+
+			XMFLOAT3 pos1 = obj1Trans->GetPosition();
+			XMFLOAT3 pos2 = obj2Trans->GetPosition();
+
+			XMFLOAT3 size1 = obj1Trans->GetScale();
+			XMFLOAT3 size2 = obj2Trans->GetScale();
+
+			pos1.z -= 1.0f;
+			pos2.z -= 1.0f;
+
+			// ここにヒビが入ったテクスチャを貼ってみる
+			m_Crack1 = GameObjectManager::AddObject("crack1", "EFFECT");
+			TransformComponent* crackTrans1 = m_Crack1->AddComponent<TransformComponent>();
+			crackTrans1->SetPosition(pos1);
+			crackTrans1->SetScale(size1);
+			Render2DComponent* rend1 = m_Crack1->AddComponent<Render2DComponent>();
+			rend1->CreateMesh<SquareMesh>();
+			rend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			rend1->ChangeTexture("assets/texture/crack.png");
+
+			m_Crack2 = GameObjectManager::AddObject("crack2", "EFFECT");
+			TransformComponent* crackTrans2 = m_Crack2->AddComponent<TransformComponent>();
+			crackTrans2->SetPosition(pos2);
+			crackTrans2->SetScale(size2);
+			Render2DComponent* rend2 = m_Crack2->AddComponent<Render2DComponent>();
+			rend2->CreateMesh<SquareMesh>();
+			rend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			rend2->ChangeTexture("assets/texture/crack.png");
+
 			return;
 		}
 

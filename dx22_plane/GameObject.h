@@ -6,6 +6,8 @@
 #include <vector>
 #include <cstdint>
 #include <algorithm>
+#include <unordered_map>
+#include <typeindex>
 
 enum class ActiveState {
 	ACTIVE,
@@ -34,8 +36,9 @@ class Component; // 前方宣言
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
 private:
-	std::vector<std::unique_ptr<Component>> components;
-	std::vector<std::unique_ptr<Component>> renderComponents;
+	std::vector<std::unique_ptr<Component>> m_Components;
+	std::vector<std::unique_ptr<Component>> m_RenderComponents;
+	std::unordered_map<std::type_index, Component*> m_ComponentMap;
 	std::vector<GameObject*> children;	// 子オブジェクトを持つことができる
 	GameObject* parent = nullptr;	// 親オブジェクトを持つことができる
 	TagAndID m_TagAndID = { "",0 }; // タグとIDのペア
@@ -50,10 +53,10 @@ private:
 
 public:
 
-	GameObject(const std::string& _name,const uint32_t& id)
-		: name(_name),m_InstanceID(id) {
-		components.reserve(20);
-		renderComponents.reserve(4);
+	GameObject(const std::string& _name, const uint32_t& id)
+		: name(_name), m_InstanceID(id) {
+		m_Components.reserve(20);
+		m_RenderComponents.reserve(4);
 	}; // 名前とタグを指定して初期化
 	~GameObject();	// デフォルトデストラクタ
 
@@ -115,21 +118,26 @@ public:
 	bool ComponentCheck(Component* comp);
 
 	// 装備されているコンポーネントを取得して使用可能にする
+	// ただし、同じ型のコンポーネントを複数持てないことに注意
 	template<typename T1>
 	T1* GetComponent() {
-		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
-				return ptr;
-			}
-		}
 
-		for (auto& component : renderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
-				return ptr;
-			}
-		}
+		auto it = m_ComponentMap.find(typeid(T1));
+		return (it != m_ComponentMap.end()) ? static_cast<T1*>(it->second): nullptr;
 
-		return nullptr; // 指定された型がなかった場合nullptr
+		//for (auto& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
+		//	if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+		//		return ptr;
+		//	}
+		//}
+
+		//for (auto& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+		//	if (auto ptr = dynamic_cast<T1*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
+		//		return ptr;
+		//	}
+		//}
+
+		//return nullptr; // 指定された型がなかった場合nullptr
 	}
 
 	template<typename T2>
@@ -137,12 +145,12 @@ public:
 		std::vector<T2*> comps;
 		comps.clear();
 
-		for (auto& component : components) { // ゲームオブジェクト内のコンポーネントをループで見る
+		for (auto& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
 			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
 				comps.push_back(ptr);
 			}
 		}
-		for (auto& component : renderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+		for (auto& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
 			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
 				comps.push_back(ptr);
 			}

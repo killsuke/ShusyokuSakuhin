@@ -7,12 +7,11 @@ using namespace DirectX;
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void Render3DComponent::Update()
 {
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -24,7 +23,7 @@ void Render3DComponent::Update()
 
 		cb.inverse = (m_Inversion == RightLeft::RIGHT) ? true : false;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -32,16 +31,15 @@ void Render3DComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		//m_Texture->SetGPU();
 
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)

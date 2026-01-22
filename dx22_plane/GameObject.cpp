@@ -19,7 +19,7 @@ void GameObject::Update() {
 		return;
 
 	// コンポーネントの更新
-	for (auto& component : components) {
+	for (auto& component : m_Components) {
 		if (component->GetActiveFlag() == true) {
 			component->Update();
 		}
@@ -39,7 +39,7 @@ void GameObject::Draw() {
 		return;
 
 	// 描画用コンポーネントの更新
-	for (auto& renderComp : renderComponents) {
+	for (auto& renderComp : m_RenderComponents) {
 		if (renderComp->GetActiveFlag() == true) {
 			renderComp->Update();
 		}
@@ -54,12 +54,12 @@ void GameObject::Draw() {
 }
 
 void GameObject::SortComponents() {
-	std::sort(components.begin(), components.end(),	// レンダー関係以外のコンポーネントコンテナをソート
+	std::sort(m_Components.begin(), m_Components.end(),	// レンダー関係以外のコンポーネントコンテナをソート
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});
 
-	std::sort(renderComponents.begin(), renderComponents.end(),	// レンダー関係のコンポーネントコンテナをソート
+	std::sort(m_RenderComponents.begin(), m_RenderComponents.end(),	// レンダー関係のコンポーネントコンテナをソート
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
 		});

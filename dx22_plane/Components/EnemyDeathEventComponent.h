@@ -37,6 +37,8 @@ private:
 	RightLeft m_RightLeft = RightLeft::RIGHT;
 
 	DeathPattern m_DeathPattern = DeathPattern::NONE;
+	GameObject* m_Crack1 = nullptr;
+	GameObject* m_Crack2 = nullptr;
 
 public:
 	EnemyDeathEventComponent(GameObject& obj);

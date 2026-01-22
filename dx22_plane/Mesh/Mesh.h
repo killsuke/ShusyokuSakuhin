@@ -68,11 +68,28 @@ public:
 		return subsets;
 	}
 
+	std::vector<SUBSET*> GetTestSubsets() {
+		std::vector<SUBSET*> subsets;
+		for (const auto& ptr : m_Subset) {
+			subsets.push_back(ptr.get());
+		}
+
+		return subsets;
+	}
+
 	// ƒ}ƒeƒŠƒAƒ‹î•ñæ“¾
 	std::vector<MATERIAL> GetMaterials() const {
 		std::vector<MATERIAL> materials;
 		for (const auto& ptr : m_Materiales) {
 			materials.push_back(*ptr.get());
+		}
+		return materials;
+	}
+
+	std::vector<MATERIAL*> GetTestMaterials() const {
+		std::vector<MATERIAL*> materials;
+		for (const auto& ptr : m_Materiales) {
+			materials.push_back(ptr.get());
 		}
 		return materials;
 	}
