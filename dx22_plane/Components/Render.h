@@ -85,6 +85,11 @@ public:
 		m_Color.w += addcolor.w;
 	};
 
+	void AddColor_X(const float color) { m_Color.x += color; };
+	void AddColor_Y(const float color) { m_Color.y += color; };
+	void AddColor_Z(const float color) { m_Color.z += color; };
+	void AddColor_A(const float color) { m_Color.w += color; };
+
 	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
 
 	template<class T>

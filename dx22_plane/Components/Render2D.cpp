@@ -9,12 +9,11 @@ using namespace DirectX;
 Render2DComponent::Render2DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void Render2DComponent::Update()
 {
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -24,7 +23,7 @@ void Render2DComponent::Update()
 
 		cb.color = m_Color;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -32,7 +31,6 @@ void Render2DComponent::Update()
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		//m_Texture->SetGPU();
 
 		auto texture = m_Mesh->GetTextures();
 
@@ -56,6 +54,9 @@ void Render2DComponent::Update()
 
 		auto textures = m_Mesh->GetTextures();
 
+		ECullingState culling = DirectXRender::GetCullingState();
+		DirectXRender::SetCullingState(ECullingState::CULLING_NONE);
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
@@ -71,5 +72,7 @@ void Render2DComponent::Update()
 				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
 				subsets[i].VertexBase);	// 頂点バッファの最初から使用
 		}
+
+		DirectXRender::SetCullingState(culling);
 	}
 }

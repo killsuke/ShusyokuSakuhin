@@ -251,6 +251,7 @@ public:
 
 	static EBlendState GetCurrentBlendState() { return m_CurrentBlendState; };
 	static EFillMode GetFillMode() { return m_FillMode; };
+	static ECullingState GetCullingState() { return m_CullingState; };
 
 	//=============================================================================
 	// ブレンド ステート設定

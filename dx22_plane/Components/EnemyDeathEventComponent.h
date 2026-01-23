@@ -3,6 +3,7 @@
 #include "MeshCut2DComponent.h"
 #include "VectorMoveComponent.h"
 #include "Transform.h"
+#include <vector>
 
 struct DeathEvent {
 	uint32_t deadID; // 死亡したオブジェクトのインスタンスID
@@ -39,6 +40,8 @@ private:
 	DeathPattern m_DeathPattern = DeathPattern::NONE;
 	GameObject* m_Crack1 = nullptr;
 	GameObject* m_Crack2 = nullptr;
+
+	std::vector<GameObject*> m_Debris;	// 飛び出した破片
 
 public:
 	EnemyDeathEventComponent(GameObject& obj);

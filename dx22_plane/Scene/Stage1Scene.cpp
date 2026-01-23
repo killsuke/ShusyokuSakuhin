@@ -10,6 +10,7 @@
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/TriangleMesh.h"
+#include "Mesh/TriangularPrismMesh.h"
 #include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
 #include "Components/BonePartsComponent.h"
@@ -179,13 +180,13 @@ void Stage1Scene::Init()
 		GameObject* parentObj = GameObjectManager::AddObject("parentObj", "Test");
 		TransformComponent* parentTrans = parentObj->AddComponent<TransformComponent>();
 		parentTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-		parentTrans->SetScale({ 50.0f,50.0f,1.0f });
-		VectorMoveComponent* vectorMove = parentObj->AddComponent<VectorMoveComponent>();
+		parentTrans->SetScale({ 50.0f,50.0f,50.0f });
+		/*VectorMoveComponent* vectorMove = parentObj->AddComponent<VectorMoveComponent>();
 		vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
 		vectorMove->SetMovePower(2.0f);
 		MeshCut2DComponent* meshCut = parentObj->AddComponent<MeshCut2DComponent>();
-		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);
-		Render3DComponent* parentRend = parentObj->AddComponent<Render3DComponent>();
+		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);*/
+		Render2DComponent* parentRend = parentObj->AddComponent<Render2DComponent>();
 		parentRend->CreateMesh<SquareMesh>();
 		parentRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
 		parentRend->ChangeTexture("assets/texture/background1.png");

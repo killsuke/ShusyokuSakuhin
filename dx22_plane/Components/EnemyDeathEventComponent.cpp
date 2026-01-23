@@ -2,8 +2,10 @@
 #include "RigidBodyComponent.h"
 #include "ProjectileMotionComponent.h"
 #include "Render2D.h"
+#include "Render3D.h"
 #include "CameraShakeComponent.h"
 #include "Mesh/SquareMesh.h"
+#include "Mesh/TriangularPrismMesh.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
 #include <SimpleMath.h>
@@ -17,7 +19,7 @@ namespace {
 	constexpr float CameraUpY = 25.0f;
 	constexpr float shakePower = 10.0f;
 	constexpr float shakeSpeed = 2.5f;
-	constexpr float shakeTime = 0.3f;
+	constexpr float shakeTime = 0.2f;
 }
 
 EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(obj) {
@@ -356,8 +358,15 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 	if (m_RecordTime > 3.0f) {
 		cutComp->DeleteCutObjs();
+		m_Crack1->Destroy();
+		m_Crack2->Destroy();
+
+		for (GameObject* debris : m_Debris) {
+			debris->Destroy();
+		}
+		m_Debris.clear();
 	}
-	else if (m_RecordTime > 1.8f) {	// 落ちる
+	else if (m_RecordTime > 1.9f) {	// 落ちる
 		RigidBodyComponent* rigid1 = obj1->GetComponent<RigidBodyComponent>();
 		RigidBodyComponent* rigid2 = obj2->GetComponent<RigidBodyComponent>();
 
@@ -369,6 +378,13 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 		obj1Trans->AddRotation({ 0.0f,0.0f,5.0f });
 		obj2Trans->AddRotation({ 0.0f,0.0f,-5.0f });
+
+		Render2DComponent* rend1 = m_Crack1->GetComponent<Render2DComponent>();
+		Render2DComponent* rend2 = m_Crack2->GetComponent<Render2DComponent>();
+
+		rend1->AddColor_A(-0.05f);
+		rend2->AddColor_A(-0.05f);
+
 	}
 	else if (m_RecordTime > 1.5f) {	// 震えを止める
 	}
@@ -416,6 +432,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			Render2DComponent* rend1 = m_Crack1->AddComponent<Render2DComponent>();
 			rend1->CreateMesh<SquareMesh>();
 			rend1->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			rend1->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
 			rend1->ChangeTexture("assets/texture/crack.png");
 
 			m_Crack2 = GameObjectManager::AddObject("crack2", "EFFECT");
@@ -425,7 +442,80 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			Render2DComponent* rend2 = m_Crack2->AddComponent<Render2DComponent>();
 			rend2->CreateMesh<SquareMesh>();
 			rend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			rend2->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
 			rend2->ChangeTexture("assets/texture/crack.png");
+
+
+			std::random_device rd;  // 非決定的な乱数の種
+			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
+			std::uniform_int_distribution<int> dist(2, 6); // 範囲指定
+
+			std::uniform_real_distribution<float> distFloat(1.0f, 1.5f);
+			std::uniform_real_distribution<float> distFloat2(5.0f, 8.0f);
+
+			const int debrisNum = dist(gen);
+
+			XMFLOAT3 testScale = { 1.0f,1.0f,1.0f };
+
+			// 左側に飛んで行った方
+			for (int i = 0; i < debrisNum; ++i) {
+
+				GameObject* debris = GameObjectManager::AddObject("debrisLeft", "Debris");
+				TransformComponent* debrisTrans = debris->AddComponent<TransformComponent>();
+				debrisTrans->SetPosition(pos1);
+				debrisTrans->SetScale(testScale);
+				
+				RigidBodyComponent* rigid = debris->AddComponent<RigidBodyComponent>();
+				rigid->SetGravityFlag(true);
+				rigid->SetMass(2.0f);
+				rigid->SetFirstFallMagnification(45.0f);
+				rigid->SetFallMagnification(4.5f);
+
+				const float dirX = distFloat(gen);
+				const float powerR = distFloat2(gen);
+
+				ProjectileMotionComponent* proj = debris->AddComponent<ProjectileMotionComponent>();
+				proj->SetProjectileDirection({ dirX,1.0f,-1.0f });
+				proj->SetProjectilePower(powerR);
+				proj->SetProjectileRotation({ 0.0f,-1.5f,5.0f });
+
+				Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
+				rend->CreateMesh<SquareMesh>();
+				rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+				rend->ChangeTexture("assets/texture/glass_shards.png");
+
+				m_Debris.push_back(debris);
+			}
+
+			// 右側に飛んで行った方
+			for (int i = 0; i < debrisNum; ++i) {
+
+				GameObject* debris = GameObjectManager::AddObject("debrisRight", "Debris");
+				TransformComponent* debrisTrans = debris->AddComponent<TransformComponent>();
+				debrisTrans->SetPosition(pos2);
+				debrisTrans->SetScale(testScale);
+
+				RigidBodyComponent* rigid = debris->AddComponent<RigidBodyComponent>();
+				rigid->SetGravityFlag(true);
+				rigid->SetMass(2.0f);
+				rigid->SetFirstFallMagnification(45.0f);
+				rigid->SetFallMagnification(4.5f);
+
+				const float dirX = distFloat(gen);
+				const float powerR = distFloat2(gen);
+
+				ProjectileMotionComponent* proj = debris->AddComponent<ProjectileMotionComponent>();
+				proj->SetProjectileDirection({ -dirX,1.0f,-1.0f });
+				proj->SetProjectilePower(powerR);
+				proj->SetProjectileRotation({ 0.0f,1.5f,-5.0f });
+
+				Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
+				rend->CreateMesh<SquareMesh>();
+				rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+				rend->ChangeTexture("assets/texture/glass_shards.png");
+
+				m_Debris.push_back(debris);
+			}
 
 			return;
 		}
@@ -440,7 +530,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			std::random_device rd;  // 非決定的な乱数の種
 			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
 			std::uniform_real_distribution<float> dist1(20.0f, 30.0f); // 範囲指定
-			std::uniform_real_distribution<float> dist2(-15.0f, 20.0f); // 範囲指定
+			std::uniform_real_distribution<float> dist2(-10.0f, 10.0f); // 範囲指定
 
 			const float value1 = dist1(gen);
 

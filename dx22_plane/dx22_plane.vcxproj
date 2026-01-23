@@ -296,6 +296,7 @@
     <ClCompile Include="Mesh\TriangleMesh.cpp" />
     <ClCompile Include="Components\TimeSpawnParticlesComponent.cpp" />
     <ClCompile Include="Components\TitleAnimationControlComponent.cpp" />
+    <ClCompile Include="Mesh\TriangularPrismMesh.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -452,6 +453,7 @@
     <ClInclude Include="Mesh\TriangleMesh.h" />
     <ClInclude Include="Components\TimeSpawnParticlesComponent.h" />
     <ClInclude Include="Components\TitleAnimationControlComponent.h" />
+    <ClInclude Include="Mesh\TriangularPrismMesh.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
