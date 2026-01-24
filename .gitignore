@@ -73,3 +73,8 @@ dx22_plane/x64/Release/dx22_plane.ipdb
 *.log
 *.tlog
 *.pdb
+*.ipdb
+*.iobj
+*.pch
+*.ilk
+*.tmp
