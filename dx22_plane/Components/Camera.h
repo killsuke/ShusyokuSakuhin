@@ -73,4 +73,6 @@ public:
 
 	inline DirectX::XMMATRIX GetProj2D() const { return m_ProjectionMatrix2D; };
 	inline DirectX::XMMATRIX GetProj3D() const { return m_ProjectionMatrix3D; };
+
+	inline DirectX::XMFLOAT3 GetOffsetPosition() const { return m_OffsetPosition; };
 };

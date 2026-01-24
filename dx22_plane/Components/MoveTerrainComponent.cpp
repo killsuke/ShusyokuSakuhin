@@ -20,12 +20,12 @@ void MoveTerrainComponent::Update() {
 
 	m_recordTime += m_deltaTime;
 
-	auto transform = m_Object->GetComponent<TransformComponent>();
-	auto myPos = transform->GetPosition();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	const XMFLOAT3 myPos = transform->GetPosition();
 
-	auto collider = m_Object->GetComponent<ColliderComponent>();
+	ColliderComponent* collider = m_Object->GetComponent<ColliderComponent>();
 
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
 	float newPosX = sinf(m_recordTime) * m_moveSpeed;
 
@@ -38,8 +38,8 @@ void MoveTerrainComponent::Update() {
 		}
 	}
 	else {
-		auto playerTransform = m_player->GetComponent<TransformComponent>();
-		auto collplay = m_player->GetComponent<ColliderComponent>();
+		TransformComponent* playerTransform = m_player->GetComponent<TransformComponent>();
+		ColliderComponent* collplay = m_player->GetComponent<ColliderComponent>();
 		PlayerOperationComponent* testMove = m_player->GetComponent<PlayerOperationComponent>();
 
 		if(playerTransform == nullptr || collplay == nullptr) {
@@ -48,7 +48,7 @@ void MoveTerrainComponent::Update() {
 		Vector3 hitNormal = {};
 		// 押し戻すことを考える
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
-			if (playerTransform->GetPosition().y > transform->GetPosition().y) {	// プレイヤーが地面に乗っているとき
+			if (playerTransform->GetPosition().y > myPos.y) {	// プレイヤーが地面に乗っているとき
 
 				const float delta = myPos.x - m_BeforePos.x;
 				if (testMove->GetMoveFlag() == false) {					
@@ -59,15 +59,21 @@ void MoveTerrainComponent::Update() {
 		}
 	}
 
-	auto enemies = GameObjectManager::GameObjectFindTag("Enemy");
+	std::vector<GameObject*> enemies = GameObjectManager::GameObjectFindTag("Enemy");
 
 	for(const auto& obj : enemies) {
-		auto enemyTransform = obj->GetComponent<TransformComponent>();
-		auto collEnemy = obj->GetComponent<ColliderComponent>();
+		TransformComponent* enemyTransform = obj->GetComponent<TransformComponent>();
+		ColliderComponent* collEnemy = obj->GetComponent<ColliderComponent>();
 		Vector3 hitNormal = {};
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collEnemy, *collider, hitNormal) == true) {
-			if (hitNormal.y > 0.5f) {	// 敵が地面に乗っているとき
-				enemyTransform->AddPosition({ newPosX,0.0f,0.0f });
+			if (enemyTransform->GetPosition().y > myPos.y) {	// 敵が地面に乗っているとき
+
+				if (m_BeforePos != XMFLOAT3())
+				{
+					const float delta = myPos.x - m_BeforePos.x;
+
+					enemyTransform->AddPosition({ delta,0.0f,0.0f });
+				}
 			}
 		}
 	}

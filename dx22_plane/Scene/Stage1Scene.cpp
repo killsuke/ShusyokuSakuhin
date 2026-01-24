@@ -165,8 +165,8 @@ void Stage1Scene::Init()
 		testTrans->SetScale({ 100.5f,100.5f,150.5f });
 		//testTrans->SetRotation({90.0f,0.0f,0.0f});
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
-			"assets/model/Copilot3D");
+		rend->LoadModelMesh("assets/model/rock9/rock9_HIGH_RES.fbx",
+			"assets/model/rock9");
 
 		//rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 		//	"assets/model/Container");

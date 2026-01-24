@@ -4,6 +4,7 @@
 #include "Render2D.h"
 #include "Render3D.h"
 #include "CameraShakeComponent.h"
+#include "Camera.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/TriangularPrismMesh.h"
 #include "Manager/EventBusManager.h"
@@ -350,8 +351,9 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
 	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
 	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
+	Camera* cameraComp = camera->GetComponent<Camera>();
 
-	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr) {
+	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr || cameraComp == nullptr) {
 		return;
 	}
 
@@ -391,9 +393,13 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 	else if (m_RecordTime > 1.3f) {	// 貼りついて揺らす
 
 		const XMFLOAT3 camPos = camTrans->GetPosition();
+		const XMFLOAT3 camOffset = cameraComp->GetOffsetPosition();
 
-		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
-		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
+		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + camOffset.z + FrontCameraZ });
+		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + camOffset.z + FrontCameraZ });
+
+		XMFLOAT3 pos1 = obj1Trans->GetPosition();
+		XMFLOAT3 pos2 = obj2Trans->GetPosition();
 
 		if (m_IsFirstCamPos == true) {
 			m_IsFirstCamPos = false;
@@ -414,9 +420,6 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 				camShake->ShakingPreparation(shakePower, shakeSpeed, shakeTime);
 				camShake->SetShakeType(ShakeType::RANDOM_DEPTH_ATTENUATION);
 			}
-
-			XMFLOAT3 pos1 = obj1Trans->GetPosition();
-			XMFLOAT3 pos2 = obj2Trans->GetPosition();
 
 			XMFLOAT3 size1 = obj1Trans->GetScale();
 			XMFLOAT3 size2 = obj2Trans->GetScale();
@@ -448,10 +451,11 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 			std::random_device rd;  // 非決定的な乱数の種
 			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-			std::uniform_int_distribution<int> dist(2, 6); // 範囲指定
+			std::uniform_int_distribution<int> dist(2, 6); // 破片の数
 
-			std::uniform_real_distribution<float> distFloat(1.0f, 1.5f);
-			std::uniform_real_distribution<float> distFloat2(5.0f, 8.0f);
+			std::uniform_real_distribution<float> distFloat(1.0f, 1.5f);	// Ⅹ方向に対しての破片の飛ぶ向き
+			std::uniform_real_distribution<float> distFloat2(5.0f, 8.0f);	// どのぐらいの力で進むか
+			std::uniform_real_distribution<float> distFloat3(5.0f, 8.0f);	// 回転
 
 			const int debrisNum = dist(gen);
 
@@ -473,11 +477,12 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 				const float dirX = distFloat(gen);
 				const float powerR = distFloat2(gen);
+				const float angle = distFloat3(gen);
 
 				ProjectileMotionComponent* proj = debris->AddComponent<ProjectileMotionComponent>();
 				proj->SetProjectileDirection({ dirX,1.0f,-1.0f });
 				proj->SetProjectilePower(powerR);
-				proj->SetProjectileRotation({ 0.0f,-1.5f,5.0f });
+				proj->SetProjectileRotation({ 0.0f,-1.5f,angle });
 
 				Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 				rend->CreateMesh<SquareMesh>();
@@ -503,11 +508,12 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 				const float dirX = distFloat(gen);
 				const float powerR = distFloat2(gen);
+				const float angle = distFloat3(gen);
 
 				ProjectileMotionComponent* proj = debris->AddComponent<ProjectileMotionComponent>();
 				proj->SetProjectileDirection({ -dirX,1.0f,-1.0f });
 				proj->SetProjectilePower(powerR);
-				proj->SetProjectileRotation({ 0.0f,1.5f,-5.0f });
+				proj->SetProjectileRotation({ 0.0f,1.5f,-angle });
 
 				Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 				rend->CreateMesh<SquareMesh>();
@@ -520,6 +526,15 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			return;
 		}
 
+		TransformComponent* crack1 = m_Crack1->GetComponent<TransformComponent>();
+		TransformComponent* crack2 = m_Crack2->GetComponent<TransformComponent>();
+
+		pos1.z -= 1.0f;
+		pos2.z -= 1.0f;
+
+		crack1->SetPosition(pos1);
+		crack2->SetPosition(pos2);
+
 		//ShakeCutObjects(obj1Trans, obj2Trans);	// 揺らす
 	}
 	else if (m_RecordTime >= 0.0f) { // 前に飛ばす
@@ -529,7 +544,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 
 			std::random_device rd;  // 非決定的な乱数の種
 			std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-			std::uniform_real_distribution<float> dist1(20.0f, 30.0f); // 範囲指定
+			std::uniform_real_distribution<float> dist1(15.0f, 25.0f); // 範囲指定
 			std::uniform_real_distribution<float> dist2(-10.0f, 10.0f); // 範囲指定
 
 			const float value1 = dist1(gen);

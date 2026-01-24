@@ -65,3 +65,8 @@ x64/Release/dx22_plane.pdb
 dx22_plane/x64/Debug/vc143.pdb
 dx22_plane/x64/Release/vc143.pdb
 dx22_plane/x64/Release/dx22_plane.ipdb
+
+*.fbx
+*.obj
+*.mtl
+*.png
