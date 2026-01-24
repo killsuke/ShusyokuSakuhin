@@ -70,3 +70,6 @@ dx22_plane/x64/Release/dx22_plane.ipdb
 *.obj
 *.mtl
 *.png
+*.log
+*.tlog
+*.pdb
