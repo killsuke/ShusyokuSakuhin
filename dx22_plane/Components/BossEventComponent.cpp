@@ -74,11 +74,11 @@ void BossEventComponent::CreateBossWalls() {
 	GameObject* boss = GameObjectManager::AddObject("Boss", "Enemy");
 
 	TransformComponent* playerTrans = boss->AddComponent<TransformComponent>();
-	playerTrans->SetScale({ 40.0f, 30.0f, 5.0f });
+	playerTrans->SetScale({ 8.0f, 10.0f, 5.0f });
 	playerTrans->SetPosition({ 1230.0f,-100.0f,0.0f });
 
 	JumpComponent* cubeJump = boss->AddComponent<JumpComponent>();
-	cubeJump->SetJumpPower(50.0f);
+	cubeJump->SetJumpPower(70.0f);
 
 	RigidBodyComponent* cubeRigid = boss->AddComponent<RigidBodyComponent>();
 	cubeRigid->SetMass(2.0f);
@@ -102,7 +102,8 @@ void BossEventComponent::CreateBossWalls() {
 	Render2DComponent* cubeRe = boss->AddComponent<Render2DComponent>();
 	cubeRe->CreateMesh<SquareMesh>();
 	cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	cubeRe->ChangeTexture("assets/texture/bossHo-dai.png");
+//	cubeRe->ChangeTexture("assets/texture/bossHo-dai.png");
+	cubeRe->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
 
 	m_boss = boss;
 

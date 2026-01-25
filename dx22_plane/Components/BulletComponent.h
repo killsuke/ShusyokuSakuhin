@@ -5,7 +5,7 @@
 class BulletComponent : public Component
 {
 private:
-	DirectX::SimpleMath::Vector3 m_firingVector = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 m_firingVector = DirectX::XMFLOAT3();
 	float m_firingSpeed = 0.0f;	// ”ò‚Ô‘¬“x
 	const float m_deltaTime = 0.016f;
 	float m_rimitTime = 2.0f;
@@ -16,7 +16,7 @@ public:
 
 	void Update();
 
-	void SetFiringVector(DirectX::SimpleMath::Vector3 vector) { m_firingVector = vector; };
+	void SetFiringVector(DirectX::XMFLOAT3 vector) { m_firingVector = vector; };
 	void SetFiringSpeed(const float speed) { m_firingSpeed = speed; };
 	void SetRimitTime(const float time) { m_rimitTime = time; };
 };

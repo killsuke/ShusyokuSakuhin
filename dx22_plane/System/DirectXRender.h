@@ -185,6 +185,8 @@ private:
 	static EBlendState m_CurrentBlendState;
 	static ID3D11BlendState* g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ブレンド ステート;
 
+	static inline bool m_IsDepthEnable = false;
+
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
 	static HRESULT DepthStencilCreate();
@@ -202,12 +204,17 @@ private:
 	static HRESULT MaterialBufferCreate();
 	static void MaterialSetting();
 
+	static HRESULT CreateCameraBuffer();
+	static HRESULT CreateLineThicknessBuffer();
+	static HRESULT CreateBlurBuffer();
+	static HRESULT CreateHitFlashBuffer();
+	static HRESULT CreateMotionBlurBuffer();
+	static HRESULT CreateGlowBuffer();
+
 	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
 	HRESULT CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
-
-	static HRESULT VeiwProjConstantCreate();
 
 public:
 	DirectXRender();
@@ -252,6 +259,7 @@ public:
 	static EBlendState GetCurrentBlendState() { return m_CurrentBlendState; };
 	static EFillMode GetFillMode() { return m_FillMode; };
 	static ECullingState GetCullingState() { return m_CullingState; };
+	static bool GetIsDepthEnable() { return m_IsDepthEnable; };
 
 	//=============================================================================
 	// ブレンド ステート設定
@@ -262,4 +270,3 @@ public:
 	static void SetFillMode(const EFillMode& fillMode);
 	static void SwitchingFillMode();
 };
-

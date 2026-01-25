@@ -19,13 +19,13 @@ float4 ps_main(in PS_IN input) : SV_Target
     
     float dist = length(d);
 
-    float value = (dist - 0.6f) / 0.15f;
+    float value = (dist - RingRadius) / RingWidth;
     
 // ガウス分布っぽいリング
     float ring = exp(-(value * value));
         
     float3 colorRGB = BaseColor + GlowColor2.rgb * ring * GlowPower2;
-    float alpha = ring;
+    float alpha = ring * GlowPower2;
 
     
     return float4(colorRGB, alpha * input.col.a);

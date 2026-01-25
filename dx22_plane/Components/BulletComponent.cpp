@@ -3,14 +3,20 @@
 #include "Transform.h"
 #include <iostream>
 
+using namespace DirectX;
+
 BulletComponent::BulletComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("GO_AROUND"); // ソート番号を設定、仮にGO_AROUNDを設置
 }
 
 void BulletComponent::Update() {
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	auto newVelocity = m_firingVector * m_firingSpeed;
+	if(rigid == nullptr) {
+		return;
+	}
+
+	XMFLOAT3 newVelocity = m_firingVector * m_firingSpeed;
 
 	rigid->ConstantVelocity(newVelocity);
 

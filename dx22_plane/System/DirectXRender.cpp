@@ -116,19 +116,30 @@ HRESULT DirectXRender::Init() {
 	BlandStateCreate();
 	DepthStencilSetting();
 	SamplerCreate();
-	ConstantBufferCreate();
-	BoneConstantBufferCreate();
-	HPBarConstantBufferCreate();
 
-	LightBufferCreate();
+
+	ConstantBufferCreate();	// 描画用定数バッファ作成、０番目
+	CreateCameraBuffer();	// カメラ情報用定数バッファ作成、１番目
+	CreateLineThicknessBuffer(); // 線の太さ用定数バッファ作成、２番目
+	CreateBlurBuffer(); // ブラー用定数バッファ作成、３番目
+	CreateHitFlashBuffer(); // ヒットフラッシュ用定数バッファ作成、４番目
+
+	LightBufferCreate();	// ライトバッファ作成、５番目
 	LightSetting();
+	MaterialBufferCreate();	// マテリアルバッファ作成、６番目
 
-	MaterialBufferCreate();
+	CreateMotionBlurBuffer();	// モーションブラー用定数バッファ作成、７番目
+
+	BoneConstantBufferCreate();	// ボーン用定数バッファ作成、８番目
+
+	HPBarConstantBufferCreate();	// ＨＰバー用定数バッファ作成、９番目
+
+	CreateGlowBuffer(); // グロー用定数バッファ作成、１０番目
+
 	//MaterialSetting();
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
 
-	VeiwProjConstantCreate();
 
 	return S_OK;
 }
@@ -193,13 +204,9 @@ void DirectXRender::DrawBegin() {
 	// 次の引数たちも増やすことも考える
 	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
 	// 定数バッファを頂点シェーダーにセットする
-	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 	//m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, 0);
 
-	// 定数バッファを頂点シェーダーにセットする
-	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
 
-	m_DeviceContext->VSSetConstantBuffers(9, 1, &g_pHPBarConstantBuffer);
 }
 
 //=======================================
@@ -412,6 +419,7 @@ HRESULT DirectXRender::DepthStencilSetting() {
 	if (FAILED(hr)) return hr;
 
 	m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, NULL);
+	m_IsDepthEnable = true;
 
 	return hr;
 }
@@ -439,7 +447,7 @@ HRESULT DirectXRender::SamplerCreate() {
 	return hr;
 }
 
-// 定数バッファ作成
+// 描画用の定数バッファ作成、０番目
 HRESULT DirectXRender::ConstantBufferCreate() {
 	HRESULT hr;
 	// 定数バッファ作成
@@ -453,55 +461,113 @@ HRESULT DirectXRender::ConstantBufferCreate() {
 	hr = m_Device->CreateBuffer(&cbDesc, NULL, &g_pConstantBuffer);
 	if (FAILED(hr)) return hr;
 
+	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+
 	return hr;
 }
 
-// 定数バッファ作成
-HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
-	HRESULT hr;
+// カメラ情報用定数バッファ作成、１番目
+HRESULT DirectXRender::CreateCameraBuffer() {
 
-	// ボーン用の定数バッファ作成
-	D3D11_BUFFER_DESC bd;
+	HRESULT hr = S_OK;
 
-	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
-	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
-	//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-	bd.CPUAccessFlags = 0;					// CPUアクセス可能
-	//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(CameraMatrix);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
 
-	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
+	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
 
 	return hr;
 }
 
-// 定数バッファ作成
-HRESULT DirectXRender::HPBarConstantBufferCreate() {// コンスタントバッファサイズ
-	HRESULT hr;
+// ライン用の定数バッファ作成、２番目
+HRESULT DirectXRender::CreateLineThicknessBuffer() {
 
-	// ボーン用の定数バッファ作成
-	D3D11_BUFFER_DESC bd;
+	HRESULT hr = S_OK;
 
-	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(HPParam);									// バッファの大き
-	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(LineThickness);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
 
-	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pHPBarConstantBuffer);
-	if (FAILED(hr)) {
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
+	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
+	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
+
 	return hr;
 }
 
+// ブラー用の定数バッファ作成、３番目
+HRESULT DirectXRender::CreateBlurBuffer() {
+
+	HRESULT hr = S_OK;
+
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(BlurBuffer);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+	
+	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
+
+	return hr;
+}
+
+// ヒットフラッシュ用の定数バッファ作成、４番目
+HRESULT DirectXRender::CreateHitFlashBuffer() {
+
+	HRESULT hr = S_OK;
+
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.ByteWidth = sizeof(HitFlashBuffer);
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_HitFlashBuffer);
+
+	return hr;
+}
+
+// ライト用定数バッファ作成、５番目
 HRESULT DirectXRender::LightBufferCreate() {
 	HRESULT hr;
 
@@ -522,29 +588,12 @@ HRESULT DirectXRender::LightBufferCreate() {
 	}
 
 	m_DeviceContext->VSSetConstantBuffers(5, 1, &m_LightBuffer);
+	m_DeviceContext->PSSetConstantBuffers(5, 1, &m_LightBuffer);
 
 	return hr;
 }
 
-void DirectXRender::LightSetting() {
-	// ライト初期化
-	LIGHT light{};
-	light.Direction = Vector4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
-	light.Direction.Normalize();
-	light.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);	// 平行光源の強さと色
-	light.Ambient = Color(0.5f, 0.5f, 0.5f, 1.0f);	// 環境光の強さと色
-
-	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
-}
-
-void DirectXRender::MaterialSetting() {
-	// マテリアル初期化
-	MATERIAL material{};
-	material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	m_DeviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
-}
-
+// マテリアル用定数バッファ作成、６番目
 HRESULT DirectXRender::MaterialBufferCreate() {
 	HRESULT hr;
 
@@ -569,6 +618,150 @@ HRESULT DirectXRender::MaterialBufferCreate() {
 	m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
 
 	return hr;
+}
+
+// モーションブラー用定数バッファ作成、７番目
+HRESULT DirectXRender::CreateMotionBlurBuffer() {
+
+	HRESULT hr = S_OK;
+
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	bufferDesc.ByteWidth = sizeof(MotionBlurBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+
+	bufferDesc.ByteWidth = sizeof(MotionBlurCircularBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurCircularBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+
+	return hr;
+}
+
+// ボーン用定数バッファ作成、８番目
+HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
+	HRESULT hr;
+
+	// ボーン用の定数バッファ作成
+	D3D11_BUFFER_DESC bd;
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
+	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+	//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
+	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+	//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
+
+	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	// 定数バッファを頂点シェーダーにセットする
+	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
+
+	return hr;
+}
+
+// ＨＰ用の定数バッファ作成、９番目
+HRESULT DirectXRender::HPBarConstantBufferCreate() {// コンスタントバッファサイズ
+	HRESULT hr;
+
+	// ボーン用の定数バッファ作成
+	D3D11_BUFFER_DESC bd;
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.ByteWidth = sizeof(HPParam);									// バッファの大き
+	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
+	bd.CPUAccessFlags = 0;					// CPUアクセス可能
+
+	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pHPBarConstantBuffer);
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(9, 1, &g_pHPBarConstantBuffer);
+
+	return hr;
+}
+
+HRESULT DirectXRender::CreateGlowBuffer() {
+
+	HRESULT hr = S_OK;
+
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	bufferDesc.ByteWidth = sizeof(GlowBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pGlowBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+
+	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pRingGlowBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
+
+	return hr;
+}
+
+void DirectXRender::LightSetting() {
+	// ライト初期化
+	LIGHT light{};
+	light.Direction = Vector4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
+	light.Direction.Normalize();
+	light.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);	// 平行光源の強さと色
+	light.Ambient = Color(0.5f, 0.5f, 0.5f, 1.0f);	// 環境光の強さと色
+
+	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
+}
+
+void DirectXRender::MaterialSetting() {
+	// マテリアル初期化
+	MATERIAL material{};
+	material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	m_DeviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 }
 
 HRESULT DirectXRender::InputLayoutAndShadersCreate() {
@@ -748,71 +941,6 @@ HRESULT DirectXRender::CompileShader(const char* szFileName, LPCSTR szEntryPoint
 	return S_OK;
 }
 
-HRESULT DirectXRender::VeiwProjConstantCreate() {
-	HRESULT hr = S_OK;
-
-	// 定数バッファ生成
-	D3D11_BUFFER_DESC bufferDesc{};
-	bufferDesc.ByteWidth = sizeof(Matrix);
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = sizeof(float);
-
-
-	bufferDesc.ByteWidth = sizeof(CameraMatrix);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
-	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
-
-	bufferDesc.ByteWidth = sizeof(LineThickness);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
-	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
-	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
-
-	bufferDesc.ByteWidth = sizeof(BlurBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
-	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
-	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
-
-	bufferDesc.ByteWidth = sizeof(HitFlashBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
-	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_HitFlashBuffer);
-
-	bufferDesc.ByteWidth = sizeof(MotionBlurBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurBuffer);
-	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
-	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
-
-	bufferDesc.ByteWidth = sizeof(MotionBlurCircularBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurCircularBuffer);
-	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
-	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
-
-	bufferDesc.ByteWidth = sizeof(GlowBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pGlowBuffer);
-	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
-	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
-	
-	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
-
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pRingGlowBuffer);
-	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
-	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
-
-	// ここ後で１番に変更
-	if (FAILED(hr)) return hr;
-
-	return hr;
-}
-
 //=======================================
 // ビュー行列を設定（３Ｄ）
 //=======================================
@@ -882,7 +1010,7 @@ void DirectXRender::GPU_UpdateViewAndProj() {
 //=======================================
 void DirectXRender::SetDepthEnable(bool Enable)
 {
-	if (Enable)
+	if (Enable == true)
 	{
 		// 深度テストを有効にするステンシルステートをセット
 		m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, NULL);
@@ -892,6 +1020,8 @@ void DirectXRender::SetDepthEnable(bool Enable)
 		// 深度テストを無効にするステンシルステートをセット
 		m_DeviceContext->OMSetDepthStencilState(m_DepthStateDisable, NULL);
 	}
+
+	m_IsDepthEnable = Enable;
 }
 
 //=======================================
