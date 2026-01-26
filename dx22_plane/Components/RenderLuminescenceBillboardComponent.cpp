@@ -85,6 +85,7 @@ void RenderLuminescenceBillboardComponent::Update()
 
 		EBlendState currentBlendState = DirectXRender::GetCurrentBlendState();
 		DirectXRender::SetBlendState(EBlendState::BS_EFFECT);
+		const bool prevDepthEnable = DirectXRender::GetIsDepthEnable();
 		DirectXRender::SetDepthEnable(false); // 深度テスト無効、書き込み無効
 
 		const XMFLOAT3 angles = transform->GetRotation();
@@ -95,6 +96,7 @@ void RenderLuminescenceBillboardComponent::Update()
 		gb.glowPower = m_GlowPower;
 		gb.glowRadius = m_GlowRadius;
 		gb.angleRadian = XMConvertToRadians(angles.z);
+		gb.expand = m_Expand;
 
 		deviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
 		deviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
@@ -105,9 +107,9 @@ void RenderLuminescenceBillboardComponent::Update()
 		for (unsigned int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
-			const MATERIAL material = materials[subsets[i].MaterialIdx];
+		/*	const MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);*/
 
 			deviceContext->DrawIndexed(
 				subsets[i].IndexNum,		// 描画するインデックス数
@@ -116,6 +118,6 @@ void RenderLuminescenceBillboardComponent::Update()
 		}
 
 		DirectXRender::SetBlendState(currentBlendState);
-		DirectXRender::SetDepthEnable(true);
+		DirectXRender::SetDepthEnable(prevDepthEnable);
 	}
 }

@@ -10,12 +10,12 @@ float4 ps_main(in PS_IN input) : SV_Target
     float2 d = uv;
     
     float s, c;
-    sincos(Angle2, s, c); // 回転を使うので行列生成
+    sincos(Angle, s, c); // 回転を使うので行列生成
     float2x2 rotationMtx = float2x2(c, -s, s, c);
     d = mul(rotationMtx, d);
     
     // 楕円形にも対応できるようスケール設定
-    d *= EllipseScale2;
+    d *= EllipseScale;
     
     float dist = length(d);
 
@@ -24,8 +24,8 @@ float4 ps_main(in PS_IN input) : SV_Target
 // ガウス分布っぽいリング
     float ring = exp(-(value * value));
         
-    float3 colorRGB = BaseColor + GlowColor2.rgb * ring * GlowPower2;
-    float alpha = ring * GlowPower2;
+    float3 colorRGB = BaseColor + GlowColor.rgb * ring * GlowPower;
+    float alpha = ring;
 
     
     return float4(colorRGB, alpha * input.col.a);

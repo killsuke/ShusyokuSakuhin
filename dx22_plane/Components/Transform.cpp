@@ -47,8 +47,22 @@ XMMATRIX TransformComponent::MakeLocalMatrix() {
 	const XMVECTOR pos = XMVectorSet(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z, 1.0f);
 	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
+	switch (m_RotationPattern)
+	{
+	case RotationPattern::SPIN:			// 自転
+
+		m_transform.localMatrix = s * r * t;
+		break;
+	case RotationPattern::REVOLUTION:	// 公転
+
+		m_transform.localMatrix = s * t * r;
+		break;
+	default:
+		break;
+	}
+
 	// ローカル行列を作成し、保存
-	return	m_transform.localMatrix = s * r * t;
+	return	m_transform.localMatrix;
 }
 
 void TransformComponent::MakeChildWorld() {
@@ -102,6 +116,7 @@ void TransformComponent::MakeChildWorld() {
 	}
 }
 
+// 自転で作る子供の行列
 DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 
 	GameObject* parent = m_Object->GetParent(); // 親オブジェクトを取得
@@ -114,7 +129,7 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 		}
 
 		const XMMATRIX childMtx = MakeLocalMatrix();
-		 
+
 		const XMVECTOR parentQuat = trans->GetQuaternion();
 		const XMFLOAT3 parentScale = trans->GetScale();
 		const XMFLOAT3 parentPos = trans->GetPosition();
@@ -137,7 +152,8 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 
 DirectX::XMMATRIX TransformComponent::MakeChildMatrixAndWorld() {
 
-	const XMMATRIX mtx = MakeChildMatrix();
+	XMMATRIX mtx = XMMatrixIdentity();
+	mtx = MakeChildMatrix();
 
 	XMVECTOR scale;
 	XMVECTOR rotation;

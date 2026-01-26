@@ -47,12 +47,14 @@ private:
 	bool m_Deletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
 	bool drawContainerChangeFlag = false;	// コンテナを入れ替える
 	bool carryOverFlag = false; // シーンを跨いでオブジェクトを持ち越すかどうかのフラグ
+	bool m_ChildAbsFrontFlag = false; // 子オブジェクトを絶対前面させるかどうかのフラグ
 	ActiveState activeState = ActiveState::ACTIVE;
 	DrawContainer drawContainer = DrawContainer::Default;
 	DrawContainer hopeDrawContainer = DrawContainer::Default;
 
 public:
 
+	GameObject() = default;
 	GameObject(const std::string& _name, const uint32_t& id)
 		: name(_name), m_InstanceID(id) {
 		m_Components.reserve(20);
@@ -95,6 +97,7 @@ public:
 	};
 
 	inline void SetCarryOverFlag(const bool flag) { carryOverFlag = flag; };
+	inline void SetChildAbsFrontFlag(const bool flag) { m_ChildAbsFrontFlag = flag; };
 
 	// ゲッター
 	inline bool GetDeleteFg()const { return m_Deletefg; };

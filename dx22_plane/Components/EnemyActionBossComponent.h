@@ -1,5 +1,11 @@
 #pragma once
 #include "EnemyActionComponent.h"
+#include <array>
+
+namespace{
+	
+	constexpr unsigned int BarrierCount = 4;
+}
 
 enum class BossActionState {
 	DEFAULT,
@@ -11,6 +17,7 @@ enum class BossActionState {
 class EnemyActionBossComponent : public EnemyActionComponent
 {
 private:
+	std::array<GameObject*, BarrierCount> m_BarrierList;
 	BossActionState m_CurrentState = BossActionState::DEFAULT;
 	float m_RecordTime1 = 0.0f;
 	float m_MoveDir = 1.0f;
@@ -19,6 +26,6 @@ public:
 	EnemyActionBossComponent(GameObject& obj);
 	~EnemyActionBossComponent() = default;
 	void Update()override;
-	void BossAction(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos);
+	void JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos);
 	void ChangeState(const BossActionState& state);
 };

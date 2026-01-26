@@ -959,6 +959,7 @@
     <FxCompile Include="shader\PassThroughVS.hlsl" />
     <FxCompile Include="shader\unlitLuminescencePS.hlsl" />
     <FxCompile Include="shader\unlitRingLuminescencePS.hlsl" />
+    <FxCompile Include="shader\unlitLuminescenceVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObjectTemplate.inl">

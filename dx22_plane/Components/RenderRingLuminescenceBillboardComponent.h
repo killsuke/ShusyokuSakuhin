@@ -10,6 +10,7 @@ private:
 	float m_GlowRadius = 1.0f; // 輝く範囲の大きさ
 	float m_RingRadius = 0.0f;	// リングの範囲の大きさ
 	float m_RingWidth = 0.0f;	// リングの幅
+	float m_Expand = 1.0f;	// 頂点の広げ具合
 	DirectX::XMFLOAT2 m_EllipseScale = { 1.0f,1.0f }; // 楕円のスケール
 
 public:
@@ -24,4 +25,5 @@ public:
 	void SetGlowRadius(const float radius) { m_GlowRadius = radius; };
 	void SetRingRadius(const float radius) { m_RingRadius = radius; };
 	void SetRingWidth(const float width) { m_RingWidth = width; };
+	void SetExpand(const float expand) { m_Expand = expand; };
 };

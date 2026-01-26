@@ -5,11 +5,16 @@
 #include "HelpMath.h"
 #include "XMFLOAT_Helper.h"
 
+enum class RotationPattern {
+	SPIN,
+	REVOLUTION
+};
+
 struct Transform {
 	// SRT情報（ワールド行列、姿勢情報）
-	DirectX::XMFLOAT3 m_Scale = DirectX::XMFLOAT3(1.0f,1.0f,1.0f);
+	DirectX::XMFLOAT3 m_Scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 	DirectX::XMFLOAT3 m_Rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-	DirectX::XMFLOAT3 m_Position = DirectX::XMFLOAT3(0.0f,0.0f,0.0f);
+	DirectX::XMFLOAT3 m_Position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	// SRT情報（ローカル行列、姿勢情報）
 	DirectX::XMFLOAT3 m_LocalScale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
@@ -31,6 +36,7 @@ class TransformComponent final : public Component
 {
 private:
 	Transform m_transform;	// トランスフォーム情報
+	RotationPattern m_RotationPattern = RotationPattern::SPIN;
 	bool m_IsLockScale = false; // スケールロックフラグ
 
 public:
@@ -42,9 +48,9 @@ public:
 	void Update() override;
 
 	inline void SetPosition(const DirectX::XMFLOAT3& position) { m_transform.m_Position = position; };
-	void SetRotation(const DirectX::XMFLOAT3& rotation) { 
+	void SetRotation(const DirectX::XMFLOAT3& rotation) {
 		m_transform.m_Rotation = rotation;
-	
+
 		const float pitch = DirectX::XMConvertToRadians(rotation.x);
 		const float yaw = DirectX::XMConvertToRadians(rotation.y);
 		const float roll = DirectX::XMConvertToRadians(rotation.z);
@@ -56,7 +62,7 @@ public:
 		);
 	};
 	inline void SetScale(const DirectX::XMFLOAT3& scale) { m_transform.m_Scale = scale; };
-	inline void SetQuaternion(const DirectX::XMVECTOR& quaternion) { 
+	inline void SetQuaternion(const DirectX::XMVECTOR& quaternion) {
 		m_transform.m_Quaternion = quaternion;
 
 		// 左手系に変換
@@ -65,7 +71,7 @@ public:
 
 	inline void SetLocalPosition(const DirectX::XMFLOAT3& position) { m_transform.m_LocalPosition = position; };
 	void SetLocalRotation(const DirectX::XMFLOAT3& rotation) {
-		m_transform.m_LocalRotation = rotation; 
+		m_transform.m_LocalRotation = rotation;
 
 		const float pitch = DirectX::XMConvertToRadians(rotation.x);
 		const float yaw = DirectX::XMConvertToRadians(rotation.y);
@@ -85,6 +91,7 @@ public:
 		m_transform.m_LocalRotation = QuaternionToEulerRad(m_transform.m_LocalQuaternion) * (180.0f / DirectX::XM_PI);
 	};
 	inline void SetLockScale(const bool lock) { m_IsLockScale = lock; };
+	inline void SetRotationPattern(const RotationPattern& rot) { m_RotationPattern = rot; };
 
 	inline DirectX::XMFLOAT3 GetPosition() const { return m_transform.m_Position; };
 	inline DirectX::XMFLOAT3 GetRotation() const { return m_transform.m_Rotation; };
@@ -102,7 +109,7 @@ public:
 	inline void AddPosition(const DirectX::XMFLOAT3& position) { m_transform.m_Position += position; };
 	inline void AddRotation(const DirectX::XMFLOAT3& rotation) {
 		m_transform.m_Rotation += rotation;
-		
+
 		const float pitch = DirectX::XMConvertToRadians(m_transform.m_Rotation.x);
 		const float yaw = DirectX::XMConvertToRadians(m_transform.m_Rotation.y);
 		const float roll = DirectX::XMConvertToRadians(m_transform.m_Rotation.z);
@@ -117,7 +124,7 @@ public:
 
 	inline void AddLocalPosition(const DirectX::XMFLOAT3& position) { m_transform.m_LocalPosition += position; };
 	inline void AddLocalRotation(const DirectX::XMFLOAT3& rotation) {
-		m_transform.m_LocalRotation += rotation; 
+		m_transform.m_LocalRotation += rotation;
 
 		const float pitch = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.x);
 		const float yaw = DirectX::XMConvertToRadians(m_transform.m_LocalRotation.y);

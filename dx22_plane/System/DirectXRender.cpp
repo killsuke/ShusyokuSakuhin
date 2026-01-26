@@ -203,10 +203,6 @@ void DirectXRender::DrawBegin() {
 	// 最初の値（スロット）を１以上にする
 	// 次の引数たちも増やすことも考える
 	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
-	// 定数バッファを頂点シェーダーにセットする
-	//m_DeviceContext->OMSetDepthStencilState(g_DepthStateDisable, 0);
-
-
 }
 
 //=======================================

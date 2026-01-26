@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Components/Render.h"
+#include "System/DirectXRender.h"
 #include <iostream>
 
 //今のところ記述内容は無し
@@ -11,6 +12,17 @@
 // デストラクタ
 GameObject::~GameObject() {
 
+	// コンポーネントの解放
+	//m_Components.clear();
+	//m_RenderComponents.clear();
+	//// 子オブジェクトの解放
+	//if (!children.empty()) {
+	//	for (auto& child : children) {
+	//		delete child;
+	//		child = nullptr;
+	//	}
+	//	children.clear();
+	//}
 }
 
 void GameObject::Update() {
@@ -48,7 +60,16 @@ void GameObject::Draw() {
 	// 子オブジェクトの描画
 	if (!children.empty()) {
 		for (auto& child : children) {
-			child->Draw();
+			if (m_ChildAbsFrontFlag == true) {
+				
+				const bool currentDepthEnable = DirectXRender::GetIsDepthEnable();
+				DirectXRender::SetDepthEnable(false);
+				child->Draw();
+				DirectXRender::SetDepthEnable(currentDepthEnable);
+			}
+			else {
+				child->Draw();
+			}
 		}
 	}
 }

@@ -99,6 +99,7 @@ void RenderRingLuminescenceBillboardComponent::Update()
 		gb.angleRadian = XMConvertToRadians(angles.z);
 		gb.ringRadius = m_RingRadius;
 		gb.ringWidth = m_RingWidth;
+		gb.expand = m_Expand;
 
 		deviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
 		deviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);

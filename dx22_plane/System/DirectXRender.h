@@ -136,7 +136,9 @@ struct GlowBuffer {
 	float glowPower = 0.0f;
 	float glowRadius = 0.0f;
 	float angleRadian = 0.0f;
-	DirectX::XMFLOAT3 paddings = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	float expand = 0.0f;
+	float pad1 = 0.0f;
+	float pad2 = 0.0f;
 };
 
 struct RingGlowBuffer {
@@ -145,9 +147,9 @@ struct RingGlowBuffer {
 	float glowPower = 0.0f;
 	float glowRadius = 0.0f;
 	float angleRadian = 0.0f;
+	float expand = 0.0f;
 	float ringRadius = 0.0f;
 	float ringWidth = 0.0f;
-	float pad = 0.0f;
 };
 
 class DirectXRender
