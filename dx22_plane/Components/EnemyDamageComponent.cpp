@@ -1,5 +1,4 @@
 #include "EnemyDamageComponent.h"
-#include "Collider.h"
 #include "Transform.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
@@ -8,6 +7,8 @@
 #include "Manager/HitStopManager.h"
 #include "FighterComponent.h"
 #include "EnemyDeathEventComponent.h"
+#include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
 
 namespace {
 	constexpr float FirstStopTime = 0.1f; // 最初のヒットストップ時間
@@ -26,8 +27,8 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 
 void EnemyDamageComponent::Update()
 {
-	auto collObjMe = m_Object->GetComponent<ColliderComponent>();
-	auto objOthers = GameObjectManager::GameObjectFindTag("Enemy");
+	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
+	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Enemy");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
 	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");
@@ -43,7 +44,7 @@ void EnemyDamageComponent::Update()
 	if (collObjMe != nullptr) {
 
 		for (auto& objOther : objOthers) {
-			ColliderComponent* collObjOther = objOther->GetComponent<ColliderComponent>();
+			ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 

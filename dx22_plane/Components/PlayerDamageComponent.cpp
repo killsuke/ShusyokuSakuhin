@@ -1,11 +1,12 @@
 #include "PlayerDamageComponent.h"
 #include "PlayerOperationComponent.h"
-#include "Collider.h"
 #include "Transform.h"
 #include "RigidBodyComponent.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
 #include "FighterComponent.h"
+#include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include <SimpleMath.h>
@@ -20,7 +21,7 @@ PlayerDamageComponent::PlayerDamageComponent(GameObject& obj) : Component(obj)
 void PlayerDamageComponent::Update()
 {
 	//auto transform = p_object->GetComponent<TransformComponent>();
-	auto collObjMe = m_Object->GetComponent<ColliderComponent>();
+	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
 	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Player");
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
@@ -29,8 +30,8 @@ void PlayerDamageComponent::Update()
 	//	auto playerPos = playerTrans->GetPosition();
 		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
-	auto attack_T = m_Object->GetComponent<AttackTimingComponent>();
-	auto attack_O = m_Object->GetComponent<AttackOneTimeComponent>();
+	AttackTimingComponent* attack_T = m_Object->GetComponent<AttackTimingComponent>();
+	AttackOneTimeComponent* attack_O = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	if (attack_O != nullptr) {
 		attack_O->ReSetAttackHitFlag();
@@ -43,7 +44,7 @@ void PlayerDamageComponent::Update()
 	if (collObjMe != nullptr) {
 
 		for (auto& objOther : objOthers) {
-			auto collObjOther = objOther->GetComponent<ColliderComponent>();
+			ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {
 

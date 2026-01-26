@@ -1,0 +1,11 @@
+#include "ColliderDamageComponent.h"
+
+ColliderDamageComponent::ColliderDamageComponent(GameObject& obj) : ColliderComponent(obj) {
+	m_SortNum = ComponentTypeManager::GetID_FromName("COLLIDER_DAMAGE"); // É\Å[Égî‘çÜÇê›íË
+
+}
+
+void ColliderDamageComponent::Update() {
+
+	ColliderComponent::Update();
+}

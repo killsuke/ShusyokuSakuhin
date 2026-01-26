@@ -1,6 +1,6 @@
 #include "EnemyActionBulletComponent.h"
 #include "Transform.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"
 #include "RigidBodyComponent.h"
@@ -68,6 +68,7 @@ void EnemyActionBulletComponent::FiringBullet() {
 	auto dmg = bullet->AddComponent<PlayerDamageComponent>();
 
 	auto coll = bullet->AddComponent<ColliderComponent>();
+	ColliderAttackComponent* attack = bullet->AddComponent<ColliderAttackComponent>();
 
 	// 毎回シェーダー生成をしているから重い。
 	auto rend = bullet->AddComponent<Render2DComponent>();

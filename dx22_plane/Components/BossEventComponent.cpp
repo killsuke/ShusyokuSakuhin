@@ -1,7 +1,6 @@
 #include "BossEventComponent.h"
 #include "CameraPointComponent.h"
 #include "Transform.h"
-#include "Collider.h"
 #include "Render2D.h"
 #include "Render3D.h"
 #include "Manager/GameObjectManager.h"
@@ -17,6 +16,8 @@
 #include "DoorFadeComponent.h"
 #include "MeshCut2DComponent.h"
 #include "EnemyDeathEventComponent.h"
+#include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
@@ -70,7 +71,8 @@ void BossEventComponent::CreateBossWalls() {
 	render->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/testTerrain.png");
 
-	// ボス本体を作成
+
+	// ボス本体を作成 =======================================================
 	GameObject* boss = GameObjectManager::AddObject("Boss", "Enemy");
 
 	TransformComponent* playerTrans = boss->AddComponent<TransformComponent>();
@@ -87,6 +89,8 @@ void BossEventComponent::CreateBossWalls() {
 	boss->AddComponent<TestExtrusionJudgeComponent>();
 
 	ColliderComponent* cubeColl = boss->AddComponent<ColliderComponent>();
+	ColliderAttackComponent* collAttack = boss->AddComponent<ColliderAttackComponent>();
+	ColliderDamageComponent* collDamage = boss->AddComponent<ColliderDamageComponent>();
 
 	FighterComponent* fighterPlayer = boss->AddComponent<FighterComponent>();
 	fighterPlayer->SetHp(50);

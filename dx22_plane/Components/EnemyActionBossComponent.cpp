@@ -7,8 +7,9 @@
 #include "RigidBodyComponent.h"
 #include "BulletComponent.h"
 #include "AttackOneTimeComponent.h"
+#include "AttackTimingComponent.h"
 #include "PlayerDamageComponent.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
 #include "JumpComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "Mesh/SquareMesh.h"
@@ -19,7 +20,8 @@ namespace {
 
 	constexpr float BulletTiming = 0.25f;
 	constexpr float JumpMoveX = 2.0f;
-	constexpr float TargetLength = 5.0f;
+	constexpr float TargetLength = 20.0f;
+	constexpr float MoveSpeed = 0.2f;
 }
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
@@ -29,26 +31,26 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 
 	// バリアオブジェクト作成
 	for (int i = 0; i < BarrierCount; ++i) {
-		GameObject* barrier = GameObjectManager::AddAbsFront("boss_barrier", "Enemy");
+		GameObject* barrier = GameObjectManager::AddAbsFront("boss_barrier", "Bullet");
 		barrier->SetChildAbsFrontFlag(true);
 
 		TransformComponent* trans = barrier->AddComponent<TransformComponent>();
 		trans->SetRotationPattern(RotationPattern::REVOLUTION);
 		trans->SetLockScale(true);
 
-		if (i == 0) {
-			trans->SetLocalPosition(XMFLOAT3(0.0f, 12.0f, 0.0f));
-		}
-		else if (i == 1) {
-			trans->SetLocalPosition(XMFLOAT3(12.0f, 0.0f, 0.0f));
-		}
-		else if (i == 2) {
-			trans->SetLocalPosition(XMFLOAT3(0.0f, -12.0f, 0.0f));
-		}
-		else if (i == 3) {
-			trans->SetLocalPosition(XMFLOAT3(-12.0f, 0.0f, 0.0f));
-		}
 		trans->SetLocalScale(XMFLOAT3(7.0f, 7.0f, 7.0f));
+
+		FighterComponent* fight = barrier->AddComponent<FighterComponent>();
+		fight->SetHp(1);
+		fight->SetAtk(2);
+
+		ColliderComponent* coll = barrier->AddComponent<ColliderComponent>();
+		ColliderAttackComponent* collAttack = barrier->AddComponent<ColliderAttackComponent>();
+
+		AttackTimingComponent* attack = barrier->AddComponent<AttackTimingComponent>();
+		attack->SetCoolDownTime(0.5f);
+
+		PlayerDamageComponent* damage = barrier->AddComponent<PlayerDamageComponent>();
 
 		Render2DComponent* rend2D = barrier->AddComponent<Render2DComponent>();
 		rend2D->CreateMesh<SquareMesh>();
@@ -58,7 +60,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		RenderRingLuminescenceBillboardComponent* rend = barrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->SetShader("shader/unlitLuminescenceVS.hlsl", "shader/unlitRingLuminescencePS.hlsl");
-		rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+		rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 		rend->SetGlowPower(0.5f);
 		rend->SetGlowRadius(0.3f);
 		rend->SetEllipseScale({ 1.0f,1.0f });
@@ -66,7 +68,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		rend->SetRingWidth(0.2f);
 		rend->SetExpand(1.2f);
 
-//		barrier->SetActiveState(ActiveState::ALL_STOP);
+		barrier->SetActiveState(ActiveState::ALL_STOP);
 		m_Object->SetChild(barrier);
 		m_BarrierList[i] = barrier;
 	}
@@ -134,22 +136,38 @@ void EnemyActionBossComponent::Update() {
 		break;
 	case BossActionState::BARRIER:
 
-		m_RecordTime1 += m_deltaTime;
-
-		// バリアを広げるて、展開完了したら通知する
-		// なおバリアの処理はUpdate内で行う
-		// フラグでスイッチをする
+		// 移動はこっち
 		for (int i = 0; i < BarrierCount; ++i) {
 
+			TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
+			if (barrierTrans != nullptr) {
 
+				if (m_LengthCount < TargetLength) {
+
+					if (i == 0) {
+						barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+					}
+					else if (i == 1) {
+						barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
+					}
+					else if (i == 2) {
+						barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
+					}
+					else if (i == 3) {
+						barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
+					}
+				}
+				else {
+
+					//m_LengthCount = 0.0f;
+					// 最後に回転を開始
+					ChangeState(BossActionState::DEFAULT);
+					break;
+				}
+			}
 		}
 
-		// 最後に回転を開始
-
-		if (m_RecordTime1 > 1.0f) {	// バリア展開
-			ChangeState(BossActionState::DEFAULT);
-			m_RecordTime1 = 0.0f;
-		}
+		m_LengthCount += MoveSpeed;
 
 		break;
 	case BossActionState::MAX:
@@ -158,11 +176,15 @@ void EnemyActionBossComponent::Update() {
 		break;
 	}
 
-	for (int i = 0; i < BarrierCount; ++i) {
+	// 回転はこっち
+	if (m_IsBarrier == true) {
 
-		TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
-		if (barrierTrans != nullptr) {
-			barrierTrans->AddLocalRotation({ 0.0f,0.0f,5.0f });
+		for (int i = 0; i < BarrierCount; ++i) {
+
+			TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
+			if (barrierTrans != nullptr) {
+				barrierTrans->AddLocalRotation({ 0.0f,0.0f,5.0f });
+			}
 		}
 	}
 
@@ -171,7 +193,7 @@ void EnemyActionBossComponent::Update() {
 }
 
 void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos) {
-	
+
 	XMVECTOR diff = XMLoadFloat3(&playPos) - XMLoadFloat3(&myPos);
 	float lengthSq = XMVectorGetX(XMVector3LengthSq(diff));
 
@@ -186,7 +208,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 		dirFloat3 = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		return;
 	}
-	
+
 
 	// ここが弾作成処理
 	GameObject* bullet = GameObjectManager::AddAbsFront("bullet", "Enemy");
@@ -206,6 +228,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 	PlayerDamageComponent* dmg = bullet->AddComponent<PlayerDamageComponent>();
 
 	ColliderComponent* coll = bullet->AddComponent<ColliderComponent>();
+	ColliderAttackComponent* collAttack = bullet->AddComponent<ColliderAttackComponent>();
 
 	Render2DComponent* rend2D = bullet->AddComponent<Render2DComponent>();
 	rend2D->CreateMesh<SquareMesh>();
@@ -277,11 +300,13 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		break;
 	case BossActionState::BARRIER:
 		// バリア展開処理をここに書く
-		/*for(int i = 0; i < BarrierCount; ++i){
+		for (int i = 0; i < BarrierCount; ++i) {
 			if (m_BarrierList[i] != nullptr) {
 				m_BarrierList[i]->SetActiveState(ActiveState::ACTIVE);
 			}
-		}*/
+		}
+
+		m_IsBarrier = true;
 		break;
 	case BossActionState::MAX:
 		break;

@@ -1,6 +1,7 @@
 #include "EnemyActionComponent.h"
 #include "Transform.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "RenderBillboard.h"
@@ -81,6 +82,16 @@ void EnemyActionComponent::ActionOff(const DeathEvent& event) {
 	ColliderComponent* coll = m_Object->GetComponent<ColliderComponent>();
 	if (coll != nullptr) {
 		coll->SetActiveColliderFlag(false);
+	}
+
+	ColliderAttackComponent* collAttack = m_Object->GetComponent<ColliderAttackComponent>();
+	if (collAttack != nullptr) {
+		collAttack->SetActiveColliderFlag(false);
+	}
+
+	ColliderDamageComponent* collDamage = m_Object->GetComponent<ColliderDamageComponent>();
+	if (collDamage != nullptr) {
+		collDamage->SetActiveColliderFlag(false);
 	}
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();

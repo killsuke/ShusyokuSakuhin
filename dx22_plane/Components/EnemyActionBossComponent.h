@@ -21,6 +21,8 @@ private:
 	BossActionState m_CurrentState = BossActionState::DEFAULT;
 	float m_RecordTime1 = 0.0f;
 	float m_MoveDir = 1.0f;
+	float m_LengthCount = 0.0f;
+	bool m_IsBarrier = false;
 
 public:
 	EnemyActionBossComponent(GameObject& obj);

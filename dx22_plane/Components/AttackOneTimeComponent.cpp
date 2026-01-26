@@ -1,6 +1,6 @@
 #include "AttackOneTimeComponent.h"
-#include "Collider.h"
 #include "FighterComponent.h"
+#include "ColliderAttackComponent.h"
 #include <iostream>
 
 AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponent(obj) {
@@ -8,7 +8,7 @@ AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponen
 }
 
 void AttackOneTimeComponent::Update() {
-	auto collObj = m_Object->GetComponent<ColliderComponent>();
+	ColliderAttackComponent* collObj = m_Object->GetComponent<ColliderAttackComponent>();
 	if (collObj->GetActiveColliderFlag() == false) {
 		m_attackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;
@@ -20,8 +20,8 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 
 	// 攻撃処理の実装
 		// ここでは仮の実装として、攻撃力を表示するだけ
-	auto fighter = m_Object->GetComponent<FighterComponent>();
-	auto targetFighter = obj.GetComponent<FighterComponent>();
+	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
+	FighterComponent* targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {
 		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット

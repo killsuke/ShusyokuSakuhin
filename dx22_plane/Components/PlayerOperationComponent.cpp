@@ -11,7 +11,7 @@
 #include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "ChargePerformanceComponent.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
 #include "VectorMoveComponent.h"
 #include "EnemyDamageComponent.h"
 #include "AttackOneTimeComponent.h"
@@ -447,6 +447,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 	//slashTransform->SetRotation(XMFLOAT3(45.0f,0.0f,0.0f));
 
 	ColliderComponent* slashCollider = chargeSlash->AddComponent<ColliderComponent>();
+	ColliderAttackComponent* colliderAttack = chargeSlash->AddComponent<ColliderAttackComponent>();
 	VectorMoveComponent* slashMove = chargeSlash->AddComponent<VectorMoveComponent>();
 	if (m_CurrentRightLeft == RightLeft::RIGHT) {
 		slashMove->SetMoveDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));

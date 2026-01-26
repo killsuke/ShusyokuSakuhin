@@ -84,61 +84,69 @@
             "name": "COLLIDER",
             "ID": 20
         },
-        {
-            "name": "TEST_JUDGE_EXTRUSION",
+	{
+            "name": "COLLIDER_ATTACK",
             "ID": 21
         },
-        {
-            "name": "ATTACK",
+	{
+            "name": "COLLIDER_DAMAGE",
             "ID": 22
         },
         {
-            "name": "DAMAGE",
+            "name": "TEST_JUDGE_EXTRUSION",
             "ID": 23
         },
         {
-            "name": "FIGHTER",
+            "name": "ATTACK",
             "ID": 24
+        },
+        {
+            "name": "DAMAGE",
+            "ID": 25
+        },
+        {
+            "name": "FIGHTER",
+            "ID": 26
         },
 	{
 	    "name": "DOOR_FADE",
-            "ID": 25
+            "ID": 27
 	},
 	{
 	    "name": "ANIMATION_TRANSFORM",
-            "ID": 26
+            "ID": 28
 	},
         {
             "name": "TRANSFORM",
-            "ID": 27
+            "ID": 29
         },
 	{
             "name": "RENDER_CONTOROL",
-            "ID": 28
+            "ID": 30
         },
         {
             "name": "RENDER_ONE_SKIN_ANIMATION",
-            "ID": 29
-        },
-        {
-	    "name": "HIT_FLASH",
-            "ID": 30
-	},
-        {
-            "name": "RENDER",
             "ID": 31
         },
         {
-            "name": "RENDER_DELAY",
+	    "name": "HIT_FLASH",
             "ID": 32
-        },
+	},
         {
-            "name": "RENDER_DEBUG",
+            "name": "RENDER",
             "ID": 33
         },
         {
-            "name": "MAX",
+            "name": "RENDER_DELAY",
             "ID": 34
+        },
+        {
+            "name": "RENDER_DEBUG",
+            "ID": 35
+        },
+        {
+            "name": "MAX",
+            "ID": 36
         }
     ]
 }

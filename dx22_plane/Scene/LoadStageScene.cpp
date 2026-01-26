@@ -43,6 +43,8 @@
 #include "Components/TrailRenderComponent.h"
 #include "Components/RenderMotionBlurComponent.h"
 #include "Components/ChargePerformanceComponent.h"
+#include "Components/ColliderAttackComponent.h"
+#include "Components/ColliderDamageComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -103,7 +105,7 @@ LoadStageScene::LoadStageScene() {
 
 	GameObject* playOBJ = nullptr;
 	{
-		GameObject* childSlash = GameObjectManager::AddChild("dashSlash", "Child");
+		/*GameObject* childSlash = GameObjectManager::AddChild("dashSlash", "Child");
 		TransformComponent* childTrans = childSlash->AddComponent<TransformComponent>();
 		childTrans->SetLocalScale({5.0f,1.0f,1.0f});
 		ColliderComponent* childColl = childSlash->AddComponent<ColliderComponent>();
@@ -113,13 +115,13 @@ LoadStageScene::LoadStageScene() {
 		childFT->SetAtk(10);
 		childFT->SetHp(5);
 		Render3DColliderAABBComponent* childRend = childSlash->AddComponent<Render3DColliderAABBComponent>();
-		childSlash->SetActiveState(ActiveState::ALL_STOP);
+		childSlash->SetActiveState(ActiveState::ALL_STOP);*/
 
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
 
 		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
-		playerOperation->SetChargeSlashObject(childSlash);
+	//	playerOperation->SetChargeSlashObject(childSlash);
 
 		auto playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
@@ -143,6 +145,7 @@ LoadStageScene::LoadStageScene() {
 		//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
 			//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
 			//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
+		ColliderDamageComponent* collDamage = player->AddComponent<ColliderDamageComponent>();
 
 		auto fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);
@@ -161,7 +164,7 @@ LoadStageScene::LoadStageScene() {
 		cubeRe->SetShader("shader/Animation2DVS.hlsl", "shader/Fighter2DPS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/aka.png");
 
-		player->SetChild(childSlash);
+		//player->SetChild(childSlash);
 
 		/*	auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
 			cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
@@ -179,6 +182,9 @@ LoadStageScene::LoadStageScene() {
 		auto rollingColl = rolling->AddComponent<ColliderComponent>();
 		rollingColl->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
 		rollingColl->SetOffsetCenterOBB({ 5.0f,0.0f,0.0f });
+		ColliderAttackComponent* collAttack = rolling->AddComponent<ColliderAttackComponent>();
+		collAttack->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
+		collAttack->SetOffsetCenterOBB({ 5.0f,0.0f,0.0f });
 
 		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
 		testAction->SetHolder(player);

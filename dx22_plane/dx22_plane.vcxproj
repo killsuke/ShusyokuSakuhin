@@ -166,6 +166,8 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
+    <ClCompile Include="Components\ColliderDamageComponent.cpp" />
+    <ClCompile Include="Components\ColliderAttackComponent.cpp" />
     <ClCompile Include="Components\ChargeSlashComponent.cpp" />
     <ClCompile Include="Components\ChargeParticleMoveComponent.cpp" />
     <ClCompile Include="Components\ChargePerformanceComponent.cpp" />
@@ -308,6 +310,8 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
+    <ClInclude Include="Components\ColliderDamageComponent.h" />
+    <ClInclude Include="Components\ColliderAttackComponent.h" />
     <ClInclude Include="Components\ChargeSlashComponent.h" />
     <ClInclude Include="Components\ChargeParticleMoveComponent.h" />
     <ClInclude Include="Components\ChargePerformanceComponent.h" />

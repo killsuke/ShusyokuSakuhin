@@ -1,6 +1,7 @@
 #include "EnemyManagerComponent.h"
 #include "Transform.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
 #include "Render3D.h"
 #include "Render2D.h"
 #include "Render3DColliderAABBComponent.h"
@@ -83,6 +84,9 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
 		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+		ColliderAttackComponent* collAttack = enemyObj->AddComponent<ColliderAttackComponent>();
+		ColliderDamageComponent* collDamage = enemyObj->AddComponent<ColliderDamageComponent>();
+
 		auto render = enemyObj->AddComponent<Render2DComponent>();
 		render->CreateMesh<SquareMesh>();
 		render->SetShader(eS.shaderVS, eS.shaderPS);
