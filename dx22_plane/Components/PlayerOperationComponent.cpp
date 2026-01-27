@@ -2,7 +2,6 @@
 #include "RigidBodyComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"
-#include "HPBarMoveComponent.h"
 #include "JumpComponent.h"
 #include "DoorFadeComponent.h"
 #include "Transform.h"
@@ -10,6 +9,7 @@
 #include "TestSwordActionComponent.h"
 #include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "RenderHpComponent.h"
 #include "ChargePerformanceComponent.h"
 #include "ColliderAttackComponent.h"
 #include "VectorMoveComponent.h"
@@ -114,7 +114,7 @@ void PlayerOperationComponent::Update() {
 	GameObject* hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
 	if (hpUI != nullptr) {
 
-		Render3DComponent* hpRend = hpUI->GetComponent<Render3DComponent>();
+		RenderHpComponent* hpRend = hpUI->GetComponent<RenderHpComponent>();
 
 		const int maxHp = fighter->GetMaxHp();
 		const int hp = fighter->GetHp();

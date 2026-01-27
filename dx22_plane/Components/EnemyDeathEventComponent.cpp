@@ -428,7 +428,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			pos2.z -= 1.0f;
 
 			// ここにヒビが入ったテクスチャを貼ってみる
-			m_Crack1 = GameObjectManager::AddObject("crack1", "EFFECT");
+			m_Crack1 = GameObjectManager::AddObject("crack1", "Effect");
 			TransformComponent* crackTrans1 = m_Crack1->AddComponent<TransformComponent>();
 			crackTrans1->SetPosition(pos1);
 			crackTrans1->SetScale(size1);
@@ -438,7 +438,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			rend1->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
 			rend1->ChangeTexture("assets/texture/crack.png");
 
-			m_Crack2 = GameObjectManager::AddObject("crack2", "EFFECT");
+			m_Crack2 = GameObjectManager::AddObject("crack2", "Effect");
 			TransformComponent* crackTrans2 = m_Crack2->AddComponent<TransformComponent>();
 			crackTrans2->SetPosition(pos2);
 			crackTrans2->SetScale(size2);

@@ -3,9 +3,9 @@
 class BossEventComponent : public Component
 {
 private:
-	const float deltaTime = 0.016f;
-	float recordTime = 0.0f;
+	float m_RecordTime = 0.0f;
 	bool createCompletionFlag = false;
+	bool m_IsBossDied = false;
 	GameObject* m_boss = nullptr;
 
 public:

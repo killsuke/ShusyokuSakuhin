@@ -24,7 +24,7 @@
 #include "Components/CameraTargetComponent.h"
 #include "Components/CameraShakeComponent.h"
 #include "Components/ArbitraryRotationComponent.h"
-#include "Components/HPBarMoveComponent.h"
+#include "Components/RenderHpComponent.h"
 #include "Components/SpringComponent.h"
 #include "Components/StageLoadCSVComponent.h"
 #include "Components/TerrainManagerComponent.h"
@@ -346,15 +346,14 @@ LoadStageScene::LoadStageScene() {
 	hpTrans->SetPosition({ -570.0f, 120.0f, 0.0f });
 	hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
 
-	auto hpBar = hp->AddComponent<HPBarMoveComponent>();
+	RenderHpComponent* hpBar = hp->AddComponent<RenderHpComponent>();
 
 	hpBar->SetReferenceHPObj(*playOBJ);
 
-	auto hpRender = hp->AddComponent<Render3DComponent>();
-	hpRender->CreateMesh<SquareMesh>();
-	hpRender->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
-	hpRender->ChangeTexture("assets/texture/NoTexture.png");
-	hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	hpBar->CreateMesh<SquareMesh>();
+	hpBar->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+	hpBar->ChangeTexture("assets/texture/NoTexture.png");
+	hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	if (!fade.empty()) {

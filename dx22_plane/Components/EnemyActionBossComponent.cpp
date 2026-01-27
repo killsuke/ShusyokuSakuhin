@@ -2,7 +2,9 @@
 #include "Manager/GameObjectManager.h"
 #include "Transform.h"
 #include "Render2D.h"
+#include "Render3D.h"
 #include "RenderRingLuminescenceBillboardComponent.h"
+#include "RenderLuminescenceBillboardComponent.h"
 #include "FighterComponent.h"
 #include "RigidBodyComponent.h"
 #include "BulletComponent.h"
@@ -10,6 +12,8 @@
 #include "AttackTimingComponent.h"
 #include "PlayerDamageComponent.h"
 #include "ColliderAttackComponent.h"
+#include "ColliderDamageComponent.h"
+#include "RenderHpComponent.h"
 #include "JumpComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "Mesh/SquareMesh.h"
@@ -22,16 +26,51 @@ namespace {
 	constexpr float JumpMoveX = 2.0f;
 	constexpr float TargetLength = 20.0f;
 	constexpr float MoveSpeed = 0.2f;
+	constexpr float ScaleSpeed = 0.05f;
+	constexpr int BarrierDurability = 35;
 }
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
 
+	// 防御用ボスのバリアの本体
+	m_BossBarrier = GameObjectManager::AddAbsFront("boss_barrier_main", "Enemy");
+	m_BossBarrier->SetChildAbsFrontFlag(true);
+	TransformComponent* trans = m_BossBarrier->AddComponent<TransformComponent>();
+	trans->SetLockScale(true);
+	trans->SetLocalScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+
+	ColliderDamageComponent* collDamage = m_BossBarrier->AddComponent<ColliderDamageComponent>();
+	collDamage->SetActiveColliderFlag(false); // 最初は当たり判定無効
+
+	FighterComponent* fight = m_BossBarrier->AddComponent<FighterComponent>();
+	fight->SetHp(BarrierDurability);
+	fight->SetAtk(1);
+
+	Render2DComponent* rend2D = m_BossBarrier->AddComponent<Render2DComponent>();
+	rend2D->CreateMesh<SquareMesh>();
+	rend2D->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rend2D->ChangeTexture("assets/texture/ring.png");
+
+	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
+	rend->CreateMesh<SquareMesh>();
+	rend->SetShader("shader/unlitLuminescenceVS.hlsl", "shader/unlitRingLuminescencePS.hlsl");
+	rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	rend->SetGlowPower(0.5f);
+	rend->SetGlowRadius(0.3f);
+	rend->SetEllipseScale({ 1.0f,1.0f });
+	rend->SetRingRadius(0.5f);
+	rend->SetRingWidth(0.2f);
+	rend->SetExpand(1.2f);
+
+	m_BossBarrier->SetActiveState(ActiveState::ALL_STOP);
+	m_Object->SetChild(m_BossBarrier);
+
 	m_BarrierList.fill(nullptr);
 
-	// バリアオブジェクト作成
+	// 攻撃用バリアオブジェクト作成
 	for (int i = 0; i < BarrierCount; ++i) {
-		GameObject* barrier = GameObjectManager::AddAbsFront("boss_barrier", "Bullet");
+		GameObject* barrier = GameObjectManager::AddAbsFront("boss_barrier", "Effect");
 		barrier->SetChildAbsFrontFlag(true);
 
 		TransformComponent* trans = barrier->AddComponent<TransformComponent>();
@@ -44,8 +83,9 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		fight->SetHp(1);
 		fight->SetAtk(2);
 
-		ColliderComponent* coll = barrier->AddComponent<ColliderComponent>();
+		//	ColliderComponent* coll = barrier->AddComponent<ColliderComponent>();
 		ColliderAttackComponent* collAttack = barrier->AddComponent<ColliderAttackComponent>();
+		collAttack->SetActiveColliderFlag(false); // 最初は当たり判定無効
 
 		AttackTimingComponent* attack = barrier->AddComponent<AttackTimingComponent>();
 		attack->SetCoolDownTime(0.5f);
@@ -71,6 +111,31 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		barrier->SetActiveState(ActiveState::ALL_STOP);
 		m_Object->SetChild(barrier);
 		m_BarrierList[i] = barrier;
+	}
+
+	{
+		GameObject* hp = GameObjectManager::AddUI("hpFrameUI", "HP_UI");
+		TransformComponent* hpTrans = hp->AddComponent<TransformComponent>();
+		hpTrans->SetPosition({ 570.0f, 150.0f, 0.0f });
+		hpTrans->SetScale({ 45.0f, 150.0f, 1.0f });
+
+		Render3DComponent* hpRender = hp->AddComponent<Render3DComponent>();
+		hpRender->CreateMesh<SquareMesh>();
+		hpRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->ChangeTexture("assets/texture/boss_bar.png");
+	}
+
+	{
+		m_HpBar = GameObjectManager::AddUI("hpUI", "HP_UI");
+		TransformComponent* hpTrans = m_HpBar->AddComponent<TransformComponent>();
+		hpTrans->SetPosition({ 570.0f, 120.0f, 0.0f });
+		hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
+
+		RenderHpComponent* hpBar = m_HpBar->AddComponent<RenderHpComponent>();
+		hpBar->SetReferenceHPObj(*m_Object);
+		hpBar->CreateMesh<SquareMesh>();
+		hpBar->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+		hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
 
@@ -135,41 +200,48 @@ void EnemyActionBossComponent::Update() {
 		myTrans->AddPosition({ m_MoveDir,0.0f,0.0f });
 		break;
 	case BossActionState::BARRIER:
+	{
+		TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
 
-		// 移動はこっち
-		for (int i = 0; i < BarrierCount; ++i) {
+		if (bossBarrierTrans != nullptr) {
 
-			TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
-			if (barrierTrans != nullptr) {
+			// 移動はこっち
+			for (int i = 0; i < BarrierCount; ++i) {
 
-				if (m_LengthCount < TargetLength) {
+				TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
+				if (barrierTrans != nullptr) {
 
-					if (i == 0) {
-						barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+					if (m_LengthCount < TargetLength) {
+
+						bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
+
+						if (i == 0) {
+							barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+						}
+						else if (i == 1) {
+							barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
+						}
+						else if (i == 2) {
+							barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
+						}
+						else if (i == 3) {
+							barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
+						}
 					}
-					else if (i == 1) {
-						barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
-					}
-					else if (i == 2) {
-						barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
-					}
-					else if (i == 3) {
-						barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
-					}
-				}
-				else {
+					else {
 
-					//m_LengthCount = 0.0f;
-					// 最後に回転を開始
-					ChangeState(BossActionState::DEFAULT);
-					break;
+						//m_LengthCount = 0.0f;
+						// 最後に回転を開始
+						ChangeState(BossActionState::DEFAULT);
+						break;
+					}
 				}
 			}
+
+			m_LengthCount += MoveSpeed;
 		}
-
-		m_LengthCount += MoveSpeed;
-
-		break;
+	}
+	break;
 	case BossActionState::MAX:
 		break;
 	default:
@@ -188,6 +260,54 @@ void EnemyActionBossComponent::Update() {
 		}
 	}
 
+	{
+		// バリア耐久値チェック
+		FighterComponent* fight = m_BossBarrier->GetComponent<FighterComponent>();
+		if (m_BossBarrier == nullptr) {
+			return;
+		}
+		if (fight == nullptr) {
+			return;
+		}
+
+		const int hp = fight->GetHp();
+
+		if (hp <= 0) {
+
+			ResetBarriers(*fight);
+		}
+		else if (hp <= (BarrierDurability / 2)) {
+
+			RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
+			rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
+
+	{
+		// HPバー処理
+		FighterComponent* fight = m_Object->GetComponent<FighterComponent>();
+		RenderHpComponent* hpBar = m_HpBar->GetComponent<RenderHpComponent>();
+
+		if (fight != nullptr && hpBar != nullptr) {
+
+			const int maxHp = fight->GetMaxHp();
+			const int hp = fight->GetHp();
+
+			// HPのカラー変更
+			if (hp <= 0) {
+				hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f)); // 透明
+			}
+			else if (hp < (maxHp * 0.3f)) {
+				hpBar->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)); // 赤色
+			}
+			else if (hp < (maxHp * 0.5f)) {
+				hpBar->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)); // 黄色
+			}
+			else {
+				hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)); // 緑色
+			}
+		}
+	}
 
 	m_recordTime += m_deltaTime;
 }
@@ -211,7 +331,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 
 
 	// ここが弾作成処理
-	GameObject* bullet = GameObjectManager::AddAbsFront("bullet", "Enemy");
+	GameObject* bullet = GameObjectManager::AddAbsFront("bullet", "Effect");
 
 	TransformComponent* trans = bullet->AddComponent<TransformComponent>();
 	trans->SetPosition({ myPos.x + 10.0f,myPos.y,myPos.z });
@@ -239,7 +359,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitRingLuminescencePS.hlsl");
-	rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+	rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 	rend->SetGlowPower(1.0f);
 	rend->SetGlowRadius(0.5f);
 	rend->SetEllipseScale({ 1.0f,1.0f });
@@ -299,12 +419,41 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		}
 		break;
 	case BossActionState::BARRIER:
+
+		m_BossBarrier->SetActiveState(ActiveState::ACTIVE);
+
+		{
+			ColliderDamageComponent* collDamage = m_BossBarrier->GetComponent<ColliderDamageComponent>();
+			collDamage->SetActiveColliderFlag(true);
+
+			RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
+			rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+		}
+
 		// バリア展開処理をここに書く
 		for (int i = 0; i < BarrierCount; ++i) {
 			if (m_BarrierList[i] != nullptr) {
 				m_BarrierList[i]->SetActiveState(ActiveState::ACTIVE);
+				{
+					// 当たり判定を有効化
+					ColliderAttackComponent* collAttack = m_BarrierList[i]->GetComponent<ColliderAttackComponent>();
+					if (collAttack != nullptr) {
+						collAttack->SetActiveColliderFlag(true);
+					}
+				}
 			}
 		}
+
+		// ボス本体のダメージ用当たり判定を切る
+		{
+			ColliderDamageComponent* collDamage = m_Object->GetComponent<ColliderDamageComponent>();
+			if (collDamage != nullptr) {
+				collDamage->SetActiveColliderFlag(false);
+			}
+		}
+
+		// ここでバリア用のオブジェクトを作成
+		// ボスのダメージを受ける方の当たり判定を切る
 
 		m_IsBarrier = true;
 		break;
@@ -312,5 +461,50 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		break;
 	default:
 		break;
+	}
+}
+
+void EnemyActionBossComponent::ResetBarriers(FighterComponent& fight) {
+
+	// バリアの耐久力回復＆当たり判定無効化
+	ColliderDamageComponent* collDamage = m_BossBarrier->GetComponent<ColliderDamageComponent>();
+	if (collDamage != nullptr) {
+		collDamage->SetActiveColliderFlag(false);
+	}
+	fight.SetHp(BarrierDurability);
+	m_BossBarrier->SetActiveState(ActiveState::ALL_STOP);
+
+	TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
+	if (bossBarrierTrans != nullptr) {
+		bossBarrierTrans->SetLocalScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
+	}
+
+	m_LengthCount = 0.0f;
+	m_IsBarrier = false;
+
+	// 攻撃用バリア
+	for (int i = 0; i < BarrierCount; ++i) {
+		if (m_BarrierList[i] != nullptr) {
+			m_BarrierList[i]->SetActiveState(ActiveState::ALL_STOP);
+			{
+				// 回転するバリアの位置戻し
+				TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
+				if (barrierTrans != nullptr) {
+					barrierTrans->SetLocalPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
+				}
+
+				// 当たり判定を無効化
+				ColliderAttackComponent* collAttack = m_BarrierList[i]->GetComponent<ColliderAttackComponent>();
+				if (collAttack != nullptr) {
+					collAttack->SetActiveColliderFlag(false);
+				}
+			}
+		}
+	}
+
+	// ボス本体の当たり判定を有効化
+	ColliderDamageComponent* myCollDamage = m_Object->GetComponent<ColliderDamageComponent>();
+	if (myCollDamage != nullptr) {
+		myCollDamage->SetActiveColliderFlag(true);
 	}
 }

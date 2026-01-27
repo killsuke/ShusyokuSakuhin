@@ -3,7 +3,7 @@
 #include "ArbitraryRotationComponent.h"
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
-#include "Collider.h"
+#include "ColliderAttackComponent.h"
 #include "Effect2DComponent.h"
 #include "RenderBillboard.h"
 #include "AttackOneTimeComponent.h"
@@ -84,7 +84,7 @@ void TestSwordActionComponent::Update() {
 			goAround->SetActiveFlag(true);
 
 			// 念のため一度コライダーをオフ
-			auto collider = m_Object->GetComponent<ColliderComponent>();
+			auto collider = m_Object->GetComponent<ColliderAttackComponent>();
 			collider->SetActiveColliderFlag(false);
 
 			// ここで攻撃対称をクリア
@@ -157,7 +157,7 @@ void TestSwordActionComponent::Update() {
 			trailMake->SetActiveFlag(false);
 		}
 
-		auto collider = m_Object->GetComponent<ColliderComponent>();
+		auto collider = m_Object->GetComponent<ColliderAttackComponent>();
 		collider->SetActiveColliderFlag(false);
 
 		m_Object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
@@ -199,7 +199,7 @@ void TestSwordActionComponent::SwordAction() {
 
 	auto sound = SceneManager::GetSound();
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
-	auto collider = m_Object->GetComponent<ColliderComponent>();
+	auto collider = m_Object->GetComponent<ColliderAttackComponent>();
 	auto atkComp = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	// ここのプレイヤー取得はのちに別のものに変更

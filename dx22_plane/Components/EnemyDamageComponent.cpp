@@ -28,7 +28,7 @@ EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
 void EnemyDamageComponent::Update()
 {
 	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
-	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Enemy");
+	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindAllTag("Enemy");	// 敵タグのオブジェクトをすべて取得
 
 	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
 	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");

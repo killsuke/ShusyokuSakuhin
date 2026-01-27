@@ -4,13 +4,13 @@
 #include <iostream>
 
 HPBarMoveComponent::HPBarMoveComponent(GameObject& obj) : Component(obj) {
-	m_SortNum = ComponentTypeManager::GetID_FromName("HP_BAR_MOVE"); // ソート番号を設定
+	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 }
 
 void HPBarMoveComponent::Update() {
 	HPParam hpParam;
 
-	auto hpObj = referenceHpObj->GetComponent<FighterComponent>();
+	FighterComponent* hpObj = referenceHpObj->GetComponent<FighterComponent>();
 
 	if(hpObj == nullptr) {
 		return; // HPオブジェクトが設定されていない場合は何もしない

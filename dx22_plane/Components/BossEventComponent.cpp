@@ -19,11 +19,38 @@
 #include "ColliderAttackComponent.h"
 #include "ColliderDamageComponent.h"
 
+namespace {
+	constexpr float DeltaTime = 0.016f;
+}
+
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
 }
 
 void BossEventComponent::Update() {
+
+	GameObject* obj = GameObjectManager::GameObjectFindNameUI("fade");
+
+	if(obj == nullptr) {
+		return;
+	}
+	DoorFadeComponent* fade = obj->GetComponent<DoorFadeComponent>();
+
+	if(fade == nullptr) {
+		return;
+	}
+
+	if (m_IsBossDied == true) {
+
+		if (m_RecordTime > 3.0f) {
+			fade->SetWinLoseFlag(true);
+			fade->SetNextSceneName("ResultScene");
+			fade->SetBootDoor(true);
+		}
+		m_RecordTime += DeltaTime;
+		return;
+	}
+
 	CameraPointComponent* point = m_Object->GetComponent<CameraPointComponent>();
 	if (point != nullptr)
 	{
@@ -34,8 +61,6 @@ void BossEventComponent::Update() {
 			}
 
 			// ボスの体力をチェックして、0以下なら勝利処理を行う
-			GameObject* obj = GameObjectManager::GameObjectFindNameUI("fade");
-			DoorFadeComponent* fade = obj->GetComponent<DoorFadeComponent>();
 
 			GameObject* boss = GameObjectManager::GameObjectFindName("Boss");
 			if (boss != nullptr) {
@@ -45,9 +70,7 @@ void BossEventComponent::Update() {
 					if (bossAction != nullptr) {
 						bossAction->SetActiveFlag(false);
 					}
-					fade->SetWinLoseFlag(true);
-					fade->SetNextSceneName("ResultScene");
-					fade->SetBootDoor(true);
+					m_IsBossDied = true;
 					return;
 				}
 			}
