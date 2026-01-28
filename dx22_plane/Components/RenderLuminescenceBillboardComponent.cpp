@@ -1,5 +1,4 @@
 #include "RenderLuminescenceBillboardComponent.h"
-#include "System/DirectXRender.h"
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
 #include "Camera.h"
@@ -84,7 +83,7 @@ void RenderLuminescenceBillboardComponent::Update()
 		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
 		EBlendState currentBlendState = DirectXRender::GetCurrentBlendState();
-		DirectXRender::SetBlendState(EBlendState::BS_EFFECT);
+		DirectXRender::SetBlendState(m_BlendState);
 		const bool prevDepthEnable = DirectXRender::GetIsDepthEnable();
 		DirectXRender::SetDepthEnable(false); // 深度テスト無効、書き込み無効
 

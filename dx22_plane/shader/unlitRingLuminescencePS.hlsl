@@ -21,7 +21,7 @@ float4 ps_main(in PS_IN input) : SV_Target
 
     float value = (dist - RingRadius) / RingWidth;
     
-// ガウス分布っぽいリング
+    // ガウス分布っぽいリング
     float ring = exp(-(value * value));
         
     float3 colorRGB = BaseColor + GlowColor.rgb * ring * GlowPower;

@@ -47,7 +47,7 @@ void ComponentTypeManager::MakeSampleJson() {
 		{ "TRANSFORM" ,					20},
 		{ "RENDER" ,					21},
 		{ "RENDER_ONE_SKIN_ANIMATION" , 22},
-		{ "RENDER_DEBUG" ,		23},
+		{ "RENDER_DEBUG" ,				23},
 		{ "MAX" ,						24},
 	};
 

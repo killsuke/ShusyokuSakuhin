@@ -18,9 +18,9 @@ namespace {
 	constexpr float DeltaTime = 0.016f;
 	constexpr float FrontCameraZ = 20.0f;
 	constexpr float CameraUpY = 25.0f;
-	constexpr float shakePower = 10.0f;
-	constexpr float shakeSpeed = 2.5f;
-	constexpr float shakeTime = 0.2f;
+	constexpr float ShakePower = 15.0f;
+	constexpr float ShakeSpeed = 2.5f;
+	constexpr float ShakeTime = 0.2f;
 }
 
 EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(obj) {
@@ -417,7 +417,7 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			// ‰æ–Ê—h‚êŠJŽn
 			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
 			if (camShake != nullptr) {
-				camShake->ShakingPreparation(shakePower, shakeSpeed, shakeTime);
+				camShake->ShakingPreparation(ShakePower, ShakeSpeed, ShakeTime);
 				camShake->SetShakeType(ShakeType::RANDOM_DEPTH_ATTENUATION);
 			}
 
@@ -573,7 +573,6 @@ void EnemyDeathEventComponent::StickyProcess2(MeshCut2DComponent* cutComp, GameO
 			rigid1->SetFirstFallMagnification(60.0f);
 			rigid2->SetFirstFallMagnification(60.0f);
 		}
-
 
 		const XMFLOAT3 camPos = camTrans->GetPosition();
 

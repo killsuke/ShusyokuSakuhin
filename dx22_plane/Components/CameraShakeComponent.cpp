@@ -23,6 +23,17 @@ void CameraShakeComponent::Update() {
 
 		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
+		// 揺れ時間の計測
+		m_RecordTime += DeltaTime;
+		if (m_RecordTime > m_RequestTime) {
+			m_RecordTime = 0.0f;
+			m_RequestTime = 0.0f;
+			m_ShakePower = 0.0f;
+			m_ShakeSpeed = 0.0f;
+			m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };
+		}
+
+		// 揺れのパターン
 		switch (m_ShakeType)
 		{
 		case ShakeType::WIDTH:
@@ -50,15 +61,6 @@ void CameraShakeComponent::Update() {
 		// 位置更新
 		camera->SetOffsetPosition(newPos);
 		camera->SetOffsetTarget(newPos);
-
-		m_RecordTime += DeltaTime;
-		if (m_RecordTime > m_RequestTime) {
-			m_RecordTime = 0.0f;
-			m_RequestTime = 0.0f;
-			m_ShakePower = 0.0f;
-			m_ShakeSpeed = 0.0f;
-			m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };
-		}
 	}
 }
 

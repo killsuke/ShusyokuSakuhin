@@ -2,6 +2,7 @@
 #include "Render.h"
 #include "ParticlesControlComponent.h"
 #include <DirectXMath.h>
+#include "System/DirectXRender.h"
 
 class RenderRingLuminescenceBillboardComponent : public RenderComponent
 {
@@ -12,6 +13,7 @@ private:
 	float m_RingWidth = 0.0f;	// リングの幅
 	float m_Expand = 1.0f;	// 頂点の広げ具合
 	DirectX::XMFLOAT2 m_EllipseScale = { 1.0f,1.0f }; // 楕円のスケール
+	EBlendState m_BlendState = EBlendState::BS_ADDITIVE;
 
 public:
 
@@ -26,4 +28,5 @@ public:
 	void SetRingRadius(const float radius) { m_RingRadius = radius; };
 	void SetRingWidth(const float width) { m_RingWidth = width; };
 	void SetExpand(const float expand) { m_Expand = expand; };
+	void SetBlendState(const EBlendState& state) { m_BlendState = state; };
 };

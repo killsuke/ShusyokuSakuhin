@@ -233,7 +233,6 @@ void Camera::Update3D() {
 	XMFLOAT3 target = m_Target + m_OffsetTarget;
 	XMVECTOR targetV = XMLoadFloat3(&target);
 
-
 	viewMatrix = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
 	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意

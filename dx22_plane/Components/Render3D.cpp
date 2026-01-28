@@ -11,7 +11,7 @@ Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
 
 void Render3DComponent::Update()
 {
-	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	const TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -42,10 +42,10 @@ void Render3DComponent::Update()
 		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		//マテリアル数分ループ 
-		for (int i = 0; i < subsets.size(); i++)
+		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 

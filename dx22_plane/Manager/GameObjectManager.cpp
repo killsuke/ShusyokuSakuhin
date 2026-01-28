@@ -17,7 +17,7 @@ GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
 std::vector<std::unique_ptr<GameObject>>
 GameObjectManager::temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
 std::vector<TagAndID>
-GameObjectManager::m_TagAndIDList;
+GameObjectManager::m_TagAndIDList;	// タグによる検索をするためのID変換リスト
 
 // リストにゲームオブジェクトを追加
 GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
