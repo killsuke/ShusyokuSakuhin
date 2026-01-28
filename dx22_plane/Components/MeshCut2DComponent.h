@@ -2,6 +2,8 @@
 #include "Component.h"
 #include <SimpleMath.h>
 #include <algorithm>
+#include <vector>
+#include <array>
 
 enum class CutDirection
 {
@@ -30,7 +32,7 @@ private:
 	uint32_t m_CutObj1ID = 0;
 	uint32_t m_CutObj2ID = 0;
 
-	void MakeCutPoints(float& vL, float& vR,const float ratio);
+	void MakeCutPoints(float& vL, float& vR, const float ratio);
 public:
 
 	MeshCut2DComponent(GameObject& obj);
@@ -47,6 +49,7 @@ public:
 	}
 
 	void MeshCutAction(const CutEvent& event);
+	std::array<uint32_t,2> MakeMeshCutAction(const CutDirection& dir, const float raito1, const float ratio2);
 
 	// 外部からアクセスして切断後のオブジェクトを消去する
 	void DeleteCutObjs() {

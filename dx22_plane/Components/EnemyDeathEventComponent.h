@@ -26,22 +26,12 @@ class EnemyDeathEventComponent : public Component
 {
 private:
 	uint64_t m_listenerID_DeathEvent = 0;
-	float m_RecordTime = 0.0f;
-	bool m_IsFirstCamPos = false;
-	DirectX::XMFLOAT3 m_CutObj1Pos = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 m_CutObj2Pos = { 0.0f,0.0f,0.0f };
 
-	DirectX::XMVECTOR m_ShakeVector = { 0.0f,0.0f,0.0f,0.0f };	// ランダムな方向に揺らすために使う
-	DirectX::XMVECTOR m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };	// ランダムな方向に揺らすために使う
-	EnemyDeathEventState m_State = EnemyDeathEventState::STICKY;
+	EnemyDeathEventState m_DeathState = EnemyDeathEventState::STICKY;
 	ESwordActionState m_SwordActionState = ESwordActionState::NONE;
 	RightLeft m_RightLeft = RightLeft::RIGHT;
 
 	DeathPattern m_DeathPattern = DeathPattern::NONE;
-	GameObject* m_Crack1 = nullptr;
-	GameObject* m_Crack2 = nullptr;
-
-	std::vector<GameObject*> m_Debris;	// 飛び出した破片
 
 public:
 	EnemyDeathEventComponent(GameObject& obj);
@@ -56,26 +46,19 @@ public:
 	};
 
 	void SetEnemyDeathEventState(const EnemyDeathEventState& state) {
-		m_State = state;
+		m_DeathState = state;
 	};
 
-	void ImmediateProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
-	void StickyProcess(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
-	void StickyProcess2(MeshCut2DComponent* cutComp, GameObject* obj1, GameObject* obj2);
-
-	void ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2);
+	
 	void SetDeathPattern(const DeathPattern pattern) {
 
-		//if (m_DeathPattern == DeathPattern::NONE) {
-			
-			m_DeathPattern = pattern;
+		m_DeathPattern = pattern;
 
-			if (m_DeathPattern == DeathPattern::DEFAULT) {
-				m_State = EnemyDeathEventState::IMMEDIATE;
-			}
-			else if (m_DeathPattern == DeathPattern::CHARGE) {
-				m_State = EnemyDeathEventState::STICKY;
-			}
-		//}
+		if (m_DeathPattern == DeathPattern::DEFAULT) {
+			m_DeathState = EnemyDeathEventState::IMMEDIATE;
+		}
+		else if (m_DeathPattern == DeathPattern::CHARGE) {
+			m_DeathState = EnemyDeathEventState::STICKY;
+		}
 	};
 };

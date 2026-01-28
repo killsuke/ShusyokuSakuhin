@@ -57,32 +57,41 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 	m_CutRatio1 = event.ratio1;
 	m_CutRatio2 = event.ratio2;
 
+	MakeMeshCutAction(m_CutDirection, m_CutRatio1, m_CutRatio2);
+}
+
+std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection& dir, const float raito1, const float ratio2) {
+
+	std::array<uint32_t, 2> cutObjIDs;
+	cutObjIDs = { 0,0 };
+	
+	// Render2Dは3Dと統合してもいいかもしれん
 	Render2DComponent* rendComp = m_Object->GetComponent<Render2DComponent>();
 	if (rendComp == nullptr) {
-		return;
+		return cutObjIDs;
 	}
 
 	Mesh* mesh = rendComp->GetMesh();
 	if (mesh == nullptr) {
-		return;
+		return cutObjIDs;
 	}
 
 	SquareMesh* squareMesh = dynamic_cast<SquareMesh*>(mesh);
 	if (squareMesh == nullptr) {
-		return;
+		return cutObjIDs;
 	}
 
 	Texture texture = rendComp->GetTexture();
 	std::string texName = texture.GetTexname();
 	const RightLeft isInversion = rendComp->GetInversionFlag();
 	Shader* shader = rendComp->GetShader();
-//	std::vector<std::string> shaderName = shader->GetShaderNames();
+	//	std::vector<std::string> shaderName = shader->GetShaderNames();
 
-	// 取り敢えず縦に左右に半分にカットする処理を書く
-	// こんどは頂点バッファを書き換える処理を書く
+		// 取り敢えず縦に左右に半分にカットする処理を書く
+		// こんどは頂点バッファを書き換える処理を書く
 	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
-	Vector3 pos = trans->GetPosition();
-	Vector3 size = trans->GetScale();
+	XMFLOAT3 pos = trans->GetPosition();
+	XMFLOAT3 size = trans->GetScale();
 
 	m_CutObj1 = GameObjectManager::AddObject("CutLeft", "CutPart");
 	TransformComponent* leftTrans = m_CutObj1->AddComponent<TransformComponent>();
@@ -213,4 +222,9 @@ void MeshCut2DComponent::MeshCutAction(const CutEvent& event) {
 
 	VertexBuffer<VERTEX_3D>* vRBuffer = rightRend->GetVertexBuffer();
 	vRBuffer->Modify(CutVertices2);
+
+	cutObjIDs[0] = m_CutObj1ID;
+	cutObjIDs[1] = m_CutObj2ID;
+
+	return cutObjIDs;
 }

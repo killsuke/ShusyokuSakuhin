@@ -50,7 +50,7 @@ void FighterComponent::Update() {
 			m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 		}
 
-		m_Object->SetActiveState(ActiveState::DRAW_STOP);
+		//m_Object->SetActiveState(ActiveState::DRAW_STOP);
 
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {

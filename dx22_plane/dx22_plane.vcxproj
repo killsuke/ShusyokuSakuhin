@@ -176,6 +176,7 @@
     <ClCompile Include="Components\RenderLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="Components\ParticlesControlComponent.cpp" />
     <ClCompile Include="Components\SlashEffectComponent.cpp" />
+    <ClCompile Include="Components\CutObjectActionComponent.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Components\RenderRingLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="Components\RenderHpComponent.cpp" />
@@ -323,6 +324,7 @@
     <ClInclude Include="Components\SlashEffectComponent.h" />
     <ClInclude Include="Components\RenderRingLuminescenceBillboardComponent.h" />
     <ClInclude Include="Components\RenderHpComponent.h" />
+    <ClInclude Include="Components\CutObjectActionComponent.h" />
     <ClInclude Include="RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="System\Application.h" />
