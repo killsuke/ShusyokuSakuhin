@@ -27,3 +27,11 @@ void TimeManager::Update() {
 	m_deltaTime = static_cast<float>(currentTime - m_prevTime);
 	m_prevTime = currentTime;
 }
+
+void TimeManager::Reset() {
+	// Å‰‚Ì‚ğæ“¾‚µ‚Ä prev ‚É‹L˜^
+	LARGE_INTEGER counter;
+	QueryPerformanceCounter(&counter);
+	m_prevTime = static_cast<double>(counter.QuadPart) / m_frequency.QuadPart;
+	m_deltaTime = 0.0f;
+}

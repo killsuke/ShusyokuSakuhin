@@ -23,6 +23,7 @@ public:
 	static void Init();
 	static void UnInit();
 	static void Update();
+	static void Reset();
 
 	static float GetDeltaTime() { return m_deltaTime; };
 };

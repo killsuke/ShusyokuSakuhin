@@ -1,6 +1,7 @@
 #include "CameraShakeComponent.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "Manager/TimeManager.h"
 #include <cmath>
 #include <random>
 
@@ -23,8 +24,11 @@ void CameraShakeComponent::Update() {
 
 		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
+		const float deltaTime = TimeManager::GetDeltaTime();
+
+
 		// —h‚êŽžŠÔ‚ÌŒv‘ª
-		m_RecordTime += DeltaTime;
+		m_RecordTime += deltaTime;
 		if (m_RecordTime > m_RequestTime) {
 			m_RecordTime = 0.0f;
 			m_RequestTime = 0.0f;

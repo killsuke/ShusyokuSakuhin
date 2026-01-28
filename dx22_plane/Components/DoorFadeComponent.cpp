@@ -3,6 +3,7 @@
 #include "Render2D.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/TimeManager.h"
 #include "Input.h"
 #include "Mesh/SquareMesh.h"
 #include <iostream>

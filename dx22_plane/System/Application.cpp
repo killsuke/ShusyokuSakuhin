@@ -294,6 +294,7 @@ void Application::MainLoop()
 
 				SceneManager::Update(); // シーンの更新
 
+		
 				m_accumulatorTime -= 0.016;
 			}
 
@@ -364,6 +365,16 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	}
 	break;
 
+	case WM_ENTERSIZEMOVE:	// サイズ変更・移動開始
+	{
+		
+	}
+	break;
+	case WM_EXITSIZEMOVE:	// サイズ変更・移動終了
+	{
+		TimeManager::Reset();
+	}
+	break;
 	default:
 	{
 #if _DEBUG
