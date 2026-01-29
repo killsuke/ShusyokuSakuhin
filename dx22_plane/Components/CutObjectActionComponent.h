@@ -10,6 +10,7 @@ private:
 	uint32_t m_CutObj2ID = 0;
 	float m_RecordTime = 0.0f;
 
+	bool m_IsFirstAction = false;
 	bool m_IsFirstCamPos = false;
 	DirectX::XMFLOAT3 m_CutObj1Pos = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 m_CutObj2Pos = { 0.0f,0.0f,0.0f };
@@ -23,6 +24,11 @@ private:
 	std::vector<GameObject*> m_Debris;	// îÚÇ—èoÇµÇΩîjï–
 	EnemyDeathEventState m_DeathState = EnemyDeathEventState::STICKY;
 
+	void ImmediateStartProcess();
+	void ImmediateEndProcess();
+
+	void StickyProcess(GameObject* obj1, GameObject* obj2);
+	void ScreenClash(GameObject* obj1, GameObject* obj2);
 
 public:
 
@@ -34,10 +40,6 @@ public:
 		m_CutObj1ID = obj1ID;
 		m_CutObj2ID = obj2ID;
 	};
-
-	void ImmediateProcess(GameObject* obj1, GameObject* obj2);
-	void StickyProcess(GameObject* obj1, GameObject* obj2);
-	void StickyProcess2(GameObject* obj1, GameObject* obj2);
 
 	void ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2);
 	void SetDeathState(const EnemyDeathEventState& state) {

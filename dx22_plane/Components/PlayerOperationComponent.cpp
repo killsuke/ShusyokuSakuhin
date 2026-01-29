@@ -47,8 +47,8 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 		});*/
 
 	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
-//	timeLine->AddPointEvent(3.0f, this, [this]() {TestProcess(); });
-	timeLine->AddRangeEvent(3.0f, 5.0f, this, [this](float t) {TestProcess2(t); }, [this]() {TestProcess(); }, [this]() {TestProcess3(); });
+//	timeLine->AddPointEvent(3.0f, this, [this]() {TestProcess(); });	// ˆê“xØ‚è
+//	timeLine->AddRangeEvent(3.0f, 5.0f, this, [this](float t) {TestProcess2(t); }, [this]() {TestProcess(); }, [this]() {TestProcess3(); });	// ”ÍˆÍ“I
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {

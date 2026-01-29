@@ -1,6 +1,7 @@
 #include "EnemyDeathEventComponent.h"
 #include "Camera.h"
 #include "CutObjectActionComponent.h"
+#include "TimeLineComponent.h"
 #include "Mesh/TriangularPrismMesh.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
@@ -99,6 +100,7 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 
 	GameObject* cutCompObj = GameObjectManager::AddObject("cutCompObj","CutCompObj");
 	TransformComponent* cutCompTrans = cutCompObj->AddComponent<TransformComponent>();
+	TimeLineComponent* timeLine = cutCompObj->AddComponent<TimeLineComponent>();
 	CutObjectActionComponent* cutCompAction = cutCompObj->AddComponent<CutObjectActionComponent>();
 	cutCompAction->SetCutObjs(cutObjIDs[0], cutObjIDs[1]);
 	cutCompAction->SetDeathState(m_DeathState);

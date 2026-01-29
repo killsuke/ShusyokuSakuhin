@@ -50,5 +50,11 @@ public:
 		std::function<void(float)> onUpdate,
 		std::function<void()> onStart,
 		std::function<void()> onEnd);
+
+	void AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
+	void AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
+		std::function<void(float)> onUpdate,
+		std::function<void()> onStart,
+		std::function<void()> onEnd);
 	void RemoveEventsByComponent(Component* owner);
 };

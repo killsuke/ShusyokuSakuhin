@@ -16,8 +16,8 @@ void TimeLineComponent::Update() {
 	const float deltaTime = TimeManager::GetDeltaTime();
 	m_CurrentTime += deltaTime;
 
-	UpdatePointEvents();
-	UpdateRangeEvents();
+	UpdatePointEvents();	// 一度きりのイベントの更新
+	UpdateRangeEvents();	// 範囲イベントの更新
 }
 
 // 一度きりのイベントの更新
@@ -78,6 +78,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 	}
 }
 
+// 一度きりのイベントを追加
 void TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
 	
 	TimePointEvent newEvent;
@@ -86,7 +87,7 @@ void TimeLineComponent::AddPointEvent(const float time, Component* owner, std::f
 	newEvent.eventAction = action;
 	m_PointEvents.push_back(newEvent);	// イベントを追加
 
-	size_t index = m_PointEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	const size_t index = m_PointEvents.size() - 1;	// 追加したイベントのインデックスを取得
 	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
 
 	// イベントをトリガー時間でソート
@@ -96,6 +97,7 @@ void TimeLineComponent::AddPointEvent(const float time, Component* owner, std::f
 		});
 }
 
+// 範囲イベントを追加
 void TimeLineComponent::AddRangeEvent(
 	const float startTime, const float endTime, Component* owner,
 	std::function<void(float)> onUpdate,
@@ -111,7 +113,44 @@ void TimeLineComponent::AddRangeEvent(
 	newEvent.ownerComponent = owner;
 	m_RangeEvents.push_back(newEvent);	// イベントを追加
 
-	size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+}
+
+// 発行してから〇秒後に一度だけ実行されるイベントを追加
+void TimeLineComponent::AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action) {
+
+	TimePointEvent newEvent;
+	newEvent.triggerTime = m_CurrentTime + delayTime;
+	newEvent.ownerComponent = owner;
+	newEvent.eventAction = action;
+	m_PointEvents.push_back(newEvent);	// イベントを追加
+
+	const size_t index = m_PointEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+
+	// イベントをトリガー時間でソート
+	std::sort(m_PointEvents.begin(), m_PointEvents.end(),
+		[](const TimePointEvent& a, const TimePointEvent& b) {
+			return a.triggerTime < b.triggerTime;
+		});
+}
+
+void TimeLineComponent::AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
+	std::function<void(float)> onUpdate,
+	std::function<void()> onStart,
+	std::function<void()> onEnd) {
+
+	TimeRangeEvent newEvent;
+	newEvent.startTime = startTime + delayTime;
+	newEvent.endTime = endTime + delayTime;
+	newEvent.onUpdate = onUpdate;
+	newEvent.onStart = onStart;
+	newEvent.onEnd = onEnd;
+	newEvent.ownerComponent = owner;
+	m_RangeEvents.push_back(newEvent);	// イベントを追加
+
+	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
 	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
 }
 

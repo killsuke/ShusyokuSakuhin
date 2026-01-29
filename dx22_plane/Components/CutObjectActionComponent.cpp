@@ -5,6 +5,7 @@
 #include "Render2D.h"
 #include "Render3D.h"
 #include "CameraShakeComponent.h"
+#include "TimeLineComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Mesh/SquareMesh.h"
 #include <random>
@@ -22,6 +23,11 @@ namespace {
 
 CutObjectActionComponent::CutObjectActionComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // ソート番号を設定
+
+	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+	if (timeLine == nullptr) {
+		timeLine = m_Object->AddComponent<TimeLineComponent>();
+	}
 }
 
 void CutObjectActionComponent::Update() {
@@ -38,13 +44,23 @@ void CutObjectActionComponent::Update() {
 		// 切れて目の前に飛んで来る
 	case EnemyDeathEventState::IMMEDIATE:
 
-		ImmediateProcess(meshCutObj1, meshCutObj2);
+		if (m_IsFirstAction == false) {
+			TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+			if (timeLine != nullptr) {
+
+				timeLine->AddPointDelayEvent(0.0f, this, [this]() {ImmediateStartProcess(); });
+				timeLine->AddPointDelayEvent(3.0f, this, [this]() {ImmediateEndProcess(); });
+			}
+			m_IsFirstAction = true;
+		}
+
+		//		ImmediateProcess(meshCutObj1, meshCutObj2);
 		break;
 
 		// 吹っ飛んでから画面に貼りつく
 	case EnemyDeathEventState::STICKY:
 
-		StickyProcess2(meshCutObj1, meshCutObj2);
+		ScreenClash(meshCutObj1, meshCutObj2);
 		break;
 	default:
 		break;
@@ -54,40 +70,49 @@ void CutObjectActionComponent::Update() {
 
 }
 
-void CutObjectActionComponent::ImmediateProcess(GameObject* obj1, GameObject* obj2) {
+void CutObjectActionComponent::ImmediateStartProcess() {
 
+	GameObject* obj1 = GameObjectManager::GameObjectFindInstanceID(m_CutObj1ID);
+	GameObject* obj2 = GameObjectManager::GameObjectFindInstanceID(m_CutObj2ID);
 
-	// 一定時間経過したらオブジェクトを消去する
-	if (m_RecordTime > 3.0f) {
-		obj1->Destroy();
-		obj2->Destroy();
-		m_Object->Destroy();
+	if (obj1 == nullptr || obj2 == nullptr) {
+		return;
 	}
-	// 最初の一回だけ動かす
-	// 切れてズレる
-	else if (m_RecordTime == 0.0f) {	// 切れたら即飛ばす！
 
-		RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
-		RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
 
-		rigid1->SetGravityFlag(true);
-		rigid2->SetGravityFlag(true);
+	rigid1->SetGravityFlag(true);
+	rigid2->SetGravityFlag(true);
 
-		rigid1->SetMass(2.0f);
-		rigid2->SetMass(2.0f);
+	rigid1->SetMass(2.0f);
+	rigid2->SetMass(2.0f);
 
-		ProjectileMotionComponent* proj1 = obj1->AddComponent<ProjectileMotionComponent>();
-		ProjectileMotionComponent* proj2 = obj2->AddComponent<ProjectileMotionComponent>();
+	ProjectileMotionComponent* proj1 = obj1->AddComponent<ProjectileMotionComponent>();
+	ProjectileMotionComponent* proj2 = obj2->AddComponent<ProjectileMotionComponent>();
 
-		proj1->SetProjectileDirection({ -0.5f,1.0f,-1.8f });
-		proj2->SetProjectileDirection({ 0.5f,1.0f,1.8f });
+	proj1->SetProjectileDirection({ -0.5f,1.0f,-1.8f });
+	proj2->SetProjectileDirection({ 0.5f,1.0f,1.8f });
 
-		proj1->SetProjectilePower(28.0f);
-		proj2->SetProjectilePower(28.0f);
+	proj1->SetProjectilePower(28.0f);
+	proj2->SetProjectilePower(28.0f);
 
-		proj1->SetProjectileRotation({ 0.0f,0.0f,15.0f });
-		proj2->SetProjectileRotation({ 0.0f,0.0f,-15.0f });
+	proj1->SetProjectileRotation({ 0.0f,0.0f,15.0f });
+	proj2->SetProjectileRotation({ 0.0f,0.0f,-15.0f });
+}
+
+void CutObjectActionComponent::ImmediateEndProcess() {
+
+	GameObject* obj1 = GameObjectManager::GameObjectFindInstanceID(m_CutObj1ID);
+	GameObject* obj2 = GameObjectManager::GameObjectFindInstanceID(m_CutObj2ID);
+
+	if (obj1 == nullptr || obj2 == nullptr) {
+		return;
 	}
+
+	obj1->Destroy();
+	obj2->Destroy();
+	m_Object->Destroy();
 }
 
 void CutObjectActionComponent::StickyProcess(GameObject* obj1, GameObject* obj2) {
@@ -269,7 +294,7 @@ void CutObjectActionComponent::ShakeCutObjects(TransformComponent* obj1, Transfo
 	obj2->AddPosition({ newPos.x,newPos.y,0.0f });
 }
 
-void CutObjectActionComponent::StickyProcess2(GameObject* obj1, GameObject* obj2) {
+void CutObjectActionComponent::ScreenClash(GameObject* obj1, GameObject* obj2) {
 
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 	if (camera == nullptr) {
