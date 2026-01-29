@@ -21,6 +21,9 @@ private:
 	GameObject* m_Crack1 = nullptr;
 	GameObject* m_Crack2 = nullptr;
 
+	uint32_t m_Crack1ID = 0;
+	uint32_t m_Crack2ID = 0;
+
 	std::vector<GameObject*> m_Debris;	// îÚÇ—èoÇµÇΩîjï–
 	EnemyDeathEventState m_DeathState = EnemyDeathEventState::STICKY;
 
@@ -28,7 +31,15 @@ private:
 	void ImmediateEndProcess();
 
 	void StickyProcess(GameObject* obj1, GameObject* obj2);
-	void ScreenClash(GameObject* obj1, GameObject* obj2);
+	void ScreenClashStart();
+	void CutObjsMove();
+	void CreateCracksAndDebris();
+	void ShakeAndClash();
+	void FollowCamera();
+	void FallStart();
+	void FallProcess();
+	void FallEnd();
+	void DummyFunc() {};
 
 public:
 
