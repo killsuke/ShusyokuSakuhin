@@ -18,6 +18,7 @@
 #include "ChargeSlashComponent.h"
 #include "SlashEffectComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
+#include "TimeLineComponent.h"	// これがちゃんと動くのか明日テスト
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
@@ -44,10 +45,29 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 	/*m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnDamageHit(e);
 		});*/
+
+	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+//	timeLine->AddPointEvent(3.0f, this, [this]() {TestProcess(); });
+	timeLine->AddRangeEvent(3.0f, 5.0f, this, [this](float t) {TestProcess2(t); }, [this]() {TestProcess(); }, [this]() {TestProcess3(); });
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
 //	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+}
+
+void PlayerOperationComponent::TestProcess() {
+
+	std::cout << "Start" << std::endl;
+}
+
+void PlayerOperationComponent::TestProcess2(float t) {
+
+	std::cout << "TestProcess" << std::endl;
+}
+
+void PlayerOperationComponent::TestProcess3() {
+
+	std::cout << "End" << std::endl;
 }
 
 // 更新処理
@@ -217,6 +237,11 @@ void PlayerOperationComponent::StateUpdate() {
 	m_IsJump = false;
 	if (keyUp) {
 		m_IsJump = true;
+	}
+
+	if (keyAttack) {
+		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+		timeLine->SetActiveFlag(true);
 	}
 
 	m_IsMoveFlag = false; // 毎フレーム初期化	

@@ -59,5 +59,9 @@ public:
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得
 	bool GetIsJump() const { return m_IsJump; } // ジャンプ中かどうかのフラグ取得
 	PlayerState GetPlayerState()const { return m_CurrentState; };
+
+	void TestProcess();
+	void TestProcess2(float t);
+	void TestProcess3();
 };
 
