@@ -48,8 +48,8 @@ void CutObjectActionComponent::Update() {
 			TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 			if (timeLine != nullptr) {
 
-				timeLine->AddPointDelayEvent(0.0f, this, [this]() {ImmediateStartProcess(); });
-				timeLine->AddPointDelayEvent(3.0f, this, [this]() {ImmediateEndProcess(); });
+				timeLine->AddPointDelayEvent(0.0f, this, [this]() {ImmediateStartProcess(); });	// 開始
+				timeLine->AddPointDelayEvent(3.0f, this, [this]() {ImmediateEndProcess(); });	// 終了
 			}
 			m_IsFirstAction = true;
 		}
@@ -62,8 +62,8 @@ void CutObjectActionComponent::Update() {
 			TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 			if (timeLine != nullptr) {
 				timeLine->AddRangeDelayEvent(0.0f, 0.2f, 0.0f, this, [this](float) {CutObjsMove(); }, [this]() {ScreenClashStart(); }, [this]() {DummyFunc(); });	// 画面衝突エフェクト開始
-				timeLine->AddPointDelayEvent(0.2f, this, [this]() {CreateCracksAndDebris(); });	// 破片とか生成
-				timeLine->AddRangeDelayEvent(0.2f, 0.4f, 0.0f, this, [this](float) {FollowCamera(); }, [this]() {ShakeAndClash(); }, [this]() {DummyFunc(); });	// 画面衝突とカメラ追従
+				timeLine->AddPointDelayEvent(0.21f, this, [this]() {CreateCracksAndDebris(); });	// 破片やヒビを生成
+				timeLine->AddRangeDelayEvent(0.21f, 0.4f, 0.0f, this, [this](float) {FollowCamera(); }, [this]() {ShakeAndClash(); }, [this]() {FollowCamera(); });	// 画面衝突とカメラ追従
 				timeLine->AddRangeDelayEvent(1.0f, 2.0f, 0.0f, this, [this](float) {FallProcess(); }, [this]() {FallStart(); }, [this]() {FallEnd(); });	// 落ちる
 			}
 			m_IsFirstAction = true;
@@ -588,17 +588,16 @@ void CutObjectActionComponent::ShakeAndClash() {
 	XMFLOAT3 pos1 = obj1Trans->GetPosition();
 	XMFLOAT3 pos2 = obj2Trans->GetPosition();
 
-	GameObject* crackObj1 = GameObjectManager::GameObjectFindInstanceID(m_Crack1ID);
-	GameObject* crackObj2 = GameObjectManager::GameObjectFindInstanceID(m_Crack2ID);
+	//TransformComponent* crack1 = m_Crack1->GetComponent<TransformComponent>();
+	//TransformComponent* crack2 = m_Crack2->GetComponent<TransformComponent>();
 
-	TransformComponent* crack1 = m_Crack1->GetComponent<TransformComponent>();
-	TransformComponent* crack2 = m_Crack2->GetComponent<TransformComponent>();
+	//pos1.z -= 1.0f;
+	//pos2.z -= 1.0f;
 
-	pos1.z -= 5.0f;
-	pos2.z -= 5.0f;
+	//// ヒビも一緒に移動させる処理を作らないとダメ
 
-	crack1->SetPosition(pos1);
-	crack2->SetPosition(pos2);
+	//crack1->SetPosition(pos1);
+	//crack2->SetPosition(pos2);
 }
 
 // カメラに追従
@@ -631,6 +630,23 @@ void CutObjectActionComponent::FollowCamera() {
 
 	obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + camOffset.z + FrontCameraZ });
 	obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + camOffset.z + FrontCameraZ });
+
+	if (m_Crack1 != nullptr && m_Crack2 != nullptr) {
+
+		TransformComponent* crack1Trans = m_Crack1->GetComponent<TransformComponent>();
+		TransformComponent* crack2Trans = m_Crack2->GetComponent<TransformComponent>();
+
+		if (crack1Trans != nullptr && crack2Trans != nullptr) {
+			XMFLOAT3 obj1Pos = obj1Trans->GetPosition();
+			XMFLOAT3 obj2Pos = obj2Trans->GetPosition();
+
+			obj1Pos.z -= 1.0f;
+			obj2Pos.z -= 1.0f;
+
+			crack1Trans->SetPosition(obj1Pos);
+			crack2Trans->SetPosition(obj2Pos);
+		}
+	}
 }
 
 // 落ちる準備

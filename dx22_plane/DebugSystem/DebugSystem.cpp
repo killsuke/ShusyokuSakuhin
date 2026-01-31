@@ -55,6 +55,15 @@ void DebugSystem::Init() {
 		uiPosition.x += ShiftUI;
 	}
 
+	m_DebugCamera = GameObjectManager::AddObject("DebugCamera", "DebugCamera");
+	TransformComponent* camTransform = m_DebugCamera->AddComponent<TransformComponent>();
+	camTransform->SetPosition(Vector3(0.0f, 0.0f, -100.0f));
+	DebugCameraComponent* debugCamera = m_DebugCamera->AddComponent<DebugCameraComponent>();
+	debugCamera->SetTarget(Vector3(0.0f, 0.0f, 0.0f));
+	debugCamera->SetFieldOfView(FieldOfView::DEFAULT);
+	m_DebugCamera->SetCarryOverFlag(true);
+	m_DebugCamera->SetActiveState(ActiveState::ALL_STOP);
+
 #endif
 }
 
@@ -62,6 +71,7 @@ void DebugSystem::UnInit() {
 
 	// デバッグUIの破棄
 	m_DebugUIs.clear();
+	m_DebugCamera = nullptr;
 }
 
 void DebugSystem::Update() {
@@ -76,7 +86,7 @@ void DebugSystem::Update() {
 	}
 
 	// 新しいオブジェクトが出来た時にちゃんと止められるか確認
-	const std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("Camera", "DebugUI");
+	const std::vector<GameObject*> objs = GameObjectManager::GameObjectFindAllTagsOtherThan("DebugCamera", "DebugUI");
 
 	// デバッグ機能の処理
 	DebugUI();
@@ -101,10 +111,38 @@ void DebugSystem::DebugUI() {
 }
 
 void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
+
+	GameObject* sceneCamera = GameObjectManager::GameObjectFindName("camera");
+
+	if (sceneCamera == nullptr || m_DebugCamera == nullptr) {
+		return;
+	}
+
+	Camera* sceneCamComp = sceneCamera->GetComponent<Camera>();
+	DebugCameraComponent* debugCamComp = m_DebugCamera->GetComponent<DebugCameraComponent>();
+	TransformComponent* sceneCamTrans = sceneCamera->GetComponent<TransformComponent>();
+	TransformComponent* debugCamTrans = m_DebugCamera->GetComponent<TransformComponent>();
+	Render3DComponent* sceneCameraRend = sceneCamera->GetComponent<Render3DComponent>();
+	if(sceneCamComp == nullptr || debugCamComp == nullptr || sceneCamTrans == nullptr || debugCamTrans == nullptr || sceneCameraRend == nullptr) {
+		return;
+	}
+
 	if (Input::GetKeyTrigger(VK_F2)) {
 		m_ScreenStop = !m_ScreenStop;
 
+		// 画面停止解除時の処理
 		if (m_ScreenStop == false) {
+
+			sceneCamera->SetActiveState(ActiveState::ACTIVE);
+			m_DebugCamera->SetActiveState(ActiveState::ALL_STOP);
+
+			const XMFLOAT3 sceneCamPos = sceneCamTrans->GetPosition();
+			const XMFLOAT3 sceneCamTarget = sceneCamComp->GetTarget();
+
+			debugCamTrans->SetPosition(sceneCamPos);
+			debugCamComp->SetTarget(sceneCamTarget);
+			sceneCameraRend->SetActiveFlag(false);
+
 			for (GameObject* obj : objs) {
 				// 描画停止中か全停止中のオブジェクトはスルー
 				const ActiveState currentState = obj->GetActiveState();
@@ -128,6 +166,11 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
 	// 画面停止中の処理
 	if (m_ScreenStop == true) {
+
+		sceneCamera->SetActiveState(ActiveState::ALL_STOP);
+		m_DebugCamera->SetActiveState(ActiveState::ACTIVE);
+		sceneCameraRend->SetActiveFlag(true);
+
 		for (GameObject* obj : objs) {
 			// 更新停止中か全停止中のオブジェクトはスルー
 			const ActiveState currentState = obj->GetActiveState();

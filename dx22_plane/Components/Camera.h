@@ -3,7 +3,11 @@
 #include "GameObject.h"
 #include "Transform.h"
 
-#define CARCAMERA (0.01745f)
+namespace {
+	constexpr float DEFAULT_FOV = 45.0f;
+	constexpr float WIDE_FOV = 90.0f;
+	constexpr float TELEPHOTO_FOV = 20.0f;
+}
 
 enum class FieldOfView{
 	DEFAULT,	// デフォルト
@@ -17,7 +21,7 @@ enum class FieldOfView{
 //Cameraクラス
 //-----------------------------------------------------------------------------
 class Camera : public Component {
-private:
+protected:
 
 	DirectX::XMFLOAT3 m_Target = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 

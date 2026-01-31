@@ -262,27 +262,27 @@ void Application::MainLoop()
 			ImGui::NewFrame();
 
 			// ImGuiのUI要素をここに追加
-			ImGui::Begin("Debug Window");
-			ImGui::Text("マウスの座標");
-			DirectX::SimpleMath::Vector2 vec2 = Input::GetMousePositionNormalize();
+			//ImGui::Begin("Debug Window");
+			//ImGui::Text("マウスの座標");
+			//DirectX::SimpleMath::Vector2 vec2 = Input::GetMousePositionNormalize();
 
-			// マウス座標デバッグ
-			ImGui::Text("X_Mouse : %.3f", vec2.x); // 現在の値を表示
-			ImGui::Text("Y_Mouse : %.3f", vec2.y); // 現在の値を表示
+			//// マウス座標デバッグ
+			//ImGui::Text("X_Mouse : %.3f", vec2.x); // 現在の値を表示
+			//ImGui::Text("Y_Mouse : %.3f", vec2.y); // 現在の値を表示
 
-			if (ImGui::Button("Click Me!")) {
-				ImGui::Text("FPS: %d", fpsCounter);
-			}
+			//if (ImGui::Button("Click Me!")) {
+			//	ImGui::Text("FPS: %d", fpsCounter);
+			//}
 
-			bool isChecked = false;
-			ImGui::Checkbox("Enable Feature", &isChecked);
+			//bool isChecked = false;
+			//ImGui::Checkbox("Enable Feature", &isChecked);
 
-			ImGui::SliderFloat("Float Slider", &num, 0.0f, 1.0f);
+			//ImGui::SliderFloat("Float Slider", &num, 0.0f, 1.0f);
 
-			ImDrawList* draw_list = ImGui::GetWindowDrawList();
-			draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
+			//ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			//draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
 
-			ImGui::End();
+			//ImGui::End();
 #endif
 			double deltaTime = 0.016;
 
