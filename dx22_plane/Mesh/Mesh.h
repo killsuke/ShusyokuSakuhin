@@ -27,24 +27,38 @@ public:
 	void DefaultSetMaterial();
 	void DefaultSetTexture();
 
-	void SetTextureUV(float nu, float nv, float sx, float sy) {
+	void SetTextureUV(const float nu,const float nv,const float sx,const float sy) {
 		// 単一テクスチャの場合のみ設定可能
 		if(m_Textures.size() == 1) {
 			m_Textures[0]->SetUV(nu, nv, sx, sy);
 		}
 	}
 
-	void SetInitialCut(float sx, float sy) {
+	void SetInitialCut(const float sx,const float sy) {
 		// 単一テクスチャの場合のみ設定可能
 		if (m_Textures.size() == 1) {
 			m_Textures[0]->SetInitialCut(sx, sy);
 		}
 	}
 
-	void SetCutNum(float nu, float nv) {
+	void SetInitialCut(const DirectX::XMFLOAT2& scut) {
+		// 単一テクスチャの場合のみ設定可能
+		if (m_Textures.size() == 1) {
+			m_Textures[0]->SetInitialCut(scut.x, scut.y);
+		}
+	}
+
+	void SetCutNum(const float nu,const float nv) {
 		// 単一テクスチャの場合のみ設定可能
 		if (m_Textures.size() == 1) {
 			m_Textures[0]->SetCutNum(nu, nv);
+		}
+	}
+
+	void SetCutNum(const DirectX::XMFLOAT2& ncut) {
+		// 単一テクスチャの場合のみ設定可能
+		if (m_Textures.size() == 1) {
+			m_Textures[0]->SetCutNum(ncut.x, ncut.y);
 		}
 	}
 

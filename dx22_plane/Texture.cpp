@@ -9,11 +9,11 @@ using Microsoft::WRL::ComPtr;
 
 Texture::Texture(const Texture& other)
 	: m_Texname(other.m_Texname),
-	m_srv(other.m_srv),           // ComPtr は参照カウントが増えるだけ
-	m_srvMask(other.m_srvMask),
-	m_width(other.m_width),
-	m_height(other.m_height),
-	m_bpp(other.m_bpp),
+	m_Srv(other.m_Srv),           // ComPtr は参照カウントが増えるだけ
+	m_SrvMask(other.m_SrvMask),
+	m_Width(other.m_Width),
+	m_Height(other.m_Height),
+	m_Bpp(other.m_Bpp),
 	m_NumU(other.m_NumU),
 	m_NumV(other.m_NumV),
 	m_SplitX(other.m_SplitX),
@@ -33,10 +33,10 @@ bool Texture::Load(const std::string& filename)
 	bool sts = true;
 	unsigned char* pixels;
 
-	std::string Isfilename = filename;
+	const std::string Isfilename = filename;
 
 	// 画像読み込み
-	pixels = stbi_load(Isfilename.c_str(), &m_width, &m_height, &m_bpp, 4);
+	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, 4);
 	if (pixels == nullptr) {
 		std::cout << Isfilename.c_str() << " Load error " << std::endl;
 		return false;
@@ -48,8 +48,8 @@ bool Texture::Load(const std::string& filename)
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 
-	desc.Width = m_width;
-	desc.Height = m_height;
+	desc.Width = m_Width;
+	desc.Height = m_Height;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			// RGBA
@@ -72,7 +72,7 @@ bool Texture::Load(const std::string& filename)
 	}
 
 	// SRV生成
-	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_srv.GetAddressOf());
+	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_Srv.GetAddressOf());
 	if (FAILED(hr)) {
 		stbi_image_free(pixels);
 		return false;
@@ -89,10 +89,10 @@ bool Texture::LoadMask(const std::string& filename)
 	bool sts = true;
 	unsigned char* pixels;
 
-	std::string Isfilename = filename;
+	const std::string Isfilename = filename;
 
 	// 画像読み込み
-	pixels = stbi_load(Isfilename.c_str(), &m_width, &m_height, &m_bpp, 4);
+	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, 4);
 	if (pixels == nullptr) {
 		std::cout << Isfilename.c_str() << " Load error " << std::endl;
 		return false;
@@ -104,8 +104,8 @@ bool Texture::LoadMask(const std::string& filename)
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 
-	desc.Width = m_width;
-	desc.Height = m_height;
+	desc.Width = m_Width;
+	desc.Height = m_Height;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			// RGBA
@@ -128,7 +128,7 @@ bool Texture::LoadMask(const std::string& filename)
 	}
 
 	// SRV生成
-	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_srvMask.GetAddressOf());
+	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_SrvMask.GetAddressOf());
 	if (FAILED(hr)) {
 		stbi_image_free(pixels);
 		return false;
@@ -149,9 +149,9 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 	// 画像読み込み
 	pixels = stbi_load_from_memory(Data, 
 		len, 
-		&m_width, 
-		&m_height, 
-		&m_bpp, 
+		&m_Width, 
+		&m_Height, 
+		&m_Bpp, 
 		STBI_rgb_alpha);
 
 	// テクスチャ2Dリソース生成
@@ -160,8 +160,8 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 
-	desc.Width = m_width;
-	desc.Height = m_height;
+	desc.Width = m_Width;
+	desc.Height = m_Height;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			// RGBA
@@ -184,7 +184,7 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 	}
 
 	// SRV生成
-	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_srv.GetAddressOf());
+	hr = device->CreateShaderResourceView(pTexture.Get(), nullptr, m_Srv.GetAddressOf());
 	if (FAILED(hr)) {
 		stbi_image_free(pixels);
 		return false;
@@ -198,13 +198,13 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 
 bool Texture::LoadTexture(const std::string& filename)
 {
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> tex = TextureManager::LoadTexture(filename);
+	const Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> tex = TextureManager::LoadTexture(filename);
 
 	if (tex != nullptr) {
 		m_Texname = filename;
-		m_srv = tex;
+		m_Srv = tex;
 		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
-		devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
+		devicecontext->PSSetShaderResources(0, 1, m_Srv.GetAddressOf());
 	}
 	else {
 		MessageBoxA(NULL, "テクスチャをシェーダーリソースビューにセット出来ませんでした。", "エラー", MB_ICONERROR | MB_OK);
@@ -217,25 +217,25 @@ bool Texture::LoadTexture(const std::string& filename)
 // テクスチャをGPUにセット
 void Texture::SetGPU()
 {
-	if (m_srv.Get() == nullptr) {
+	if (m_Srv.Get() == nullptr) {
 		return;
 	}
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 	
-	devicecontext->PSSetShaderResources(0, 1, m_srv.GetAddressOf());
+	devicecontext->PSSetShaderResources(0, 1, m_Srv.GetAddressOf());
 }
 
 void Texture::SetGPU_Mask()
 {
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
-	devicecontext->PSSetShaderResources(1, 1, m_srvMask.GetAddressOf());
+	devicecontext->PSSetShaderResources(1, 1, m_SrvMask.GetAddressOf());
 }
 
 DirectX::XMMATRIX Texture::MakeUV(const float u,const float v,const float uw,const float vh) {
 	// ＵＶの行列作成
-	XMMATRIX scaleMtx = XMMatrixScaling(uw, vh, 1.0f);
-	XMMATRIX transMtx = XMMatrixTranslation(u, v, 0.0f);
-	transMtx = XMMatrixTranspose(transMtx);
+	const XMMATRIX scaleMtx = XMMatrixScaling(uw, vh, 1.0f);
+	const XMMATRIX transMtx = XMMatrixTranslation(u, v, 0.0f);
+	const XMMATRIX transMtxTranspose = XMMatrixTranspose(transMtx);
 
-	return scaleMtx * transMtx;
+	return scaleMtx * transMtxTranspose;
 }

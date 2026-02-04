@@ -2,7 +2,7 @@
 #include <unordered_set>
 #include <string>
 
-class HitStopManager
+class HitStopManager final
 {
 private:
 
@@ -13,8 +13,15 @@ private:
 
 public:
 
+	// コンストラクタ・デストラクタを削除
 	HitStopManager() = delete;
 	~HitStopManager() = delete;
+
+	// コピー・ムーブも削除
+	HitStopManager(const HitStopManager&) = delete;
+	HitStopManager(HitStopManager&&) = delete;
+	HitStopManager& operator=(const HitStopManager&) = delete;
+	HitStopManager& operator=(HitStopManager&&) = delete;
 
 	static void Update();
 

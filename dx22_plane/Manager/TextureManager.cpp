@@ -1,9 +1,5 @@
 #include "TextureManager.h"
 
-// Ã“I‚È•Ï”éŒ¾‚ğŠm’è
-std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>
-TextureManager::textureMap;
-
 void TextureManager::Init() {
 
 	textureMap.clear();

@@ -30,13 +30,6 @@ void EnemyDamageComponent::Update()
 	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
 	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindAllTag("Enemy");	// 敵タグのオブジェクトをすべて取得
 
-	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
-	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");
-	//	auto playerTrans = playerObj->GetComponent<TransformComponent>();
-	//	auto playerPos = playerTrans->GetPosition();
-		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
-
-	//auto attack = p_object->GetComponent<AttackTimingComponent>();
 	AttackOneTimeComponent* attack = m_Object->GetComponent<AttackOneTimeComponent>();
 
 	attack->ReSetAttackHitFlag();	// 攻撃が当たったかどうかのフラグをリセット
@@ -52,7 +45,7 @@ void EnemyDamageComponent::Update()
 
 				if (attack->GetAttackHitFlag() == true) {
 
-					std::string tag = m_Object->GetTag();
+					const std::string tag = m_Object->GetTag();
 
 					TestSwordActionComponent* swordComp = m_Object->GetComponent<TestSwordActionComponent>();
 
@@ -73,7 +66,7 @@ void EnemyDamageComponent::Update()
 					if (deathComp != nullptr) {
 						deathComp->SetHittedState(state, dir);
 
-						std::string name = m_Object->GetName();
+						const std::string name = m_Object->GetName();
 
 						const DeathPattern pattern = DeathPattern::DEFAULT;
 						if (name == "sword") {
@@ -104,7 +97,7 @@ void EnemyDamageComponent::Update()
 
 						// 画面揺れステータスの選択
 						if (swordComp != nullptr) {
-							ESwordActionState state = swordComp->GetSwordActionState();
+							const ESwordActionState state = swordComp->GetSwordActionState();
 							status = ChoiceShakeStatus(state);
 						}
 

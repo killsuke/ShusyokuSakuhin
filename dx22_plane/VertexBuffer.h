@@ -23,7 +23,7 @@ public:
 		assert(device);
 
 		// 頂点バッファ作成
-		bool sts = CreateVertexBufferWrite(
+		const bool sts = CreateVertexBufferWrite(
 			device,
 			sizeof(T),						// １頂点当たりバイト数
 			(unsigned int)vertices.size(),	// 頂点数
@@ -41,8 +41,8 @@ public:
 		devicecontext = DirectXRender::GetDeviceContext();
 
 		// 頂点バッファをセットする
-		unsigned int stride = sizeof(T);
-		unsigned  offset = 0;
+		const unsigned int stride = sizeof(T);
+		const unsigned  offset = 0;
 		devicecontext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
 
 	}
@@ -50,11 +50,11 @@ public:
 	// 頂点バッファを書き換える
 	void Modify(const std::vector<T>& vertices)
 	{
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		//頂点データ書き換え
 		D3D11_MAPPED_SUBRESOURCE msr;
-		HRESULT hr = deviceContext->Map(
+		const HRESULT hr = deviceContext->Map(
 			m_VertexBuffer.Get(), 
 			0,
 			D3D11_MAP_WRITE_DISCARD, 0, &msr);

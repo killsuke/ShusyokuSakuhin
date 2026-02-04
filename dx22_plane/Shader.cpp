@@ -21,7 +21,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 	m_ShaderNames.push_back(ps);
 	m_ShaderNames.push_back(gs);
 
-	unsigned int numElements = static_cast<unsigned int>(layout.size());
+	const unsigned int numElements = static_cast<unsigned int>(layout.size());
 
 	ID3D11Device* device = DirectXRender::GetDevice();
 

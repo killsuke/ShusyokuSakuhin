@@ -1,33 +1,14 @@
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Components/Render.h"
 #include "System/DirectXRender.h"
 #include <iostream>
 
-//今のところ記述内容は無し
-// コンストラクタ
-//GameObject::GameObject() {
-//
-//}
-
-// デストラクタ
-GameObject::~GameObject() {
-
-	// コンポーネントの解放
-	//m_Components.clear();
-	//m_RenderComponents.clear();
-	//// 子オブジェクトの解放
-	//if (!children.empty()) {
-	//	for (auto& child : children) {
-	//		delete child;
-	//		child = nullptr;
-	//	}
-	//	children.clear();
-	//}
-}
+GameObject::GameObject(const std::string& _name, const uint32_t& id) : m_Name(_name), m_InstanceID(id) {
+};
 
 void GameObject::Update() {
 	// 更新処理を消すか？
-	if (activeState == ActiveState::UPDATE_STOP || activeState == ActiveState::ALL_STOP)
+	if (m_ActiveState == ActiveState::UPDATE_STOP || m_ActiveState == ActiveState::ALL_STOP)
 		return;
 
 	// コンポーネントの更新
@@ -38,8 +19,8 @@ void GameObject::Update() {
 	}
 
 	// 子オブジェクトの更新
-	if (!children.empty()) {
-		for (auto& child : children) {
+	if (!m_Children.empty()) {
+		for (auto& child : m_Children) {
 			child->Update();
 		}
 	}
@@ -47,7 +28,7 @@ void GameObject::Update() {
 
 void GameObject::Draw() {
 	// 描画処理を消すか？
-	if (activeState == ActiveState::DRAW_STOP || activeState == ActiveState::ALL_STOP)
+	if (m_ActiveState == ActiveState::DRAW_STOP || m_ActiveState == ActiveState::ALL_STOP)
 		return;
 
 	// 描画用コンポーネントの更新
@@ -58,8 +39,8 @@ void GameObject::Draw() {
 	}
 
 	// 子オブジェクトの描画
-	if (!children.empty()) {
-		for (auto& child : children) {
+	if (!m_Children.empty()) {
+		for (auto& child : m_Children) {
 			if (m_ChildAbsFrontFlag == true) {
 				
 				const bool currentDepthEnable = DirectXRender::GetIsDepthEnable();

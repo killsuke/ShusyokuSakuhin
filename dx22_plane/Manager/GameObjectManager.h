@@ -10,35 +10,58 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include <ranges>
-#include <algorithm>
 #include <string>
-#include <codecvt>
-#include <locale>
-#include <utility> // std::move
-#include <deque>
-#include <cstdint>
 #include <unordered_set>
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 
 class GameObject;	// 相互インクルードしないように前方宣言
 
-class GameObjectManager
+class GameObjectManager final
 {
+private:
+
+	static inline std::vector<std::unique_ptr<GameObject>> m_Objects;
+	static inline std::vector<std::unique_ptr<GameObject>> m_Child_Objects;
+	static inline std::vector<std::unique_ptr<GameObject>> m_Objects_UI;
+	static inline std::vector<std::unique_ptr<GameObject>> m_Objects_Absfront;
+	static inline std::vector<std::unique_ptr<GameObject>> m_TemporaryContainer; // 一時的にオブジェクトを保管するコンテナ
+	static inline std::vector<TagAndID> m_TagAndIDList; // タグとIDのリスト
+
+	static inline uint32_t m_NextID = 0;
+	static uint16_t TagToIDGet(const std::string& tag);
+	static uint16_t TagToIDRegister(const std::string& tag);
+
+	static GameObject* HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag);
+	static void HelperRemoveObject(std::vector<std::unique_ptr<GameObject>>& objs);
+	static void HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& ids);
+	static void HelperUpdate(std::vector<std::unique_ptr<GameObject>>& objs);
+	static void HelperDraw(std::vector<std::unique_ptr<GameObject>>& objs);
+	static void HelperChangeContainer(std::vector<std::unique_ptr<GameObject>>& objs);
+	static std::vector<GameObject*> HelperFindTag(const std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& id);
+	static std::vector<GameObject*> HelperFindTags(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
+	static std::vector<GameObject*> HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
+	static GameObject* HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id);
+
 public:
-	// コンストラクタ
-	GameObjectManager() = default;
+
+	// コンストラクタ・デストラクタを削除
+	GameObjectManager() = delete;
+	~GameObjectManager() = delete;
+
+	// コピー・ムーブも削除
+	GameObjectManager(const GameObjectManager&) = delete;
+	GameObjectManager(GameObjectManager&&) = delete;
+	GameObjectManager& operator=(const GameObjectManager&) = delete;
+	GameObjectManager& operator=(GameObjectManager&&) = delete;
 
 	static void Init() {
-		objects.reserve(100);
-		child_Objects.reserve(100);
-		objects_UI.reserve(100);
-		objects_Absfront.reserve(100);
-		temporaryContainer.reserve(100);
+		m_Objects.reserve(100);
+		m_Child_Objects.reserve(100);
+		m_Objects_UI.reserve(100);
+		m_Objects_Absfront.reserve(100);
+		m_TemporaryContainer.reserve(100);
 	};
 
-	// デストラクタ
-	~GameObjectManager() = default;
 	static void UnInit() { ListClear(); };
 
 	// リストにゲームオブジェクトを追加
@@ -59,7 +82,7 @@ public:
 	static void OtherThanClear();
 	static void ListClear();		// ベクター内をクリア
 
-	static int ListSize() { return static_cast<int>(objects.size()); };	// オブジェクトをいくつ格納しているのかを返す
+	static int ListSize() { return static_cast<int>(m_Objects.size()); };	// オブジェクトをいくつ格納しているのかを返す
 
 	static void ChangeContainer();
 
@@ -84,7 +107,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return 	HelperFindTags(objects, ids); // 一致するオブジェクトのベクターを返す
+		return 	HelperFindTags(m_Objects, ids); // 一致するオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -92,7 +115,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return 	HelperFindTags(child_Objects, ids); // 一致するオブジェクトのベクターを返す
+		return 	HelperFindTags(m_Child_Objects, ids); // 一致するオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -100,7 +123,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return 	HelperFindTags(objects_UI, ids); // 一致するオブジェクトのベクターを返す
+		return 	HelperFindTags(m_Objects_UI, ids); // 一致するオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -108,7 +131,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return 	HelperFindTags(objects_Absfront, ids); // 一致するオブジェクトのベクターを返す
+		return 	HelperFindTags(m_Objects_Absfront, ids); // 一致するオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -116,7 +139,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return HelperFindTagsOtherThan(objects,ids); // 一致しないオブジェクトのベクターを返す
+		return HelperFindTagsOtherThan(m_Objects,ids); // 一致しないオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -124,7 +147,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return HelperFindTagsOtherThan(child_Objects, ids); // 一致しないオブジェクトのベクターを返す
+		return HelperFindTagsOtherThan(m_Child_Objects, ids); // 一致しないオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -132,7 +155,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return HelperFindTagsOtherThan(objects_UI, ids); // 一致しないオブジェクトのベクターを返す
+		return HelperFindTagsOtherThan(m_Objects_UI, ids); // 一致しないオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -140,7 +163,7 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		return HelperFindTagsOtherThan(objects_Absfront, ids); // 一致しないオブジェクトのベクターを返す
+		return HelperFindTagsOtherThan(m_Objects_Absfront, ids); // 一致しないオブジェクトのベクターを返す
 	}
 
 	template<typename ... Tags>
@@ -148,10 +171,10 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		std::vector<GameObject*> matchingObjects = HelperFindTags(objects, ids);
-		std::vector<GameObject*> matchingObjectsChild = HelperFindTags(child_Objects, ids);
-		std::vector<GameObject*> matchingObjectsUI = HelperFindTags(objects_UI, ids);
-		std::vector<GameObject*> matchingObjectsAbs = HelperFindTags(objects_Absfront, ids);
+		std::vector<GameObject*> matchingObjects = HelperFindTags(m_Objects, ids);
+		std::vector<GameObject*> matchingObjectsChild = HelperFindTags(m_Child_Objects, ids);
+		std::vector<GameObject*> matchingObjectsUI = HelperFindTags(m_Objects_UI, ids);
+		std::vector<GameObject*> matchingObjectsAbs = HelperFindTags(m_Objects_Absfront, ids);
 
 		std::vector<GameObject*> result;
 
@@ -179,10 +202,10 @@ public:
 
 		std::unordered_set<uint16_t> ids{ TagToIDGet(std::forward<Tags>(tags))... };
 
-		std::vector<GameObject*> matchingObjects = HelperFindTagsOtherThan(objects, ids);
-		std::vector<GameObject*> matchingObjectsChild = HelperFindTagsOtherThan(child_Objects, ids);
-		std::vector<GameObject*> matchingObjectsUI = HelperFindTagsOtherThan(objects_UI, ids);
-		std::vector<GameObject*> matchingObjectsAbs = HelperFindTagsOtherThan(objects_Absfront, ids);
+		std::vector<GameObject*> matchingObjects = HelperFindTagsOtherThan(m_Objects, ids);
+		std::vector<GameObject*> matchingObjectsChild = HelperFindTagsOtherThan(m_Child_Objects, ids);
+		std::vector<GameObject*> matchingObjectsUI = HelperFindTagsOtherThan(m_Objects_UI, ids);
+		std::vector<GameObject*> matchingObjectsAbs = HelperFindTagsOtherThan(m_Objects_Absfront, ids);
 
 		std::vector<GameObject*> result;
 
@@ -206,53 +229,27 @@ public:
 	}
 
 	static GameObject* GameObjectFindInstanceID(const uint32_t& id) { // インスタンスID検索でゲームオブジェクトを持ってくるか考える
-		return HelperFindInstanceID(objects, id);
+		return HelperFindInstanceID(m_Objects, id);
 	}
 
 	static GameObject* GameObjectFindInstanceIDAll(const uint32_t& id) { // インスタンスID検索でゲームオブジェクトを持ってくるか考える
-		GameObject* obj = HelperFindInstanceID(objects, id);
+		GameObject* obj = HelperFindInstanceID(m_Objects, id);
 		if (obj != nullptr) {
 			return obj;
 		}
-		obj = HelperFindInstanceID(child_Objects, id);
+		obj = HelperFindInstanceID(m_Child_Objects, id);
 		if (obj != nullptr) {
 			return obj;
 		}
-		obj = HelperFindInstanceID(objects_UI, id);
+		obj = HelperFindInstanceID(m_Objects_UI, id);
 		if (obj != nullptr) {
 			return obj;
 		}
-		obj = HelperFindInstanceID(objects_Absfront, id);
+		obj = HelperFindInstanceID(m_Objects_Absfront, id);
 		if (obj != nullptr) {
 			return obj;
 		}
 		return nullptr;
 	}
-
-private:
-
-	static std::vector<std::unique_ptr<GameObject>> objects;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
-	static std::vector<std::unique_ptr<GameObject>> child_Objects;	 // ゲーム内で、実際に更新をかけるベクター
-	static std::vector<std::unique_ptr<GameObject>> objects_UI;			 // シーンをnewする度に様々なオブジェクトを格納するようにする
-	static std::vector<std::unique_ptr<GameObject>> objects_Absfront;	 // シーンをnewする度に様々なオブジェクトを格納するようにする
-
-	static std::vector<std::unique_ptr<GameObject>> temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
-
-	static std::vector<TagAndID> m_TagAndIDList; // タグとIDのリスト
-
-	static uint16_t TagToIDRegister(const std::string& tag);
-	static uint16_t TagToIDGet(const std::string& tag);
-	static inline uint32_t m_NextID = 0;
-
-	static GameObject* HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag);
-	static void HelperRemoveObject(std::vector<std::unique_ptr<GameObject>>& objs);
-	static void HelperRemoveTagObject(std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& ids);
-	static void HelperUpdate(std::vector<std::unique_ptr<GameObject>>& objs);
-	static void HelperDraw(std::vector<std::unique_ptr<GameObject>>& objs);
-	static void HelperChangeContainer(std::vector<std::unique_ptr<GameObject>>& objs);
-	static std::vector<GameObject*> HelperFindTag(const std::vector<std::unique_ptr<GameObject>>& objs, const uint16_t& id);
-	static std::vector<GameObject*> HelperFindTags(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
-	static std::vector<GameObject*> HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
-	static GameObject* HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id);
 };
 

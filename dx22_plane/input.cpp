@@ -38,11 +38,13 @@ Input::~Input()
 void Input::Update()
 {
 	//1フレーム前の入力を記録しておく
-	for (int i = 0; i < 256; i++) { keyState_old[i] = keyState[i]; }
+	for (int i = 0; i < 256; ++i) {
+		keyState_old[i] = keyState[i]; 
+	}
 	controllerState_old = controllerState;
 
 	//キー入力を更新
-	BOOL hr = GetKeyboardState(keyState);
+	const BOOL hr = GetKeyboardState(keyState);
 
 	//コントローラー入力を更新(XInput)
 	XInputGetState(0, &controllerState);
@@ -80,8 +82,8 @@ bool Input::GetKeyRelease(int key) //リリース
 //左アナログスティック
 DirectX::XMFLOAT2 Input::GetLeftAnalogStick(void)
 {
-	SHORT x = controllerState.Gamepad.sThumbLX; // -32768～32767
-	SHORT y = controllerState.Gamepad.sThumbLY; // -32768～32767
+	const SHORT x = controllerState.Gamepad.sThumbLX; // -32768～32767
+	const SHORT y = controllerState.Gamepad.sThumbLY; // -32768～32767
 
 	DirectX::XMFLOAT2 res;
 	res.x = x / 32767.0f; //-1～1
@@ -91,8 +93,8 @@ DirectX::XMFLOAT2 Input::GetLeftAnalogStick(void)
 //右アナログスティック
 DirectX::XMFLOAT2 Input::GetRightAnalogStick(void)
 {
-	SHORT x = controllerState.Gamepad.sThumbRX; // -32768～32767
-	SHORT y = controllerState.Gamepad.sThumbRY; // -32768～32767
+	const SHORT x = controllerState.Gamepad.sThumbRX; // -32768～32767
+	const SHORT y = controllerState.Gamepad.sThumbRY; // -32768～32767
 
 	DirectX::XMFLOAT2 res;
 	res.x = x / 32767.0f; //-1～1
@@ -103,13 +105,13 @@ DirectX::XMFLOAT2 Input::GetRightAnalogStick(void)
 //左トリガー
 float Input::GetLeftTrigger(void)
 {
-	BYTE t = controllerState.Gamepad.bLeftTrigger; // 0～255
+	const BYTE t = controllerState.Gamepad.bLeftTrigger; // 0～255
 	return t / 255.0f;
 }
 //右トリガー
 float Input::GetRightTrigger(void)
 {
-	BYTE t = controllerState.Gamepad.bRightTrigger; // 0～255
+	const BYTE t = controllerState.Gamepad.bRightTrigger; // 0～255
 	return t / 255.0f;
 }
 
@@ -151,11 +153,11 @@ DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 	POINT pt;	// マウスの座標取得（宣言）
 
 	if (GetCursorPos(&pt)) {	// マウスの座標取得
-		HWND hWnd = Application::GetWindow();	// 作成したウィンドウのハンドル取得
+		const HWND hWnd = Application::GetWindow();	// 作成したウィンドウのハンドル取得
 
 		// 縦横サイズ取得
-		uint32_t SCREEN_WIDTH = Application::GetWidth();
-		uint32_t SCREEN_HEIGHT = Application::GetHeight();
+		const uint32_t SCREEN_WIDTH = Application::GetWidth();
+		const uint32_t SCREEN_HEIGHT = Application::GetHeight();
 
 		// 前フレームと位置が違えば更新
 		if (pt.x != prevPt.x || pt.y != prevPt.y) {
@@ -163,8 +165,8 @@ DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 			if (ScreenToClient(hWnd, &pt)) {
 				RECT clientRect;	// ウィンドウのクライアント領域の矩形を取得
 				GetClientRect(hWnd, &clientRect);	// ウィンドウのクライアント領域の座標を取得
-				int width = clientRect.right - clientRect.left;		// ウィンドウの横幅を計算
-				int height = clientRect.bottom - clientRect.top;	// ウィンドウの縦幅を計算
+				const int width = clientRect.right - clientRect.left;		// ウィンドウの横幅を計算
+				const int height = clientRect.bottom - clientRect.top;	// ウィンドウの縦幅を計算
 
 				// 補正処理（座標の正規化）
 				vec2.x = static_cast<float>(pt.x) / static_cast<float>(width) * SCREEN_WIDTH - (SCREEN_WIDTH / 2.0f);

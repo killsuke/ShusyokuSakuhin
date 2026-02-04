@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "sound.h"
 
 // TitleSceneƒNƒ‰ƒX

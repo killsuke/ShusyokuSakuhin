@@ -15,8 +15,9 @@ int main(void)
 #endif//defined(DEBUG) || defined(_DEBUG)
 
     // アプリケーション実行
-    Application app(SCREEN_WIDTH,SCREEN_HEIGHT);
-    app.Run();
+    Application::Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+    Application::Run();
+    Application::UnInit();
 
     return 0;
 }

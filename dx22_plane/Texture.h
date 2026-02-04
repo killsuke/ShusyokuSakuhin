@@ -15,12 +15,12 @@ class Texture
 private:
 
 	std::string m_Texname = ""; // ファイル名
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_srv{}; // シェーダーリソースビュー
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_srvMask{};	// マスク用シェーダーリソースビュー
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_Srv{}; // シェーダーリソースビュー
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_SrvMask{};	// マスク用シェーダーリソースビュー
 
-	int m_width = 0; // 幅
-	int m_height = 0; // 高さ
-	int m_bpp = 0; // BPP
+	int m_Width = 0; // 幅
+	int m_Height = 0; // 高さ
+	int m_Bpp = 0; // BPP
 
 	// UV座標の情報
 	float m_NumU = 1.0f;

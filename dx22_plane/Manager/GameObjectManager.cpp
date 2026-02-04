@@ -5,20 +5,6 @@
 #include "System/DirectXRender.h"
 #include <iostream>
 
-// 静的な宣言として必要
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::child_Objects;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects_UI;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::objects_Absfront;		// ゲーム内で、実際に更新をかけるベクター
-std::vector<std::unique_ptr<GameObject>>
-GameObjectManager::temporaryContainer; // 一時的にオブジェクトを保管するコンテナ
-std::vector<TagAndID>
-GameObjectManager::m_TagAndIDList;	// タグによる検索をするためのID変換リスト
-
 // リストにゲームオブジェクトを追加
 GameObject* GameObjectManager::AddObject(const std::string& _name, const std::string& _tag) {
 
@@ -77,9 +63,9 @@ uint16_t GameObjectManager::TagToIDGet(const std::string& tag) {
 
 GameObject* GameObjectManager::HelperAddObject(const DrawContainer& dc, const std::string& _name, const std::string& _tag) {
 	
-	temporaryContainer.push_back(std::make_unique<GameObject>(_name,m_NextID));
+	m_TemporaryContainer.push_back(std::make_unique<GameObject>(_name,m_NextID));
 
-	GameObject* ptr = temporaryContainer.back().get();
+	GameObject* ptr = m_TemporaryContainer.back().get();
 
 	// タグとIDの登録
 	const uint16_t id = TagToIDRegister(_tag);
@@ -154,13 +140,13 @@ void GameObjectManager::HelperChangeContainer(std::vector<std::unique_ptr<GameOb
 				switch (hdc)
 				{
 				case DrawContainer::Default:
-					objects.push_back(std::move(movingObj));
+					m_Objects.push_back(std::move(movingObj));
 					break;
 				case DrawContainer::AbsFront:
-					objects_Absfront.push_back(std::move(movingObj));
+					m_Objects_Absfront.push_back(std::move(movingObj));
 					break;
 				case DrawContainer::UI:
-					objects_UI.push_back(std::move(movingObj));
+					m_Objects_UI.push_back(std::move(movingObj));
 					break;
 				case DrawContainer::Max:
 					break;
@@ -230,29 +216,29 @@ GameObject* GameObjectManager::HelperFindInstanceID(const std::vector<std::uniqu
 
 void GameObjectManager::TransferAddObjects() {
 
-	for (auto& p : temporaryContainer)
+	for (auto& p : m_TemporaryContainer)
 	{
 		auto dc = p->GetDrawContainer();
 
 		if (dc == DrawContainer::Default)
 		{
-			objects.push_back(std::move(p));
+			m_Objects.push_back(std::move(p));
 		}
 		else if (dc == DrawContainer::Child)
 		{
-			child_Objects.push_back(std::move(p));
+			m_Child_Objects.push_back(std::move(p));
 		}
 		else if (dc == DrawContainer::UI)
 		{
-			objects_UI.push_back(std::move(p));
+			m_Objects_UI.push_back(std::move(p));
 		}
 		else if (dc == DrawContainer::AbsFront)
 		{
-			objects_Absfront.push_back(std::move(p));
+			m_Objects_Absfront.push_back(std::move(p));
 		}
 	}
 
-	temporaryContainer.clear();
+	m_TemporaryContainer.clear();
 }
 
 // どうやってオブジェクトをリストから削除するかを考える
@@ -264,20 +250,20 @@ void GameObjectManager::RemoveObject() {
 	//		}),
 	//	objects.end());
 
-	HelperRemoveObject(objects);
-	HelperRemoveObject(child_Objects);
-	HelperRemoveObject(objects_UI);
-	HelperRemoveObject(objects_Absfront);
+	HelperRemoveObject(m_Objects);
+	HelperRemoveObject(m_Child_Objects);
+	HelperRemoveObject(m_Objects_UI);
+	HelperRemoveObject(m_Objects_Absfront);
 }
 
 void GameObjectManager::RemoveTagObject(const std::string& tag) {
 
 	uint16_t id = TagToIDGet(tag);
 
-	HelperRemoveTagObject(objects, id);
-	HelperRemoveTagObject(child_Objects, id);
-	HelperRemoveTagObject(objects_UI, id);
-	HelperRemoveTagObject(objects_Absfront, id);
+	HelperRemoveTagObject(m_Objects, id);
+	HelperRemoveTagObject(m_Child_Objects, id);
+	HelperRemoveTagObject(m_Objects_UI, id);
+	HelperRemoveTagObject(m_Objects_Absfront, id);
 }
 
 // 更新
@@ -288,9 +274,9 @@ void GameObjectManager::Update() {
 
 	// 描画順を整える
 	//DrawSort();
-	HelperUpdate(objects);
-	HelperUpdate(objects_UI);
-	HelperUpdate(objects_Absfront);
+	HelperUpdate(m_Objects);
+	HelperUpdate(m_Objects_UI);
+	HelperUpdate(m_Objects_Absfront);
 
 	EventBusManager::Update();
 
@@ -308,48 +294,48 @@ void GameObjectManager::Update() {
 void GameObjectManager::Draw() {
 	auto deviceContext = DirectXRender::GetDeviceContext();
 
-	HelperDraw(objects);
+	HelperDraw(m_Objects);
 
 	DirectXRender::SetDepthEnable(false);
 
-	HelperDraw(objects_Absfront);
+	HelperDraw(m_Objects_Absfront);
 
 	DirectXRender::SetDepthEnable(true);
 
-	HelperDraw(objects_UI);
+	HelperDraw(m_Objects_UI);
 }
 
 void GameObjectManager::OtherThanClear() {
 	// C++ 20で使えるコンテナの要素削除処理
-	std::erase_if(objects, [](const std::unique_ptr<GameObject>& obj) {
+	std::erase_if(m_Objects, [](const std::unique_ptr<GameObject>& obj) {
 		return obj->GetCarryOverFlag() == false;
 		});
 
-	std::erase_if(child_Objects, [](const std::unique_ptr<GameObject>& obj) {
+	std::erase_if(m_Child_Objects, [](const std::unique_ptr<GameObject>& obj) {
 		return obj->GetCarryOverFlag() == false;
 		});
 
-	std::erase_if(objects_UI, [](const std::unique_ptr<GameObject>& obj) {
+	std::erase_if(m_Objects_UI, [](const std::unique_ptr<GameObject>& obj) {
 		return obj->GetCarryOverFlag() == false;
 		});
 
-	std::erase_if(objects_Absfront, [](const std::unique_ptr<GameObject>& obj) {
+	std::erase_if(m_Objects_Absfront, [](const std::unique_ptr<GameObject>& obj) {
 		return obj->GetCarryOverFlag() == false;
 		});
 }
 
 // オブジェクトを管理するリストを全て空にする
 void GameObjectManager::ListClear() {
-	objects.clear();
-	child_Objects.clear();
-	objects_UI.clear();
-	objects_Absfront.clear();
+	m_Objects.clear();
+	m_Child_Objects.clear();
+	m_Objects_UI.clear();
+	m_Objects_Absfront.clear();
 };
 
 void GameObjectManager::ChangeContainer() {
-	HelperChangeContainer(objects);
-	HelperChangeContainer(objects_Absfront);
-	HelperChangeContainer(objects_UI);
+	HelperChangeContainer(m_Objects);
+	HelperChangeContainer(m_Objects_Absfront);
+	HelperChangeContainer(m_Objects_UI);
 }
 
 // 描画順のソート
@@ -359,8 +345,8 @@ void GameObjectManager::DrawSort() {
 			b->GetComponent<TransformComponent>()->GetPosition().z;
 		};
 
-	if (!std::is_sorted(objects.begin(), objects.end(), sortZLambdaObjects)) {
-		std::sort(objects.begin(), objects.end(), sortZLambdaObjects);  // std::is_sortedではなくstd::sortを呼び出す
+	if (!std::is_sorted(m_Objects.begin(), m_Objects.end(), sortZLambdaObjects)) {
+		std::sort(m_Objects.begin(), m_Objects.end(), sortZLambdaObjects);  // std::is_sortedではなくstd::sortを呼び出す
 	}
 
 	auto sortZLambdaChildObjects = [](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b) {
@@ -368,8 +354,8 @@ void GameObjectManager::DrawSort() {
 			b->GetComponent<TransformComponent>()->GetPosition().z;
 		};
 
-	if (!std::is_sorted(child_Objects.begin(), child_Objects.end(), sortZLambdaChildObjects)) {
-		std::sort(child_Objects.begin(), child_Objects.end(), sortZLambdaChildObjects);  // std::is_sortedではなくstd::sortを呼び出す
+	if (!std::is_sorted(m_Child_Objects.begin(), m_Child_Objects.end(), sortZLambdaChildObjects)) {
+		std::sort(m_Child_Objects.begin(), m_Child_Objects.end(), sortZLambdaChildObjects);  // std::is_sortedではなくstd::sortを呼び出す
 	}
 
 	auto sortZLambdaUI = [](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b) {
@@ -377,8 +363,8 @@ void GameObjectManager::DrawSort() {
 			b->GetComponent<TransformComponent>()->GetPosition().z;
 		};
 
-	if (!std::is_sorted(objects_UI.begin(), objects_UI.end(), sortZLambdaUI)) {
-		std::sort(objects_UI.begin(), objects_UI.end(), sortZLambdaUI);  // std::is_sortedではなくstd::sortを呼び出す
+	if (!std::is_sorted(m_Objects_UI.begin(), m_Objects_UI.end(), sortZLambdaUI)) {
+		std::sort(m_Objects_UI.begin(), m_Objects_UI.end(), sortZLambdaUI);  // std::is_sortedではなくstd::sortを呼び出す
 	}
 
 	auto sortZLambdaAbsfront = [](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b) {
@@ -386,14 +372,14 @@ void GameObjectManager::DrawSort() {
 			b->GetComponent<TransformComponent>()->GetPosition().z;
 		};
 
-	if (!std::is_sorted(objects_Absfront.begin(), objects_Absfront.end(), sortZLambdaAbsfront)) {
-		std::sort(objects_Absfront.begin(), objects_Absfront.end(), sortZLambdaAbsfront);  // std::is_sortedではなくstd::sortを呼び出す
+	if (!std::is_sorted(m_Objects_Absfront.begin(), m_Objects_Absfront.end(), sortZLambdaAbsfront)) {
+		std::sort(m_Objects_Absfront.begin(), m_Objects_Absfront.end(), sortZLambdaAbsfront);  // std::is_sortedではなくstd::sortを呼び出す
 	}
 }
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
 GameObject* GameObjectManager::GameObjectFindName(const std::string& name) {
-	for (const auto& obj : objects) { // objects をループで探索
+	for (const auto& obj : m_Objects) { // objects をループで探索
 		if (obj->GetName() == name) { // 名前が一致するかチェック
 			return obj.get(); // 一致する場合、そのオブジェクトを返す
 		}
@@ -409,7 +395,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindTag(const std::string&
 	uint16_t id = TagToIDGet(tag);
 
 	std::vector<GameObject*> matchingObjects;
-	for (const auto& obj : objects) { // objects をループで探索
+	for (const auto& obj : m_Objects) { // objects をループで探索
 		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
@@ -421,7 +407,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindTag(const std::string&
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
 GameObject* GameObjectManager::GameObjectFindNameUI(const std::string& name) {
-	for (const auto& obj : objects_UI) { // objects をループで探索
+	for (const auto& obj : m_Objects_UI) { // objects をループで探索
 		if (obj->GetName() == name) { // 名前が一致するかチェック
 			return obj.get(); // 一致する場合、そのオブジェクトを返す
 		}
@@ -437,7 +423,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindTagUI(const std::strin
 	uint16_t id = TagToIDGet(tag);
 
 	std::vector<GameObject*> matchingObjects;
-	for (const auto& obj : objects_UI) { // objects をループで探索
+	for (const auto& obj : m_Objects_UI) { // objects をループで探索
 		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
@@ -449,7 +435,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindTagUI(const std::strin
 
 // 検索したオブジェクトを１つ返すが、存在しない場合は止まるので注意
 GameObject* GameObjectManager::GameObjectFindNameAbsFront(const std::string& name) {
-	for (const auto& obj : objects_Absfront) { // objects をループで探索
+	for (const auto& obj : m_Objects_Absfront) { // objects をループで探索
 		if (obj->GetName() == name) { // 名前が一致するかチェック
 			return obj.get(); // 一致する場合、そのオブジェクトを返す
 		}
@@ -465,7 +451,7 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindTagAbsFront(const std:
 	uint16_t id = TagToIDGet(tag);
 
 	std::vector<GameObject*> matchingObjects;
-	for (const auto& obj : objects_Absfront) { // objects をループで探索
+	for (const auto& obj : m_Objects_Absfront) { // objects をループで探索
 		if (obj->GetID() == id) { // タグが一致するかチェック
 			matchingObjects.push_back(obj.get()); // 一致するオブジェクトを追加
 		}
@@ -479,10 +465,10 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::stri
 
 	uint16_t id = TagToIDGet(tag);
 
-	std::vector<GameObject*> matchingObjects = HelperFindTag(objects, id);
-	std::vector<GameObject*> childMatches = HelperFindTag(child_Objects, id);
-	std::vector<GameObject*> uiMatches = HelperFindTag(objects_UI, id);
-	std::vector<GameObject*> absfrontMatches = HelperFindTag(objects_Absfront, id);
+	std::vector<GameObject*> matchingObjects = HelperFindTag(m_Objects, id);
+	std::vector<GameObject*> childMatches = HelperFindTag(m_Child_Objects, id);
+	std::vector<GameObject*> uiMatches = HelperFindTag(m_Objects_UI, id);
+	std::vector<GameObject*> absfrontMatches = HelperFindTag(m_Objects_Absfront, id);
 
 	std::vector<GameObject*> result;
 
@@ -522,10 +508,10 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::vect
 	std::vector<GameObject*> absfrontMatches;
 
 	for (const auto& id : ids) {
-		matchingObjects = HelperFindTag(objects, id);
-		childMatches = HelperFindTag(child_Objects, id);
-		uiMatches = HelperFindTag(objects_UI, id);
-		absfrontMatches = HelperFindTag(objects_Absfront, id);
+		matchingObjects = HelperFindTag(m_Objects, id);
+		childMatches = HelperFindTag(m_Child_Objects, id);
+		uiMatches = HelperFindTag(m_Objects_UI, id);
+		absfrontMatches = HelperFindTag(m_Objects_Absfront, id);
 	}
 
 	std::vector<GameObject*> result;
@@ -567,13 +553,13 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::unor
 
 	for (const auto& id : ids) {
 
-		std::vector<GameObject*> result1 = HelperFindTag(objects, id);
+		std::vector<GameObject*> result1 = HelperFindTag(m_Objects, id);
 		matchingObjects.insert(matchingObjects.end(), result1.begin(), result1.end());
-		std::vector<GameObject*> result2 = HelperFindTag(child_Objects, id);
+		std::vector<GameObject*> result2 = HelperFindTag(m_Child_Objects, id);
 		childMatches.insert(childMatches.end(), result2.begin(), result2.end());
-		std::vector<GameObject*> result3 = HelperFindTag(objects_UI, id);
+		std::vector<GameObject*> result3 = HelperFindTag(m_Objects_UI, id);
 		uiMatches.insert(uiMatches.end(), result3.begin(), result3.end());
-		std::vector<GameObject*> result4 = HelperFindTag(objects_Absfront, id);
+		std::vector<GameObject*> result4 = HelperFindTag(m_Objects_Absfront, id);
 		absfrontMatches.insert(absfrontMatches.end(), result4.begin(), result4.end());
 	}
 
@@ -602,19 +588,19 @@ std::vector<GameObject*> GameObjectManager::GameObjectFindAllTag(const std::unor
 // 容量が足りなくなった場合追加
 void GameObjectManager::SizeUP() {
 
-	if (objects.size() >= objects.capacity() * 0.7) {
-		objects.reserve(objects.capacity() + 1000);
+	if (m_Objects.size() >= m_Objects.capacity() * 0.7) {
+		m_Objects.reserve(m_Objects.capacity() + 1000);
 	}
 
-	if (child_Objects.size() >= child_Objects.capacity() * 0.7) {
-		child_Objects.reserve(child_Objects.capacity() + 100);
+	if (m_Child_Objects.size() >= m_Child_Objects.capacity() * 0.7) {
+		m_Child_Objects.reserve(m_Child_Objects.capacity() + 100);
 	}
 
-	if (objects_UI.size() >= objects_UI.capacity() * 0.7) {
-		objects_UI.reserve(objects_UI.capacity() + 100);
+	if (m_Objects_UI.size() >= m_Objects_UI.capacity() * 0.7) {
+		m_Objects_UI.reserve(m_Objects_UI.capacity() + 100);
 	}
 
-	if (objects_Absfront.size() >= objects_Absfront.capacity() * 0.7) {
-		objects_Absfront.reserve(objects_Absfront.capacity() + 100);
+	if (m_Objects_Absfront.size() >= m_Objects_Absfront.capacity() * 0.7) {
+		m_Objects_Absfront.reserve(m_Objects_Absfront.capacity() + 100);
 	}
 }

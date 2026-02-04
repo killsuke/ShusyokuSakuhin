@@ -19,28 +19,14 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 const auto ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
 const auto WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
 
-HINSTANCE  Application::m_hInst;        // インスタンスハンドル
-HWND       Application::m_hWnd;         // ウィンドウハンドル
-uint32_t   Application::m_Width;        // ウィンドウの横幅
-uint32_t   Application::m_Height;       // ウィンドウの縦幅
-double	   Application::m_accumulatorTime = 0.0;
-
-//-----------------------------------------------------------------------------
-// コンストラクタ
-//-----------------------------------------------------------------------------
-Application::Application(uint32_t width, uint32_t height)
-{
+void Application::Init(const uint32_t& width, const uint32_t& height) {
 	m_Height = height;
 	m_Width = width;
 
 	timeBeginPeriod(1);
 }
 
-//-----------------------------------------------------------------------------
-// デストラクタ
-//-----------------------------------------------------------------------------
-Application::~Application()
-{
+void Application::UnInit() {
 	timeEndPeriod(1);
 }
 
@@ -112,7 +98,7 @@ bool Application::InitWnd()
 	}
 
 	// インスタンスハンドル設定.
-	m_hInst = hInst;
+	m_HInst = hInst;
 
 	// ウィンドウのサイズを設定.
 	RECT rc = {};
@@ -124,7 +110,7 @@ bool Application::InitWnd()
 	AdjustWindowRect(&rc, style, FALSE);
 
 	// ウィンドウを生成.
-	m_hWnd = CreateWindowEx(
+	m_HWnd = CreateWindowEx(
 		0,
 		//        WS_EX_TOPMOST,
 		ClassName,
@@ -136,22 +122,22 @@ bool Application::InitWnd()
 		rc.bottom - rc.top,
 		nullptr,
 		nullptr,
-		m_hInst,
+		m_HInst,
 		nullptr);
 
-	if (m_hWnd == nullptr)
+	if (m_HWnd == nullptr)
 	{
 		return false;
 	}
 
 	// ウィンドウを表示.
-	ShowWindow(m_hWnd, SW_SHOWNORMAL);
+	ShowWindow(m_HWnd, SW_SHOWNORMAL);
 
 	// ウィンドウを更新.
-	UpdateWindow(m_hWnd);
+	UpdateWindow(m_HWnd);
 
 	// ウィンドウにフォーカスを設定.
-	SetFocus(m_hWnd);
+	SetFocus(m_HWnd);
 
 	return true;
 }
@@ -171,13 +157,13 @@ void Application::TermWnd()
 #endif
 
 	// ウィンドウの登録を解除.
-	if (m_hInst != nullptr)
+	if (m_HInst != nullptr)
 	{
-		UnregisterClass(ClassName, m_hInst);
+		UnregisterClass(ClassName, m_HInst);
 	}
 
-	m_hInst = nullptr;
-	m_hWnd = nullptr;
+	m_HInst = nullptr;
+	m_HWnd = nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -217,7 +203,7 @@ void Application::MainLoop()
 	ImGui::StyleColorsDark();
 
 	// デバイスやウィンドウへのバインド
-	ImGui_ImplWin32_Init(m_hWnd);  // hwnd: ウィンドウハンドル
+	ImGui_ImplWin32_Init(m_HWnd);  // hwnd: ウィンドウハンドル
 	ImGui_ImplDX11_Init(device, deviceContext);
 #endif
 
@@ -286,16 +272,16 @@ void Application::MainLoop()
 #endif
 			double deltaTime = 0.016;
 
-			m_accumulatorTime += deltaTime;
+			m_AccumulatorTime += deltaTime;
 
-			while (m_accumulatorTime >= 0.016) {
+			while (m_AccumulatorTime >= 0.016) {
 
 				TimeManager::Update();
 
 				SceneManager::Update(); // シーンの更新
 
 		
-				m_accumulatorTime -= 0.016;
+				m_AccumulatorTime -= 0.016;
 			}
 
 			SceneManager::Draw();   // シーンの描画
@@ -310,7 +296,7 @@ void Application::MainLoop()
 				// FPS表示
 				char str[64];
 				wsprintfA(str, "FPS : %d", fpsCounter);
-				SetWindowTextA(m_hWnd, str);
+				SetWindowTextA(m_HWnd, str);
 
 #endif // デバッグモードならFPSをウィンドウタイトルに表示
 				// カウンターリセット

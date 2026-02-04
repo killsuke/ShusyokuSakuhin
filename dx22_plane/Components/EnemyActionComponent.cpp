@@ -13,7 +13,10 @@
 using namespace DirectX;
 
 namespace {
-	constexpr XMFLOAT3 BloodSplatterScale(15.0f,15.0f,5.0f);
+	constexpr XMFLOAT3 BLOODSPLATTER_SCALE(15.0f,15.0f,5.0f);
+	constexpr XMFLOAT2 OFFSET_POSITION(10.0f,5.0f);
+	constexpr XMFLOAT2 DIVISION_NUM(6.0f, 1.0f);
+	constexpr float RIMIT_TIME = 0.2f;
 }
 
 EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
@@ -45,30 +48,35 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 		return;
 	}
 
-	auto pos = m_Object->GetComponent<TransformComponent>()->GetPosition();
+	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+	if (myTrans == nullptr) {
+		return;
+	}
 
-	auto effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
-	auto effectTrans = effect->AddComponent<TransformComponent>();
-	effectTrans->SetScale(BloodSplatterScale);
+	const XMFLOAT3 pos = myTrans->GetPosition();
+
+	GameObject* effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	TransformComponent* effectTrans = effect->AddComponent<TransformComponent>();
+	effectTrans->SetScale(BLOODSPLATTER_SCALE);
 	RightLeft direction = RightLeft::RIGHT;
 	if (m_IsRightLeft == RightLeft::LEFT) {
-		effectTrans->SetPosition({ pos.x + 10.0f, pos.y + 5.0f, pos.z });
+		effectTrans->SetPosition({ pos.x + OFFSET_POSITION.x, pos.y + OFFSET_POSITION.y, pos.z });
 		// Œã‚ÉØ‚Á‚½•ûŒü‚É‡‚í‚¹‚æ‚¤‚©
 		direction = RightLeft::RIGHT;
 	}
 	else if(m_IsRightLeft == RightLeft::RIGHT){
-		effectTrans->SetPosition({ pos.x - 10.0f, pos.y + 5.0f, pos.z });
+		effectTrans->SetPosition({ pos.x - OFFSET_POSITION.x, pos.y + OFFSET_POSITION.y, pos.z });
 		direction = RightLeft::LEFT;
 	}
 
-	auto render = effect->AddComponent<RenderBillboardComponent>();
-	auto mesh = render->CreateMesh<SquareMesh>();
+	RenderBillboardComponent* render = effect->AddComponent<RenderBillboardComponent>();
+	SquareMesh* mesh = render->CreateMesh<SquareMesh>();
 	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/Blood_Splatter.png");
 	render->SetInversionFlag(direction);
-	mesh->SetInitialCut(6.0f, 1.0f);
-	auto effectComp = effect->AddComponent<Effect2DComponent>();
-	effectComp->SetMaxTimeAndCut_X(0.2f, 6.0f);
+	mesh->SetInitialCut(DIVISION_NUM);
+	Effect2DComponent* effectComp = effect->AddComponent<Effect2DComponent>();
+	effectComp->SetMaxTimeAndCut_X(RIMIT_TIME, DIVISION_NUM.x);
 }
 
 void EnemyActionComponent::ActionOff(const DeathEvent& event) {

@@ -30,7 +30,7 @@ public:
 		dev = DirectXRender::GetDevice();
 
 		// コンスタントバッファ作成
-		bool sts = CreateConstantBuffer(
+		const bool sts = CreateConstantBuffer(
 			dev,								// デバイス
 			sizeof(ConstantBufferMaterial),		// サイズ
 			m_pConstantBufferMaterial.GetAddressOf());		// コンスタントバッファ４
@@ -44,7 +44,6 @@ public:
 		m_Material.Specular = mtrl.Specular;
 		m_Material.Emission = mtrl.Emission;
 		m_Material.Shiness = mtrl.Shiness;
-		//m_Material.TextureEnable = mtrl.TextureEnable;
 
 		Update();
 
@@ -113,26 +112,26 @@ public:
 	}
 
 	void SetDiffuse(DirectX::XMFLOAT4 diffuse) {
-		//m_Material.Diffuse = diffuse;
+		m_Material.Diffuse = diffuse;
 	}
 
 	void SetAmbient(DirectX::XMFLOAT4 ambient) {
-		//m_Material.Ambient = ambient;
+		m_Material.Ambient = ambient;
 	}
 
 	void SetSpecular(DirectX::XMFLOAT4 specular) {
-		//m_Material.Specular = specular;
+		m_Material.Specular = specular;
 	}
 
 	void SetEmission(DirectX::XMFLOAT4 emission) {
-		//m_Material.Emission = emission;
+		m_Material.Emission = emission;
 	}
 
 	void SetShiness(float shiness) {
-		//m_Material.Shiness = shiness;
+		m_Material.Shiness = shiness;
 	}
 
-	bool isTextureEnable() {
-		return /*m_Material.TextureEnable == */TRUE;
+	bool IsTextureEnable() {
+		return m_Material.TextureEnable == TRUE;
 	}
 };

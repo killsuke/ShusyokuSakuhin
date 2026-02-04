@@ -18,7 +18,7 @@ Camera::Camera(GameObject& obj) : Component(obj)
 
 	if (transform != nullptr) {
 
-		XMFLOAT3 pos = transform->GetPosition();
+		const XMFLOAT3 pos = transform->GetPosition();
 
 		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
@@ -43,7 +43,7 @@ void Camera::Update()
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
-		XMFLOAT3 pos = transform->GetPosition();
+		const XMFLOAT3 pos = transform->GetPosition();
 
 		if (pos == m_Target) {
 			MessageBoxA(nullptr, "カメラのポジションとターゲットが同じです。", "エラー", MB_OK | MB_ICONERROR);
@@ -51,25 +51,16 @@ void Camera::Update()
 		}
 
 		XMFLOAT3 forward = m_Target - pos;
-		XMVECTOR forwardVec = XMLoadFloat3(&forward);
+		const XMVECTOR forwardVec = XMLoadFloat3(&forward);
 		const float distance = XMVectorGetX(XMVector3Length(forwardVec));
-		XMVECTOR forwardNorm = XMVector3Normalize(forwardVec);
+		const XMVECTOR forwardNorm = XMVector3Normalize(forwardVec);
 		XMStoreFloat3(&forward, forwardNorm);
-
-		XMFLOAT3 up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-		XMVECTOR upVec = XMLoadFloat3(&up);
-
-		XMFLOAT3 right = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		XMVECTOR rightVec = XMVector3Cross(upVec,forwardVec);
-		rightVec = XMVector3Normalize(rightVec);
-		XMStoreFloat3(&right, rightVec);
 
 		XMFLOAT3 move = XMFLOAT3(0.0f, 0.0f, 0.0f);	// 初期化
 
 		// 座標更新
 		transform->AddPosition(move);
 
-		XMFLOAT3 rot = transform->GetRotation();
 		XMFLOAT3 nowPos = transform->GetPosition();
 
 		if (move != XMFLOAT3(0.0f, 0.0f, 0.0f)) {
@@ -77,24 +68,17 @@ void Camera::Update()
 			m_Target = nowPos + forward * distance;
 		}
 
-
-		// マウスの座標を取得
-		const XMFLOAT2 mouseVec2 = Input::GetMousePositionNormalize();
-
 		CameraMoveComponent* cameraMove = m_Object->GetComponent<CameraMoveComponent>();
 
 		if (cameraMove)
 		{
-			CameraPattern cameraPattern = cameraMove->GetCameraPattern();
+			const CameraPattern cameraPattern = cameraMove->GetCameraPattern();
 
 			if (cameraPattern != CameraPattern::CAMERA_NONE) {
 				m_Target.x = nowPos.x;
 				m_Target.y = nowPos.y;
 			}
 		}
-
-		// このフレームのマウス位置を次回に備えて保存
-		prevMouse = mouseVec2;
 
 		Update2D();
 		Update3D();
@@ -105,13 +89,13 @@ void Camera::Update()
 
 void Camera::Update2D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
-	XMFLOAT3 camPos = transform->GetPosition();
+	const XMFLOAT3 camPos = transform->GetPosition();
 	// ビュー変換後列作成
 	XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, -10.0f);
-	XMVECTOR posV = XMLoadFloat3(&pos);
+	const XMVECTOR posV = XMLoadFloat3(&pos);
 
 	XMFLOAT3 tgt = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMVECTOR tgtV = XMLoadFloat3(&tgt);
+	const XMVECTOR tgtV = XMLoadFloat3(&tgt);
 
 	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
@@ -138,13 +122,13 @@ void Camera::Update3D() {
 	pos += m_OffsetPosition;
 
 	// ビュー変換後列作成
-	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	const XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMMATRIX viewMatrix;
 
-	XMVECTOR posV = XMLoadFloat3(&pos);
+	const XMVECTOR posV = XMLoadFloat3(&pos);
 
-	XMFLOAT3 target = m_Target + m_OffsetTarget;
-	XMVECTOR targetV = XMLoadFloat3(&target);
+	const XMFLOAT3 target = m_Target + m_OffsetTarget;
+	const XMVECTOR targetV = XMLoadFloat3(&target);
 
 	viewMatrix = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
 	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
@@ -180,7 +164,7 @@ void Camera::Update3D() {
 	}
 
 	// 後にここは調整できるようにしておく
-	float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
+	const float aspectRatio = static_cast<float>(Application::GetWidth()) / static_cast<float>(Application::GetHeight());	// アスペクト比	
 	float nearPlane = 1.0f;       // ニアクリップ
 	float farPlane = 5000.0f;      // ファークリップ
 

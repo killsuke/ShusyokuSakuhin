@@ -59,7 +59,7 @@ void ComponentTypeManager::MakeSampleJson() {
 
 	json j = ComponentTypeNameToJson(nameToId);
 	// 保存先のファイルパス
-	std::string filepath = "json/component.json";
+	const std::string filepath = "json/component.json";
 	// JSONをファイルに保存
 	if (SaveJsonToFile(j, filepath)) {
 		std::cout << "Component JSON saved successfully to " << filepath << std::endl;
@@ -108,7 +108,7 @@ json ComponentTypeManager::ComponentTypeNameToJson(const std::unordered_map<std:
 bool ComponentTypeManager::SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath) {
 
 	// ディレクトリ部分を作成（ファイル名を除いたパス）
-	path _path(filepath);
+	const path _path(filepath);
 	if (!_path.parent_path().empty()) {
 		std::error_code ec;
 		create_directories(_path.parent_path(), ec);

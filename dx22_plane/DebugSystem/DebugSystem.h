@@ -1,10 +1,10 @@
 #pragma once
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Components/DebugCameraComponent.h"
 #include <vector>
 #include <string>
 
-class DebugSystem
+class DebugSystem final
 {
 private:
 
@@ -17,6 +17,12 @@ private:
 
 	DebugSystem() = default;
 	~DebugSystem() = default;
+
+	// コピー・ムーブも削除
+	DebugSystem(const DebugSystem&) = delete;
+	DebugSystem(DebugSystem&&) = delete;
+	DebugSystem& operator=(const DebugSystem&) = delete;
+	DebugSystem& operator=(DebugSystem&&) = delete;
 
 	// デバッグ機能のUIのON/OFF
 	static void DebugUI();

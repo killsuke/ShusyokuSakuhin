@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Transform.h"
 
 namespace {
@@ -38,18 +38,6 @@ protected:
 	DirectX::XMMATRIX m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
 
 	FieldOfView m_FieldOfView = FieldOfView::DEFAULT;
-
-	//float m_CameraDirection = 0; // カメラの方向
-
-	//float targetCount = 0.0f;	// ターゲットにしてから数える
-	//float targetSpeed_x = 0.0f;	// ターゲットからの位置、加速の時にのみ増やす
-	//float targetSpeed_z = 0.0f;	// ターゲットからの位置、加速の時にのみ増やす
-	//bool targetCarFg = false;	// 車をターゲットにするかどうかのフラグ
-
-	//float deltaCamera = 0.0f;
-
-
-	DirectX::XMFLOAT2 prevMouse = DirectX::XMFLOAT2(0.0f, 0.0f);	// マウス位置記録
 
 	void Update2D();
 	void Update3D();

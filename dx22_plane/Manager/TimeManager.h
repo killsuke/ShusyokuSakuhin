@@ -2,7 +2,7 @@
 #include <chrono>
 #include <windows.h>
 
-class TimeManager
+class TimeManager final
 {
 private:
 	static LARGE_INTEGER m_frequency;

@@ -18,8 +18,8 @@ CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 
 void CameraMoveComponent::Update()
 {
-	auto cameraObj = GameObjectManager::GameObjectFindName("camera");
-	auto player = GameObjectManager::GameObjectFindName("Player");
+	GameObject* cameraObj = GameObjectManager::GameObjectFindName("camera");
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
 
 	//	auto camerapos = cameraObj->GetComponent<RigidBodyComponent>()->GetVelocity();
 

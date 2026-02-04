@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Manager/ComponentTypeManager.h"
 
 class GameObject; // ‘O•ûéŒ¾

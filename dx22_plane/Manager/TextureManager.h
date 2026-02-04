@@ -10,12 +10,21 @@
 #include "WICTextureLoader.h" // テクスチャ読み込みライブラリ
 #include <wrl.h>
 
-class TextureManager
+class TextureManager final
 {
 private:
 	// テクスチャ管理用のマップ
 	// 文字列とDirectX11のシェーダーリソースビューを関連付ける
-	static std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureMap;
+	static inline std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureMap;
+
+	TextureManager() = default;
+	~TextureManager() = default;
+
+	// コピー・ムーブも削除
+	TextureManager(const TextureManager&) = delete;
+	TextureManager(TextureManager&&) = delete;
+	TextureManager& operator=(const TextureManager&) = delete;
+	TextureManager& operator=(TextureManager&&) = delete;
 
 public:
 	static void Init();

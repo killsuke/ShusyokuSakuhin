@@ -1,6 +1,6 @@
 #include "HitStopManager.h"
 #include "Manager/GameObjectManager.h"
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include <vector>
 
 std::unordered_set<std::string> HitStopManager::m_TargetTags;

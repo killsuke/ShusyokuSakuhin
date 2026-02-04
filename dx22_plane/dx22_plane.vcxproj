@@ -262,7 +262,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Components\JumpComponent.cpp" />
     <ClCompile Include="Manager\ModelManager.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Components\Render.cpp" />
     <ClCompile Include="Components\Render2D.cpp" />
@@ -421,7 +421,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Manager\ModelManager.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Components\Render.h" />
     <ClInclude Include="Components\Render2D.h" />
@@ -661,9 +661,6 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gs_main</EntryPointName>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GameObjectTemplate.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

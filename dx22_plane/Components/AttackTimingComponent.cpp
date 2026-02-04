@@ -13,11 +13,11 @@ void AttackTimingComponent::Update() {
 
 	ColliderAttackComponent* collObj = m_Object->GetComponent<ColliderAttackComponent>();
 	if (collObj->GetActiveColliderFlag() == false) {
-		m_attackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
+		m_AttackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;
 	}
 
-	for (auto& attackObj : m_attackObjs) {
+	for (auto& attackObj : m_AttackObjs) {
 
 		if (attackObj.hitCoolTime > 0.0f) {
 
@@ -40,10 +40,10 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 
 		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
-		auto it = std::find_if(m_attackObjs.begin(), m_attackObjs.end(),
+		auto it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
 
-		if(it != m_attackObjs.end()) {
+		if(it != m_AttackObjs.end()) {
 			if (it->hitCoolTime > 0.0f) {
 			//	std::cout << "攻撃クールダウン中..." << std::endl;
 				it->hitCount++; // 攻撃が当たった回数を増やす
@@ -51,10 +51,10 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 			}
 		}
 		else {
-			m_attackObjs.push_back({ &obj, m_coolDownTime,1 });	// ここで攻撃対象に組み込む
+			m_AttackObjs.push_back({ &obj, m_coolDownTime,1 });	// ここで攻撃対象に組み込む
 		}
 
-		m_attackHitFlag = true; // 攻撃が当たったフラグを立てる
+		m_AttackHitFlag = true; // 攻撃が当たったフラグを立てる
 
 		int atk = fighter->GetAtk();
 

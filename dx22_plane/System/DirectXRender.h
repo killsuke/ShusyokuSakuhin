@@ -219,8 +219,14 @@ private:
 	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
 public:
-	DirectXRender();
-	~DirectXRender();
+	DirectXRender() = default;
+	~DirectXRender() = default;
+
+	// コピー・ムーブも削除
+	DirectXRender(const DirectXRender&) = delete;
+	DirectXRender(DirectXRender&&) = delete;
+	DirectXRender& operator=(const DirectXRender&) = delete;
+	DirectXRender& operator=(DirectXRender&&) = delete;
 
 	static HRESULT Init();
 	static void UnInit();

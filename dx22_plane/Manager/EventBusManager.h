@@ -24,21 +24,25 @@ enum class ActiveQueue {
 	QUEUE_B
 };
 
-class EventBusManager
+class EventBusManager final
 {
 private:
 
-	static std::vector<QueuedEvent> m_QueuedEventsA;
-	static std::vector<QueuedEvent> m_QueuedEventsB;
+	static inline std::vector<QueuedEvent> m_QueuedEventsA;
+	static inline std::vector<QueuedEvent> m_QueuedEventsB;
 	static inline ActiveQueue m_ActiveQueue = ActiveQueue::QUEUE_A;
 
-	static constexpr int MAX_LOOP = 1000;
-
-	static std::unordered_map<std::type_index, std::vector<ListenerEntry>> m_Listeners;
-	static uint64_t m_NextListenerID;
+	static inline std::unordered_map<std::type_index, std::vector<ListenerEntry>> m_Listeners;
+	static inline uint64_t m_NextListenerID;
 
 	EventBusManager() = default;
 	~EventBusManager() = default;
+
+	// コピー・ムーブも削除
+	EventBusManager(const EventBusManager&) = delete;
+	EventBusManager(EventBusManager&&) = delete;
+	EventBusManager& operator=(const EventBusManager&) = delete;
+	EventBusManager& operator=(EventBusManager&&) = delete;
 
 public:
 

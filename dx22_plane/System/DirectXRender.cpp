@@ -97,14 +97,6 @@ FLOAT DirectXRender::m_ClearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
 
 EBlendState DirectXRender::m_CurrentBlendState = EBlendState::BS_ALPHABLEND;
 
-DirectXRender::DirectXRender() {
-
-}
-
-DirectXRender::~DirectXRender() {
-	//	UnInit();	// これはちゃんと呼び出されている？
-}
-
 HRESULT DirectXRender::Init() {
 
 	DeviceAndSwapCreate();	// デバイス、スワップチェーン作成

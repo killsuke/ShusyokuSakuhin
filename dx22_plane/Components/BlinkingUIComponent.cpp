@@ -12,12 +12,12 @@ void BlinkingUIComponent::Update() {
 		return; // 点滅フラグがfalseなら何もしない
 	}
 	m_recordTime += m_deltaTime;
-	auto rend = m_Object->GetComponent<Render2DComponent>();
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 	if (rend == nullptr) {
 		return;
 	}
 	// sin波で点滅させる
-	float value = sinf(m_recordTime * m_blinkingSpeed);        // [-1, 1]
-	float normalized = (value + 1.0f) * 0.5f; // [0, 1]
+	const float value = sinf(m_recordTime * m_blinkingSpeed);        // [-1, 1]
+	const float normalized = (value + 1.0f) * 0.5f; // [0, 1]
 	rend->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, normalized));
 }

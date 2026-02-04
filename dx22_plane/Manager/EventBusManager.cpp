@@ -7,10 +7,9 @@
 
 #include "EventBusManager.h"
 
-std::vector<QueuedEvent> EventBusManager::m_QueuedEventsA;
-std::vector<QueuedEvent> EventBusManager::m_QueuedEventsB;
-std::unordered_map<std::type_index, std::vector<ListenerEntry>> EventBusManager::m_Listeners;
-uint64_t EventBusManager::m_NextListenerID = 1;
+namespace {
+	constexpr int MAX_LOOP = 1000;
+}
 
 void EventBusManager::Init()
 {

@@ -17,11 +17,15 @@ TestExtrusionJudgeComponent::TestExtrusionJudgeComponent(GameObject& obj) : Comp
 
 void TestExtrusionJudgeComponent::Update()
 {
-	auto terrains = GameObjectManager::GameObjectFindTag("Terrain");
-	auto coll = m_Object->GetComponent<ColliderComponent>();
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
-	auto jump = m_Object->GetComponent<JumpComponent>();
+	std::vector<GameObject*> terrains = GameObjectManager::GameObjectFindTag("Terrain");
+	ColliderComponent* coll = m_Object->GetComponent<ColliderComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	JumpComponent* jump = m_Object->GetComponent<JumpComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+
+	if (terrains.empty()) {
+		return;
+	}
 
 	m_isGround = false;
 	m_isCeiling = false;
@@ -82,26 +86,27 @@ void TestExtrusionJudgeComponent::Update()
 
 	}
 
-	if (m_MoveCarObjName != "") {
+	// 後に奥側からジャンプしてくる敵用に使う
+	//if (m_MoveCarObjName != "") {
 
-		GameObject* moveCarObj = GameObjectManager::GameObjectFindName(m_MoveCarObjName);
+	//	GameObject* moveCarObj = GameObjectManager::GameObjectFindName(m_MoveCarObjName);
 
-		if (moveCarObj != nullptr) {
+	//	if (moveCarObj != nullptr) {
 
-			MoveCarComponent* moveCar = moveCarObj->GetComponent<MoveCarComponent>();
+	//		MoveCarComponent* moveCar = moveCarObj->GetComponent<MoveCarComponent>();
 
-			// 名前検索の処理も入れる
+	//		// 名前検索の処理も入れる
 
-			//float speed = moveCar->GetMoveSpeed();
-			//// ここの2倍は外そう
-			//rigid->AddForce(Vector3(speed * 2.0f, 0.0f, 0.0f));
-			//rigid->UpdateVelocity();
+	//		//float speed = moveCar->GetMoveSpeed();
+	//		//// ここの2倍は外そう
+	//		//rigid->AddForce(Vector3(speed * 2.0f, 0.0f, 0.0f));
+	//		//rigid->UpdateVelocity();
 
-			Vector3 deltaPos = moveCar->GetDeltaCarPos();
+	//		Vector3 deltaPos = moveCar->GetDeltaCarPos();
 
-			transform->AddPosition(deltaPos * 2.0f);
-		}
-	}
+	//		transform->AddPosition(deltaPos * 2.0f);
+	//	}
+	//}
 	coll->Update();
 
 	if (jump == nullptr) {

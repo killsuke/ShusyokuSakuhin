@@ -11,10 +11,8 @@
 
 #include	<d3d11.h>
 #include	<DirectXMath.h>
-#include	<SimpleMath.h>
 #include	<map>
 #include	<iostream>
-//#include	<io.h>
 #include	<string>
 #include	<vector>
 #include	<memory>
@@ -35,9 +33,9 @@ class RenderComponent : public Component
 {
 protected:
 	std::unique_ptr<Shader> m_Shader = nullptr;
+	std::unique_ptr<Mesh> m_Mesh = nullptr;
 	VertexBuffer<VERTEX_3D> m_VertexBuffer = {};
 	IndexBuffer m_IndexBuffer = {};
-	std::unique_ptr<Mesh> m_Mesh = nullptr;
 	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f, 1.0f, 1.0f }; // F
 	RightLeft m_Inversion = RightLeft::RIGHT;
 
@@ -54,10 +52,6 @@ public:
 
 		m_Mesh->ChangeTexture(fileName);
 	};
-	/*void SetTextureAndMask(const std::string& fileName, const std::string& maskFileName) {
-		m_Texture->Load(fileName);
-		m_Texture->LoadMask(maskFileName);
-	};*/
 	void SetColor(const DirectX::XMFLOAT4& color) { m_Color = color; };
 	void SetInversionFlag(const RightLeft& flag) { m_Inversion = flag; };
 
@@ -108,6 +102,4 @@ public:
 		m_Mesh = std::move(mesh);
 		return raw;
 	}
-
 };
-

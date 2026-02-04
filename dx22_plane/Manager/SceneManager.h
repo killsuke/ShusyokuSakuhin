@@ -7,7 +7,7 @@
 #include <memory>
 #include "sound.h"
 
-class SceneManager
+class SceneManager final
 {
 public:
 
@@ -22,18 +22,7 @@ public:
 		}
 		m_pScene = std::make_unique<T1>();	// シーンを変更
 	};
-
-	// ちょっと待ってからシーン遷移するように組む？
-	/*template <typename T2>
-	static void WaitSceneChange(const float time) {
-
-		if (waitTimeCounter > waitTime) {
-			waitTimeCounter = 0.0f;
-			waitTime = 0.0f;
-			SceneChange<T2>();
-		}
-	};*/
-
+	
 	static void Init();					// シーンの初期化
 	static void Update();					// 現在のシーンの更新
 	static void Draw();					// 現在のシーンの描画

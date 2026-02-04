@@ -4,7 +4,8 @@
 #include <memory>
 #include "StaticMesh.h"
 
-class ModelManager {
+class ModelManager final
+{
 public:
 
 	static void AddModel(const std::string& modelPath, const std::string& texDirectory,const StaticMesh& mesh);
@@ -13,13 +14,15 @@ public:
     static StaticMesh* GetModel(const std::string& modelPath, const std::string& texDirectory);
 
 private:
-    // プライベートコンストラクタ
-	ModelManager() = default;
-	~ModelManager() = default;
+	// コンストラクタ・デストラクタを削除
+	ModelManager() = delete;
+	~ModelManager() = delete;
 
-    // コンストラクタを生成されないように
-    ModelManager(const ModelManager&) = delete;
-    ModelManager& operator=(const ModelManager&) = delete;
+	// コピー・ムーブも削除
+	ModelManager(const ModelManager&) = delete;
+	ModelManager(ModelManager&&) = delete;
+	ModelManager& operator=(const ModelManager&) = delete;
+	ModelManager& operator=(ModelManager&&) = delete;
 
     // 全てのモデルデータを保持
     static std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;

@@ -14,16 +14,16 @@ protected:
 	AttackComponent(GameObject& obj);
 	~AttackComponent() = default;
 
-	std::vector<HitRule> m_attackObjs;
-	bool m_attackHitFlag = false; // 攻撃が当たったかどうかのフラグ
+	std::vector<HitRule> m_AttackObjs;
+	bool m_AttackHitFlag = false; // 攻撃が当たったかどうかのフラグ
 public:
 	
 	void Update() override;
 
 	virtual void AttackAction(GameObject& obj) = 0; // 攻撃処理を行う関数
 
-	inline void ClearAttackObjs() { m_attackObjs.clear(); };
+	inline void ClearAttackObjs() { m_AttackObjs.clear(); };
 
-	inline void ReSetAttackHitFlag() { m_attackHitFlag = false; };
-	inline bool GetAttackHitFlag() const { return m_attackHitFlag; };
+	inline void ReSetAttackHitFlag() { m_AttackHitFlag = false; };
+	inline bool GetAttackHitFlag() const { return m_AttackHitFlag; };
 };

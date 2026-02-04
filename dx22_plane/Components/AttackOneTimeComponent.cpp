@@ -10,7 +10,7 @@ AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponen
 void AttackOneTimeComponent::Update() {
 	ColliderAttackComponent* collObj = m_Object->GetComponent<ColliderAttackComponent>();
 	if (collObj->GetActiveColliderFlag() == false) {
-		m_attackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
+		m_AttackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;
 	}
 
@@ -26,10 +26,10 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 	if (fighter != nullptr && targetFighter != nullptr) {
 		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
-		auto it = std::find_if(m_attackObjs.begin(), m_attackObjs.end(),
+		std::vector<HitRule>::iterator it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
 
-		if (it != m_attackObjs.end()) {
+		if (it != m_AttackObjs.end()) {
 			if (it->hitCount > 0) {
 
 				it->hitCount++; // 攻撃が当たった回数を増やす
@@ -37,12 +37,12 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 			}
 		}
 		else {
-			m_attackObjs.push_back({ &obj, 0.0f,1 });	// ここで攻撃対象に組み込む
+			m_AttackObjs.push_back({ &obj, 0.0f,1 });	// ここで攻撃対象に組み込む
 		}
 
-		m_attackHitFlag = true; // 攻撃が当たったフラグを立てる
+		m_AttackHitFlag = true; // 攻撃が当たったフラグを立てる
 
-		int atk = fighter->GetAtk();
+		const int atk = fighter->GetAtk();
 
 		targetFighter->AddDamage(atk); // 攻撃力分だけ相手のHPを減らす
 
