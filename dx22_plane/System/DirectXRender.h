@@ -41,15 +41,25 @@ enum class EFillMode {
 	MAX_FILL
 };
 
-extern ID3D11Buffer* g_pConstantBuffer;
-extern ID3D11Buffer* g_pBoneConstantBuffer;
-extern ID3D11Buffer* g_pHPBarConstantBuffer;
-extern ID3D11Buffer* g_pBlurBuffer;
-extern ID3D11Buffer* g_pMotionBlurBuffer;
-extern ID3D11Buffer* g_pMotionBlurCircularBuffer;
-extern ID3D11Buffer* m_MaterialBuffer;
-extern ID3D11Buffer* g_pGlowBuffer;
-extern ID3D11Buffer* g_pRingGlowBuffer;
+// 定数バッファの種類
+enum class EBufferTypes {
+
+	DEFAULT_DRAW = 0,
+	CAMERA,
+	LINE_THICKNESS,
+	BLUR,
+	HIT_FLASH,
+	LIGHT,
+	MATERIAL,
+	MOTION_BLUR,
+	BONE,
+	HP_BAR,
+	GLOW,
+
+	MAX
+};
+
+
 
 // 定数バッファ用構造体
 struct ConstBuffer
@@ -156,49 +166,67 @@ class DirectXRender
 {
 private:
 
-	static ID3D11Device* m_Device;				// デバイス＝DirectXの各種機能を作る
-	static IDXGISwapChain* m_SwapChain;			// スワップチェイン＝ダブルバッファ機能
-	static ID3D11DeviceContext* m_DeviceContext;	// コンテキスト＝描画関連を司る機能
-	static ID3D11DepthStencilState* m_DepthStateEnable;
-	static ID3D11DepthStencilState* m_DepthStateDisable;
-	static ID3D11RenderTargetView* g_pRenderTargetView;	// レンダーターゲット＝描画先を表す機能
-	static ID3D11DepthStencilView* g_pDepthStencilView;	// デプスバッファ
-	static ID3D11Buffer* m_LightBuffer;
-	static CameraMatrix m_CameraMatrix;			// カメラ行列
-	static ID3D11Buffer* g_pLineThicknessBuffer; // 線の太さ
+	static inline ID3D11Device* m_Device = nullptr;				// デバイス＝DirectXの各種機能を作る
+	static inline IDXGISwapChain* m_SwapChain = nullptr;			// スワップチェイン＝ダブルバッファ機能
+	static inline ID3D11DeviceContext* m_DeviceContext = nullptr; // コンテキスト＝描画関連を司る機能
+	static inline ID3D11DepthStencilState* m_DepthStateEnable = nullptr;
+	static inline ID3D11DepthStencilState* m_DepthStateDisable = nullptr;
+	static inline ID3D11RenderTargetView* m_RenderTargetView = nullptr;	// レンダーターゲット＝描画先を表す機能
+	static inline ID3D11DepthStencilView* m_DepthStencilView = nullptr;	// デプスバッファ
+	static inline CameraMatrix m_CameraMatrix = { DirectX::XMMatrixIdentity() };			// カメラ行列
 
-	// ヒットフラッシュ用のバッファ
-	static ID3D11Buffer* m_HitFlashBuffer;
 
 	// ラスタライザーステート
-	static ID3D11RasterizerState* m_SolidRasterizerNone;
-	static ID3D11RasterizerState* m_SolidRasterizerCullBack;
-	static ID3D11RasterizerState* m_SolidRasterizerCullFront;
+	static inline ID3D11RasterizerState* m_SolidRasterizerNone = nullptr;
+	static inline ID3D11RasterizerState* m_SolidRasterizerCullBack = nullptr;
+	static inline ID3D11RasterizerState* m_SolidRasterizerCullFront = nullptr;
 
-	static ID3D11RasterizerState* m_WireFrameRasterizerNone;
-	static ID3D11RasterizerState* m_WireFrameRasterizerCullBack;
-	static ID3D11RasterizerState* m_WireFrameRasterizerCullFront;
+	static inline ID3D11RasterizerState* m_WireFrameRasterizerNone = nullptr;
+	static inline ID3D11RasterizerState* m_WireFrameRasterizerCullBack = nullptr;
+	static inline ID3D11RasterizerState* m_WireFrameRasterizerCullFront = nullptr;
 
-	static ECullingState m_CullingState;
-	static EFillMode m_FillMode;
+	static inline ECullingState m_CullingState = ECullingState::CULLING_NONE;
+	static inline EFillMode m_FillMode = EFillMode::FILL_SOLID;
 
-	static FLOAT m_ClearColor[4];
+	static inline FLOAT m_ClearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
 
-	static EBlendState m_CurrentBlendState;
-	static ID3D11BlendState* g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ブレンド ステート;
+	static inline EBlendState m_CurrentBlendState = EBlendState::BS_ALPHABLEND;
+	static inline ID3D11BlendState* m_BlendState[(int)(EBlendState::MAX_BLENDSTATE)] = { nullptr }; // ブレンド ステート;
 
 	static inline bool m_IsDepthEnable = false;
+
+	static inline D3D_FEATURE_LEVEL m_FeatureLevel;
+	static inline ID3D11BlendState* m_BlendStateATC = nullptr;
+
+
+	static inline ID3D11SamplerState* m_Sampler = nullptr;		// サンプラー用変数
+
+	// ブラー用バッファとモーションブラー用バッファは別途用意する
+	// モーションブラー用バッファは実験中の為
+
+	static inline ID3D11Buffer* m_DefaultDrawBuffer = nullptr;		// デフォルト描画用定数バッファ、０番目
+	static inline ID3D11Buffer* m_CameraInformationBuffer = nullptr; // カメラ関係の行列をまとめたバッファ、１番目
+	static inline ID3D11Buffer* m_LineThicknessBuffer = nullptr; // 線の太さ・描画モード用定数バッファ、２番目
+	static inline ID3D11Buffer* m_BlurBuffer = nullptr;				// ブラー用バッファ、３番目
+	static inline ID3D11Buffer* m_HitFlashBuffer = nullptr;		// ヒットフラッシュ用のバッファ、４番目
+	static inline ID3D11Buffer* m_LightBuffer = nullptr;		// ライト用定数バッファ、５番目
+	static inline ID3D11Buffer* m_MaterialBuffer = nullptr;		// マテリアル用定数バッファ、６番目
+	static inline ID3D11Buffer* m_MotionBlurBuffer = nullptr;	// 縦横のみモーションブラー用バッファ、７番目
+	static inline ID3D11Buffer* m_MotionBlurCircularBuffer = nullptr;	// 自由に使えるモーションブラー用バッファ（開発中）、７番目
+	static inline ID3D11Buffer* m_BoneConstantBuffer = nullptr;		// ボーン用バッファ、８番目（このプロジェクトでは使わない）
+	static inline ID3D11Buffer* m_HPBarConstantBuffer = nullptr;	// HPバー用バッファ、９番目
+	static inline ID3D11Buffer* m_GlowBuffer = nullptr;				// グロー用定数バッファ、１０番目
+	static inline ID3D11Buffer* m_RingGlowBuffer = nullptr;			// リンググロー用定数バッファ、１０番目
 
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
 	static HRESULT DepthStencilCreate();
 	static void ViewportCreate();
-	HRESULT InputLayoutAndShadersCreate();
 	static HRESULT RasterizerSetting();
 	static HRESULT BlandStateCreate();
 	static HRESULT DepthStencilSetting();
 	static HRESULT SamplerCreate();
-	static HRESULT ConstantBufferCreate();
+	static HRESULT DefaultDrawConstantBufferCreate();
 	static HRESULT BoneConstantBufferCreate();
 	static HRESULT HPBarConstantBufferCreate();
 	static HRESULT LightBufferCreate();
@@ -212,11 +240,6 @@ private:
 	static HRESULT CreateHitFlashBuffer();
 	static HRESULT CreateMotionBlurBuffer();
 	static HRESULT CreateGlowBuffer();
-
-	HRESULT CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
-		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
-	HRESULT CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
-	HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut);
 
 public:
 	DirectXRender() = default;
@@ -254,13 +277,13 @@ public:
 
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
-	static ID3D11RenderTargetView* GetRenderTargetView() { return g_pRenderTargetView; };
-	static ID3D11DepthStencilView* GetDepthStencilView() { return g_pDepthStencilView; };
+	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; };
+	static ID3D11DepthStencilView* GetDepthStencilView() { return m_DepthStencilView; };
 
 	static ID3D11DepthStencilState* GetDepthStateEnable() { return m_DepthStateEnable; };
 	static ID3D11DepthStencilState* GetDepthStateDisable() { return m_DepthStateDisable; };
 
-	static ID3D11Buffer* GetLineThicknessBuffer() { return g_pLineThicknessBuffer; };
+	static ID3D11Buffer* GetLineThicknessBuffer() { return m_LineThicknessBuffer; };
 
 	static FLOAT* GetClearColor() { return m_ClearColor; };
 
@@ -268,6 +291,17 @@ public:
 	static EFillMode GetFillMode() { return m_FillMode; };
 	static ECullingState GetCullingState() { return m_CullingState; };
 	static bool GetIsDepthEnable() { return m_IsDepthEnable; };
+
+	static ID3D11Buffer* GetDefaultDrawBuffer() { return m_DefaultDrawBuffer; }
+	static ID3D11Buffer* GetBoneBuffer() { return m_BoneConstantBuffer; };
+	static ID3D11Buffer* GetHPBarMoveBuffer() { return m_HPBarConstantBuffer; };
+	static ID3D11Buffer* GetMaterialBuffer() { return m_MaterialBuffer; };
+	static ID3D11Buffer* GetBlurBuffer() { return m_BlurBuffer; };
+	static ID3D11Buffer* GetMotionBlurBuffer() { return m_MotionBlurBuffer; };
+	static ID3D11Buffer* GetMotionBlurCircularBuffer() { return m_MotionBlurCircularBuffer; };
+	static ID3D11Buffer* GetGlowBuffer() { return m_GlowBuffer; };
+	static ID3D11Buffer* GetRingGlowBuffer() { return m_RingGlowBuffer; };
+
 
 	//=============================================================================
 	// ブレンド ステート設定

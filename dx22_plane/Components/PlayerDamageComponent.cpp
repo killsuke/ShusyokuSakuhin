@@ -20,15 +20,8 @@ PlayerDamageComponent::PlayerDamageComponent(GameObject& obj) : Component(obj)
 
 void PlayerDamageComponent::Update()
 {
-	//auto transform = p_object->GetComponent<TransformComponent>();
 	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
 	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Player");
-
-	//	auto collObjOther = objOther->GetComponent<ColliderComponent>();
-	//	auto playerObj = GameObjectManager::GameObjectFindName("Player");
-	//	auto playerTrans = playerObj->GetComponent<TransformComponent>();
-	//	auto playerPos = playerTrans->GetPosition();
-		//transform->SetPosition({playerPos.x + 13.0f,playerPos.y,playerPos.z});
 
 	AttackTimingComponent* attack_T = m_Object->GetComponent<AttackTimingComponent>();
 	AttackOneTimeComponent* attack_O = m_Object->GetComponent<AttackOneTimeComponent>();
@@ -58,22 +51,6 @@ void PlayerDamageComponent::Update()
 						}
 					}
 				}
-
-				/*RigidBodyComponent* playerRigid = objOther->GetComponent<RigidBodyComponent>();
-
-				if (playerRigid != nullptr) {
-
-					Vector3 playerVelocity = playerRigid->GetVelocity();
-
-					if (playerVelocity.x > 0.0f) {
-						playerRigid->AddVelocity(Vector3(80.0f, 0.0f, 0.0f));
-					}
-					else {
-						playerRigid->AddVelocity(Vector3(-80.0f, 0.0f, 0.0f));
-					}
-				}*/
-
-
 
 				const uint32_t myID = m_Object->GetInstanceID();
 				const uint32_t otherID = objOther->GetInstanceID();

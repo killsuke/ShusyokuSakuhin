@@ -22,5 +22,7 @@ void HPBarMoveComponent::Update() {
 	// HPの値「１」辺りの縦のサイズを入れる
 	hpParam.hpScale = hpScale;
 
-	DirectXRender::GetDeviceContext()->UpdateSubresource(g_pHPBarConstantBuffer, 0, nullptr, &hpParam, 0, 0);
+	ID3D11Buffer* buffer = DirectXRender::GetHPBarMoveBuffer();
+
+	DirectXRender::GetDeviceContext()->UpdateSubresource(buffer, 0, nullptr, &hpParam, 0, 0);
 }

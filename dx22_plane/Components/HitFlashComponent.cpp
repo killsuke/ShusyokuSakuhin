@@ -46,14 +46,12 @@ void HitFlashComponent::Update() {
 		ID3D11Buffer* buffer = DirectXRender::GetHitFlashBuffer();
 
 		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
-
-		//m_IsFlash = false;
 	}
 }
 
 void HitFlashComponent::OnHitFlash(const HitEvent& event) {
 
-	uint32_t targetID = m_Object->GetInstanceID();
+	const uint32_t targetID = m_Object->GetInstanceID();
 	if(event.targetID != targetID) {
 		return;
 	}

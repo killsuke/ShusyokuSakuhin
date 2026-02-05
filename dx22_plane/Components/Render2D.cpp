@@ -45,8 +45,10 @@ void Render2DComponent::Update()
 
 		cb.inverse = m_Inversion == RightLeft::RIGHT ? true : false;
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		auto subsets = m_Mesh->GetSubsets();
 
@@ -57,13 +59,16 @@ void Render2DComponent::Update()
 		ECullingState culling = DirectXRender::GetCullingState();
 		DirectXRender::SetCullingState(ECullingState::CULLING_NONE);
 
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			textures[subsets[i].MaterialIdx].SetGPU();
 

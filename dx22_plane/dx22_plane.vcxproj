@@ -271,7 +271,10 @@
     <ClCompile Include="Components\Render3DColliderOBBComponent.cpp" />
     <ClCompile Include="Components\RenderBillboard.cpp" />
     <ClCompile Include="Components\RenderMask3D.cpp" />
-    <ClCompile Include="Components\RenderOneSkinAnimation.cpp" />
+    <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Components\RigidBodyComponent.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -431,7 +434,10 @@
     <ClInclude Include="Components\RenderBillboard.h" />
     <ClInclude Include="RenderElement.h" />
     <ClInclude Include="Components\RenderMask3D.h" />
-    <ClInclude Include="Components\RenderOneSkinAnimation.h" />
+    <ClInclude Include="Components\RenderOneSkinAnimation.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Components\RigidBodyComponent.h" />
     <ClInclude Include="Scene\Scene.h" />

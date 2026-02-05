@@ -10,92 +10,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "HPParam.h"
+
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
-D3D_FEATURE_LEVEL      m_FeatureLevel;
 
-ID3D11DeviceContext* DirectXRender::m_DeviceContext = nullptr; // ƒRƒ“ƒeƒLƒXƒg•`‰æŠÖ˜A‚ðŽi‚é‹@”\
 
-ID3D11Device* DirectXRender::m_Device = nullptr; // ƒRƒ“ƒeƒLƒXƒg•`‰æŠÖ˜A‚ðŽi‚é‹@”\
-
-IDXGISwapChain* DirectXRender::m_SwapChain = nullptr; // ƒXƒƒbƒvƒ`ƒF[ƒ“ƒ_ƒuƒ‹ƒoƒbƒtƒ@‹@”\
-
-ID3D11DepthStencilState* DirectXRender::m_DepthStateEnable = nullptr;
-
-ID3D11DepthStencilState* DirectXRender::m_DepthStateDisable = nullptr;
-
-// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg•`‰ææ‚ð•\‚·‹@”\
-ID3D11RenderTargetView* DirectXRender::g_pRenderTargetView = nullptr;
-// ƒfƒvƒXƒoƒbƒtƒ@
-ID3D11DepthStencilView* DirectXRender::g_pDepthStencilView = nullptr;
-
-ID3D11Buffer* DirectXRender::m_LightBuffer = nullptr;
-
-CameraMatrix DirectXRender::m_CameraMatrix = {};
-
-ID3D11Buffer* DirectXRender::g_pLineThicknessBuffer = nullptr; // ü‚Ì‘¾‚³
-
-ID3D11RasterizerState* DirectXRender::m_SolidRasterizerNone = nullptr;
-ID3D11RasterizerState* DirectXRender::m_SolidRasterizerCullBack = nullptr;
-ID3D11RasterizerState* DirectXRender::m_SolidRasterizerCullFront = nullptr;
-
-ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerNone = nullptr;
-ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerCullBack = nullptr;
-ID3D11RasterizerState* DirectXRender::m_WireFrameRasterizerCullFront = nullptr;
-
-ECullingState DirectXRender::m_CullingState = ECullingState::CULLING_NONE;
-EFillMode DirectXRender::m_FillMode = EFillMode::FILL_SOLID;
-
-ID3D11DepthStencilState* g_DepthStateEnable = nullptr;
-
-ID3D11DepthStencilState* g_DepthStateDisable = nullptr;
-
-// ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg
-ID3D11InputLayout* g_pInputLayout = nullptr;
-// ’¸“_ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg
-ID3D11VertexShader* g_pUnlitVertexShader = nullptr;
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg
-ID3D11PixelShader* g_pUnlitPixelShader = nullptr;
-// ƒTƒ“ƒvƒ‰[—p•Ï”
-ID3D11SamplerState* g_pSampler = nullptr;
-// ’è”ƒoƒbƒtƒ@—p•Ï”
-ID3D11Buffer* g_pConstantBuffer = nullptr;
-
-// ƒ{[ƒ“—p‚Ì’è”ƒoƒbƒtƒ@\‘¢‘Ì
-ID3D11Buffer* g_pBoneConstantBuffer = nullptr;
-
-// ‚g‚oƒo[—p‚Ì’è”ƒoƒbƒtƒ@\‘¢‘Ì
-ID3D11Buffer* g_pHPBarConstantBuffer = nullptr;
-
-// ƒuƒ‰[—p‚Ìƒoƒbƒtƒ@
-ID3D11Buffer* g_pBlurBuffer = nullptr;
-
-// ƒ‚[ƒVƒ‡ƒ“ƒuƒ‰[—p‚Ìƒoƒbƒtƒ@
-ID3D11Buffer* g_pMotionBlurBuffer = nullptr;
-
-// ‰ñ“]‚É‚à‘Î‰ž‚µ‚½ƒ‚[ƒVƒ‡ƒ“ƒuƒ‰[
-ID3D11Buffer* g_pMotionBlurCircularBuffer = nullptr;
-
-ID3D11Buffer* m_MaterialBuffer = nullptr;
-
-ID3D11Buffer* g_pGlowBuffer = nullptr;
-
-ID3D11Buffer* g_pRingGlowBuffer = nullptr;
-
-// ƒqƒbƒgƒtƒ‰ƒbƒVƒ…—p‚Ìƒoƒbƒtƒ@
-ID3D11Buffer* DirectXRender::m_HitFlashBuffer = nullptr;
-
-// ƒuƒŒƒ“ƒhƒXƒe[ƒg—p•Ï”iƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒfƒBƒ“ƒOj
-ID3D11BlendState* DirectXRender::g_BlendState[(int)(EBlendState::MAX_BLENDSTATE)]; // ƒuƒŒƒ“ƒh ƒXƒe[ƒg;
-
-ID3D11BlendState* g_BlendStateATC = nullptr;
-
-ID3D11Buffer* g_pCameraInformationBuffer{}; // ƒJƒƒ‰î•ñ
-
-FLOAT DirectXRender::m_ClearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
-
-EBlendState DirectXRender::m_CurrentBlendState = EBlendState::BS_ALPHABLEND;
 
 HRESULT DirectXRender::Init() {
 
@@ -103,14 +23,12 @@ HRESULT DirectXRender::Init() {
 	RenderTargetCreate();	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[ì¬
 	DepthStencilCreate();	// ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@ì¬
 	ViewportCreate();		// ƒrƒ…[ƒ|[ƒgÝ’è
-	//InputLayoutAndShadersCreate();
 	RasterizerSetting();
 	BlandStateCreate();
 	DepthStencilSetting();
 	SamplerCreate();
 
-
-	ConstantBufferCreate();	// •`‰æ—p’è”ƒoƒbƒtƒ@ì¬A‚O”Ô–Ú
+	DefaultDrawConstantBufferCreate();	// •`‰æ—p’è”ƒoƒbƒtƒ@ì¬A‚O”Ô–Ú
 	CreateCameraBuffer();	// ƒJƒƒ‰î•ñ—p’è”ƒoƒbƒtƒ@ì¬A‚P”Ô–Ú
 	CreateLineThicknessBuffer(); // ü‚Ì‘¾‚³—p’è”ƒoƒbƒtƒ@ì¬A‚Q”Ô–Ú
 	CreateBlurBuffer(); // ƒuƒ‰[—p’è”ƒoƒbƒtƒ@ì¬A‚R”Ô–Ú
@@ -139,35 +57,32 @@ HRESULT DirectXRender::Init() {
 void DirectXRender::UnInit() {
 
 	m_DeviceContext->ClearState();
-	SAFE_RELEASE(g_pRenderTargetView);
-	SAFE_RELEASE(g_pDepthStencilView);
+	SAFE_RELEASE(m_RenderTargetView);
+	SAFE_RELEASE(m_DepthStencilView);
 	SAFE_RELEASE(m_DepthStateEnable);
 	SAFE_RELEASE(m_DepthStateDisable);
 	SAFE_RELEASE(m_SwapChain);
-	SAFE_RELEASE(g_pInputLayout);
-	SAFE_RELEASE(g_pUnlitVertexShader);
-	SAFE_RELEASE(g_pUnlitPixelShader);
-	SAFE_RELEASE(g_pSampler);
-	SAFE_RELEASE(g_pConstantBuffer);
-	SAFE_RELEASE(g_pBoneConstantBuffer);
-	SAFE_RELEASE(g_pHPBarConstantBuffer);
-	SAFE_RELEASE(g_pBlurBuffer);
-	SAFE_RELEASE(g_pMotionBlurBuffer);
-	SAFE_RELEASE(g_pMotionBlurCircularBuffer);
+	SAFE_RELEASE(m_Sampler);
+	SAFE_RELEASE(m_DefaultDrawBuffer);
+	SAFE_RELEASE(m_BoneConstantBuffer);
+	SAFE_RELEASE(m_HPBarConstantBuffer);
+	SAFE_RELEASE(m_BlurBuffer);
+	SAFE_RELEASE(m_MotionBlurBuffer);
+	SAFE_RELEASE(m_MotionBlurCircularBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
-	SAFE_RELEASE(g_pGlowBuffer);
-	SAFE_RELEASE(g_pRingGlowBuffer);
+	SAFE_RELEASE(m_GlowBuffer);
+	SAFE_RELEASE(m_RingGlowBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
-		if (g_BlendState[i]) {  // nullptr ƒ`ƒFƒbƒN
-			SAFE_RELEASE(g_BlendState[i]);
+		if (m_BlendState[i]) {  // nullptr ƒ`ƒFƒbƒN
+			SAFE_RELEASE(m_BlendState[i]);
 			//g_BlendState[i] = nullptr;  // ‰ð•úŒã‚Éƒ|ƒCƒ“ƒ^‚ðƒNƒŠƒA
 		}
 	}
-	SAFE_RELEASE(g_BlendStateATC);
-	SAFE_RELEASE(g_pCameraInformationBuffer);
-	SAFE_RELEASE(g_pLineThicknessBuffer);
+	SAFE_RELEASE(m_BlendStateATC);
+	SAFE_RELEASE(m_CameraInformationBuffer);
+	SAFE_RELEASE(m_LineThicknessBuffer);
 	SAFE_RELEASE(m_DeviceContext);
 	SAFE_RELEASE(m_Device);
 }
@@ -183,18 +98,18 @@ void DirectXRender::DrawBegin() {
 
 	// •`‰ææ‚ÌƒLƒƒƒ“ƒoƒX‚ÆŽg—p‚·‚é[“xƒoƒbƒtƒ@‚ðŽw’è‚·‚é
 	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÆƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[‚ðÝ’è
-	m_DeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 	// •`‰ææƒLƒƒƒ“ƒoƒX‚ð“h‚è‚Â‚Ô‚·
-	m_DeviceContext->ClearRenderTargetView(g_pRenderTargetView, m_ClearColor);
+	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, m_ClearColor);
 	// [“xƒoƒbƒtƒ@‚ðƒŠƒZƒbƒg‚·‚é
-	m_DeviceContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	// 	ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒgiGPU‚É“n‚·’¸“_ƒf[ƒ^‚ÌƒtƒH[ƒ}ƒbƒg‚ð’è‹`j‚ðÝ’è
 	//m_DeviceContext->IASetInputLayout(g_pInputLayout);
 	// ‚Ç‚Ì‚æ‚¤‚ÉƒeƒNƒXƒ`ƒƒ‚ðˆµ‚¤‚©‚ðÝ’è
 	// ƒ|ƒXƒgƒGƒtƒFƒNƒg“™‚Å‚Ç‚ñ‚È•`‰æ‚©‚ðŽg‚¤ê‡‚ÍA
 	// Å‰‚Ì’liƒXƒƒbƒgj‚ð‚PˆÈã‚É‚·‚é
 	// ŽŸ‚Ìˆø”‚½‚¿‚à‘‚â‚·‚±‚Æ‚àl‚¦‚é
-	m_DeviceContext->PSSetSamplers(0, 1, &g_pSampler);
+	m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler);
 }
 
 //=======================================
@@ -236,7 +151,7 @@ HRESULT DirectXRender::RenderTargetCreate() {
 	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[ì¬
 	ID3D11Texture2D* renderTarget{};
 	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
-	if (renderTarget != nullptr)m_Device->CreateRenderTargetView(renderTarget, NULL, &g_pRenderTargetView);
+	if (renderTarget != nullptr)m_Device->CreateRenderTargetView(renderTarget, NULL, &m_RenderTargetView);
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
@@ -272,7 +187,7 @@ HRESULT DirectXRender::DepthStencilCreate() {
 	depthStencilViewDesc.Format = textureDesc.Format; // ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg‚ðÝ’è
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // ƒrƒ…[‚ÌŽŸŒ³‚ð2DƒeƒNƒXƒ`ƒƒ‚Æ‚µ‚ÄÝ’èi2DƒeƒNƒXƒ`ƒƒ—p‚ÌƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[j
 	depthStencilViewDesc.Flags = 0; // “Á•Ê‚Èƒtƒ‰ƒO‚ÍÝ’è‚µ‚È‚¢iƒfƒtƒHƒ‹ƒg‚Ì“®ìj
-	if (depthStencile != nullptr)m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &g_pDepthStencilView);
+	if (depthStencile != nullptr)m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
 	if (FAILED(hr)) return hr;
 	depthStencile->Release();
 
@@ -347,37 +262,37 @@ HRESULT DirectXRender::BlandStateCreate() {
 	BlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // ƒAƒ‹ƒtƒ@’l‚É‘Î‚µ‚Ä‰ÁŽZ‘€ì‚ðs‚¤
 	BlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL; // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚ÌƒJƒ‰[ƒ`ƒƒƒ“ƒlƒ‹‘‚«ž‚Ýƒ}ƒXƒN
 
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[0]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[0]);
 	if (FAILED(hr)) return hr;
 
 	// ƒuƒŒƒ“ƒh ƒXƒe[ƒg¶¬ (ƒAƒ‹ƒtƒ@ ƒuƒŒƒ“ƒh—p)
 	//BlendDesc.AlphaToCoverageEnable = TRUE;
 	BlendDesc.RenderTarget[0].BlendEnable = TRUE;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[1]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[1]);
 	if (FAILED(hr)) return hr;
 
 	// ƒuƒŒƒ“ƒh ƒXƒe[ƒg¶¬ (‰ÁŽZ‡¬—p)
 	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[2]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[2]);
 	if (FAILED(hr)) return hr;
 
 	// ƒuƒŒƒ“ƒh ƒXƒe[ƒg¶¬ (Œ¸ŽZ‡¬—p)
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[3]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[3]);
 	if (FAILED(hr)) return hr;
 
 	// ƒuƒŒƒ“ƒh ƒXƒe[ƒg¶¬ (æŽZ‡¬—p)
 	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_COLOR;
 	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[4]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[4]);
 	if (FAILED(hr)) return hr;
 
 	// ƒGƒtƒFƒNƒg—p‰ÁŽZ‡¬
 	BlendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	BlendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 	BlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	hr = m_Device->CreateBlendState(&BlendDesc, &g_BlendState[5]);
+	hr = m_Device->CreateBlendState(&BlendDesc, &m_BlendState[5]);
 	if (FAILED(hr)) return hr;
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
@@ -429,14 +344,14 @@ HRESULT DirectXRender::SamplerCreate() {
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 	//	ID3D11SamplerState* samplerState{};
-	hr = m_Device->CreateSamplerState(&samplerDesc, &g_pSampler);
+	hr = m_Device->CreateSamplerState(&samplerDesc, &m_Sampler);
 	if (FAILED(hr)) return hr;
 
 	return hr;
 }
 
 // •`‰æ—p‚Ì’è”ƒoƒbƒtƒ@ì¬A‚O”Ô–Ú
-HRESULT DirectXRender::ConstantBufferCreate() {
+HRESULT DirectXRender::DefaultDrawConstantBufferCreate() {
 	HRESULT hr;
 	// ’è”ƒoƒbƒtƒ@ì¬
 	D3D11_BUFFER_DESC cbDesc;
@@ -446,10 +361,10 @@ HRESULT DirectXRender::ConstantBufferCreate() {
 	cbDesc.CPUAccessFlags = 0;
 	cbDesc.MiscFlags = 0;
 	cbDesc.StructureByteStride = 0;
-	hr = m_Device->CreateBuffer(&cbDesc, NULL, &g_pConstantBuffer);
+	hr = m_Device->CreateBuffer(&cbDesc, NULL, &m_DefaultDrawBuffer);
 	if (FAILED(hr)) return hr;
 
-	m_DeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::DEFAULT_DRAW), 1, &m_DefaultDrawBuffer);
 
 	return hr;
 }
@@ -468,12 +383,12 @@ HRESULT DirectXRender::CreateCameraBuffer() {
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = sizeof(float);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pCameraInformationBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_CameraInformationBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
-	m_DeviceContext->VSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::CAMERA), 1, &m_CameraInformationBuffer);
 
 	return hr;
 }
@@ -492,14 +407,14 @@ HRESULT DirectXRender::CreateLineThicknessBuffer() {
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = sizeof(float);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pLineThicknessBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LineThicknessBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->GSSetConstantBuffers(1, 1, &g_pCameraInformationBuffer);
-	m_DeviceContext->GSSetConstantBuffers(2, 1, &g_pLineThicknessBuffer);
+	m_DeviceContext->GSSetConstantBuffers(UINT(EBufferTypes::CAMERA), 1, &m_CameraInformationBuffer);
+	m_DeviceContext->GSSetConstantBuffers(UINT(EBufferTypes::LINE_THICKNESS), 1, &m_LineThicknessBuffer);
 
 	return hr;
 }
@@ -518,14 +433,14 @@ HRESULT DirectXRender::CreateBlurBuffer() {
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = sizeof(float);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pBlurBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_BlurBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 	
-	m_DeviceContext->VSSetConstantBuffers(3, 1, &g_pBlurBuffer);
-	m_DeviceContext->PSSetConstantBuffers(3, 1, &g_pBlurBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::BLUR), 1, &m_BlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::BLUR), 1, &m_BlurBuffer);
 
 	return hr;
 }
@@ -550,7 +465,7 @@ HRESULT DirectXRender::CreateHitFlashBuffer() {
 		return hr;
 	}
 
-	m_DeviceContext->PSSetConstantBuffers(4, 1, &m_HitFlashBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::HIT_FLASH), 1, &m_HitFlashBuffer);
 
 	return hr;
 }
@@ -575,8 +490,8 @@ HRESULT DirectXRender::LightBufferCreate() {
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(5, 1, &m_LightBuffer);
-	m_DeviceContext->PSSetConstantBuffers(5, 1, &m_LightBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::LIGHT), 1, &m_LightBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::LIGHT), 1, &m_LightBuffer);
 
 	return hr;
 }
@@ -602,8 +517,8 @@ HRESULT DirectXRender::MaterialBufferCreate() {
 	}
 
 	// ’¸“_•ƒsƒNƒZƒ‹ƒVƒF[ƒ_[—¼•û‚ÉƒZƒbƒg
-	m_DeviceContext->VSSetConstantBuffers(6, 1, &m_MaterialBuffer);
-	m_DeviceContext->PSSetConstantBuffers(6, 1, &m_MaterialBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MATERIAL), 1, &m_MaterialBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::MATERIAL), 1, &m_MaterialBuffer);
 
 	return hr;
 }
@@ -623,24 +538,24 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 
 	bufferDesc.ByteWidth = sizeof(MotionBlurBuffer);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
-	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurBuffer);
 
 	bufferDesc.ByteWidth = sizeof(MotionBlurCircularBuffer);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pMotionBlurCircularBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurCircularBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
-	m_DeviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
-	m_DeviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
 
 	return hr;
 }
@@ -660,15 +575,15 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒY
 	bd.CPUAccessFlags = 0;					// CPUƒAƒNƒZƒX‰Â”\
 	//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUƒAƒNƒZƒX‰Â”\
 
-	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pBoneConstantBuffer);
+	hr = m_Device->CreateBuffer(&bd, nullptr, &m_BoneConstantBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
 	// ’è”ƒoƒbƒtƒ@‚ð’¸“_ƒVƒF[ƒ_[‚ÉƒZƒbƒg‚·‚é
-	m_DeviceContext->VSSetConstantBuffers(8, 1, &g_pBoneConstantBuffer);
-
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::BONE), 1, &m_BoneConstantBuffer);
+	
 	return hr;
 }
 
@@ -685,13 +600,13 @@ HRESULT DirectXRender::HPBarConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒ
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@
 	bd.CPUAccessFlags = 0;					// CPUƒAƒNƒZƒX‰Â”\
 
-	hr = m_Device->CreateBuffer(&bd, nullptr, &g_pHPBarConstantBuffer);
+	hr = m_Device->CreateBuffer(&bd, nullptr, &m_HPBarConstantBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(9, 1, &g_pHPBarConstantBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::HP_BAR), 1, &m_HPBarConstantBuffer);
 
 	return hr;
 }
@@ -710,25 +625,25 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	bufferDesc.ByteWidth = sizeof(GlowBuffer);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pGlowBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_GlowBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pGlowBuffer);
-	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pGlowBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_GlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_GlowBuffer);
 
 	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
 
-	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &g_pRingGlowBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_RingGlowBuffer);
 	if(FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
-	m_DeviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_RingGlowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_RingGlowBuffer);
 
 	return hr;
 }
@@ -750,183 +665,6 @@ void DirectXRender::MaterialSetting() {
 	material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
 	m_DeviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
-}
-
-HRESULT DirectXRender::InputLayoutAndShadersCreate() {
-	HRESULT hr;
-	// ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒgì¬
-	D3D11_INPUT_ELEMENT_DESC layout[]
-	{
-		// ’¸“_‚ÌˆÊ’uî•ñi3‚Â‚Ìfloat’lj
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,	0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		// ’¸“_‚Ì–@üƒxƒNƒgƒ‹î•ñi3‚Â‚Ìfloat’lj
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,		0,	4 * 3,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		// ’¸“_‚ÌFî•ñi4‚Â‚Ìfloat’lFRGBAj
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0,	4 * 6,	D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		// ’¸“_‚ÌƒeƒNƒXƒ`ƒƒÀ•Wî•ñi2‚Â‚Ìfloat’lj
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,			0,	4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-	unsigned int numElements = ARRAYSIZE(layout);
-
-	// ’¸“_ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚ð¶¬A“¯Žž‚É’¸“_ƒŒƒCƒAƒEƒg‚à¶¬
-	hr = CreateVertexShader(m_Device, "unlitTextureVS.hlsl", "vs_main", "vs_5_0",
-		layout, numElements, &g_pUnlitVertexShader, &g_pInputLayout);
-	if (FAILED(hr)) {
-		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);
-		return E_FAIL;
-	}
-
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚ð¶¬
-	hr = CreatePixelShader(m_Device, "unlitTexturePS.hlsl", "ps_main", "ps_5_0", &g_pUnlitPixelShader);
-	if (FAILED(hr)) {
-		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
-		return E_FAIL;
-	}
-
-	return hr;
-}
-
-//--------------------------------------------------------------------------------------
-// ’¸“_ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚ð¶¬‚·‚é
-//--------------------------------------------------------------------------------------
-HRESULT DirectXRender::CreateVertexShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
-	D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout)
-{
-	HRESULT   hr;
-	ID3DBlob* pBlob = nullptr;
-	void* ShaderObject;
-	size_t	  ShaderObjectSize;
-
-	// ƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚É‡‚í‚¹‚ÄƒRƒ“ƒpƒCƒ‹
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
-	}
-
-	// ’¸“_ƒVƒF[ƒ_[‚ð¶¬
-	hr = device->CreateVertexShader(ShaderObject, ShaderObjectSize, NULL, ppVertexShader);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
-	}
-
-	// ’¸“_ƒf[ƒ^’è‹`¶¬
-	hr = device->CreateInputLayout(
-		layout,
-		numElements,
-		ShaderObject,
-		ShaderObjectSize,
-		ppVertexLayout);
-	if (FAILED(hr)) {
-		MessageBoxA(NULL, "CreateInputLayout error", "error", MB_OK);
-		pBlob->Release();
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-
-//--------------------------------------------------------------------------------------
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ƒIƒuƒWƒFƒNƒg‚ð¶¬‚·‚é
-//--------------------------------------------------------------------------------------
-HRESULT DirectXRender::CreatePixelShader(ID3D11Device* device, const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader)
-{
-	HRESULT   hr;
-	ID3DBlob* pBlob = nullptr;
-	void* ShaderObject;
-	size_t	  ShaderObjectSize;
-
-	// ƒtƒ@ƒCƒ‹‚ÌŠg’£Žq‚É‡‚í‚¹‚ÄƒRƒ“ƒpƒCƒ‹
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
-	if (FAILED(hr))
-	{
-		return E_FAIL;
-	}
-
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ð¶¬
-	hr = device->CreatePixelShader(ShaderObject, ShaderObjectSize, NULL, ppPixelShader);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
-
-//--------------------------------------------------------------------------------------
-// ƒVƒF[ƒ_[‚ðƒtƒ@ƒCƒ‹Šg’£Žq‚É‡‚í‚¹‚ÄƒRƒ“ƒpƒCƒ‹
-//--------------------------------------------------------------------------------------
-HRESULT DirectXRender::CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, void** ShaderObject, size_t& ShaderObjectSize, ID3DBlob** ppBlobOut)
-{
-	*ppBlobOut = nullptr;
-	//int aaa = strlen(szFileName);
-	//Šg’£Žq‚ðhlsl‚©‚çcso‚É•ÏX‚µ‚½ƒtƒ@ƒCƒ‹–¼‚ðì¬
-	char* csoFileName = new char[strlen(szFileName)];
-	const char* dot = strrchr(szFileName, '.'); // ÅŒã‚Ì"."‚ð’T‚·
-	if (dot != NULL) {
-		size_t prefixLength = dot - szFileName;
-		strncpy_s(csoFileName, prefixLength + 1, szFileName, _TRUNCATE); // Šg’£ŽqˆÈŠO‚ðƒRƒs[
-		strcpy_s(csoFileName + prefixLength, 5, ".cso"); // V‚µ‚¢Šg’£Žq‚ð’Ç‰Á
-	}
-	else {
-		strcpy_s(csoFileName, strlen(szFileName), szFileName); // Šg’£Žq‚ª‚È‚¢ê‡‚Í‚»‚Ì‚Ü‚ÜƒRƒs[
-	}
-
-	FILE* fp;
-	// ƒRƒ“ƒpƒCƒ‹Ï‚ÝƒVƒF[ƒ_[ƒtƒ@ƒCƒ‹(cso)‚ª‚ ‚ê‚Î“Ç‚Ýž‚Þ
-	if (fopen_s(&fp, csoFileName, "rb") == 0)
-	{
-		long int size = _filelength(_fileno(fp));
-		unsigned char* buffer = new unsigned char[size];
-		fread(buffer, size, 1, fp);
-		if (!buffer) return E_FAIL;
-		*ShaderObject = buffer;
-		ShaderObjectSize = size;
-		fclose(fp);
-	}
-	// ƒRƒ“ƒpƒCƒ‹Ï‚ÝƒVƒF[ƒ_[ƒtƒ@ƒCƒ‹‚ª–³‚¯‚ê‚ÎƒVƒF[ƒ_[ƒtƒ@ƒCƒ‹(hlsl)‚ðƒRƒ“ƒpƒCƒ‹‚·‚é
-	else
-	{
-		ID3DBlob* p1 = nullptr;
-		HRESULT hr = S_OK;
-		WCHAR	filename[512];
-		size_t 	wLen = 0;
-		int err = 0;
-
-		// char -> wchar‚É•ÏŠ·
-		setlocale(LC_ALL, "japanese");
-		err = mbstowcs_s(&wLen, filename, 512, szFileName, _TRUNCATE);
-
-		DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#if defined( DEBUG ) || defined( _DEBUG )
-		// D3DCOMPILE_DEBUGƒtƒ‰ƒO‚ðÝ’è‚·‚é‚ÆAƒVƒF[ƒ_[‚ÉƒfƒoƒbƒOî•ñ‚ª–„‚ßž‚Ü‚ê‚é
-		dwShaderFlags |= D3DCOMPILE_DEBUG;
-#endif
-
-		ID3DBlob* pErrorBlob = nullptr;
-		hr = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-			szEntryPoint, szShaderModel, dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
-		if (FAILED(hr))
-		{
-			if (pErrorBlob != nullptr) {
-				MessageBoxA(NULL, (char*)pErrorBlob->GetBufferPointer(), "Error", MB_OK);
-			}
-			if (pErrorBlob) pErrorBlob->Release();
-			if (*ppBlobOut)(*ppBlobOut)->Release();
-			return hr;
-		}
-		if (pErrorBlob) pErrorBlob->Release();
-
-		*ShaderObject = (*ppBlobOut)->GetBufferPointer();
-		ShaderObjectSize = (*ppBlobOut)->GetBufferSize();
-	}
-
-	delete[] csoFileName;
-	return S_OK;
 }
 
 //=======================================
@@ -990,7 +728,7 @@ void DirectXRender::GPU_UpdateViewAndProj() {
 	mtx.matrixProjectionSkyDome = XMMatrixTranspose(m_CameraMatrix.matrixProjectionSkyDome);
 
 	// ƒJƒƒ‰î•ñ‚ðGPU‘¤‚Ö‘—‚é
-	m_DeviceContext->UpdateSubresource(g_pCameraInformationBuffer, 0, NULL, &mtx, 0, 0);
+	m_DeviceContext->UpdateSubresource(m_CameraInformationBuffer, 0, NULL, &mtx, 0, 0);
 }
 
 //=======================================
@@ -1023,12 +761,12 @@ void DirectXRender::SetATCEnable(bool Enable)
 	if (Enable)
 	{
 		// ƒAƒ‹ƒtƒ@ƒeƒXƒg‚ÆƒJƒoƒŒƒbƒW (ATC) ‚ð—LŒø‚É‚·‚éƒuƒŒƒ“ƒhƒXƒe[ƒg‚ðƒZƒbƒg
-		m_DeviceContext->OMSetBlendState(g_BlendStateATC, blendFactor, 0xffffffff);
+		m_DeviceContext->OMSetBlendState(m_BlendStateATC, blendFactor, 0xffffffff);
 	}
 	else
 	{
 		// ’Êí‚ÌƒuƒŒƒ“ƒhƒXƒe[ƒg‚ðƒZƒbƒg
-		m_DeviceContext->OMSetBlendState(g_BlendState[0], blendFactor, 0xffffffff);
+		m_DeviceContext->OMSetBlendState(m_BlendState[0], blendFactor, 0xffffffff);
 	}
 }
 
@@ -1062,7 +800,7 @@ void DirectXRender::SetBlendState(const EBlendState& nBlendState)
 		}
 
 		m_CurrentBlendState = nBlendState;
-		m_DeviceContext->OMSetBlendState(g_BlendState[result], blendFactor, 0xffffffff);
+		m_DeviceContext->OMSetBlendState(m_BlendState[result], blendFactor, 0xffffffff);
 	}
 }
 

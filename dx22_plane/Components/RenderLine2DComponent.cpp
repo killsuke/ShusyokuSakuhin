@@ -97,7 +97,9 @@ void RenderLine2DComponent::Update()
 			// ‚±‚±Žg‚¤
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			ID3D11Buffer* buffer = DirectXRender::GetMaterialBuffer();
+
+			deviceContext->UpdateSubresource(buffer, 0, NULL, &material, 0, 0);
 
 			textures[subsets[i].MaterialIdx].SetGPU();
 

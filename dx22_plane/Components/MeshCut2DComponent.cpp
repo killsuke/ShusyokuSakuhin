@@ -95,7 +95,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 
 	m_CutObj1 = GameObjectManager::AddObject("CutLeft", "CutPart");
 	TransformComponent* leftTrans = m_CutObj1->AddComponent<TransformComponent>();
-	leftTrans->SetScale(Vector3(size.x, size.y, size.z));
+	leftTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
@@ -106,7 +106,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 
 	m_CutObj2 = GameObjectManager::AddObject("CutRight", "CutPart");
 	TransformComponent* rightTrans = m_CutObj2->AddComponent<TransformComponent>();
-	rightTrans->SetScale(Vector3(size.x, size.y, size.z));
+	rightTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
 	VectorMoveComponent* rightMove = m_CutObj2->AddComponent<VectorMoveComponent>();
 	//rightMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
 	//rightMove->SetMovePower(0.1f);
@@ -125,8 +125,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 
 	if (m_CutDirection == CutDirection::HORIZONTAL) { // HORIZONTAL
 
-		leftTrans->SetPosition(Vector3(pos.x, pos.y + (size.y * 0.5f), pos.z));
-		rightTrans->SetPosition(Vector3(pos.x, pos.y + (-size.y * 0.5f), pos.z));
+		leftTrans->SetPosition(XMFLOAT3(pos.x, pos.y + (size.y * 0.5f), pos.z));
+		rightTrans->SetPosition(XMFLOAT3(pos.x, pos.y + (-size.y * 0.5f), pos.z));
 
 		float vDLeft = 0.0f;
 		float vDRight = 0.0f;

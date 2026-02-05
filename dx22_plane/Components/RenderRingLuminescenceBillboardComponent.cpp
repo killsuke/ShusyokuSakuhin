@@ -75,8 +75,10 @@ void RenderRingLuminescenceBillboardComponent::Update()
 
 		cb.inverse = m_Inversion == RightLeft::RIGHT ? true : false;
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
@@ -100,10 +102,12 @@ void RenderRingLuminescenceBillboardComponent::Update()
 		gb.ringWidth = m_RingWidth;
 		gb.expand = m_Expand;
 
-		deviceContext->VSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
-		deviceContext->PSSetConstantBuffers(10, 1, &g_pRingGlowBuffer);
+		ID3D11Buffer* bufferRingGlow = DirectXRender::GetRingGlowBuffer();
 
-		deviceContext->UpdateSubresource(g_pRingGlowBuffer, 0, NULL, &gb, 0, 0);
+		deviceContext->VSSetConstantBuffers(10, 1, &bufferRingGlow);
+		deviceContext->PSSetConstantBuffers(10, 1, &bufferRingGlow);
+
+		deviceContext->UpdateSubresource(bufferRingGlow, 0, NULL, &gb, 0, 0);
 
 		//マテリアル数分ループ 
 		for (unsigned int i = 0; i < subsets.size(); i++)

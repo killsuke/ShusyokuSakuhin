@@ -84,8 +84,10 @@ void TrailRenderComponent::Update() {
 
 	//	cb.inverse = m_InversionFlag;
 
+		ID3D11Buffer* buffer = DirectXRender::GetDefaultDrawBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
 
 		texture[0].SetGPU();
 

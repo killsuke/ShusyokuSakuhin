@@ -107,7 +107,7 @@ public:
 		devcontext->PSSetConstantBuffers(6, 1, m_pConstantBufferMaterial.GetAddressOf());
 
 	}
-
+	
 	void Uninit() {
 	}
 

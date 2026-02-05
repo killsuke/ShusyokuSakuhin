@@ -37,8 +37,10 @@ void RenderMask3DComponent::Update()
 		/*m_Texture->SetGPU();
 		m_Texture->SetGPU_Mask();*/
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		auto subsets = m_Mesh->GetSubsets();
 
@@ -46,13 +48,15 @@ void RenderMask3DComponent::Update()
 
 		auto textures = m_Mesh->GetTextures();
 
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			textures[subsets[i].MaterialIdx].SetGPU();
 

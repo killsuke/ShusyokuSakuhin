@@ -254,9 +254,10 @@ void HumanBoneComponent::Draw() {
 		//cb.mtx[0] = g_combMtx[0];	// ボーン行列配列
 		//cb.mtx[1] = g_combMtx[1];	// ボーン行列配列
 
+		ID3D11Buffer* buffer = DirectXRender::GetBoneBuffer();
 
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
 
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）

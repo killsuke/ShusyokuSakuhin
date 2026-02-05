@@ -40,8 +40,9 @@ void SkyDomeRenderComponent::Update() {
 
 		deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）

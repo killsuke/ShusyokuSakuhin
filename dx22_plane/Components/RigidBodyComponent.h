@@ -41,6 +41,9 @@ public:
 	inline void SetLimitVelocity_Z(const float velocity) { m_LimitVelocity.z = velocity; };
 	inline DirectX::XMFLOAT3 GetVelocity()const { return m_Velocity; };
 	inline void AddVelocity(const DirectX::XMFLOAT3& velocity) { m_Velocity += velocity; };
+	void AddVelocity_X(const float velocity) { m_Velocity.x = velocity; };
+	void AddVelocity_Y(const float velocity) { m_Velocity.y = velocity; };
+	void AddVelocity_Z(const float velocity) { m_Velocity.z = velocity; };
 
 	void ConstantVelocity(const DirectX::XMFLOAT3& velocity);	// “™‘¬‰^“®
 	void ConstantVelocity_X(const float velocity);	// “™‘¬‰^“®

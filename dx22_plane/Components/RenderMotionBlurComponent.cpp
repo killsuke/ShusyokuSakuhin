@@ -37,8 +37,9 @@ void RenderMotionBlurComponent::Update() {
 		// 半透明合成を有効にして、シェル同士が重なるよう深度書き込みをOFFに
 		DirectXRender::SetDepthEnable(false);
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		const DirectX::XMMATRIX prevMtx = m_MotionBlurController->GetPrevMatrix();
 		const float blurStrength = m_MotionBlurController->GetBlurStrength();
@@ -58,8 +59,9 @@ void RenderMotionBlurComponent::Update() {
 
 		std::vector<Texture> textures = m_Mesh->GetTextures();
 
-		deviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
-		deviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurBuffer);
+		ID3D11Buffer* bufferMotionBlur = DirectXRender::GetMotionBlurBuffer();
+		deviceContext->VSSetConstantBuffers(7, 1, &bufferMotionBlur);
+		deviceContext->PSSetConstantBuffers(7, 1, &bufferMotionBlur);
 
 		// シェル分ループして描画
 		for (int i = 0; i < shellCount; ++i)
@@ -67,7 +69,9 @@ void RenderMotionBlurComponent::Update() {
 			// シェルインデックスをセット
 			motionBlur.BlurParams.x = (float)i;
 		
-			deviceContext->UpdateSubresource(g_pMotionBlurBuffer, 0, NULL, &motionBlur, 0, 0);
+			deviceContext->UpdateSubresource(bufferMotionBlur, 0, NULL, &motionBlur, 0, 0);
+
+			ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
 			//マテリアル数分ループ 
 			for (int i = 0; i < subsets.size(); ++i)
@@ -75,7 +79,7 @@ void RenderMotionBlurComponent::Update() {
 				// ここ使う
 				MATERIAL material = materials[subsets[i].MaterialIdx];
 
-				deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+				deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 				if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
 

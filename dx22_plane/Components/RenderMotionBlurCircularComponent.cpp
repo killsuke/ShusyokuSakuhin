@@ -51,8 +51,9 @@ void RenderMotionBlurCircularComponent::Update() {
 		// 半透明合成を有効にして、シェル同士が重なるよう深度書き込みをOFFに
 //		DirectXRender::SetDepthEnable(false);
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		MotionBlurCircularBuffer motionBlur;
 
@@ -79,11 +80,15 @@ void RenderMotionBlurCircularComponent::Update() {
 
 		std::vector<Texture> textures = m_Mesh->GetTextures();
 
-		deviceContext->VSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
-		deviceContext->PSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
-		deviceContext->GSSetConstantBuffers(7, 1, &g_pMotionBlurCircularBuffer);
+		ID3D11Buffer* bufferMotionBlur = DirectXRender::GetMotionBlurCircularBuffer();
 
-		deviceContext->UpdateSubresource(g_pMotionBlurCircularBuffer, 0, NULL, &motionBlur, 0, 0);
+		deviceContext->VSSetConstantBuffers(7, 1, &bufferMotionBlur);
+		deviceContext->PSSetConstantBuffers(7, 1, &bufferMotionBlur);
+		deviceContext->GSSetConstantBuffers(7, 1, &bufferMotionBlur);
+
+		deviceContext->UpdateSubresource(bufferMotionBlur, 0, NULL, &motionBlur, 0, 0);
+
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); ++i)
@@ -91,7 +96,7 @@ void RenderMotionBlurCircularComponent::Update() {
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
 

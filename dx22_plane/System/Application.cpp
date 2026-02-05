@@ -73,7 +73,7 @@ void Application::TermApp()
 bool Application::InitWnd()
 {
 	// インスタンスハンドルを取得.
-	auto hInst = GetModuleHandle(nullptr);
+	const HMODULE hInst = GetModuleHandle(nullptr);
 	if (hInst == nullptr)
 	{
 		return false;
@@ -106,7 +106,7 @@ bool Application::InitWnd()
 	rc.bottom = static_cast<LONG>(m_Height);
 
 	// ウィンドウサイズを調整.
-	auto style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
+	const long style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
 	AdjustWindowRect(&rc, style, FALSE);
 
 	// ウィンドウを生成.

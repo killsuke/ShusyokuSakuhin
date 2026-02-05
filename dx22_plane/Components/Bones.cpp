@@ -194,8 +194,10 @@ void Bones::Update() {
 	/*	cb.matrixView = cameraComp->GetViewMtx3D();
 		cb.matrixProj = cameraComp->GetProjMtx3D();*/
 
+		ID3D11Buffer* buffer = DirectXRender::GetBoneBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(buffer, 0, NULL, &cb, 0, 0);
 
 		deviceContext->DrawIndexed(
 			m_IndexBuffer.GetIndexSize(),							// 描画するインデックス数（立方体なんで36）

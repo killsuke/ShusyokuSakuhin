@@ -46,8 +46,10 @@ void RenderHpComponent::Update()
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 
+		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
+
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
 		HPParam hpParam;
 
@@ -57,7 +59,9 @@ void RenderHpComponent::Update()
 		// HPの値「１」辺りの縦のサイズを入れる
 		hpParam.hpScale = hpScale;
 
-		DirectXRender::GetDeviceContext()->UpdateSubresource(g_pHPBarConstantBuffer, 0, nullptr, &hpParam, 0, 0);
+		ID3D11Buffer* bufferHp = DirectXRender::GetHPBarMoveBuffer();
+
+		DirectXRender::GetDeviceContext()->UpdateSubresource(bufferHp, 0, nullptr, &hpParam, 0, 0);
 
 		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
@@ -65,12 +69,14 @@ void RenderHpComponent::Update()
 
 		std::vector<Texture> textures = m_Mesh->GetTextures();
 
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
 

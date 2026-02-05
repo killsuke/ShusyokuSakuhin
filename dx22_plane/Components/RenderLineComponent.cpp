@@ -89,13 +89,15 @@ void RenderLineComponent::Update()
 
 		auto textures = m_Mesh->GetTextures();
 
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			textures[subsets[i].MaterialIdx].SetGPU();
 

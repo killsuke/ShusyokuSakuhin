@@ -34,9 +34,10 @@ void RenderOneSkinAnimation::Update()
 		m_IndexBuffer.SetGPU();
 		//m_Texture->SetGPU();
 
+		ID3D11Buffer* bufferBone = DirectXRender::GetBoneBuffer();
 
 		// 行列をシェーダーに渡す
-		deviceContext->UpdateSubresource(g_pBoneConstantBuffer, 0, NULL, &cb, 0, 0);
+		deviceContext->UpdateSubresource(bufferBone, 0, NULL, &cb, 0, 0);
 
 		auto subsets = m_Mesh->GetSubsets();
 
@@ -44,13 +45,15 @@ void RenderOneSkinAnimation::Update()
 
 		auto textures = m_Mesh->GetTextures();
 
+		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
+
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
 			MATERIAL material = materials[subsets[i].MaterialIdx];
 
-			deviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
+			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
 			textures[subsets[i].MaterialIdx].SetGPU();
 
