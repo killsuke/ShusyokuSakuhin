@@ -2,6 +2,8 @@
 #include	"System/AssimpPerse.h"
 #include	"Manager/ModelManager.h"
 
+using namespace DirectX;
+
 StaticMesh::StaticMesh(const StaticMesh& other) : Mesh(other) {
 
 }
@@ -50,10 +52,10 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 		for (const AssimpPerse::VERTEX& v : mv)
 		{
 			VERTEX_3D vertex{};
-			vertex.position = DirectX::SimpleMath::Vector3(v.pos.x, v.pos.y, v.pos.z);
-			vertex.normal = DirectX::SimpleMath::Vector3(v.normal.x, v.normal.y, v.normal.z);
-			vertex.uv = DirectX::SimpleMath::Vector2(v.texcoord.x, v.texcoord.y);
-			vertex.color = DirectX::SimpleMath::Color(v.color.r, v.color.g, v.color.b, v.color.a);
+			vertex.position = DirectX::XMFLOAT3(v.pos.x, v.pos.y, v.pos.z);
+			vertex.normal = DirectX::XMFLOAT3(v.normal.x, v.normal.y, v.normal.z);
+			vertex.uv = DirectX::XMFLOAT2(v.texcoord.x, v.texcoord.y);
+			vertex.color = DirectX::XMFLOAT4(v.color.r, v.color.g, v.color.b, v.color.a);
 
 			m_Vertices.emplace_back(vertex);
 		}
@@ -87,10 +89,10 @@ void StaticMesh::Load(std::string filename, std::string texturedirectory)
 	for (const AssimpPerse::MATERIAL& m : materials) {
 		std::unique_ptr material = std::make_unique<MATERIAL>();
 
-		material->Ambient = DirectX::SimpleMath::Color(m.Ambient.r, m.Ambient.g, m.Ambient.b, m.Ambient.a);
-		material->Diffuse = DirectX::SimpleMath::Color(m.Diffuse.r, m.Diffuse.g, m.Diffuse.b, m.Diffuse.a);
-		material->Specular = DirectX::SimpleMath::Color(m.Specular.r, m.Specular.g, m.Specular.b, m.Specular.a);
-		material->Emission = DirectX::SimpleMath::Color(m.Emission.r, m.Emission.g, m.Emission.b, m.Emission.a);
+		material->Ambient = DirectX::XMFLOAT4(m.Ambient.r, m.Ambient.g, m.Ambient.b, m.Ambient.a);
+		material->Diffuse = DirectX::XMFLOAT4(m.Diffuse.r, m.Diffuse.g, m.Diffuse.b, m.Diffuse.a);
+		material->Specular = DirectX::XMFLOAT4(m.Specular.r, m.Specular.g, m.Specular.b, m.Specular.a);
+		material->Emission = DirectX::XMFLOAT4(m.Emission.r, m.Emission.g, m.Emission.b, m.Emission.a);
 		material->Shiness = m.Shiness;
 
 		if (m.texturename.empty()) {

@@ -8,9 +8,6 @@ namespace MaxTrailBufferSize{
 
 class TrailMesh :  public Mesh
 {
-private:
-
-
 public:
 
 	TrailMesh();

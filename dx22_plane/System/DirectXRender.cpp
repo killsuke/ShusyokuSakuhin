@@ -651,10 +651,12 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 void DirectXRender::LightSetting() {
 	// ライト初期化
 	LIGHT light{};
-	light.Direction = Vector4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
-	light.Direction.Normalize();
-	light.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);	// 平行光源の強さと色
-	light.Ambient = Color(0.5f, 0.5f, 0.5f, 1.0f);	// 環境光の強さと色
+	light.Direction = XMFLOAT4(0.0f, -1.0f, 0.2f, 0.0f);	// 方向
+	XMVECTOR lightDir = XMLoadFloat4(&light.Direction);
+	lightDir = XMVector4Normalize(lightDir);
+	XMStoreFloat4(&light.Direction, lightDir);
+	light.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);	// 平行光源の強さと色
+	light.Ambient = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);	// 環境光の強さと色
 
 	m_DeviceContext->UpdateSubresource(m_LightBuffer, 0, NULL, &light, 0, 0);
 }
@@ -662,8 +664,8 @@ void DirectXRender::LightSetting() {
 void DirectXRender::MaterialSetting() {
 	// マテリアル初期化
 	MATERIAL material{};
-	material.Diffuse = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	material.Ambient = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_DeviceContext->UpdateSubresource(m_MaterialBuffer, 0, NULL, &material, 0, 0);
 }
 

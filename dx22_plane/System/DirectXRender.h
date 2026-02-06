@@ -110,8 +110,8 @@ struct LineThickness
 //};
 
 struct BlurBuffer {
-	DirectX::SimpleMath::Vector2 textureSize = DirectX::SimpleMath::Vector2::Zero;
-	DirectX::SimpleMath::Vector2 blurPad = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::XMFLOAT2 textureSize = DirectX::XMFLOAT2();
+	DirectX::XMFLOAT2 blurPad = DirectX::XMFLOAT2();
 };
 
 struct MotionBlurBuffer {
@@ -123,21 +123,21 @@ struct MotionBlurBuffer {
 };
 
 struct MotionBlurCircularBuffer {
-	DirectX::XMFLOAT3 centerPos = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT3 centerPos = DirectX::XMFLOAT3();
 	float length = 0.0f;
 
 	DirectX::XMVECTOR prevRot = DirectX::XMQuaternionIdentity();
 	DirectX::XMVECTOR currRot = DirectX::XMQuaternionIdentity();
 
 	int shellCount = 0;
-	DirectX::XMFLOAT3 padding = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	DirectX::XMFLOAT3 padding = DirectX::XMFLOAT3();
 };
 
 struct HitFlashBuffer {
-	DirectX::SimpleMath::Vector3 hitFlashColor = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 hitFlashColor = DirectX::XMFLOAT3();
 	float hitFlashPower = 0.0f;
 	BOOL isHit = false;
-	DirectX::SimpleMath::Vector3 pad = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 pad = DirectX::XMFLOAT3();
 };
 
 struct GlowBuffer {

@@ -1,11 +1,11 @@
 #pragma once
 #include "Mesh/Mesh.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 struct LineStatus
 {
-	DirectX::SimpleMath::Vector3 start; // 線の始点
-	DirectX::SimpleMath::Vector3 end;   // 線の終点
+	DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(); // 線の始点
+	DirectX::XMFLOAT3 end = DirectX::XMFLOAT3();   // 線の終点
 
 	float width;                     // 線の太さ
 };

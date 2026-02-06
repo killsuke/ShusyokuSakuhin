@@ -43,6 +43,7 @@ public:
 	bool LoadFromFemory(const unsigned char* data,int len);
 
 	void SetGPU();
+	void SetGPU(ID3D11DeviceContext* context);
 	void SetGPU_Mask();
 
 	DirectX::XMMATRIX MakeUV(const float u,const float v,const float uw,const float vh);

@@ -225,6 +225,15 @@ void Texture::SetGPU()
 	devicecontext->PSSetShaderResources(0, 1, m_Srv.GetAddressOf());
 }
 
+void Texture::SetGPU(ID3D11DeviceContext* context)
+{
+	if (m_Srv.Get() == nullptr) {
+		return;
+	}
+
+	context->PSSetShaderResources(0, 1, m_Srv.GetAddressOf());
+}
+
 void Texture::SetGPU_Mask()
 {
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();

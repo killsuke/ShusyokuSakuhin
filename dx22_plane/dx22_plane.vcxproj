@@ -222,7 +222,10 @@
     <ClCompile Include="Components\FollowPositionComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp" />
     <ClCompile Include="Components\ProjectileMotionComponent.cpp" />
-    <ClCompile Include="Mesh\PentagonMesh.cpp" />
+    <ClCompile Include="Mesh\PentagonMesh.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Components\RenderLine2DComponent.cpp" />
     <ClCompile Include="Components\RenderParticlesComponent.cpp" />
     <ClCompile Include="Scene\HighwayScene.cpp" />
@@ -284,7 +287,7 @@
     <ClCompile Include="Components\SpringComponent.cpp" />
     <ClCompile Include="Mesh\SquareMesh.cpp" />
     <ClCompile Include="Scene\Stage1Scene.cpp" />
-    <ClCompile Include="StaticMesh.cpp" />
+    <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="System\main.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -377,7 +380,10 @@
     <ClInclude Include="Components\FollowPositionComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurComponent.h" />
     <ClInclude Include="Components\ProjectileMotionComponent.h" />
-    <ClInclude Include="Mesh\PentagonMesh.h" />
+    <ClInclude Include="Mesh\PentagonMesh.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Components\RenderLine2DComponent.h" />
     <ClInclude Include="Components\RenderParticlesComponent.h" />
     <ClInclude Include="Scene\HighwayScene.h" />
@@ -448,11 +454,11 @@
     <ClInclude Include="Components\SpringComponent.h" />
     <ClInclude Include="Mesh\SquareMesh.h" />
     <ClInclude Include="Scene\Stage1Scene.h" />
-    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TestBoneData.h" />
     <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="main.h" />
+    <ClInclude Include="System\main.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Components\TestExtrusionJudgeComponent.h" />
     <ClInclude Include="Scene\TestMaskScene.h" />

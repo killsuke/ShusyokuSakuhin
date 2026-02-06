@@ -26,7 +26,7 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	const XMFLOAT3 velocity = rigid->GetVelocity();
+	XMFLOAT3 velocity = rigid->GetVelocity();
 
 	// 地面接触
 	if (m_isGround) {
@@ -57,8 +57,10 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 				m_firstSpeed = 0.0f;
 			}
 
+			velocity.y += m_firstSpeed;
+
 			// 速度更新
-			rigid->AddVelocity_Y(m_firstSpeed);
+			rigid->SetVelocity(velocity);
 
 			m_firstSpeed -= m_firstSpeed * m_attenuationUp;	// 毎フレーム何％ずつ減らす
 		}
@@ -71,9 +73,9 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 			// この速度減速を段階化して、極小、小、中、大、ぐらいで減速させる
 			// つまり、あまりにもジャンプが低かったりすると減速しないようにする
 			// 速度を減衰させる
-			float minusValue = -velocity.y * m_attenuationStop;
+			 velocity.y -= velocity.y * m_attenuationStop;
 
-			rigid->AddVelocity_Y(minusValue);
+			rigid->SetVelocity(velocity);
 		}
 	}
 }

@@ -4,7 +4,7 @@
 #include "EnemyManagerComponent.h"
 #include <fstream>
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 StageLoadCSVComponent::StageLoadCSVComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("STAGE_LOAD_CSV"); // ソート番号を設定
@@ -59,7 +59,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 
 			
 			// データを行ベクターに追加
-			CSV_Data nowcell = { cellName,Vector2(posx, posy) };	// 位置補正と追加
+			CSV_Data nowcell = { cellName,XMFLOAT2(posx, posy) };	// 位置補正と追加
 			row.push_back(nowcell);
 			// X座標を更新
 			posx += 10.0f;

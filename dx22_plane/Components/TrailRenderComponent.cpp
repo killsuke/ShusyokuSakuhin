@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 namespace {
@@ -29,7 +28,11 @@ void TrailRenderComponent::Update() {
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	const int pointSize = static_cast<int>(m_TrailPoints.size());
+	if(transform == nullptr){
+		return;
+	}
+
+	const unsigned int pointSize = static_cast<unsigned int>(m_TrailPoints.size());
 
 	if (pointSize == 0) {
 		return;
@@ -174,7 +177,8 @@ void TrailRenderComponent::TrailUpdate() {
 	ArbitraryRotationComponent* arbitraryRotation = m_Object->GetComponent<ArbitraryRotationComponent>();
 	const float rollingSpeed = arbitraryRotation->GetRollingSpeed();
 
-	int pointSize = static_cast<int>(m_TrailPoints.size());
+	const size_t pointSize_t = m_TrailPoints.size();
+	const unsigned int pointSize = static_cast<unsigned int>(m_TrailPoints.size());
 
 	std::vector<VERTEX_3D> vertices;
 	std::vector<unsigned int> indices;
@@ -183,8 +187,8 @@ void TrailRenderComponent::TrailUpdate() {
 		return;
 	}
 
-	vertices.reserve(pointSize * 2);
-	indices.reserve((pointSize - 1) * 6);
+	vertices.reserve(pointSize_t * 2);
+	indices.reserve((pointSize_t - 1) * 6);
 
 	// ここにTraiCountUpがあった
 
@@ -194,10 +198,10 @@ void TrailRenderComponent::TrailUpdate() {
 		const TrailPoint p0 = m_TrailPoints[i];
 		const TrailPoint p1 = m_TrailPoints[i + 1];
 
-		const Vector4 color0 = Color(1.0f, 1.0f, 1.0f, 1.0f - p0.lifeTime); // ポイントの生存時間に基づいて透明度を設定
-		const Vector4 color1 = Color(1.0f, 1.0f, 1.0f, 1.0f - p1.lifeTime); // ポイントの生存時間に基づいて透明度を設定
+		const XMFLOAT4 color0 = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f - p0.lifeTime); // ポイントの生存時間に基づいて透明度を設定
+		const XMFLOAT4 color1 = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f - p1.lifeTime); // ポイントの生存時間に基づいて透明度を設定
 
-		const DirectX::SimpleMath::Vector3 normal(0.0f, 1.0f, 0.0f);
+		const XMFLOAT3 normal(0.0f, 1.0f, 0.0f);
 
 		// UVは縦方向に時間または距離で割り当てるとする
 		const float v0 = static_cast<float>(i) / static_cast<float>(pointSize);
@@ -355,7 +359,7 @@ void TrailRenderComponent::SetTrailPoint(const std::vector<PosAndQuaternion>& po
 	m_VertexBuffer.BufferReset();
 	m_IndexBuffer.BufferReset();
 
-	const int pointSize = static_cast<int>(m_TrailPoints.size());
+	const unsigned int pointSize = static_cast<unsigned int>(m_TrailPoints.size());
 
 	TrailMesh* trailMesh = dynamic_cast<TrailMesh*>(m_Mesh.get());
 	if (trailMesh != nullptr) {

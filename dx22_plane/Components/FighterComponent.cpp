@@ -4,7 +4,6 @@
 #include <string>
 #include <SimpleMath.h>
 #include "EnemyActionComponent.h"
-//#include "MeshCut2DComponent.h"
 #include "Transform.h"
 #include "Manager/EventBusManager.h"
 

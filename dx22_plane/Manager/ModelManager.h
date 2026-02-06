@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "StaticMesh.h"
+#include "Mesh/StaticMesh.h"
 
 class ModelManager final
 {

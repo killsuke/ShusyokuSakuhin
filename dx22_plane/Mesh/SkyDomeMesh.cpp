@@ -2,7 +2,7 @@
 #include <SimpleMath.h>
 #include "System/DirectXRender.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 SkyDomeMesh::SkyDomeMesh() {
 	CreateMeshVertices();
@@ -21,13 +21,13 @@ std::vector<VERTEX_3D> SkyDomeMesh::CreateMeshVertices() {
 	// 頂点作成
 	for (int i = 0; i <= (latitudeBands / 2); ++i) {
 		// 緯度方向の角度を計算
-		float irad = DirectX::XM_PI * 2.0f / (float)latitudeBands * (float)i;
+		float irad = XM_PI * 2.0f / (float)latitudeBands * (float)i;
 		float y = (float)cos(irad);					// y座標を計算
 		float r = (float)sin(irad);					// 半径を計算
 		float v = (float)i / (float)(latitudeBands / 2);	//テクスチャ座標vを計算
 		for (int j = 0; j <= latitudeBands; ++j) {
 			// 経度方向の角度を計算
-			float jrad = DirectX::XM_PI * 2.0f / (float)latitudeBands * (float)j;
+			float jrad = XM_PI * 2.0f / (float)latitudeBands * (float)j;
 			float x = r * (float)cos(jrad);			// x座標を計算
 			float z = r * (float)sin(jrad);			// z座標を計算
 			float u = (float)j / (float)latitudeBands;	// テクスチャ座標uを計算
@@ -36,15 +36,15 @@ std::vector<VERTEX_3D> SkyDomeMesh::CreateMeshVertices() {
 			int   inx = i * (latitudeBands + 1) + j;
 
 			// 頂点の位置を設定
-			m_Vertices[inx].position = Vector3(x, y, z);
+			m_Vertices[inx].position = XMFLOAT3(x, y, z);
 
 			// 頂点の法線を設定（位置と同じ）
-			m_Vertices[inx].normal = Vector3(0.0f, 0.0f, 0.0f);
+			m_Vertices[inx].normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-			m_Vertices[inx].color = Color(1, 1, 1, 1);
+			m_Vertices[inx].color = XMFLOAT4(1, 1, 1, 1);
 
 			// 頂点のテクスチャ座標を設定
-			m_Vertices[inx].uv = Vector2(u, v);
+			m_Vertices[inx].uv = XMFLOAT2(u, v);
 
 		}
 	}

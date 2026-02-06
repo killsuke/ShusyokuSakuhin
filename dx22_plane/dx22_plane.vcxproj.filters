@@ -138,7 +138,7 @@
     <ClCompile Include="Mesh\SquareMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="StaticMesh.cpp">
+    <ClCompile Include="Mesh\StaticMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\CubeMesh.cpp">
@@ -473,7 +473,7 @@
     <ClInclude Include="IndexBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
+    <ClInclude Include="System\main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -593,7 +593,7 @@
     <ClInclude Include="Mesh\SquareMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="StaticMesh.h">
+    <ClInclude Include="Mesh\StaticMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\Mesh.h">

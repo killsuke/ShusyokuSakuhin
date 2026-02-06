@@ -1,5 +1,5 @@
 #pragma once
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include	<iostream>
 #include	<string.h>
 #include	<memory>
@@ -7,17 +7,17 @@
 // ３Ｄ頂点データ
 struct VERTEX_3D
 {
-	DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Vector3 normal = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Color color = DirectX::SimpleMath::Vector4::Zero;
-	DirectX::SimpleMath::Vector2 uv = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT3 normal = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT4 color = DirectX::XMFLOAT4();
+	DirectX::XMFLOAT2 uv = DirectX::XMFLOAT2();
 };
 
 // 平行光源
 struct LIGHT {
-	DirectX::SimpleMath::Vector4 Direction = DirectX::SimpleMath::Vector4::Zero;	// 平行光源の方向
-	DirectX::SimpleMath::Color Diffuse = DirectX::SimpleMath::Vector4::Zero;		// 平行光源の強さと色
-	DirectX::SimpleMath::Color Ambient = DirectX::SimpleMath::Vector4::Zero;		// 環境光の強さと色
+	DirectX::XMFLOAT4 Direction = DirectX::XMFLOAT4();	// 平行光源の方向
+	DirectX::XMFLOAT4 Diffuse = DirectX::XMFLOAT4();		// 平行光源の強さと色
+	DirectX::XMFLOAT4 Ambient = DirectX::XMFLOAT4();		// 環境光の強さと色
 
 };
 
@@ -44,13 +44,13 @@ struct SUBSET {
 
 // マテリアル
 struct MATERIAL {
-	DirectX::SimpleMath::Color Ambient  = DirectX::SimpleMath::Vector4::Zero;	// 環境反射
-	DirectX::SimpleMath::Color Diffuse  = DirectX::SimpleMath::Vector4::Zero;	// 拡散反射（ != カラー）
-	DirectX::SimpleMath::Color Specular = DirectX::SimpleMath::Vector4::Zero;// 鏡面反射
-	DirectX::SimpleMath::Color Emission = DirectX::SimpleMath::Vector4::Zero;// 発光
+	DirectX::XMFLOAT4 Ambient  = DirectX::XMFLOAT4();	// 環境反射
+	DirectX::XMFLOAT4 Diffuse  = DirectX::XMFLOAT4();	// 拡散反射（ != カラー）
+	DirectX::XMFLOAT4 Specular = DirectX::XMFLOAT4();// 鏡面反射
+	DirectX::XMFLOAT4 Emission = DirectX::XMFLOAT4();// 発光
 	float Shiness = 0.0f;	// 光沢の滑らかさ
 	BOOL TextureEnable = TRUE; // テクスチャを使うか否かのフラグ
-	DirectX::SimpleMath::Vector2 Padding = DirectX::SimpleMath::Vector2::Zero; // パディング
+	DirectX::XMFLOAT2 Padding = DirectX::XMFLOAT2(); // パディング
 
 	std::unique_ptr<MATERIAL> Clone() const {
 		std::unique_ptr<MATERIAL> material = std::make_unique<MATERIAL>();

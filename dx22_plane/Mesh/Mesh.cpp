@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+using namespace DirectX;
+
 Mesh::Mesh(const Mesh& other) : m_Vertices(other.m_Vertices),m_Indices(other.m_Indices) {
 
 	// サブセット情報のコピー
@@ -37,10 +39,10 @@ void Mesh::DefaultSetSubset() {
 
 void Mesh::DefaultSetMaterial() {
 	std::unique_ptr<MATERIAL> material = std::make_unique<MATERIAL>();
-	material->Ambient = DirectX::SimpleMath::Vector4(0.3f, 0.3f, 0.3f, 1.0f);
-	material->Diffuse = DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	material->Specular = DirectX::SimpleMath::Vector4(1.0f, 1.0f, 1.0f, 16.0f); // wはスぺキュラーの強さ
-	material->Emission = DirectX::SimpleMath::Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+	material->Ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
+	material->Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material->Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f); // wはスぺキュラーの強さ
+	material->Emission = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	material->Shiness = 16.0f;
 	m_Materiales.push_back(std::move(material));
 }

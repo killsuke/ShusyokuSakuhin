@@ -57,14 +57,14 @@ void TitleScene::Init()
 		//return;
 	}
 
-	/*for (int num = 0; num < 10000; ++num) {
-		GameObject* obj = GameObjectManager::AddObject("test","Test");
-		TransformComponent* trans = obj->AddComponent<TransformComponent>();
-		trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));
-		Render3DComponent* rend = obj->AddComponent<Render3DComponent>();
-		rend->CreateMesh<SquareMesh>();
-		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
-	}*/
+	//for (int num = 0; num < 10000; ++num) {
+	//	GameObject* obj = GameObjectManager::AddObject("test","Test");
+	//	TransformComponent* trans = obj->AddComponent<TransformComponent>();
+	//	trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));
+	//	Render3DComponent* rend = obj->AddComponent<Render3DComponent>();
+	//	rend->CreateMesh<SquareMesh>();
+	//	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	//}
 
 	auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
 	fadeUI->SetCarryOverFlag(true);

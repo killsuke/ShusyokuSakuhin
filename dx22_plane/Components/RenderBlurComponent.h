@@ -1,11 +1,11 @@
 #pragma once
 #include "Render.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 class RenderBlurComponent : public RenderComponent
 {
 private:
-	DirectX::SimpleMath::Vector2 m_BlurSize = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::XMFLOAT2 m_BlurSize = DirectX::XMFLOAT2();
 
 public:
 	RenderBlurComponent(GameObject& obj);

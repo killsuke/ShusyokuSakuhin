@@ -14,6 +14,7 @@ public:
 	void Create(const std::string& vs, const std::string& ps, const std::string& gs = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{});
 	void CreateOneSkinAnimation(std::string vs, std::string ps);
 	void SetGPU();
+	void SetGPU(ID3D11DeviceContext* context);
 	std::vector<std::string> GetShaderNames()const { return m_ShaderNames; };
 private:
 	ComPtr<ID3D11VertexShader> m_pVertexShader;		// 頂点シェーダー

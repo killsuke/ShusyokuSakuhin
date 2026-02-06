@@ -30,3 +30,12 @@ StaticMesh* RenderComponent::LoadModelMesh(const std::string& filename, const st
 
 	return staticMesh;
 }
+
+void RenderComponent::PrimitiveTypeUpdate(ID3D11DeviceContext* context) {
+	// 要求されたプリミティブタイプが現在のプリミティブタイプと異なる場合、更新する
+	if (m_PrimitiveType != m_RequestPrimitive) {
+		m_PrimitiveType = m_RequestPrimitive;
+
+		context->IASetPrimitiveTopology(m_PrimitiveType); // プリミティブタイプを設定
+	}
+}

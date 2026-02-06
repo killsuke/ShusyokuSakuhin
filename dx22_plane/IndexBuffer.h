@@ -39,13 +39,19 @@ public:
 
 	void SetGPU() {
 		// デバイスコンテキスト取得
-		ID3D11DeviceContext* devicecontext = nullptr;
-		devicecontext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
 		// インデックスバッファをセット
 		devicecontext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	}
+
+	void SetGPU(ID3D11DeviceContext* context) {
+
+		// インデックスバッファをセット
+		context->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	}
+
 
 	// インデックスバッファを書き換える
 	void Modify(const std::vector<unsigned int>& vertices)

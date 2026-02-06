@@ -37,14 +37,21 @@ public:
 	void SetGPU() {
 
 		// デバイスコンテキスト取得
-		ID3D11DeviceContext* devicecontext = nullptr;
-		devicecontext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
 		// 頂点バッファをセットする
 		const unsigned int stride = sizeof(T);
 		const unsigned  offset = 0;
 		devicecontext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
 
+	}
+
+	void SetGPU(ID3D11DeviceContext* context) {
+
+		// 頂点バッファをセットする
+		const unsigned int stride = sizeof(T);
+		const unsigned  offset = 0;
+		context->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
 	}
 
 	// 頂点バッファを書き換える

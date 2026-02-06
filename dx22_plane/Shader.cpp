@@ -132,3 +132,10 @@ void Shader::SetGPU()
 	devicecontext->IASetInputLayout(m_pVertexLayout.Get());				// 頂点レイアウトセット
 }
 
+void Shader::SetGPU(ID3D11DeviceContext* context) {
+
+	context->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
+	context->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
+	context->GSSetShader(m_pGeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
+	context->IASetInputLayout(m_pVertexLayout.Get());				// 頂点レイアウトセット
+}

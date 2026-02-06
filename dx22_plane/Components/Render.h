@@ -22,8 +22,9 @@
 #include "IndexBuffer.h"
 #include "Mesh/Mesh.h"
 #include "BoneData.h"
-#include "StaticMesh.h"
+#include "Mesh/StaticMesh.h"
 #include "RightLeft.h"
+#include "System/DirectXRender.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -38,9 +39,14 @@ protected:
 	IndexBuffer m_IndexBuffer = {};
 	DirectX::XMFLOAT4 m_Color = { 1.0f,1.0f, 1.0f, 1.0f }; // 色
 	RightLeft m_Inversion = RightLeft::RIGHT;
+	D3D_PRIMITIVE_TOPOLOGY m_PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;		// 現在のプリミティブタイプ
+	D3D_PRIMITIVE_TOPOLOGY m_RequestPrimitive = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;	// 要求されたプリミティブタイプ
 
 	RenderComponent(GameObject& obj);
 	~RenderComponent() = default;
+
+	void PrimitiveTypeUpdate(ID3D11DeviceContext* context);
+
 public:
 
 	virtual void Update() = 0;
@@ -54,6 +60,7 @@ public:
 	};
 	void SetColor(const DirectX::XMFLOAT4& color) { m_Color = color; };
 	void SetInversionFlag(const RightLeft& flag) { m_Inversion = flag; };
+	void SetPrimitiveType(const D3D_PRIMITIVE_TOPOLOGY& type) { m_RequestPrimitive = type; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
 	Texture GetTexture() {
@@ -71,6 +78,7 @@ public:
 	RightLeft GetInversionFlag()const { return m_Inversion; };
 	Shader* GetShader()const { return m_Shader.get(); };
 	DirectX::XMFLOAT4 GetColor()const { return m_Color; };
+	D3D_PRIMITIVE_TOPOLOGY GetPrimitiveType()const { return m_PrimitiveType; };
 
 	void AddColor(const DirectX::XMFLOAT4& addcolor) {
 		m_Color.x += addcolor.x;

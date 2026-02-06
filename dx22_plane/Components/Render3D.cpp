@@ -1,5 +1,4 @@
 #include "Render3D.h"
-#include "System/DirectXRender.h"
 #include "Transform.h"
 
 using namespace DirectX;
@@ -27,10 +26,10 @@ void Render3DComponent::Update()
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
-		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// 頂点の結び方の規則
-		m_Shader->SetGPU();
-		m_VertexBuffer.SetGPU();
-		m_IndexBuffer.SetGPU();
+		PrimitiveTypeUpdate(deviceContext);
+		m_Shader->SetGPU(deviceContext);
+		m_VertexBuffer.SetGPU(deviceContext);
+		m_IndexBuffer.SetGPU(deviceContext);
 
 		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
 
@@ -46,7 +45,7 @@ void Render3DComponent::Update()
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
 		//マテリアル数分ループ 
-		for (int i = 0; i < subsets.size(); ++i)
+		for (size_t i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
 			const MATERIAL material = materials[subsets[i].MaterialIdx];
@@ -55,7 +54,7 @@ void Render3DComponent::Update()
 
 			if (materials[subsets[i].MaterialIdx].TextureEnable == TRUE) {
 
-				textures[subsets[i].MaterialIdx].SetGPU();
+				textures[subsets[i].MaterialIdx].SetGPU(deviceContext);
 			}
 
 			deviceContext->DrawIndexed(

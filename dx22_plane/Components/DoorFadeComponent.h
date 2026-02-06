@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "SimpleMath.h"
+#include <DirectXMath.h>
 #include <string>
 
 class DoorFadeComponent : public Component
@@ -14,8 +14,8 @@ private:
 	const float deltaTime = 0.016f; // 仮のデルタタイム
 	GameObject* doorUp = nullptr;
 	GameObject* doorDown = nullptr;
-	DirectX::SimpleMath::Vector3 doorUpFirstPos = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Vector3 doorDownFirstPos = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 doorUpFirstPos = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT3 doorDownFirstPos = DirectX::XMFLOAT3();
 
 	std::string m_nextSceneName = ""; // 次のシーン名
 

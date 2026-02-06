@@ -1,10 +1,14 @@
+// ----------------------------------------------
+// まだ開発途中のメッシュデータ
+// ----------------------------------------------
+
 #include "PentagonMesh.h"
 
 using namespace DirectX::SimpleMath;
 
 namespace {
-	unsigned int vertexSize = 6;
-	unsigned int indexSize = 6;
+	unsigned int VERTEX_NUM = 6;
+	unsigned int INDEX_NUM = 6;
 }
 
 PentagonMesh::PentagonMesh() {
@@ -18,7 +22,7 @@ PentagonMesh::PentagonMesh() {
 std::vector<VERTEX_3D> PentagonMesh::CreateMeshVertices() {
 	// 頂点データ
 
-	m_Vertices.resize(vertexSize);
+	m_Vertices.resize(VERTEX_NUM);
 
 	m_Vertices[0].position = Vector3(0.0f, 0.0f, 0.0f);
 	m_Vertices[1].position = Vector3(1.0f, -1.0f, 0.0f);
@@ -49,7 +53,7 @@ std::vector<VERTEX_3D> PentagonMesh::CreateMeshVertices() {
 std::vector<unsigned int> PentagonMesh::CreateMeshIndices() {
 	// インデックス情報生成
 
-	m_Indices.resize(indexSize);
+	m_Indices.resize(INDEX_NUM);
 
 	m_Indices = {
 		2,1,0,
