@@ -46,6 +46,7 @@
 #include "Components/ColliderAttackComponent.h"
 #include "Components/ColliderDamageComponent.h"
 #include "Components/TimeLineComponent.h"
+#include "Components/SoundComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -213,6 +214,10 @@ LoadStageScene::LoadStageScene() {
 		auto rollingAtk = rolling->AddComponent<AttackOneTimeComponent>();
 
 		auto rollingED = rolling->AddComponent<EnemyDamageComponent>();
+
+		SoundComponent* rollingSound = rolling->AddComponent<SoundComponent>();
+		rollingSound->AddSoundLabel("slash");
+		rollingSound->AddSoundLabel("slashHit");
 
 		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
 		effectRender->SetTipPoint(10.0f);

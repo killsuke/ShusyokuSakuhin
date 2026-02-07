@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "GameObject/GameObject.h"
 //#include "Texture2D.h"
-#include "sound.h"
 #include <chrono>
 
 // ResultSceneƒNƒ‰ƒX

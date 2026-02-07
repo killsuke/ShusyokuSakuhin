@@ -148,9 +148,13 @@
             "name": "RENDER_DEBUG",
             "ID": 36
         },
+	{
+            "name": "SOUND",
+            "ID": 37
+        },
         {
             "name": "MAX",
-            "ID": 37
+            "ID": 38
         }
     ]
 }

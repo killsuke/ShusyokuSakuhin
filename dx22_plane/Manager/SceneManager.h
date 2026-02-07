@@ -1,11 +1,10 @@
 #pragma once
 #include "GameObjectManager.h"
-#include "sound.h"
+#include "SoundManager.h"
 #include "Input.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneList.h"
 #include <memory>
-#include "sound.h"
 
 class SceneManager final
 {
@@ -32,7 +31,7 @@ public:
 	static void SetSCFrag(const bool _sceneChangeFg) { sceneChangeFg = _sceneChangeFg; };
 	static bool GetSCFrag() { return sceneChangeFg; };
 	
-	static Sound GetSound() { return sound; };
+//	static Sound GetSound() { return sound; };
 	static Scene* GetScene() { return m_pScene.get(); };
 
 private:
@@ -42,5 +41,5 @@ private:
 	static bool sceneChangeFg;	// シーンチェンジが起こったのかのフラグ
 	static float waitTime;	// シーン遷移を少し待つ
 	static float waitTimeCounter;
-	inline static Sound sound; // サウンド
+	//inline static Sound sound; // サウンド
 };

@@ -79,9 +79,10 @@ void TimeLineComponent::UpdateRangeEvents() {
 }
 
 // 一度きりのイベントを追加
-void TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
+uint32_t TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
 	
 	TimePointEvent newEvent;
+	newEvent.eventID = GenerateEventID();
 	newEvent.triggerTime = time;
 	newEvent.ownerComponent = owner;
 	newEvent.eventAction = action;
@@ -95,16 +96,19 @@ void TimeLineComponent::AddPointEvent(const float time, Component* owner, std::f
 		[](const TimePointEvent& a, const TimePointEvent& b) {
 			return a.triggerTime < b.triggerTime;
 		});
+
+	return newEvent.eventID;
 }
 
 // 範囲イベントを追加
-void TimeLineComponent::AddRangeEvent(
+uint32_t TimeLineComponent::AddRangeEvent(
 	const float startTime, const float endTime, Component* owner,
 	std::function<void(float)> onUpdate,
 	std::function<void()> onStart,
 	std::function<void()> onEnd) {
 
 	TimeRangeEvent newEvent;
+	newEvent.eventID = GenerateEventID();
 	newEvent.startTime = startTime;
 	newEvent.endTime = endTime;
 	newEvent.onUpdate = onUpdate;
@@ -115,12 +119,15 @@ void TimeLineComponent::AddRangeEvent(
 
 	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
 	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+
+	return newEvent.eventID;
 }
 
 // 発行してから〇秒後に一度だけ実行されるイベントを追加
-void TimeLineComponent::AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action) {
+uint32_t TimeLineComponent::AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action) {
 
 	TimePointEvent newEvent;
+	newEvent.eventID = GenerateEventID();
 	newEvent.triggerTime = m_CurrentTime + delayTime;
 	newEvent.ownerComponent = owner;
 	newEvent.eventAction = action;
@@ -134,14 +141,17 @@ void TimeLineComponent::AddPointDelayEvent(const float delayTime, Component* own
 		[](const TimePointEvent& a, const TimePointEvent& b) {
 			return a.triggerTime < b.triggerTime;
 		});
+
+	return newEvent.eventID;
 }
 
-void TimeLineComponent::AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
+uint32_t TimeLineComponent::AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
 	std::function<void(float)> onUpdate,
 	std::function<void()> onStart,
 	std::function<void()> onEnd) {
 
 	TimeRangeEvent newEvent;
+	newEvent.eventID = GenerateEventID();
 	newEvent.startTime = startTime + delayTime;
 	newEvent.endTime = endTime + delayTime;
 	newEvent.onUpdate = onUpdate;
@@ -152,6 +162,8 @@ void TimeLineComponent::AddRangeDelayEvent(const float startTime, const float en
 
 	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
 	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+
+	return newEvent.eventID;
 }
 
 // 指定したコンポーネントに関連するすべてのイベントを削除
@@ -171,4 +183,21 @@ void TimeLineComponent::RemoveEventsByComponent(Component* owner) {
 	}
 
 	m_ComponentEventMap.erase(it); // マップからエントリを削除
+}
+
+// 指定したイベントIDのイベントを停止
+void TimeLineComponent::StopEvent(uint32_t eventID) {
+
+	for (auto& e : m_PointEvents) {
+		if (e.eventID == eventID) {
+			e.valid = false; // イベントを無効化
+			return;
+		}
+	}
+	for (auto& e : m_RangeEvents) {
+		if (e.eventID == eventID) {
+			e.valid = false; // イベントを無効化
+			return;
+		}
+	}
 }

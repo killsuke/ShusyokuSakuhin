@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "GameObject/GameObject.h"
 #include <chrono>
-#include "sound.h"
 
 // Stage1ScenƒNƒ‰ƒX
 class Stage1Scene : public Scene

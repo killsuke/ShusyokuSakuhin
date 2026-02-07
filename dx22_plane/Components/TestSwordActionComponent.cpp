@@ -12,6 +12,7 @@
 #include "TrailRenderComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "SlashEffectComponent.h"
+#include "SoundComponent.h"
 #include <iostream>
 #include <SimpleMath.h>
 
@@ -54,7 +55,7 @@ void TestSwordActionComponent::Update() {
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
 	auto moveComp = m_Holder->GetComponent<PlayerOperationComponent>();
 	auto objTrans = m_Object->GetComponent<TransformComponent>();
-	auto sound = SceneManager::GetSound();
+//	auto sound = SceneManager::GetSound();
 
 	if (goAround == nullptr) {
 		return;
@@ -78,8 +79,8 @@ void TestSwordActionComponent::Update() {
 			if (isFinished == true) {
 				m_IsUseTrailFlag = false;
 			}
-
-			sound.Play(SOUND_LABEL::SOUND_LABEL_SE000);
+			SoundComponent* soundComp = m_Object->GetComponent<SoundComponent>();
+			soundComp->Play("slash");
 
 			goAround->SetActiveFlag(true);
 
@@ -197,7 +198,7 @@ void TestSwordActionComponent::Update() {
 
 void TestSwordActionComponent::SwordAction() {
 
-	auto sound = SceneManager::GetSound();
+//	auto sound = SceneManager::GetSound();
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
 	auto collider = m_Object->GetComponent<ColliderAttackComponent>();
 	auto atkComp = m_Object->GetComponent<AttackOneTimeComponent>();
@@ -262,8 +263,8 @@ void TestSwordActionComponent::SwordAction() {
 
 	if (atkComp->GetAttackHitFlag() == true) {
 		CreateSwordEffect();
-		//sound.Stop(SOUND_LABEL::SOUND_LABEL_SE001);
-		sound.Play(SOUND_LABEL::SOUND_LABEL_SE001);
+		SoundComponent* soundComp = m_Object->GetComponent<SoundComponent>();
+		soundComp->Play("slashHit");
 	}
 
 }

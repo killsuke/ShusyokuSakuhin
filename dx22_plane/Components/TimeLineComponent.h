@@ -6,6 +6,7 @@
 
 // 一度しか発生しないイベント
 struct TimePointEvent {
+	uint32_t eventID = 0; // イベントのID
 	float triggerTime = 0.0f; // イベントが発生する時間
 	std::function<void()> eventAction; // イベントのアクション
 	Component* ownerComponent = nullptr; // このイベントを所有するコンポーネントへのポインタ
@@ -14,6 +15,7 @@ struct TimePointEvent {
 
 // 一定時間継続するイベント
 struct TimeRangeEvent{
+	uint32_t eventID = 0; // イベントのID
 	float startTime = 0.0f; // イベントが開始する時間
 	float endTime = 0.0f;   // イベントが終了する時間
 
@@ -30,6 +32,7 @@ struct TimeRangeEvent{
 class TimeLineComponent : public Component
 {
 private:
+	uint32_t m_NextEventID = 1; // 次に割り当てるイベントID
 	float m_CurrentTime = 0.0f; // 現在のタイムライン時間
 	size_t m_NextEventIndex = 0; // 次に発生するイベントのインデックス
 	std::vector<TimePointEvent> m_PointEvents; // タイムラインイベントのリスト
@@ -44,17 +47,20 @@ public:
 	~TimeLineComponent();
 	void Update() override;
 	
-	void AddPointEvent(const float time, Component* owner, std::function<void()> action);
-	void AddRangeEvent(
+	uint32_t AddPointEvent(const float time, Component* owner, std::function<void()> action);
+	uint32_t AddRangeEvent(
 		const float startTime, const float endTime, Component* owner,
 		std::function<void(float)> onUpdate,
 		std::function<void()> onStart,
 		std::function<void()> onEnd);
 
-	void AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
-	void AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
+	uint32_t AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
+	uint32_t AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
 		std::function<void(float)> onUpdate,
 		std::function<void()> onStart,
 		std::function<void()> onEnd);
 	void RemoveEventsByComponent(Component* owner);
+
+	void StopEvent(uint32_t eventID);
+	uint32_t GenerateEventID() { return m_NextEventID++; };
 };

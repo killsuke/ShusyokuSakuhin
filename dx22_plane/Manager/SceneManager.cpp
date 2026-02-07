@@ -4,6 +4,7 @@
 #include "HitStopManager.h"
 #include "System/Application.h"
 #include "DebugSystem/DebugSystem.h"
+#include "SoundManager.h"
 
 std::unique_ptr<Scene> SceneManager::m_pScene;	// ここで書くことでちゃんと定義できる
 bool SceneManager::sceneChangeFg = false;	// シーンチェンジのフラグ
@@ -11,7 +12,7 @@ float SceneManager::waitTime = 0.0f;	// シーンチェンジの待ち時間
 float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
 
 void SceneManager::Init() {
-	sound.Init();	// サウンドの初期化
+	SoundManager::Init();	// サウンドの初期化
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
@@ -25,7 +26,7 @@ void SceneManager::UnInit() {
 
 	TextureManager::UnInit(); // テクスチャマネージャーの終了処理
 
-	sound.Uninit();	// サウンドの終了処理
+	SoundManager::UnInit();	// サウンドの終了処理
 	//	Debug::DebugFin();
 
 };

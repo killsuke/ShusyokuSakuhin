@@ -1,7 +1,6 @@
 #pragma once
 #include "Scene.h"
 #include "GameObject/GameObject.h"
-#include "sound.h"
 
 // TitleSceneƒNƒ‰ƒX
 class TitleScene : public Scene
