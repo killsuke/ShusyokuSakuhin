@@ -17,7 +17,7 @@
 #include "Components/GoAroundComponent.h"
 #include "Components/RenderBlurComponent.h"
 #include "Components/RenderMotionBlurCircularComponent.h"
-#include "input.h"
+#include "Input/Input.h"
 #include "Manager/ModelManager.h"
 #include "Components/Collider.h"
 #include "Components/Render3DColliderAABBComponent.h"
@@ -73,7 +73,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/Mountain/uploads_files_4307558_Mountain.fbx",
 		//	"assets/model/Mountain");
 
-		//rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 		////	rend->ChangeTexture("assets/texture/NoTexture.png");
 		//rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -88,7 +88,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/NewCar/uploads_files_3262252_r8.fbx",
 		//	"assets/model/NewCar");
 
-		//rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		//rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 		////	rend->ChangeTexture("assets/texture/NoTexture.png");
 		//rend->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 	}
@@ -102,7 +102,7 @@ void Stage1Scene::Init()
 		rend->SetBasePoint(-5.0f);
 		rend->SetTipPoint(5.0f);*/
 		//rend->CreateMesh<SquareMesh>();
-//		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+//		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	//	rend->ChangeTexture("assets/texture/ranks.png");
 //		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -116,7 +116,7 @@ void Stage1Scene::Init()
 			rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 				"assets/model/Container");
 
-			rend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+			rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 			rend->CreateMesh<SquareMesh>();
 			rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });*/
 	}
@@ -128,7 +128,7 @@ void Stage1Scene::Init()
 		testTrans->SetScale({ 30.0f,30.0f,30.0f });
 		auto rend = testObj->AddComponent<RenderMotionBlurComponent>();
 		rend->CreateMesh<CubeMesh>();
-		rend->SetShader("shader/litTextureVS.hlsl", "shader/MotionBlurPS.hlsl");
+		rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/MotionBlurPS.hlsl");
 		rend->ChangeTexture("assets/texture/dice.png");
 		rend->SetBlurVelocity({ 0.5f,0.0f });*/
 
@@ -142,7 +142,7 @@ void Stage1Scene::Init()
 		meshCutTrans->SetScale({ 70.0f,70.0f,1.0f });
 		auto meshRend = meshCutObj->AddComponent<Render3DComponent>();
 		meshRend->CreateMesh<SquareMesh>();
-		meshRend->SetShader("shader/litTextureVS.hlsl", "shader/litTexturePS.hlsl");
+		meshRend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 		meshRend->SetColor({ 0.0f,0.0f,1.0f,1.0f });
 
 
@@ -158,6 +158,16 @@ void Stage1Scene::Init()
 
 	}
 
+
+	//for (int num = 0; num < 10000; ++num) {
+	//	GameObject* obj = GameObjectManager::AddObject("test","Test");
+	//	TransformComponent* trans = obj->AddComponent<TransformComponent>();
+	//	trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));
+	//	Render3DComponent* rend = obj->AddComponent<Render3DComponent>();
+	//	rend->CreateMesh<SquareMesh>();
+	//	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//}
+
 	{
 		auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
@@ -171,7 +181,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 		//	"assets/model/Container");
 
-		rend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		//	rend->ChangeTexture("assets/texture/NoTexture.png");
 		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -188,7 +198,7 @@ void Stage1Scene::Init()
 		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);*/
 		Render2DComponent* parentRend = parentObj->AddComponent<Render2DComponent>();
 		parentRend->CreateMesh<SquareMesh>();
-		parentRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		parentRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		parentRend->ChangeTexture("assets/texture/background1.png");
 	//	m_testID = parentObj->GetInstanceID();
 
@@ -203,7 +213,7 @@ void Stage1Scene::Init()
 		//RenderMotionBlurCircularComponent* rend = testObj->AddComponent<RenderMotionBlurCircularComponent>();
 		//rend->CreateMesh<SquareMesh>();
 		//rend->ChangeTexture("assets/texture/background1.png");
-		//rend->SetShader("shader/PassThroughVS.hlsl", "shader/unlitTexturePS.hlsl","shader/MotionBlurCircularGS.hlsl");
+		//rend->SetShader("ShaderResource/PassThroughVS.hlsl", "ShaderResource/unlitTexturePS.hlsl","ShaderResource/MotionBlurCircularGS.hlsl");
 
 
 		//parentObj->SetChild(testObj);
@@ -252,7 +262,7 @@ void Stage1Scene::BonePartTest()
 	auto waistrend = waist->AddComponent<Render3DComponent>();
 
 	waistrend->CreateMesh<SquareMesh>();
-	waistrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	waistrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	waistrend->ChangeTexture("assets/texture/NoTexture.png");
 	waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
 
@@ -270,7 +280,7 @@ void Stage1Scene::BonePartTest()
 
 	auto chestrend = chest->AddComponent<Render3DComponent>();
 	chestrend->CreateMesh<SquareMesh>();
-	chestrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	chestrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	chestrend->ChangeTexture("assets/texture/NoTexture.png");
 	chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
@@ -288,7 +298,7 @@ void Stage1Scene::BonePartTest()
 
 	auto headrend = head->AddComponent<Render3DComponent>();
 	headrend->CreateMesh<SquareMesh>();
-	headrend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	headrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	headrend->ChangeTexture("assets/texture/NoTexture.png");
 	headrend->SetColor({ 0.0f,0.0f,0.5f,1.0f });
 
@@ -316,7 +326,7 @@ void Stage1Scene::TestBlur() {
 	trans->SetScale({ 200.0f,200.0f,1.0f });
 	auto rend = obj->AddComponent<RenderBlurComponent>();
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("shader/unlitTextureVS.hlsl", "shader/BlurPS.hlsl");
+	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/BlurPS.hlsl");
 	rend->ChangeTexture("assets/texture/setumei.png");
 	rend->SetBlurTextureSize(Vector2(512.0f, 512.0f));
 }

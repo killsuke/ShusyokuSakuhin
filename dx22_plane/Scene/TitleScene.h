@@ -3,7 +3,7 @@
 #include "GameObject/GameObject.h"
 
 // TitleSceneƒNƒ‰ƒX
-class TitleScene : public Scene
+class TitleScene final : public Scene
 {
 private:
 	void Init(); // ‰Šú‰»

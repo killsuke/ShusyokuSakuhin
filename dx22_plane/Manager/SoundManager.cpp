@@ -56,17 +56,6 @@ HRESULT SoundManager::Init() {
 
 void SoundManager::UnInit() {
 
-	//for (int i = 0; i < SOUND_LABEL_MAX; ++i)
-	//{
-	//	//	if (m_pSourceVoice[i])
-	//	//	{
-	//	//		m_pSourceVoice[i]->Stop(0);
-	//	//		m_pSourceVoice[i]->FlushSourceBuffers();
-	//	//		m_pSourceVoice[i]->DestroyVoice();			// オーディオグラフからソースボイスを削除
-	//	delete[]  m_DataBuffer[i];
-	//}
-	////}
-
 	for(const auto& [key, res] : m_SoundResources)
 	{
 		if(res.pDataBuffer)

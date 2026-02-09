@@ -3,8 +3,7 @@
 
 #pragma once
 #include <d3d11.h>  // DirectX11を使うためのヘッダーファイル
-//#include <DirectXMath.h> // DirextXの数学関連のヘッダーファイル
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 #include <Xinput.h> //XInputを使うためのヘッダーファイル
 #pragma comment (lib, "xinput.lib") //XInputを使うために必要
@@ -61,30 +60,40 @@
 #define VK_Y 0x59
 #define VK_Z 0x5A
 
-class Input {
+class Input final{
 private:
 	//キー入力情報を保存する変数
-	static BYTE keyState[256];
-	static BYTE keyState_old[256];
+	static inline BYTE m_KeyState[256] = {};
+	static inline BYTE m_KeyState_old[256] = {};
 
 	//コントローラー入力情報を保存する変数
-	static XINPUT_STATE controllerState;
-	static XINPUT_STATE controllerState_old;
+	static inline XINPUT_STATE m_ControllerState = {};
+	static inline XINPUT_STATE m_ControllerState_old = {};
 
-	static int VibrationTime; //振動継続時間をカウントする変数
+	static inline int m_VibrationTime = 0; //振動継続時間をカウントする変数
 
 	// 現在のマウスのクリックの状態を保持
-	static bool isCurrentlyLPressed;
-	static bool isCurrentlyRPressed;
+	static inline bool m_IsCurrentlyLPressed = false;
+	static inline bool m_IsCurrentlyRPressed = false;
 
 	// マウスのクリックのフラグ
-	static bool isLeftButtonPressed;   // 前回の状態（押され続けているか）
-	static bool isLeftButtonTriggered; // 押された瞬間
-	static bool isLeftButtonReleased;  // 離された瞬間
+	static inline bool m_IsLeftButtonPressed = false;   // 前回の状態（押され続けているか）
+	static inline bool m_IsLeftButtonTriggered = false; // 押された瞬間
+	static inline bool m_IsLeftButtonReleased = false;  // 離された瞬間
 
-	static bool isRightButtonPressed;   // 前回の状態（押され続けているか）
-	static bool isRightButtonTriggered; // 押された瞬間
-	static bool isRightButtonReleased;  // 離された瞬間
+	static inline bool m_IsRightButtonPressed = false;   // 前回の状態（押され続けているか）
+	static inline bool m_IsRightButtonTriggered = false; // 押された瞬間
+	static inline bool m_IsRightButtonReleased = false;  // 離された瞬間
+
+	// コンストラクタ・デストラクタを削除
+	Input();
+	~Input();
+
+	// コピー・ムーブも削除
+	Input(const Input&) = delete;
+	Input(Input&&) = delete;
+	Input& operator=(const Input&) = delete;
+	Input& operator=(Input&&) = delete;
 
 
 	// マウスのクリックの状態更新
@@ -92,8 +101,6 @@ private:
 
 public:
 
-	Input(); //コンストラクタ
-	~Input(); //デストラクタ
 	static void Update(); //更新
 
 	//キー入力

@@ -15,10 +15,11 @@ class SoundManager final
 {
 private:
 
+	// サウンドリソース管理用マップ
 	static inline std::unordered_map<std::string, SoundResource> m_SoundResources;
 
-	static inline IXAudio2* m_pXAudio2 = nullptr;
-	static inline IXAudio2MasteringVoice* m_pMasteringVoice = nullptr;
+	static inline IXAudio2* m_pXAudio2 = nullptr;						// XAudio2インターフェース
+	static inline IXAudio2MasteringVoice* m_pMasteringVoice = nullptr;	// マスタリングボイス
 
 	// コンストラクタ・デストラクタを削除
 	SoundManager() = delete;

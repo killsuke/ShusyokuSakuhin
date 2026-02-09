@@ -9,7 +9,7 @@ using namespace DirectX;
 Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	m_Shader->Create("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	m_Shader->Create("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	CreateMesh<CubeMesh>();
 	m_Color = XMFLOAT4(0.0f, 1.0f, 0.0f, 0.3f); // 緑色
 	//m_Texture = std::make_unique<Texture>();

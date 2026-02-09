@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "RightLeft.h"
+#include "Structs/RightLeft.h"
 #include <DirectXMath.h>
 
 enum class ESwordActionState

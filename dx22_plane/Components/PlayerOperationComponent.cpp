@@ -5,7 +5,7 @@
 #include "JumpComponent.h"
 #include "DoorFadeComponent.h"
 #include "Transform.h"
-#include "input.h"
+#include "Input/Input.h"
 #include "TestSwordActionComponent.h"
 #include "ArbitraryRotationComponent.h"
 #include "TestExtrusionJudgeComponent.h"
@@ -493,7 +493,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 
 	Render3DComponent* slashRender = chargeSlash->AddComponent<Render3DComponent>();
 	slashRender->CreateMesh<SquareMesh>();
-	slashRender->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	slashRender->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	slashRender->ChangeTexture("assets/texture/charge_slash1.png");
 	slashRender->SetInversionFlag(m_CurrentRightLeft);
 }
@@ -601,7 +601,7 @@ void PlayerOperationComponent::CreateSlashEffect() {
 	// エフェクト用のレンダー
 	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
 	render->CreateMesh<SquareMesh>();
-	render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+	render->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
 	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
 	render->SetGlowPower(0.4f);
 	render->SetGlowRadius(0.2f);

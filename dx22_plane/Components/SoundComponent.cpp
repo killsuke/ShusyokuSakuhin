@@ -25,6 +25,7 @@ SoundComponent::SoundComponent(GameObject& obj) :Component(obj)
 
 SoundComponent::~SoundComponent()
 {
+	// 全てのソースボイスを破棄
 	for (const auto& [label, pSourceVoice] : m_pSourceVoice) {
 		if (pSourceVoice) {
 			pSourceVoice->Stop(0);
@@ -73,6 +74,7 @@ void SoundComponent::Play(const std::string& label)
 
 	IXAudio2SourceVoice*& pSV = it->second;
 
+	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
 		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
@@ -105,16 +107,11 @@ void SoundComponent::Stop(const std::string& label)
 
 	IXAudio2SourceVoice* sourceVoice = it->second;
 
-	/*XAUDIO2_VOICE_STATE xa2state;
-	m_pSourceVoice[(int)label]->GetState(&xa2state);
-	if (xa2state.BuffersQueued)
-	{
-		m_pSourceVoice[(int)label]->Stop(0);
-	}*/
 	XAUDIO2_VOICE_STATE xa2state = {};
 	sourceVoice->GetState(&xa2state);
 	if (xa2state.BuffersQueued > 0)
 	{
+		// 一時停止
 		HRESULT hr = sourceVoice->Stop(0);
 		if (FAILED(hr))
 		{
@@ -124,7 +121,7 @@ void SoundComponent::Stop(const std::string& label)
 }
 
 //=============================================================================
-// 一時停止
+// 再開
 //=============================================================================
 void SoundComponent::Resume(const std::string& label)
 {
@@ -137,6 +134,7 @@ void SoundComponent::Resume(const std::string& label)
 		return;
 	}
 
+	// サウンド再生再開
 	IXAudio2SourceVoice* sourceVoice = it->second;
 
 	if (sourceVoice == nullptr) {
@@ -166,5 +164,6 @@ void SoundComponent::SetVolume(const std::string& label, float volume) {
 		return;
 	}
 
+	// 音量調整
 	sourceVoice->SetVolume(volume);
 }

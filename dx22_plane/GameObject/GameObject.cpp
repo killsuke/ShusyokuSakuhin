@@ -3,7 +3,16 @@
 #include "System/DirectXRender.h"
 #include <iostream>
 
+namespace {
+	constexpr size_t FIRST_COMPONENT_RESERVE = 10;
+	constexpr size_t FIRST_RENDERCOMPONENT_RESERVE = 2;
+}
+
 GameObject::GameObject(const std::string& _name, const uint32_t& id) : m_Name(_name), m_InstanceID(id) {
+
+	// コンポーネント用コンテナの初期確保
+	m_Components.reserve(FIRST_COMPONENT_RESERVE);
+	m_RenderComponents.reserve(FIRST_RENDERCOMPONENT_RESERVE);
 };
 
 void GameObject::Update() {

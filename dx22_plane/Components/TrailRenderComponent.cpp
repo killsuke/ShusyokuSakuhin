@@ -17,7 +17,7 @@ TrailRenderComponent::TrailRenderComponent(GameObject& obj) : RenderComponent(ob
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è
 	m_Shader = std::make_unique<Shader>();
 	CreateMesh<TrailMesh>();
-	SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	m_TrailMakeComponent = m_Object->AddComponent<TrailMakeComponent>();
 	m_TrailMakeComponent->SetTrailRenderComponent(this);
 

@@ -1,5 +1,5 @@
 #include	<iostream>
-#include	"Texture.h"
+#include	"Texture/Texture.h"
 #include	"stb_image.h"
 #include	"System/DirectXRender.h"
 #include	"Manager/TextureManager.h"

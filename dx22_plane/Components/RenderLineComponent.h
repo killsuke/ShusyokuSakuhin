@@ -1,8 +1,8 @@
 #pragma once
 #include "Render.h"
-#include "TestBoneData.h"
+#include "Structs/TestBoneData.h"
 #include <SimpleMath.h>
-#include "HelpMath.h"
+#include "Helper/HelpMath.h"
 
 class RenderLineComponent : public RenderComponent
 {

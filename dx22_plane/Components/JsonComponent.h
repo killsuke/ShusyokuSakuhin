@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "ObjectStatus.h"
+#include "Structs/ObjectStatus.h"
 #include <string>
 #include <vector>
 #include <json.hpp>

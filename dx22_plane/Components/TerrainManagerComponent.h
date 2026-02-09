@@ -5,8 +5,8 @@
 
 #pragma once
 #include "CSVObjectManagerComponent.h"
-#include "CSV_Data.h"
-#include "ObjectStatus.h"
+#include "Structs/CSV_Data.h"
+#include "Structs/ObjectStatus.h"
 #include <vector>
 #include <string>
 #include <utility>

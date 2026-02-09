@@ -1,23 +1,6 @@
-#include "input.h"
+#include "Input/Input.h"
 #include "System/Application.h"
 
-BYTE Input::keyState[256] = {};
-BYTE Input::keyState_old[256] = {};
-XINPUT_STATE Input::controllerState = {};
-XINPUT_STATE Input::controllerState_old = {};
-int Input::VibrationTime = 0;
-bool Input::isCurrentlyLPressed = false;
-bool Input::isCurrentlyRPressed = false;
-
-// 左クリックの方
-bool Input::isLeftButtonPressed = false;
-bool Input::isLeftButtonTriggered = false;
-bool Input::isLeftButtonReleased = false;
-
-// 右クリックの方
-bool Input::isRightButtonPressed = false;
-bool Input::isRightButtonTriggered = false;
-bool Input::isRightButtonReleased = false;
 
 //コンストラクタ
 Input::Input()
@@ -39,20 +22,20 @@ void Input::Update()
 {
 	//1フレーム前の入力を記録しておく
 	for (int i = 0; i < 256; ++i) {
-		keyState_old[i] = keyState[i]; 
+		m_KeyState_old[i] = m_KeyState[i]; 
 	}
-	controllerState_old = controllerState;
+	m_ControllerState_old = m_ControllerState;
 
 	//キー入力を更新
-	const BOOL hr = GetKeyboardState(keyState);
+	const BOOL hr = GetKeyboardState(m_KeyState);
 
 	//コントローラー入力を更新(XInput)
-	XInputGetState(0, &controllerState);
+	XInputGetState(0, &m_ControllerState);
 
 	//振動継続時間をカウント
-	if (VibrationTime > 0) {
-		VibrationTime--;
-		if (VibrationTime == 0) { //振動継続時間が経った時に振動を止める
+	if (m_VibrationTime > 0) {
+		m_VibrationTime--;
+		if (m_VibrationTime == 0) { //振動継続時間が経った時に振動を止める
 			XINPUT_VIBRATION vibration;
 			ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 			vibration.wLeftMotorSpeed = 0;
@@ -68,22 +51,22 @@ void Input::Update()
 //キー入力
 bool Input::GetKeyPress(int key) //プレス
 {
-	return keyState[key] & 0x80;
+	return m_KeyState[key] & 0x80;
 }
 bool Input::GetKeyTrigger(int key) //トリガー
 {
-	return (keyState[key] & 0x80) && !(keyState_old[key] & 0x80);
+	return (m_KeyState[key] & 0x80) && !(m_KeyState_old[key] & 0x80);
 }
 bool Input::GetKeyRelease(int key) //リリース
 {
-	return !(keyState[key] & 0x80) && (keyState_old[key] & 0x80);
+	return !(m_KeyState[key] & 0x80) && (m_KeyState_old[key] & 0x80);
 }
 
 //左アナログスティック
 DirectX::XMFLOAT2 Input::GetLeftAnalogStick(void)
 {
-	const SHORT x = controllerState.Gamepad.sThumbLX; // -32768～32767
-	const SHORT y = controllerState.Gamepad.sThumbLY; // -32768～32767
+	const SHORT x = m_ControllerState.Gamepad.sThumbLX; // -32768～32767
+	const SHORT y = m_ControllerState.Gamepad.sThumbLY; // -32768～32767
 
 	DirectX::XMFLOAT2 res;
 	res.x = x / 32767.0f; //-1～1
@@ -93,8 +76,8 @@ DirectX::XMFLOAT2 Input::GetLeftAnalogStick(void)
 //右アナログスティック
 DirectX::XMFLOAT2 Input::GetRightAnalogStick(void)
 {
-	const SHORT x = controllerState.Gamepad.sThumbRX; // -32768～32767
-	const SHORT y = controllerState.Gamepad.sThumbRY; // -32768～32767
+	const SHORT x = m_ControllerState.Gamepad.sThumbRX; // -32768～32767
+	const SHORT y = m_ControllerState.Gamepad.sThumbRY; // -32768～32767
 
 	DirectX::XMFLOAT2 res;
 	res.x = x / 32767.0f; //-1～1
@@ -105,28 +88,28 @@ DirectX::XMFLOAT2 Input::GetRightAnalogStick(void)
 //左トリガー
 float Input::GetLeftTrigger(void)
 {
-	const BYTE t = controllerState.Gamepad.bLeftTrigger; // 0～255
+	const BYTE t = m_ControllerState.Gamepad.bLeftTrigger; // 0～255
 	return t / 255.0f;
 }
 //右トリガー
 float Input::GetRightTrigger(void)
 {
-	const BYTE t = controllerState.Gamepad.bRightTrigger; // 0～255
+	const BYTE t = m_ControllerState.Gamepad.bRightTrigger; // 0～255
 	return t / 255.0f;
 }
 
 //ボタン入力
 bool Input::GetButtonPress(WORD btn) //プレス
 {
-	return (controllerState.Gamepad.wButtons & btn) != 0;
+	return (m_ControllerState.Gamepad.wButtons & btn) != 0;
 }
 bool Input::GetButtonTrigger(WORD btn) //トリガー
 {
-	return (controllerState.Gamepad.wButtons & btn) != 0 && (controllerState_old.Gamepad.wButtons & btn) == 0;
+	return (m_ControllerState.Gamepad.wButtons & btn) != 0 && (m_ControllerState_old.Gamepad.wButtons & btn) == 0;
 }
 bool Input::GetButtonRelease(WORD btn) //リリース
 {
-	return (controllerState.Gamepad.wButtons & btn) == 0 && (controllerState_old.Gamepad.wButtons & btn) != 0;
+	return (m_ControllerState.Gamepad.wButtons & btn) == 0 && (m_ControllerState_old.Gamepad.wButtons & btn) != 0;
 }
 
 //振動
@@ -142,7 +125,7 @@ void Input::SetVibration(int frame, float powor)
 	XInputSetState(0, &vibration);
 
 	//振動継続時間を代入
-	VibrationTime = frame;
+	m_VibrationTime = frame;
 }
 
 // マウスの座標情報を返す
@@ -193,63 +176,63 @@ bool Input::IsMouseRightButtonDown() {
 // マウスの入力状態の更新
 void Input::ClickUpdate() {
 	// 入力の更新
-	isCurrentlyLPressed = IsMouseLeftButtonDown();
-	isCurrentlyRPressed = IsMouseRightButtonDown();
+	m_IsCurrentlyLPressed = IsMouseLeftButtonDown();
+	m_IsCurrentlyRPressed = IsMouseRightButtonDown();
 
 	// トリガー
-	isLeftButtonTriggered = !isLeftButtonPressed && isCurrentlyLPressed;
-	isRightButtonTriggered = !isRightButtonPressed && isCurrentlyRPressed;
+	m_IsLeftButtonTriggered = !m_IsLeftButtonPressed && m_IsCurrentlyLPressed;
+	m_IsRightButtonTriggered = !m_IsRightButtonPressed && m_IsCurrentlyRPressed;
 
 	// リリース
-	isLeftButtonReleased = isLeftButtonPressed && !isCurrentlyLPressed;
-	isRightButtonReleased = isRightButtonPressed && !isCurrentlyRPressed;
+	m_IsLeftButtonReleased = m_IsLeftButtonPressed && !m_IsCurrentlyLPressed;
+	m_IsRightButtonReleased = m_IsRightButtonPressed && !m_IsCurrentlyRPressed;
 
 	// プレス
-	isLeftButtonPressed = isCurrentlyLPressed;
-	isRightButtonPressed = isCurrentlyRPressed;
+	m_IsLeftButtonPressed = m_IsCurrentlyLPressed;
+	m_IsRightButtonPressed = m_IsCurrentlyRPressed;
 }
 
 // プレス
 bool Input::MouseLeftPress() {
-	if (isLeftButtonPressed == true) {
-		return isLeftButtonPressed;
+	if (m_IsLeftButtonPressed == true) {
+		return m_IsLeftButtonPressed;
 	}
 	return false;
 }
 
 bool Input::MouseRightPress() {
-	if (isRightButtonPressed == true) {
-		return isRightButtonPressed;
+	if (m_IsRightButtonPressed == true) {
+		return m_IsRightButtonPressed;
 	}
 	return false;
 }
 
 // リリース
 bool Input::MouseLeftRelease() {
-	if (isLeftButtonReleased == true) {
-		return isLeftButtonReleased;
+	if (m_IsLeftButtonReleased == true) {
+		return m_IsLeftButtonReleased;
 	}
 	return false;
 }
 
 bool Input::MouseRightRelease() {
-	if (isRightButtonReleased == true) {
-		return isRightButtonReleased;
+	if (m_IsRightButtonReleased == true) {
+		return m_IsRightButtonReleased;
 	}
 	return false;
 }
 
 // トリガー
 bool Input::MouseLeftTrigger() {
-	if (isLeftButtonTriggered == true) {
-		return isLeftButtonTriggered;
+	if (m_IsLeftButtonTriggered == true) {
+		return m_IsLeftButtonTriggered;
 	}
 	return false;
 }
 
 bool Input::MouseRightTrigger() {
-	if (isRightButtonTriggered == true) {
-		return isRightButtonTriggered;
+	if (m_IsRightButtonTriggered == true) {
+		return m_IsRightButtonTriggered;
 	}
 	return false;
 }

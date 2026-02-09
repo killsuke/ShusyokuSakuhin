@@ -6,13 +6,6 @@
 
 class ModelManager final
 {
-public:
-
-	static void AddModel(const std::string& modelPath, const std::string& texDirectory,const StaticMesh& mesh);
-
-    // モデルを取得する関数
-    static StaticMesh* GetModel(const std::string& modelPath, const std::string& texDirectory);
-
 private:
 	// コンストラクタ・デストラクタを削除
 	ModelManager() = delete;
@@ -24,7 +17,15 @@ private:
 	ModelManager& operator=(const ModelManager&) = delete;
 	ModelManager& operator=(ModelManager&&) = delete;
 
-    // 全てのモデルデータを保持
-    static std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;
+	// 全てのモデルデータを保持
+	static inline std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;
+
+public:
+
+	static void AddModel(const std::string& modelPath, const std::string& texDirectory,const StaticMesh& mesh);
+
+    // モデルを取得する関数
+    static StaticMesh* GetModel(const std::string& modelPath, const std::string& texDirectory);
+
 };
 

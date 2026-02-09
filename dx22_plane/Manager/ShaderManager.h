@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <filesystem>
 #include <fstream>
-#include "dx11helper.h"
+#include "Helper/dx11helper.h"
 
 struct ShaderKey {
 	std::string file = "";
@@ -25,7 +25,7 @@ struct ShaderKeyHash {
 class ShaderManager final
 {
 private:
-	static std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash> m_ShaderCache;
+	static inline std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash> m_ShaderCache;
 
 	// コンストラクタ・デストラクタを削除
 	ShaderManager() = delete;

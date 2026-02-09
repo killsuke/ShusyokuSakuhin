@@ -6,16 +6,11 @@
 #include "DebugSystem/DebugSystem.h"
 #include "SoundManager.h"
 
-std::unique_ptr<Scene> SceneManager::m_pScene;	// ここで書くことでちゃんと定義できる
-bool SceneManager::sceneChangeFg = false;	// シーンチェンジのフラグ
-float SceneManager::waitTime = 0.0f;	// シーンチェンジの待ち時間
-float SceneManager::waitTimeCounter = 0.0f;	// シーンチェンジの待ち時間
-
 void SceneManager::Init() {
 	SoundManager::Init();	// サウンドの初期化
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
-	m_pScene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
+	m_Scene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
 	//m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
 	//	Debug::DebugFirst();
 }
@@ -37,14 +32,14 @@ void SceneManager::Update() {
 
 	DebugSystem::Update();
 
-	if (m_pScene != nullptr) {
+	if (m_Scene != nullptr) {
 
-		if (m_pScene->GetSceneActive() == true)
+		if (m_Scene->GetSceneActive() == true)
 		{
 			HitStopManager::Update();
 
 			// ポインタ内に入ってるシーンの更新
-			m_pScene->Update();
+			m_Scene->Update();
 		}
 	}
 

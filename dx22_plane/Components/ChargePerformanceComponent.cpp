@@ -86,7 +86,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 
 		RenderLuminescenceBillboardComponent* childRender = particleObj->AddComponent<RenderLuminescenceBillboardComponent>();
 		childRender->CreateMesh<SquareMesh>();
-		childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+		childRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
 		childRender->SetColor({ 0.3f,0.8f,1.0f,0.8f });
 		childRender->SetGlowPower(1.0f);
 		childRender->SetGlowRadius(0.5f);
@@ -115,7 +115,7 @@ void ChargePerformanceComponent::InitCreateParticles(const unsigned int num, con
 
 	RenderLuminescenceBillboardComponent* childRender = particleObj->AddComponent<RenderLuminescenceBillboardComponent>();
 	childRender->CreateMesh<SquareMesh>();
-	childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+	childRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
 	childRender->SetColor({ 0.3f,0.8f,1.0f,0.8f });
 	childRender->SetGlowPower(0.5f);
 	childRender->SetGlowRadius(0.7f);

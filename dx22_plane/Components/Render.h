@@ -7,7 +7,7 @@
 
 #pragma once
 #include "Component.h"
-#include "RenderElement.h"
+#include "Structs/RenderElement.h"
 
 #include	<d3d11.h>
 #include	<DirectXMath.h>
@@ -16,14 +16,14 @@
 #include	<string>
 #include	<vector>
 #include	<memory>
-#include "Shader.h"
-#include "Texture.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "Shader/Shader.h"
+#include "Texture/Texture.h"
+#include "Buffer/VertexBuffer.h"
+#include "Buffer/IndexBuffer.h"
 #include "Mesh/Mesh.h"
-#include "BoneData.h"
+#include "Structs/BoneData.h"
 #include "Mesh/StaticMesh.h"
-#include "RightLeft.h"
+#include "Structs/RightLeft.h"
 #include "System/DirectXRender.h"
 
 //ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ

@@ -71,7 +71,7 @@ TestStageScene::TestStageScene() {
 		/*	CubeMesh cubeMesh3;
 			auto cubeRe3 = player->AddComponent<Render3DColliderOBBComponent>();
 			cubeRe3->SetMesh(cubeMesh3);
-			cubeRe3->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			cubeRe3->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 			cubeRe3->SetTexture("assets/texture/NoTexture.png");
 			cubeRe3->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
 
@@ -87,7 +87,7 @@ TestStageScene::TestStageScene() {
 			CubeMesh childMesh;
 			auto childRender = child->AddComponent<Render3DComponent>();
 			childRender->SetMesh(childMesh);
-			childRender->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+			childRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 			childRender->SetTexture("assets/texture/NoTexture.png");*/
 
 		auto sword = GameObjectManager::AddChild("sword", "Cube");
@@ -115,12 +115,12 @@ TestStageScene::TestStageScene() {
 
 		auto swordRe = sword->AddComponent<Render3DComponent>();
 		swordRe->CreateMesh<CubeMesh>();
-		swordRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		swordRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		swordRe->ChangeTexture("assets/texture/NoTexture.png");
 
 		auto swordRe2 = sword->AddComponent<Render3DColliderOBBComponent>();
 		swordRe2->CreateMesh<CubeMesh>();
-		swordRe2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		swordRe2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		swordRe2->ChangeTexture("assets/texture/NoTexture.png");
 		swordRe2->SetColor(DirectX::XMFLOAT4(0.5f, 1.0f, 0.5f, 0.5f));
 	}
@@ -137,7 +137,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->CreateMesh<CubeMesh>();
-		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/NoTexture.png");
 
 		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
@@ -157,7 +157,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->CreateMesh<CubeMesh>();
-		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/NoTexture.png");
 
 		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
@@ -177,7 +177,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->CreateMesh<CubeMesh>();
-		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/NoTexture.png");
 
 		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
@@ -200,7 +200,7 @@ TestStageScene::TestStageScene() {
 
 		auto cubeRe = cube->AddComponent<Render3DComponent>();
 		cubeRe->CreateMesh<CubeMesh>();
-		cubeRe->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		cubeRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/NoTexture.png");
 
 		auto cubeRe2 = cube->AddComponent<Render3DColliderAABBComponent>();
@@ -219,7 +219,7 @@ TestStageScene::TestStageScene() {
 		auto targetRend = target1->AddComponent<Render3DComponent>();
 		targetRend->CreateMesh<CircleMesh>();
 		targetRend->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-		targetRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		targetRend->ChangeTexture("assets/texture/NoTexture.png");
 
 
@@ -234,7 +234,7 @@ TestStageScene::TestStageScene() {
 		auto targetRend2 = target2->AddComponent<Render3DComponent>();
 		targetRend2->CreateMesh<CircleMesh>();
 		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
-		targetRend2->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		targetRend2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		targetRend2->ChangeTexture("assets/texture/NoTexture.png");
 
 
@@ -247,7 +247,7 @@ TestStageScene::TestStageScene() {
 		//auto circleRend = circle->AddComponent<Render3DComponent>();
 		//CircleMesh circleMesh;
 		//circleRend->SetMesh(circleMesh);
-		//circleRend->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		//circleRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		//circleRend->SetTexture("assets/texture/NoTexture.png");
 
 		//auto circleSpring = circle->AddComponent<SpringComponent>();
@@ -284,7 +284,7 @@ TestStageScene::TestStageScene() {
 
 		auto hpUnderlayRender = hpUnderlay->AddComponent<Render3DComponent>();
 		hpUnderlayRender->CreateMesh<SquareMesh>();
-		hpUnderlayRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		hpUnderlayRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		hpUnderlayRender->ChangeTexture("assets/texture/NoTexture.png");
 		hpUnderlayRender->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -299,7 +299,7 @@ TestStageScene::TestStageScene() {
 
 		auto hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->CreateMesh<SquareMesh>();
-		hpRender->SetShader("shader/OverVertexMoveVS.hlsl", "shader/unlitTexturePS.hlsl");
+		hpRender->SetShader("ShaderResource/OverVertexMoveVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		hpRender->ChangeTexture("assets/texture/NoTexture.png");
 		hpRender->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 

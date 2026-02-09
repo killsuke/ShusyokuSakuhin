@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
 #include "System/DirectXRender.h"
-#include "input.h"
+#include "Input/Input.h"
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;

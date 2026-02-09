@@ -1,7 +1,7 @@
 #pragma once
 #include "Transform.h"
 #include "RenderLineComponent.h"
-#include "TestBoneData.h"
+#include "Structs/TestBoneData.h"
 #include <vector>
 #include <memory>
 #include <string>

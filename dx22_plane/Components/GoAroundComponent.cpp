@@ -1,7 +1,7 @@
 #include "GoAroundComponent.h"
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
-#include "HelpMath.h"
+#include "Helper/HelpMath.h"
 #include <iostream>
 
 using namespace DirectX;

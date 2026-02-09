@@ -2,8 +2,8 @@
 #include "Component.h"
 #include <DirectXMath.h>
 #include <iostream>
-#include "HelpMath.h"
-#include "XMFLOAT_Helper.h"
+#include "Helper/HelpMath.h"
+#include "Helper/XMFLOAT_Helper.h"
 
 enum class RotationPattern {
 	SPIN,

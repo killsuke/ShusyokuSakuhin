@@ -104,7 +104,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
-		renderColl->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+		renderColl->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		renderColl->ChangeTexture("assets/texture/NoTexture.png");
 		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));*/
 

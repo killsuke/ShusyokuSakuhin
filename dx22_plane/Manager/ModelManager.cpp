@@ -1,7 +1,5 @@
 #include "ModelManager.h"
 
-std::unordered_map<std::string, std::unique_ptr<StaticMesh>> ModelManager::m_ModelCache;
-
 void ModelManager::AddModel(const std::string& modelPath, const std::string& texDirectory, const StaticMesh& mesh) {
     // Šù‚É“o˜^‚³‚ê‚Ä‚¢‚éê‡‚Í’Ç‰Á‚µ‚È‚¢
     if (m_ModelCache.find(modelPath) != m_ModelCache.end()) {

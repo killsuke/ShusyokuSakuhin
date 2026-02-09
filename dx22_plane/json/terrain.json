@@ -13,8 +13,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/NoTexture.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
+            "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         },
         {
             "kind": "T_dice",
@@ -29,8 +29,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/dice.png",
-            "shaderVS": "shader/unlitTextureVS.hlsl",
-            "shaderPS": "shader/unlitTexturePS.hlsl"
+            "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
+            "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         },
 	{
             "kind": "T_Floor",
@@ -45,8 +45,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_BigFloor",
@@ -61,8 +61,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_ShortFloor",
@@ -77,8 +77,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_Wall",
@@ -93,8 +93,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_Small",
@@ -109,8 +109,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_Move",
@@ -125,8 +125,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
 	{
             "kind": "T_Dummy",
@@ -141,8 +141,8 @@
                 "z": 0.0
             },
             "texture": "assets/texture/testTerrain.png",
-            "shaderVS": "shader/litTextureVS.hlsl",
-            "shaderPS": "shader/litTexturePS.hlsl"
+            "shaderVS": "ShaderResource/litTextureVS.hlsl",
+            "shaderPS": "ShaderResource/litTexturePS.hlsl"
         }
     ]
 }

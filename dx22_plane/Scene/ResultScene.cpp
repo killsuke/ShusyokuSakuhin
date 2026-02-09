@@ -13,7 +13,7 @@
 #include "Components/PlayerOperationComponent.h"
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
-#include "Input.h"
+#include "Input/Input.h"
 #include "Manager/SceneManager.h"
 #include "Components/DoorFadeComponent.h"
 #include "Components/BlinkingUIComponent.h"
@@ -37,7 +37,7 @@ ResultScene::ResultScene()
 		SquareMesh square;
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
 		rendTitle->SetMesh(square);
-		rendTitle->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		rendTitle->SetTexture("assets/texture/NoTexture.png");
 		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 	}*/
@@ -49,7 +49,7 @@ ResultScene::ResultScene()
 
 	auto rendTitle = ResultUI->AddComponent<Render2DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
-	rendTitle->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	if (fadeUI->GetWinLoseFlag() == true) {
 		rendTitle->ChangeTexture("assets/texture/gameclear.png");
 	}
@@ -67,7 +67,7 @@ ResultScene::ResultScene()
 
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
 		rendTitle->CreateMesh<SquareMesh>();
-		rendTitle->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		rendTitle->ChangeTexture("assets/texture/please.png");
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}

@@ -71,7 +71,7 @@ void EnemyActionComponent::CreateDamageEffect(const HitEvent& event) {
 
 	RenderBillboardComponent* render = effect->AddComponent<RenderBillboardComponent>();
 	SquareMesh* mesh = render->CreateMesh<SquareMesh>();
-	render->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	render->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	render->ChangeTexture("assets/texture/Blood_Splatter.png");
 	render->SetInversionFlag(direction);
 	mesh->SetInitialCut(DIVISION_NUM);

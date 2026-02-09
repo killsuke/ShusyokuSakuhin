@@ -4,7 +4,7 @@
 #include "Manager/SceneManager.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/TimeManager.h"
-#include "Input.h"
+#include "Input/Input.h"
 #include "Mesh/SquareMesh.h"
 #include <iostream>
 
@@ -19,7 +19,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	auto doorUpRender = doorUp->AddComponent<Render2DComponent>();
 	doorUpRender->CreateMesh<SquareMesh>();
 	doorUpRender->ChangeTexture("assets/texture/IronWall.png");
-	doorUpRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	doorUpRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 
 	doorDown = GameObjectManager::AddUI("doorDOWN", "FadeUI");
 	auto doorDownTransform = doorDown->AddComponent<TransformComponent>();
@@ -29,7 +29,7 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 	auto doorDownRender = doorDown->AddComponent<Render2DComponent>();
 	doorDownRender->CreateMesh<SquareMesh>();
 	doorDownRender->ChangeTexture("assets/texture/IronWall.png");
-	doorDownRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+	doorDownRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 
 	doorUp->SetCarryOverFlag(true);
 	doorDown->SetCarryOverFlag(true);

@@ -1,6 +1,6 @@
 #include "System/DirectXRender.h"
 #include "System/Application.h"
-#include "BoneData.h"
+#include "Structs/BoneData.h"
 #include <d3dcompiler.h>
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -9,7 +9,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <string.h>
-#include "HPParam.h"
+#include "Structs/HPParam.h"
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;

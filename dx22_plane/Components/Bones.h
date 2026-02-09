@@ -1,5 +1,5 @@
 #pragma once
-#include "BoneData.h"
+#include "Structs/BoneData.h"
 #include "Render.h"
 #include <SimpleMath.h>
 

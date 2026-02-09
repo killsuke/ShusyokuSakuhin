@@ -1,6 +1,6 @@
 #include "RenderOneSkinAnimation.h"
 #include "System/DirectXRender.h"
-#include "BoneData.h"
+#include "Structs/BoneData.h"
 #include "Transform.h"
 #include "Manager/GameObjectManager.h"
 

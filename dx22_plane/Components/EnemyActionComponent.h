@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "FighterComponent.h"
 #include "EnemyDeathEventComponent.h"
-#include "RightLeft.h"
+#include "Structs/RightLeft.h"
 
 enum class EEnemyState {
 	WAIT,

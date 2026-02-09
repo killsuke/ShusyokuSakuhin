@@ -1,6 +1,6 @@
 #include "BonePartsComponent.h"
 #include <iostream>
-#include "input.h"
+#include "Input/Input.h"
 
 using namespace DirectX::SimpleMath;
 

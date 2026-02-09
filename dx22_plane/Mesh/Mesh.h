@@ -3,8 +3,8 @@
 #include	<SimpleMath.h>
 #include	<memory>
 #include	<string>
-#include	"RenderElement.h"
-#include "Texture.h"
+#include	"Structs/RenderElement.h"
+#include "Texture/Texture.h"
 
 class Mesh {
 protected:

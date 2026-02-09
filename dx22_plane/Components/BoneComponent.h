@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "BoneData.h"
+#include "Structs/BoneData.h"
 class BoneComponent : public Component
 {
 private :

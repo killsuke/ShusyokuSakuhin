@@ -16,7 +16,6 @@
 #include <iostream>
 #include <SimpleMath.h>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 namespace {
@@ -322,13 +321,14 @@ void TestSwordActionComponent::CreateSwordEffect() {
 	// エフェクト用のレンダー
 	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
 	render->CreateMesh<SquareMesh>();
-	render->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitLuminescencePS.hlsl");
+	render->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
 	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
 	render->SetGlowPower(0.5f);
 	render->SetGlowRadius(0.6f);
 	render->SetEllipseScale({ 1.0f,1.0f });
 }
 
+// 振り方パターンを選択
 void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxis) {
 
 	switch (m_SwordActionState)

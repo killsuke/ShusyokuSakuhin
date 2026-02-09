@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "CameraPattern.h"
+#include "Structs/CameraPattern.h"
 #include <SimpleMath.h>
 
 class CameraMoveComponent : public Component

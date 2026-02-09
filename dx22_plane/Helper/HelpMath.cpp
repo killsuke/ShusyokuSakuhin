@@ -1,4 +1,4 @@
-#include "HelpMath.h"
+#include "Helper/HelpMath.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;

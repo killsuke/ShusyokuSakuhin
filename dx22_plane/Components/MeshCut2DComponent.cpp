@@ -3,7 +3,7 @@
 #include "Render2D.h"
 #include "Transform.h"
 #include "VectorMoveComponent.h"
-#include "input.h"
+#include "Input/Input.h"
 #include "Manager/GameObjectManager.h"
 #include "System/DirectXRender.h"
 #include "Manager/EventBusManager.h"
@@ -99,7 +99,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
 	leftRend->CreateMesh<SquareMesh>();
-	leftRend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	leftRend->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	leftRend->ChangeTexture(texName);
 	leftRend->SetInversionFlag(isInversion);
 	m_CutObj1ID = m_CutObj1->GetInstanceID();
@@ -112,7 +112,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	//rightMove->SetMovePower(0.1f);
 	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
-	rightRend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rightRend->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rightRend->ChangeTexture(texName);
 	rightRend->SetInversionFlag(isInversion);
 	m_CutObj2ID = m_CutObj2->GetInstanceID();

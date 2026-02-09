@@ -1,9 +1,9 @@
 #include "DebugCameraComponent.h"
 #include "System/DirectXRender.h"
-#include "CameraPattern.h"
+#include "Structs/CameraPattern.h"
 #include "CameraMoveComponent.h"
 #include "System/Application.h"
-#include "input.h"
+#include "Input/Input.h"
 #include <Windows.h>
 
 using namespace DirectX;

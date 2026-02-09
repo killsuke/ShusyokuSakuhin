@@ -1,7 +1,7 @@
 #pragma once
 #include "Render.h"
 #include <SimpleMath.h>
-#include "HelpMath.h"
+#include "Helper/HelpMath.h"
 
 class RenderLine2DComponent : public RenderComponent
 {

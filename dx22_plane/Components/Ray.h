@@ -1,15 +1,19 @@
 #pragma once
-#include <simplemath.h>
+#include <DirectXMath.h>
+#include "Component.h"
 
-class RayComponent
+class RayComponent: public Component
 {
 private:
 	DirectX::XMVECTOR m_Origin = {}; // レイの始点
 	DirectX::XMVECTOR m_Direction = {}; // レイの方向
 
 public:
-	RayComponent() = default; // デフォルトコンストラクタ
+
+	RayComponent(GameObject& obj);
 	~RayComponent() = default; // デフォルトデストラクタ
+
+	void Update()override;
 
 	inline void SetOriginPosition(const DirectX::XMVECTOR& origin) { m_Origin = origin; };
 	inline DirectX::XMVECTOR GetOriginPosition() const { return m_Origin; };

@@ -1,5 +1,5 @@
 #include "StageLoadCSVComponent.h"
-#include "CSV_Data.h"
+#include "Structs/CSV_Data.h"
 #include "TerrainManagerComponent.h"
 #include "EnemyManagerComponent.h"
 #include <fstream>

@@ -6,7 +6,7 @@
 #include "Components/Render3D.h"
 #include "Mesh/SquareMesh.h"
 #include "System/DirectXRender.h"
-#include "input.h"
+#include "Input/Input.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -48,7 +48,7 @@ void DebugSystem::Init() {
 
 		Render3DComponent* dbRender = m_DebugUIs[i]->AddComponent<Render3DComponent>();
 		dbRender->CreateMesh<SquareMesh>();
-		dbRender->SetShader("shader/unlitTextureVS2D.hlsl", "shader/unlitTexturePS.hlsl");
+		dbRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		dbRender->ChangeTexture(m_DebugUITextureNames[i]);
 
 		uiPosition.x += ShiftUI;

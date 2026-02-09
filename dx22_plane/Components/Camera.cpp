@@ -1,10 +1,10 @@
 #include "System/DirectXRender.h"
 #include "Camera.h"
-#include "CameraPattern.h"
+#include "Structs/CameraPattern.h"
 #include "CameraMoveComponent.h"
 #include "Render3D.h"
 #include "System/Application.h"
-#include "input.h"
+#include "Input/Input.h"
 #include <Windows.h>
 
 using namespace DirectX;
@@ -30,7 +30,7 @@ Camera::Camera(GameObject& obj) : Component(obj)
 
 	Render3DComponent* render3D = m_Object->AddComponent<Render3DComponent>();
 	render3D->LoadModelMesh("assets/model/Camera/uploads_files_2423186_fbx+file.fbx", "assets/model/Camera/");
-	render3D->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	render3D->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	render3D->SetActiveFlag(false); // ”ñ•\Ž¦‚É‚·‚é
 }
 

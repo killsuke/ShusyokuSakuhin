@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "HPParam.h"
+#include "Structs/HPParam.h"
 
 class HPBarMoveComponent : public Component
 {

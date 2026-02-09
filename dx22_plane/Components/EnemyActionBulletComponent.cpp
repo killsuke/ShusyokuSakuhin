@@ -101,7 +101,7 @@ void EnemyActionBulletComponent::FiringBullet() {
 	Render2DComponent* rend = bullet->AddComponent<Render2DComponent>();
 
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("shader/Animation2DVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rend->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rend->ChangeTexture("assets/texture/bullet.png");
 	rend->SetInversionFlag(m_IsRightLeft);
 }

@@ -7,7 +7,7 @@
 #include	<io.h>
 #include	<vector>
 #include	<Windows.h>
-#include "RenderElement.h"
+#include "Structs/RenderElement.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -218,6 +218,15 @@ private:
 	static inline ID3D11Buffer* m_GlowBuffer = nullptr;				// グロー用定数バッファ、１０番目
 	static inline ID3D11Buffer* m_RingGlowBuffer = nullptr;			// リンググロー用定数バッファ、１０番目
 
+	DirectXRender() = default;
+	~DirectXRender() = default;
+
+	// コピー・ムーブも削除
+	DirectXRender(const DirectXRender&) = delete;
+	DirectXRender(DirectXRender&&) = delete;
+	DirectXRender& operator=(const DirectXRender&) = delete;
+	DirectXRender& operator=(DirectXRender&&) = delete;
+
 	static HRESULT DeviceAndSwapCreate();
 	static HRESULT RenderTargetCreate();
 	static HRESULT DepthStencilCreate();
@@ -242,14 +251,6 @@ private:
 	static HRESULT CreateGlowBuffer();
 
 public:
-	DirectXRender() = default;
-	~DirectXRender() = default;
-
-	// コピー・ムーブも削除
-	DirectXRender(const DirectXRender&) = delete;
-	DirectXRender(DirectXRender&&) = delete;
-	DirectXRender& operator=(const DirectXRender&) = delete;
-	DirectXRender& operator=(DirectXRender&&) = delete;
 
 	static HRESULT Init();
 	static void UnInit();

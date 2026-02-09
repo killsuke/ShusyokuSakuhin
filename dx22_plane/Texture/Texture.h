@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 //TextureƒNƒ‰ƒX
 //-----------------------------------------------------------------------------
-class Texture
+class Texture final
 {
 private:
 
@@ -68,12 +68,12 @@ public:
 
 	std::string GetTexname() const { return m_Texname; };
 
-	inline void SetInitialCut(float sx, float sy) {
+	inline void SetInitialCut(const float sx, const float sy) {
 		m_SplitX = sx;
 		m_SplitY = sy;
 	};
 
-	inline void SetCutNum(float nu, float nv) {
+	inline void SetCutNum(const float nu, const float nv) {
 		m_NumU = nu;
 		m_NumV = nv;
 	};

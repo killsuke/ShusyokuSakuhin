@@ -172,6 +172,7 @@
     <ClCompile Include="Components\ChargeParticleMoveComponent.cpp" />
     <ClCompile Include="Components\ChargePerformanceComponent.cpp" />
     <ClCompile Include="Components\MotionBlurControllerComponent.cpp" />
+    <ClCompile Include="Components\Ray.cpp" />
     <ClCompile Include="Components\RenderMotionBlurCircularComponent.cpp" />
     <ClCompile Include="Components\RenderLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="Components\ParticlesControlComponent.cpp" />
@@ -197,7 +198,7 @@
     <ClCompile Include="Components\BlinkingUIComponent.cpp" />
     <ClCompile Include="Components\BoneComponent.cpp" />
     <ClCompile Include="Components\BonePartsComponent.cpp" />
-    <ClCompile Include="BonePartsMesh.cpp" />
+    <ClCompile Include="Mesh\BonePartsMesh.cpp" />
     <ClCompile Include="Components\Bones.cpp" />
     <ClCompile Include="Components\BossEventComponent.cpp" />
     <ClCompile Include="Components\BulletComponent.cpp" />
@@ -242,7 +243,7 @@
     <ClCompile Include="Components\MoveTerrainComponent.cpp" />
     <ClCompile Include="Mesh\PlaneMesh.cpp" />
     <ClCompile Include="Components\PlayerDamageComponent.cpp" />
-    <ClCompile Include="HelpMath.cpp" />
+    <ClCompile Include="Helper\HelpMath.cpp" />
     <ClCompile Include="Components\RenderBlurComponent.cpp" />
     <ClCompile Include="Components\RenderLineComponent.cpp" />
     <ClCompile Include="Mesh\SkyDomeMesh.cpp" />
@@ -253,21 +254,20 @@
     <ClCompile Include="Mesh\CubeMesh.cpp" />
     <ClCompile Include="System\DebugCout.cpp" />
     <ClCompile Include="System\DirectXRender.cpp" />
-    <ClCompile Include="dx11helper.cpp" />
+    <ClCompile Include="Helper\dx11helper.cpp" />
     <ClCompile Include="Components\EnemyDamageComponent.cpp" />
     <ClCompile Include="Components\FighterComponent.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Components\GoAroundComponent.cpp" />
     <ClCompile Include="Components\HPBarMoveComponent.cpp" />
-    <ClCompile Include="InchWorm_Test.cpp">
+    <ClCompile Include="Components\InchWorm_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="input.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Components\JumpComponent.cpp" />
     <ClCompile Include="Manager\ModelManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
-    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Components\Render.cpp" />
     <ClCompile Include="Components\Render2D.cpp" />
     <ClCompile Include="Components\Render3D.cpp" />
@@ -291,13 +291,13 @@
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="System\main.cpp" />
-    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Components\TestExtrusionJudgeComponent.cpp" />
     <ClCompile Include="Scene\TestMaskScene.cpp" />
     <ClCompile Include="Components\PlayerOperationComponent.cpp" />
     <ClCompile Include="Scene\TestStageScene.cpp" />
     <ClCompile Include="Components\TestSwordActionComponent.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="Manager\TextureManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
@@ -327,6 +327,7 @@
     <ClInclude Include="Components\ChargeParticleMoveComponent.h" />
     <ClInclude Include="Components\ChargePerformanceComponent.h" />
     <ClInclude Include="Components\MotionBlurControllerComponent.h" />
+    <ClInclude Include="Components\Ray.h" />
     <ClInclude Include="Components\RenderMotionBlurCircularComponent.h" />
     <ClInclude Include="Components\RenderLuminescenceBillboardComponent.h" />
     <ClInclude Include="Components\ParticlesControlComponent.h" />
@@ -335,7 +336,7 @@
     <ClInclude Include="Components\RenderHpComponent.h" />
     <ClInclude Include="Components\CutObjectActionComponent.h" />
     <ClInclude Include="Components\DebugCameraComponent.h" />
-    <ClInclude Include="RightLeft.h" />
+    <ClInclude Include="Structs\RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />
     <ClInclude Include="System\Application.h" />
@@ -352,15 +353,15 @@
     <ClInclude Include="Components\AttackTimingComponent.h" />
     <ClInclude Include="Components\BlinkingUIComponent.h" />
     <ClInclude Include="Components\BoneComponent.h" />
-    <ClInclude Include="BoneData.h" />
+    <ClInclude Include="Structs\BoneData.h" />
     <ClInclude Include="Components\BonePartsComponent.h" />
-    <ClInclude Include="BonePartsMesh.h" />
+    <ClInclude Include="Mesh\BonePartsMesh.h" />
     <ClInclude Include="Components\Bones.h" />
     <ClInclude Include="Components\BossEventComponent.h" />
     <ClInclude Include="Components\BulletComponent.h" />
     <ClInclude Include="Components\Camera.h" />
     <ClInclude Include="Components\CameraMoveComponent.h" />
-    <ClInclude Include="CameraPattern.h" />
+    <ClInclude Include="Structs\CameraPattern.h" />
     <ClInclude Include="Components\CameraPointComponent.h" />
     <ClInclude Include="Components\CameraTargetComponent.h" />
     <ClInclude Include="Components\MeshCut2DComponent.h" />
@@ -369,7 +370,7 @@
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Manager\ComponentTypeManager.h" />
     <ClInclude Include="Components\CSVObjectManagerComponent.h" />
-    <ClInclude Include="CSV_Data.h" />
+    <ClInclude Include="Structs\CSV_Data.h" />
     <ClInclude Include="Components\DeathBlockComponent.h" />
     <ClInclude Include="Components\DoorFadeComponent.h" />
     <ClInclude Include="Components\Effect2DComponent.h" />
@@ -397,11 +398,11 @@
     <ClInclude Include="Mesh\LineMesh.h" />
     <ClInclude Include="Components\MoveCarComponent.h" />
     <ClInclude Include="Components\MoveTerrainComponent.h" />
-    <ClInclude Include="ObjectStatus.h" />
+    <ClInclude Include="Structs\ObjectStatus.h" />
     <ClInclude Include="Scene\LoadStageScene.h" />
     <ClInclude Include="Mesh\PlaneMesh.h" />
     <ClInclude Include="Components\PlayerDamageComponent.h" />
-    <ClInclude Include="HelpMath.h" />
+    <ClInclude Include="Helper\HelpMath.h" />
     <ClInclude Include="Components\RenderBlurComponent.h" />
     <ClInclude Include="Components\RenderLineComponent.h" />
     <ClInclude Include="Mesh\SkyDomeMesh.h" />
@@ -412,20 +413,20 @@
     <ClInclude Include="Mesh\CubeMesh.h" />
     <ClInclude Include="System\DebugCout.h" />
     <ClInclude Include="System\DirectXRender.h" />
-    <ClInclude Include="dx11helper.h" />
+    <ClInclude Include="Helper\dx11helper.h" />
     <ClInclude Include="Components\EnemyDamageComponent.h" />
     <ClInclude Include="Components\FighterComponent.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Components\GoAroundComponent.h" />
     <ClInclude Include="Components\HPBarMoveComponent.h" />
-    <ClInclude Include="HPParam.h" />
-    <ClInclude Include="InchWorm_Test.h">
+    <ClInclude Include="Structs\HPParam.h" />
+    <ClInclude Include="Components\InchWorm_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="input.h" />
+    <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Components\JumpComponent.h" />
-    <ClInclude Include="Material.h" />
+    <ClInclude Include="Structs\Material.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="MeshRenderer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -433,14 +434,13 @@
     </ClInclude>
     <ClInclude Include="Manager\ModelManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Ray.h" />
     <ClInclude Include="Components\Render.h" />
     <ClInclude Include="Components\Render2D.h" />
     <ClInclude Include="Components\Render3D.h" />
     <ClInclude Include="Components\Render3DColliderAABBComponent.h" />
     <ClInclude Include="Components\Render3DColliderOBBComponent.h" />
     <ClInclude Include="Components\RenderBillboard.h" />
-    <ClInclude Include="RenderElement.h" />
+    <ClInclude Include="Structs\RenderElement.h" />
     <ClInclude Include="Components\RenderMask3D.h" />
     <ClInclude Include="Components\RenderOneSkinAnimation.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -458,16 +458,16 @@
     <ClInclude Include="Scene\Stage1Scene.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="TestBoneData.h" />
-    <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="Structs\TestBoneData.h" />
+    <ClInclude Include="Buffer\IndexBuffer.h" />
     <ClInclude Include="System\main.h" />
-    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Components\TestExtrusionJudgeComponent.h" />
     <ClInclude Include="Scene\TestMaskScene.h" />
     <ClInclude Include="Components\PlayerOperationComponent.h" />
     <ClInclude Include="Scene\TestStageScene.h" />
     <ClInclude Include="Components\TestSwordActionComponent.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Manager\TextureManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
     <ClInclude Include="Scene\TitleScene.h" />
@@ -481,11 +481,11 @@
     <ClInclude Include="Mesh\TriangularPrismMesh.h" />
     <ClInclude Include="Components\TimeLineComponent.h" />
     <ClInclude Include="utility.h" />
-    <ClInclude Include="VertexBuffer.h" />
-    <ClInclude Include="XMFLOAT_Helper.h" />
+    <ClInclude Include="Buffer\VertexBuffer.h" />
+    <ClInclude Include="Helper\XMFLOAT_Helper.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\MaskTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\MaskTexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -493,7 +493,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\MotionBlurCircularGS.hlsl">
+    <FxCompile Include="ShaderResource\MotionBlurCircularGS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -507,7 +507,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="shader\MotionBlurVS.hlsl">
+    <FxCompile Include="ShaderResource\MotionBlurVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -515,7 +515,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\OneSkinAnimationPS.hlsl">
+    <FxCompile Include="ShaderResource\OneSkinAnimationPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -523,7 +523,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\OneSkinAnimationVS.hlsl">
+    <FxCompile Include="ShaderResource\OneSkinAnimationVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -531,7 +531,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\OverVertexMoveVS.hlsl">
+    <FxCompile Include="ShaderResource\OverVertexMoveVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -539,35 +539,35 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\Animation2DVS.hlsl">
+    <FxCompile Include="ShaderResource\Animation2DVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\BlurPS.hlsl">
+    <FxCompile Include="ShaderResource\BlurPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\common.hlsl">
+    <FxCompile Include="ShaderResource\common.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="shader\Fighter2DPS.hlsl">
+    <FxCompile Include="ShaderResource\Fighter2DPS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="shader\LineVS.hlsl">
+    <FxCompile Include="ShaderResource\LineVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\litTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\litTexturePS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
@@ -575,7 +575,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="shader\litTextureVS.hlsl">
+    <FxCompile Include="ShaderResource\litTextureVS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
@@ -583,7 +583,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="shader\litTextureVS2D.hlsl">
+    <FxCompile Include="ShaderResource\litTextureVS2D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -591,7 +591,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\PassThroughVS.hlsl">
+    <FxCompile Include="ShaderResource\PassThroughVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -599,7 +599,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitLuminescencePS.hlsl">
+    <FxCompile Include="ShaderResource\unlitLuminescencePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -607,7 +607,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitLuminescenceVS.hlsl">
+    <FxCompile Include="ShaderResource\unlitLuminescenceVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -615,7 +615,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitRingLuminescencePS.hlsl">
+    <FxCompile Include="ShaderResource\unlitRingLuminescencePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
@@ -623,19 +623,19 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexturePS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexture2D_GS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexture2D_GS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
@@ -647,7 +647,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS2D.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVS2D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -655,7 +655,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVSSkyDome.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVSSkyDome.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
@@ -663,7 +663,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexture_GS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexture_GS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>

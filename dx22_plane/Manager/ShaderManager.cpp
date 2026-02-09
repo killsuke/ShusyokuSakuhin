@@ -4,10 +4,8 @@
 using namespace std::filesystem;
 
 namespace {
-	std::string FilePathToShader = "shader/"; // シェーダーファイルのパス
+	std::string FilePathToShader = "ShaderResource/"; // シェーダーファイルのパス
 }
-
-std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash> ShaderManager::m_ShaderCache;
 
 void ShaderManager::Init() {
 	m_ShaderCache.clear();

@@ -1,7 +1,7 @@
 #include "RenderHpComponent.h"
 #include "System/DirectXRender.h"
 #include "Transform.h"
-#include "HPParam.h"
+#include "Structs/HPParam.h"
 #include "FighterComponent.h"
 
 using namespace DirectX;

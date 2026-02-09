@@ -5,7 +5,7 @@
 #include "RenderBillboard.h"
 #include "Mesh/CircleMesh.h"
 #include "Mesh/LineMesh.h"
-#include "input.h"
+#include "Input/Input.h"
 #include "FollowPositionComponent.h"
 
 using namespace DirectX::SimpleMath;
@@ -18,7 +18,7 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 
 	CreateMesh<LineMesh>();
 	// 専用のインプットレイアウトもここで作成予定
-	SetShader("shader/LineVS.hlsl", "shader/unlitTexturePS.hlsl","shader/unlitTexture_GS.hlsl");
+	SetShader("ShaderResource/LineVS.hlsl", "ShaderResource/unlitTexturePS.hlsl","ShaderResource/unlitTexture_GS.hlsl");
 
 	m_StartObj = GameObjectManager::AddAbsFront("startPoint", "LineObj");
 	TransformComponent* transS = m_StartObj->AddComponent<TransformComponent>();
@@ -27,7 +27,7 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	RenderBillboardComponent* rendS = m_StartObj->AddComponent<RenderBillboardComponent>();
 	
 	rendS->CreateMesh<CircleMesh>();
-	rendS->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rendS->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rendS->ChangeTexture("assets/texture/NoTexture.png");
 
 	m_EndObj = GameObjectManager::AddAbsFront("endPoint","LineObj");
@@ -37,7 +37,7 @@ RenderLineComponent::RenderLineComponent(GameObject& obj) : RenderComponent(obj)
 	RenderBillboardComponent* rendE = m_EndObj->AddComponent<RenderBillboardComponent>();
 	
 	rendE->CreateMesh<CircleMesh>();
-	rendE->SetShader("shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl");
+	rendE->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rendE->ChangeTexture("assets/texture/NoTexture.png");
 }
 

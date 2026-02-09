@@ -15,8 +15,8 @@ void EnemyJsonComponent::Update() {
 
 void EnemyJsonComponent::MakeSampleStatus() {
 	std::vector<EnemyStatus> enemies = {
-	{ "E_NoMove" , {5.0f,5.0f,5.0f}, { 0.0f,0.0f,0.0f },10,10,"assets/texture/NoTexture.png","shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl"},
-	{ "E_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },10,10,"assets/texture/dice.png","shader/unlitTextureVS.hlsl", "shader/unlitTexturePS.hlsl"},
+	{ "E_NoMove" , {5.0f,5.0f,5.0f}, { 0.0f,0.0f,0.0f },10,10,"assets/texture/NoTexture.png","ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl"},
+	{ "E_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },10,10,"assets/texture/dice.png","ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl"},
 	};
 
 	m_enemyStatus = enemies;

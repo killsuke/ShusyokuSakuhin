@@ -1,25 +1,38 @@
 #pragma once
 #include "GameObjectManager.h"
-#include "SoundManager.h"
-#include "Input.h"
+#include "Input/Input.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneList.h"
 #include <memory>
 
 class SceneManager final
 {
+private:
+	static inline std::unique_ptr<Scene> m_Scene = nullptr;		// 現在のシーン
+	static inline bool m_IsSceneChange = false;	// シーンチェンジが起こったのかのフラグ
+	static inline float m_WaitTime = 0.0f;	// シーン遷移を少し待つ
+	static inline float m_WaitTimeCounter = 0.0f;
+
+	// コンストラクタ・デストラクタを削除
+	SceneManager() = delete;
+	~SceneManager() = delete;
+
+	// コピー・ムーブも削除
+	SceneManager(const SceneManager&) = delete;
+	SceneManager(SceneManager&&) = delete;
+	SceneManager& operator=(const SceneManager&) = delete;
+	SceneManager& operator=(SceneManager&&) = delete;
+
 public:
 
-	SceneManager() = default;	// コンストラクタ
-	~SceneManager() = default;			// デストラクタ
 	template <typename T1>
 	static void SceneChange() {	// sceneの値で現在処理するべきシーンへと変更する
 		static_assert(std::is_base_of<Scene, T1>::value, "T1 must be derived from Scene");
 		{
-			sceneChangeFg = true;	// シーンチェンジのフラグを立てる
-			m_pScene.reset();	// 現在のシーンを片付ける
+			m_IsSceneChange = true;	// シーンチェンジのフラグを立てる
+			m_Scene.reset();	// 現在のシーンを片付ける
 		}
-		m_pScene = std::make_unique<T1>();	// シーンを変更
+		m_Scene = std::make_unique<T1>();	// シーンを変更
 	};
 	
 	static void Init();					// シーンの初期化
@@ -28,18 +41,8 @@ public:
 	static void UnInit();					// シーンの片付け
 
 	// シーンチェンジのフラグ管理
-	static void SetSCFrag(const bool _sceneChangeFg) { sceneChangeFg = _sceneChangeFg; };
-	static bool GetSCFrag() { return sceneChangeFg; };
+	static void SetSCFrag(const bool _sceneChangeFg) { m_IsSceneChange = _sceneChangeFg; };
+	static bool GetSCFrag() { return m_IsSceneChange; };
 	
-//	static Sound GetSound() { return sound; };
-	static Scene* GetScene() { return m_pScene.get(); };
-
-private:
-	static std::unique_ptr<Scene> m_pScene;		// 現在のシーン
-	//Input input = Input::GetInstance();	// 入力処理のインスタンスを取得
-	//Sound* sound = nullptr;	// サウンド用のインスタンス
-	static bool sceneChangeFg;	// シーンチェンジが起こったのかのフラグ
-	static float waitTime;	// シーン遷移を少し待つ
-	static float waitTimeCounter;
-	//inline static Sound sound; // サウンド
+	static Scene* GetScene() { return m_Scene.get(); };
 };

@@ -33,7 +33,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dx11helper.cpp">
+    <ClCompile Include="Helper\dx11helper.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="System\Application.cpp">
@@ -42,13 +42,13 @@
     <ClCompile Include="System\main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="Shader\Shader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="Texture\Texture.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="System\AssimpPerse.cpp">
@@ -57,7 +57,7 @@
     <ClCompile Include="GameObject\GameObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="input.cpp">
+    <ClCompile Include="Input\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Components\SoundComponent.cpp">
@@ -88,9 +88,6 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="System\DebugCout.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Components\Collider.cpp">
@@ -153,10 +150,10 @@
     <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="BonePartsMesh.cpp">
+    <ClCompile Include="Mesh\BonePartsMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="InchWorm_Test.cpp">
+    <ClCompile Include="Components\InchWorm_Test.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\Render2D.cpp">
@@ -321,7 +318,7 @@
     <ClCompile Include="Components\FollowPositionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="HelpMath.cpp">
+    <ClCompile Include="Helper\HelpMath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Components\RenderBlurComponent.cpp">
@@ -462,30 +459,33 @@
     <ClCompile Include="Manager\SoundManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Ray.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dx11helper.h">
+    <ClInclude Include="Helper\dx11helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="System\Application.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="VertexBuffer.h">
+    <ClInclude Include="Buffer\VertexBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
+    <ClInclude Include="Buffer\IndexBuffer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="System\main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="Shader\Shader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Texture\Texture.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="System\AssimpPerse.h">
@@ -497,13 +497,13 @@
     <ClInclude Include="utility.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="Structs\Material.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\GameObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
+    <ClInclude Include="Input\Input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\SoundComponent.h">
@@ -539,10 +539,7 @@
     <ClInclude Include="System\DebugCout.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderElement.h">
+    <ClInclude Include="Structs\RenderElement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\Camera.h">
@@ -608,16 +605,16 @@
     <ClInclude Include="Mesh\SphereMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="BoneData.h">
+    <ClInclude Include="Structs\BoneData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderOneSkinAnimation.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="BonePartsMesh.h">
+    <ClInclude Include="Mesh\BonePartsMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="InchWorm_Test.h">
+    <ClInclude Include="Components\InchWorm_Test.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Render2D.h">
@@ -650,7 +647,7 @@
     <ClInclude Include="Components\CameraPointComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CameraPattern.h">
+    <ClInclude Include="Structs\CameraPattern.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\CameraTargetComponent.h">
@@ -668,7 +665,7 @@
     <ClInclude Include="Components\GoAroundComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="HPParam.h">
+    <ClInclude Include="Structs\HPParam.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\HPBarMoveComponent.h">
@@ -680,13 +677,13 @@
     <ClInclude Include="Scene\LoadStageScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="CSV_Data.h">
+    <ClInclude Include="Structs\CSV_Data.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\TerrainJsonComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectStatus.h">
+    <ClInclude Include="Structs\ObjectStatus.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\AttackComponent.h">
@@ -791,10 +788,10 @@
     <ClInclude Include="Components\FollowPositionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TestBoneData.h">
+    <ClInclude Include="Structs\TestBoneData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HelpMath.h">
+    <ClInclude Include="Helper\HelpMath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderBlurComponent.h">
@@ -824,7 +821,7 @@
     <ClInclude Include="Components\ArbitraryRotationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="XMFLOAT_Helper.h">
+    <ClInclude Include="Helper\XMFLOAT_Helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Manager\HitStopManager.h">
@@ -896,7 +893,7 @@
     <ClInclude Include="Components\SlashEffectComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RightLeft.h">
+    <ClInclude Include="Structs\RightLeft.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\ChargePerformanceComponent.h">
@@ -938,69 +935,72 @@
     <ClInclude Include="Manager\SoundManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Components\Ray.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="shader\common.hlsl">
+    <FxCompile Include="ShaderResource\common.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\OneSkinAnimationVS.hlsl">
+    <FxCompile Include="ShaderResource\OneSkinAnimationVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\OneSkinAnimationPS.hlsl">
+    <FxCompile Include="ShaderResource\OneSkinAnimationPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS2D.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\MaskTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\MaskTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\OverVertexMoveVS.hlsl">
+    <FxCompile Include="ShaderResource\OverVertexMoveVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTextureVSSkyDome.hlsl">
+    <FxCompile Include="ShaderResource\unlitTextureVSSkyDome.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\litTextureVS.hlsl">
+    <FxCompile Include="ShaderResource\litTextureVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\litTexturePS.hlsl">
+    <FxCompile Include="ShaderResource\litTexturePS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexture_GS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexture_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\LineVS.hlsl">
+    <FxCompile Include="ShaderResource\LineVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\BlurPS.hlsl">
+    <FxCompile Include="ShaderResource\BlurPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\Animation2DVS.hlsl">
+    <FxCompile Include="ShaderResource\Animation2DVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\Fighter2DPS.hlsl">
+    <FxCompile Include="ShaderResource\Fighter2DPS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\unlitTexture2D_GS.hlsl">
+    <FxCompile Include="ShaderResource\unlitTexture2D_GS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\MotionBlurVS.hlsl">
+    <FxCompile Include="ShaderResource\MotionBlurVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\litTextureVS2D.hlsl">
+    <FxCompile Include="ShaderResource\litTextureVS2D.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\MotionBlurCircularGS.hlsl" />
-    <FxCompile Include="shader\PassThroughVS.hlsl" />
-    <FxCompile Include="shader\unlitLuminescencePS.hlsl" />
-    <FxCompile Include="shader\unlitRingLuminescencePS.hlsl" />
-    <FxCompile Include="shader\unlitLuminescenceVS.hlsl" />
+    <FxCompile Include="ShaderResource\MotionBlurCircularGS.hlsl" />
+    <FxCompile Include="ShaderResource\PassThroughVS.hlsl" />
+    <FxCompile Include="ShaderResource\unlitLuminescencePS.hlsl" />
+    <FxCompile Include="ShaderResource\unlitRingLuminescencePS.hlsl" />
+    <FxCompile Include="ShaderResource\unlitLuminescenceVS.hlsl" />
   </ItemGroup>
 </Project>

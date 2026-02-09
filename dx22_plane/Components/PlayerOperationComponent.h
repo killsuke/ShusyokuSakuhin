@@ -1,6 +1,6 @@
 #pragma once
 #include "FighterComponent.h"
-#include "RightLeft.h"
+#include "Structs/RightLeft.h"
 
 enum class PlayerState
 {

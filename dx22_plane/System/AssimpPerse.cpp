@@ -2,7 +2,7 @@
 #include	<iostream>
 #include	<unordered_map>
 #include	<cassert>
-#include	"Texture.h"
+#include	"Texture/Texture.h"
 #include	"AssimpPerse.h"
 
 #pragma comment(lib, "assimp-vc143-mtd.lib")
