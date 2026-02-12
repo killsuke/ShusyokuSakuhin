@@ -18,6 +18,7 @@ void TimeLineComponent::Update() {
 
 	UpdatePointEvents();	// 一度きりのイベントの更新
 	UpdateRangeEvents();	// 範囲イベントの更新
+	UpdateContinuousEvents();	// 動き続けるイベントの更新
 }
 
 // 一度きりのイベントの更新
@@ -78,6 +79,16 @@ void TimeLineComponent::UpdateRangeEvents() {
 	}
 }
 
+void TimeLineComponent::UpdateContinuousEvents() {
+
+	for (auto& e : m_ContinuousEvents) {
+
+		if (e.valid == true && m_CurrentTime > e.triggerTime) {
+			e.eventAction();
+		}
+	}
+}
+
 // 一度きりのイベントを追加
 uint32_t TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
 	
@@ -120,6 +131,20 @@ uint32_t TimeLineComponent::AddRangeEvent(
 	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
 	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
 
+	return newEvent.eventID;
+}
+
+uint32_t TimeLineComponent::AddContinuousEvent(const float startTime, Component* owner, std::function<void()> action) {
+
+	TimeContinuousEvent newEvent;
+	newEvent.eventID = GenerateEventID();
+	newEvent.triggerTime = startTime;
+	newEvent.eventAction = action;
+	newEvent.ownerComponent = owner;
+	m_ContinuousEvents.push_back(newEvent);	// イベントを追加
+
+	const size_t index = m_ContinuousEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
 	return newEvent.eventID;
 }
 
@@ -166,6 +191,21 @@ uint32_t TimeLineComponent::AddRangeDelayEvent(const float startTime, const floa
 	return newEvent.eventID;
 }
 
+uint32_t TimeLineComponent::AddContinuousDelayEvent(const float delayTime, Component* owner, std::function<void()> action) {
+
+	TimeContinuousEvent newEvent;
+	newEvent.eventID = GenerateEventID();
+	newEvent.triggerTime = m_CurrentTime + delayTime;
+	newEvent.eventAction = action;
+	newEvent.ownerComponent = owner;
+	m_ContinuousEvents.push_back(newEvent);
+
+	const size_t index = m_ContinuousEvents.size() - 1;	// 追加したイベントのインデックスを取得
+	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+
+	return newEvent.eventID;
+}
+
 // 指定したコンポーネントに関連するすべてのイベントを削除
 void TimeLineComponent::RemoveEventsByComponent(Component* owner) {
 
@@ -195,6 +235,12 @@ void TimeLineComponent::StopEvent(uint32_t eventID) {
 		}
 	}
 	for (auto& e : m_RangeEvents) {
+		if (e.eventID == eventID) {
+			e.valid = false; // イベントを無効化
+			return;
+		}
+	}
+	for (auto& e : m_ContinuousEvents) {
 		if (e.eventID == eventID) {
 			e.valid = false; // イベントを無効化
 			return;

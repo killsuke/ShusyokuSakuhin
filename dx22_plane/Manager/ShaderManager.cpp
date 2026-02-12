@@ -92,7 +92,7 @@ HRESULT ShaderManager::CreateShader(const char* file,const LPCSTR& entry,const L
 // 拡張子を置き換える
 std::string ShaderManager::ReplaceExt(const std::string& path, const std::string& newExt) {
 
-	size_t pos = path.find_last_of('.');	// 最後に出てくるドットの位置を探す
+	const size_t pos = path.find_last_of('.');	// 最後に出てくるドットの位置を探す
 	if (pos == std::string::npos) {	// ドットが見つからなかった場合、std::string::npos = 見つからなかったことを示す特殊な値
 		return path + "." + newExt;
 	}

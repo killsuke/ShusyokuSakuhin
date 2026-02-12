@@ -13,23 +13,20 @@
 #include "Mesh/TriangleMesh.h"
 #include "System/Application.h"
 #include "Input/Input.h"
+#include "TimeLineComponent.h"
 
 using namespace DirectX::SimpleMath;
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
 
-	
+
 
 	GameObject* titleUI = GameObjectManager::AddObject("titleUI", "TitleUI");
 	TransformComponent* transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
 	transTitle->SetScale({ 350.0f,200.0f,1.0f });
-//	transTitle->SetRotation({ 0.0f,30.0f,0.0f });
+	//	transTitle->SetRotation({ 0.0f,30.0f,0.0f });
 	Render3DComponent* rendTitle = titleUI->AddComponent<Render3DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
 	rendTitle->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
@@ -99,7 +96,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		Render2DComponent* rendTri1 = triangle1->AddComponent<Render2DComponent>();
 		rendTri1->CreateMesh<TriangleMesh>();
 		rendTri1->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	//	rendTri1->ChangeTexture("assets/texture/testTerrain.png");
+		//	rendTri1->ChangeTexture("assets/texture/testTerrain.png");
 		m_Triangle1 = triangle1;
 
 		GameObject* triangle2 = GameObjectManager::AddObject("triangle2", "TitleUI");
@@ -148,7 +145,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		transTri4->SetScale({ 400.0f,360.0f,1.0f });
 		transTri4->SetRotation({ 0.0f,0.0f,-90.0f });
 		ProjectileMotionComponent* projComp4 = triangle4->AddComponent<ProjectileMotionComponent>();
-		projComp4->InitProjectile({ 0.0f, 5.0f, -20.0f }, { -0.5f,0.0f,0.0f },50.0f);
+		projComp4->InitProjectile({ 0.0f, 5.0f, -20.0f }, { -0.5f,0.0f,0.0f }, 50.0f);
 		projComp4->SetActiveFlag(false);
 		RigidBodyComponent* rigidComp4 = triangle4->AddComponent<RigidBodyComponent>();
 		rigidComp4->SetGravityFlag(true);
@@ -196,100 +193,122 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	rendSlashLine2->ChangeTexture("assets/texture/LightLine.png");
 	m_SlashUI2 = slashLineUI2;
 	m_SlashUI2->SetActiveState(ActiveState::UPDATE_STOP);
+
+	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+
+	if (timeLine == nullptr) {
+		timeLine = m_Object->AddComponent<TimeLineComponent>();
+	}
+
+	timeLine->AddPointDelayEvent(1.0f, this, [this]() {Slash1ActiveOn(); });				// 1.0秒後にスラッシュエフェクト1出現
+	timeLine->AddPointDelayEvent(1.2f, this, [this]() {Slash2ActiveOn(); });				// 1.2秒後にスラッシュエフェクト2出現
+	timeLine->AddPointDelayEvent(2.3f, this, [this]() {SlashesActiveOff(); });				// 2.3秒後にスラッシュエフェクト消去
+	timeLine->AddPointDelayEvent(2.8f, this, [this]() {TrianglesActiveOn(); });				// 2.8秒後に三角形割れ開始
+	timeLine->AddRangeDelayEvent(4.0f, 5.0f, 0.0f, this, [this](float) {SwordMove(); }, nullptr, [this]() {SwordSpecifiedPosition(); });	// 4.0秒から5.0秒まで剣移動
+	timeLine->AddRangeDelayEvent(5.0f, 5.3f, 0.0f, this, [this](float) {LogoRotating(); }); // 5.0秒から5.3秒までロゴの回転
+	timeLine->AddRangeDelayEvent(5.4f, 6.3f, 0.0f, this, [this](float) {SwordDown(); });	// 5.4秒から6.3秒まで剣を下に移動
+	timeLine->AddContinuousDelayEvent(6.3f, this, [this]() {GameStartWait(); });	// 5.4秒から6.3秒まで剣を下に移動
 }
 
 void TitleAnimationControlComponent::Update() {
+
+}
+
+void TitleAnimationControlComponent::Slash1ActiveOn() {
+
+	m_SlashUI1->SetActiveState(ActiveState::ACTIVE);
+}
+
+void TitleAnimationControlComponent::Slash2ActiveOn() {
+
+	m_SlashUI2->SetActiveState(ActiveState::ACTIVE);
+}
+
+void TitleAnimationControlComponent::SlashesActiveOff() {
+
+	m_SlashUI1->SetActiveState(ActiveState::ALL_STOP);
+	m_SlashUI2->SetActiveState(ActiveState::ALL_STOP);
+}
+
+void TitleAnimationControlComponent::TrianglesActiveOn() {
+
+	RigidBodyComponent* rigid1 = m_Triangle1->GetComponent<RigidBodyComponent>();
+	rigid1->SetActiveFlag(true);
+	RigidBodyComponent* rigid2 = m_Triangle2->GetComponent<RigidBodyComponent>();
+	rigid2->SetActiveFlag(true);
+	RigidBodyComponent* rigid3 = m_Triangle3->GetComponent<RigidBodyComponent>();
+	rigid3->SetActiveFlag(true);
+	RigidBodyComponent* rigid4 = m_Triangle4->GetComponent<RigidBodyComponent>();
+	rigid4->SetActiveFlag(true);
+	ProjectileMotionComponent* proj1 = m_Triangle1->GetComponent<ProjectileMotionComponent>();
+	proj1->SetActiveFlag(true);
+	ProjectileMotionComponent* proj2 = m_Triangle2->GetComponent<ProjectileMotionComponent>();
+	proj2->SetActiveFlag(true);
+	ProjectileMotionComponent* proj3 = m_Triangle3->GetComponent<ProjectileMotionComponent>();
+	proj3->SetActiveFlag(true);
+	ProjectileMotionComponent* proj4 = m_Triangle4->GetComponent<ProjectileMotionComponent>();
+	proj4->SetActiveFlag(true);
+}
+
+void TitleAnimationControlComponent::SwordMove() {
+
+	TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
+	trans->AddPosition({ 40.0f,0.0f,0.0f });
+}
+
+void TitleAnimationControlComponent::LogoRotating() {
+
+	TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
+	trans->AddRotation({ 0.0f,2.0f,0.0f });
+}
+
+void TitleAnimationControlComponent::SwordSpecifiedPosition() {
+
+	TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
+	transSword->SetPosition({ 1200.0f,1200.0f,-30.0f });
+	transSword->SetRotation({ 45.0f,-50.0f,0.0f });
+	transSword->SetScale({ 10.0f,500.0f,800.0f });
+}
+
+void TitleAnimationControlComponent::SwordDown() {
+
+	TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
+	trans->AddPosition({ -20.0f,-20.0f,0.0f });
+}
+
+void TitleAnimationControlComponent::GameStartWait() {
 
 	const bool IsEnter = (Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A));
 	const bool IsUporDown = (Input::GetKeyTrigger(VK_W) || Input::GetKeyTrigger(VK_S) || Input::GetKeyTrigger(VK_UP) || Input::GetKeyTrigger(VK_DOWN)
 		|| Input::GetButtonTrigger(XINPUT_UP) || Input::GetButtonTrigger(XINPUT_DOWN));
 
 	// ここで一連のアニメーション終了後の処理
-	if (m_RecordTime > 5.9f) {
-		m_StartUI->SetActiveState(ActiveState::ACTIVE);
-		m_EndUI->SetActiveState(ActiveState::ACTIVE);
-		m_MiniSword3D->SetActiveState(ActiveState::ACTIVE);
+	m_StartUI->SetActiveState(ActiveState::ACTIVE);
+	m_EndUI->SetActiveState(ActiveState::ACTIVE);
+	m_MiniSword3D->SetActiveState(ActiveState::ACTIVE);
 
-		TransformComponent* trans = m_MiniSword3D->GetComponent<TransformComponent>();
-		trans->AddRotation({0.0f,0.0f,2.0f});
+	TransformComponent* trans = m_MiniSword3D->GetComponent<TransformComponent>();
+	trans->AddRotation({ 0.0f,0.0f,2.0f });
 
-		// ここで十字キー上下とかで選択
-		if (IsUporDown == true) {
-			m_IsMiniSwordUpDown = !m_IsMiniSwordUpDown;
-		}
+	// ここで十字キー上下とかで選択
+	if (IsUporDown == true) {
+		m_IsMiniSwordUpDown = !m_IsMiniSwordUpDown;
+	}
 
-		if (m_IsMiniSwordUpDown == true) {
-			trans->SetPosition({ -200.0f,-200.0f,-8.0f });
-			// エンターキーを押してステージ1へ
-			if (IsEnter == true)
-			{
-				auto fade = GameObjectManager::GameObjectFindNameUI("fade");
-				auto door = fade->GetComponent<DoorFadeComponent>();
-				door->SetBootDoor(true);
-			}
-		}
-		else {
-			trans->SetPosition({ -150.0f,-290.0f,-8.0f });
-			if (IsEnter == true) {
-				Application::GameEnd();
-			}
+	if (m_IsMiniSwordUpDown == true) {
+		trans->SetPosition({ -200.0f,-200.0f,-8.0f });
+		// エンターキーを押してステージ1へ
+		if (IsEnter == true)
+		{
+			GameObject* fade = GameObjectManager::GameObjectFindNameUI("fade");
+			DoorFadeComponent* door = fade->GetComponent<DoorFadeComponent>();
+			door->SetBootDoor(true);
 		}
 	}
-	// 出現させた剣をロゴの後ろに移動させる
-	else if (m_RecordTime > 5.0f) {
-		TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
-		trans->AddPosition({-20.0f,-20.0f,0.0f});
+	else {
+		trans->SetPosition({ -150.0f,-290.0f,-8.0f });
+		if (IsEnter == true) {
+			Application::GameEnd();
+		}
 	}
-	// ロゴ回転
-	else if (m_RecordTime > 4.7f) {
-		TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
-		trans->AddRotation({0.0f,2.0f,0.0f});
-
-		TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
-		transSword->SetPosition({ 1200.0f,1200.0f,-30.0f });
-		transSword->SetRotation({45.0f,-50.0f,0.0f});
-		transSword->SetScale({ 10.0f,500.0f,800.0f });
-	}
-	// 剣出現
-	else if (m_RecordTime > 3.8) {
-		TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
-		trans->AddPosition({ 40.0f,0.0f,0.0f });
-	}
-	// 三角形飛ばす、画面割れ
-	else if (m_RecordTime > 2.2f) {
-		RigidBodyComponent* rigid1 = m_Triangle1->GetComponent<RigidBodyComponent>();
-		rigid1->SetActiveFlag(true);
-		RigidBodyComponent* rigid2 = m_Triangle2->GetComponent<RigidBodyComponent>();
-		rigid2->SetActiveFlag(true);
-		RigidBodyComponent* rigid3 = m_Triangle3->GetComponent<RigidBodyComponent>();
-		rigid3->SetActiveFlag(true);
-		RigidBodyComponent* rigid4 = m_Triangle4->GetComponent<RigidBodyComponent>();
-		rigid4->SetActiveFlag(true);
-		ProjectileMotionComponent* proj1 = m_Triangle1->GetComponent<ProjectileMotionComponent>();
-		proj1->SetActiveFlag(true);
-		ProjectileMotionComponent* proj2 = m_Triangle2->GetComponent<ProjectileMotionComponent>();
-		proj2->SetActiveFlag(true);
-		ProjectileMotionComponent* proj3 = m_Triangle3->GetComponent<ProjectileMotionComponent>();
-		proj3->SetActiveFlag(true);
-		ProjectileMotionComponent* proj4 = m_Triangle4->GetComponent<ProjectileMotionComponent>();
-		proj4->SetActiveFlag(true);
-
-
-	}
-	// 斬撃の役目終了
-	else if (m_RecordTime > 1.8f) {
-		m_SlashUI1->SetActiveState(ActiveState::ALL_STOP);
-		m_SlashUI2->SetActiveState(ActiveState::ALL_STOP);
-	}
-	// ２本目の斬撃
-	else if (m_RecordTime > 0.7f) {
-		m_SlashUI2->SetActiveState(ActiveState::ACTIVE);
-	}
-	// １本目の斬撃
-	else if (m_RecordTime > 0.5f) {
-		m_SlashUI1->SetActiveState(ActiveState::ACTIVE);
-	}
-	
-
-	m_RecordTime += DeltaTime;
 }

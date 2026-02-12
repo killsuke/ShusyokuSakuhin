@@ -242,105 +242,10 @@ LoadStageScene::LoadStageScene() {
 
 		playerOperation->SetWeaponObject(rolling);
 
-		//auto rolling2 = GameObjectManager::AddObject("rolling2", "Sword");
-
-		//auto rollingTrans2 = rolling2->AddComponent<TransformComponent>();
-		//rollingTrans2->SetScale({ 8.0f, 3.0f, 3.0f });
-		//rollingTrans2->SetPosition({ -30.0f,-9.0f,0.0f });
-		//rollingTrans2->SetRotation({ 0.0f, 0.0f, 0.0f });
-
-		//auto rollingGoAround2 = rolling2->AddComponent<GoAroundComponent>();
-		//rollingGoAround2->SetCenterObject(player); // プレイヤーを中心に回るように設定
-		//rollingGoAround2->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
-		//rollingGoAround2->SetRotationSpeed(7.0f); // 回転速度を設定
-		//rollingGoAround2->SetInitialAngle(180.0f); // 初期角度を設定
-
-		//SquareMesh rollingMesh2;
-		//auto rollingRender2 = rolling2->AddComponent<Render3DComponent>();
-		//rollingRender2->CreateMesh(rollingMesh2);
-		//rollingRender2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//rollingRender2->SetTexture("assets/texture/NoTexture.png");
-
-		// == ここ大事↑ ==
-
-
-		/*CubeMesh cubeMeshSword;
-		CubeMesh cubeMeshSword2;
-		auto sword = GameObjectManager::AddChild("sword", "Cube");
-
-		player->SetChild(sword);
-
-		auto swordTrans = sword->AddComponent<TransformComponent>();
-		swordTrans->SetLocalScale({ 1.5f, 0.5f, 1.0f });
-		swordTrans->SetLocalPosition({ 3.0f, 2.0f, 0.0f });
-		swordTrans->SetLocalRotation({ 0.0f, 0.0f, 30.0f });
-		swordTrans->MakeChildWorld();
-
-		auto swordColl = sword->AddComponent<ColliderComponent>();
-		swordColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
-		swordColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(5.0f, 5.0f, 0.0f));
-
-		auto swordAttack = sword->AddComponent<AttackComponent>();
-		swordAttack->SetCoolDownTime(1.0f);
-
-		auto fighter = sword->AddComponent<FighterComponent>();
-		fighter->SetHp(100);
-		fighter->SetAtk(10);
-
-		sword->AddComponent<EnemyDamageComponent>();
-
-		auto swordRe = sword->AddComponent<Render3DComponent>();
-		swordRe->CreateMesh(cubeMeshSword);
-		swordRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		swordRe->SetTexture("assets/texture/NoTexture.png");
-
-		auto swordRe2 = sword->AddComponent<Render3DColliderOBBComponent>();
-		swordRe2->CreateMesh(cubeMeshSword2);
-		swordRe2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		swordRe2->SetTexture("assets/texture/NoTexture.png");
-		swordRe2->SetColor(DirectX::XMFLOAT4(0.5f, 1.0f, 0.5f, 0.5f));*/
+		
 	}
-
-	// ブラーのテスト
-	/*auto blur = GameObjectManager::AddUI("blur", "BlurUI");
-	auto transBlur = blur->AddComponent<TransformComponent>();
-	transBlur->SetPosition({ 0.0f, 15.0f, 220.0f });
-	transBlur->SetScale({ 50.0f, 50.0f, 1.0f });
-	auto blurRend = blur->AddComponent<RenderBlurComponent>();
-
-	blurRend->CreateMesh<SquareMesh>();
-	blurRend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-	blurRend->ChangeTexture("assets/texture/title_car.png");
-	blurRend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(200.0f,200.0f));*/
-
-
-	// モデルテスト
-	/*auto modelObj = GameObjectManager::AddObject("model", "Model");
-	auto trans = modelObj->AddComponent<TransformComponent>();
-	trans->SetPosition({ 0.0f,10.0f,0.0f });
-	trans->SetScale({ 30.0f,30.0f,30.0f });
-	auto model = ModelManager::GetModel("assets/model/goal/goal.fbx", "assets/model/goal");
-	auto rend = modelObj->AddComponent<Render3DComponent>();
-	rend->CreateMesh(*model);
-	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");*/
 
 	TargetAndScroolCreate();
-
-	{
-		/*auto testUI = GameObjectManager::AddUI("TestUI", "TestUI");
-		auto testUITrans = testUI->AddComponent<TransformComponent>();
-		testUITrans->SetPosition({ -300.0f, 0.0f, 0.0f });
-		testUITrans->SetScale({ 50.0f,50.0f,50.0f });
-		auto testUIRend = testUI->AddComponent<Render2DComponent>();
-		SquareMesh square;
-		testUIRend->CreateMesh(square);
-		testUIRend->SetTexture("assets/texture/3count.png");
-		testUIRend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-		testUIRend->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		// ここのテクスチャはメッシュ経由でやろう
-		auto uiTex = testUIRend->GetTexture();
-		uiTex->SetInitialCut(2.0f, 2.0f);*/
-	}
 
 	{
 		auto hp = GameObjectManager::AddUI("hpFrameUI", "HP_UI");
@@ -545,27 +450,6 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend8->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		targetRend8->ChangeTexture("assets/texture/NoTexture.png");
 #endif
-
-		//auto circle = GameObjectManager::AddObject("Scroll", "Scroll");
-		//auto circleTrans = circle->AddComponent<TransformComponent>();
-		//circleTrans->SetScale({ 30.0f, 30.0f, 10.0f });
-		//circleTrans->SetPosition({ -80.0f, 60.0f, 0.0f });
-		//auto rigidMe = circle->AddComponent<RigidBodyComponent>();
-		//rigidMe->SetActiveFlag(true); // 物理演算を有効にする
-		//auto circleRend = circle->AddComponent<Render3DComponent>();
-		//CircleMesh circleMesh;
-		//circleRend->CreateMesh(circleMesh);
-		//circleRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//circleRend->SetTexture("assets/texture/NoTexture.png");
-
-		//auto circleSpring = circle->AddComponent<SpringComponent>();
-		//circleSpring->SetK(20.0f); // ばね定数をセット
-		//circleSpring->MakeDamping(); // ダンピングを作成
-		//circleSpring->SetSpringPartner(target);
-
-		//cameraSpring->SetK(20.0f); // ばね定数をセット
-		//cameraSpring->MakeDamping(); // ダンピングを作成
-		//cameraSpring->SetSpringPartner(target);
 
 		auto point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
 		auto pointTrans1 = point1->AddComponent<TransformComponent>();

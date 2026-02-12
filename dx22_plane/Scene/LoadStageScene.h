@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
-class LoadStageScene : public Scene
+
+class LoadStageScene final : public Scene
 {
 private:
 

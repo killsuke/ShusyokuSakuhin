@@ -16,7 +16,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 
     const std::wstring wfilename = ShortConversion(filename);
     
-    std::unordered_map<std::wstring,Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
+    const std::unordered_map<std::wstring,Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
         = textureMap.find(wfilename);
 
     if (it != textureMap.end()) {
@@ -43,7 +43,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 // テクスチャの取得関数
 Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(const std::string& filename) {
     const std::wstring wfilename = ShortConversion(filename);
-    std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
+    const std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it 
         = textureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
 	
     if (it != textureMap.end()) { // 要素が見つかった場合

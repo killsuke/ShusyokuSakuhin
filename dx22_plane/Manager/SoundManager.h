@@ -31,8 +31,8 @@ private:
 	SoundManager& operator=(const SoundManager&) = delete;
 	SoundManager& operator=(SoundManager&&) = delete;
 
-	static HRESULT FindChunk(HANDLE, DWORD, DWORD&, DWORD&);
-	static HRESULT ReadChunkData(HANDLE, void*, DWORD, DWORD);
+	static HRESULT FindChunk(const HANDLE& hFile,const DWORD& fourcc, DWORD& dwChunkSize, DWORD& dwChunkDataPosition);
+	static HRESULT ReadChunkData(const HANDLE& hFile, void* buffer, const DWORD& buffersize, const DWORD& bufferoffset);
 
 public:
 
@@ -42,12 +42,12 @@ public:
 	// ゲームループ終了後に呼び出すサウンドの解放処理
 	static void UnInit();
 
-	static HRESULT LoadWave(const std::string& key, const char* filename, bool loop);
+	static HRESULT LoadWave(const std::string& key, const char* filename, const bool loop);
 
 	static IXAudio2* GetXAudio2() { return m_pXAudio2; };
 	static IXAudio2MasteringVoice* GetMasteringVoice() { return m_pMasteringVoice; };
 	static SoundResource* GetSoundResource(const std::string& key) {
-		auto it = m_SoundResources.find(key);
+		const auto it = m_SoundResources.find(key);
 		if (it != m_SoundResources.end()) {
 			return &it->second;
 		}

@@ -4,7 +4,6 @@
 class TitleAnimationControlComponent : public Component
 {
 private:
-	float m_RecordTime = 0.0f;
 	GameObject* m_SlashUI1 = nullptr;
 	GameObject* m_SlashUI2 = nullptr;
 	GameObject* m_Triangle1 = nullptr;
@@ -19,8 +18,18 @@ private:
 	bool m_IsMiniSwordUpDown = true;
 
 public:
+
 	TitleAnimationControlComponent(GameObject& obj);
 	~TitleAnimationControlComponent() = default;
 	void Update()override;
 
+	void Slash1ActiveOn();
+	void Slash2ActiveOn();
+	void SlashesActiveOff();
+	void TrianglesActiveOn();
+	void SwordMove();
+	void SwordSpecifiedPosition();
+	void LogoRotating();
+	void SwordDown();
+	void GameStartWait();
 };

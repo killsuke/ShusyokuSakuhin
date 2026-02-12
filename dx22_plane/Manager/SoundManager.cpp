@@ -75,7 +75,7 @@ void SoundManager::UnInit() {
 //=============================================================================
 // ユーティリティ関数群
 //=============================================================================
-HRESULT SoundManager::FindChunk(HANDLE hFile, DWORD fourcc, DWORD& dwChunkSize, DWORD& dwChunkDataPosition)
+HRESULT SoundManager::FindChunk(const HANDLE& hFile,const DWORD& fourcc, DWORD& dwChunkSize, DWORD& dwChunkDataPosition)
 {
 	HRESULT hr = S_OK;
 	if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
@@ -118,7 +118,7 @@ HRESULT SoundManager::FindChunk(HANDLE hFile, DWORD fourcc, DWORD& dwChunkSize, 
 	return S_OK;
 }
 
-HRESULT SoundManager::ReadChunkData(HANDLE hFile, void* buffer, DWORD buffersize, DWORD bufferoffset)
+HRESULT SoundManager::ReadChunkData(const HANDLE& hFile,void* buffer,const DWORD& buffersize,const DWORD& bufferoffset)
 {
 	HRESULT hr = S_OK;
 	if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, bufferoffset, NULL, FILE_BEGIN))
@@ -130,11 +130,11 @@ HRESULT SoundManager::ReadChunkData(HANDLE hFile, void* buffer, DWORD buffersize
 }
 
 
-HRESULT SoundManager::LoadWave(const std::string& key, const char* filename, bool loop) {
+HRESULT SoundManager::LoadWave(const std::string& key, const char* filename,const bool loop) {
 
 	SoundResource res{};
 
-	HANDLE hFile = CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	const HANDLE hFile = CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if(hFile == INVALID_HANDLE_VALUE) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	}

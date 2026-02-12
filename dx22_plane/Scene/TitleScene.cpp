@@ -17,6 +17,7 @@
 #include "Manager/SceneManager.h"
 #include "Components/DoorFadeComponent.h"
 #include "Components/TitleAnimationControlComponent.h"
+#include "Components/TimeLineComponent.h"
 
 // コンストラクタ
 TitleScene::TitleScene()

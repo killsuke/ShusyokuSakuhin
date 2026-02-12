@@ -29,7 +29,16 @@ struct TimeRangeEvent{
 	bool valid = true;  // イベントが有効かどうかのフラグ
 };
 
-class TimeLineComponent : public Component
+struct TimeContinuousEvent {
+
+	uint32_t eventID = 0; // イベントのID
+	float triggerTime = 0.0f; // イベントが発生する時間
+	std::function<void()> eventAction; // イベントのアクション
+	Component* ownerComponent = nullptr; // このイベントを所有するコンポーネントへのポインタ
+	bool valid = true; // イベントが有効かどうかのフラグ
+};
+
+class TimeLineComponent final : public Component
 {
 private:
 	uint32_t m_NextEventID = 1; // 次に割り当てるイベントID
@@ -37,10 +46,12 @@ private:
 	size_t m_NextEventIndex = 0; // 次に発生するイベントのインデックス
 	std::vector<TimePointEvent> m_PointEvents; // タイムラインイベントのリスト
 	std::vector<TimeRangeEvent> m_RangeEvents; // 一定時間継続するイベントのリスト
+	std::vector<TimeContinuousEvent> m_ContinuousEvents;	// 無期限で継続するイベントのリスト
 	std::unordered_map<Component*, std::vector<size_t>> m_ComponentEventMap; // コンポーネントごとのイベントインデックスマップ
 
 	void UpdatePointEvents();
 	void UpdateRangeEvents();
+	void UpdateContinuousEvents();
 
 public:
 	TimeLineComponent(GameObject& obj);
@@ -51,14 +62,16 @@ public:
 	uint32_t AddRangeEvent(
 		const float startTime, const float endTime, Component* owner,
 		std::function<void(float)> onUpdate,
-		std::function<void()> onStart,
-		std::function<void()> onEnd);
+		std::function<void()> onStart = nullptr,
+		std::function<void()> onEnd = nullptr);
+	uint32_t AddContinuousEvent(const float startTime, Component* owner, std::function<void()> action);
 
 	uint32_t AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
 	uint32_t AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
 		std::function<void(float)> onUpdate,
-		std::function<void()> onStart,
-		std::function<void()> onEnd);
+		std::function<void()> onStart = nullptr,
+		std::function<void()> onEnd = nullptr);
+	uint32_t AddContinuousDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
 	void RemoveEventsByComponent(Component* owner);
 
 	void StopEvent(uint32_t eventID);

@@ -47,7 +47,7 @@ void SoundComponent::Update()
 // =============================================================================
 void SoundComponent::AddSoundLabel(const std::string& label) {
 
-	auto it = m_pSourceVoice.find(label);
+	const auto it = m_pSourceVoice.find(label);
 	if (it == m_pSourceVoice.end()) {
 		// 見つからなかった場合、新しいエントリを追加
 		m_pSourceVoice.emplace(label, nullptr);
@@ -59,7 +59,7 @@ void SoundComponent::AddSoundLabel(const std::string& label) {
 //=============================================================================
 void SoundComponent::Play(const std::string& label)
 {
-	auto it = m_pSourceVoice.find(label);
+	const auto it = m_pSourceVoice.find(label);
 	if (it == m_pSourceVoice.end()) return;
 
 	IXAudio2* xAudio = SoundManager::GetXAudio2();
@@ -100,7 +100,7 @@ void SoundComponent::Stop(const std::string& label)
 		return;
 	}
 
-	auto it = m_pSourceVoice.find(label);
+	const auto it = m_pSourceVoice.find(label);
 	if (it == m_pSourceVoice.end()) {
 		return;
 	}
@@ -129,7 +129,7 @@ void SoundComponent::Resume(const std::string& label)
 		return;
 	}
 
-	auto it = m_pSourceVoice.find(label);
+	const auto it = m_pSourceVoice.find(label);
 	if (it == m_pSourceVoice.end()) {
 		return;
 	}
@@ -147,13 +147,13 @@ void SoundComponent::Resume(const std::string& label)
 //=============================================================================
 // 音量調整
 //=============================================================================
-void SoundComponent::SetVolume(const std::string& label, float volume) {
+void SoundComponent::SetVolume(const std::string& label,const float volume) {
 
 	if (m_pSourceVoice.empty()) {
 		return;
 	}
 
-	auto it = m_pSourceVoice.find(label);
+	const auto it = m_pSourceVoice.find(label);
 	if (it == m_pSourceVoice.end()) {
 		return;
 	}

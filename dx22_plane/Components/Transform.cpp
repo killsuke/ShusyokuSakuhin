@@ -12,15 +12,11 @@ void TransformComponent::Update() {
 	GameObject* parent = m_Object->GetParent(); // 親オブジェクトを取得
 	if (parent != nullptr) {
 
-		//	m_transform.worldMatrix = MakeLocalMatrix() * parent->GetComponent<TransformComponent>()->GetWorldMatrix(); // 親のワールド行列を取得
 		MakeChildMatrixAndWorld();
 	}
 	else {
 		// ワールド行列計算
 		MakeWorldMatrix();
-
-		// ローカル行列計算
-	//	MakeLocalMatrix();
 	}
 }
 

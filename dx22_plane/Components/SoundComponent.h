@@ -30,5 +30,5 @@ public:
 	void Resume(const std::string& label);
 
 	// 引数で指定したサウンドの音量を調整する
-	void SetVolume(const std::string& label, float volume);
+	void SetVolume(const std::string& label,const float volume);
 };

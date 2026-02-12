@@ -1,6 +1,6 @@
 #pragma once
 #include "Mesh.h"
-class CircleMesh : public Mesh
+class CircleMesh final : public Mesh
 {
 private:
 	const int numSegments = 32;

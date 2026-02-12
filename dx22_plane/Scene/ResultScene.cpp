@@ -29,19 +29,6 @@ ResultScene::ResultScene()
 	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 
-	/*{
-		auto titleUI = GameObjectManager::AddUI("BackUI", "TitleUI");
-		auto transTitle = titleUI->AddComponent<TransformComponent>();
-		transTitle->SetPosition({ 0.0f,0.0f,1.0f });
-		transTitle->SetScale({ 1080.0f,1000.0f,1.0f });
-		SquareMesh square;
-		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
-		rendTitle->SetMesh(square);
-		rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		rendTitle->SetTexture("assets/texture/NoTexture.png");
-		rendTitle->SetColor({ 0.0f,0.0f,0.0f,1.0f });
-	}*/
-
 	auto ResultUI = GameObjectManager::AddUI("resultUI", "ResultUI");
 	auto transTitle = ResultUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,30.0f,0.0f });
