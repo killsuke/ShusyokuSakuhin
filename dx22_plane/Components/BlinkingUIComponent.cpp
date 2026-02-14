@@ -7,7 +7,7 @@ BlinkingUIComponent::BlinkingUIComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
 }
 
-void BlinkingUIComponent::Update() {
+void BlinkingUIComponent										::Update() {
 	if (m_blinkingFlag == false) {
 		return; // 点滅フラグがfalseなら何もしない
 	}

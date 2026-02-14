@@ -186,7 +186,7 @@ void Application::MainLoop()
 	EventBusManager::Init();
 	ShaderManager::Init();
 	DebugSystem::Init();
-	
+
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 	ID3D11Device* device = DirectXRender::GetDevice();
 
@@ -270,18 +270,12 @@ void Application::MainLoop()
 
 			//ImGui::End();
 #endif
-			double deltaTime = 0.016;
 
-			m_AccumulatorTime += deltaTime;
+			TimeManager::Update();
 
-			while (m_AccumulatorTime >= 0.016) {
-
-				TimeManager::Update();
+			while (TimeManager::ShouldFixedUpdate()) {
 
 				SceneManager::Update(); // シーンの更新
-
-		
-				m_AccumulatorTime -= 0.016;
 			}
 
 			SceneManager::Draw();   // シーンの描画
@@ -343,6 +337,22 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	}
 	break;
 
+	case WM_SIZE: // ウィンドウサイズが変更されたメッセージ
+	{
+		// ウィンドウの幅と高さを取得
+		UINT width = LOWORD(lParam);
+		UINT height = HIWORD(lParam);
+
+		if (width == 0 || height == 0) {
+			break; // 最小化された場合はリサイズ処理をスキップ
+		}
+
+		DirectXRender::OnResize(width, height);
+		std::cout << "WM_SIZE message received." << std::endl;
+
+	}
+	break;
+
 	case WM_KEYDOWN: //キー入力があったメッセージ
 	{
 		if (LOWORD(wParam) == VK_ESCAPE) { //入力されたキーがESCAPEなら
@@ -353,12 +363,15 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
 	case WM_ENTERSIZEMOVE:	// サイズ変更・移動開始
 	{
-		
+		TimeManager::SetTimeManagerActive(false);
+		std::cout << "StopTime" << std::endl;
 	}
 	break;
 	case WM_EXITSIZEMOVE:	// サイズ変更・移動終了
 	{
-		TimeManager::Reset();
+		TimeManager::SetTimeManagerActive(true);
+		std::cout << "StartTime" << std::endl;
+		//	TimeManager::Reset();
 	}
 	break;
 	default:

@@ -13,7 +13,12 @@ TimeLineComponent::~TimeLineComponent() {
 
 void TimeLineComponent::Update() {
 
-	const float deltaTime = TimeManager::GetDeltaTime();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+
+	if (deltaTime <= 0.0f) {
+		return;
+	}
+
 	m_CurrentTime += deltaTime;
 
 	UpdatePointEvents();	// 一度きりのイベントの更新
@@ -24,34 +29,46 @@ void TimeLineComponent::Update() {
 // 一度きりのイベントの更新
 void TimeLineComponent::UpdatePointEvents() {
 
+	const float now = m_CurrentTime;
+
 	// 次のイベントが存在し、かつ現在の時間がそのイベントのトリガー時間を超えている場合
 	while (m_NextEventIndex < m_PointEvents.size()) {
 
-		if (m_PointEvents[m_NextEventIndex].valid == false) {
+		auto& e = m_PointEvents[m_NextEventIndex];
+
+		if (e.valid == false) {
 
 			m_NextEventIndex++;
 			continue; // 無効なイベントはスキップ
 		}
 
-		if (m_CurrentTime < m_PointEvents[m_NextEventIndex].triggerTime)
+		if (now >= e.triggerTime) {
+			// イベントを実行
+			e.eventAction();
+			// 次のイベントへ進む
+			m_NextEventIndex++;
+		}
+
+		if (m_CurrentTime < e.triggerTime)
 		{
 			break; // 次のイベントの時間に達していない場合はループを抜ける
 		}
-
-		// イベントを実行
-		m_PointEvents[m_NextEventIndex].eventAction();
-		// 次のイベントへ進む
-		m_NextEventIndex++;
 	}
 }
 
 // 範囲イベントの更新
 void TimeLineComponent::UpdateRangeEvents() {
 
+	const float now = m_CurrentTime;
+
 	for (auto& e : m_RangeEvents) {
 
+		if (e.valid == false) {
+			continue; // 無効なイベントはスキップ
+		}
+
 		// 開始処理
-		if (e.started == false && m_CurrentTime >= e.startTime) {
+		if (e.started == false && now >= e.startTime) {
 
 			e.started = true;
 			if (e.onStart) {
@@ -62,7 +79,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 		// 中間処理
 		if (e.started == true && e.ended == false) {
 
-			float t = (m_CurrentTime - e.startTime) / (e.endTime - e.startTime);
+			float t = (now - e.startTime) / (e.endTime - e.startTime);
 			t = std::clamp(t, 0.0f, 1.0f);
 			if (e.onUpdate) {
 				e.onUpdate(t);
@@ -70,7 +87,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 		}
 
 		// 終了処理
-		if (e.ended == false && m_CurrentTime >= e.endTime) {
+		if (e.ended == false && now >= e.endTime) {
 			e.ended = true;
 			if (e.onEnd) {
 				e.onEnd();
@@ -81,9 +98,15 @@ void TimeLineComponent::UpdateRangeEvents() {
 
 void TimeLineComponent::UpdateContinuousEvents() {
 
+	const float now = m_CurrentTime;
+
 	for (auto& e : m_ContinuousEvents) {
 
-		if (e.valid == true && m_CurrentTime > e.triggerTime) {
+		if (e.valid == false) {
+			continue;
+		}
+
+		if (now >= e.triggerTime) {
 			e.eventAction();
 		}
 	}
@@ -91,7 +114,7 @@ void TimeLineComponent::UpdateContinuousEvents() {
 
 // 一度きりのイベントを追加
 uint32_t TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
-	
+
 	TimePointEvent newEvent;
 	newEvent.eventID = GenerateEventID();
 	newEvent.triggerTime = time;
@@ -218,7 +241,7 @@ void TimeLineComponent::RemoveEventsByComponent(Component* owner) {
 		m_PointEvents[index].valid = false; // 空の関数に置き換え
 	}
 
-	for(auto index : it->second) {
+	for (auto index : it->second) {
 		m_RangeEvents[index].valid = false; // 空の関数に置き換え
 	}
 

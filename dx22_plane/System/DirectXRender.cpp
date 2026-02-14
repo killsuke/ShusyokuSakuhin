@@ -14,8 +14,11 @@
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
+namespace {
 
-
+	constexpr int DEFAULT_SCREEN_POS_X = 100;
+	constexpr int DEFAULT_SCREEN_POS_Y = 50;
+}
 
 HRESULT DirectXRender::Init() {
 
@@ -50,6 +53,14 @@ HRESULT DirectXRender::Init() {
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
 
+#ifdef _DEBUG
+
+	SetWindowed(); // ウィンドウモード設定
+#else
+
+	// フルスクリーンボーダレス設定
+	SetBorderlessFullScreen();
+#endif // _DEBUG
 
 	return S_OK;
 }
@@ -140,7 +151,7 @@ HRESULT DirectXRender::DeviceAndSwapCreate() {
 	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, NULL, 0,
 		D3D11_SDK_VERSION, &swapChainDesc, &m_SwapChain, &m_Device, &m_FeatureLevel, &m_DeviceContext);
 	if (FAILED(hr)) return hr;
-
+	
 	return hr;
 }
 
@@ -163,7 +174,7 @@ HRESULT DirectXRender::DepthStencilCreate() {
 	HRESULT hr = S_OK;
 
 	// デプスステンシルバッファ作成
-	ID3D11Texture2D* depthStencile{};
+	ID3D11Texture2D* depthStencile = nullptr;
 	D3D11_TEXTURE2D_DESC textureDesc{};
 	textureDesc.Width = Application::GetWidth();   // バッファの幅をスワップチェーンに合わせる
 	textureDesc.Height = Application::GetHeight(); // バッファの高さをスワップチェーンに合わせる
@@ -893,4 +904,129 @@ void DirectXRender::SwitchingFillMode() {
 	else if (m_FillMode == EFillMode::FILL_WIREFRAME) {
 		SetFillMode(EFillMode::FILL_SOLID);
 	}
+}
+
+void DirectXRender::SetBorderlessFullScreen() {
+
+	const HWND hWnd = Application::GetWindow();
+
+	// モニター情報を取得
+	const HMONITOR hMonitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
+	MONITORINFO mi = {};
+	mi.cbSize = sizeof(mi);
+	GetMonitorInfo(hMonitor, &mi);
+
+	// ウィンドウハンドルスタイル変更（枠なし）
+	SetWindowLong(hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+
+	// モニターサイズに合わせる
+	SetWindowPos(
+		hWnd,
+		HWND_TOP,
+		mi.rcMonitor.left,
+		mi.rcMonitor.top,
+		mi.rcMonitor.right - mi.rcMonitor.left,
+		mi.rcMonitor.bottom - mi.rcMonitor.top,
+		SWP_FRAMECHANGED
+	);
+}
+
+void DirectXRender::SetWindowed() {
+
+	const HWND hWnd = Application::GetWindow();
+	const int width = Application::GetWidth();
+	const int height = Application::GetHeight();
+
+	// ウィンドウハンドルスタイル変更（枠あり）
+	SetWindowLong(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+
+	SetWindowPos(
+		hWnd,
+		nullptr,
+		DEFAULT_SCREEN_POS_X, DEFAULT_SCREEN_POS_Y,
+		width,
+		height,
+		SWP_FRAMECHANGED
+	);
+}
+
+void DirectXRender::OnResize(const UINT& width, const UINT& height) {
+
+	if (m_SwapChain == nullptr) {
+		return;
+	}
+
+	HRESULT hr = S_OK;
+
+	m_DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	SAFE_RELEASE(m_RenderTargetView);
+	SAFE_RELEASE(m_DepthStencilView);
+
+	// バックバッファサイズ変更
+	hr = m_SwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "ResizeBuffers error", "Error", MB_OK);
+		return;
+	}
+
+	// バックバッファ再取得
+	ID3D11Texture2D* backBuffer = nullptr;
+	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "GetBuffer error", "Error", MB_OK);
+		return;
+	}
+
+	// レンダーターゲットビュー再作成
+	hr = m_Device->CreateRenderTargetView(backBuffer, nullptr, &m_RenderTargetView);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateRenderTargetView error", "Error", MB_OK);
+		return;
+	}
+
+	backBuffer->Release();
+
+	// デプスステンシルバッファ再作成
+	ID3D11Texture2D* depthStencile = nullptr;
+	D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+	depthStencilDesc.Width = width;
+	depthStencilDesc.Height = height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	hr = m_Device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencile);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateTexture2D error", "Error", MB_OK);
+		return;
+	}
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
+	depthStencilViewDesc.Format = depthStencilDesc.Format; // デプスステンシルバッファのフォーマットを設定
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // ビューの次元を2Dテクスチャとして設定（2Dテクスチャ用のデプスステンシルビュー）
+	depthStencilViewDesc.Flags = 0; // 特別なフラグは設定しない（デフォルトの動作）
+
+	// デプスステンシルビュー再作成
+	hr = m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
+	if(FAILED(hr)) {
+		MessageBox(nullptr, "CreateDepthStencilView error", "Error", MB_OK);
+		return;
+	}
+
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+
+	depthStencile->Release();
+
+	// ビューポート再設定
+	D3D11_VIEWPORT vp = {};
+	vp.Width = static_cast<FLOAT>(width);
+	vp.Height = static_cast<FLOAT>(height);
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+
+	m_DeviceContext->RSSetViewports(1, &vp);
 }

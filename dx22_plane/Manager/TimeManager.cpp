@@ -1,6 +1,11 @@
 #include "TimeManager.h"
 #include <iostream>
 
+namespace {
+	constexpr double FIXED_DT = 0.016;
+	constexpr double MAX_DELTA_TIME = 0.1;
+}
+
 void TimeManager::Init() {
 	// 周波数を取得（秒に直すためのスケール）
 	QueryPerformanceFrequency(&m_Frequency);
@@ -16,13 +21,28 @@ void TimeManager::UnInit() {
 }
 
 void TimeManager::Update() {
+
 	LARGE_INTEGER counter;
 	QueryPerformanceCounter(&counter);
 
 	// 時刻を取得して更新
 	const double currentTime = static_cast<double>(counter.QuadPart) / m_Frequency.QuadPart;
-	m_DeltaTime = static_cast<float>(currentTime - m_PrevTime);
+	double frameTime = currentTime - m_PrevTime;
 	m_PrevTime = currentTime;
+
+	// タイマーストップ中はフレームタイムをゼロにする
+	if (m_IsActive == false) {
+		frameTime = 0.0;
+	}
+
+	// 巨大フレーム防止
+	if (frameTime > MAX_DELTA_TIME) {
+		frameTime = MAX_DELTA_TIME;
+	}
+
+	m_DeltaTime = static_cast<float>(frameTime);
+
+	m_Accumulator += frameTime;
 }
 
 void TimeManager::Reset() {
@@ -31,4 +51,25 @@ void TimeManager::Reset() {
 	QueryPerformanceCounter(&counter);
 	m_PrevTime = static_cast<double>(counter.QuadPart) / m_Frequency.QuadPart;
 	m_DeltaTime = 0.0f;
+}
+
+// 固定更新が必要かどうかを判定
+bool TimeManager::ShouldFixedUpdate() {
+
+	// アキュムレータが固定更新の時間を超えているかどうかをチェック
+	// おさまっている時間の分だけ実行、余った分によるズレを防止
+	if (m_Accumulator >= FIXED_DT)
+	{
+		m_Accumulator -= FIXED_DT;
+		m_FixedDeltaTime = static_cast<float>(FIXED_DT);
+		return true;
+	}
+
+	return false;
+}
+
+// 固定更新のデルタタイムを取得
+float TimeManager::GetFixedDeltaTime()
+{
+	return m_FixedDeltaTime;
 }

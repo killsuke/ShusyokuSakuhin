@@ -22,8 +22,6 @@ private:
     static inline HWND        m_HWnd;         // ウィンドウハンドル
     static inline uint32_t    m_Width = 0;        // ウィンドウの横幅
     static inline uint32_t    m_Height = 0;       // ウィンドウの縦幅
-	const double m_FixedDeltaTime = 1.0 / 60.0; // 固定更新の時間
-	static inline double m_AccumulatorTime = 0.0f;       // 固定更新用のアキュムレータ
     static inline bool m_IsEndGame = false; // ゲームを終了させるフラグ
 
     Application() = default;

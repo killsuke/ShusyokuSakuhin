@@ -276,6 +276,11 @@ public:
 		m_ClearColor[3] = colors[3];
 	}
 
+	static void SetFullscreen(const BOOL flag) {
+
+		m_SwapChain->SetFullscreenState(flag, NULL);
+	};
+
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; };
@@ -312,4 +317,8 @@ public:
 	static void SetCullingState(const ECullingState& state);
 	static void SetFillMode(const EFillMode& fillMode);
 	static void SwitchingFillMode();
+
+	static void SetBorderlessFullScreen();
+	static void SetWindowed();
+	static void OnResize(const UINT& width,const UINT& height);
 };
