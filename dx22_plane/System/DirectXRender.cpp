@@ -49,6 +49,8 @@ HRESULT DirectXRender::Init() {
 
 	CreateGlowBuffer(); // ƒOƒ[—p’è”ƒoƒbƒtƒ@ì¬A‚P‚O”Ô–Ú
 
+	CreateTimeBuffer();	// ŠÔŠÇ——p’è”ƒoƒbƒtƒ@ì¬A‚P‚P”Ô–Ú
+
 	//MaterialSetting();
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
@@ -76,13 +78,14 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_Sampler);
 	SAFE_RELEASE(m_DefaultDrawBuffer);
 	SAFE_RELEASE(m_BoneConstantBuffer);
-	SAFE_RELEASE(m_HPBarConstantBuffer);
+	SAFE_RELEASE(m_OverVertexConstantBuffer);
 	SAFE_RELEASE(m_BlurBuffer);
 	SAFE_RELEASE(m_MotionBlurBuffer);
 	SAFE_RELEASE(m_MotionBlurCircularBuffer);
 	SAFE_RELEASE(m_LightBuffer);
 	SAFE_RELEASE(m_MaterialBuffer);
 	SAFE_RELEASE(m_GlowBuffer);
+	SAFE_RELEASE(m_TimeBuffer);
 	SAFE_RELEASE(m_RingGlowBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
@@ -606,18 +609,18 @@ HRESULT DirectXRender::HPBarConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒ
 	D3D11_BUFFER_DESC bd;
 
 	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(HPParam);									// ƒoƒbƒtƒ@‚Ì‘å‚«
+	bd.ByteWidth = sizeof(OverVertexParam);									// ƒoƒbƒtƒ@‚Ì‘å‚«
 	bd.Usage = D3D11_USAGE_DEFAULT;							// ƒoƒbƒtƒ@g—p•û–@
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@
 	bd.CPUAccessFlags = 0;					// CPUƒAƒNƒZƒX‰Â”\
 
-	hr = m_Device->CreateBuffer(&bd, nullptr, &m_HPBarConstantBuffer);
+	hr = m_Device->CreateBuffer(&bd, nullptr, &m_OverVertexConstantBuffer);
 	if (FAILED(hr)) {
 		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
 		return hr;
 	}
 
-	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::HP_BAR), 1, &m_HPBarConstantBuffer);
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &m_OverVertexConstantBuffer);
 
 	return hr;
 }
@@ -655,6 +658,32 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_RingGlowBuffer);
 	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::GLOW), 1, &m_RingGlowBuffer);
+
+	return hr;
+}
+
+HRESULT DirectXRender::CreateTimeBuffer() {
+
+	HRESULT hr = S_OK;
+
+	// ’è”ƒoƒbƒtƒ@¶¬
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+
+	bufferDesc.ByteWidth = sizeof(TimeBuffer);
+
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_TimeBuffer);
+	if (FAILED(hr)) {
+		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		return hr;
+	}
+
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::TIME), 1, &m_TimeBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::TIME), 1, &m_TimeBuffer);
 
 	return hr;
 }

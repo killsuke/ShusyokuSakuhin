@@ -21,7 +21,7 @@ PS_IN vs_main(in VS_IN input)
     }
     uv.z = 0.0f;
     uv.w = 1.0f;
-	uv = mul(uv, matrixTex1);	// ‚t‚uÀ•W‚ÆˆÚ“®s—ñ‚ğŠ|‚¯Z
+	uv = mul(uv, matrixTex);	// ‚t‚uÀ•W‚ÆˆÚ“®s—ñ‚ğŠ|‚¯Z
     output.tex = uv.xy; // Š|‚¯Z‚ÌŒ‹‰Ê‚ğ‘—M—p•Ï”‚ÉƒZƒbƒg
 
     output.col = input.col * vertexColor;

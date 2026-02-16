@@ -8,7 +8,7 @@ HPBarMoveComponent::HPBarMoveComponent(GameObject& obj) : Component(obj) {
 }
 
 void HPBarMoveComponent::Update() {
-	HPParam hpParam;
+	OverVertexParam hpParam;
 
 	FighterComponent* hpObj = referenceHpObj->GetComponent<FighterComponent>();
 
@@ -17,12 +17,15 @@ void HPBarMoveComponent::Update() {
 	}
 
 	// HPの量を入れる
-	hpParam.currentHP = float(hpObj->GetHp());
+	hpParam.currentScale = float(hpObj->GetHp());
 
 	// HPの値「１」辺りの縦のサイズを入れる
-	hpParam.hpScale = hpScale;
+	hpParam.baseScale = hpScale;
 
-	ID3D11Buffer* buffer = DirectXRender::GetHPBarMoveBuffer();
+	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
+
+	ID3D11Buffer* buffer = DirectXRender::GetOverVertexMoveBuffer();
+	deviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &buffer);
 
 	DirectXRender::GetDeviceContext()->UpdateSubresource(buffer, 0, nullptr, &hpParam, 0, 0);
 }

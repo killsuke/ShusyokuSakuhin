@@ -1,5 +1,8 @@
 #include "TimeManager.h"
+#include "System/DirectXRender.h"
 #include <iostream>
+
+using namespace DirectX;
 
 namespace {
 	constexpr double FIXED_DT = 0.016;
@@ -56,16 +59,28 @@ void TimeManager::Reset() {
 // 固定更新が必要かどうかを判定
 bool TimeManager::ShouldFixedUpdate() {
 
+	ID3D11Buffer* timeBuffer = DirectXRender::GetTimeBuffer();
+	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
+	TimeBuffer timeData = {};
+	bool updated = false;
+
 	// アキュムレータが固定更新の時間を超えているかどうかをチェック
 	// おさまっている時間の分だけ実行、余った分によるズレを防止
-	if (m_Accumulator >= FIXED_DT)
+
+	while (m_Accumulator >= FIXED_DT)
 	{
 		m_Accumulator -= FIXED_DT;
-		m_FixedDeltaTime = static_cast<float>(FIXED_DT);
-		return true;
+		const float deltaTime = static_cast<float>(FIXED_DT);
+		m_FixedDeltaTime = deltaTime;
+		m_TotalTime += deltaTime;
+
+		timeData.deltaTime = deltaTime;
+		timeData.totalTime = m_TotalTime;
+		deviceContext->UpdateSubresource(timeBuffer, 0, NULL, &timeData, 0, 0);
+		updated = true;
 	}
 
-	return false;
+	return updated;
 }
 
 // 固定更新のデルタタイムを取得

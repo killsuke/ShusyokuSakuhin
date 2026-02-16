@@ -8,6 +8,7 @@ private:
 	static inline LARGE_INTEGER m_Frequency = {};	// タイマー値に使用する周波数
 	static inline float m_DeltaTime = 0.0f;	// 時間の差分
 	static inline float m_FixedDeltaTime = 0.0f;
+	static inline float m_TotalTime = 0.0f;	// 累積時間
 	static inline double m_PrevTime = 0.0;	// 前回の時間
 	static inline double m_Accumulator = 0.0;
 	static inline bool m_IsActive = true;	// タイマーが動作中かどうか

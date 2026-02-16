@@ -66,7 +66,7 @@ cbuffer ConstBuffer : register(b0)
     float4 vertexColor;
 
 	// UV座標移動行列
-    matrix matrixTex1;
+    matrix matrixTex;
 
 	// ワールド変換行列
     matrix matrixWorld;
@@ -153,8 +153,8 @@ cbuffer ConstantBufferBoneComb : register(b8)
 
 cbuffer UIParam : register(b9)
 {
-    float currentHP;
-    float hpScale;
+    float currentScale;
+    float baseScale;
     float2 padding; // 必要なら
 };
 
@@ -168,4 +168,11 @@ cbuffer GlowParam : register(b10)
     float Expand;
     float RingRadius; // リングの中心半径、0～1.4 ぐらいが目安
     float RingWidth; // リングの太さ、0.15 ぐらいが良さげ
+};
+
+cbuffer TimeBuffer : register(b11)
+{
+    float TotalTime; // ゲーム開始からの総時間
+    float DeltaTime; // 前フレームからの経過時間
+    float2 Padding;
 };

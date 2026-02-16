@@ -17,6 +17,7 @@
 #include "AttackOneTimeComponent.h"
 #include "ChargeSlashComponent.h"
 #include "SlashEffectComponent.h"
+#include "RenderCharacterComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "TimeLineComponent.h"	// これがちゃんと動くのか明日テスト
 #include "Mesh/SquareMesh.h"
@@ -45,10 +46,6 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 	/*m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnDamageHit(e);
 		});*/
-
-	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
-//	timeLine->AddPointEvent(3.0f, this, [this]() {TestProcess(); });	// 一度切り
-//	timeLine->AddRangeEvent(3.0f, 5.0f, this, [this](float t) {TestProcess2(t); }, [this]() {TestProcess(); }, [this]() {TestProcess3(); });	// 範囲的
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
@@ -237,11 +234,6 @@ void PlayerOperationComponent::StateUpdate() {
 	m_IsJump = false;
 	if (keyUp) {
 		m_IsJump = true;
-	}
-
-	if (keyAttack) {
-		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
-		timeLine->SetActiveFlag(true);
 	}
 
 	m_IsMoveFlag = false; // 毎フレーム初期化	

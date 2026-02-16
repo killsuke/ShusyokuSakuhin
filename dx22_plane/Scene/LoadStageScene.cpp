@@ -45,8 +45,8 @@
 #include "Components/ChargePerformanceComponent.h"
 #include "Components/ColliderAttackComponent.h"
 #include "Components/ColliderDamageComponent.h"
-#include "Components/TimeLineComponent.h"
 #include "Components/SoundComponent.h"
+#include "Components/RenderCharacterComponent.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -124,10 +124,6 @@ LoadStageScene::LoadStageScene() {
 
 		auto player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
-
-		// ŽÀŒ±‚Æ‚µ‚ÄÝ’u
-		TimeLineComponent* timeLine = player->AddComponent<TimeLineComponent>();
-		timeLine->SetActiveFlag(false);
 
 		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
 	//	playerOperation->SetChargeSlashObject(childSlash);

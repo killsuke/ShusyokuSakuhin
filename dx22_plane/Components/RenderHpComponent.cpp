@@ -51,17 +51,18 @@ void RenderHpComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
-		HPParam hpParam;
+		OverVertexParam hpParam;
 
 		// HPの量を入れる
-		hpParam.currentHP = float(nowHP);
+		hpParam.currentScale = float(nowHP);
 
 		// HPの値「１」辺りの縦のサイズを入れる
-		hpParam.hpScale = hpScale;
+		hpParam.baseScale = hpScale;
 
-		ID3D11Buffer* bufferHp = DirectXRender::GetHPBarMoveBuffer();
+		ID3D11Buffer* bufferHp = DirectXRender::GetOverVertexMoveBuffer();
+		deviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &bufferHp);
 
-		DirectXRender::GetDeviceContext()->UpdateSubresource(bufferHp, 0, nullptr, &hpParam, 0, 0);
+		deviceContext->UpdateSubresource(bufferHp, 0, nullptr, &hpParam, 0, 0);
 
 		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 

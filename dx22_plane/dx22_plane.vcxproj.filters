@@ -462,6 +462,12 @@
     <ClCompile Include="Components\Ray.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Components\RenderCharacterComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\StretchingComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helper\dx11helper.h">
@@ -938,6 +944,12 @@
     <ClInclude Include="Components\Ray.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Components\RenderCharacterComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\StretchingComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderResource\common.hlsl">
@@ -1002,5 +1014,6 @@
     <FxCompile Include="ShaderResource\unlitLuminescencePS.hlsl" />
     <FxCompile Include="ShaderResource\unlitRingLuminescencePS.hlsl" />
     <FxCompile Include="ShaderResource\unlitLuminescenceVS.hlsl" />
+    <FxCompile Include="ShaderResource\OverVertexMove3DVS.hlsl" />
   </ItemGroup>
 </Project>

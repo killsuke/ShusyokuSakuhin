@@ -166,6 +166,7 @@
     <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
     <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
+    <ClCompile Include="Components\RenderCharacterComponent.cpp" />
     <ClCompile Include="Components\ColliderDamageComponent.cpp" />
     <ClCompile Include="Components\ColliderAttackComponent.cpp" />
     <ClCompile Include="Components\ChargeSlashComponent.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="Components\RenderRingLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="Components\RenderHpComponent.cpp" />
     <ClCompile Include="Manager\SoundManager.cpp" />
+    <ClCompile Include="Components\StretchingComponent.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
@@ -321,6 +323,7 @@
     <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
+    <ClInclude Include="Components\RenderCharacterComponent.h" />
     <ClInclude Include="Components\ColliderDamageComponent.h" />
     <ClInclude Include="Components\ColliderAttackComponent.h" />
     <ClInclude Include="Components\ChargeSlashComponent.h" />
@@ -336,6 +339,7 @@
     <ClInclude Include="Components\RenderHpComponent.h" />
     <ClInclude Include="Components\CutObjectActionComponent.h" />
     <ClInclude Include="Components\DebugCameraComponent.h" />
+    <ClInclude Include="Components\StretchingComponent.h" />
     <ClInclude Include="Structs\RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />
@@ -524,6 +528,14 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
     </FxCompile>
     <FxCompile Include="ShaderResource\OneSkinAnimationVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="ShaderResource\OverVertexMove3DVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

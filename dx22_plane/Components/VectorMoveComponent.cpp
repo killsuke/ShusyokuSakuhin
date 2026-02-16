@@ -15,7 +15,7 @@ void VectorMoveComponent::Update()
 		return;
 	}
 
-	TransformComponent* trans = m_Object->GetComponent <TransformComponent>();
+	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
 	if(trans == nullptr){
 		return;
 	}

@@ -10,7 +10,6 @@
 #include <array>
 
 using namespace DirectX;
-using namespace DirectX::SimpleMath;
 
 MeshCut2DComponent::MeshCut2DComponent(GameObject& obj) : Component(obj)
 {
@@ -85,10 +84,6 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	std::string texName = texture.GetTexname();
 	const RightLeft isInversion = rendComp->GetInversionFlag();
 	Shader* shader = rendComp->GetShader();
-	//	std::vector<std::string> shaderName = shader->GetShaderNames();
-
-		// 取り敢えず縦に左右に半分にカットする処理を書く
-		// こんどは頂点バッファを書き換える処理を書く
 	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
 	XMFLOAT3 pos = trans->GetPosition();
 	XMFLOAT3 size = trans->GetScale();
@@ -108,8 +103,6 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	TransformComponent* rightTrans = m_CutObj2->AddComponent<TransformComponent>();
 	rightTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
 	VectorMoveComponent* rightMove = m_CutObj2->AddComponent<VectorMoveComponent>();
-	//rightMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
-	//rightMove->SetMovePower(0.1f);
 	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
 	rightRend->CreateMesh<SquareMesh>();
 	rightRend->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
@@ -137,10 +130,10 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		MakeCutPoints(vTLeft, vTRight, m_CutRatio2);
 
 		// 上側 ====================================================
-		CutVertices1[0].position = Vector3(-1.0f, vTRight, 0.0f);
-		CutVertices1[1].position = Vector3(1.0f, vDRight, 0.0f);
-		CutVertices1[2].position = Vector3(1.0f, 0.5f, 0.0f);
-		CutVertices1[3].position = Vector3(-1.0f, 0.5f, 0.0f);
+		CutVertices1[0].position = XMFLOAT3(-1.0f, vTRight, 0.0f);
+		CutVertices1[1].position = XMFLOAT3(1.0f, vDRight, 0.0f);
+		CutVertices1[2].position = XMFLOAT3(1.0f, 0.5f, 0.0f);
+		CutVertices1[3].position = XMFLOAT3(-1.0f, 0.5f, 0.0f);
 
 		CutVertices1[0].uv = { 0.0f, m_CutRatio1 };
 		CutVertices1[1].uv = { 1.0f, m_CutRatio2 };
@@ -149,10 +142,10 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		// =========================================================
 
 		// 下側 ====================================================
-		CutVertices2[0].position = Vector3(-1.0f, -0.5f, 0.0f);
-		CutVertices2[1].position = Vector3(1.0f, -0.5f, 0.0f);
-		CutVertices2[2].position = Vector3(1.0f, vDLeft, 0.0f);
-		CutVertices2[3].position = Vector3(-1.0f, vTLeft, 0.0f);
+		CutVertices2[0].position = XMFLOAT3(-1.0f, -0.5f, 0.0f);
+		CutVertices2[1].position = XMFLOAT3(1.0f, -0.5f, 0.0f);
+		CutVertices2[2].position = XMFLOAT3(1.0f, vDLeft, 0.0f);
+		CutVertices2[3].position = XMFLOAT3(-1.0f, vTLeft, 0.0f);
 
 		CutVertices2[0].uv = { 0.0f, 1.0f };
 		CutVertices2[1].uv = { 1.0f, 1.0f };
@@ -161,8 +154,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		// =========================================================
 	}
 	else {// VERTICAL
-		leftTrans->SetPosition(Vector3(pos.x + (-size.x * 0.5f), pos.y, pos.z));
-		rightTrans->SetPosition(Vector3(pos.x + (size.x * 0.5f), pos.y, pos.z));
+		leftTrans->SetPosition(XMFLOAT3(pos.x + (-size.x * 0.5f), pos.y, pos.z));
+		rightTrans->SetPosition(XMFLOAT3(pos.x + (size.x * 0.5f), pos.y, pos.z));
 
 		float vLTop = 0.0f;
 		float vRTop = 0.0f;
@@ -173,10 +166,10 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		MakeCutPoints(vLDown, vRDown, m_CutRatio2);
 
 		// 左側 ====================================================
-		CutVertices1[0].position = Vector3(-0.5f, -1.0f, 0.0f);
-		CutVertices1[1].position = Vector3(vLDown, -1.0f, 0.0f);
-		CutVertices1[2].position = Vector3(vLTop, 1.0f, 0.0f);
-		CutVertices1[3].position = Vector3(-0.5f, 1.0f, 0.0f);
+		CutVertices1[0].position = XMFLOAT3(-0.5f, -1.0f, 0.0f);
+		CutVertices1[1].position = XMFLOAT3(vLDown, -1.0f, 0.0f);
+		CutVertices1[2].position = XMFLOAT3(vLTop, 1.0f, 0.0f);
+		CutVertices1[3].position = XMFLOAT3(-0.5f, 1.0f, 0.0f);
 
 		CutVertices1[0].uv = { 0.0f, 1.0f };
 		CutVertices1[1].uv = { m_CutRatio1, 1.0f };
@@ -185,10 +178,10 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		// =========================================================
 
 		// 右側 ====================================================
-		CutVertices2[0].position = Vector3(vRDown, -1.0f, 0.0f);
-		CutVertices2[1].position = Vector3(0.5f, -1.0f, 0.0f);
-		CutVertices2[2].position = Vector3(0.5f, 1.0f, 0.0f);
-		CutVertices2[3].position = Vector3(vRTop, 1.0f, 0.0f);
+		CutVertices2[0].position = XMFLOAT3(vRDown, -1.0f, 0.0f);
+		CutVertices2[1].position = XMFLOAT3(0.5f, -1.0f, 0.0f);
+		CutVertices2[2].position = XMFLOAT3(0.5f, 1.0f, 0.0f);
+		CutVertices2[3].position = XMFLOAT3(vRTop, 1.0f, 0.0f);
 
 		CutVertices2[0].uv = { m_CutRatio1, 1.0f };
 		CutVertices2[1].uv = { 1.0f, 1.0f };
@@ -197,25 +190,25 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		// =========================================================
 	}
 
-	CutVertices1[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices1[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices1[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices1[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices1[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	CutVertices1[0].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices1[1].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices1[2].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices1[3].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices1[0].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices1[1].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices1[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices1[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
-	CutVertices2[0].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices2[1].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices2[2].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	CutVertices2[3].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	CutVertices2[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	CutVertices2[0].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices2[1].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices2[2].normal = Vector3(0.0f, 0.0f, -1.0f);
-	CutVertices2[3].normal = Vector3(0.0f, 0.0f, -1.0f);
+	CutVertices2[0].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices2[1].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices2[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	CutVertices2[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 	VertexBuffer<VERTEX_3D>* vLBuffer = leftRend->GetVertexBuffer();
 	vLBuffer->Modify(CutVertices1);

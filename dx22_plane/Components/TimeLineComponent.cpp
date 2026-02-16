@@ -34,7 +34,7 @@ void TimeLineComponent::UpdatePointEvents() {
 	// 次のイベントが存在し、かつ現在の時間がそのイベントのトリガー時間を超えている場合
 	while (m_NextEventIndex < m_PointEvents.size()) {
 
-		auto& e = m_PointEvents[m_NextEventIndex];
+		TimePointEvent e = m_PointEvents[m_NextEventIndex];
 
 		if (e.valid == false) {
 
@@ -61,7 +61,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 
 	const float now = m_CurrentTime;
 
-	for (auto& e : m_RangeEvents) {
+	for (TimeRangeEvent& e : m_RangeEvents) {
 
 		if (e.valid == false) {
 			continue; // 無効なイベントはスキップ
@@ -100,7 +100,7 @@ void TimeLineComponent::UpdateContinuousEvents() {
 
 	const float now = m_CurrentTime;
 
-	for (auto& e : m_ContinuousEvents) {
+	for (TimeContinuousEvent& e : m_ContinuousEvents) {
 
 		if (e.valid == false) {
 			continue;
@@ -232,38 +232,38 @@ uint32_t TimeLineComponent::AddContinuousDelayEvent(const float delayTime, Compo
 // 指定したコンポーネントに関連するすべてのイベントを削除
 void TimeLineComponent::RemoveEventsByComponent(Component* owner) {
 
-	auto it = m_ComponentEventMap.find(owner);
-	if (it == m_ComponentEventMap.end()) {
-		return;
-	}
+    std::unordered_map<Component*, std::vector<size_t>>::iterator it = m_ComponentEventMap.find(owner);
+    if (it == m_ComponentEventMap.end()) {
+        return;
+    }
 
-	for (auto index : it->second) {
-		m_PointEvents[index].valid = false; // 空の関数に置き換え
-	}
+    for (size_t index : it->second) {
+        m_PointEvents[index].valid = false; // 空の関数に置き換え
+    }
 
-	for (auto index : it->second) {
-		m_RangeEvents[index].valid = false; // 空の関数に置き換え
-	}
+    for (size_t index : it->second) {
+        m_RangeEvents[index].valid = false; // 空の関数に置き換え
+    }
 
-	m_ComponentEventMap.erase(it); // マップからエントリを削除
+    m_ComponentEventMap.erase(it); // マップからエントリを削除
 }
 
 // 指定したイベントIDのイベントを停止
 void TimeLineComponent::StopEvent(uint32_t eventID) {
 
-	for (auto& e : m_PointEvents) {
+	for (TimePointEvent& e : m_PointEvents) {
 		if (e.eventID == eventID) {
 			e.valid = false; // イベントを無効化
 			return;
 		}
 	}
-	for (auto& e : m_RangeEvents) {
+	for (TimeRangeEvent& e : m_RangeEvents) {
 		if (e.eventID == eventID) {
 			e.valid = false; // イベントを無効化
 			return;
 		}
 	}
-	for (auto& e : m_ContinuousEvents) {
+	for (TimeContinuousEvent& e : m_ContinuousEvents) {
 		if (e.eventID == eventID) {
 			e.valid = false; // イベントを無効化
 			return;

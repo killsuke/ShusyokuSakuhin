@@ -53,8 +53,9 @@ enum class EBufferTypes {
 	MATERIAL,
 	MOTION_BLUR,
 	BONE,
-	HP_BAR,
+	OVER_VERTEX,
 	GLOW,
+	TIME,
 
 	MAX
 };
@@ -162,6 +163,12 @@ struct RingGlowBuffer {
 	float ringWidth = 0.0f;
 };
 
+struct TimeBuffer {
+	float totalTime = 0.0f;
+	float deltaTime = 0.0f;
+	DirectX::XMFLOAT2 pad = DirectX::XMFLOAT2();
+};
+
 class DirectXRender
 {
 private:
@@ -214,9 +221,11 @@ private:
 	static inline ID3D11Buffer* m_MotionBlurBuffer = nullptr;	// 縦横のみモーションブラー用バッファ、７番目
 	static inline ID3D11Buffer* m_MotionBlurCircularBuffer = nullptr;	// 自由に使えるモーションブラー用バッファ（開発中）、７番目
 	static inline ID3D11Buffer* m_BoneConstantBuffer = nullptr;		// ボーン用バッファ、８番目（このプロジェクトでは使わない）
-	static inline ID3D11Buffer* m_HPBarConstantBuffer = nullptr;	// HPバー用バッファ、９番目
+
+	static inline ID3D11Buffer* m_OverVertexConstantBuffer = nullptr;	// HPバー用バッファ、９番目
 	static inline ID3D11Buffer* m_GlowBuffer = nullptr;				// グロー用定数バッファ、１０番目
 	static inline ID3D11Buffer* m_RingGlowBuffer = nullptr;			// リンググロー用定数バッファ、１０番目
+	static inline ID3D11Buffer* m_TimeBuffer = nullptr;				// 時間管理用定数バッファ、１１番目
 
 	DirectXRender() = default;
 	~DirectXRender() = default;
@@ -249,6 +258,7 @@ private:
 	static HRESULT CreateHitFlashBuffer();
 	static HRESULT CreateMotionBlurBuffer();
 	static HRESULT CreateGlowBuffer();
+	static HRESULT CreateTimeBuffer();
 
 public:
 
@@ -300,13 +310,14 @@ public:
 
 	static ID3D11Buffer* GetDefaultDrawBuffer() { return m_DefaultDrawBuffer; }
 	static ID3D11Buffer* GetBoneBuffer() { return m_BoneConstantBuffer; };
-	static ID3D11Buffer* GetHPBarMoveBuffer() { return m_HPBarConstantBuffer; };
+	static ID3D11Buffer* GetOverVertexMoveBuffer() { return m_OverVertexConstantBuffer; };
 	static ID3D11Buffer* GetMaterialBuffer() { return m_MaterialBuffer; };
 	static ID3D11Buffer* GetBlurBuffer() { return m_BlurBuffer; };
 	static ID3D11Buffer* GetMotionBlurBuffer() { return m_MotionBlurBuffer; };
 	static ID3D11Buffer* GetMotionBlurCircularBuffer() { return m_MotionBlurCircularBuffer; };
 	static ID3D11Buffer* GetGlowBuffer() { return m_GlowBuffer; };
 	static ID3D11Buffer* GetRingGlowBuffer() { return m_RingGlowBuffer; };
+	static ID3D11Buffer* GetTimeBuffer() { return m_TimeBuffer; };
 
 
 	//=============================================================================
