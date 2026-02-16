@@ -38,4 +38,6 @@ public:
 
 	// デルタタイムを取得
 	static float GetDeltaTime() { return m_DeltaTime; };
+
+	static float GetTotalTime() { return m_TotalTime; };
 };

@@ -16,6 +16,7 @@
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
 #include "Components/EnemyDamageComponent.h"
+#include "Components/StretchingComponent.h"
 #include "Components/FighterComponent.h"
 #include "Components/AttackTimingComponent.h"
 #include "Components/AttackOneTimeComponent.h"
@@ -160,14 +161,18 @@ LoadStageScene::LoadStageScene() {
 		fighterPlayer->SetUseInvincible(true);
 		fighterPlayer->SetUseDeadFlag(false);
 
+		StretchingComponent* stretching = player->AddComponent<StretchingComponent>();
+		stretching->SetStretchPower(0.1f);
+		stretching->SetStretchSpeed(1.0f);
+
 		ChargePerformanceComponent* chargePerf = player->AddComponent<ChargePerformanceComponent>();
 		chargePerf->InitCreateParticles(10, 20.0f,*player,50.0f,10.0f,20.0f);
 		chargePerf->SetOneParticleActiveTime(0.05f);
 		chargePerf->SetActiveFlag(false);
 
-		auto cubeRe = player->AddComponent<Render2DComponent>();
+		auto cubeRe = player->AddComponent<RenderCharacterComponent>();
 		cubeRe->CreateMesh<SquareMesh>();
-		cubeRe->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/Fighter2DPS.hlsl");
+		cubeRe->SetShader("ShaderResource/OverVertexMove3DVS.hlsl", "ShaderResource/Fighter2DPS.hlsl");
 		cubeRe->ChangeTexture("assets/texture/aka.png");
 
 		//player->SetChild(childSlash);

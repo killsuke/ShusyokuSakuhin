@@ -209,23 +209,10 @@ void Application::MainLoop()
 
 	// FPS計測用変数
 	int fpsCounter = 0;
-	long long oldTick = GetTickCount64(); // 前回計測時の時間
-	long long nowTick = oldTick; // 今回計測時の時間
-
-	// FPS固定用変数
-	LARGE_INTEGER liWork; // workがつく変数は作業用変数
-	long long frequency;// どれくらい細かく時間をカウントできるか
-	QueryPerformanceFrequency(&liWork);
-	frequency = liWork.QuadPart;
-	// 時間（単位：カウント）取得
-	QueryPerformanceCounter(&liWork);
-	long long oldCount = liWork.QuadPart;// 前回計測時の時間
-	long long nowCount = oldCount;// 今回計測時の時間
 
 	// ゲームループ
 	while (1)
 	{
-		float num = 0.0f;
 		// 新たにメッセージがあれば
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -282,9 +269,10 @@ void Application::MainLoop()
 
 			fpsCounter++; // ゲーム処理を実行したら＋１する
 
-			nowTick = GetTickCount64();// 現在時間を取得
+			m_FpsTimer += TimeManager::GetDeltaTime(); // 前回からの時間を加算
+
 			// 前回計測から1000ミリ秒が経過したか？
-			if (nowTick >= oldTick + 1000)
+			if (m_FpsTimer >= 1.0f)
 			{
 #if _DEBUG
 				// FPS表示
@@ -295,7 +283,7 @@ void Application::MainLoop()
 #endif // デバッグモードならFPSをウィンドウタイトルに表示
 				// カウンターリセット
 				fpsCounter = 0;
-				oldTick = nowTick;
+				m_FpsTimer = 0.0f;
 			}
 
 			if (m_IsEndGame == true) {
@@ -348,8 +336,6 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		}
 
 		DirectXRender::OnResize(width, height);
-		std::cout << "WM_SIZE message received." << std::endl;
-
 	}
 	break;
 
@@ -364,14 +350,11 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	case WM_ENTERSIZEMOVE:	// サイズ変更・移動開始
 	{
 		TimeManager::SetTimeManagerActive(false);
-		std::cout << "StopTime" << std::endl;
 	}
 	break;
 	case WM_EXITSIZEMOVE:	// サイズ変更・移動終了
 	{
 		TimeManager::SetTimeManagerActive(true);
-		std::cout << "StartTime" << std::endl;
-		//	TimeManager::Reset();
 	}
 	break;
 	default:

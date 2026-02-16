@@ -20,6 +20,7 @@
 #include "RenderCharacterComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "TimeLineComponent.h"	// これがちゃんと動くのか明日テスト
+#include "StretchingComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
@@ -49,7 +50,7 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
-//	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+	//	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
 }
 
 void PlayerOperationComponent::TestProcess() {
@@ -74,7 +75,7 @@ void PlayerOperationComponent::Update() {
 
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
 	//RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
-	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+	RenderCharacterComponent* rend = m_Object->GetComponent<RenderCharacterComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (fighter == nullptr/* || rigid == nullptr*/)
@@ -162,7 +163,16 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	switch (m_CurrentState)
 	{
 	case PlayerState::NONE:
-		break;
+	{
+		StretchingComponent* stretch = m_Object->GetComponent<StretchingComponent>();
+		if (stretch != nullptr) {
+
+			stretch->SetActiveFlag(false);
+			stretch->SetHolderTime(0.0f);
+			stretch->SetCurrentScale(0.0f);
+		}
+	}
+	break;
 	case PlayerState::MOVE:
 		break;
 	case PlayerState::AIR:
@@ -189,7 +199,16 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	switch (m_CurrentState)
 	{
 	case PlayerState::NONE:
-		break;
+	{
+		StretchingComponent* stretch = m_Object->GetComponent<StretchingComponent>();
+		if (stretch != nullptr) {
+
+			stretch->SetActiveFlag(true);
+			stretch->SetHolderTime(0.0f);
+			stretch->SetCurrentScale(0.0f);
+		}
+	}
+	break;
 	case PlayerState::MOVE:
 		break;
 	case PlayerState::AIR:
@@ -282,6 +301,7 @@ void PlayerOperationComponent::StateUpdate() {
 		break;
 	}
 
+	// チャージの処理
 	Charge(keyCharge, keyCAttack);
 
 	JumpComponent* jumpComp = m_Object->GetComponent<JumpComponent>();
@@ -418,6 +438,17 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		m_ChargeTime = 0.0f;
 		m_IsChargeComplete = false;
 	}
+	else if (attack && !m_IsChargeComplete)
+	{
+		StretchingComponent* stretch = m_Object->GetComponent<StretchingComponent>();
+		if (stretch != nullptr) {
+
+			stretch->SetActiveFlag(true);
+			stretch->SetHolderTime(0.0f);
+			stretch->SetCurrentScale(0.0f);
+		}
+	}
+
 
 	// チャージ処理
 	if (charge) {
@@ -430,6 +461,15 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		}
 		// まだチャージ中
 		else {
+
+			StretchingComponent* stretch = m_Object->GetComponent<StretchingComponent>();
+			if (stretch != nullptr) {
+
+				stretch->SetActiveFlag(false);
+				stretch->SetHolderTime(0.0f);
+				stretch->SetCurrentScale(0.0f);
+			}
+
 			// チャージエフェクト開始
 			if (m_ChargeTime > ChargeStartTime) {
 				chargePerf->SetActiveFlag(true);
@@ -443,6 +483,7 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		chargePerf->SetActiveFlag(false);
 		chargePerf->ResetAllParticles();
 		chargePerf->SetChargeCompleteFlag(false);
+		
 	}
 }
 
@@ -506,9 +547,9 @@ void PlayerOperationComponent::FastChageSlash() {
 	if (swordAction == nullptr) {
 		return;
 	}
-	
+
 	AttackOneTimeComponent* attackComp = m_ChargeSlashObject->GetComponent<AttackOneTimeComponent>();
-	if(attackComp == nullptr) {
+	if (attackComp == nullptr) {
 		return;
 	}
 

@@ -22,6 +22,7 @@ private:
     static inline HWND        m_HWnd;         // ウィンドウハンドル
     static inline uint32_t    m_Width = 0;        // ウィンドウの横幅
     static inline uint32_t    m_Height = 0;       // ウィンドウの縦幅
+	static inline float m_FpsTimer = 0.0f;	// FPS計測用のタイマー
     static inline bool m_IsEndGame = false; // ゲームを終了させるフラグ
 
     Application() = default;

@@ -44,16 +44,16 @@ void RenderCharacterComponent::Update()
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
-		//OverVertexParam hpParam;
+		OverVertexParam hpParam;
 
-		//hpParam.currentScale = m_CurrentScale;
+		hpParam.currentScale = m_CurrentScale;
 
-		//hpParam.baseScale = m_BaseScale;
+		hpParam.baseScale = m_BaseScale;
 
-		//ID3D11Buffer* bufferHp = DirectXRender::GetOverVertexMoveBuffer();
-		//deviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &bufferHp);
+		ID3D11Buffer* bufferHp = DirectXRender::GetOverVertexMoveBuffer();
+		deviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &bufferHp);
 
-		//deviceContext->UpdateSubresource(bufferHp, 0, nullptr, &hpParam, 0, 0);
+		deviceContext->UpdateSubresource(bufferHp, 0, nullptr, &hpParam, 0, 0);
 
 		//マテリアル数分ループ 
 		for (size_t i = 0; i < subsets.size(); ++i)
