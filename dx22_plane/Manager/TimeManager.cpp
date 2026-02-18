@@ -5,8 +5,8 @@
 using namespace DirectX;
 
 namespace {
-	constexpr double FIXED_DT = 0.016;
-	constexpr double MAX_DELTA_TIME = 0.1;
+	constexpr double FIXED_DT = (1.0 / 60.0);
+	constexpr double MAX_DELTA_TIME = 0.05;
 }
 
 void TimeManager::Init() {
@@ -46,6 +46,10 @@ void TimeManager::Update() {
 	m_DeltaTime = static_cast<float>(frameTime);
 
 	m_Accumulator += frameTime;
+
+	if (m_Accumulator > 0.2) {
+		m_Accumulator = 0.2;
+	}
 }
 
 void TimeManager::Reset() {
@@ -67,16 +71,18 @@ bool TimeManager::ShouldFixedUpdate() {
 	// アキュムレータが固定更新の時間を超えているかどうかをチェック
 	// おさまっている時間の分だけ実行、余った分によるズレを防止
 
-	while (m_Accumulator >= FIXED_DT)
+	const float deltaTime = static_cast<float>(FIXED_DT);
+	if (m_Accumulator >= FIXED_DT)
 	{
 		m_Accumulator -= FIXED_DT;
-		const float deltaTime = static_cast<float>(FIXED_DT);
+		m_TotalTime += FIXED_DT;
 		m_FixedDeltaTime = deltaTime;
-		m_TotalTime += deltaTime;
 
+		// 固定更新の時間をシェーダーに渡す
 		timeData.deltaTime = deltaTime;
-		timeData.totalTime = m_TotalTime;
-		deviceContext->UpdateSubresource(timeBuffer, 0, NULL, &timeData, 0, 0);
+		timeData.totalTime = static_cast<float>(m_TotalTime);
+		//		deviceContext->UpdateSubresource(timeBuffer, 0, NULL, &timeData, 0, 0);
+
 		updated = true;
 	}
 

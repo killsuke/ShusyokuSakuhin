@@ -79,6 +79,9 @@ public:
 
 	float UseGravity(const bool gravityFlag);		// èdóÕ
 	inline void AddForce(const DirectX::XMFLOAT3& force) { m_TotalForce += force; };
+	inline void AddForce_X(const float force) { m_TotalForce.x += force; };
+	inline void AddForce_Y(const float force) { m_TotalForce.y += force; };
+	inline void AddForce_Z(const float force) { m_TotalForce.z += force; };
 	inline void ClearForce() { m_TotalForce = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };	// çáóÕÇÉNÉäÉA
 	inline DirectX::XMFLOAT3 GetTotalForce() const { return m_TotalForce; }	// çáóÕÇï‘Ç∑
 

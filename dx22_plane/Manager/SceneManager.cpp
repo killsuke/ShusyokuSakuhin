@@ -28,7 +28,6 @@ void SceneManager::UnInit() {
 
 // XV
 void SceneManager::Update() {
-	Input::Update();
 
 	DebugSystem::Update();
 

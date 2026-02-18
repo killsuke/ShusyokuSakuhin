@@ -19,6 +19,10 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 const auto ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
 const auto WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
 
+namespace {
+	constexpr int MAX_LOOP = 3;	// 固定更新の最大ループ回数（無限ループ防止用）
+}
+
 void Application::Init(const uint32_t& width, const uint32_t& height) {
 	m_Height = height;
 	m_Width = width;
@@ -258,10 +262,20 @@ void Application::MainLoop()
 			//ImGui::End();
 #endif
 
+			Input::Update();
 			TimeManager::Update();
 
-			while (TimeManager::ShouldFixedUpdate()) {
+			int loopCount = 0;
 
+			while (TimeManager::ShouldFixedUpdate() && loopCount < MAX_LOOP) {
+
+				SceneManager::Update(); // シーンの更新
+
+				loopCount++;
+			}
+
+			// ズレによって更新されなかった場合更新する
+			if (loopCount == 0) {
 				SceneManager::Update(); // シーンの更新
 			}
 

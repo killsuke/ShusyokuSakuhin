@@ -11,6 +11,7 @@
 #include "PlayerDamageComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "Mesh/SquareMesh.h"
+#include "Manager/EventBusManager.h"
 
 using namespace DirectX;
 
@@ -18,10 +19,19 @@ EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyAc
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ðÝ’è
 	auto jump = m_Object->AddComponent<JumpComponent>();
 	jump->SetJumpPower(60.0f);
+
+	m_listenerID_HitEvent_Hopper = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		KnockBackEvent(e);
+		});
+}
+
+EnemyActionHopperComponent::~EnemyActionHopperComponent() {
+	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Hopper);
 }
 
 void EnemyActionHopperComponent::Update() {
 
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	auto player = GameObjectManager::GameObjectFindTag("Player");
 	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
 	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
@@ -65,6 +75,8 @@ void EnemyActionHopperComponent::Update() {
 	HopperAction(jumpFlag);
 
 	m_IsBeforeJump = jumpFlag;
+
+//	rigid->ReduceVelocity_X(0.5f);
 }
 
 void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
@@ -88,4 +100,36 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	if (m_moveFlag == true) {
 		jump->SetJumpPress(jumpFlag);
 	}
+}
+
+void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
+
+	const uint32_t deadID = m_Object->GetInstanceID();
+
+	if (event.targetID != deadID) {
+		return; // Ž©•ªˆ¶‚¶‚á‚È‚¢‚È‚ç–³Ž‹
+	}
+
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+	TransformComponent* playerTrans = player->GetComponent<TransformComponent>();
+	TransformComponent* enemyTrans = m_Object->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+
+	if (playerTrans == nullptr || enemyTrans == nullptr || rigid == nullptr) {
+		return;
+	}
+
+	const XMFLOAT3 playPos = playerTrans->GetPosition();
+	const XMFLOAT3 enemyPos = enemyTrans->GetPosition();
+
+	
+		if (enemyPos.x > playPos.x) {
+			rigid->AddVelocity_X(-100.0f);
+		}
+		else if (enemyPos.x < playPos.x) {
+			rigid->AddVelocity_X(100.0f);
+		}
+		rigid->AddVelocity_Y(50.0f);
+	
+	
 }
