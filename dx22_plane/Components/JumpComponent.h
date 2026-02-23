@@ -1,17 +1,13 @@
 #pragma once
-#include "Component.h"
 #include "RigidBodyComponent.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 class JumpComponent final : public Component
 {
 private:
-	void JumpAction(bool isJumpButtonPressed, bool trigger);
 
-//	float m_jumpHeight = 0.0f; // ジャンプの高さ
 	float m_jumpPower = 50.0f; // ジャンプの振幅
 	float m_time = 0.0f;
-//	float m_jumpDuration = 0.5f; // 例：ジャンプの全体が0.5秒で完了
 	float m_magnification = 2.0f; // ジャンプの加速度の倍率
 	float m_firstSpeed = 50.0f;
 	float m_maxJumpTime = 0.7f; // ジャンプの最大時間
@@ -23,8 +19,9 @@ private:
 	bool m_isGround = false; // 地面にいるかどうか
 	bool m_isCeiling = false; // 天井にいるかどうか
 	bool m_beforePress = false; // 前フレームでジャンプボタンが押されていたかどうか
-	//bool m_jumpTrigger = false; // 最初のジャンプかどうか
 	bool m_jumpPress = false; // ジャンプボタンが押されているかどうか
+
+	void JumpAction(bool isJumpButtonPressed, bool trigger);
 
 public:
 	JumpComponent(GameObject& obj);
@@ -44,7 +41,6 @@ public:
 	void StartJump() { m_isJumping = true; };
 	void StopJump() { m_isJumping = false; };
 
-//	void SetJumpTrigger(const bool trigger) { m_jumpTrigger = trigger; };
 	void SetJumpPress(const bool press) { m_jumpPress = press; };
 
 	void SetAttenuationUp(const float attenuation) { m_attenuationUp = attenuation; };

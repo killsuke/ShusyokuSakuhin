@@ -1,7 +1,7 @@
 #include "RenderRingLuminescenceBillboardComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 
 using namespace DirectX;
 
@@ -21,7 +21,7 @@ void RenderRingLuminescenceBillboardComponent::Update()
 
 		const XMFLOAT3 pos = transform->GetPosition();
 		const XMFLOAT3 scale = transform->GetScale();
-		Camera* cameraComp = camera->GetComponent<Camera>();
+		CameraComponent* cameraComp = camera->GetComponent<CameraComponent>();
 		const XMMATRIX cameraView3D = cameraComp->GetView3D();
 
 		XMMATRIX rotationOnly = cameraView3D;

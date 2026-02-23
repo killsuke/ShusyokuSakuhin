@@ -1,5 +1,5 @@
 #include "SkyDomeMesh.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "System/DirectXRender.h"
 
 using namespace DirectX;
@@ -15,25 +15,25 @@ SkyDomeMesh::SkyDomeMesh() {
 std::vector<VERTEX_3D> SkyDomeMesh::CreateMeshVertices() {
 
 	// 頂点データ
-	int     vcount = (latitudeBands + 1) * (latitudeBands / 2 + 1);	// 頂点の総数を計算
+	const int vcount = (latitudeBands + 1) * (latitudeBands / 2 + 1);	// 頂点の総数を計算
 	m_Vertices.resize(vcount);
 
 	// 頂点作成
 	for (int i = 0; i <= (latitudeBands / 2); ++i) {
 		// 緯度方向の角度を計算
-		float irad = XM_PI * 2.0f / (float)latitudeBands * (float)i;
-		float y = (float)cos(irad);					// y座標を計算
-		float r = (float)sin(irad);					// 半径を計算
-		float v = (float)i / (float)(latitudeBands / 2);	//テクスチャ座標vを計算
+		const float irad = XM_PI * 2.0f / (float)latitudeBands * (float)i;
+		const float y = (float)cos(irad);					// y座標を計算
+		const float r = (float)sin(irad);					// 半径を計算
+		const float v = (float)i / (float)(latitudeBands / 2);	//テクスチャ座標vを計算
 		for (int j = 0; j <= latitudeBands; ++j) {
 			// 経度方向の角度を計算
-			float jrad = XM_PI * 2.0f / (float)latitudeBands * (float)j;
-			float x = r * (float)cos(jrad);			// x座標を計算
-			float z = r * (float)sin(jrad);			// z座標を計算
-			float u = (float)j / (float)latitudeBands;	// テクスチャ座標uを計算
+			const float jrad = XM_PI * 2.0f / (float)latitudeBands * (float)j;
+			const float x = r * (float)cos(jrad);			// x座標を計算
+			const float z = r * (float)sin(jrad);			// z座標を計算
+			const float u = (float)j / (float)latitudeBands;	// テクスチャ座標uを計算
 
 			// 頂点インデックスを計算
-			int   inx = i * (latitudeBands + 1) + j;
+			const int inx = i * (latitudeBands + 1) + j;
 
 			// 頂点の位置を設定
 			m_Vertices[inx].position = XMFLOAT3(x, y, z);
@@ -56,7 +56,7 @@ std::vector<unsigned int> SkyDomeMesh::CreateMeshIndices() {
 
 	// インデックスバッファ生成
 
-	int   icount = latitudeBands * 3 + latitudeBands * (latitudeBands / 2 - 1) * 6 + latitudeBands * 3;
+	int icount = latitudeBands * 3 + latitudeBands * (latitudeBands / 2 - 1) * 6 + latitudeBands * 3;
 	m_Indices.resize(icount);
 	icount = 0;
 	int i = 0;
@@ -94,5 +94,3 @@ std::vector<unsigned int> SkyDomeMesh::CreateMeshIndices() {
 
 	return m_Indices;
 }
-
-// 描画処理も書く

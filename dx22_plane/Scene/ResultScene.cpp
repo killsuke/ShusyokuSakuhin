@@ -1,7 +1,7 @@
 #include "ResultScene.h"
-#include "Components/Camera.h"
+#include "Components/CameraComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/CircleMesh.h"
@@ -9,7 +9,7 @@
 #include "Components/Render3D.h"
 #include "Components/Render2D.h"
 #include "Components/Render3DColliderAABBComponent.h"
-#include "Components/Collider.h"
+#include "Components/ColliderComponent.h"
 #include "Components/PlayerOperationComponent.h"
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
@@ -18,14 +18,16 @@
 #include "Components/DoorFadeComponent.h"
 #include "Components/BlinkingUIComponent.h"
 
+using namespace DirectX;
+
 // コンストラクタ
 ResultScene::ResultScene()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
-	auto cameraObj = camera->AddComponent<Camera>();
-	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -170.0f));
+	auto cameraObj = camera->AddComponent<CameraComponent>();
+	cameraObj->SetTarget(XMFLOAT3(10.0f, 30.0f, 0.0f));
 	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 

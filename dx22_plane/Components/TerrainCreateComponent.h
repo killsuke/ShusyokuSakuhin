@@ -11,13 +11,11 @@
 #include <string>
 #include <utility>
 
-class TerrainManagerComponent : public CSVObjectManagerComponent
+class TerrainCreateComponent final : public CSVObjectManagerComponent
 {
-private:
-
 public:
-	TerrainManagerComponent(GameObject& obj);
-	~TerrainManagerComponent() = default;
+	TerrainCreateComponent(GameObject& obj);
+	~TerrainCreateComponent() = default;
 
 	void Update() override;
 	void CreateTerrains(std::vector<TerrainStatus> status,const float centerZ); // ’nŒ`‚ğ¶¬‚·‚éŠÖ”

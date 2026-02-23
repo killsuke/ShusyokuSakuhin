@@ -1,7 +1,7 @@
 #include "StageLoadCSVComponent.h"
 #include "Structs/CSV_Data.h"
-#include "TerrainManagerComponent.h"
-#include "EnemyManagerComponent.h"
+#include "TerrainCreateComponent.h"
+#include "EnemyCreateComponent.h"
 #include <fstream>
 
 using namespace DirectX;
@@ -114,8 +114,8 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 		}
 	}
 
-	auto terrainMn = terrainManager.GetComponent<TerrainManagerComponent>();
-	auto enemyMn = terrainManager.GetComponent<EnemyManagerComponent>();
+	auto terrainMn = terrainManager.GetComponent<TerrainCreateComponent>();
+	auto enemyMn = terrainManager.GetComponent<EnemyCreateComponent>();
 
 	// 地形データを移す
 	if (terrainMn != nullptr) {

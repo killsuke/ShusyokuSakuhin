@@ -1,14 +1,14 @@
 #include "TestExtrusionJudgeComponent.h"
-#include "Collider.h"
+#include "ColliderComponent.h"
 #include "RigidBodyComponent.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "Manager/GameObjectManager.h"
 #include "JumpComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "PlayerOperationComponent.h"
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 TestExtrusionJudgeComponent::TestExtrusionJudgeComponent(GameObject& obj) : Component(obj)
 {
@@ -36,7 +36,7 @@ void TestExtrusionJudgeComponent::Update()
 			continue; // コライダーが存在しない場合はスキップ
 		}
 
-		Vector3 hitNormal = {};
+		XMFLOAT3 hitNormal = {};
 		if (coll->TestNormal(*terrainColl, *coll, hitNormal)) {
 			if (hitNormal.y < -0.5f) {	// 地面
 				rigid->UseGravity(false);

@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Structs/CameraPattern.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 class CameraMoveComponent : public Component
 {

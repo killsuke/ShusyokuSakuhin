@@ -1,5 +1,5 @@
 #include "TrailMakeComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "TestSwordActionComponent.h"
 #include "System/DirectXRender.h"
 #include "Mesh/TrailMesh.h"

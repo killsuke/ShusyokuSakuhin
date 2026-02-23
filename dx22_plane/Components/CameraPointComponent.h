@@ -1,6 +1,5 @@
 #pragma once
 #include "Component.h"
-//#include "Structs/CameraPattern.h"
 #include <DirectXMath.h>
 #include <memory>
 

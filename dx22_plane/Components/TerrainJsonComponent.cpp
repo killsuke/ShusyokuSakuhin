@@ -1,7 +1,7 @@
 #include "TerrainJsonComponent.h"
 
 using json = nlohmann::ordered_json;
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 using namespace std::filesystem;
 
 TerrainJsonComponent::TerrainJsonComponent(GameObject& obj) :JsonComponent(obj) {
@@ -42,8 +42,8 @@ json TerrainJsonComponent::TerrainsToJson(const std::vector<TerrainStatus>& terr
     for (const auto& t : terrains) {
         json item;
         item["kind"] = t.kind;
-        item["scale"] = Vector3ToJson(t.scale);
-        item["angle"] = Vector3ToJson(t.angle);
+        item["scale"] = XMFLOAT3ToJson(t.scale);
+        item["angle"] = XMFLOAT3ToJson(t.angle);
         item["texture"] = t.texture;
         item["shaderVS"] = t.shaderVS;
 		item["shaderPS"] = t.shaderPS;

@@ -1,8 +1,10 @@
 #include "DeathBlockComponent.h"
-#include "Transform.h"
-#include "Collider.h"
+#include "TransformComponent.h"
+#include "ColliderComponent.h"
 #include "FighterComponent.h"
 #include "Manager/GameObjectManager.h"
+
+using namespace DirectX;
 
 DeathBlockComponent::DeathBlockComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ƒ\[ƒg”Ô†‚ðÝ’è
@@ -22,7 +24,8 @@ void DeathBlockComponent::Update() {
 		if (playerTransform == nullptr || collplay == nullptr) {
 			return;
 		}
-		DirectX::SimpleMath::Vector3 hitNormal = {};
+		
+		XMFLOAT3 hitNormal = {};
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
 			fighter->SetHp(0);
 		}

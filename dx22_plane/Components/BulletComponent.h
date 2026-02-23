@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "SimpleMath.h"
+#include <DirectXMath.h>
 
 class BulletComponent : public Component
 {

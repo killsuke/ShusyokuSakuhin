@@ -1,5 +1,5 @@
 #include "ArbitraryRotationComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "TrailRenderComponent.h"
 
 using namespace DirectX;

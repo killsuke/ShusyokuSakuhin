@@ -1,5 +1,5 @@
 #include "Render.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
 RenderComponent::RenderComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è

@@ -1,5 +1,5 @@
 #include "Render3D.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
 using namespace DirectX;
 

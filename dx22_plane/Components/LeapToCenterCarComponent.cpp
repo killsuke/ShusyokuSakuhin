@@ -1,6 +1,6 @@
 #include "LeapToCenterCarComponent.h"
 #include "JumpComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RigidBodyComponent.h"
 #include "Manager/TimeManager.h"
 #include "Manager/GameObjectManager.h"

@@ -1,6 +1,5 @@
 #pragma once
 #include	<vector>
-#include	<SimpleMath.h>
 #include	<memory>
 #include	<string>
 #include	"Structs/RenderElement.h"

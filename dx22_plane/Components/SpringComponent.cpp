@@ -1,5 +1,5 @@
 #include    "SpringComponent.h"
-#include    "Transform.h"
+#include    "TransformComponent.h"
 #include    "RigidBodyComponent.h"
 #include <iostream>
 

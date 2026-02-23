@@ -1,4 +1,4 @@
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "Component.h"
 
 // ‚Î‚Ë

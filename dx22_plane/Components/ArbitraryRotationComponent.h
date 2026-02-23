@@ -1,7 +1,8 @@
 #pragma once
 #include "Component.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include <vector>
+#include "Helper/XMFLOAT_Helper.h"
 
 enum class RollingPattern {
 	DEFAULT_ROLLING,
@@ -41,7 +42,7 @@ private:
 
 	RollingPattern m_rollingPattern = RollingPattern::DEFAULT_ROLLING;
 
-	DirectX::SimpleMath::Vector3 m_initialOffset = DirectX::SimpleMath::Vector3::Zero; // 中心と回転するオブジェクトの差分
+	DirectX::XMFLOAT3 m_initialOffset = {}; // 中心と回転するオブジェクトの差分
 	DirectX::XMFLOAT3 m_LockRotation = {};
 	std::vector<PosAndQuaternion> m_worldPosQuats = { };
 
@@ -117,10 +118,12 @@ public:
 	inline void SetCenterObject(GameObject* centerObj) { m_CenterObject = centerObj; }
 
 	inline void SetRotationSpeed(float speed) { m_rotationSpeed = fabsf(speed); }
-	inline void MakeInitialOffset(const DirectX::SimpleMath::Vector3& parent, const DirectX::SimpleMath::Vector3& child) {
+	inline void MakeInitialOffset(const DirectX::XMFLOAT3& parent, const DirectX::XMFLOAT3& child) {
 		m_initialOffset = child - parent; // 子オブジェクトの位置から親オブジェクトの位置を引いて差分を計算
 
-		m_radius = DirectX::SimpleMath::Vector2(m_initialOffset.x, m_initialOffset.y).Length();
+		const DirectX::XMFLOAT2 offset = DirectX::XMFLOAT2(m_initialOffset.x, m_initialOffset.y);
+
+		m_radius = sqrtf(offset.x * offset.x + offset.y * offset.y);
 	}
 	inline void SetClockwise(const bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
 	inline void SetRollingActive(const bool active) { m_rollingActive = active; } // 回転の停止・再開

@@ -1,5 +1,5 @@
 #include "VectorMoveComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
 using namespace DirectX;
 

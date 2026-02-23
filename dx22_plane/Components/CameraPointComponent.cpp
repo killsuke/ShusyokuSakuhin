@@ -1,11 +1,10 @@
 #include "CameraPointComponent.h"
 #include "CameraMoveComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Collider.h"
+#include "ColliderComponent.h"
 #include "RigidBodyComponent.h"
 #include "CameraTargetComponent.h"
 #include <iostream>
-#include <SimpleMath.h>
 
 using namespace DirectX;
 
@@ -33,7 +32,7 @@ void CameraPointComponent::Update() {
 	// ここで当たり判定でリリースがあればこれ以降の処理を実行
 	beforeTouched = afterTouched; // 前に触れたかどうかのフラグを更新
 
-	DirectX::SimpleMath::Vector3 dir = {};
+	XMFLOAT3 dir = {};
 	XMFLOAT3 dir2 = {};
 	if (camColl->CheckHit_CubeAndCube_IsTrigger2D_Normal(*camColl, *playerColl, dir)) {
 

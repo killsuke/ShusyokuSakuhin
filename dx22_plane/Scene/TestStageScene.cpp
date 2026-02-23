@@ -1,7 +1,7 @@
 #include "TestStageScene.h"
-#include "Components/Camera.h"
+#include "Components/CameraComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/CircleMesh.h"
@@ -9,7 +9,7 @@
 #include "Components/Render3D.h"
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/Render3DColliderOBBComponent.h"
-#include "Components/Collider.h"
+#include "Components/ColliderComponent.h"
 #include "Components/PlayerOperationComponent.h"
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
@@ -31,7 +31,7 @@ TestStageScene::TestStageScene() {
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
 	camera->AddComponent<RigidBodyComponent>();
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
-	camera->AddComponent<Camera>();
+	camera->AddComponent<CameraComponent>();
 
 	camera->AddComponent<SpringComponent>();
 

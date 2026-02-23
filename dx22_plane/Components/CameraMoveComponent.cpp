@@ -1,13 +1,12 @@
 #include "CameraMoveComponent.h"
-#include "Transform.h"
-#include "Camera.h"
+#include "TransformComponent.h"
+#include "CameraComponent.h"
 #include "SpringComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "CameraTargetComponent.h"
 #include "RigidBodyComponent.h"
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
@@ -83,7 +82,7 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 		cameraSpring->SetActiveFlag(false);
 	}
 
-	auto cameraComp = cameraObj.GetComponent<Camera>();
+	CameraComponent* cameraComp = cameraObj.GetComponent<CameraComponent>();
 	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
@@ -95,7 +94,7 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
 
 void CameraMoveComponent::ChaseXAndYCamera(GameObject& cameraObj, GameObject& player)
 {
-	auto cameraComp = cameraObj.GetComponent<Camera>();
+	CameraComponent* cameraComp = cameraObj.GetComponent<CameraComponent>();
 	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
@@ -116,7 +115,7 @@ void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& playe
 		cameraSpring->SetActiveFlag(false);
 	}
 
-	auto cameraComp = cameraObj.GetComponent<Camera>();
+	CameraComponent* cameraComp = cameraObj.GetComponent<CameraComponent>();
 	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
@@ -129,7 +128,7 @@ void CameraMoveComponent::Chase_XCamera(GameObject& cameraObj, GameObject& playe
 
 void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& player) {
 	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
-	auto cameraComp = cameraObj.GetComponent<Camera>();
+	CameraComponent* cameraComp = cameraObj.GetComponent<CameraComponent>();
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();
@@ -170,7 +169,7 @@ void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
 void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& player)
 {
 	auto cameraTrans = cameraObj.GetComponent<TransformComponent>();
-	auto cameraComp = cameraObj.GetComponent<Camera>();
+	CameraComponent* cameraComp = cameraObj.GetComponent<CameraComponent>();
 
 	auto playerTrans = player.GetComponent<TransformComponent>();
 	auto playerPos = playerTrans->GetPosition();

@@ -274,6 +274,8 @@ void Application::MainLoop()
 				loopCount++;
 			}
 
+//			std::cout << "ループ回数: " << loopCount << std::endl;
+
 			// ズレによって更新されなかった場合更新する
 			if (loopCount == 0) {
 				SceneManager::Update(); // シーンの更新

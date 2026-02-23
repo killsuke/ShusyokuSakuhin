@@ -2,7 +2,7 @@
 #include "Manager/SceneManager.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/HitStopManager.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 #include "Components/Render3D.h"
 #include "Mesh/SquareMesh.h"
 #include "System/DirectXRender.h"
@@ -117,7 +117,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		return;
 	}
 
-	Camera* sceneCamComp = sceneCamera->GetComponent<Camera>();
+	CameraComponent* sceneCamComp = sceneCamera->GetComponent<CameraComponent>();
 	DebugCameraComponent* debugCamComp = m_DebugCamera->GetComponent<DebugCameraComponent>();
 	TransformComponent* sceneCamTrans = sceneCamera->GetComponent<TransformComponent>();
 	TransformComponent* debugCamTrans = m_DebugCamera->GetComponent<TransformComponent>();

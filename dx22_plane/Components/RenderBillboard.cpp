@@ -1,10 +1,9 @@
 #include "RenderBillboard.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderBillboardComponent::RenderBillboardComponent(GameObject& obj) : RenderComponent(obj) {
@@ -22,9 +21,9 @@ void RenderBillboardComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		const Vector3 pos = transform->GetPosition();
-		const Vector3 scale = transform->GetScale();
-		Camera* cameraComp = camera->GetComponent<Camera>();
+		const XMFLOAT3 pos = transform->GetPosition();
+		const XMFLOAT3 scale = transform->GetScale();
+		CameraComponent* cameraComp = camera->GetComponent<CameraComponent>();
 		const XMMATRIX cameraView3D = cameraComp->GetView3D();
 
 		XMMATRIX rotationOnly = cameraView3D;
@@ -67,7 +66,7 @@ void RenderBillboardComponent::Update()
 		m_IndexBuffer.SetGPU();
 
 		Texture texture = GetTexture();
-		Vector4 uvs = texture.GetUVSets();
+		XMFLOAT4 uvs = texture.GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;

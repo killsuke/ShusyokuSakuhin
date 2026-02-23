@@ -1,9 +1,8 @@
 #include "Render2D.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 Render2DComponent::Render2DComponent(GameObject& obj) : RenderComponent(obj) {

@@ -1,10 +1,9 @@
 #include "SkyDomeRenderComponent.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 #include <DDSTextureLoader.h>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 SkyDomeRenderComponent::SkyDomeRenderComponent(GameObject& obj) : RenderComponent(obj) {

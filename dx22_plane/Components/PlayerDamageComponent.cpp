@@ -1,6 +1,6 @@
 #include "PlayerDamageComponent.h"
 #include "PlayerOperationComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RigidBodyComponent.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
@@ -9,9 +9,6 @@
 #include "ColliderDamageComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
-#include <SimpleMath.h>
-
-using namespace DirectX::SimpleMath;
 
 PlayerDamageComponent::PlayerDamageComponent(GameObject& obj) : Component(obj)
 {

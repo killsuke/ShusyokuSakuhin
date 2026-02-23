@@ -1,11 +1,11 @@
 #include "EnemyDeathEventComponent.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "CutObjectActionComponent.h"
 #include "TimeLineComponent.h"
 #include "Mesh/TriangularPrismMesh.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 using namespace DirectX;
 
@@ -26,13 +26,6 @@ EnemyDeathEventComponent::~EnemyDeathEventComponent() {
 
 void EnemyDeathEventComponent::Update() {
 
-	//MeshCut2DComponent* meshCut = m_Object->GetComponent<MeshCut2DComponent>();
-	//if (meshCut == nullptr) {
-	//	return; // メッシュカットコンポーネントがないなら何もしない
-	//}
-
-	//const uint32_t cutObj1ID = meshCut->GetCutObj1ID();
-	//const uint32_t cutObj2ID = meshCut->GetCutObj2ID();
 	
 }
 

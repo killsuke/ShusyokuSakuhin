@@ -9,7 +9,7 @@
 using namespace DirectX;
 using namespace std;
 
-DebugCameraComponent::DebugCameraComponent(GameObject& obj) : Camera(obj)
+DebugCameraComponent::DebugCameraComponent(GameObject& obj) : CameraComponent(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // É\Å[Égî‘çÜÇê›íË
 }

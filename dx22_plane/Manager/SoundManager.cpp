@@ -30,18 +30,14 @@ HRESULT SoundManager::Init() {
 	}
 
 	// 音声エンジン作成
-	/**** Create XAudio2 ****/
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
-	//hr=XAudio2Create(&g_pXAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);		// 第三引数は、windowsでは無視
 	if (FAILED(hr)) {
 		CoUninitialize();
 		return -1;
 	}
 
 	// スピーカーへの最終出力ノード作成
-	/**** Create Mastering Voice ****/
 	hr = m_pXAudio2->CreateMasteringVoice(&m_pMasteringVoice);			// 今回はＰＣのデフォルト設定に任せている
-	/*, XAUDIO2_DEFAULT_CHANNELS, XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL*/		// 本当６個の引数を持っている
 	if (FAILED(hr)) {
 		if (m_pXAudio2)	m_pXAudio2->Release();
 		CoUninitialize();
@@ -56,15 +52,16 @@ HRESULT SoundManager::Init() {
 
 void SoundManager::UnInit() {
 
-	for(const auto& [key, res] : m_SoundResources)
-	{
-		if(res.pDataBuffer)
-		{
-			delete[] res.pDataBuffer;
-		}
-	}
+    for (const std::pair<const std::string, SoundResource>& entry : m_SoundResources)
+    {
+        const SoundResource& res = entry.second;
+        if (res.pDataBuffer)
+        {
+            delete[] res.pDataBuffer;
+        }
+    }
 
-	m_pMasteringVoice->DestroyVoice();
+    m_pMasteringVoice->DestroyVoice();
 
 	if (m_pXAudio2) m_pXAudio2->Release();
 

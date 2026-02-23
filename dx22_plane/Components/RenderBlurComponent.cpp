@@ -1,7 +1,6 @@
 #include "RenderBlurComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderBlurComponent::RenderBlurComponent(GameObject& obj) :RenderComponent(obj) {

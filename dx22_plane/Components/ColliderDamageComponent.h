@@ -1,5 +1,5 @@
 #pragma once
-#include "Collider.h"
+#include "ColliderComponent.h"
 
 class ColliderDamageComponent : public ColliderComponent
 {

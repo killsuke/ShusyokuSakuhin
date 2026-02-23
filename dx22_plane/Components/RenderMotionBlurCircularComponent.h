@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
 class RenderMotionBlurCircularComponent :  public RenderComponent
 {

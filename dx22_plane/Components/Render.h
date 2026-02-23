@@ -9,13 +9,13 @@
 #include "Component.h"
 #include "Structs/RenderElement.h"
 
-#include	<d3d11.h>
-#include	<DirectXMath.h>
-#include	<map>
-#include	<iostream>
-#include	<string>
-#include	<vector>
-#include	<memory>
+#include <d3d11.h>
+#include <DirectXMath.h>
+#include <map>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 #include "Shader/Shader.h"
 #include "Texture/Texture.h"
 #include "Buffer/VertexBuffer.h"

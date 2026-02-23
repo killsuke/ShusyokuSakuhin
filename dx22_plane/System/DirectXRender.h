@@ -1,7 +1,6 @@
 #pragma once
 #include	<d3d11.h>
 #include	<DirectXMath.h>
-#include	<SimpleMath.h>
 #include	<map>
 #include	<iostream>
 #include	<io.h>

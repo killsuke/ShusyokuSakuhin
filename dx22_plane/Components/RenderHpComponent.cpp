@@ -1,6 +1,6 @@
 #include "RenderHpComponent.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Structs/HPParam.h"
 #include "FighterComponent.h"
 

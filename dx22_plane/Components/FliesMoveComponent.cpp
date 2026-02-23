@@ -1,6 +1,6 @@
 #include "FliesMoveComponent.h"
 #include <random>
-#include "Transform.h"
+#include "TransformComponent.h"
 
 using namespace DirectX;
 

@@ -1,7 +1,7 @@
 #include "GameObjectManager.h"
 #include "SceneManager.h"
 #include "EventBusManager.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 #include "System/DirectXRender.h"
 #include <iostream>
 

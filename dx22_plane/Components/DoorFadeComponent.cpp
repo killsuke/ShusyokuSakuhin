@@ -1,5 +1,5 @@
 #include "DoorFadeComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Render2D.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameObjectManager.h"

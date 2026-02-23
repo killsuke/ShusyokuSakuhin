@@ -1,5 +1,5 @@
 #pragma once
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RenderLineComponent.h"
 #include "Structs/TestBoneData.h"
 #include <vector>

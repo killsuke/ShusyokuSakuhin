@@ -2,7 +2,6 @@
 #include "System/DirectXRender.h"
 #include "Manager/GameObjectManager.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderMotionBlurCircularComponent::RenderMotionBlurCircularComponent(GameObject& obj) :RenderComponent(obj) {

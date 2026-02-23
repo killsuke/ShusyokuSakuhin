@@ -1,5 +1,5 @@
 #include "EnemyDamageComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "AttackTimingComponent.h"
 #include "AttackOneTimeComponent.h"
 #include "Manager/GameObjectManager.h"

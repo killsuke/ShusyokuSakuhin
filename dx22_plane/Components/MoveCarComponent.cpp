@@ -1,9 +1,9 @@
 #include "MoveCarComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RigidBodyComponent.h"
 #include "Manager/GameObjectManager.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 MoveCarComponent::MoveCarComponent(GameObject& obj) :Component(obj)
 {
@@ -17,11 +17,11 @@ void MoveCarComponent::Update()
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	rigid->AddForce(DirectX::SimpleMath::Vector3(m_MoveSpeed, 0.0f, 0.0f));
+	rigid->AddForce(XMFLOAT3(m_MoveSpeed, 0.0f, 0.0f));
 
 	rigid->UpdateVelocity();
 
-	Vector3 currentPos = transform->GetPosition();
+	const XMFLOAT3 currentPos = transform->GetPosition();
 
 	m_DeltaCarPos = currentPos - m_PrevCarPos;
 

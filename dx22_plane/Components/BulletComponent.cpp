@@ -1,6 +1,6 @@
 #include "BulletComponent.h"
 #include "RigidBodyComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include <iostream>
 
 using namespace DirectX;

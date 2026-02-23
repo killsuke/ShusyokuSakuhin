@@ -1,5 +1,5 @@
 #include "EnemyActionBulletComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "ColliderAttackComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"

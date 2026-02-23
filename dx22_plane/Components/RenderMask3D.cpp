@@ -1,9 +1,8 @@
 #include "RenderMask3D.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderMask3DComponent::RenderMask3DComponent(GameObject& obj) : RenderComponent(obj) {

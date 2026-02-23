@@ -1,14 +1,12 @@
 #include "MoveTerrainComponent.h"
-#include "Transform.h"
-#include "Collider.h"
+#include "TransformComponent.h"
+#include "ColliderComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "PlayerOperationComponent.h"
 #include "RigidBodyComponent.h"
 #include <cmath>
-#include <SimpleMath.h>
 #include <iostream>
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 MoveTerrainComponent::MoveTerrainComponent(GameObject& obj) : Component(obj)
@@ -45,7 +43,7 @@ void MoveTerrainComponent::Update() {
 		if(playerTransform == nullptr || collplay == nullptr) {
 			return;
 		}
-		Vector3 hitNormal = {};
+		XMFLOAT3 hitNormal = {};
 		// 押し戻すことを考える
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
 			if (playerTransform->GetPosition().y > myPos.y) {	// プレイヤーが地面に乗っているとき
@@ -64,7 +62,7 @@ void MoveTerrainComponent::Update() {
 	for(const auto& obj : enemies) {
 		TransformComponent* enemyTransform = obj->GetComponent<TransformComponent>();
 		ColliderComponent* collEnemy = obj->GetComponent<ColliderComponent>();
-		Vector3 hitNormal = {};
+		XMFLOAT3 hitNormal = {};
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collEnemy, *collider, hitNormal) == true) {
 			if (enemyTransform->GetPosition().y > myPos.y) {	// 敵が地面に乗っているとき
 

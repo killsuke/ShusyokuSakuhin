@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 struct OverVertexParam
 {

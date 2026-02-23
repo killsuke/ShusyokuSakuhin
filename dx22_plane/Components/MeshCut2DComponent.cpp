@@ -1,7 +1,7 @@
 #include "MeshCut2DComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Render2D.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "VectorMoveComponent.h"
 #include "Input/Input.h"
 #include "Manager/GameObjectManager.h"

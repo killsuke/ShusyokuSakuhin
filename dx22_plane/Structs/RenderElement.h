@@ -1,8 +1,9 @@
 #pragma once
+#include <Windows.h>
 #include <DirectXMath.h>
-#include	<iostream>
-#include	<string.h>
-#include	<memory>
+#include <iostream>
+#include <string.h>
+#include <memory>
 
 // ３Ｄ頂点データ
 struct VERTEX_3D
@@ -44,8 +45,8 @@ struct SUBSET {
 
 // マテリアル
 struct MATERIAL {
-	DirectX::XMFLOAT4 Ambient  = DirectX::XMFLOAT4();	// 環境反射
-	DirectX::XMFLOAT4 Diffuse  = DirectX::XMFLOAT4();	// 拡散反射（ != カラー）
+	DirectX::XMFLOAT4 Ambient = DirectX::XMFLOAT4();	// 環境反射
+	DirectX::XMFLOAT4 Diffuse = DirectX::XMFLOAT4();	// 拡散反射（ != カラー）
 	DirectX::XMFLOAT4 Specular = DirectX::XMFLOAT4();// 鏡面反射
 	DirectX::XMFLOAT4 Emission = DirectX::XMFLOAT4();// 発光
 	float Shiness = 0.0f;	// 光沢の滑らかさ

@@ -47,8 +47,8 @@ void TimeManager::Update() {
 
 	m_Accumulator += frameTime;
 
-	if (m_Accumulator > 0.2) {
-		m_Accumulator = 0.2;
+	if (m_Accumulator > 0.032) {
+		m_Accumulator = 0.032;
 	}
 }
 
@@ -81,7 +81,7 @@ bool TimeManager::ShouldFixedUpdate() {
 		// 固定更新の時間をシェーダーに渡す
 		timeData.deltaTime = deltaTime;
 		timeData.totalTime = static_cast<float>(m_TotalTime);
-		//		deviceContext->UpdateSubresource(timeBuffer, 0, NULL, &timeData, 0, 0);
+		deviceContext->UpdateSubresource(timeBuffer, 0, NULL, &timeData, 0, 0);
 
 		updated = true;
 	}

@@ -90,10 +90,10 @@
     <ClCompile Include="System\DebugCout.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Collider.cpp">
+    <ClCompile Include="Components\ColliderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Camera.cpp">
+    <ClCompile Include="Components\CameraComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\Component.cpp">
@@ -111,7 +111,7 @@
     <ClCompile Include="Components\Render3D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Transform.cpp">
+    <ClCompile Include="Components\TransformComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\Render3DColliderAABBComponent.cpp">
@@ -228,7 +228,7 @@
     <ClCompile Include="Components\CSVObjectManagerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\EnemyManagerComponent.cpp">
+    <ClCompile Include="Components\EnemyCreateComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\TestExtrusionJudgeComponent.cpp">
@@ -264,7 +264,7 @@
     <ClCompile Include="Components\DoorFadeComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\TerrainManagerComponent.cpp">
+    <ClCompile Include="Components\TerrainCreateComponent.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Components\EnemyActionComponent.cpp">
@@ -548,10 +548,10 @@
     <ClInclude Include="Structs\RenderElement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Camera.h">
+    <ClInclude Include="Components\CameraComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Collider.h">
+    <ClInclude Include="Components\ColliderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\JumpComponent.h">
@@ -566,7 +566,7 @@
     <ClInclude Include="Components\RigidBodyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Transform.h">
+    <ClInclude Include="Components\TransformComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Component.h">
@@ -707,7 +707,7 @@
     <ClInclude Include="Components\CSVObjectManagerComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\EnemyManagerComponent.h">
+    <ClInclude Include="Components\EnemyCreateComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\TestExtrusionJudgeComponent.h">
@@ -743,7 +743,7 @@
     <ClInclude Include="Components\DoorFadeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\TerrainManagerComponent.h">
+    <ClInclude Include="Components\TerrainCreateComponent.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Components\EnemyActionComponent.h">

@@ -4,7 +4,7 @@
 #include "Render3D.h"
 #include "JumpComponent.h"
 #include "DoorFadeComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Input/Input.h"
 #include "TestSwordActionComponent.h"
 #include "ArbitraryRotationComponent.h"

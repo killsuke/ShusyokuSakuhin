@@ -1,5 +1,5 @@
 #include "GoAroundComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Helper/HelpMath.h"
 #include <iostream>

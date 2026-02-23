@@ -1,7 +1,7 @@
 #include "Bones.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 using namespace DirectX::SimpleMath;
 
 // ボーンのコンストラクタ
@@ -189,7 +189,7 @@ void Bones::Update() {
 		m_IndexBuffer.SetGPU();
 		//m_Texture->SetGPU();
 
-		auto cameraComp = cameraobj->GetComponent<Camera>();
+		auto cameraComp = cameraobj->GetComponent<CameraComponent>();
 
 	/*	cb.matrixView = cameraComp->GetViewMtx3D();
 		cb.matrixProj = cameraComp->GetProjMtx3D();*/

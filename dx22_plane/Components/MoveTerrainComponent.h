@@ -1,12 +1,12 @@
 #pragma once
 #include "Component.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 class MoveTerrainComponent : public Component
 {
 private:
-	DirectX::SimpleMath::Vector3 m_moveVector = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::XMFLOAT3 m_BeforePos = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT3 m_moveVector = {};
+	DirectX::XMFLOAT3 m_BeforePos = {};
 	float m_moveSpeed = 1.0f;
 	const float m_deltaTime = 0.016f;
 	float m_recordTime = 0.0f;
@@ -16,6 +16,6 @@ public:
 	~MoveTerrainComponent() = default;
 	void Update() override;
 
-	void SetMoveVector(DirectX::SimpleMath::Vector3 vector) { m_moveVector = vector; };
+	void SetMoveVector(DirectX::XMFLOAT3 vector) { m_moveVector = vector; };
 	void SetMoveSpeed(const float speed) { m_moveSpeed = speed; };
 };

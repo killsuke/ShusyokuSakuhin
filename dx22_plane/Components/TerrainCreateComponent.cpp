@@ -1,6 +1,6 @@
-#include "TerrainManagerComponent.h"
-#include "Transform.h"
-#include "Collider.h"
+#include "TerrainCreateComponent.h"
+#include "TransformComponent.h"
+#include "ColliderComponent.h"
 #include "Render3D.h"
 #include "Render3DColliderAABBComponent.h"
 #include "Render3DColliderOBBComponent.h"
@@ -10,18 +10,18 @@
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
-TerrainManagerComponent::TerrainManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
+TerrainCreateComponent::TerrainCreateComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ソート番号を設定
 }
 
-void TerrainManagerComponent::Update() {
+void TerrainCreateComponent::Update() {
 
 
 }
 
-void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status, const float centerZ) {
+void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, const float centerZ) {
 	// この中で生成する
 	if(m_csvObjData.empty()) {
 		return; // データがない場合は何もしない
@@ -56,12 +56,12 @@ void TerrainManagerComponent::CreateTerrains(std::vector<TerrainStatus> status, 
 		if (kind != "T_Dummy") {
 
 			auto collider = terrainObj->AddComponent<ColliderComponent>();
-			collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+			collider->SetOffsetSizeAABB(XMFLOAT3(0.0f, 1.0f, 1.0f));
 
 			if (kind == "T_Move") {
 				auto move = terrainObj->AddComponent<MoveTerrainComponent>();
 				move->SetMoveSpeed(80.0f);
-				move->SetMoveVector(Vector3(1.0f, 0.0f, 0.0f));
+				move->SetMoveVector(XMFLOAT3(1.0f, 0.0f, 0.0f));
 			}
 
 			auto rigid = terrainObj->AddComponent<RigidBodyComponent>();

@@ -1,6 +1,6 @@
 #include "RenderLine2DComponent.h"
 #include "System/DirectXRender.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "RenderBillboard.h"
 #include "Mesh/CircleMesh.h"
@@ -8,7 +8,6 @@
 #include "Input/Input.h"
 #include "FollowPositionComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(obj) {
@@ -54,19 +53,19 @@ void RenderLine2DComponent::Update()
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
 		// ここで全頂点データを更新
-		Vector3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
-		Vector3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
+		XMFLOAT3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
+		XMFLOAT3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
 		
 		vtx[0].position = pos_S;
-		vtx[0].normal = Vector3(0.0f, 1.0f, 0.0f);
+		vtx[0].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 		vtx[0].color = m_Color;
-		vtx[0].uv = Vector2(0.0f, 0.0f);
+		vtx[0].uv = XMFLOAT2(0.0f, 0.0f);
 
 		//		pos_E.z -= 4.0f;
 		vtx[1].position = pos_E;
-		vtx[1].normal = Vector3(0.0f, 1.0f, 0.0f);
+		vtx[1].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 		vtx[1].color = m_Color;
-		vtx[1].uv = Vector2(1.0f, 0.0f);
+		vtx[1].uv = XMFLOAT2(1.0f, 0.0f);
 
 		deviceContext->Unmap(m_VertexBuffer.GetBuffer(), 0);
 
@@ -111,19 +110,19 @@ void RenderLine2DComponent::Update()
 	}
 }
 
-void RenderLine2DComponent::SetStartPosition(const DirectX::SimpleMath::Vector3& startPos) {
+void RenderLine2DComponent::SetStartPosition(const DirectX::XMFLOAT3& startPos) {
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 
 	transS->SetPosition(startPos);
 }
 
-void RenderLine2DComponent::SetEndPosition(const DirectX::SimpleMath::Vector3& endPos) {
+void RenderLine2DComponent::SetEndPosition(const DirectX::XMFLOAT3& endPos) {
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 
 	transE->SetPosition(endPos);
 }
 
-void RenderLine2DComponent::SetStartAndEndPosition(const DirectX::SimpleMath::Vector3& startPos, const DirectX::SimpleMath::Vector3& endPos) {
+void RenderLine2DComponent::SetStartAndEndPosition(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos) {
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 

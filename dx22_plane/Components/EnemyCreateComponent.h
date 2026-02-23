@@ -2,13 +2,11 @@
 #include "CSVObjectManagerComponent.h"
 #include <string>
 
-class EnemyManagerComponent :  public CSVObjectManagerComponent
+class EnemyCreateComponent final :  public CSVObjectManagerComponent
 {
-private:
-
 public:
-	EnemyManagerComponent(GameObject& obj);
-	~EnemyManagerComponent() = default;
+	EnemyCreateComponent(GameObject& obj);
+	~EnemyCreateComponent() = default;
 
 	void Update() override;
 

@@ -1,6 +1,6 @@
 #include "BossEventComponent.h"
 #include "CameraPointComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"
 #include "Manager/GameObjectManager.h"

@@ -198,19 +198,25 @@
     <ClCompile Include="Components\AttackOneTimeComponent.cpp" />
     <ClCompile Include="Components\AttackTimingComponent.cpp" />
     <ClCompile Include="Components\BlinkingUIComponent.cpp" />
-    <ClCompile Include="Components\BoneComponent.cpp" />
-    <ClCompile Include="Components\BonePartsComponent.cpp" />
+    <ClCompile Include="Components\BoneComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Components\BonePartsComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Mesh\BonePartsMesh.cpp" />
-    <ClCompile Include="Components\Bones.cpp" />
+    <ClCompile Include="Components\Bones.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Components\BossEventComponent.cpp" />
     <ClCompile Include="Components\BulletComponent.cpp" />
-    <ClCompile Include="Components\Camera.cpp" />
+    <ClCompile Include="Components\CameraComponent.cpp" />
     <ClCompile Include="Components\CameraMoveComponent.cpp" />
     <ClCompile Include="Components\CameraPointComponent.cpp" />
     <ClCompile Include="Components\CameraTargetComponent.cpp" />
     <ClCompile Include="Components\MeshCut2DComponent.cpp" />
     <ClCompile Include="Mesh\CircleMesh.cpp" />
-    <ClCompile Include="Components\Collider.cpp" />
+    <ClCompile Include="Components\ColliderComponent.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Manager\ComponentTypeManager.cpp" />
     <ClCompile Include="Components\CSVObjectManagerComponent.cpp" />
@@ -222,7 +228,7 @@
     <ClCompile Include="Components\EnemyActionBulletComponent.cpp" />
     <ClCompile Include="Components\EnemyActionHopperComponent.cpp" />
     <ClCompile Include="Components\EnemyJsonComponent.cpp" />
-    <ClCompile Include="Components\EnemyManagerComponent.cpp" />
+    <ClCompile Include="Components\EnemyCreateComponent.cpp" />
     <ClCompile Include="Components\FollowPositionComponent.cpp" />
     <ClCompile Include="Components\RenderMotionBlurComponent.cpp" />
     <ClCompile Include="Components\ProjectileMotionComponent.cpp" />
@@ -235,7 +241,9 @@
     <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
     <ClCompile Include="Manager\HitStopManager.cpp" />
-    <ClCompile Include="Components\HumanBoneComponent.cpp" />
+    <ClCompile Include="Components\HumanBoneComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Components\JsonComponent.cpp" />
     <ClCompile Include="Components\LeapToCenterCarComponent.cpp" />
     <ClCompile Include="Mesh\LineMesh.cpp" />
@@ -252,7 +260,7 @@
     <ClCompile Include="Components\SkyDomeRenderComponent.cpp" />
     <ClCompile Include="Components\StageLoadCSVComponent.cpp" />
     <ClCompile Include="Components\TerrainJsonComponent.cpp" />
-    <ClCompile Include="Components\TerrainManagerComponent.cpp" />
+    <ClCompile Include="Components\TerrainCreateComponent.cpp" />
     <ClCompile Include="Mesh\CubeMesh.cpp" />
     <ClCompile Include="System\DebugCout.cpp" />
     <ClCompile Include="System\DirectXRender.cpp" />
@@ -260,7 +268,9 @@
     <ClCompile Include="Components\EnemyDamageComponent.cpp" />
     <ClCompile Include="Components\FighterComponent.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
-    <ClCompile Include="Components\GoAroundComponent.cpp" />
+    <ClCompile Include="Components\GoAroundComponent.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Components\HPBarMoveComponent.cpp" />
     <ClCompile Include="Components\InchWorm_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -306,7 +316,7 @@
     <ClCompile Include="Mesh\TrailMesh.cpp" />
     <ClCompile Include="Components\TrailMakeComponent.cpp" />
     <ClCompile Include="Components\TrailRenderComponent.cpp" />
-    <ClCompile Include="Components\Transform.cpp" />
+    <ClCompile Include="Components\TransformComponent.cpp" />
     <ClCompile Include="Mesh\TriangleMesh.cpp" />
     <ClCompile Include="Components\TimeSpawnParticlesComponent.cpp" />
     <ClCompile Include="Components\TitleAnimationControlComponent.cpp" />
@@ -356,21 +366,29 @@
     <ClInclude Include="Components\AttackOneTimeComponent.h" />
     <ClInclude Include="Components\AttackTimingComponent.h" />
     <ClInclude Include="Components\BlinkingUIComponent.h" />
-    <ClInclude Include="Components\BoneComponent.h" />
-    <ClInclude Include="Structs\BoneData.h" />
-    <ClInclude Include="Components\BonePartsComponent.h" />
+    <ClInclude Include="Components\BoneComponent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Structs\BoneData.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Components\BonePartsComponent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Mesh\BonePartsMesh.h" />
-    <ClInclude Include="Components\Bones.h" />
+    <ClInclude Include="Components\Bones.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Components\BossEventComponent.h" />
     <ClInclude Include="Components\BulletComponent.h" />
-    <ClInclude Include="Components\Camera.h" />
+    <ClInclude Include="Components\CameraComponent.h" />
     <ClInclude Include="Components\CameraMoveComponent.h" />
     <ClInclude Include="Structs\CameraPattern.h" />
     <ClInclude Include="Components\CameraPointComponent.h" />
     <ClInclude Include="Components\CameraTargetComponent.h" />
     <ClInclude Include="Components\MeshCut2DComponent.h" />
     <ClInclude Include="Mesh\CircleMesh.h" />
-    <ClInclude Include="Components\Collider.h" />
+    <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Manager\ComponentTypeManager.h" />
     <ClInclude Include="Components\CSVObjectManagerComponent.h" />
@@ -383,7 +401,7 @@
     <ClInclude Include="Components\EnemyActionBulletComponent.h" />
     <ClInclude Include="Components\EnemyActionHopperComponent.h" />
     <ClInclude Include="Components\EnemyJsonComponent.h" />
-    <ClInclude Include="Components\EnemyManagerComponent.h" />
+    <ClInclude Include="Components\EnemyCreateComponent.h" />
     <ClInclude Include="Components\FollowPositionComponent.h" />
     <ClInclude Include="Components\RenderMotionBlurComponent.h" />
     <ClInclude Include="Components\ProjectileMotionComponent.h" />
@@ -396,7 +414,9 @@
     <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
     <ClInclude Include="Manager\HitStopManager.h" />
-    <ClInclude Include="Components\HumanBoneComponent.h" />
+    <ClInclude Include="Components\HumanBoneComponent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Components\JsonComponent.h" />
     <ClInclude Include="Components\LeapToCenterCarComponent.h" />
     <ClInclude Include="Mesh\LineMesh.h" />
@@ -413,7 +433,7 @@
     <ClInclude Include="Components\SkyDomeRenderComponent.h" />
     <ClInclude Include="Components\StageLoadCSVComponent.h" />
     <ClInclude Include="Components\TerrainJsonComponent.h" />
-    <ClInclude Include="Components\TerrainManagerComponent.h" />
+    <ClInclude Include="Components\TerrainCreateComponent.h" />
     <ClInclude Include="Mesh\CubeMesh.h" />
     <ClInclude Include="System\DebugCout.h" />
     <ClInclude Include="System\DirectXRender.h" />
@@ -421,7 +441,9 @@
     <ClInclude Include="Components\EnemyDamageComponent.h" />
     <ClInclude Include="Components\FighterComponent.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
-    <ClInclude Include="Components\GoAroundComponent.h" />
+    <ClInclude Include="Components\GoAroundComponent.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Components\HPBarMoveComponent.h" />
     <ClInclude Include="Structs\HPParam.h" />
     <ClInclude Include="Components\InchWorm_Test.h">
@@ -462,7 +484,9 @@
     <ClInclude Include="Scene\Stage1Scene.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Structs\TestBoneData.h" />
+    <ClInclude Include="Structs\TestBoneData.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Buffer\IndexBuffer.h" />
     <ClInclude Include="System\main.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -478,7 +502,7 @@
     <ClInclude Include="Mesh\TrailMesh.h" />
     <ClInclude Include="Components\TrailMakeComponent.h" />
     <ClInclude Include="Components\TrailRenderComponent.h" />
-    <ClInclude Include="Components\Transform.h" />
+    <ClInclude Include="Components\TransformComponent.h" />
     <ClInclude Include="Mesh\TriangleMesh.h" />
     <ClInclude Include="Components\TimeSpawnParticlesComponent.h" />
     <ClInclude Include="Components\TitleAnimationControlComponent.h" />

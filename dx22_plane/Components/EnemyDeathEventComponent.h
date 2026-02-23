@@ -2,7 +2,7 @@
 #include "TestSwordActionComponent.h"
 #include "MeshCut2DComponent.h"
 #include "VectorMoveComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include <vector>
 
 struct DeathEvent {

@@ -1,4 +1,4 @@
-#include "Transform.h"
+#include "TransformComponent.h"
 
 using namespace DirectX;
 
@@ -24,41 +24,41 @@ XMMATRIX TransformComponent::MakeWorldMatrix() {
 
 	// SRT情報作成
 	// 各行列を生成
-	const XMMATRIX r = XMMatrixRotationQuaternion(m_transform.m_Quaternion);
-	const XMVECTOR scale = XMVectorSet(m_transform.m_Scale.x, m_transform.m_Scale.y, m_transform.m_Scale.z, 1.0f);
+	const XMMATRIX r = XMMatrixRotationQuaternion(m_Transform.m_Quaternion);
+	const XMVECTOR scale = XMVectorSet(m_Transform.m_Scale.x, m_Transform.m_Scale.y, m_Transform.m_Scale.z, 1.0f);
 	const XMMATRIX s = XMMatrixScalingFromVector(scale);
-	const XMVECTOR pos = XMVectorSet(m_transform.m_Position.x, m_transform.m_Position.y, m_transform.m_Position.z, 1.0f);
+	const XMVECTOR pos = XMVectorSet(m_Transform.m_Position.x, m_Transform.m_Position.y, m_Transform.m_Position.z, 1.0f);
 	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	// ワールド行列を作成し、保存
-	return	m_transform.worldMatrix = s * r * t;
+	return	m_Transform.worldMatrix = s * r * t;
 }
 
 XMMATRIX TransformComponent::MakeLocalMatrix() {
 
 	// SRT情報作成
-	const XMMATRIX r = XMMatrixRotationQuaternion(m_transform.m_LocalQuaternion);
-	const XMVECTOR scale = XMVectorSet(m_transform.m_LocalScale.x, m_transform.m_LocalScale.y, m_transform.m_LocalScale.z, 1.0f);
+	const XMMATRIX r = XMMatrixRotationQuaternion(m_Transform.m_LocalQuaternion);
+	const XMVECTOR scale = XMVectorSet(m_Transform.m_LocalScale.x, m_Transform.m_LocalScale.y, m_Transform.m_LocalScale.z, 1.0f);
 	const XMMATRIX s = XMMatrixScalingFromVector(scale);
-	const XMVECTOR pos = XMVectorSet(m_transform.m_LocalPosition.x, m_transform.m_LocalPosition.y, m_transform.m_LocalPosition.z, 1.0f);
+	const XMVECTOR pos = XMVectorSet(m_Transform.m_LocalPosition.x, m_Transform.m_LocalPosition.y, m_Transform.m_LocalPosition.z, 1.0f);
 	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	switch (m_RotationPattern)
 	{
 	case RotationPattern::SPIN:			// 自転
 
-		m_transform.localMatrix = s * r * t;
+		m_Transform.localMatrix = s * r * t;
 		break;
 	case RotationPattern::REVOLUTION:	// 公転
 
-		m_transform.localMatrix = s * t * r;
+		m_Transform.localMatrix = s * t * r;
 		break;
 	default:
 		break;
 	}
 
 	// ローカル行列を作成し、保存
-	return	m_transform.localMatrix;
+	return	m_Transform.localMatrix;
 }
 
 void TransformComponent::MakeChildWorld() {
@@ -88,7 +88,7 @@ void TransformComponent::MakeChildWorld() {
 			parentMtx = s * r * t;
 		}
 
-		m_transform.worldMatrix = MakeLocalMatrix() * parentMtx; // 親のワールド行列とローカル行列を掛け合わせて子のワールド行列を計算
+		m_Transform.worldMatrix = MakeLocalMatrix() * parentMtx; // 親のワールド行列とローカル行列を掛け合わせて子のワールド行列を計算
 
 		XMVECTOR scale;
 		XMVECTOR rotation;
@@ -97,18 +97,18 @@ void TransformComponent::MakeChildWorld() {
 		XMFLOAT3 nowScale;
 		XMFLOAT3 nowTranslation;
 
-		DecomposeMatrix(m_transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
+		DecomposeMatrix(m_Transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
 
 		XMStoreFloat3(&nowScale, scale);
 		XMStoreFloat3(&nowTranslation, translation);
 
-		m_transform.m_Position = nowTranslation; // 位置を更新
-		m_transform.m_Scale = nowScale; // スケールを更新
+		m_Transform.m_Position = nowTranslation; // 位置を更新
+		m_Transform.m_Scale = nowScale; // スケールを更新
 
 		XMFLOAT3 rad = QuaternionToEulerRad(rotation);
 		rad *= (180.0f / XM_PI);
 
-		m_transform.m_Rotation = rad; // 回転を更新
+		m_Transform.m_Rotation = rad; // 回転を更新
 	}
 }
 
@@ -140,7 +140,7 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrix() {
 		const XMVECTOR pos = XMVectorSet(parentPos.x, parentPos.y, parentPos.z, 1.0f);
 		const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
-		return	m_transform.worldMatrix = childMtx * (s * r * t);
+		return	m_Transform.worldMatrix = childMtx * (s * r * t);
 	}
 
 	return XMMatrixIdentity();
@@ -158,18 +158,18 @@ DirectX::XMMATRIX TransformComponent::MakeChildMatrixAndWorld() {
 	XMFLOAT3 nowScale;
 	XMFLOAT3 nowTranslation;
 
-	DecomposeMatrix(m_transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
+	DecomposeMatrix(m_Transform.worldMatrix, scale, rotation, translation);	// ワールド行列からSRT情報を取得
 
 	XMStoreFloat3(&nowScale, scale);
 	XMStoreFloat3(&nowTranslation, translation);
 
-	m_transform.m_Position = nowTranslation; // 位置を更新
-	m_transform.m_Scale = nowScale; // スケールを更新
+	m_Transform.m_Position = nowTranslation; // 位置を更新
+	m_Transform.m_Scale = nowScale; // スケールを更新
 
 	XMFLOAT3 rad = QuaternionToEulerRad(rotation);
 	rad *= (180.0f / XM_PI);
 
-	m_transform.m_Rotation = rad; // 回転を更新
+	m_Transform.m_Rotation = rad; // 回転を更新
 
 	return mtx;
 }

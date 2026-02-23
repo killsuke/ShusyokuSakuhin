@@ -2,14 +2,11 @@
 #include "Manager/GameObjectManager.h"
 #include <iostream>
 #include <string>
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "EnemyActionComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/EventBusManager.h"
-
-namespace {
-	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
-}
+#include "Manager/TimeManager.h"
 
 FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 {
@@ -25,13 +22,15 @@ FighterComponent::~FighterComponent() {
 
 void FighterComponent::Update() {
 
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+
 	if (m_atk < 0) {
 		m_atk = 0; // 攻撃力が0以下になったら0にする
 	}
 
 	// 無敵の経過時間を加算
 	if (m_invincibleFlag == true) {
-		m_recordTime += DeltaTime;
+		m_recordTime += deltaTime;
 
 		// 無敵時間終了判定
 		if (m_recordTime >= 1.5f) {
@@ -44,12 +43,10 @@ void FighterComponent::Update() {
 		m_hp = 0; // ヒットポイントが0以下になったら0にする
 
 		// 遅れて死ぬ
-		m_DeadRecordTime += DeltaTime;
+		m_DeadRecordTime += deltaTime;
 		if (m_DeadRecordTime > 5.0f) {
 			m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 		}
-
-		//m_Object->SetActiveState(ActiveState::DRAW_STOP);
 
 		// これがボスであった場合はどうするかを考えてみる
 		if (m_useDeadFlag == false) {
@@ -62,8 +59,6 @@ void FighterComponent::Update() {
 		}
 
 		m_deadFlag = true; // 死亡フラグを立てる
-
-	//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
 
@@ -109,7 +104,6 @@ void FighterComponent::DamageProcess() {
 		}
 
 		m_deadFlag = true; // 死亡フラグを立てる
-	//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
 	}
 }
 

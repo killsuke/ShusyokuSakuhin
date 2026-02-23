@@ -1,7 +1,6 @@
 #include "EnemyJsonComponent.h"
 
 using json = nlohmann::ordered_json;
-using namespace DirectX::SimpleMath;
 using namespace std::filesystem;
 
 EnemyJsonComponent::EnemyJsonComponent(GameObject& obj) : JsonComponent(obj) {
@@ -44,8 +43,8 @@ json EnemyJsonComponent::EnemyToJson(const std::vector<EnemyStatus>& enemies) {
 	for (const auto& e : enemies) {
 		json item;
 		item["kind"] = e.kind;
-		item["scale"] = Vector3ToJson(e.scale);
-		item["angle"] = Vector3ToJson(e.angle);
+		item["scale"] = XMFLOAT3ToJson(e.scale);
+		item["angle"] = XMFLOAT3ToJson(e.angle);
 		item["atk"] = e.atk;
 		item["hp"] = e.hp;
 		item["texture"] = e.texture;

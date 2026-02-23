@@ -1,5 +1,5 @@
 #include "InchWorm_Test.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "GameObjectManager.h"
 #include "System/DirectXRender.h"
 

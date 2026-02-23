@@ -1,5 +1,5 @@
 #pragma once
-#include "Transform.h"
+#include "TransformComponent.h"
 
 class FollowPositionComponent : public Component
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include	<simplemath.h>
+#include	<DirectXMath.h>
 #include	<string>
 #include	<vector>
 #include	<memory>

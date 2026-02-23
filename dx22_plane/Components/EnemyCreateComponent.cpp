@@ -1,5 +1,5 @@
-#include "EnemyManagerComponent.h"
-#include "Transform.h"
+#include "EnemyCreateComponent.h"
+#include "TransformComponent.h"
 #include "ColliderAttackComponent.h"
 #include "ColliderDamageComponent.h"
 #include "Render3D.h"
@@ -21,19 +21,18 @@
 #include "MeshCut2DComponent.h"
 #include "EnemyDeathEventComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
-EnemyManagerComponent::EnemyManagerComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
+EnemyCreateComponent::EnemyCreateComponent(GameObject& obj) : CSVObjectManagerComponent(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // ソート番号を設定
 }
 
-void EnemyManagerComponent::Update()
+void EnemyCreateComponent::Update()
 {
 }
 
-void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
+void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 {
 	// この中で生成する
 	if (m_csvObjData.empty()) {
@@ -83,7 +82,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		fighter->SetHp(eS.hp);
 
 		auto collider = enemyObj->AddComponent<ColliderComponent>();
-		collider->SetOffsetSizeAABB(Vector3(0.0f, 1.0f, 1.0f));
+		collider->SetOffsetSizeAABB(XMFLOAT3(0.0f, 1.0f, 1.0f));
 		ColliderAttackComponent* collAttack = enemyObj->AddComponent<ColliderAttackComponent>();
 		ColliderDamageComponent* collDamage = enemyObj->AddComponent<ColliderDamageComponent>();
 
@@ -97,11 +96,11 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		atk->SetCoolDownTime(0.1f);
 
 		HitFlashComponent* hitFlash = enemyObj->AddComponent<HitFlashComponent>();
-		hitFlash->SetHitFlashColor(Vector3(1.0f, 1.0f, 1.0f));
+		hitFlash->SetHitFlashColor(XMFLOAT3(1.0f, 1.0f, 1.0f));
 		hitFlash->SetHitFlashPower(0.8f);
 
 		
-
+		// 当たり判定の可視化用（デバッグ用）
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
 		renderColl->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
@@ -112,7 +111,7 @@ void EnemyManagerComponent::CreateEnemies(std::vector<EnemyStatus> status)
 	}
 }
 
-void EnemyManagerComponent::CreateKind(const std::string& kind, GameObject& obj)
+void EnemyCreateComponent::CreateKind(const std::string& kind, GameObject& obj)
 {
 	EnemyActionComponent* enemyAction = nullptr;
 

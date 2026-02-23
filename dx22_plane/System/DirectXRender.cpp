@@ -11,7 +11,6 @@
 #include <string.h>
 #include "Structs/HPParam.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 namespace {

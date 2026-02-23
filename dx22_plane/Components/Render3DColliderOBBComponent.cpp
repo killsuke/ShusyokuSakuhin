@@ -1,9 +1,8 @@
 #include "Render3DColliderOBBComponent.h"
 #include "System/DirectXRender.h"
-#include "Collider.h"
+#include "ColliderComponent.h"
 #include "Manager/GameObjectManager.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : RenderComponent(obj) {

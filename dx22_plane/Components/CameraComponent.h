@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameObject/GameObject.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
 namespace {
 	constexpr float DEFAULT_FOV = 45.0f;
@@ -20,7 +20,7 @@ enum class FieldOfView{
 //-----------------------------------------------------------------------------
 //CameraƒNƒ‰ƒX
 //-----------------------------------------------------------------------------
-class Camera : public Component {
+class CameraComponent : public Component {
 protected:
 
 	DirectX::XMFLOAT3 m_Target = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -45,8 +45,8 @@ protected:
 
 public:
 
-	Camera(GameObject& obj);
-	~Camera() = default;
+	CameraComponent(GameObject& obj);
+	~CameraComponent() = default;
 
 	void Update() override;
 

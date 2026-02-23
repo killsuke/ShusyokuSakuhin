@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 struct ShakeStatus {
 	float power = 0.0f;

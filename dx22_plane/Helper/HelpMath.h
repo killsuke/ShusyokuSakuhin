@@ -1,13 +1,14 @@
 #pragma once
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "Helper/XMFLOAT_Helper.h"
-
-DirectX::SimpleMath::Vector3 QuaternionToEulerRad(const DirectX::SimpleMath::Quaternion& qf);
-
-DirectX::SimpleMath::Vector3 QuaternionToEulerDeg(const DirectX::SimpleMath::Quaternion& qf);
+#include <math.h>
+#include <limits.h>
+#include <stdbool.h>
 
 DirectX::XMFLOAT3 QuaternionToEulerRad(const DirectX::XMVECTOR& q);
 
 DirectX::XMFLOAT3 QuaternionToEulerDeg(const DirectX::XMVECTOR& q);
 
 void DecomposeMatrix(const DirectX::XMMATRIX& matrix, DirectX::XMVECTOR& outScale, DirectX::XMVECTOR& outRotation, DirectX::XMVECTOR& outTranslation);
+
+bool FloatToInt(const float f,int* out);

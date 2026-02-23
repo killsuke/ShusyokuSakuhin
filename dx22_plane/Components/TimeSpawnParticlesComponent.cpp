@@ -1,14 +1,11 @@
 #include "TimeSpawnParticlesComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "RenderParticlesComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "Render3D.h"
 #include "FliesMoveComponent.h"
 #include "Mesh/SquareMesh.h"
-
-using namespace DirectX::SimpleMath;
-using namespace DirectX;
 
 namespace {
 	constexpr float DeltaTime = 0.016f;

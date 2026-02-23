@@ -1,5 +1,5 @@
 #include "CutObjectActionComponent.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "RigidBodyComponent.h"
 #include "ProjectileMotionComponent.h"
 #include "Render2D.h"
@@ -361,7 +361,7 @@ void CutObjectActionComponent::CutObjsMove() {
 	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
 	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
 	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
-	Camera* cameraComp = camera->GetComponent<Camera>();
+	CameraComponent* cameraComp = camera->GetComponent<CameraComponent>();
 
 	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr || cameraComp == nullptr) {
 		return;
@@ -434,7 +434,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
 	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
 	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
-	Camera* cameraComp = camera->GetComponent<Camera>();
+	CameraComponent* cameraComp = camera->GetComponent<CameraComponent>();
 
 	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr || cameraComp == nullptr) {
 		return;
@@ -618,7 +618,7 @@ void CutObjectActionComponent::FollowCamera() {
 	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
 	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
 	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
-	Camera* cameraComp = camera->GetComponent<Camera>();
+	CameraComponent* cameraComp = camera->GetComponent<CameraComponent>();
 
 	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr || cameraComp == nullptr) {
 		return;

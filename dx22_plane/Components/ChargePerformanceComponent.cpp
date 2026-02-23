@@ -1,5 +1,5 @@
 #include "ChargePerformanceComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "RenderRingLuminescenceBillboardComponent.h"
 #include "ChargeParticleMoveComponent.h"

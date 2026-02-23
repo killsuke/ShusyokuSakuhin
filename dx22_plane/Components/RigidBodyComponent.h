@@ -5,7 +5,7 @@
 // -------------------------------------------
 
 #pragma once
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Component.h"
 #include <cmath>
 

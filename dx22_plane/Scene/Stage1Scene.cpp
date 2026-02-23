@@ -1,6 +1,6 @@
 #include "Stage1Scene.h"
-#include "Components/Camera.h"
-#include "Components/Transform.h"
+#include "Components/CameraComponent.h"
+#include "Components/TransformComponent.h"
 #include "Components/Render3D.h"
 #include "Components/Render2D.h"
 #include "Components/RenderBillboard.h"
@@ -13,13 +13,12 @@
 #include "Mesh/TriangularPrismMesh.h"
 #include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
-#include "Components/BonePartsComponent.h"
 #include "Components/GoAroundComponent.h"
 #include "Components/RenderBlurComponent.h"
 #include "Components/RenderMotionBlurCircularComponent.h"
 #include "Input/Input.h"
 #include "Manager/ModelManager.h"
-#include "Components/Collider.h"
+#include "Components/ColliderComponent.h"
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/TrailRenderComponent.h"
 #include "Components/ProjectileMotionComponent.h"
@@ -31,7 +30,7 @@
 //#include "Effekseer.h"
 //#include "EffekseerRendererDX11.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 // コンストラクタ
 Stage1Scene::Stage1Scene()
@@ -49,7 +48,7 @@ Stage1Scene::~Stage1Scene()
 void Stage1Scene::Init()
 {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
-	camera->AddComponent<Camera>();
+	camera->AddComponent<CameraComponent>();
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition({ 0.0f, 0.0f, -500.0f });
 
@@ -251,56 +250,56 @@ void Stage1Scene::Uninit()
 void Stage1Scene::BonePartTest()
 {
 	// 腰
-	auto waist = GameObjectManager::AddObject("waist", "Part");
-	auto waistTrans = waist->AddComponent<TransformComponent>();
-	waistTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
-	waistTrans->SetScale({ 15.0f, 30.0f, 1.0f });
-	auto waistbone = waist->AddComponent<BonePartsComponent>();
-	waistbone->SetPartName("waist");
-	waistbone->SetStartBonePosition({ 0.0f,0.0f,0.0f });
-	waistbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
-	auto waistrend = waist->AddComponent<Render3DComponent>();
+	//auto waist = GameObjectManager::AddObject("waist", "Part");
+	//auto waistTrans = waist->AddComponent<TransformComponent>();
+	//waistTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
+	//waistTrans->SetScale({ 15.0f, 30.0f, 1.0f });
+	//auto waistbone = waist->AddComponent<BonePartsComponent>();
+	//waistbone->SetPartName("waist");
+	//waistbone->SetStartBonePosition({ 0.0f,0.0f,0.0f });
+	//waistbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
+	//auto waistrend = waist->AddComponent<Render3DComponent>();
 
-	waistrend->CreateMesh<SquareMesh>();
-	waistrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	waistrend->ChangeTexture("assets/texture/NoTexture.png");
-	waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
+	//waistrend->CreateMesh<SquareMesh>();
+	//waistrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//waistrend->ChangeTexture("assets/texture/NoTexture.png");
+	//waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
 
-	// 胸
-	auto chest = GameObjectManager::AddObject("chest", "Part");
-	auto chestTrans = chest->AddComponent<TransformComponent>();
-	chestTrans->SetLocalPosition({ 0.0f, 30.0f, 0.0f });
-	chestTrans->SetScale({ 15.0f, 30.0f, 1.0f });
-	auto chestbone = chest->AddComponent<BonePartsComponent>();
-	chestbone->SetPartName("chest");
-	chestbone->SetBoneParent(waistbone->GetAttachBone());
-	chestbone->SetStartBonePosition({ 0.0f,-30.0f,0.0f });
-	chestbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
-	chestbone->SetReferencePoint(waistbone->GetEndPoint());
+	//// 胸
+	//auto chest = GameObjectManager::AddObject("chest", "Part");
+	//auto chestTrans = chest->AddComponent<TransformComponent>();
+	//chestTrans->SetLocalPosition({ 0.0f, 30.0f, 0.0f });
+	//chestTrans->SetScale({ 15.0f, 30.0f, 1.0f });
+	//auto chestbone = chest->AddComponent<BonePartsComponent>();
+	//chestbone->SetPartName("chest");
+	//chestbone->SetBoneParent(waistbone->GetAttachBone());
+	//chestbone->SetStartBonePosition({ 0.0f,-30.0f,0.0f });
+	//chestbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
+	//chestbone->SetReferencePoint(waistbone->GetEndPoint());
 
-	auto chestrend = chest->AddComponent<Render3DComponent>();
-	chestrend->CreateMesh<SquareMesh>();
-	chestrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	chestrend->ChangeTexture("assets/texture/NoTexture.png");
-	chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
+	//auto chestrend = chest->AddComponent<Render3DComponent>();
+	//chestrend->CreateMesh<SquareMesh>();
+	//chestrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//chestrend->ChangeTexture("assets/texture/NoTexture.png");
+	//chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
-	// 頭
-	auto head = GameObjectManager::AddObject("head", "Part");
-	auto headTrans = head->AddComponent<TransformComponent>();
-	headTrans->SetLocalPosition({ 0.0f, 30.0f, 0.0f });
-	headTrans->SetScale({ 15.0f, 30.0f, 1.0f });
-	auto headbone = head->AddComponent<BonePartsComponent>();
-	headbone->SetPartName("head");
-	headbone->SetBoneParent(chestbone->GetAttachBone());
-	headbone->SetStartBonePosition({ 0.0f,-30.0f,0.0f });
-	headbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
-	headbone->SetReferencePoint(chestbone->GetEndPoint());
+	//// 頭
+	//auto head = GameObjectManager::AddObject("head", "Part");
+	//auto headTrans = head->AddComponent<TransformComponent>();
+	//headTrans->SetLocalPosition({ 0.0f, 30.0f, 0.0f });
+	//headTrans->SetScale({ 15.0f, 30.0f, 1.0f });
+	//auto headbone = head->AddComponent<BonePartsComponent>();
+	//headbone->SetPartName("head");
+	//headbone->SetBoneParent(chestbone->GetAttachBone());
+	//headbone->SetStartBonePosition({ 0.0f,-30.0f,0.0f });
+	//headbone->SetEndBonePosition({ 0.0f,30.0f,0.0f });
+	//headbone->SetReferencePoint(chestbone->GetEndPoint());
 
-	auto headrend = head->AddComponent<Render3DComponent>();
-	headrend->CreateMesh<SquareMesh>();
-	headrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	headrend->ChangeTexture("assets/texture/NoTexture.png");
-	headrend->SetColor({ 0.0f,0.0f,0.5f,1.0f });
+	//auto headrend = head->AddComponent<Render3DComponent>();
+	//headrend->CreateMesh<SquareMesh>();
+	//headrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//headrend->ChangeTexture("assets/texture/NoTexture.png");
+	//headrend->SetColor({ 0.0f,0.0f,0.5f,1.0f });
 
 }
 
@@ -328,5 +327,5 @@ void Stage1Scene::TestBlur() {
 	rend->CreateMesh<SquareMesh>();
 	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/BlurPS.hlsl");
 	rend->ChangeTexture("assets/texture/setumei.png");
-	rend->SetBlurTextureSize(Vector2(512.0f, 512.0f));
+	rend->SetBlurTextureSize(XMFLOAT2(512.0f, 512.0f));
 }

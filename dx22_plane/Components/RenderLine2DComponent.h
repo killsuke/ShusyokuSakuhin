@@ -1,6 +1,6 @@
 #pragma once
 #include "Render.h"
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 #include "Helper/HelpMath.h"
 
 class RenderLine2DComponent : public RenderComponent
@@ -16,9 +16,9 @@ public:
 
 	void Update() override;
 
-	void SetStartPosition(const DirectX::SimpleMath::Vector3& startPos);
-	void SetEndPosition(const DirectX::SimpleMath::Vector3& endPos);
-	void SetStartAndEndPosition(const DirectX::SimpleMath::Vector3& startPos, const DirectX::SimpleMath::Vector3& endPos);
+	void SetStartPosition(const DirectX::XMFLOAT3& startPos);
+	void SetEndPosition(const DirectX::XMFLOAT3& endPos);
+	void SetStartAndEndPosition(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos);
 	void SetStartAndEndFollowObject(GameObject* objS, GameObject* objE);
 	void SetStartAndEndDrawContainer(const DrawContainer& dcS, const DrawContainer& dcE);
 	void SetStartActive(const ActiveState& as) { m_StartObj->SetActiveState(as); };

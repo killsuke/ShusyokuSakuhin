@@ -1,5 +1,5 @@
 #include "RenderCharacterComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "System/DirectXRender.h"
 #include "Structs/HPParam.h"
 

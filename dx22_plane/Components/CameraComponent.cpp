@@ -1,5 +1,5 @@
 #include "System/DirectXRender.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "Structs/CameraPattern.h"
 #include "CameraMoveComponent.h"
 #include "Render3D.h"
@@ -10,7 +10,7 @@
 using namespace DirectX;
 using namespace std;
 
-Camera::Camera(GameObject& obj) : Component(obj)
+CameraComponent::CameraComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA"); // ソート番号を設定
 
@@ -38,7 +38,7 @@ Camera::Camera(GameObject& obj) : Component(obj)
 //=======================================
 //更新処理
 //=======================================
-void Camera::Update()
+void CameraComponent::Update()
 {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
@@ -87,7 +87,7 @@ void Camera::Update()
 	}
 }
 
-void Camera::Update2D() {
+void CameraComponent::Update2D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	const XMFLOAT3 camPos = transform->GetPosition();
 	// ビュー変換後列作成
@@ -116,7 +116,7 @@ void Camera::Update2D() {
 	DirectXRender::SetProjectionMatrix2D(&projectionMatrix);
 }
 
-void Camera::Update3D() {
+void CameraComponent::Update3D() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	XMFLOAT3 pos = transform->GetPosition();
 	pos += m_OffsetPosition;
@@ -186,7 +186,7 @@ void Camera::Update3D() {
 	DirectXRender::SetProjectionMatrix3D(&projectionMatrix);
 }
 
-void Camera::UpdateSky() {
+void CameraComponent::UpdateSky() {
 	//// ビュー変換後列作成
 	XMVECTOR up = XMVectorSet(0.0f,1.0f,0.0f,0.0f);
 	XMVECTOR posV = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);

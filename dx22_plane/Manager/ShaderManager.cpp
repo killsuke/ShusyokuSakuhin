@@ -4,14 +4,14 @@
 using namespace std::filesystem;
 
 namespace {
-	std::string FilePathToShader = "ShaderResource/"; // シェーダーファイルのパス
+	std::string FILE_PATH_TO_SHADER = "ShaderResource/"; // シェーダーファイルのパス
 }
 
 void ShaderManager::Init() {
 	m_ShaderCache.clear();
 
 	// シェーダーファイルの一覧を取得
-	const std::vector<std::string> fileNames = GetShaderFiles(FilePathToShader);
+	const std::vector<std::string> fileNames = GetShaderFiles(FILE_PATH_TO_SHADER);
 	
 	// ファイルの更新時刻の比較
 	for (const std::string& file : fileNames) {

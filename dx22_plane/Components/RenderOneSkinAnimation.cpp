@@ -1,7 +1,7 @@
 #include "RenderOneSkinAnimation.h"
 #include "System/DirectXRender.h"
 #include "Structs/BoneData.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 
 using namespace DirectX;

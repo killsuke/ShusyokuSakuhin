@@ -4,12 +4,12 @@
 #include "TrailMakeComponent.h"
 #include <vector>
 #include <map>
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 struct TrailPoint
 {
-	DirectX::SimpleMath::Vector3 basePosition = DirectX::SimpleMath::Vector3::Zero;
-	DirectX::SimpleMath::Vector3 tipPosition = DirectX::SimpleMath::Vector3::Zero;
+	DirectX::XMFLOAT3 basePosition = {};
+	DirectX::XMFLOAT3 tipPosition = {};
 	DirectX::XMFLOAT3 centerLocalPosition = { 0.0f,0.0f,0.0f };
 	DirectX::XMVECTOR localQuat = { 0.0f,0.0f,0.0f,1.0f };
 	float lifeTime = 0.0f;	// 生存時間（フェード用）

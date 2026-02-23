@@ -1,7 +1,7 @@
 #include "JsonComponent.h"
 
 using json = nlohmann::ordered_json;
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 using namespace std::filesystem;
 
 JsonComponent::JsonComponent(GameObject& obj) : Component(obj) {
@@ -18,13 +18,13 @@ void JsonComponent::MakeSampleStatus() {
 }
 
 // Vector3 Å® JSON
-json JsonComponent::Vector3ToJson(const Vector3& v) {
+json JsonComponent::XMFLOAT3ToJson(const XMFLOAT3& v) {
     return { {"x", v.x}, {"y", v.y}, {"z", v.z} };
 }
 
 // JSON Å® Vector3
-Vector3 JsonComponent::JsonToVector3(const nlohmann::ordered_json& j) {
-    return Vector3(j.at("x"), j.at("y"), j.at("z"));
+XMFLOAT3 JsonComponent::JsonToVector3(const nlohmann::ordered_json& j) {
+    return XMFLOAT3(j.at("x"), j.at("y"), j.at("z"));
 }
 
 bool JsonComponent::SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "Transform.h"
+#include "TransformComponent.h"
 
 enum class EBlurPattern {
 	NONE = 0,

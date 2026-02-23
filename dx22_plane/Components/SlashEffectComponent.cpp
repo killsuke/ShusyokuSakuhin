@@ -1,5 +1,5 @@
 #include "SlashEffectComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 
 using namespace DirectX;

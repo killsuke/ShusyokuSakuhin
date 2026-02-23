@@ -1,7 +1,7 @@
 #include "LoadStageScene.h"
-#include "Components/Camera.h"
+#include "Components/CameraComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Components/Transform.h"
+#include "Components/TransformComponent.h"
 #include "Mesh/CubeMesh.h"
 #include "Mesh/SquareMesh.h"
 #include "Mesh/CircleMesh.h"
@@ -11,7 +11,7 @@
 #include "Components/Render3DColliderAABBComponent.h"
 #include "Components/Render3DColliderOBBComponent.h"
 #include "Components/Render2D.h"
-#include "Components/Collider.h"
+#include "Components/ColliderComponent.h"
 #include "Components/PlayerOperationComponent.h"
 #include "Components/RigidBodyComponent.h"
 #include "Components/JumpComponent.h"
@@ -28,8 +28,8 @@
 #include "Components/RenderHpComponent.h"
 #include "Components/SpringComponent.h"
 #include "Components/StageLoadCSVComponent.h"
-#include "Components/TerrainManagerComponent.h"
-#include "Components/EnemyManagerComponent.h"
+#include "Components/TerrainCreateComponent.h"
+#include "Components/EnemyCreateComponent.h"
 #include "Components/TerrainJsonComponent.h"
 #include "Components/EnemyJsonComponent.h"
 #include "Components/TestExtrusionJudgeComponent.h"
@@ -49,18 +49,18 @@
 #include "Components/SoundComponent.h"
 #include "Components/RenderCharacterComponent.h"
 
-using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 LoadStageScene::LoadStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvZ‚µ‚ÄA‹–ìŠp“¯m‚Ìˆø‚«Z‚ÅŒvZ‚·‚é‚Æ‚©H
-	//cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -170.0f));
+	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvZ‚µ‚ÄA‹–ìŠp“¯m‚Ìˆø‚«Z‚ÅŒvZ‚·‚é‚Æ‚©H
+	//cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -170.0f));
 	camera->AddComponent<RigidBodyComponent>();
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
-	auto cameraComp = camera->AddComponent<Camera>();
-	cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 100.0f));
-	//cameraComp->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	CameraComponent* cameraComp = camera->AddComponent<CameraComponent>();
+	cameraComp->SetTarget(XMFLOAT3(10.0f, 30.0f, 100.0f));
+	//cameraComp->SetTarget(XMFLOAT3(10.0f, 30.0f, 0.0f));
 	cameraComp->SetFieldOfView(FieldOfView::WIDE);
 	//cameraComp->SetFieldOfView(FieldOfView::DEFAULT);
 	CameraShakeComponent* cameraShake = camera->AddComponent<CameraShakeComponent>();
@@ -88,8 +88,8 @@ LoadStageScene::LoadStageScene() {
 		auto stageRoadCSV = GameObjectManager::AddObject("StageRoadCSV", "StageRoadCSV");
 		auto stageRoadCSVTrans = stageRoadCSV->AddComponent<TransformComponent>();
 		auto str = stageRoadCSV->AddComponent<StageLoadCSVComponent>();
-		auto teM = stageRoadCSV->AddComponent<TerrainManagerComponent>();
-		auto enM = stageRoadCSV->AddComponent<EnemyManagerComponent>();
+		auto teM = stageRoadCSV->AddComponent<TerrainCreateComponent>();
+		auto enM = stageRoadCSV->AddComponent<EnemyCreateComponent>();
 
 		auto terrainJson = stageRoadCSV->AddComponent<TerrainJsonComponent>();
 		terrainJson->LoadTerrainJsonFile("json/terrain.json");
@@ -143,7 +143,7 @@ LoadStageScene::LoadStageScene() {
 		cubeRigid->SetGravityFlag(true);
 
 		HitFlashComponent* hitFlash = player->AddComponent<HitFlashComponent>();
-		hitFlash->SetHitFlashColor(Vector3(1.0f, 1.0f, 1.0f));
+		hitFlash->SetHitFlashColor(XMFLOAT3(1.0f, 1.0f, 1.0f));
 		hitFlash->SetHitFlashPower(0.8f);
 
 		player->AddComponent<TestExtrusionJudgeComponent>();
@@ -590,7 +590,7 @@ void LoadStageScene::BackGroundCreate() {
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+		rend->SetBlurTextureSize(XMFLOAT2(700.0f, 700.0f));
 	}
 
 	{
@@ -602,7 +602,7 @@ void LoadStageScene::BackGroundCreate() {
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(900.0f, 900.0f));
+		rend->SetBlurTextureSize(XMFLOAT2(900.0f, 900.0f));
 	}
 
 	{
@@ -641,7 +641,7 @@ void LoadStageScene::BackGroundCreate() {
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(500.0f, 500.0f));
+		rend->SetBlurTextureSize(XMFLOAT2(500.0f, 500.0f));
 	}
 
 	{
@@ -653,7 +653,7 @@ void LoadStageScene::BackGroundCreate() {
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(700.0f, 700.0f));
+		rend->SetBlurTextureSize(XMFLOAT2(700.0f, 700.0f));
 	}
 
 	{
@@ -665,7 +665,7 @@ void LoadStageScene::BackGroundCreate() {
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("assets/texture/bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
-		rend->SetBlurTextureSize(DirectX::SimpleMath::Vector2(900.0f, 900.0f));
+		rend->SetBlurTextureSize(XMFLOAT2(900.0f, 900.0f));
 	}
 
 	// İ’u•¨‚ğ‚³‚ç‚É‘‚â‚·

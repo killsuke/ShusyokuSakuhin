@@ -7,7 +7,7 @@
 #include <fstream>
 #include <filesystem>
 #include <iostream>
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 class JsonComponent : public Component
 {
@@ -26,10 +26,10 @@ public:
 	inline std::vector<std::string> GetKindNames() const { return m_kindNames; } // ínå`ÇÃéÌóﬁÇÃéÊìæ
 
 	// Vector3 Å® JSON
-	nlohmann::ordered_json  Vector3ToJson(const DirectX::SimpleMath::Vector3& v);
+	nlohmann::ordered_json  XMFLOAT3ToJson(const DirectX::XMFLOAT3& v);
 
 	// JSON Å® Vector3
-	DirectX::SimpleMath::Vector3 JsonToVector3(const nlohmann::ordered_json& j);
+	DirectX::XMFLOAT3 JsonToVector3(const nlohmann::ordered_json& j);
 
 	bool SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath);
 

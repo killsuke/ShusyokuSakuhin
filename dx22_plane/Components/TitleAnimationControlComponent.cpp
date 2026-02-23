@@ -1,6 +1,6 @@
 #include "TitleAnimationControlComponent.h"
 #include "Manager/GameObjectManager.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Render2D.h"
 #include "Render3D.h"
 #include "VectorMoveComponent.h"
@@ -15,12 +15,8 @@
 #include "Input/Input.h"
 #include "TimeLineComponent.h"
 
-using namespace DirectX::SimpleMath;
-
 TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
-
-
 
 	GameObject* titleUI = GameObjectManager::AddObject("titleUI", "TitleUI");
 	TransformComponent* transTitle = titleUI->AddComponent<TransformComponent>();

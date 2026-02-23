@@ -1,7 +1,7 @@
 #include "TestSwordActionComponent.h"
 #include "PlayerOperationComponent.h"
 #include "ArbitraryRotationComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "ColliderAttackComponent.h"
 #include "Effect2DComponent.h"
@@ -14,7 +14,7 @@
 #include "SlashEffectComponent.h"
 #include "SoundComponent.h"
 #include <iostream>
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 using namespace DirectX;
 
@@ -72,7 +72,7 @@ void TestSwordActionComponent::Update() {
 
 		// 先ほどまでは、剣の動き終了後にもう一度振れるようにしていた
 		// それをプレイヤー側の制御に移す
-		if (isAroundActive == false/* || isFinished == true*/) {
+		if (isAroundActive == false) {
 
 			m_IsUseTrailFlag = true;
 			if (isFinished == true) {
@@ -126,14 +126,12 @@ void TestSwordActionComponent::Update() {
 			}
 
 			if (isRightLeft == RightLeft::RIGHT) {
-				//goAround->SetStartAndEndAndWarpAngle(120.0f, -120.0f, -90.0f, true);
-				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, true);
 
+				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, true);
 			}
 			else if(isRightLeft == RightLeft::LEFT){
-				//	goAround->SetStartAndEndAndWarpAngle(60.0f, -60.0f, -90.0f, false);
-				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, false);
 
+				goAround->SetStartAndEndAngle(m_SwordActionPattern.startAngle, m_SwordActionPattern.endAngle, false);
 			}
 
 			// 回転の動きのシミュレーション（軌跡用）
@@ -176,7 +174,6 @@ void TestSwordActionComponent::Update() {
 		}
 	}
 
-	//const bool isAroundActive2 = goAround->GetRollingActive();
 	if (isAroundActive == true) {
 		SwordAction();
 		m_IsSwordAction = true;
@@ -185,19 +182,13 @@ void TestSwordActionComponent::Update() {
 		m_IsSwordAction = false;
 	}
 
-	/*Vector3 nowPos = objTrans->GetPosition();
-	if (nowPos.z < 0.0f) {
-		m_Object->SetDrawContainerChangeFlag(DrawContainer::Default, true);
-	}*/
 
 	// 向き反転用
 	m_BeforeDirection = isRightLeft;
-	//m_IsAction = false;
 }
 
 void TestSwordActionComponent::SwordAction() {
 
-//	auto sound = SceneManager::GetSound();
 	auto goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
 	auto collider = m_Object->GetComponent<ColliderAttackComponent>();
 	auto atkComp = m_Object->GetComponent<AttackOneTimeComponent>();
@@ -213,7 +204,6 @@ void TestSwordActionComponent::SwordAction() {
 
 	// 左右の向き変わったら、現在角度に＋90度して左右反転、上記の止める処理もちょいと変える？タイム方式とかに
 	const RightLeft direction = moveComp->GetRightLeft();
-	//const bool isFinished = goAround->GetIsFinished();
 
 	TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
 	TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
@@ -243,8 +233,6 @@ void TestSwordActionComponent::SwordAction() {
 			trail->RequestInversion();
 			trail->InversionEvent();
 		}
-
-		//	m_RightLeft = true;
 	}
 	else if (direction == RightLeft::LEFT && m_BeforeDirection == RightLeft::RIGHT) { // 左向き
 		goAround->SetClockwise(false);
@@ -256,8 +244,6 @@ void TestSwordActionComponent::SwordAction() {
 			trail->RequestInversion();
 			trail->InversionEvent();
 		}
-
-		//	m_RightLeft = false;
 	}
 
 	if (atkComp->GetAttackHitFlag() == true) {

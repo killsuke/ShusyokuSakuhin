@@ -4,9 +4,8 @@
 
 #include "ProjectileMotionComponent.h"
 #include "RigidBodyComponent.h"
-#include "Transform.h"
+#include "TransformComponent.h"
 
-using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
 ProjectileMotionComponent::ProjectileMotionComponent(GameObject& obj) : Component(obj)

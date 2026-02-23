@@ -1,6 +1,6 @@
 #include "CameraShakeComponent.h"
-#include "Camera.h"
-#include "Transform.h"
+#include "CameraComponent.h"
+#include "TransformComponent.h"
 #include "Manager/TimeManager.h"
 #include <cmath>
 #include <random>
@@ -17,7 +17,7 @@ CameraShakeComponent::CameraShakeComponent(GameObject& obj) : Component(obj) {
 
 void CameraShakeComponent::Update() {
 
-	Camera* camera = m_Object->GetComponent<Camera>();
+	CameraComponent* camera = m_Object->GetComponent<CameraComponent>();
 
 	if (camera != nullptr && m_RequestTime != 0.0f) {
 		const XMMATRIX view = camera->GetView3D();

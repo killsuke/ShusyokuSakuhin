@@ -1,6 +1,6 @@
 #include "EnemyActionHopperComponent.h"
-#include "Transform.h"
-#include "Collider.h"
+#include "TransformComponent.h"
+#include "ColliderComponent.h"
 #include "Render2D.h"
 #include "RigidBodyComponent.h"
 #include "Manager/GameObjectManager.h"

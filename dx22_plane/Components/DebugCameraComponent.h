@@ -1,7 +1,7 @@
 #pragma once
-#include "Camera.h"
+#include "CameraComponent.h"
 
-class DebugCameraComponent final :  public Camera
+class DebugCameraComponent final :  public CameraComponent
 {
 private:
 

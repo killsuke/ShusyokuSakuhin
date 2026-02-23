@@ -1,7 +1,7 @@
 #include "TestMaskScene.h"
 #include "Manager/GameObjectManager.h"
-#include "Components/Transform.h"
-#include "Components/Camera.h"
+#include "Components/TransformComponent.h"
+#include "Components/CameraComponent.h"
 #include "Components/RenderMask3D.h"
 #include "Mesh/SquareMesh.h"
 
@@ -9,7 +9,7 @@ TestMaskScene::TestMaskScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -300.0f));
-	camera->AddComponent<Camera>();
+	camera->AddComponent<CameraComponent>();
 
 	auto testSquare = GameObjectManager::AddObject("testSquare", "TestSquare");
 	auto testSquareTrans = testSquare->AddComponent<TransformComponent>();
