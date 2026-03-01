@@ -52,7 +52,7 @@
 using namespace DirectX;
 
 LoadStageScene::LoadStageScene() {
-	auto camera = GameObjectManager::AddObject("camera", "Camera");
+	GameObject* camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvŽZ‚µ‚ÄAŽ‹–ìŠp“¯Žm‚Ìˆø‚«ŽZ‚ÅŒvŽZ‚·‚é‚Æ‚©H
 	//cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -170.0f));
@@ -74,7 +74,7 @@ LoadStageScene::LoadStageScene() {
 		auto skyRend = skydome->AddComponent<SkyDomeRenderComponent>();
 		skyRend->CreateMesh<SkyDomeMesh>();
 		skyRend->SetShader("ShaderResource/unlitTextureVSSkyDome.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		skyRend->TextureLoadSkyDome(L"assets/texture/skyDome.dds");*/
+		skyRend->TextureLoadSkyDome(L"skyDome.dds");*/
 	}
 
 	FLOAT clearColor[4] = { 0.4f,0.75f, 1.0f, 1.0f };
@@ -173,7 +173,7 @@ LoadStageScene::LoadStageScene() {
 		auto cubeRe = player->AddComponent<RenderCharacterComponent>();
 		cubeRe->CreateMesh<SquareMesh>();
 		cubeRe->SetShader("ShaderResource/OverVertexMove3DVS.hlsl", "ShaderResource/Fighter2DPS.hlsl");
-		cubeRe->ChangeTexture("assets/texture/aka.png");
+		cubeRe->ChangeTexture("aka.png");
 
 		//player->SetChild(childSlash);
 
@@ -223,7 +223,7 @@ LoadStageScene::LoadStageScene() {
 		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
-		effectRender->ChangeTexture("assets/texture/baran.png");
+		effectRender->ChangeTexture("baran.png");
 		//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 
 		//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
@@ -231,14 +231,14 @@ LoadStageScene::LoadStageScene() {
 		Render3DComponent* rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		rollingRender->ChangeTexture("assets/texture/sword.png");
+		rollingRender->ChangeTexture("sword.png");
 
 		//	rollingRender->SetBlurVelocity({ 0.0f,0.0f });
 
 		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();
 		rollingCollRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		rollingCollRend->ChangeTexture("assets/texture/NoTexture.png");
+		rollingCollRend->ChangeTexture("NoTexture.png");
 		rollingCollRend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f));
 
 		playerOperation->SetWeaponObject(rolling);
@@ -257,7 +257,7 @@ LoadStageScene::LoadStageScene() {
 		auto hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->CreateMesh<SquareMesh>();
 		hpRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		hpRender->ChangeTexture("assets/texture/hp_bar.png");
+		hpRender->ChangeTexture("hp_bar.png");
 		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
@@ -272,7 +272,7 @@ LoadStageScene::LoadStageScene() {
 
 	hpBar->CreateMesh<SquareMesh>();
 	hpBar->SetShader("ShaderResource/OverVertexMoveVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	hpBar->ChangeTexture("assets/texture/NoTexture.png");
+	hpBar->ChangeTexture("NoTexture.png");
 	hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
 	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
@@ -316,7 +316,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend1->CreateMesh<CircleMesh>();
 		targetRend1->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend1->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend1->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend1->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target2 = GameObjectManager::AddObject("target2", "Target");
@@ -335,7 +335,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend2->CreateMesh<CircleMesh>();
 		targetRend2->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend2->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend2->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target3 = GameObjectManager::AddObject("target3", "Target");
@@ -354,7 +354,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend3->CreateMesh<CircleMesh>();
 		targetRend3->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend3->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend3->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend3->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target4 = GameObjectManager::AddObject("target4", "Target");
@@ -373,7 +373,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend4->CreateMesh<CircleMesh>();
 		targetRend4->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend4->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend4->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend4->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target5 = GameObjectManager::AddObject("target5", "Target");
@@ -392,7 +392,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend5->CreateMesh<CircleMesh>();
 		targetRend5->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend5->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend5->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend5->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target6 = GameObjectManager::AddObject("target6", "Target");
@@ -411,7 +411,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend6->CreateMesh<CircleMesh>();
 		targetRend6->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend6->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend6->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend6->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target7 = GameObjectManager::AddObject("target7", "Target");
@@ -430,7 +430,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend7->CreateMesh<CircleMesh>();
 		targetRend7->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend7->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend7->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend7->ChangeTexture("NoTexture.png");
 #endif
 
 		auto target8 = GameObjectManager::AddObject("target8", "Target");
@@ -449,7 +449,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		targetRend8->CreateMesh<CircleMesh>();
 		targetRend8->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 		targetRend8->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		targetRend8->ChangeTexture("assets/texture/NoTexture.png");
+		targetRend8->ChangeTexture("NoTexture.png");
 #endif
 
 		auto point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
@@ -588,7 +588,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->ChangeTexture("bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
 		rend->SetBlurTextureSize(XMFLOAT2(700.0f, 700.0f));
 	}
@@ -600,7 +600,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->ChangeTexture("bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
 		rend->SetBlurTextureSize(XMFLOAT2(900.0f, 900.0f));
 	}
@@ -639,7 +639,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->ChangeTexture("bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
 		rend->SetBlurTextureSize(XMFLOAT2(500.0f, 500.0f));
 	}
@@ -651,7 +651,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->ChangeTexture("bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
 		rend->SetBlurTextureSize(XMFLOAT2(700.0f, 700.0f));
 	}
@@ -663,7 +663,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 384.0f,216.0f,1.0f });
 		RenderBlurComponent* rend = backGround->AddComponent<RenderBlurComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("assets/texture/bambooForest.png");
+		rend->ChangeTexture("bambooForest.png");
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/blurPS.hlsl");
 		rend->SetBlurTextureSize(XMFLOAT2(900.0f, 900.0f));
 	}
@@ -678,7 +678,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 110.0f,90.0f,5.0f });
 		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
 		rend->CreateMesh<CubeMesh>();
-		rend->ChangeTexture("assets/texture/testTerrain.png");
+		rend->ChangeTexture("testTerrain.png");
 		rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 	}
 
@@ -689,7 +689,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 110.0f,90.0f,5.0f });
 		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
 		rend->CreateMesh<CubeMesh>();
-		rend->ChangeTexture("assets/texture/testTerrain.png");
+		rend->ChangeTexture("testTerrain.png");
 		rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 	}
 
@@ -700,7 +700,7 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetScale({ 110.0f,90.0f,5.0f });
 		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
 		rend->CreateMesh<CubeMesh>();
-		rend->ChangeTexture("assets/texture/testTerrain.png");
+		rend->ChangeTexture("testTerrain.png");
 		rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
 	}
 }

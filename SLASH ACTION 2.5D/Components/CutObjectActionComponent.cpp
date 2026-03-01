@@ -476,7 +476,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 	rend1->CreateMesh<SquareMesh>();
 	rend1->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rend1->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
-	rend1->ChangeTexture("assets/texture/crack.png");
+	rend1->ChangeTexture("crack.png");
 	//		m_Crack1ID = m_Crack1->GetInstanceID();
 
 	m_Crack2 = GameObjectManager::AddObject("crack2", "Effect");
@@ -487,7 +487,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 	rend2->CreateMesh<SquareMesh>();
 	rend2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	rend2->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
-	rend2->ChangeTexture("assets/texture/crack.png");
+	rend2->ChangeTexture("crack.png");
 	//		m_Crack2ID = m_Crack2->GetInstanceID();
 
 	std::random_device rd;  // ”ñŒˆ’è“I‚È—”‚ÌŽí
@@ -528,7 +528,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 		Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		rend->ChangeTexture("assets/texture/glass_shards.png");
+		rend->ChangeTexture("glass_shards.png");
 
 		m_Debris.push_back(debris);
 	}
@@ -559,7 +559,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 		Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		rend->ChangeTexture("assets/texture/glass_shards.png");
+		rend->ChangeTexture("glass_shards.png");
 
 		m_Debris.push_back(debris);
 	}

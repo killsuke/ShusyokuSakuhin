@@ -19,7 +19,7 @@ HumanBoneComponent::HumanBoneComponent(GameObject& obj) : RenderComponent(obj)
 	CreateMeshIndices();
 
 	m_Shader->CreateOneSkinAnimation("OneSkinAnimationVS.hlsl", "OneSkinAnimationPS.hlsl");
-	//m_Texture->Load("assets/texture/NoTexture.png");
+	//m_Texture->Load("NoTexture.png");
 
 	BoneInit();
 }

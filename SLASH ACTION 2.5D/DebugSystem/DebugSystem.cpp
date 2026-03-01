@@ -27,10 +27,10 @@ void DebugSystem::Init() {
 	m_DebugUIs.resize(UI_DisplayCount, nullptr);
 
 	m_DebugUITextureNames.resize(UI_DisplayCount);
-	m_DebugUITextureNames[0] = "assets/texture/debugUI.png";
-	m_DebugUITextureNames[1] = "assets/texture/debugUI_F2.png";
-	m_DebugUITextureNames[2] = "assets/texture/debugUI_F3.png";
-	m_DebugUITextureNames[3] = "assets/texture/debugUI_F4.png";
+	m_DebugUITextureNames[0] = "debugUI.png";
+	m_DebugUITextureNames[1] = "debugUI_F2.png";
+	m_DebugUITextureNames[2] = "debugUI_F3.png";
+	m_DebugUITextureNames[3] = "debugUI_F4.png";
 
 	XMFLOAT3 uiPosition = StartUIPosition;
 	std::string debugUIName = "DebugUIObject";

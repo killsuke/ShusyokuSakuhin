@@ -6,9 +6,11 @@
 #include <d3d11.h>
 #include <unordered_map>
 #include <string>
+#include <wrl.h>
+#include <fstream>
+#include <filesystem>
 #include "System/DirectXRender.h"
 #include "WICTextureLoader.h" // テクスチャ読み込みライブラリ
-#include <wrl.h>
 
 class TextureManager final
 {
@@ -25,6 +27,7 @@ private:
 	TextureManager(TextureManager&&) = delete;
 	TextureManager& operator=(const TextureManager&) = delete;
 	TextureManager& operator=(TextureManager&&) = delete;
+	static void LoadFolder(const std::string& path);
 
 public:
 	static void Init();

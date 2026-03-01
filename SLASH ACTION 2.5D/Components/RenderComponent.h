@@ -53,7 +53,7 @@ public:
 	void SetShader(const std::string& vertex, const std::string& pixel, const std::string& geometry = "", std::vector<D3D11_INPUT_ELEMENT_DESC> lay = std::vector<D3D11_INPUT_ELEMENT_DESC>{}) { m_Shader->Create(vertex, pixel, geometry, lay); };
 
 	// テクスチャを変更する（メッシュに装備されたテクスチャが１枚なら）
-	void ChangeTexture(const std::string& fileName = "assets/texture/NoTexture.png") {
+	void ChangeTexture(const std::string& fileName = "NoTexture.png") {
 		if (m_Mesh == nullptr) return;
 
 		m_Mesh->ChangeTexture(fileName);

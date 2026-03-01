@@ -49,6 +49,6 @@ void Mesh::DefaultSetMaterial() {
 
 void Mesh::DefaultSetTexture() {
 	std::unique_ptr<Texture> texture = std::make_unique<Texture>();
-	texture->LoadTexture("assets/texture/NoTexture.png");
+	texture->LoadTexture("NoTexture.png");
 	m_Textures.push_back(std::move(texture));
 }

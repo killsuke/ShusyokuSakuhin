@@ -14,7 +14,7 @@
             },
             "atk": 10,
             "hp": 15,
-            "texture": "assets/texture/ho-dai.png",
+            "texture": "ho-dai.png",
             "shaderVS": "ShaderResource/Animation2DVS.hlsl",
             "shaderPS": "ShaderResource/Fighter2DPS.hlsl"
         },
@@ -32,7 +32,7 @@
             },
             "atk": 5,
             "hp": 20,
-            "texture": "assets/texture/hopper.png",
+            "texture": "hopper.png",
             "shaderVS": "ShaderResource/Animation2DVS.hlsl",
             "shaderPS": "ShaderResource/Fighter2DPS.hlsl"
         },
@@ -50,7 +50,7 @@
             },
             "atk": 10,
             "hp": 10,
-            "texture": "assets/texture/dice.png",
+            "texture": "dice.png",
             "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
             "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         },
@@ -68,7 +68,7 @@
             },
             "atk": 10,
             "hp": 10,
-            "texture": "assets/texture/hopper.png",
+            "texture": "hopper.png",
             "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
             "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         }

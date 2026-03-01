@@ -10,7 +10,7 @@ BonePartsComponent::BonePartsComponent(GameObject& obj) : Component(obj) {
 	myPart.attachBone = std::make_unique<TestBone>();
 	rlcom = m_Object->AddComponent<RenderLineComponent>();
 	rlcom->SetStartAndEndPosition(startBonePos, endBonePos);
-	rlcom->ChangeTexture("assets/texture/NoTexture.png");
+	rlcom->ChangeTexture("NoTexture.png");
 	rlcom->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	rlcom->SetThickness(5.0f);

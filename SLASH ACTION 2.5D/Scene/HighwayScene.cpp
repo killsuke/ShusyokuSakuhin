@@ -39,7 +39,7 @@ HighwayScene::HighwayScene() {
 	rigidPlayer->SetGravityFlag(true);
 	Render2DComponent* renderPlayer = player->AddComponent<Render2DComponent>();
 	renderPlayer->CreateMesh<SquareMesh>();
-	renderPlayer->ChangeTexture("assets/texture/aka.png");
+	renderPlayer->ChangeTexture("aka.png");
 	renderPlayer->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	auto jumpPlayer = player->AddComponent<JumpComponent>();
 	jumpPlayer->SetJumpPower(50.0f);
@@ -86,7 +86,7 @@ void HighwayScene::Enemeis() {
 	enemy1Rigid->SetGravityFlag(true);
 	Render2DComponent* enemy1Render = enemy1->AddComponent<Render2DComponent>();
 	enemy1Render->CreateMesh<SquareMesh>();
-	enemy1Render->ChangeTexture("assets/texture/hopper.png");
+	enemy1Render->ChangeTexture("hopper.png");
 	enemy1Render->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	enemy1Render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	enemy1->AddComponent<TestExtrusionJudgeComponent>();
@@ -109,7 +109,7 @@ void HighwayScene::Enemeis() {
 	enemy2Rigid->SetGravityFlag(true);
 	Render2DComponent* enemy2Render = enemy2->AddComponent<Render2DComponent>();
 	enemy2Render->CreateMesh<SquareMesh>();
-	enemy2Render->ChangeTexture("assets/texture/hopper.png");
+	enemy2Render->ChangeTexture("hopper.png");
 	enemy2Render->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 	enemy2Render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	enemy2->AddComponent<TestExtrusionJudgeComponent>();

@@ -12,7 +12,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/NoTexture.png",
+            "texture": "NoTexture.png",
             "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
             "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         },
@@ -28,7 +28,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/dice.png",
+            "texture": "dice.png",
             "shaderVS": "ShaderResource/unlitTextureVS.hlsl",
             "shaderPS": "ShaderResource/unlitTexturePS.hlsl"
         },
@@ -44,7 +44,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -60,7 +60,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -76,7 +76,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -92,7 +92,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -108,7 +108,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -124,7 +124,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         },
@@ -140,7 +140,7 @@
                 "y": 0.0,
                 "z": 0.0
             },
-            "texture": "assets/texture/testTerrain.png",
+            "texture": "testTerrain.png",
             "shaderVS": "ShaderResource/litTextureVS.hlsl",
             "shaderPS": "ShaderResource/litTexturePS.hlsl"
         }

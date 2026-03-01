@@ -527,7 +527,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 	Render3DComponent* slashRender = chargeSlash->AddComponent<Render3DComponent>();
 	slashRender->CreateMesh<SquareMesh>();
 	slashRender->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	slashRender->ChangeTexture("assets/texture/charge_slash1.png");
+	slashRender->ChangeTexture("charge_slash1.png");
 	slashRender->SetInversionFlag(m_CurrentRightLeft);
 }
 

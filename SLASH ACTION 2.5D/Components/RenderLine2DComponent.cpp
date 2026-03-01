@@ -27,7 +27,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 
 	rendS->CreateMesh<CircleMesh>();
 	rendS->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	rendS->ChangeTexture("assets/texture/NoTexture.png");
+	rendS->ChangeTexture("NoTexture.png");
 
 	m_EndObj = GameObjectManager::AddAbsFront("endPoint", "LineObj");
 	TransformComponent* transE = m_EndObj->AddComponent<TransformComponent>();
@@ -37,7 +37,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 
 	rendE->CreateMesh<CircleMesh>();
 	rendE->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-	rendE->ChangeTexture("assets/texture/NoTexture.png");
+	rendE->ChangeTexture("NoTexture.png");
 }
 
 void RenderLine2DComponent::Update()

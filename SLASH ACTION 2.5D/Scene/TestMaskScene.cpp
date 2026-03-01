@@ -19,7 +19,7 @@ TestMaskScene::TestMaskScene() {
 	auto testSquareRe = testSquare->AddComponent<RenderMask3DComponent>();
 	testSquareRe->CreateMesh<SquareMesh>();
 	testSquareRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "MaskTexturePS.hlsl");
-//	testSquareRe->SetTextureAndMask("assets/texture/title_car.png","assets/texture/mask.png");
+//	testSquareRe->SetTextureAndMask("title_car.png","mask.png");
 	testSquareRe->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
