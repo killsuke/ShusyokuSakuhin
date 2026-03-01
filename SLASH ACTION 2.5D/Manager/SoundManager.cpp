@@ -1,5 +1,4 @@
 #include "SoundManager.h"
-using json = nlohmann::ordered_json;
 using namespace std::filesystem;
 
 #ifdef _XBOX //Big-Endian
@@ -19,6 +18,11 @@ using namespace std::filesystem;
 #define fourccDPDS 'sdpd'
 #endif
 
+namespace {
+
+	std::string BGMPath = "sound/BGM/";
+	std::string SEPath = "sound/SE/";
+}
 
 HRESULT SoundManager::Init() {
 
@@ -46,9 +50,12 @@ HRESULT SoundManager::Init() {
 		return -1;
 	}
 
-	LoadSoundJsonFile();
+	//LoadSoundJsonFile();
 
-	LoadSoundFiles();
+	//LoadSoundFiles();
+
+	LoadFolder(BGMPath, true);
+	LoadFolder(SEPath, false);
 
 	return hr;
 }
@@ -129,60 +136,26 @@ HRESULT SoundManager::ReadChunkData(const HANDLE& hFile, void* buffer, const DWO
 	return hr;
 }
 
-void SoundManager::LoadSoundJsonFile() {
+// 指定されたフォルダ内のすべてのファイルを読み込む
+void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 
-	std::ifstream ifs("json/sound.json");
-	if (!ifs) {
-		std::cerr << "ファイルを開けません: " << "json/sound.json" << "\n";
-		return;
-	}
+	// 指定されたディレクトリのフォルダを開き読み込む
+	for (auto& file : directory_iterator(path)) {
 
-	nlohmann::json j;
-	ifs >> j;
+		// 通常ファイルであれば読み込む
+		if (file.is_regular_file()) {
 
-	auto loadCategory = [&](const std::string& category,const SoundType& type) {
+			std::string name = file.path().stem().string(); // 拡張子を除いたファイル名
+			std::string full_path = file.path().string(); // フルパス
 
-		for (const auto& item : j.at(category)) {
-			SoundStatus st;
-			st.type = type;
+			const char* c_path = full_path.c_str();
 
-			// file名
-			std::string file = item.at("file");
-
-			// name は拡張子を除いたもの
-			st.name = file.substr(0, file.find_last_of('.'));
-
-			// path は自動生成
-			st.path = "sound/" + category + "/" + file;
-
-			// volume と loopは任意
-			st.volume = item.value("volume", 1.0f);
-			st.loop = item.value("loop", type == SoundType::BGM);
-
-			m_SoundStatuses.push_back(st);
+			LoadWave(name, c_path, loop);
 		}
-	};
-
-	loadCategory("BGM", SoundType::BGM);
-	loadCategory("SE", SoundType::SE);
-//	loadCategory("VOICE", SoundType::VOICE);
-}
-
-void SoundManager::LoadSoundFiles() {
-
-	for (const auto& file : m_SoundStatuses) {
-
-		const std::string name = file.name;
-		const std::string path = file.path;
-		const bool loop = file.loop;
-
-		const char* c_path = path.c_str();
-
-		// パスはキャラポインタ型であるべきか理論
-		LoadWave(name, c_path, loop);
 	}
 }
 
+// WAVファイルを読み込む関数
 HRESULT SoundManager::LoadWave(const std::string& key, const char* filename, const bool loop) {
 
 	SoundResource res{};

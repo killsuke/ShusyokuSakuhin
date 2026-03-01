@@ -96,6 +96,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 	}
 }
 
+// 永続的に行うイベント
 void TimeLineComponent::UpdateContinuousEvents() {
 
 	const float now = m_CurrentTime;
