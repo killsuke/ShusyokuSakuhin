@@ -1,0 +1,17 @@
+{
+  "BGM": [
+    {
+      "file": "bgm1.wav",
+      "loop": true
+    }
+  ],
+
+  "SE": [
+    {
+      "file": "slash.wav"
+    },
+    {
+      "file": "slashHit.wav"
+    }
+  ]
+}
