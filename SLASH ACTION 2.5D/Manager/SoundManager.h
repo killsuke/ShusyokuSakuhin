@@ -37,7 +37,7 @@ private:
 	static HRESULT FindChunk(const HANDLE& hFile,const DWORD& fourcc, DWORD& dwChunkSize, DWORD& dwChunkDataPosition);
 	static HRESULT ReadChunkData(const HANDLE& hFile, void* buffer, const DWORD& buffersize, const DWORD& bufferoffset);
 	static void LoadFolder(const std::string& path, const bool loop);
-	static HRESULT LoadWave(const std::string& key, const char* filename, const bool loop);
+	static HRESULT LoadWave(const std::string& key, const wchar_t* filename, const bool loop);
 
 public:
 

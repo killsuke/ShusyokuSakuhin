@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <vector>
 #include <Windows.h>
+#include "Helper/StringHelper.h"
 
 class ComponentTypeManager final
 {
@@ -45,8 +46,10 @@ public:
 			return it->second;
 		}
 
-		std::string errorMsg = "コンポーネント名 ： " + name + " に対応するＩＤは存在しません。";
-		MessageBoxA(nullptr, errorMsg.c_str(), "Error", MB_ICONERROR | MB_OK);
+		std::wstring newName = StringToWString(name);
+
+		std::wstring errorMsg = L"コンポーネント名 ： " + newName + L" に対応するＩＤは存在しません。";
+		MessageBoxW(nullptr, errorMsg.c_str(), L"Error", MB_ICONERROR | MB_OK);
 		return UINT32_MAX; // 魔法の数字で「存在しない」を表す
 	}
 
@@ -55,7 +58,7 @@ public:
 		if(it != idToName.end()) {
 			return it->second; // 見つかった場合は名前を返す
 		}
-		MessageBoxA(nullptr, "その ID のコンポーネントの名前は存在しません。", "Error", MB_ICONERROR | MB_OK);
+		MessageBoxW(nullptr, L"その ID のコンポーネントの名前は存在しません。", L"Error", MB_ICONERROR | MB_OK);
 
 		return ""; // 見つからなかった場合は空文字を返す
 		// ↑ここをどうするか決める

@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "Helper/StringHelper.h"
 
 using namespace std::filesystem;
 
@@ -31,7 +32,8 @@ void TextureManager::LoadFolder(const std::string& path) {
 
 			// テクスチャの読み込み
             if (!LoadTexture(name)) {
-                MessageBoxA(NULL, ("テクスチャの読み込みに失敗しました: " + name).c_str(), "エラー", MB_ICONERROR | MB_OK);
+                std::wstring newName = StringToWString(name);
+                MessageBoxW(NULL, (L"テクスチャの読み込みに失敗しました: " + newName).c_str(), L"エラー", MB_ICONERROR | MB_OK);
 			}
         }
     }
@@ -61,7 +63,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
                                                      D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &texture);
     // エラーが起きた場合の処理
     if (FAILED(hr) || !texture) {
-        MessageBoxA(NULL, "テクスチャ読み込み失敗", "エラー", MB_ICONERROR | MB_OK);
+        MessageBoxW(NULL, L"テクスチャ読み込み失敗", L"エラー", MB_ICONERROR | MB_OK);
         return nullptr;
     }
     
@@ -83,7 +85,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(cons
 	}
     
     // エラー処理
-    MessageBoxA(NULL, "要求されたテクスチャが存在しませんでした。", "エラー", MB_ICONERROR | MB_OK);
+    MessageBoxW(NULL, L"要求されたテクスチャが存在しませんでした。", L"エラー", MB_ICONERROR | MB_OK);
     return nullptr;
 }
 

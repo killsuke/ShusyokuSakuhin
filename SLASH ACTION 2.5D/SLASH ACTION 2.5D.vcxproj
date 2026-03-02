@@ -44,14 +44,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -188,6 +188,7 @@
     <ClCompile Include="Components\RenderHpComponent.cpp" />
     <ClCompile Include="Manager\SoundManager.cpp" />
     <ClCompile Include="Components\StretchingComponent.cpp" />
+    <ClCompile Include="Helper\StringHelper.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="Components\CutObjectActionComponent.h" />
     <ClInclude Include="Components\DebugCameraComponent.h" />
     <ClInclude Include="Components\StretchingComponent.h" />
+    <ClInclude Include="Helper\StringHelper.h" />
     <ClInclude Include="Structs\RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />

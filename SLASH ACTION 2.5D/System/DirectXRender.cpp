@@ -398,7 +398,7 @@ HRESULT DirectXRender::CreateCameraBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_CameraInformationBuffer);
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::CAMERA), 1, &m_CameraInformationBuffer);
@@ -422,7 +422,7 @@ HRESULT DirectXRender::CreateLineThicknessBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LineThicknessBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -448,7 +448,7 @@ HRESULT DirectXRender::CreateBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_BlurBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 	
@@ -474,7 +474,7 @@ HRESULT DirectXRender::CreateHitFlashBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -499,7 +499,7 @@ HRESULT DirectXRender::LightBufferCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
 
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -525,7 +525,7 @@ HRESULT DirectXRender::MaterialBufferCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
 
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -553,7 +553,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -564,7 +564,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurCircularBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
@@ -590,7 +590,7 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒY
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &m_BoneConstantBuffer);
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -615,7 +615,7 @@ HRESULT DirectXRender::HPBarConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒ
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &m_OverVertexConstantBuffer);
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -640,7 +640,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_GlowBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -651,7 +651,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_RingGlowBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -677,7 +677,7 @@ HRESULT DirectXRender::CreateTimeBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_TimeBuffer);
 	if (FAILED(hr)) {
-		MessageBox(nullptr, "CreateBuffer(constant buffer) error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -995,7 +995,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 	// ƒoƒbƒNƒoƒbƒtƒ@ƒTƒCƒY•ÏX
 	hr = m_SwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "ResizeBuffers error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"ResizeBuffers error", L"Error", MB_OK);
 		return;
 	}
 
@@ -1003,14 +1003,14 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 	ID3D11Texture2D* backBuffer = nullptr;
 	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "GetBuffer error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"GetBuffer error", L"Error", MB_OK);
 		return;
 	}
 
 	// ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[Äì¬
 	hr = m_Device->CreateRenderTargetView(backBuffer, nullptr, &m_RenderTargetView);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateRenderTargetView error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateRenderTargetView error", L"Error", MB_OK);
 		return;
 	}
 
@@ -1030,7 +1030,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 
 	hr = m_Device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencile);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateTexture2D error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateTexture2D error", L"Error", MB_OK);
 		return;
 	}
 
@@ -1042,7 +1042,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 	// ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[Äì¬
 	hr = m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
 	if(FAILED(hr)) {
-		MessageBox(nullptr, "CreateDepthStencilView error", "Error", MB_OK);
+		MessageBoxW(nullptr, L"CreateDepthStencilView error", L"Error", MB_OK);
 		return;
 	}
 

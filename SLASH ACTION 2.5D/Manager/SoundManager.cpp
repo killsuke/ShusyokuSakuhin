@@ -147,9 +147,9 @@ void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 		if (file.is_regular_file()) {
 
 			std::string name = file.path().stem().string(); // 拡張子を除いたファイル名
-			std::string full_path = file.path().string(); // フルパス
+			std::wstring full_path = file.path().wstring(); // フルパス
 
-			const char* c_path = full_path.c_str();
+			const wchar_t* c_path = full_path.c_str();
 
 			LoadWave(name, c_path, loop);
 		}
@@ -157,11 +157,11 @@ void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 }
 
 // WAVファイルを読み込む関数
-HRESULT SoundManager::LoadWave(const std::string& key, const char* filename, const bool loop) {
+HRESULT SoundManager::LoadWave(const std::string& key, const wchar_t* filename, const bool loop) {
 
 	SoundResource res{};
 
-	const HANDLE hFile = CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	const HANDLE hFile = CreateFileW(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (hFile == INVALID_HANDLE_VALUE) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	}

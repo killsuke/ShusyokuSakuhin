@@ -211,7 +211,7 @@ bool Texture::LoadTexture(const std::string& filename)
 		devicecontext->PSSetShaderResources(0, 1, m_Srv.GetAddressOf());
 	}
 	else {
-		MessageBoxA(NULL, "テクスチャをシェーダーリソースビューにセット出来ませんでした。", "エラー", MB_ICONERROR | MB_OK);
+		MessageBoxW(NULL, L"テクスチャをシェーダーリソースビューにセット出来ませんでした。", L"エラー", MB_ICONERROR | MB_OK);
 		return false;
 	}
 

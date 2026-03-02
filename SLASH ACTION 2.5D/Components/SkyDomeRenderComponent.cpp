@@ -56,6 +56,6 @@ void SkyDomeRenderComponent::TextureLoadSkyDome(const wchar_t* tex) {
 	auto hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_pTextureView);
 	if (FAILED(hr))
 	{
-		MessageBox(NULL, "DDSファイルの読み込みに失敗しました。", "エラー", MB_OK | MB_ICONERROR);
+		MessageBoxW(NULL, L"DDSファイルの読み込みに失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
 	}
 }
