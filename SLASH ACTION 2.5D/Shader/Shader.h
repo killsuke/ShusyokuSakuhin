@@ -17,10 +17,10 @@ public:
 	void SetGPU(ID3D11DeviceContext* context);
 	std::vector<std::string> GetShaderNames()const { return m_ShaderNames; };
 private:
-	ComPtr<ID3D11VertexShader> m_pVertexShader;		// 頂点シェーダー
-	ComPtr<ID3D11PixelShader>  m_pPixelShader;		// ピクセルシェーダー
-	ComPtr<ID3D11InputLayout>  m_pVertexLayout;		// 頂点レイアウト
-	ComPtr<ID3D11GeometryShader> m_pGeometryShader;	// ジオメトリシェーダー
+	ComPtr<ID3D11VertexShader> m_pVertexShader = nullptr;		// 頂点シェーダー
+	ComPtr<ID3D11PixelShader>  m_pPixelShader = nullptr;		// ピクセルシェーダー
+	ComPtr<ID3D11InputLayout>  m_pVertexLayout = nullptr;		// 頂点レイアウト
+	ComPtr<ID3D11GeometryShader> m_pGeometryShader = nullptr;	// ジオメトリシェーダー
 	std::vector<std::string> m_ShaderNames;
 };
 

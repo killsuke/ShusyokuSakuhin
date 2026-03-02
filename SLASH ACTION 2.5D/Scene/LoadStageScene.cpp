@@ -111,24 +111,10 @@ LoadStageScene::LoadStageScene() {
 
 	GameObject* playOBJ = nullptr;
 	{
-		/*GameObject* childSlash = GameObjectManager::AddChild("dashSlash", "Child");
-		TransformComponent* childTrans = childSlash->AddComponent<TransformComponent>();
-		childTrans->SetLocalScale({5.0f,1.0f,1.0f});
-		ColliderComponent* childColl = childSlash->AddComponent<ColliderComponent>();
-		AttackOneTimeComponent* childAtk = childSlash->AddComponent<AttackOneTimeComponent>();
-		EnemyDamageComponent* childED = childSlash->AddComponent<EnemyDamageComponent>();
-		FighterComponent* childFT = childSlash->AddComponent<FighterComponent>();
-		childFT->SetAtk(10);
-		childFT->SetHp(5);
-		Render3DColliderAABBComponent* childRend = childSlash->AddComponent<Render3DColliderAABBComponent>();
-		childSlash->SetActiveState(ActiveState::ALL_STOP);*/
-
 		GameObject* player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
 
 		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
-	//	playerOperation->SetChargeSlashObject(childSlash);
-
 
 		TransformComponent* playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
@@ -148,13 +134,10 @@ LoadStageScene::LoadStageScene() {
 
 		player->AddComponent<TestExtrusionJudgeComponent>();
 
-		auto cubeColl = player->AddComponent<ColliderComponent>();
-		//	cubeColl->SetOffsetSizeAABB(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
-			//		cubeColl->SetOffsetSizeOBB(DirectX::XMFLOAT3(20.0f, 5.0f, 0.0f));
-			//		cubeColl->SetOffsetRotationOBB(DirectX::XMFLOAT3(0.0f, 0.0f, 45.0f));
+		ColliderComponent* cubeColl = player->AddComponent<ColliderComponent>();
 		ColliderDamageComponent* collDamage = player->AddComponent<ColliderDamageComponent>();
 
-		auto fighterPlayer = player->AddComponent<FighterComponent>();
+		FighterComponent* fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);
 		fighterPlayer->SetMaxHp(50);
 		fighterPlayer->SetAtk(10);
@@ -170,37 +153,29 @@ LoadStageScene::LoadStageScene() {
 		chargePerf->SetOneParticleActiveTime(0.05f);
 		chargePerf->SetActiveFlag(false);
 
-		auto cubeRe = player->AddComponent<RenderCharacterComponent>();
+		RenderCharacterComponent* cubeRe = player->AddComponent<RenderCharacterComponent>();
 		cubeRe->CreateMesh<SquareMesh>();
 		cubeRe->SetShader("ShaderResource/OverVertexMove3DVS.hlsl", "ShaderResource/Fighter2DPS.hlsl");
 		cubeRe->ChangeTexture("aka.png");
 
-		//player->SetChild(childSlash);
-
-		/*	auto cubeRe2 = player->AddComponent<Render3DColliderAABBComponent>();
-			cubeRe2->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));*/
-	
-			//	auto rolling = GameObjectManager::AddObject("rolling", "Sword");
-
 		// 剣のオブジェクト生成 =============================================================
-		auto rolling = GameObjectManager::AddObject("sword", "Sword");
+		GameObject* rolling = GameObjectManager::AddObject("sword", "Sword");
 
-		auto rollingTrans = rolling->AddComponent<TransformComponent>();
+		TransformComponent* rollingTrans = rolling->AddComponent<TransformComponent>();
 		rollingTrans->SetScale({ 11.0f, 4.0f, 3.0f });
 		rollingTrans->SetPosition({ 30.0f,-9.0f,3.0f });
-		//	rollingTrans->SetRotation({ 90.0f,0.0f,0.0f });
 
-		auto rollingColl = rolling->AddComponent<ColliderComponent>();
+		ColliderComponent* rollingColl = rolling->AddComponent<ColliderComponent>();
 		rollingColl->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
 		rollingColl->SetOffsetCenterOBB({ 5.0f,0.0f,0.0f });
 		ColliderAttackComponent* collAttack = rolling->AddComponent<ColliderAttackComponent>();
 		collAttack->SetOffsetSizeOBB({ -2.0f,0.0f,6.0f });
 		collAttack->SetOffsetCenterOBB({ 5.0f,0.0f,0.0f });
 
-		auto testAction = rolling->AddComponent<TestSwordActionComponent>();
+		TestSwordActionComponent* testAction = rolling->AddComponent<TestSwordActionComponent>();
 		testAction->SetHolder(player);
 
-		auto rollingGoAround = rolling->AddComponent<ArbitraryRotationComponent>();
+		ArbitraryRotationComponent* rollingGoAround = rolling->AddComponent<ArbitraryRotationComponent>();
 		rollingGoAround->SetCenterObject(player); // プレイヤーを中心に回るように設定
 		rollingGoAround->MakeInitialOffset(playerTrans->GetPosition(), rollingTrans->GetPosition()); // 初期オフセットを設定
 		rollingGoAround->SetRotationSpeed(20.0f); // 回転速度を設定
@@ -208,34 +183,30 @@ LoadStageScene::LoadStageScene() {
 		rollingGoAround->SetClockwise(true);
 		rollingGoAround->SetStopTime(0.2f);
 
-		auto rollingFT = rolling->AddComponent<FighterComponent>();
+		FighterComponent* rollingFT = rolling->AddComponent<FighterComponent>();
 		rollingFT->SetAtk(5);
 		rollingFT->SetHp(50);
 
-		auto rollingAtk = rolling->AddComponent<AttackOneTimeComponent>();
+		AttackOneTimeComponent* rollingAtk = rolling->AddComponent<AttackOneTimeComponent>();
 
-		auto rollingED = rolling->AddComponent<EnemyDamageComponent>();
+		EnemyDamageComponent* rollingED = rolling->AddComponent<EnemyDamageComponent>();
 
 		SoundComponent* rollingSound = rolling->AddComponent<SoundComponent>();
 		rollingSound->AddSoundLabel("slash");
 		rollingSound->AddSoundLabel("slashHit");
 
-		auto effectRender = rolling->AddComponent<TrailRenderComponent>();
+		TrailRenderComponent* effectRender = rolling->AddComponent<TrailRenderComponent>();
 		effectRender->SetTipPoint(10.0f);
 		effectRender->SetBasePoint(-1.5f);
 		effectRender->ChangeTexture("baran.png");
-		//	effectRender->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-
-		//	auto rollingRender = rolling->AddComponent<Render3DComponent>();
 				
 		Render3DComponent* rollingRender = rolling->AddComponent<Render3DComponent>();
 		rollingRender->CreateMesh<SquareMesh>();
 		rollingRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		rollingRender->ChangeTexture("sword.png");
 
-		//	rollingRender->SetBlurVelocity({ 0.0f,0.0f });
 
-		auto rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
+		Render3DColliderOBBComponent* rollingCollRend = rolling->AddComponent<Render3DColliderOBBComponent>();
 		rollingCollRend->CreateMesh<CubeMesh>();
 		rollingCollRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 		rollingCollRend->ChangeTexture("NoTexture.png");
@@ -261,8 +232,8 @@ LoadStageScene::LoadStageScene() {
 		hpRender->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
-	auto hp = GameObjectManager::AddUI("hpUI", "HP_UI");
-	auto hpTrans = hp->AddComponent<TransformComponent>();
+	GameObject* hp = GameObjectManager::AddUI("hpUI", "HP_UI");
+	TransformComponent* hpTrans = hp->AddComponent<TransformComponent>();
 	hpTrans->SetPosition({ -570.0f, 120.0f, 0.0f });
 	hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
 
@@ -275,17 +246,17 @@ LoadStageScene::LoadStageScene() {
 	hpBar->ChangeTexture("NoTexture.png");
 	hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
-	auto fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
+	std::vector<GameObject*> fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	if (!fade.empty()) {
-		auto fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
+		DoorFadeComponent* fadeUI = fade[0]->GetComponent<DoorFadeComponent>();
 		fadeUI->SetBootDoor(true);
 		//	fadeUI->SetNextSceneName();
 	}
 	else {
-		auto fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
+		GameObject* fadeUI = GameObjectManager::AddUI("fade", "FadeUI");
 		fadeUI->SetCarryOverFlag(true);
-		auto fadeTrans = fadeUI->AddComponent<TransformComponent>();
-		auto fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
+		TransformComponent* fadeTrans = fadeUI->AddComponent<TransformComponent>();
+		DoorFadeComponent* fadeAC = fadeUI->AddComponent<DoorFadeComponent>();
 		fadeAC->SetNextSceneName("LoadStageScene");
 	}
 }

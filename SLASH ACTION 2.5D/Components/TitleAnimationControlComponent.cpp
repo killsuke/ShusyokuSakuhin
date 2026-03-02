@@ -101,7 +101,6 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		Render2DComponent* rendTri1 = triangle1->AddComponent<Render2DComponent>();
 		rendTri1->CreateMesh<TriangleMesh>();
 		rendTri1->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//	rendTri1->ChangeTexture("testTerrain.png");
 		m_Triangles[0] = triangle1;
 
 		GameObject* triangle2 = GameObjectManager::AddObject("triangle2", "TitleUI");
@@ -124,7 +123,6 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		Render2DComponent* rendTri2 = triangle2->AddComponent<Render2DComponent>();
 		rendTri2->CreateMesh<TriangleMesh>();
 		rendTri2->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//rendTri2->ChangeTexture("testTerrain.png");
 		m_Triangles[1] = triangle2;
 
 		GameObject* triangle3 = GameObjectManager::AddObject("triangle3", "TitleUI");
@@ -147,7 +145,6 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		Render2DComponent* rendTri3 = triangle3->AddComponent<Render2DComponent>();
 		rendTri3->CreateMesh<TriangleMesh>();
 		rendTri3->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//rendTri3->ChangeTexture("testTerrain.png");
 		m_Triangles[2] = triangle3;
 
 		GameObject* triangle4 = GameObjectManager::AddObject("triangle4", "TitleUI");
@@ -170,7 +167,6 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 		Render2DComponent* rendTri4 = triangle4->AddComponent<Render2DComponent>();
 		rendTri4->CreateMesh<TriangleMesh>();
 		rendTri4->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
-		//rendTri4->ChangeTexture("testTerrain.png");
 		m_Triangles[3] = triangle4;
 	}
 

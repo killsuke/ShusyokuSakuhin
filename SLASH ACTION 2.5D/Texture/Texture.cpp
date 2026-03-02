@@ -7,6 +7,10 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
+namespace {
+	constexpr int BYTE4 = 4;
+}
+
 Texture::Texture(const Texture& other)
 	: m_Texname(other.m_Texname),
 	m_Srv(other.m_Srv),           // ComPtr は参照カウントが増えるだけ
@@ -36,7 +40,7 @@ bool Texture::Load(const std::string& filename)
 	const std::string Isfilename = filename;
 
 	// 画像読み込み
-	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, 4);
+	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, BYTE4);
 	if (pixels == nullptr) {
 		std::cout << Isfilename.c_str() << " Load error " << std::endl;
 		return false;
@@ -60,7 +64,7 @@ bool Texture::Load(const std::string& filename)
 
 	D3D11_SUBRESOURCE_DATA subResource{};
 	subResource.pSysMem = pixels;
-	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
+	subResource.SysMemPitch = desc.Width * BYTE4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
 	ID3D11Device* device = DirectXRender::GetDevice();
@@ -92,7 +96,7 @@ bool Texture::LoadMask(const std::string& filename)
 	const std::string Isfilename = filename;
 
 	// 画像読み込み
-	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, 4);
+	pixels = stbi_load(Isfilename.c_str(), &m_Width, &m_Height, &m_Bpp, BYTE4);
 	if (pixels == nullptr) {
 		std::cout << Isfilename.c_str() << " Load error " << std::endl;
 		return false;
@@ -116,7 +120,7 @@ bool Texture::LoadMask(const std::string& filename)
 
 	D3D11_SUBRESOURCE_DATA subResource{};
 	subResource.pSysMem = pixels;
-	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
+	subResource.SysMemPitch = desc.Width * BYTE4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
 	ID3D11Device* device = DirectXRender::GetDevice();
@@ -141,7 +145,7 @@ bool Texture::LoadMask(const std::string& filename)
 }
 
 // テクスチャをメモリからロード
-bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
+bool Texture::LoadFromFemory(const unsigned char* Data,const int len) {
 
 	bool sts = true;
 	unsigned char* pixels;
@@ -172,7 +176,7 @@ bool Texture::LoadFromFemory(const unsigned char* Data,int len) {
 
 	D3D11_SUBRESOURCE_DATA subResource{};
 	subResource.pSysMem = pixels;
-	subResource.SysMemPitch = desc.Width * 4;			// RGBA = 4 bytes per pixel
+	subResource.SysMemPitch = desc.Width * BYTE4;			// RGBA = 4 bytes per pixel
 	subResource.SysMemSlicePitch = 0;
 
 	ID3D11Device* device = DirectXRender::GetDevice();

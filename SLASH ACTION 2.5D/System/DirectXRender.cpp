@@ -924,6 +924,7 @@ void DirectXRender::SetFillMode(const EFillMode& fillMode) {
 	}
 }
 
+// ƒ‚ƒfƒ‹‚Ì•\¦ó‘Ô‚ğ•ÏX
 void DirectXRender::SwitchingFillMode() {
 
 	if (m_FillMode == EFillMode::FILL_SOLID) {

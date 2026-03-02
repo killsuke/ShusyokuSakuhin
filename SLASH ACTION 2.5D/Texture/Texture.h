@@ -40,7 +40,7 @@ public:
 	bool LoadMask(const std::string& filename);
 	bool LoadTexture(const std::string& filename);
 
-	bool LoadFromFemory(const unsigned char* data,int len);
+	bool LoadFromFemory(const unsigned char* data,const int len);
 
 	void SetGPU();
 	void SetGPU(ID3D11DeviceContext* context);
