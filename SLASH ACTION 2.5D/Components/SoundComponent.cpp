@@ -54,13 +54,62 @@ void SoundComponent::AddSoundLabel(const std::string& label) {
 	}
 }
 
+void SoundComponent::Play() {
+
+	if (m_pSourceVoice.empty()) {
+		return;
+	}
+
+	const auto it = m_pSourceVoice.begin();
+
+	if (it == m_pSourceVoice.end()) { 
+		return;
+	};
+
+	const auto key = it->first;
+
+	IXAudio2* xAudio = SoundManager::GetXAudio2();
+	if (xAudio == nullptr) {
+		return;
+	}
+
+	SoundResource* soundRes = SoundManager::GetSoundResource(key);
+	if (soundRes == nullptr) {
+		return;
+	}
+
+	IXAudio2SourceVoice*& pSV = it->second;
+
+	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
+	if (pSV == nullptr)
+	{
+		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) return;
+	}
+	else
+	{
+		pSV->Stop(0);
+		pSV->FlushSourceBuffers();
+	}
+
+	pSV->SubmitSourceBuffer(&soundRes->buffer);
+	pSV->Start(0);
+
+}
+
 //=============================================================================
 // 再生
 //=============================================================================
 void SoundComponent::Play(const std::string& label)
 {
+	if (m_pSourceVoice.empty()) {
+		return;
+	}
+
 	const auto it = m_pSourceVoice.find(label);
-	if (it == m_pSourceVoice.end()) return;
+	if (it == m_pSourceVoice.end()) {
+		return;
+	};
 
 	IXAudio2* xAudio = SoundManager::GetXAudio2();
 	if (xAudio == nullptr) {
@@ -90,6 +139,32 @@ void SoundComponent::Play(const std::string& label)
 	pSV->Start(0);
 }
 
+void SoundComponent::Stop() {
+
+	if (m_pSourceVoice.empty()) {
+		return;
+	}
+
+	const auto it = m_pSourceVoice.begin();
+
+	if (it == m_pSourceVoice.end()) {
+		return;
+	};
+
+	IXAudio2SourceVoice* sourceVoice = it->second;
+
+	XAUDIO2_VOICE_STATE xa2state = {};
+	sourceVoice->GetState(&xa2state);
+	if (xa2state.BuffersQueued > 0)
+	{
+		// 一時停止
+		HRESULT hr = sourceVoice->Stop(0);
+		if (FAILED(hr))
+		{
+			// ログ出力やエラーハンドリング
+		}
+	}
+}
 
 //=============================================================================
 // 停止
@@ -120,6 +195,28 @@ void SoundComponent::Stop(const std::string& label)
 	}
 }
 
+void SoundComponent::Resume()
+{
+	if (m_pSourceVoice.empty()) {
+		return;
+	}
+
+	const auto it = m_pSourceVoice.begin();
+
+	if (it == m_pSourceVoice.end()) {
+		return;
+	};
+
+	// サウンド再生再開
+	IXAudio2SourceVoice* sourceVoice = it->second;
+
+	if (sourceVoice == nullptr) {
+		return;
+	}
+
+	sourceVoice->Start();
+}
+
 //=============================================================================
 // 再開
 //=============================================================================
@@ -144,10 +241,32 @@ void SoundComponent::Resume(const std::string& label)
 	sourceVoice->Start();
 }
 
+void SoundComponent::SetVolume(const float volume) {
+
+	if (m_pSourceVoice.empty()) {
+		return;
+	}
+
+	const auto it = m_pSourceVoice.begin();
+
+	if (it == m_pSourceVoice.end()) {
+		return;
+	};
+
+	IXAudio2SourceVoice* sourceVoice = it->second;
+
+	if (sourceVoice == nullptr) {
+		return;
+	}
+
+	// 音量調整
+	sourceVoice->SetVolume(volume);
+}
+
 //=============================================================================
 // 音量調整
 //=============================================================================
-void SoundComponent::SetVolume(const std::string& label,const float volume) {
+void SoundComponent::SetVolume(const std::string& label, const float volume) {
 
 	if (m_pSourceVoice.empty()) {
 		return;
@@ -160,7 +279,7 @@ void SoundComponent::SetVolume(const std::string& label,const float volume) {
 
 	IXAudio2SourceVoice* sourceVoice = it->second;
 
-	if(sourceVoice == nullptr) {
+	if (sourceVoice == nullptr) {
 		return;
 	}
 

@@ -53,11 +53,11 @@ using namespace DirectX;
 
 LoadStageScene::LoadStageScene() {
 	GameObject* camera = GameObjectManager::AddObject("camera", "Camera");
-	auto cameraTrans = camera->AddComponent<TransformComponent>();
+	TransformComponent* cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvŽZ‚µ‚ÄAŽ‹–ìŠp“¯Žm‚Ìˆø‚«ŽZ‚ÅŒvŽZ‚·‚é‚Æ‚©H
 	//cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -170.0f));
 	camera->AddComponent<RigidBodyComponent>();
-	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
+	CameraMoveComponent* cameraMove = camera->AddComponent<CameraMoveComponent>();
 	CameraComponent* cameraComp = camera->AddComponent<CameraComponent>();
 	cameraComp->SetTarget(XMFLOAT3(10.0f, 30.0f, 100.0f));
 	//cameraComp->SetTarget(XMFLOAT3(10.0f, 30.0f, 0.0f));
@@ -123,22 +123,22 @@ LoadStageScene::LoadStageScene() {
 		Render3DColliderAABBComponent* childRend = childSlash->AddComponent<Render3DColliderAABBComponent>();
 		childSlash->SetActiveState(ActiveState::ALL_STOP);*/
 
-		auto player = GameObjectManager::AddObject("Player", "Player");
+		GameObject* player = GameObjectManager::AddObject("Player", "Player");
 		playOBJ = player;
 
 		PlayerOperationComponent* playerOperation = player->AddComponent<PlayerOperationComponent>();
 	//	playerOperation->SetChargeSlashObject(childSlash);
 
 
-		auto playerTrans = player->AddComponent<TransformComponent>();
+		TransformComponent* playerTrans = player->AddComponent<TransformComponent>();
 		playerTrans->SetScale({ 6.0f, 10.0f, 5.0f });
 		playerTrans->SetPosition({ 0.0f,-9.0f,0.0f });
 		playerTrans->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		auto cubeJump = player->AddComponent<JumpComponent>();
+		JumpComponent* cubeJump = player->AddComponent<JumpComponent>();
 		cubeJump->SetJumpPower(50.0f);
 
-		auto cubeRigid = player->AddComponent<RigidBodyComponent>();
+		RigidBodyComponent* cubeRigid = player->AddComponent<RigidBodyComponent>();
 		cubeRigid->SetMass(2.0f);
 		cubeRigid->SetGravityFlag(true);
 

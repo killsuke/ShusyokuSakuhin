@@ -7,6 +7,7 @@ using namespace DirectX;
 namespace {
 	constexpr double FIXED_DT = (1.0 / 60.0);
 	constexpr double MAX_DELTA_TIME = 0.05;
+	constexpr double RESTRICTION_DELTA_TIME = 0.032;
 }
 
 void TimeManager::Init() {
@@ -47,8 +48,9 @@ void TimeManager::Update() {
 
 	m_Accumulator += frameTime;
 
-	if (m_Accumulator > 0.032) {
-		m_Accumulator = 0.032;
+	// XVŽžŠÔ‚ð§Œä‚·‚é‚½‚ß‚Éˆì‚ê‚½•ª‚Íí‚é
+	if (m_Accumulator > RESTRICTION_DELTA_TIME) {
+		m_Accumulator = RESTRICTION_DELTA_TIME;
 	}
 }
 

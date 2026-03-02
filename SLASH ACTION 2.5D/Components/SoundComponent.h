@@ -20,14 +20,26 @@ public:
 
 	void AddSoundLabel(const std::string& label);
 
+	// 登録されたサウンドが１つなら
+	void Play();
+	
 	// 引数で指定したサウンドを再生する
 	void Play(const std::string& label);
+
+	// 登録されたサウンドが１つなら
+	void Stop();
 
 	// 引数で指定したサウンドを停止する
 	void Stop(const std::string& label);
 
+	// 登録されたサウンドが１つなら
+	void Resume();
+
 	// 引数で指定したサウンドの再生を再開する
 	void Resume(const std::string& label);
+
+	// 登録されたサウンドが１つなら
+	void SetVolume(const float volume);
 
 	// 引数で指定したサウンドの音量を調整する
 	void SetVolume(const std::string& label,const float volume);
