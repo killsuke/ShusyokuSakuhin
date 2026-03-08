@@ -4,6 +4,7 @@
 #pragma once
 #include <d3d11.h>  // DirectX11を使うためのヘッダーファイル
 #include <DirectXMath.h>
+#include <array>
 
 #include <Xinput.h> //XInputを使うためのヘッダーファイル
 #pragma comment (lib, "xinput.lib") //XInputを使うために必要
@@ -60,11 +61,15 @@
 #define VK_Y 0x59
 #define VK_Z 0x5A
 
+namespace {
+	constexpr unsigned int MAX_KEY_STATE = 256;
+}
+
 class Input final{
 private:
 	//キー入力情報を保存する変数
-	static inline BYTE m_KeyState[256] = {};
-	static inline BYTE m_KeyState_old[256] = {};
+	static inline BYTE m_KeyState[MAX_KEY_STATE] = {};
+	static inline BYTE m_KeyState_old[MAX_KEY_STATE] = {};
 
 	//コントローラー入力情報を保存する変数
 	static inline XINPUT_STATE m_ControllerState = {};
@@ -85,9 +90,12 @@ private:
 	static inline bool m_IsRightButtonTriggered = false; // 押された瞬間
 	static inline bool m_IsRightButtonReleased = false;  // 離された瞬間
 
+	static inline POINT prevPt = { 0, 0 }; // 前フレームのマウス座標を保持する変数
+	static inline DirectX::XMFLOAT2 vec2 = {}; // 前フレームの正規化されたマウス座標を保持する変数
+
 	// コンストラクタ・デストラクタを削除
-	Input();
-	~Input();
+	Input() = delete;
+	~Input() = delete;
 
 	// コピー・ムーブも削除
 	Input(const Input&) = delete;
@@ -100,6 +108,9 @@ private:
 	static void ClickUpdate();
 
 public:
+
+	static void Init();
+	static void UnInit();
 
 	static void Update(); //更新
 

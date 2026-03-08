@@ -50,6 +50,8 @@ HRESULT DirectXRender::Init() {
 
 	CreateTimeBuffer();	// 時間管理用定数バッファ作成、１１番目
 
+	CreateShadowBuffer(); // シャドウ用定数バッファ作成、１２番目
+
 	//MaterialSetting();
 
 	SetBlendState(EBlendState::BS_ALPHABLEND);
@@ -85,6 +87,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_MaterialBuffer);
 	SAFE_RELEASE(m_GlowBuffer);
 	SAFE_RELEASE(m_TimeBuffer);
+	SAFE_RELEASE(m_ShadowBuffer);
 	SAFE_RELEASE(m_RingGlowBuffer);
 	SAFE_RELEASE(m_HitFlashBuffer);
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
@@ -684,6 +687,26 @@ HRESULT DirectXRender::CreateTimeBuffer() {
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::TIME), 1, &m_TimeBuffer);
 	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::TIME), 1, &m_TimeBuffer);
 
+	return hr;
+}
+
+HRESULT DirectXRender::CreateShadowBuffer() {
+	HRESULT hr = S_OK;
+	// 定数バッファ生成
+	D3D11_BUFFER_DESC bufferDesc{};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);
+	bufferDesc.ByteWidth = sizeof(ShadowBuffer);
+	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_ShadowBuffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		return hr;
+	}
+	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::SHADOW), 1, &m_ShadowBuffer);
+	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::SHADOW), 1, &m_ShadowBuffer);
 	return hr;
 }
 

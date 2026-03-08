@@ -9,6 +9,7 @@
 #include "Manager/TimeManager.h"
 #include "Manager/ShaderManager.h"
 #include "DebugSystem/DebugSystem.h"
+#include "Input/Input.h"
 
 #if _DEBUG
 
@@ -190,6 +191,7 @@ void Application::MainLoop()
 	EventBusManager::Init();
 	ShaderManager::Init();
 	DebugSystem::Init();
+	Input::Init();
 
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 	ID3D11Device* device = DirectXRender::GetDevice();
@@ -308,6 +310,7 @@ void Application::MainLoop()
 
 
 	// 片付け
+	Input::UnInit();
 	DebugSystem::UnInit();
 	ComponentTypeManager::UnInit();
 	EventBusManager::UnInit();

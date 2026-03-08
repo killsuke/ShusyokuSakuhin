@@ -7,7 +7,13 @@
 #include <Windows.h>
 
 using namespace DirectX;
-using namespace std;
+
+namespace {
+
+	constexpr float MAX_MOVE_SPEED = 5.0f; // 最大移動速度
+	constexpr float SLOW_MOVE_MULTIPLIER = 0.5f; // スローモードの速度倍率
+	constexpr XMFLOAT3 UP_VECTOR = XMFLOAT3(0.0f, 1.0f, 0.0f); // 上方向ベクトル
+}
 
 DebugCameraComponent::DebugCameraComponent(GameObject& obj) : CameraComponent(obj)
 {
@@ -36,15 +42,14 @@ void DebugCameraComponent::Update()
 		const XMVECTOR forwardNorm = XMVector3Normalize(forwardVec);
 		XMStoreFloat3(&forward, forwardNorm);
 
-		const XMFLOAT3 up = XMFLOAT3(0.0f, 1.0f, 0.0f);
-		const XMVECTOR upVec = XMLoadFloat3(&up);
+		const XMVECTOR upVec = XMLoadFloat3(&UP_VECTOR);
 
-		XMFLOAT3 right = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		XMFLOAT3 right = XMFLOAT3();
 		XMVECTOR rightVec = XMVector3Cross(upVec, forwardVec);
 		rightVec = XMVector3Normalize(rightVec);
 		XMStoreFloat3(&right, rightVec);
 
-		XMFLOAT3 move = XMFLOAT3(0.0f, 0.0f, 0.0f);	// 初期化
+		XMFLOAT3 move = XMFLOAT3();	// 初期化
 
 #if _DEBUG
 
@@ -70,10 +75,10 @@ void DebugCameraComponent::Update()
 			move -= right;
 		}
 		if (upMove) {
-			move += up;
+			move += UP_VECTOR;
 		}
 		if (downMove) {
-			move -= up;
+			move -= UP_VECTOR;
 		}
 		if (shiftMove) {
 			m_Target.x = pos.x;
@@ -87,10 +92,10 @@ void DebugCameraComponent::Update()
 			moveVec = XMVector3Normalize(moveVec);
 			XMStoreFloat3(&move, moveVec);
 			if (slowMove) {
-				move *= 0.5f; // 移動速度
+				move *= SLOW_MOVE_MULTIPLIER; // 移動速度
 			}
 			else {
-				move *= 5.0f; // 移動速度
+				move *= MAX_MOVE_SPEED; // 移動速度
 			}
 		}
 

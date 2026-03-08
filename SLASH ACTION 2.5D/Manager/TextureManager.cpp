@@ -22,13 +22,12 @@ void TextureManager::UnInit() {
 void TextureManager::LoadFolder(const std::string& path) {
 
     // 指定されたディレクトリのフォルダを開き読み込む
-    for (auto& file : directory_iterator(path)) {
+    for (const directory_entry& file : directory_iterator(path)) {
 
         // 通常ファイルであれば読み込む
         if (file.is_regular_file()) {
 
             std::string name = file.path().filename().string(); // 拡張子を除いたファイル名
-            std::string full_path = file.path().string(); // フルパス
 
 			// テクスチャの読み込み
             if (!LoadTexture(name)) {

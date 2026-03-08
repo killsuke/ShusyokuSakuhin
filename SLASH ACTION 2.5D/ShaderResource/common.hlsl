@@ -1,3 +1,5 @@
+#define SHADOW_OBJECT_MAX (32)
+
 //cbuffer WorldBuffer : register(b0)
 //{
 //	matrix World;
@@ -41,6 +43,17 @@ struct PS_IN
     float2 tex : TEXCOORD0;
 };
 
+struct PS_SHADOW
+{
+    float4 pos : SV_POSITION;
+    float4 col : COLOR;
+    float2 tex : TEXCOORD0;
+
+    float4 worldPos : TEXCOORD1;
+    float4 worldNormal : TEXCOORD2;
+    float height : TEXCOORD3;
+};
+
 struct LIGHT
 {
     float4 Direction; // 方向
@@ -57,6 +70,12 @@ struct MATERIAL
     float Shininess;
     bool TextureEnable;
     float2 Padding;
+};
+
+struct ShadowData
+{
+    float3 objectPos; // オブジェクトの位置
+    float shadowRadius; // 影の半径
 };
 
 // 定数バッファ受け取り
@@ -175,4 +194,11 @@ cbuffer TimeBuffer : register(b11)
     float TotalTime; // ゲーム開始からの総時間
     float DeltaTime; // 前フレームからの経過時間
     float2 Padding;
+};
+
+cbuffer ShadowBuffer : register(b12)
+{
+    ShadowData shadows[SHADOW_OBJECT_MAX];
+    int shadowCount;
+    float3 padding3; // 4の倍数にするためのパディング
 };

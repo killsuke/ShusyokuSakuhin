@@ -32,13 +32,25 @@ EnemyActionHopperComponent::~EnemyActionHopperComponent() {
 void EnemyActionHopperComponent::Update() {
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
-	auto player = GameObjectManager::GameObjectFindTag("Player");
-	auto playPos = player[0]->GetComponent<TransformComponent>()->GetPosition();
-	auto myPos = m_Object->GetComponent<TransformComponent>()->GetPosition();
-	auto rend = m_Object->GetComponent<Render2DComponent>();
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+
+	if (player == nullptr || rigid == nullptr) {
+		return;
+	}
+
+	TransformComponent* playTrans = player->GetComponent<TransformComponent>();
+	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+
+	if (playTrans == nullptr || myTrans == nullptr || rend == nullptr) {
+		return;
+	}
+
+	const XMFLOAT3 playPos = playTrans->GetPosition();
+	const XMFLOAT3 myPos = myTrans->GetPosition();
 	bool jumpFlag = false;
 
-	XMFLOAT3 delta = playPos - myPos;
+	const XMFLOAT3 delta = playPos - myPos;
 
 	const XMVECTOR deltaVec = XMLoadFloat3(&delta);
 	const float length = XMVectorGetX(XMVector3Length(deltaVec));
@@ -76,13 +88,14 @@ void EnemyActionHopperComponent::Update() {
 
 	m_IsBeforeJump = jumpFlag;
 
-//	rigid->ReduceVelocity_X(0.5f);
+	//rigid->ReduceVelocity_X(0.5f);
 }
 
 void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
-	auto jump = m_Object->GetComponent<JumpComponent>();
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
-	auto testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	JumpComponent* jump = m_Object->GetComponent<JumpComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	TestExtrusionJudgeComponent* testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
 	bool isGround = testExtrusion->GetIsGround();
 
 	if (isGround == true) {
@@ -90,10 +103,14 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	}
 	else {
 		if (m_IsRightLeft == RightLeft::LEFT) {
-			rigid->ConstantVelocity_X(-30.0f);
+			//rigid->ConstantVelocity_X(-30.0f);
+
+			myTrans->AddPosition({ -0.5f,0.0f,0.0f });
 		}
-		else if(m_IsRightLeft == RightLeft::RIGHT){
-			rigid->ConstantVelocity_X(30.0f);
+		else if (m_IsRightLeft == RightLeft::RIGHT) {
+			//rigid->ConstantVelocity_X(30.0f);
+
+			myTrans->AddPosition({ 0.5f,0.0f,0.0f });
 		}
 	}
 
@@ -122,14 +139,14 @@ void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
 	const XMFLOAT3 playPos = playerTrans->GetPosition();
 	const XMFLOAT3 enemyPos = enemyTrans->GetPosition();
 
-	
-		if (enemyPos.x > playPos.x) {
-			rigid->AddVelocity_X(-100.0f);
-		}
-		else if (enemyPos.x < playPos.x) {
-			rigid->AddVelocity_X(100.0f);
-		}
-		rigid->AddVelocity_Y(50.0f);
-	
-	
+
+	if (enemyPos.x > playPos.x) {
+		rigid->AddVelocity_X(100.0f);
+	}
+	else if (enemyPos.x < playPos.x) {
+		rigid->AddVelocity_X(-100.0f);
+	}
+	rigid->AddVelocity_Y(50.0f);
+
+
 }

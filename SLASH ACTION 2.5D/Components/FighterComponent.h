@@ -9,6 +9,12 @@ struct HitEvent {
 	uint32_t targetID;   // 被攻撃者のインスタンスID
 };
 
+struct DamageEvent {
+	uint32_t attackerID; // 攻撃者のインスタンスID
+	uint32_t targetID;   // 被攻撃者のインスタンスID
+	int damage;			// ダメージ量
+};
+
 class FighterComponent final : public Component
 {
 private:
@@ -58,7 +64,7 @@ public:
 		}
 	};
 
-	void DamageProcess();
+	void DamageProcess(const HitEvent& event);
 	// ヒットした際のイベント
 	void OnHit(const HitEvent& event);
 };

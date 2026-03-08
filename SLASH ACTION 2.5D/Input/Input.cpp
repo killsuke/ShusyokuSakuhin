@@ -1,15 +1,12 @@
 #include "Input/Input.h"
 #include "System/Application.h"
 
+void Input::Init() {
 
-//コンストラクタ
-Input::Input()
-{
 }
 
-//デストラクタ
-Input::~Input()
-{
+void Input::UnInit() {
+
 	//振動を終了させる
 	XINPUT_VIBRATION vibration;
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
@@ -21,7 +18,7 @@ Input::~Input()
 void Input::Update()
 {
 	//1フレーム前の入力を記録しておく
-	for (int i = 0; i < 256; ++i) {
+	for (unsigned int i = 0; i < MAX_KEY_STATE; ++i) {
 		m_KeyState_old[i] = m_KeyState[i]; 
 	}
 	m_ControllerState_old = m_ControllerState;
@@ -130,8 +127,6 @@ void Input::SetVibration(int frame, float powor)
 
 // マウスの座標情報を返す
 DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
-	static POINT prevPt = { -1,-1 };	// 前フレームのマウスの座標
-	static DirectX::XMFLOAT2 vec2 = {};		// 前フレームの正規化された座標
 
 	POINT pt;	// マウスの座標取得（宣言）
 
@@ -152,8 +147,8 @@ DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 				const int height = clientRect.bottom - clientRect.top;	// ウィンドウの縦幅を計算
 
 				// 補正処理（座標の正規化）
-				vec2.x = static_cast<float>(pt.x) / static_cast<float>(width) * SCREEN_WIDTH - (SCREEN_WIDTH / 2.0f);
-				vec2.y = (static_cast<float>(pt.y) / static_cast<float>(height) * SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.0f)) * -1.0f;
+				vec2.x = static_cast<float>(pt.x) / static_cast<float>(width) * SCREEN_WIDTH - (SCREEN_WIDTH * 0.5f);
+				vec2.y = -(static_cast<float>(pt.y) / static_cast<float>(height) * SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.5f));
 
 				// 前フレームのマウス座標を更新
 				prevPt = pt;

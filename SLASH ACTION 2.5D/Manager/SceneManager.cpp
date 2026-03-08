@@ -5,6 +5,7 @@
 #include "System/Application.h"
 #include "DebugSystem/DebugSystem.h"
 #include "SoundManager.h"
+#include "ShadowManager.h"
 
 void SceneManager::Init() {
 	SoundManager::Init();	// ƒTƒEƒ“ƒh‚Ì‰Šú‰»
@@ -43,6 +44,8 @@ void SceneManager::Update() {
 	}
 
 	GameObjectManager::Update();
+
+	ShadowManager::Update();
 };
 
 // •`‰æ

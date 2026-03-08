@@ -33,7 +33,7 @@ void PlayerDamageComponent::Update()
 	// ‚±‚±‚ÅƒvƒŒƒCƒ„[‚ð‚¿‚å‚Á‚Æ‚Á”ò‚Î‚·ˆ—‚à’Ç‰Á‚·‚é—\’è
 	if (collObjMe != nullptr) {
 
-		for (auto& objOther : objOthers) {
+		for (GameObject* objOther : objOthers) {
 			ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
 			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
 				*collObjOther, *collObjMe)) {

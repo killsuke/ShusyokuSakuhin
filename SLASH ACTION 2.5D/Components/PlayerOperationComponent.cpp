@@ -33,6 +33,8 @@ namespace {
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
 	constexpr float ChargeSlashStopTime = 0.15f; // チャージスラッシュ終了時間
 	constexpr float ChargeSlashEndTime = 0.45f; // チャージスラッシュ終了時間
+	constexpr float DONT_MOVE_TIME = 0.3f; // ダメージを受けてから移動できない時間
+	constexpr float DEFAULT_KNOCKBACK_POWER = 500.0f; // デフォルトのノックバックの力
 	constexpr XMFLOAT3 MoveRightSpeed = XMFLOAT3(1.5f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 MoveLeftSpeed = XMFLOAT3(-1.5f, 0.0f, 0.0f);
 	constexpr XMFLOAT3 DashRightSpeed = XMFLOAT3(5.0f, 0.0f, 0.0f);
@@ -42,15 +44,18 @@ namespace {
 }
 
 PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
 
-	/*m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_KnockBackPower = DEFAULT_KNOCKBACK_POWER; // ノックバックの力を初期化
+
+	m_listenerID_HitEvent = EventBusManager::Subscribe<DamageEvent>([&](const DamageEvent& e) {
 		OnDamageHit(e);
-		});*/
+		});
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
-	//	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
 }
 
 void PlayerOperationComponent::TestProcess() {
@@ -74,11 +79,11 @@ void PlayerOperationComponent::Update() {
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
 
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
-	//RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	RenderCharacterComponent* rend = m_Object->GetComponent<RenderCharacterComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	if (fighter == nullptr/* || rigid == nullptr*/)
+	if (fighter == nullptr || rigid == nullptr)
 	{
 		return;
 	}
@@ -153,6 +158,8 @@ void PlayerOperationComponent::Update() {
 	}
 
 	StateUpdate();
+
+	rigid->ReduceVelocity_X(0.5f); // 毎フレーム減速
 }
 
 void PlayerOperationComponent::ChangeState(const PlayerState& state) {
@@ -241,6 +248,7 @@ void PlayerOperationComponent::StateUpdate() {
 	const bool keyCAttack = Input::GetKeyRelease(VK_RETURN) || Input::GetButtonRelease(XINPUT_X);
 
 	TestExtrusionJudgeComponent* extrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	bool isGround = false;
 
 	// ここで地面か空中か判断
@@ -294,6 +302,26 @@ void PlayerOperationComponent::StateUpdate() {
 		FastChageSlash();
 		break;
 	case PlayerState::DAMAGE:
+
+		if (rigid != nullptr) {
+
+			m_KnockBackPower *= 0.9f; // ダメージを受けるたびにノックバックの力が増す
+			if (m_KnockBackRightLeft == RightLeft::RIGHT) {
+				// 左から攻撃されたら右に吹き飛ぶ
+				rigid->AddVelocity_X(m_KnockBackPower);
+			}
+			else if (m_KnockBackRightLeft == RightLeft::LEFT) {
+				// 右から攻撃されたら左に吹き飛ぶ
+				rigid->AddVelocity_X(-m_KnockBackPower);
+			}
+		}
+
+		m_DamageRecordTime += DeltaTime;
+		if (m_DamageRecordTime >= DONT_MOVE_TIME) {
+			m_DamageRecordTime = 0.0f;
+			m_KnockBackPower = DEFAULT_KNOCKBACK_POWER;
+			ChangeState(PlayerState::NONE);
+		}
 		break;
 	case PlayerState::DEAD:
 		break;
@@ -306,12 +334,18 @@ void PlayerOperationComponent::StateUpdate() {
 
 	JumpComponent* jumpComp = m_Object->GetComponent<JumpComponent>();
 	if (jumpComp != nullptr) {
-		jumpComp->SetJumpPress(keyUp);
+
+		bool isNonDamage = true;
+		if (m_CurrentState == PlayerState::DAMAGE) {
+			isNonDamage = false;
+		}
+		jumpComp->SetJumpPress(keyUp && isNonDamage);
 	}
 
 	m_beforeMove = isMove;
 
-	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::CHARGE_SLASH) {
+	// どのキーも押されていないときは状態をNONEにする
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::DAMAGE) {
 		ChangeState(PlayerState::NONE);
 	}
 }
@@ -483,7 +517,7 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 		chargePerf->SetActiveFlag(false);
 		chargePerf->ResetAllParticles();
 		chargePerf->SetChargeCompleteFlag(false);
-		
+
 	}
 }
 
@@ -583,7 +617,7 @@ void PlayerOperationComponent::FastChageSlash() {
 	}
 }
 
-void PlayerOperationComponent::OnDamageHit(const HitEvent& event) {
+void PlayerOperationComponent::OnDamageHit(const DamageEvent& event) {
 
 	const uint32_t targetID = m_Object->GetInstanceID();
 
@@ -607,14 +641,16 @@ void PlayerOperationComponent::OnDamageHit(const HitEvent& event) {
 	XMFLOAT3 atPos = atTrans->GetPosition();
 	XMFLOAT3 taPos = taTrans->GetPosition();
 
-	XMVECTOR atVec = XMLoadFloat3(&atPos);
-	XMVECTOR taVec = XMLoadFloat3(&taPos);
+	if (atPos.x < taPos.x) {
 
-	// ノックバック用のベクトル計算
-	XMVECTOR delta = taVec - atVec;
-	float lenSq = XMVectorGetX(XMVector3LengthSq(delta));
+		m_KnockBackRightLeft = RightLeft::RIGHT;
+	}
+	else {
 
+		m_KnockBackRightLeft = RightLeft::LEFT;
+	}
 
+	ChangeState(PlayerState::DAMAGE);
 }
 
 void PlayerOperationComponent::CreateSlashEffect() {

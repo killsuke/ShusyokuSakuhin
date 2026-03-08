@@ -62,7 +62,7 @@ void FighterComponent::Update() {
 	}
 }
 
-void FighterComponent::DamageProcess() {
+void FighterComponent::DamageProcess(const HitEvent& event) {
 
 	if (m_useInvincible == true) {
 
@@ -70,6 +70,15 @@ void FighterComponent::DamageProcess() {
 			if (m_totalDamage > 0 && m_invincibleFlag == false) {
 				m_invincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
 				m_hp -= m_totalDamage;
+
+				DamageEvent de = { 
+					event.attackerID,
+					event.targetID,
+					m_totalDamage
+				};
+
+				EventBusManager::Push(de);
+
 				m_totalDamage = 0;
 			}
 		}
@@ -83,6 +92,14 @@ void FighterComponent::DamageProcess() {
 		if (m_totalDamage > 0) {
 			// 合計ダメージを引く
 			m_hp -= m_totalDamage;
+
+			DamageEvent de = {
+					event.attackerID,
+					event.targetID,
+					m_totalDamage
+			};
+
+			EventBusManager::Push(de);
 			m_totalDamage = 0;
 		}
 	}
@@ -115,5 +132,5 @@ void FighterComponent::OnHit(const HitEvent& event) {
 		return; // 自分宛じゃないなら無視
 	}
 	// ダメージを受ける処理
-	DamageProcess();
+	DamageProcess(event);
 }

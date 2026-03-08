@@ -5,8 +5,10 @@
 #include	<iostream>
 #include	<io.h>
 #include	<vector>
+#include	<array>
 #include	<Windows.h>
 #include "Structs/RenderElement.h"
+#include "Manager/ShadowManager.h"
 
 //外部ライブラリ
 #pragma comment(lib,"directxtk.lib")
@@ -55,6 +57,7 @@ enum class EBufferTypes {
 	OVER_VERTEX,
 	GLOW,
 	TIME,
+	SHADOW,
 
 	MAX
 };
@@ -225,6 +228,7 @@ private:
 	static inline ID3D11Buffer* m_GlowBuffer = nullptr;				// グロー用定数バッファ、１０番目
 	static inline ID3D11Buffer* m_RingGlowBuffer = nullptr;			// リンググロー用定数バッファ、１０番目
 	static inline ID3D11Buffer* m_TimeBuffer = nullptr;				// 時間管理用定数バッファ、１１番目
+	static inline ID3D11Buffer* m_ShadowBuffer = nullptr;				// 丸影用バッファ、１２番目
 
 	DirectXRender() = default;
 	~DirectXRender() = default;
@@ -258,6 +262,7 @@ private:
 	static HRESULT CreateMotionBlurBuffer();
 	static HRESULT CreateGlowBuffer();
 	static HRESULT CreateTimeBuffer();
+	static HRESULT CreateShadowBuffer();
 
 public:
 
@@ -317,7 +322,8 @@ public:
 	static ID3D11Buffer* GetGlowBuffer() { return m_GlowBuffer; };
 	static ID3D11Buffer* GetRingGlowBuffer() { return m_RingGlowBuffer; };
 	static ID3D11Buffer* GetTimeBuffer() { return m_TimeBuffer; };
-
+	static ID3D11Buffer* GetShadowBuffer() { return m_ShadowBuffer; };
+	static ID3D11SamplerState* GetSampler() { return m_Sampler; };
 
 	//=============================================================================
 	// ブレンド ステート設定

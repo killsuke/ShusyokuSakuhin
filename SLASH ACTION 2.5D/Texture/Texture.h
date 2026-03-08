@@ -68,6 +68,8 @@ public:
 
 	std::string GetTexname() const { return m_Texname; };
 
+	ID3D11ShaderResourceView* GetShaderResourceView() const { return m_Srv.Get(); };
+
 	inline void SetInitialCut(const float sx, const float sy) {
 		m_SplitX = sx;
 		m_SplitY = sy;

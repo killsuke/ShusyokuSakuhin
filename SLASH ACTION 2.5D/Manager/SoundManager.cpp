@@ -51,10 +51,6 @@ HRESULT SoundManager::Init() {
 		return -1;
 	}
 
-	//LoadSoundJsonFile();
-
-	//LoadSoundFiles();
-
 	LoadFolder(BGMPath, true);
 	LoadFolder(SEPath, false);
 
@@ -140,8 +136,9 @@ HRESULT SoundManager::ReadChunkData(const HANDLE& hFile, void* buffer, const DWO
 // 指定されたフォルダ内のすべてのファイルを読み込む
 void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 
+	HRESULT hr = S_OK;
 	// 指定されたディレクトリのフォルダを開き読み込む
-	for (auto& file : directory_iterator(path)) {
+	for (const directory_entry& file : directory_iterator(path)) {
 
 		// 通常ファイルであれば読み込む
 		if (file.is_regular_file()) {
@@ -150,8 +147,11 @@ void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 			std::wstring full_path = file.path().wstring(); // フルパス
 
 			const wchar_t* c_path = full_path.c_str();
-
-			LoadWave(name, c_path, loop);
+			
+			hr = LoadWave(name, c_path, loop);
+			if (FAILED(hr)) {
+				std::wcerr << L"Failed to load sound file: " << full_path << L". Error code: " << hr << std::endl;
+			}
 		}
 	}
 }

@@ -23,14 +23,14 @@ void TestExtrusionJudgeComponent::Update()
 	JumpComponent* jump = m_Object->GetComponent<JumpComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	if (terrains.empty()) {
-		return;
+	if(terrains.empty() || coll == nullptr || rigid == nullptr || transform == nullptr) {
+		return; // テレインが存在しない、または必要なコンポーネントが存在しない場合は終了
 	}
 
 	m_isGround = false;
 	m_isCeiling = false;
 
-	for (auto& terrain : terrains) {
+	for (GameObject* terrain : terrains) {
 		ColliderComponent* terrainColl = terrain->GetComponent<ColliderComponent>();
 		if (terrainColl == nullptr) {
 			continue; // コライダーが存在しない場合はスキップ

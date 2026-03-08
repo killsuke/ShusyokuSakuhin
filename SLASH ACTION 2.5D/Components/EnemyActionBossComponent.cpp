@@ -22,7 +22,7 @@ using namespace DirectX;
 
 namespace {
 
-	constexpr float BulletTiming = 0.25f;
+	constexpr float BulletTiming = 0.35f;
 	constexpr float JumpMoveX = 2.0f;
 	constexpr float TargetLength = 20.0f;
 	constexpr float MoveSpeed = 0.2f;

@@ -52,68 +52,21 @@ float ArbitraryRotationComponent::NormalizeAngleRadian(float rad) {
 	return result;
 }
 
-//void ArbitraryRotationComponent::SimulationMove() {
-//
-//	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
-//
-//	if (trailRender != nullptr) {
-//		m_worldPosQuats.clear();
-//		auto transform = m_Object->GetComponent<TransformComponent>();
-//		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
-//		const auto centerPos = centerTrans->GetPosition();
-//		const auto centerQuat = centerTrans->GetQuaternion();
-//
-//		// ラジアンに変換
-//		const float startRad = XMConvertToRadians(m_StartAngle);
-//		const float endRad = XMConvertToRadians(m_EndAngle);
-//
-//		// 分割ステップ
-//		const float stepRad = (endRad - startRad) / m_SampleDivisions;
-//
-//		for (int i = 0; i <= m_SampleDivisions; ++i) {
-//
-//			float totalAngle = startRad + stepRad * i;
-//			totalAngle = NormalizeAngleRadian(totalAngle);
-//
-//			// 正確に合わせるならこの処理が必要だが、なぜかこれを使うとちょっとズレる
-//			// なので後に修正
-//			//if (fabs(simulationRad) > m_TargetRotationAmount) {
-//			//	// 目標角度に到達したら、正確に目標角度に合わせる
-//			//	if (m_clockwise == true) {
-//			//		simulationRad = -m_TargetRotationAmount;
-//			//	}
-//			//	else {
-//			//		simulationRad = m_TargetRotationAmount;
-//			//	}
-//			//}
-//
-//			const XMVECTOR baseOffset = XMVectorSet(m_radius, 0.0f, 0.0f, 0.0f);
-//			XMVECTOR axis = XMVector3Normalize(m_ArbitraryAxis); 	// 回転軸を設定
-//
-//			const XMVECTOR rotationQuat = XMQuaternionRotationAxis(axis, totalAngle);
-//			const XMVECTOR rotatedOffset = XMVector3Rotate(baseOffset, rotationQuat);
-//
-//			XMFLOAT3 newPos = {};
-//			XMStoreFloat3(&newPos, rotatedOffset);
-//			m_worldPosQuats.push_back(PosAndQuaternion(newPos, rotationQuat));
-//		}
-//
-//		trailRender->SetTrailPoint(m_worldPosQuats);
-//	}
-//}
-
 void ArbitraryRotationComponent::DefaultRollingMove() {
-	auto transform = m_Object->GetComponent<TransformComponent>();
 
-	auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
-	auto centerPos = centerTrans->GetPosition();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* centerTrans = m_CenterObject->GetComponent<TransformComponent>();
+
+	if(transform == nullptr || centerTrans == nullptr) {
+		return; // トランスフォームが取得できない場合は何もしない
+	}
+
+	XMFLOAT3 centerPos = centerTrans->GetPosition();
 
 	// 反転要求があれば、現在の角度を反転
 	if (m_flipRequested == true) {
 
-		float angle1 = XMConvertToDegrees(m_nowAngleRadian);
 		m_nowAngleRadian = -m_nowAngleRadian;
-		float angle2 = XMConvertToDegrees(m_nowAngleRadian);
 
 		// スタートとゴール時の回転角度を反転
 		if (m_StartAngle > 0) {
@@ -353,13 +306,14 @@ void ArbitraryRotationComponent::SwordSlashMove() {
 void ArbitraryRotationComponent::SimulationMove() {
 
 	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* centerTrans = m_CenterObject->GetComponent<TransformComponent>();
 
-	if (trailRender != nullptr) {
+	if (trailRender != nullptr && transform != nullptr && centerTrans != nullptr) {
 		m_worldPosQuats.clear();
-		auto transform = m_Object->GetComponent<TransformComponent>();
-		auto centerTrans = m_CenterObject->GetComponent<TransformComponent>();
-		const auto centerPos = centerTrans->GetPosition();
-		const auto centerQuat = centerTrans->GetQuaternion();
+		
+		const XMFLOAT3 centerPos = centerTrans->GetPosition();
+		const XMVECTOR centerQuat = centerTrans->GetQuaternion();
 
 		// ラジアンに変換
 		const float startRad = XMConvertToRadians(m_StartAngle);

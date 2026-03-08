@@ -20,11 +20,14 @@ class PlayerOperationComponent : public Component
 private:
 	float m_BlinkingRecordTime = 0.0f; // 無敵時間中の点滅の時間を記録
 	float m_ChargeSlashRecordTime = 0.0f;
+	float m_DamageRecordTime = 0.0f; // ダメージを受けてからの時間を記録
 	float m_ChargeTime = 0.0f; // チャージしている時間を記録する
 	float m_ChargeCompleteTime = 2.0f; // チャージ完了までの時間
+	float m_KnockBackPower = 0.0f; // ノックバックの力
 	uint64_t m_listenerID_HitEvent = 0;
 
 	RightLeft m_CurrentRightLeft = RightLeft::RIGHT; // 現在の向き管理
+	RightLeft m_KnockBackRightLeft = RightLeft::NONE; // ノックバックの向き管理
 	PlayerState m_CurrentState = PlayerState::NONE; // プレイヤーの状態管理
 	bool m_beforeMove = false; // 前回のフレームで移動していたかどうかのフラグ
 	bool m_IsMoveFlag = false; // 移動中かどうかのフラグ
@@ -41,7 +44,7 @@ private:
 	void Charge(const bool charge,const bool attack);
 	void CreateChargeSlash();
 	void FastChageSlash();	// 高速チャージスラッシュ攻撃
-	void OnDamageHit(const HitEvent& event);
+	void OnDamageHit(const DamageEvent& event);
 	void CreateSlashEffect();
 
 public:
