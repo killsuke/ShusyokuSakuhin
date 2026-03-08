@@ -35,7 +35,7 @@ void ShadowManager::Update()
         {
             ShadowData buf;
             buf.objectPos = playerTrans->GetPosition();
-            buf.shadowRadius = playerTrans->GetScale().x * SHADOW_RADIUS_MULTIPLIER;
+            buf.shadowRadius = playerTrans->GetScale().x * SHADOW_RADIUS_MULTIPLIER_PLAYER;
 
             m_ShadowBuffers[0] = buf;
             count = 1; // “G‚Í 1 ”Ô–Ú‚©‚ç
@@ -58,7 +58,7 @@ void ShadowManager::Update()
 
         ShadowData buf;
         buf.objectPos = enemyTrans->GetPosition();
-        buf.shadowRadius = enemyTrans->GetScale().x * SHADOW_RADIUS_MULTIPLIER;
+        buf.shadowRadius = enemyTrans->GetScale().x * SHADOW_RADIUS_MULTIPLIER_ENEMY;
 
         m_ShadowBuffers[count] = buf;
         ++count;

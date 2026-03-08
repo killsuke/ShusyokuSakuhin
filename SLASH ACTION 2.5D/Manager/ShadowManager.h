@@ -9,7 +9,8 @@ namespace {
 
 	constexpr size_t SHADOW_OBJECT_MAX = 32; // シャドウオブジェクトの最大数
 	constexpr size_t ENEMY_MAX = SHADOW_OBJECT_MAX - 1; // 敵の最大数（プレイヤーの分を残しておく）
-	constexpr float SHADOW_RADIUS_MULTIPLIER = 2.5f; // シャドウの半径をオブジェクトのスケールに対してどれだけ大きくするかの倍率
+	constexpr float SHADOW_RADIUS_MULTIPLIER_PLAYER = 2.5f; // シャドウの半径をオブジェクトのスケールに対してどれだけ大きくするかの倍率
+	constexpr float SHADOW_RADIUS_MULTIPLIER_ENEMY = 1.5f; // シャドウの半径をオブジェクトのスケールに対してどれだけ大きくするかの倍率
 }
 
 struct ShadowData {

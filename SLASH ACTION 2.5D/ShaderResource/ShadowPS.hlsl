@@ -19,7 +19,9 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
         float height = input.worldPos.y - shadows[i].objectPos.y; // オブジェクトとピクセルの高さ差を計算
         float heightFade = saturate(1.0f - height * 0.1f); // 高さに基づいて影の強さを計算
 
-        float heightScale = saturate(1.0f / (1.0f + height * 0.05f));
+        float heightAbs = abs(input.worldPos.y - shadows[i].objectPos.y); // オブジェクトとピクセルの高さ差を計算
+
+        float heightScale = saturate(1.0f / (heightAbs * 0.1f));
         
         float radius = shadows[i].shadowRadius * heightScale; // 高さに基づいて影の半径を調整
         
@@ -42,14 +44,11 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
         float normalMask = saturate(dot(input.worldNormal.xyz, float3(0, 1, 0))); // 上面に影、横面は弱く、下面には出ず
         s *= normalMask; // 法線の向きに基づいて影の強さを調整
             
-        
+        s *= heightScale; // 高さによるスケーリングを影の強さに乗算
         
         s *= heightFade; // 高さによるフェードを影の強さに乗算
         
         shadow = max(shadow, s); // 複数の影がある場合は最大値を取る)
-        
-        //shadow += s; // 複数の影がある場合は加算
-        //shadow = saturate(shadow); // 影の強さを0～1にクランプ
     }
     
     if (Material.TextureEnable)
