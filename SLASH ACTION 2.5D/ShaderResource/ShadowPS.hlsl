@@ -21,7 +21,7 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
 
         float heightAbs = abs(input.worldPos.y - shadows[i].objectPos.y); // オブジェクトとピクセルの高さ差を計算
 
-        float heightScale = saturate(1.0f / (heightAbs * 0.1f));
+        float heightScale = saturate(1.0f / (heightAbs * 0.04f));
         
         float radius = shadows[i].shadowRadius * heightScale; // 高さに基づいて影の半径を調整
         
@@ -46,7 +46,7 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
             
         s *= heightScale; // 高さによるスケーリングを影の強さに乗算
         
-        s *= heightFade; // 高さによるフェードを影の強さに乗算
+//        s *= heightFade; // 高さによるフェードを影の強さに乗算
         
         shadow = max(shadow, s); // 複数の影がある場合は最大値を取る)
     }
@@ -62,7 +62,7 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
         color = input.col * Material.Diffuse;
     }
 
-    color.rgb *= (1.0f - shadow * 0.7f); // 影の強さに応じて色を暗くする
+    color.rgb *= (1.0f - shadow * 1.5f); // 影の強さに応じて色を暗くする
     
     return color;
 }

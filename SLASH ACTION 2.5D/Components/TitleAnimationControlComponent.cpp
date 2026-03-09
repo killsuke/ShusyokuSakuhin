@@ -47,6 +47,9 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	TransformComponent* startTrans = startUI->AddComponent<TransformComponent>();
 	startTrans->SetPosition({ 0.0f,-200.0f,-8.0f });
 	startTrans->SetScale({ 130.0f,30.0f,1.0f });
+	SoundComponent* soundStart = startUI->AddComponent<SoundComponent>();
+	soundStart->AddSoundLabel("Sword_Title");
+
 	Render3DComponent* startRend = startUI->AddComponent<Render3DComponent>();
 	startRend->CreateMesh<SquareMesh>();
 	startRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
@@ -357,6 +360,13 @@ void TitleAnimationControlComponent::GameStartWait() {
 	const bool IsUporDown = (Input::GetKeyTrigger(VK_W) || Input::GetKeyTrigger(VK_S) || Input::GetKeyTrigger(VK_UP) || Input::GetKeyTrigger(VK_DOWN)
 		|| Input::GetButtonTrigger(XINPUT_UP) || Input::GetButtonTrigger(XINPUT_DOWN));
 
+	SoundComponent* sound = m_StartUI->GetComponent<SoundComponent>();
+
+	if (sound != nullptr) {
+		sound->PlayOnce(0.0f);
+		sound->AddVolume(0.005f);
+	}
+
 	// ここで一連のアニメーション終了後の処理
 	m_StartUI->SetActiveState(ActiveState::ACTIVE);
 	m_EndUI->SetActiveState(ActiveState::ACTIVE);
@@ -374,10 +384,16 @@ void TitleAnimationControlComponent::GameStartWait() {
 		trans->SetPosition({ -200.0f,-200.0f,-8.0f });
 		// エンターキーを押してステージ1へ
 		if (IsEnter == true)
-		{
+		{			
+			if(sound != nullptr){
+				sound->Stop();
+			}
+
 			GameObject* fade = GameObjectManager::GameObjectFindNameUI("fade");
 			DoorFadeComponent* door = fade->GetComponent<DoorFadeComponent>();
 			door->SetBootDoor(true);
+
+			m_IsloopAnim = false;
 		}
 	}
 	else {
