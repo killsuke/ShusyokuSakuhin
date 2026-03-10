@@ -16,6 +16,7 @@
 #include "SoundComponent.h"
 
 TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) : Component(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
 
 	GameObject* titleUI = GameObjectManager::AddObject("titleUI", "TitleUI");
@@ -237,6 +238,10 @@ void TitleAnimationControlComponent::Update() {
 
 void TitleAnimationControlComponent::Slash1ActiveOn() {
 
+	if(m_SlashUI1 == nullptr){
+		return;
+	}
+
 	m_SlashUI1->SetActiveState(ActiveState::ACTIVE);
 	SoundComponent* sound = m_SlashUI1->GetComponent<SoundComponent>();
 	if (sound != nullptr) {
@@ -245,6 +250,10 @@ void TitleAnimationControlComponent::Slash1ActiveOn() {
 }
 
 void TitleAnimationControlComponent::Slash2ActiveOn() {
+
+	if(m_SlashUI2 == nullptr){
+		return;
+	}
 
 	m_SlashUI2->SetActiveState(ActiveState::ACTIVE);
 	SoundComponent* sound = m_SlashUI2->GetComponent<SoundComponent>();
@@ -255,11 +264,21 @@ void TitleAnimationControlComponent::Slash2ActiveOn() {
 
 void TitleAnimationControlComponent::SlashesActiveOff() {
 
+	if(m_SlashUI1 == nullptr || m_SlashUI2 == nullptr){
+		return;
+	}
+
 	m_SlashUI1->SetActiveState(ActiveState::ALL_STOP);
 	m_SlashUI2->SetActiveState(ActiveState::ALL_STOP);
 }
 
 void TitleAnimationControlComponent::TrianglesActiveOn() {
+
+	for(const auto& triangle : m_Triangles){
+		if(triangle == nullptr){
+			return;
+		}
+	}
 
 	RigidBodyComponent* rigid1 = m_Triangles[0]->GetComponent<RigidBodyComponent>();
 	RigidBodyComponent* rigid2 = m_Triangles[1]->GetComponent<RigidBodyComponent>();
@@ -305,6 +324,10 @@ void TitleAnimationControlComponent::TrianglesActiveOn() {
 
 void TitleAnimationControlComponent::SwordMoveStart() {
 
+	if (m_Sword3D == nullptr) {
+		return;
+	}
+
 	SoundComponent* sound = m_Sword3D->GetComponent<SoundComponent>();
 	if (sound != nullptr) {
 		sound->Play();
@@ -312,6 +335,10 @@ void TitleAnimationControlComponent::SwordMoveStart() {
 }
 
 void TitleAnimationControlComponent::SwordMove() {
+
+	if (m_Sword3D == nullptr) {
+		return;
+	}
 
 	TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
 	if (trans != nullptr) {
@@ -321,6 +348,10 @@ void TitleAnimationControlComponent::SwordMove() {
 
 void TitleAnimationControlComponent::LogoRotating() {
 
+	if(m_TitleRogo == nullptr){
+		return;
+	}
+
 	TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
 	if (trans != nullptr) {
 		trans->AddRotation({ 0.0f,2.0f,0.0f });
@@ -328,6 +359,10 @@ void TitleAnimationControlComponent::LogoRotating() {
 }
 
 void TitleAnimationControlComponent::SwordSpecifiedPosition() {
+
+	if (m_Sword3D == nullptr) {
+		return;
+	}
 
 	TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
 	if (transSword != nullptr) {
@@ -339,6 +374,10 @@ void TitleAnimationControlComponent::SwordSpecifiedPosition() {
 
 void TitleAnimationControlComponent::SwordDown() {
 
+	if(m_Sword3D == nullptr){
+		return;
+	}
+
 	TransformComponent* trans = m_Sword3D->GetComponent<TransformComponent>();
 	if (trans != nullptr) {
 		trans->AddPosition({ -20.0f,-20.0f,0.0f });
@@ -346,6 +385,10 @@ void TitleAnimationControlComponent::SwordDown() {
 }
 
 void TitleAnimationControlComponent::SwordSheath() {
+
+	if(m_MiniSword3D == nullptr){
+		return;
+	}
 
 	SoundComponent* sound = m_MiniSword3D->GetComponent<SoundComponent>();
 	if (sound != nullptr) {
@@ -359,6 +402,10 @@ void TitleAnimationControlComponent::GameStartWait() {
 	const bool IsEnter = (Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A));
 	const bool IsUporDown = (Input::GetKeyTrigger(VK_W) || Input::GetKeyTrigger(VK_S) || Input::GetKeyTrigger(VK_UP) || Input::GetKeyTrigger(VK_DOWN)
 		|| Input::GetButtonTrigger(XINPUT_UP) || Input::GetButtonTrigger(XINPUT_DOWN));
+
+	if(m_StartUI == nullptr || m_EndUI == nullptr || m_MiniSword3D == nullptr){
+		return;
+	}
 
 	SoundComponent* sound = m_StartUI->GetComponent<SoundComponent>();
 
@@ -407,6 +454,10 @@ void TitleAnimationControlComponent::GameStartWait() {
 }
 
 void TitleAnimationControlComponent::SkipAnimation() {
+
+	if(m_EndUI == nullptr || m_StartUI == nullptr || m_MiniSword3D == nullptr){
+		return;
+	}
 
 	if (m_IsloopAnim == true) {
 

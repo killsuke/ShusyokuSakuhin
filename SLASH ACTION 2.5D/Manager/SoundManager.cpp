@@ -33,14 +33,14 @@ HRESULT SoundManager::Init() {
 	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hr)) {
 		CoUninitialize();
-		return -1;
+		return hr;
 	}
 
 	// 音声エンジン作成
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
 	if (FAILED(hr)) {
 		CoUninitialize();
-		return -1;
+		return hr;
 	}
 
 	// スピーカーへの最終出力ノード作成
@@ -48,7 +48,7 @@ HRESULT SoundManager::Init() {
 	if (FAILED(hr)) {
 		if (m_pXAudio2)	m_pXAudio2->Release();
 		CoUninitialize();
-		return -1;
+		return hr;
 	}
 
 	LoadFolder(BGMPath, true);
@@ -68,9 +68,13 @@ void SoundManager::UnInit() {
 		}
 	}
 
-	m_pMasteringVoice->DestroyVoice();
+	if (m_pMasteringVoice) {
+		m_pMasteringVoice->DestroyVoice();
+	}
 
-	if (m_pXAudio2) m_pXAudio2->Release();
+	if (m_pXAudio2) {
+		m_pXAudio2->Release();
+	}
 
 	// COMの破棄
 	CoUninitialize();
@@ -135,6 +139,11 @@ HRESULT SoundManager::ReadChunkData(const HANDLE& hFile, void* buffer, const DWO
 
 // 指定されたフォルダ内のすべてのファイルを読み込む
 void SoundManager::LoadFolder(const std::string& path, const bool loop) {
+
+	if(!exists(path)) {
+		std::cerr << "Directory does not exist: " << path << std::endl;
+		return;
+	}
 
 	HRESULT hr = S_OK;
 	// 指定されたディレクトリのフォルダを開き読み込む

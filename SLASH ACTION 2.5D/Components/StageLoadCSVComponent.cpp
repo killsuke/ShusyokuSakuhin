@@ -24,7 +24,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 	std::string usefilename = "csv/" + fileName;
 	std::ifstream file(usefilename);
 	if (!file.is_open()) {
-		throw std::runtime_error("ファイルが見つかりませんでした: " + fileName);
+	//	throw std::runtime_error("ファイルが見つかりませんでした: " + fileName);
 	}
 
 	// データを2次元ベクターに保存 

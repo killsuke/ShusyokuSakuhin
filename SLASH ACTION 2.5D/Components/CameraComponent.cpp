@@ -8,7 +8,6 @@
 #include <Windows.h>
 
 using namespace DirectX;
-using namespace std;
 
 CameraComponent::CameraComponent(GameObject& obj) : Component(obj)
 {

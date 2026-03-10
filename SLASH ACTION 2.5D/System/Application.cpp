@@ -184,6 +184,7 @@ void Application::MainLoop()
 		DirectXRender::UnInit();
 		return;
 	}
+
 	TimeManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");

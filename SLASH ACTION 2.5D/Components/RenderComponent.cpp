@@ -10,13 +10,9 @@ StaticMesh* RenderComponent::LoadModelMesh(const std::string& filename, const st
 	m_Mesh = std::make_unique<StaticMesh>();
 
 	StaticMesh* staticMesh = static_cast<StaticMesh*>(m_Mesh.get());
-	
-	if(staticMesh == nullptr) {
-		std::cerr << "Error: Failed to create StaticMesh." << std::endl;
-		return nullptr;
-	}
 
 	staticMesh->Load(filename, texturedirectory);
+
 	const std::vector<VERTEX_3D>& vertices = staticMesh->CreateMeshVertices();
 	const std::vector<unsigned int>& indices = staticMesh->CreateMeshIndices();
 

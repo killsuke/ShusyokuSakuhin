@@ -17,10 +17,15 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
             break;        
         
         float height = input.worldPos.y - shadows[i].objectPos.y; // オブジェクトとピクセルの高さ差を計算
+        
+        // オブジェクトより下にある場合のみ影を計算
+        if (height > 0.0f)
+            continue;
+
         float heightFade = saturate(1.0f - height * 0.1f); // 高さに基づいて影の強さを計算
 
         float heightAbs = abs(input.worldPos.y - shadows[i].objectPos.y); // オブジェクトとピクセルの高さ差を計算
-
+        
         float heightScale = saturate(1.0f / (heightAbs * 0.04f));
         
         float radius = shadows[i].shadowRadius * heightScale; // 高さに基づいて影の半径を調整

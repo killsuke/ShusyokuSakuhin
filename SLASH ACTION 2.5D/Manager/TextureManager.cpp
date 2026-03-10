@@ -21,6 +21,11 @@ void TextureManager::UnInit() {
 // 指定されたフォルダ内のすべてのファイルを読み込む
 void TextureManager::LoadFolder(const std::string& path) {
 
+    if(!exists(path) || !is_directory(path)) {
+        MessageBoxW(NULL, L"テクスチャのフォルダが見つかりませんでした。", L"エラー", MB_ICONERROR | MB_OK);
+        return;
+	}
+
     // 指定されたディレクトリのフォルダを開き読み込む
     for (const directory_entry& file : directory_iterator(path)) {
 

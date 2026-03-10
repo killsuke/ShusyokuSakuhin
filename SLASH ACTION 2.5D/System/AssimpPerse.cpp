@@ -187,9 +187,10 @@ namespace AssimpPerse
 
 		if (pScene == nullptr)
 		{
-			std::cout << "load error" << filename.c_str() << importer.GetErrorString() << std::endl;
+			std::cout << "Load error: " << filename << std::endl;
+			std::cout << importer.GetErrorString() << std::endl;
+			return;
 		}
-		assert(pScene != nullptr);
 
 		// マテリアル情報取得
 		GetMaterialData(pScene, texturedirectory);
@@ -281,6 +282,8 @@ namespace AssimpPerse
 		g_subsets.resize(pScene->mNumMeshes);
 		for (unsigned int m = 0; m < g_subsets.size(); m++)
 		{
+			assert(g_vertices[m].size() > 0);	// 頂点数が０のメッシュは想定していない
+
 			g_subsets[m].IndexNum = (unsigned int)g_indices[m].size();
 			g_subsets[m].VertexNum = (unsigned int)g_vertices[m].size();
 			g_subsets[m].VertexBase = 0;

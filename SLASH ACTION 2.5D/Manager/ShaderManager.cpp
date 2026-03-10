@@ -141,6 +141,11 @@ std::vector<std::string> ShaderManager::GetShaderFiles(const std::string& folder
 
 	std::vector<std::string> files;
 
+	if(!exists(folder)) {
+		std::cerr << "Directory does not exist: " << folder << std::endl;
+		return files;
+	}
+
 	for(const directory_entry& entry : directory_iterator(folder)) {
 		
 		if (entry.path().extension() == ".hlsl") {

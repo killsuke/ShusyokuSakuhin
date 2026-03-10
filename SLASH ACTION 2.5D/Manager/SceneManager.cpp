@@ -8,6 +8,7 @@
 #include "ShadowManager.h"
 
 void SceneManager::Init() {
+	
 	SoundManager::Init();	// サウンドの初期化
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化

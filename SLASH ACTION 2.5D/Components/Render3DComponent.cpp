@@ -4,6 +4,7 @@
 using namespace DirectX;
 
 Render3DComponent::Render3DComponent(GameObject& obj) : RenderComponent(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è
 	m_Shader = std::make_unique<Shader>();
 }

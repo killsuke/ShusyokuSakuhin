@@ -18,6 +18,7 @@
 #include "EnemyDeathEventComponent.h"
 #include "ColliderAttackComponent.h"
 #include "ColliderDamageComponent.h"
+#include "SoundComponent.h"
 
 namespace {
 	constexpr float DeltaTime = 0.016f;
@@ -133,6 +134,21 @@ void BossEventComponent::CreateBossWalls() {
 	cubeRe->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
 
 	m_boss = boss;
+
+	SoundComponent* mySound = m_Object->GetComponent<SoundComponent>();
+
+	if (mySound != nullptr) {
+		mySound->Play();
+
+		GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+		if(camera != nullptr) {
+			
+			SoundComponent* cameraSound = camera->GetComponent<SoundComponent>();
+			if(cameraSound != nullptr) {
+				cameraSound->Stop();
+			}
+		}
+	}
 
 	createCompletionFlag = true;
 }
