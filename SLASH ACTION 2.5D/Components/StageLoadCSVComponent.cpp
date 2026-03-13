@@ -80,7 +80,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 
 	// 最大列数を求める
 	size_t maxCols = 0;
-	for (auto& row : data) {
+	for (std::vector<CSV_Data>& row : data) {
 		if (row.size() > maxCols) {
 			maxCols = row.size();
 		}
@@ -95,7 +95,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 			// 行データの中に現在の列が存在しているか確認（行ごとにセル数が異なる可能性があるため）
 			if (col < data[row].size()) {
 
-				const auto& cell = data[row][col];
+				const CSV_Data& cell = data[row][col];
 
 				// まず NoData を除外
 				if (cell.kind == "NoData") {
@@ -114,8 +114,8 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 		}
 	}
 
-	auto terrainMn = terrainManager.GetComponent<TerrainCreateComponent>();
-	auto enemyMn = terrainManager.GetComponent<EnemyCreateComponent>();
+	TerrainCreateComponent* terrainMn = terrainManager.GetComponent<TerrainCreateComponent>();
+	EnemyCreateComponent* enemyMn = terrainManager.GetComponent<EnemyCreateComponent>();
 
 	// 地形データを移す
 	if (terrainMn != nullptr) {

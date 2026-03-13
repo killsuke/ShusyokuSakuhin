@@ -17,8 +17,8 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif
 
-const auto ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
-const auto WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
+const wchar_t* ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
+const wchar_t* WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
 
 namespace {
 	constexpr int MAX_LOOP = 3;	// 固定更新の最大ループ回数（無限ループ防止用）

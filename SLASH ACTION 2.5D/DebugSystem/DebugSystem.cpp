@@ -97,7 +97,10 @@ void DebugSystem::Update() {
 }
 
 void DebugSystem::DebugUI() {
-	if (Input::GetKeyTrigger(VK_F1)) {
+
+	const bool vk_F1_Trigger = Input::GetKeyTrigger(VK_F1);
+
+	if (vk_F1_Trigger) {
 		m_IsDebugUI = !m_IsDebugUI;
 
 		// デバッグUIの表示非表示
@@ -126,7 +129,9 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		return;
 	}
 
-	if (Input::GetKeyTrigger(VK_F2)) {
+	const bool vk_F2_Trigger = Input::GetKeyTrigger(VK_F2);
+
+	if (vk_F2_Trigger) {
 		m_ScreenStop = !m_ScreenStop;
 
 		const XMFLOAT3 sceneCamPos = sceneCamTrans->GetPosition();
@@ -194,9 +199,11 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
 void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 
+	const bool vk_F3_Trigger = Input::GetKeyTrigger(VK_F3);
+
 	// コマ送り
-	if (Input::GetKeyTrigger(VK_F3) && m_ScreenStop == true) {
-		for (const auto& obj : objs) {
+	if (vk_F3_Trigger && m_ScreenStop == true) {
+		for (GameObject* obj : objs) {
 			// 描画停止中か全停止中のオブジェクトはスルー
 			const ActiveState currentState = obj->GetActiveState();
 			if (currentState == ActiveState::DRAW_STOP || currentState == ActiveState::ALL_STOP) {
@@ -217,7 +224,9 @@ void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 
 void DebugSystem::SwitchingFillMode() {
 
-	if (Input::GetKeyTrigger(VK_F4)) {
+	const bool vk_F4_Trigger = Input::GetKeyTrigger(VK_F4);
+
+	if (vk_F4_Trigger) {
 		DirectXRender::SwitchingFillMode();
 	}
 }

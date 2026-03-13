@@ -1,4 +1,5 @@
 #include "SoundComponent.h"
+#include <algorithm>
 
 #ifdef _XBOX //Big-Endian
 #define fourccRIFF 'RIFF'
@@ -26,11 +27,12 @@ SoundComponent::SoundComponent(GameObject& obj) :Component(obj)
 SoundComponent::~SoundComponent()
 {
 	// 全てのソースボイスを破棄
-	for (const auto& [label, pSourceVoice] : m_pSourceVoices) {
-		if (pSourceVoice.pSourceVoice) {
-			pSourceVoice.pSourceVoice->Stop(0);
-			pSourceVoice.pSourceVoice->FlushSourceBuffers();
-			pSourceVoice.pSourceVoice->DestroyVoice();
+	for (const std::pair<const std::string, SourceVoiceData>& entry : m_pSourceVoices) {
+		const SourceVoiceData& sourceVoiceData = entry.second;
+		if (sourceVoiceData.pSourceVoice) {
+			sourceVoiceData.pSourceVoice->Stop(0);
+			sourceVoiceData.pSourceVoice->FlushSourceBuffers();
+			sourceVoiceData.pSourceVoice->DestroyVoice();
 		}
 	}
 
@@ -47,7 +49,7 @@ void SoundComponent::Update()
 // =============================================================================
 void SoundComponent::AddSoundLabel(const std::string& label) {
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		// 見つからなかった場合、新しいエントリを追加
 		m_pSourceVoices.emplace(label, nullptr);
@@ -60,13 +62,13 @@ void SoundComponent::Play() {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
 
-	const auto key = it->first;
+	const std::string key = it->first;
 
 	IXAudio2* xAudio = SoundManager::GetXAudio2();
 	if (xAudio == nullptr) {
@@ -106,7 +108,7 @@ void SoundComponent::Play(const std::string& label)
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -145,12 +147,12 @@ void SoundComponent::Play(const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
 
-	const auto key = it->first;
+	const std::string key = it->first;
 
 	IXAudio2* xAudio = SoundManager::GetXAudio2();
 	if (xAudio == nullptr) {
@@ -188,7 +190,7 @@ void SoundComponent::Play(const std::string& label, const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -228,7 +230,7 @@ void SoundComponent::PlayOnce() {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 
 	if (it == m_pSourceVoices.end()) {
 		return;
@@ -240,7 +242,7 @@ void SoundComponent::PlayOnce() {
 
 	it->second.isPlayed = true;
 
-	const auto key = it->first;
+	const std::string key = it->first;
 
 	IXAudio2* xAudio = SoundManager::GetXAudio2();
 	if (xAudio == nullptr) {
@@ -276,7 +278,7 @@ void SoundComponent::PlayOnce(const std::string& label) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -321,12 +323,12 @@ void SoundComponent::PlayOnce(const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
 
-	const auto key = it->first;
+	const std::string key = it->first;
 
 	if (it->second.isPlayed == true) {
 		return;
@@ -370,7 +372,7 @@ void SoundComponent::PlayOnce(const std::string& label, const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -416,7 +418,7 @@ void SoundComponent::Stop() {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 
 	if (it == m_pSourceVoices.end()) {
 		return;
@@ -448,7 +450,7 @@ void SoundComponent::Stop(const std::string& label)
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	}
@@ -476,10 +478,10 @@ void SoundComponent::StopAll() {
 		return;
 	}
 
-	for (auto& [label, sourceVoiceData] : m_pSourceVoices) {
+	for (std::pair<const std::string, SourceVoiceData>& entry : m_pSourceVoices) {
 
-		sourceVoiceData.isPlayed = false;
-		IXAudio2SourceVoice* sourceVoice = sourceVoiceData.pSourceVoice;
+		entry.second.isPlayed = false;
+		IXAudio2SourceVoice* sourceVoice = entry.second.pSourceVoice;
 		XAUDIO2_VOICE_STATE xa2state = {};
 		sourceVoice->GetState(&xa2state);
 		if (xa2state.BuffersQueued > 0)
@@ -503,7 +505,7 @@ void SoundComponent::Resume() {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 
 	if (it == m_pSourceVoices.end()) {
 		return;
@@ -525,7 +527,7 @@ void SoundComponent::Resume(const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -545,7 +547,7 @@ void SoundComponent::Resume(const std::string& label) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	}
@@ -566,7 +568,7 @@ void SoundComponent::Resume(const std::string& label, const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	}
@@ -587,7 +589,7 @@ void SoundComponent::SetVolume(const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 
 	if (it == m_pSourceVoices.end()) {
 		return;
@@ -599,8 +601,12 @@ void SoundComponent::SetVolume(const float volume) {
 		return;
 	}
 
+	const float maxVolume = it->second.maxVolume;
+
+	const float clampedVolume = std::clamp(volume, 0.0f, maxVolume);
+
 	// 音量調整
-	sourceVoice->SetVolume(volume);
+	sourceVoice->SetVolume(clampedVolume);
 }
 
 //=============================================================================
@@ -612,7 +618,7 @@ void SoundComponent::SetVolume(const std::string& label, const float volume) {
 		return;
 	}
 
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	}
@@ -623,8 +629,11 @@ void SoundComponent::SetVolume(const std::string& label, const float volume) {
 		return;
 	}
 
+	const float maxVolume = it->second.maxVolume;
+	const float clampedVolume = std::clamp(volume, 0.0f, maxVolume);
+
 	// 音量調整
-	sourceVoice->SetVolume(volume);
+	sourceVoice->SetVolume(clampedVolume);
 }
 
 
@@ -633,7 +642,7 @@ void SoundComponent::AddVolume(const float volume) {
 	if (m_pSourceVoices.empty()) {
 		return;
 	}
-	const auto it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
 	if (it == m_pSourceVoices.end()) {
 		return;
 	};
@@ -644,7 +653,20 @@ void SoundComponent::AddVolume(const float volume) {
 	// 音量調整
 	float currentVolume = 0.0f;
 	sourceVoice->GetVolume(&currentVolume);
-	sourceVoice->SetVolume(currentVolume + volume);
+
+	float newVolume = currentVolume + volume;
+
+	// 最大音量を超えた場合は最大音量に設定、最小音量を下回った場合は最小音量に設定
+	if(newVolume > 0.0f) {
+
+		newVolume = std::min(it->second.maxVolume, newVolume);
+	}
+	else if(newVolume < 0.0f) {
+
+		newVolume = std::max(0.0f, newVolume);
+	}
+
+	sourceVoice->SetVolume(newVolume);
 }
 
 void SoundComponent::AddVolume(const std::string& label, const float volume) {
@@ -652,7 +674,7 @@ void SoundComponent::AddVolume(const std::string& label, const float volume) {
 	if (m_pSourceVoices.empty()) {
 		return;
 	}
-	const auto it = m_pSourceVoices.find(label);
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
 	if (it == m_pSourceVoices.end()) {
 		return;
 	}
@@ -663,5 +685,52 @@ void SoundComponent::AddVolume(const std::string& label, const float volume) {
 	// 音量調整
 	float currentVolume = 0.0f;
 	sourceVoice->GetVolume(&currentVolume);
-	sourceVoice->SetVolume(currentVolume + volume);
+
+	float newVolume = currentVolume + volume;
+
+	// 最大音量を超えた場合は最大音量に設定、最小音量を下回った場合は最小音量に設定
+	if(newVolume > 0.0f) {
+		newVolume = std::min(it->second.maxVolume, newVolume);
+	}
+	else if(newVolume < 0.0f) {
+		newVolume = std::max(0.0f, newVolume);
+	}
+
+	sourceVoice->SetVolume(newVolume);
+}
+
+void SoundComponent::SetMaxVolume(const float volume) {
+
+	const float clampedVolume = std::clamp(volume, 0.0f, 1.0f);
+
+	if (m_pSourceVoices.empty()) {
+		return;
+	}
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	if (it == m_pSourceVoices.end()) {
+		return;
+	};
+	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
+	if (sourceVoice == nullptr) {
+		return;
+	}
+	
+	it->second.maxVolume = clampedVolume;
+}
+
+void SoundComponent::SetMaxVolume(const std::string& label, const float volume) {
+
+	const float clampedVolume = std::clamp(volume, 0.0f, 1.0f);
+	if (m_pSourceVoices.empty()) {
+		return;
+	}
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
+	if (it == m_pSourceVoices.end()) {
+		return;
+	}
+	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
+	if (sourceVoice == nullptr) {
+		return;
+	}
+	it->second.maxVolume = clampedVolume;
 }

@@ -8,12 +8,11 @@ using namespace DirectX;
 RenderMask3DComponent::RenderMask3DComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void RenderMask3DComponent::Update()
 {
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -23,7 +22,7 @@ void RenderMask3DComponent::Update()
 
 		cb.color = m_Color;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -32,7 +31,6 @@ void RenderMask3DComponent::Update()
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 
-		// ここはどうするかちょっと考える
 		/*m_Texture->SetGPU();
 		m_Texture->SetGPU_Mask();*/
 
@@ -41,11 +39,11 @@ void RenderMask3DComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
@@ -53,7 +51,7 @@ void RenderMask3DComponent::Update()
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 

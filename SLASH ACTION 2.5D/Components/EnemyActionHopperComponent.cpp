@@ -17,7 +17,7 @@ using namespace DirectX;
 
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
-	auto jump = m_Object->AddComponent<JumpComponent>();
+	JumpComponent* jump = m_Object->AddComponent<JumpComponent>();
 	jump->SetJumpPower(60.0f);
 
 	m_listenerID_HitEvent_Hopper = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
@@ -91,11 +91,18 @@ void EnemyActionHopperComponent::Update() {
 	//rigid->ReduceVelocity_X(0.5f);
 }
 
+// ジャンプの処理
 void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
+
 	JumpComponent* jump = m_Object->GetComponent<JumpComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	TestExtrusionJudgeComponent* testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+
+	if (jump == nullptr || rigid == nullptr || testExtrusion == nullptr || myTrans == nullptr) {
+		return;
+	}
+
 	bool isGround = testExtrusion->GetIsGround();
 
 	if (isGround == true) {
@@ -119,6 +126,7 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	}
 }
 
+// ノックバックの処理
 void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
 
 	const uint32_t deadID = m_Object->GetInstanceID();
@@ -139,14 +147,12 @@ void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
 	const XMFLOAT3 playPos = playerTrans->GetPosition();
 	const XMFLOAT3 enemyPos = enemyTrans->GetPosition();
 
-
 	if (enemyPos.x > playPos.x) {
 		rigid->AddVelocity_X(100.0f);
 	}
 	else if (enemyPos.x < playPos.x) {
 		rigid->AddVelocity_X(-100.0f);
 	}
+
 	rigid->AddVelocity_Y(50.0f);
-
-
 }

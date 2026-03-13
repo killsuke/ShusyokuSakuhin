@@ -6,15 +6,15 @@
 using namespace DirectX;
 
 Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : RenderComponent(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void Render3DColliderOBBComponent::Update()
 {
 #ifdef _DEBUG
-	auto colliderOBB = m_Object->GetComponent<ColliderComponent>();
+	ColliderComponent* colliderOBB = m_Object->GetComponent<ColliderComponent>();
 
 	if (colliderOBB != nullptr && m_Mesh != nullptr) {
 		//定数バッファを更新
@@ -24,7 +24,7 @@ void Render3DColliderOBBComponent::Update()
 
 		cb.color = m_Color;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -38,11 +38,11 @@ void Render3DColliderOBBComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
@@ -50,7 +50,7 @@ void Render3DColliderOBBComponent::Update()
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 

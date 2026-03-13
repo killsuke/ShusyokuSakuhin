@@ -28,32 +28,32 @@ void ComponentTypeManager::MakeSampleJson() {
 		{ "STAGE_LOAD_CSV" ,			1},
 		{ "JSON" ,						2},
 		{ "CSV_OBJECT_MANAGER" ,		3},
-		{ "TEST_MOVE" ,					4},
-		{ "JUMP" ,						5},
-		{ "SPRING" ,					6},
-		{ "RIGIDBODY" ,					7},
+		{ "TEST_MOVE" ,				4},
+		{ "JUMP" ,					5},
+		{ "SPRING" ,				6},
+		{ "RIGIDBODY" ,				7},
 		{ "CAMERA_TARGET" ,				8},
 		{ "CAMERA_POINT" ,				9},
-		{ "CAMERA_MOVE" ,				10},
-		{ "CAMERA" ,					11},
-		{ "BONE" ,						12},
-		{ "GO_AROUND" ,					13},
-		{ "HP_BAR_MOVE" ,				14},
-		{ "COLLIDER" ,					15},
+		{ "CAMERA_MOVE" ,			10},
+		{ "CAMERA" ,				11},
+		{ "BONE" ,					12},
+		{ "GO_AROUND" ,			13},
+		{ "HP_BAR_MOVE" ,			14},
+		{ "COLLIDER" ,				15},
 		{ "TEST_JUDGE_EXTRUSION" ,		16},
-		{ "ATTACK" ,					17},
-		{ "ENEMY_DAMAGE" ,				18},
-		{ "FIGHTER" ,					19},
-		{ "TRANSFORM" ,					20},
-		{ "RENDER" ,					21},
+		{ "ATTACK" ,				17},
+		{ "ENEMY_DAMAGE" ,			18},
+		{ "FIGHTER" ,				19},
+		{ "TRANSFORM" ,				20},
+		{ "RENDER" ,				21},
 		{ "RENDER_ONE_SKIN_ANIMATION" , 22},
-		{ "RENDER_DEBUG" ,				23},
-		{ "MAX" ,						24},
+		{ "RENDER_DEBUG" ,			23},
+		{ "MAX" ,					24},
 	};
 
 	nameToId = components;
 
-	for (const auto& comp : nameToId) {
+	for (const std::pair<const std::string, uint32_t>& comp : nameToId) {
 		idToName[comp.second] = comp.first;
 	}
 
@@ -79,7 +79,7 @@ void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath
 	nlohmann::json j;
 	ifs >> j;
 
-	for (const auto& comp : j["components"]) {
+	for (const nlohmann::json& comp : j["components"]) {
 		std::string compName = comp.at("name");
 		uint32_t id = comp.at("ID");
 		nameToId[compName] = id; // 名前とIDを紐付け
@@ -92,11 +92,11 @@ json ComponentTypeManager::ComponentTypeNameToJson(const std::unordered_map<std:
 	j["components"] = json::array();
 
 	std::vector<std::pair<std::string, uint32_t>> sorted(comps.begin(), comps.end());
-	std::sort(sorted.begin(), sorted.end(), [](const auto& a, const auto& b) {
-		return a.second < b.second;	// 名前に変えるのも可
+	std::sort(sorted.begin(), sorted.end(), [](const std::pair<std::string, uint32_t>& a, const std::pair<std::string, uint32_t>& b) {
+		return a.second < b.second; // 名前に変えるのも可
 		});
 
-	for (const auto& c : sorted) {
+	for (const std::pair<std::string, uint32_t>& c : sorted) {
 		json comp;
 		comp["name"] = c.first;
 		comp["ID"] = c.second; // IDを追加

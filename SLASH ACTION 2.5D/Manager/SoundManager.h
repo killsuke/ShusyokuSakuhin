@@ -50,9 +50,10 @@ public:
 	static IXAudio2* GetXAudio2() { return m_pXAudio2; };
 	static IXAudio2MasteringVoice* GetMasteringVoice() { return m_pMasteringVoice; };
 	static SoundResource* GetSoundResource(const std::string& key) {
-		const auto it = m_SoundResources.find(key);
+
+		std::unordered_map<std::string, SoundResource>::const_iterator it = m_SoundResources.find(key);
 		if (it != m_SoundResources.end()) {
-			return &it->second;
+			return const_cast<SoundResource*>(&it->second);
 		}
 		return nullptr;
 	}

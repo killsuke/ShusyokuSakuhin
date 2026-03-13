@@ -53,8 +53,8 @@ void RenderLineComponent::Update()
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
 		// ここで全頂点データを更新
-		XMFLOAT3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
-		XMFLOAT3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
+		const XMFLOAT3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
+		const XMFLOAT3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
 
 		vtx[0].position = pos_S;
 		vtx[0].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -82,11 +82,11 @@ void RenderLineComponent::Update()
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
@@ -94,7 +94,7 @@ void RenderLineComponent::Update()
 		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 
@@ -109,31 +109,47 @@ void RenderLineComponent::Update()
 }
 
 void RenderLineComponent::SetStartPosition(const DirectX::XMFLOAT3& startPos) {
+
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 
-	transS->SetPosition(startPos);
+	if (transS != nullptr) {
+		
+		transS->SetPosition(startPos);
+	}
 }
 
 void RenderLineComponent::SetEndPosition(const DirectX::XMFLOAT3& endPos) {
+
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 
-	transE->SetPosition(endPos);
+	if (transE != nullptr) {
+		
+		transE->SetPosition(endPos);
+	}
 }
 
 void RenderLineComponent::SetStartAndEndPosition(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos) {
+
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 
-	transS->SetPosition(startPos);
-	transE->SetPosition(endPos);
+	if (transE != nullptr && transS != nullptr) {
+
+		transS->SetPosition(startPos);
+		transE->SetPosition(endPos);
+	}
 }
 
-void RenderLineComponent::SetStartAndEndFollowObject(GameObject* objS,GameObject* objE) {
+void RenderLineComponent::SetStartAndEndFollowObject(GameObject* objS, GameObject* objE) {
 
 	FollowPositionComponent* followS = m_StartObj->AddComponent<FollowPositionComponent>();
-	followS->SetFollowObject(objS);
 	FollowPositionComponent* followE = m_EndObj->AddComponent<FollowPositionComponent>();
-	followE->SetFollowObject(objE);
+
+	if (followE != nullptr && followS != nullptr) {
+
+		followS->SetFollowObject(objS);
+		followE->SetFollowObject(objE);
+	}
 }
 
 void RenderLineComponent::SetStartAndEndDrawContainer(const DrawContainer& dcS, const DrawContainer& dcE) {

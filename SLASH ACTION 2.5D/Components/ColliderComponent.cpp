@@ -14,14 +14,20 @@ void ColliderComponent::Update()
 {
 	beforeColl_ab = coll_ab; // 前回のAABBの当たり判定用を保存
 
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+
+	if(transform == nullptr) {
+		std::cerr << "Error: ColliderComponent requires a TransformComponent." << std::endl;
+		return;
+	}
+
 	transform->MakeChildWorld(); // ワールド行列を更新
 
-	auto pos = transform->GetPosition();
-	auto scale = transform->GetScale();
-	auto rot = transform->GetQuaternion();
+	DirectX::XMFLOAT3 pos = transform->GetPosition();
+	DirectX::XMFLOAT3 scale = transform->GetScale();
+	DirectX::XMVECTOR rot = transform->GetQuaternion();
 
-	auto childRot = transform->GetLocalQuaternion();
+	DirectX::XMVECTOR childRot = transform->GetLocalQuaternion();
 
 	SetColliderSize_AABB(pos, scale);
 
@@ -618,7 +624,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	if (check == true) {
 
 		XMFLOAT3 returnDir = {};
-		auto it = touchObjects.find(p1.m_Object);
+		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = touchObjects.find(p1.m_Object);
 		if (it != touchObjects.end()) {
 
 			if (it->second != XMFLOAT3()) {
@@ -719,7 +725,7 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	}
 	else {
 		// 存在確認をして、second情報をリセット上書き
-		auto it = touchObjects.find(p1.m_Object);
+		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = touchObjects.find(p1.m_Object);
 		if (it != touchObjects.end()) {
 			it->second = XMFLOAT3();
 		}
@@ -1137,7 +1143,7 @@ bool ColliderComponent::CheckHit_SphereAndCube_NoTrigger2D(const Sphere& p1, con
 	const float r = p1.radius;	// 球体の半径
 
 	if (distSq2 < (r * r)) {	// 半径から距離を比較
-		const float dist = std::sqrt(distSq1);	// ２つのオブジェクトの中心位置の距離（平方根を使い算出）
+		const float dist = std::sqrt(distSq1);		// ２つのオブジェクトの中心位置の距離（平方根を使い算出）
 		const float overlap = r - dist;	// ２つのオブジェクトの半径から距離を引いて、重なり量を算出
 
 		if (dist > 0.0001f) {

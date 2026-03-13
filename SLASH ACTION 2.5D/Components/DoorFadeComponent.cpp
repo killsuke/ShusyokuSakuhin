@@ -12,21 +12,21 @@ DoorFadeComponent::DoorFadeComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // 更新の優先度を設定（数値が小さいほど優先して更新される）
 	doorUp = GameObjectManager::AddUI("doorUP", "FadeUI");
-	auto doorUpTransform = doorUp->AddComponent<TransformComponent>();
+	TransformComponent* doorUpTransform = doorUp->AddComponent<TransformComponent>();
 	doorUpTransform->SetPosition({ 0.0f,600.0f,-1.0f });
 	doorUpTransform->SetScale({ 700.0f,200.0f,1.0f });
 	doorUpFirstPos = doorUpTransform->GetPosition();
-	auto doorUpRender = doorUp->AddComponent<Render2DComponent>();
+	Render2DComponent* doorUpRender = doorUp->AddComponent<Render2DComponent>();
 	doorUpRender->CreateMesh<SquareMesh>();
 	doorUpRender->ChangeTexture("IronWall.png");
 	doorUpRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
 
 	doorDown = GameObjectManager::AddUI("doorDOWN", "FadeUI");
-	auto doorDownTransform = doorDown->AddComponent<TransformComponent>();
+	TransformComponent* doorDownTransform = doorDown->AddComponent<TransformComponent>();
 	doorDownTransform->SetPosition({ 0.0f,-600.0f,-1.0f });
 	doorDownTransform->SetScale({ 700.0f,200.0f,1.0f });
 	doorDownFirstPos = doorDownTransform->GetPosition();
-	auto doorDownRender = doorDown->AddComponent<Render2DComponent>();
+	Render2DComponent* doorDownRender = doorDown->AddComponent<Render2DComponent>();
 	doorDownRender->CreateMesh<SquareMesh>();
 	doorDownRender->ChangeTexture("IronWall.png");
 	doorDownRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
@@ -58,8 +58,8 @@ void DoorFadeComponent::Update()
 }
 
 void DoorFadeComponent::OpenDoor() {
-	auto upTrans = doorUp->GetComponent<TransformComponent>();
-	auto downTrans = doorDown->GetComponent<TransformComponent>();
+	TransformComponent* upTrans = doorUp->GetComponent<TransformComponent>();
+	TransformComponent* downTrans = doorDown->GetComponent<TransformComponent>();
 
 	if (m_doorMoveEndFlag == false) {
 		upTrans->AddPosition({ 0.0f,10.0f,0.0f });
@@ -78,10 +78,10 @@ void DoorFadeComponent::OpenDoor() {
 }
 
 void DoorFadeComponent::CloseDoor() {
-	auto upTrans = doorUp->GetComponent<TransformComponent>();
-	auto downTrans = doorDown->GetComponent<TransformComponent>();
+	TransformComponent* upTrans = doorUp->GetComponent<TransformComponent>();
+	TransformComponent* downTrans = doorDown->GetComponent<TransformComponent>();
 
-	auto upPos = upTrans->GetPosition();
+	DirectX::XMFLOAT3 upPos = upTrans->GetPosition();
 
 	if (timer > 0.65f) {
 		m_doorMoveEndFlag = true;

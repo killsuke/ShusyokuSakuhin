@@ -20,7 +20,7 @@ void TerrainJsonComponent::MakeSampleStatus() {
 
 	m_terrainStatus = terrains;
 
-    for(auto& t : m_terrainStatus) {
+    for (TerrainStatus& t : m_terrainStatus) {
 		m_kindNames.push_back(t.kind); // 地形の種類をベクターに追加
     }
 
@@ -39,7 +39,7 @@ void TerrainJsonComponent::MakeSampleStatus() {
 json TerrainJsonComponent::TerrainsToJson(const std::vector<TerrainStatus>& terrains) {
     json j;
     j["terrains"] = json::array();
-    for (const auto& t : terrains) {
+    for (const TerrainStatus& t : terrains) {
         json item;
         item["kind"] = t.kind;
         item["scale"] = XMFLOAT3ToJson(t.scale);
@@ -63,7 +63,7 @@ std::vector<TerrainStatus> TerrainJsonComponent::LoadTerrainJsonFile(const std::
     ifs >> j;
 
     std::vector<TerrainStatus> terrains;
-    for (const auto& item : j.at("terrains")) {
+    for (const nlohmann::ordered_json& item : j.at("terrains")) {
         TerrainStatus t;
         t.kind = item.at("kind");
         t.scale = JsonToVector3(item.at("scale"));
@@ -76,7 +76,7 @@ std::vector<TerrainStatus> TerrainJsonComponent::LoadTerrainJsonFile(const std::
 
     m_terrainStatus = terrains;
 
-    for (auto& t : m_terrainStatus) {
+    for (TerrainStatus& t : m_terrainStatus) {
         m_kindNames.push_back(t.kind); // 地形の種類をベクターに追加
     }
 

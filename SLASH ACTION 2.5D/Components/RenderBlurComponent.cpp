@@ -43,11 +43,11 @@ void RenderBlurComponent::Update() {
 		ID3D11Buffer* bufferBlur = DirectXRender::GetBlurBuffer();
 		deviceContext->UpdateSubresource(bufferBlur, 0, NULL, &blurSize, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
@@ -55,7 +55,7 @@ void RenderBlurComponent::Update() {
 		for (int i = 0; i < subsets.size(); i++)
 		{
 			// ‚±‚±Žg‚¤
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 			

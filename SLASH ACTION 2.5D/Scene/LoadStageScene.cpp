@@ -57,6 +57,8 @@ LoadStageScene::LoadStageScene() {
 	SoundComponent* sound = camera->AddComponent<SoundComponent>();
 	sound->AddSoundLabel("game");
 	sound->Play();
+	sound->SetMaxVolume(0.8f);
+
 	TransformComponent* cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvŽZ‚µ‚ÄAŽ‹–ìŠp“¯Žm‚Ìˆø‚«ŽZ‚ÅŒvŽZ‚·‚é‚Æ‚©H
 	//cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -170.0f));

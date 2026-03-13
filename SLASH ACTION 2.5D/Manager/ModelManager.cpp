@@ -12,7 +12,7 @@ void ModelManager::AddModel(const std::string& modelPath, const std::string& tex
 
 StaticMesh* ModelManager::GetModel(const std::string& modelPath, const std::string& texDirectory) {
     // ƒƒ‚ƒŠ“à‚ÉŠù‚ÉŠi”[‚µ‚Ä‚¢‚é‚©ŒŸ¸
-    const auto it = m_ModelCache.find(modelPath);
+    const std::unordered_map<std::string, std::unique_ptr<StaticMesh>>::const_iterator it = m_ModelCache.find(modelPath);
     if (it != m_ModelCache.end()) {
         return (it->second).get();
     }

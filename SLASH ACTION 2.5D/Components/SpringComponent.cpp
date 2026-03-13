@@ -1,6 +1,6 @@
-#include    "SpringComponent.h"
-#include    "TransformComponent.h"
-#include    "RigidBodyComponent.h"
+#include "SpringComponent.h"
+#include "TransformComponent.h"
+#include "RigidBodyComponent.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -21,6 +21,10 @@ void SpringComponent::SpringAction2D()
 
 	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
+
+	if(transformP1 == nullptr || transformP2 == nullptr || rigidBodyP1 == nullptr || rigidBodyP2 == nullptr) {
+		return; // TransformComponentまたはRigidBodyComponentがない場合は何もしない
+	}
 
 	XMFLOAT3 posP1 = transformP1->GetPosition();
 	XMFLOAT3 posP2 = transformP2->GetPosition();
@@ -60,7 +64,6 @@ void SpringComponent::SpringAction2D()
 	rigidBodyP1->AddForce(-force); // p1に対しては反対方向の力を加える
 	rigidBodyP2->AddForce(force);  // p2に対しては正方向の力を加える
 
-	//	std::cout << force.Length() << std::endl;
 
 // 強制停止チェック
 	const XMFLOAT3 diff = posP2 - posP1;
@@ -78,24 +81,26 @@ void SpringComponent::SpringAction2D()
 
 		transformP1->SetPosition({ posP2.x,posP2.y,transformP1->GetPosition().z }); // ← ここでスナップ
 		m_finSpringAction = true;
-		//m_isSpringAction = false;
-		//transformP1->SetPosition(transformP2->GetPosition());
 	}
 }
 
 void SpringComponent::SpringAction3D()
 {
-	auto transformP1 = m_Object->GetComponent<TransformComponent>();
-	auto rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
+	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
 
-	auto transformP2 = m_springPartner->GetComponent<TransformComponent>();
-	auto rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
+	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
 
-	auto posP1 = transformP1->GetPosition();
-	auto posP2 = transformP2->GetPosition();
+	if(transformP1 == nullptr || transformP2 == nullptr || rigidBodyP1 == nullptr || rigidBodyP2 == nullptr) {
+		return; // TransformComponentやRigidBodyComponentがない場合は何もしない
+	}
 
-	auto velocityP1 = rigidBodyP1->GetVelocity();
-	auto velocityP2 = rigidBodyP2->GetVelocity();
+	XMFLOAT3 posP1 = transformP1->GetPosition();
+	XMFLOAT3 posP2 = transformP2->GetPosition();
+
+	XMFLOAT3 velocityP1 = rigidBodyP1->GetVelocity();
+	XMFLOAT3 velocityP2 = rigidBodyP2->GetVelocity();
 
 	XMFLOAT3 delta = posP1 - posP2;
 
@@ -129,6 +134,10 @@ void SpringComponent::SpringActionTransform() {
 
 	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
 	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
+
+	if(transformP1 == nullptr || transformP2 == nullptr) {
+		return; // TransformComponentがない場合は何もしない
+	}
 
 	XMFLOAT3 posP1 = transformP1->GetPosition();
 	XMFLOAT3 posP2 = transformP2->GetPosition();
@@ -208,9 +217,13 @@ void SpringComponent::Setrestlng(float restLength) {
 
 // ダンピング定数を作成する
 void SpringComponent::MakeDamping() {
-	auto rigid = m_Object->GetComponent<RigidBodyComponent>();
-	// m_DAMPING = 0.0f; だと、減衰がないのでバネ挙動を続ける
-	m_DAMPING = -ComputeCriticalDamping(rigid->GetMass(), m_K);
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+
+	if (rigid != nullptr) {
+
+		// m_DAMPING = 0.0f; だと、減衰がないのでバネ挙動を続ける
+		m_DAMPING = -ComputeCriticalDamping(rigid->GetMass(), m_K);
+	}
 }
 
 /**

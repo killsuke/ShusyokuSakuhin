@@ -49,9 +49,9 @@ void TrailRenderComponent::Update() {
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 
-		auto texture = m_Mesh->GetTextures();
+		std::vector<Texture> texture = m_Mesh->GetTextures();
 
-		auto uvs = texture[0].GetUVSets();
+		XMFLOAT4 uvs = texture[0].GetUVSets();
 
 		uvs.x = uvs.x - 1;
 		uvs.y = uvs.y - 1;

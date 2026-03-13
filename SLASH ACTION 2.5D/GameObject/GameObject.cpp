@@ -21,7 +21,7 @@ void GameObject::Update() {
 		return;
 
 	// コンポーネントの更新
-	for (auto& component : m_Components) {
+	for (std::unique_ptr<Component>& component : m_Components) {
 		if (component->GetActiveFlag() == true) {
 			component->Update();
 		}
@@ -29,7 +29,7 @@ void GameObject::Update() {
 
 	// 子オブジェクトの更新
 	if (!m_Children.empty()) {
-		for (auto& child : m_Children) {
+		for (GameObject* child : m_Children) {
 			child->Update();
 		}
 	}
@@ -41,7 +41,7 @@ void GameObject::Draw() {
 		return;
 
 	// 描画用コンポーネントの更新
-	for (auto& renderComp : m_RenderComponents) {
+	for (std::unique_ptr<Component>& renderComp : m_RenderComponents) {
 		if (renderComp->GetActiveFlag() == true) {
 			renderComp->Update();
 		}
@@ -49,7 +49,7 @@ void GameObject::Draw() {
 
 	// 子オブジェクトの描画
 	if (!m_Children.empty()) {
-		for (auto& child : m_Children) {
+		for (GameObject* child : m_Children) {
 			if (m_ChildAbsFrontFlag == true) {
 				
 				const bool currentDepthEnable = DirectXRender::GetIsDepthEnable();
@@ -78,7 +78,7 @@ void GameObject::SortComponents() {
 
 bool GameObject::ComponentCheck(Component* comp) {
 	// 描画関係の機能と分けるため、ここで判断
-	if (auto renderComp = dynamic_cast<RenderComponent*>(comp)) {
+	if (RenderComponent* renderComp = dynamic_cast<RenderComponent*>(comp)) {
 		return true;
 	}
 

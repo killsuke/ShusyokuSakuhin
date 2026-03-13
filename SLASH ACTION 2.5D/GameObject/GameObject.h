@@ -71,21 +71,21 @@ public:
 	inline void SetName(const std::string& name) { this->m_Name = name; };
 	inline void SetChild(GameObject* obj) {
 
-		auto childObj = std::find(m_Children.begin(), m_Children.end(), obj);
-		if (childObj != m_Children.end()) {
-			return; // すでに子オブジェクトとして登録されている場合は何もしない
-		}
+        std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
+        if (childObj != m_Children.end()) {
+            return; // すでに子オブジェクトとして登録されている場合は何もしない
+        }
 
-		m_Children.push_back(obj);
-		obj->m_Parent = this;	// 親オブジェクトを設定
-	};
-	inline void RemoveChild(GameObject* obj) {
-		auto childObj = std::find(m_Children.begin(), m_Children.end(), obj);
-		if (childObj != m_Children.end()) {
-			m_Children.erase(childObj);
-			obj->m_Parent = nullptr; // 親オブジェクトを解除
-		}
-	};
+        m_Children.push_back(obj);
+        obj->m_Parent = this;   // 親オブジェクトを設定
+    };
+    inline void RemoveChild(GameObject* obj) {
+        std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
+        if (childObj != m_Children.end()) {
+            m_Children.erase(childObj);
+            obj->m_Parent = nullptr; // 親オブジェクトを解除
+        }
+    };
 
 	inline void SetActiveState(const ActiveState& as) { m_ActiveState = as; };
 	inline void SetDrawContainer(const DrawContainer& dc) { m_DrawContainer = dc; };
@@ -123,53 +123,53 @@ public:
 	template<typename T1>
 	T1* GetComponent() {
 
-		auto it = m_ComponentMap.find(typeid(T1));
-		return (it != m_ComponentMap.end()) ? static_cast<T1*>(it->second): nullptr;
-	}
+        std::unordered_map<std::type_index, Component*>::iterator it = m_ComponentMap.find(typeid(T1));
+        return (it != m_ComponentMap.end()) ? static_cast<T1*>(it->second): nullptr;
+    }
 
-	template<typename T2>
-	std::vector<T2*> GetComponents() {
-		std::vector<T2*> comps;
-		comps.clear();
+    template<typename T2>
+    std::vector<T2*> GetComponents() {
+        std::vector<T2*> comps;
+        comps.clear();
 
-		for (auto& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
-				comps.push_back(ptr);
-			}
-		}
-		for (auto& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
-			if (auto ptr = dynamic_cast<T2*>(component.get())) {	// ダイナミックキャストでキャスト可能かどうか判定
-				comps.push_back(ptr);
-			}
-		}
-		return comps; // 指定された型のコンポーネント群を返す
-	}
+        for (std::unique_ptr<Component>& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
+            if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
+                comps.push_back(ptr);
+            }
+        }
+        for (std::unique_ptr<Component>& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+            if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
+                comps.push_back(ptr);
+            }
+        }
+        return comps; // 指定された型のコンポーネント群を返す
+    }
 
-	// コンポーネントを追加する
-	template<typename T3>
-	// コンポーネントを追加する
-	T3* AddComponent() {
-		static_assert(std::is_base_of<Component, T3>::value,
-			"型エラー！Compnentクラスを継承していません！");	// プロジェクトをUTF-8に変換しておく
+    // コンポーネントを追加する
+    template<typename T3>
+    // コンポーネントを追加する
+    T3* AddComponent() {
+        static_assert(std::is_base_of<Component, T3>::value,
+            "型エラー！Compnentクラスを継承していません！");  // プロジェクトをUTF-8に変換しておく
 
-		auto comp = std::make_unique<T3>(*this);	// thisで呼び出した者を取得可能
-		T3* ptr = comp.get();	// 一度別で格納してアクセス違反を防ぐ
+        std::unique_ptr<T3> comp = std::make_unique<T3>(*this);   // thisで呼び出した者を取得可能
+        T3* ptr = comp.get();  // 一度別で格納してアクセス違反を防ぐ
 
-		Component* p_comp = comp.get();
+        Component* p_comp = comp.get();
 
-		// 型IDで登録
-		m_ComponentMap[typeid(T3)] = p_comp;
+        // 型IDで登録
+        m_ComponentMap[typeid(T3)] = p_comp;
 
-		const bool renderFlag = ComponentCheck(p_comp);
+        const bool renderFlag = ComponentCheck(p_comp);
 
-		if (renderFlag == true) {
-			m_RenderComponents.emplace_back(std::move(comp));
-		}
-		else {
-			m_Components.emplace_back(std::move(comp));
-		}
+        if (renderFlag == true) {
+            m_RenderComponents.emplace_back(std::move(comp));
+        }
+        else {
+            m_Components.emplace_back(std::move(comp));
+        }
 
-		SortComponents();
-		return ptr;
-	}
+        SortComponents();
+        return ptr;
+    }
 };

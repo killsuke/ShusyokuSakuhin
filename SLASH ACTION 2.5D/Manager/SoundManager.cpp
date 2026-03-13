@@ -152,8 +152,8 @@ void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 		// 通常ファイルであれば読み込む
 		if (file.is_regular_file()) {
 
-			std::string name = file.path().stem().string(); // 拡張子を除いたファイル名
-			std::wstring full_path = file.path().wstring(); // フルパス
+			const std::string name = file.path().stem().string(); // 拡張子を除いたファイル名
+			const std::wstring full_path = file.path().wstring(); // フルパス
 
 			const wchar_t* c_path = full_path.c_str();
 			

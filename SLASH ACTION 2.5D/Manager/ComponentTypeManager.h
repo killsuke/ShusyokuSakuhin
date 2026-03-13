@@ -41,7 +41,7 @@ public:
 	static bool SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath);
 
 	static uint32_t GetID_FromName(const std::string& name) {
-		const auto it = nameToId.find(name);
+		const std::unordered_map<std::string, uint32_t>::const_iterator it = nameToId.find(name);
 		if (it != nameToId.end()) {
 			return it->second;
 		}
@@ -54,7 +54,7 @@ public:
 	}
 
 	static std::string GetName_FromID(const uint32_t& id) {
-		const auto it = idToName.find(id);
+		const std::unordered_map<uint32_t, std::string>::const_iterator it = idToName.find(id);
 		if(it != idToName.end()) {
 			return it->second; // Œ©‚Â‚©‚Á‚½ê‡‚Í–¼‘O‚ğ•Ô‚·
 		}

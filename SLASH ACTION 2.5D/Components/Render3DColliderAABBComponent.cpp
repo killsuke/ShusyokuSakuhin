@@ -41,11 +41,11 @@ void Render3DColliderAABBComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
@@ -53,7 +53,7 @@ void Render3DColliderAABBComponent::Update()
 		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			deviceContext->UpdateSubresource(bufferMaterial, 0, NULL, &material, 0, 0);
 

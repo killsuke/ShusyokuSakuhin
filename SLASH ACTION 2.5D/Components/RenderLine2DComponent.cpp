@@ -11,9 +11,9 @@
 using namespace DirectX;
 
 RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 
 	CreateMesh<LineMesh>();
 	// 専用のインプットレイアウトもここで作成予定
@@ -53,8 +53,8 @@ void RenderLine2DComponent::Update()
 		VERTEX_3D* vtx = reinterpret_cast<VERTEX_3D*>(mapped.pData);
 
 		// ここで全頂点データを更新
-		XMFLOAT3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
-		XMFLOAT3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
+		const XMFLOAT3 pos_S = m_StartObj->GetComponent<TransformComponent>()->GetPosition();
+		const XMFLOAT3 pos_E = m_EndObj->GetComponent<TransformComponent>()->GetPosition();
 		
 		vtx[0].position = pos_S;
 		vtx[0].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -75,26 +75,24 @@ void RenderLine2DComponent::Update()
 
 		deviceContext->UpdateSubresource(DirectXRender::GetLineThicknessBuffer(), 0, NULL, &thick, 0, 0);
 
-
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);	// 頂点の結び方の規則
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-		//	m_Texture->SetGPU();
 
-		auto subsets = m_Mesh->GetSubsets();
+		const std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
 
-		auto materials = m_Mesh->GetMaterials();
+		const std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
 
-		auto textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_Mesh->GetTextures();
 
 		//マテリアル数分ループ 
 		for (int i = 0; i < subsets.size(); ++i)
 		{
 			// ここ使う
-			MATERIAL material = materials[subsets[i].MaterialIdx];
+			const MATERIAL material = materials[subsets[i].MaterialIdx];
 
 			ID3D11Buffer* buffer = DirectXRender::GetMaterialBuffer();
 
@@ -111,31 +109,47 @@ void RenderLine2DComponent::Update()
 }
 
 void RenderLine2DComponent::SetStartPosition(const DirectX::XMFLOAT3& startPos) {
+
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 
-	transS->SetPosition(startPos);
+	if (transS != nullptr) {
+		
+		transS->SetPosition(startPos);
+	}
 }
 
 void RenderLine2DComponent::SetEndPosition(const DirectX::XMFLOAT3& endPos) {
+
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 
-	transE->SetPosition(endPos);
+	if (transE != nullptr) {
+		
+		transE->SetPosition(endPos);
+	}
 }
 
 void RenderLine2DComponent::SetStartAndEndPosition(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos) {
+
 	TransformComponent* transS = m_StartObj->GetComponent<TransformComponent>();
 	TransformComponent* transE = m_EndObj->GetComponent<TransformComponent>();
 
-	transS->SetPosition(startPos);
-	transE->SetPosition(endPos);
+	if (transE != nullptr && transS != nullptr) {
+		
+		transS->SetPosition(startPos);
+		transE->SetPosition(endPos);
+	}
 }
 
 void RenderLine2DComponent::SetStartAndEndFollowObject(GameObject* objS, GameObject* objE) {
 
 	FollowPositionComponent* followS = m_StartObj->AddComponent<FollowPositionComponent>();
-	followS->SetFollowObject(objS);
 	FollowPositionComponent* followE = m_EndObj->AddComponent<FollowPositionComponent>();
-	followE->SetFollowObject(objE);
+
+	if (followE != nullptr && followS != nullptr) {
+
+		followS->SetFollowObject(objS);
+		followE->SetFollowObject(objE);
+	}
 }
 
 void RenderLine2DComponent::SetStartAndEndDrawContainer(const DrawContainer& dcS, const DrawContainer& dcE) {

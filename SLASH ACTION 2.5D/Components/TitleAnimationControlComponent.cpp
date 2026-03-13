@@ -274,7 +274,7 @@ void TitleAnimationControlComponent::SlashesActiveOff() {
 
 void TitleAnimationControlComponent::TrianglesActiveOn() {
 
-	for(const auto& triangle : m_Triangles){
+	for (GameObject* const triangle : m_Triangles){
 		if(triangle == nullptr){
 			return;
 		}
@@ -411,6 +411,7 @@ void TitleAnimationControlComponent::GameStartWait() {
 
 	if (sound != nullptr) {
 		sound->PlayOnce(0.0f);
+		sound->SetMaxVolume(0.8f);
 		sound->AddVolume(0.005f);
 	}
 
@@ -474,7 +475,7 @@ void TitleAnimationControlComponent::SkipAnimation() {
 
 		TimeLineComponent* line = m_Object->GetComponent<TimeLineComponent>();
 
-		for (const auto& event : m_Events) {
+		for (const uint32_t event : m_Events) {
 
 			line->StopEvent(event);
 		}
@@ -483,7 +484,7 @@ void TitleAnimationControlComponent::SkipAnimation() {
 		SlashesActiveOff();
 
 		// 割れた破片たち
-		for (const auto& triangle : m_Triangles) {
+		for (GameObject* triangle : m_Triangles) {
 			triangle->SetActiveState(ActiveState::ALL_STOP);
 		}
 		
@@ -495,7 +496,7 @@ void TitleAnimationControlComponent::SkipAnimation() {
 
 		// パーティクルたちをストップ
 		std::vector<GameObject*> particles = GameObjectManager::GameObjectFindAllTag("Particle");
-		for (const auto& particle : particles) {
+		for (GameObject* particle : particles) {
 
 			particle->SetActiveState(ActiveState::ALL_STOP);
 		}

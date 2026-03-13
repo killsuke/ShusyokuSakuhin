@@ -9,12 +9,11 @@ using namespace DirectX;
 SkyDomeRenderComponent::SkyDomeRenderComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void SkyDomeRenderComponent::Update() {
 
-	auto transform = m_Object->GetComponent<TransformComponent>();
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
 
@@ -27,7 +26,7 @@ void SkyDomeRenderComponent::Update() {
 
 		cb.color = m_Color;
 
-		auto deviceContext = DirectXRender::GetDeviceContext();
+		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
@@ -35,7 +34,6 @@ void SkyDomeRenderComponent::Update() {
 		m_Shader->SetGPU();
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
-	//	m_Texture->SetGPU();
 
 		deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
 
@@ -51,9 +49,9 @@ void SkyDomeRenderComponent::Update() {
 }
 
 void SkyDomeRenderComponent::TextureLoadSkyDome(const wchar_t* tex) {
-	auto device = DirectXRender::GetDevice();
+	ID3D11Device* device = DirectXRender::GetDevice();
 
-	auto hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_pTextureView);
+	HRESULT hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_pTextureView);
 	if (FAILED(hr))
 	{
 		MessageBoxW(NULL, L"DDSファイルの読み込みに失敗しました。", L"エラー", MB_OK | MB_ICONERROR);

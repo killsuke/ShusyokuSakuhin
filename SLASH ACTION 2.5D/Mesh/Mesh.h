@@ -74,7 +74,7 @@ public:
 	// サブセット情報取得
 	std::vector<SUBSET> GetSubsets() const {
 		std::vector<SUBSET> subsets;
-		for (const auto& ptr : m_Subset) {
+		for (const std::unique_ptr<SUBSET>& ptr : m_Subset) {
 			subsets.push_back(*ptr.get());
 		}
 
@@ -83,7 +83,7 @@ public:
 
 	std::vector<SUBSET*> GetTestSubsets() {
 		std::vector<SUBSET*> subsets;
-		for (const auto& ptr : m_Subset) {
+		for (const std::unique_ptr<SUBSET>& ptr : m_Subset) {
 			subsets.push_back(ptr.get());
 		}
 
@@ -93,7 +93,7 @@ public:
 	// マテリアル情報取得
 	std::vector<MATERIAL> GetMaterials() const {
 		std::vector<MATERIAL> materials;
-		for (const auto& ptr : m_Materiales) {
+		for (const std::unique_ptr<MATERIAL>& ptr : m_Materiales) {
 			materials.push_back(*ptr.get());
 		}
 		return materials;
@@ -101,7 +101,7 @@ public:
 
 	std::vector<MATERIAL*> GetTestMaterials() const {
 		std::vector<MATERIAL*> materials;
-		for (const auto& ptr : m_Materiales) {
+		for (const std::unique_ptr<MATERIAL>& ptr : m_Materiales) {
 			materials.push_back(ptr.get());
 		}
 		return materials;
@@ -110,7 +110,7 @@ public:
 	// テクスチャ情報取得
 	std::vector<Texture> GetTextures() const {
 		std::vector<Texture> textures;
-		for (const auto& ptr : m_Textures) {
+		for (const std::unique_ptr<Texture>& ptr : m_Textures) {
 			if (ptr == nullptr) {
 				textures.push_back(Texture());
 				continue;

@@ -19,20 +19,23 @@ void MoveTerrainComponent::Update() {
 	m_recordTime += m_deltaTime;
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
-	const XMFLOAT3 myPos = transform->GetPosition();
-
 	ColliderComponent* collider = m_Object->GetComponent<ColliderComponent>();
-
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	float newPosX = sinf(m_recordTime) * m_moveSpeed;
+	if(transform == nullptr || collider == nullptr || rigid == nullptr) {
+		return;
+	}
+
+	const XMFLOAT3 myPos = transform->GetPosition();
+
+	const float newPosX = sinf(m_recordTime) * m_moveSpeed;
 
 	rigid->ConstantVelocity_X(newPosX);
 
 	if (m_player == nullptr) {
-		auto player = GameObjectManager::GameObjectFindTag("Player");
-		if (player.size() > 0) {
-			m_player = player[0];
+		GameObject* player = GameObjectManager::GameObjectFindName("Player");
+		if (player != nullptr) {
+			m_player = player;
 		}
 	}
 	else {
@@ -40,7 +43,7 @@ void MoveTerrainComponent::Update() {
 		ColliderComponent* collplay = m_player->GetComponent<ColliderComponent>();
 		PlayerOperationComponent* testMove = m_player->GetComponent<PlayerOperationComponent>();
 
-		if(playerTransform == nullptr || collplay == nullptr) {
+		if (playerTransform == nullptr || collplay == nullptr) {
 			return;
 		}
 		XMFLOAT3 hitNormal = {};
@@ -49,19 +52,25 @@ void MoveTerrainComponent::Update() {
 			if (playerTransform->GetPosition().y > myPos.y) {	// プレイヤーが地面に乗っているとき
 
 				const float delta = myPos.x - m_BeforePos.x;
-				if (testMove->GetMoveFlag() == false) {					
-					playerTransform->AddPosition(XMFLOAT3(delta,0.0f,0.0f));
+				if (testMove->GetMoveFlag() == false) {
+					playerTransform->AddPosition(XMFLOAT3(delta, 0.0f, 0.0f));
 				}
 			}
-			
+
 		}
 	}
 
 	std::vector<GameObject*> enemies = GameObjectManager::GameObjectFindTag("Enemy");
 
-	for(const auto& obj : enemies) {
+	for (GameObject* obj : enemies) {
+
 		TransformComponent* enemyTransform = obj->GetComponent<TransformComponent>();
 		ColliderComponent* collEnemy = obj->GetComponent<ColliderComponent>();
+
+		if (enemyTransform == nullptr || collEnemy == nullptr) {
+			continue;
+		}
+
 		XMFLOAT3 hitNormal = {};
 		if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collEnemy, *collider, hitNormal) == true) {
 			if (enemyTransform->GetPosition().y > myPos.y) {	// 敵が地面に乗っているとき

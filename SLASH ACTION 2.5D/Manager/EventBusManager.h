@@ -82,7 +82,8 @@ public:
 
 	// イベントリスナーの登録解除
 	static void Unsubscribe(uint64_t& id) {
-		for (auto& [type, listeners] : m_Listeners) {
+		for (std::pair<const std::type_index, std::vector<ListenerEntry>>& mapEntry : m_Listeners) {
+			std::vector<ListenerEntry>& listeners = mapEntry.second;
 			listeners.erase(
 				std::remove_if(
 					listeners.begin(),

@@ -17,7 +17,7 @@ void AttackTimingComponent::Update() {
 		return;
 	}
 
-	for (auto& attackObj : m_AttackObjs) {
+	for (HitRule& attackObj : m_AttackObjs) {
 
 		if (attackObj.hitCoolTime > 0.0f) {
 
@@ -40,7 +40,7 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 
 		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
-		auto it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
+		std::vector<HitRule>::iterator it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
 
 		if(it != m_AttackObjs.end()) {

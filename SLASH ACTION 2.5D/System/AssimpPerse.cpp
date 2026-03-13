@@ -108,7 +108,7 @@ namespace AssimpPerse
 
 					texpaths.push_back(texpath);
 					// 内蔵テクスチャかどうかを判断する
-					if (auto tex = pScene->GetEmbeddedTexture(path.C_Str())) {
+					if (const aiTexture* tex = pScene->GetEmbeddedTexture(path.C_Str())) {
 
 						std::unique_ptr<Texture> texture = std::make_unique<Texture>();
 

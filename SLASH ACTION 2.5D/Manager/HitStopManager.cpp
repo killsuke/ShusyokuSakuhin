@@ -26,7 +26,7 @@ void HitStopManager::Update()
 		{
 			// 最初のフレームだけ、オブジェクトの更新を止める
 			std::vector<GameObject*>objs = GameObjectManager::GameObjectFindAllTag(m_TargetTags);
-			for (auto& obj : objs)
+			for (GameObject* obj : objs)
 			{
 				ActiveState ac = obj->GetActiveState();
 				if (ac == ActiveState::ACTIVE) {
@@ -43,7 +43,7 @@ void HitStopManager::Update()
 			m_RecordTime = 0.0f;
 			// オブジェクトの更新を再開する
 			std::vector<GameObject*>objs = GameObjectManager::GameObjectFindAllTag(m_TargetTags);
-			for (auto& obj : objs)
+			for (GameObject* obj : objs)
 			{
 				ActiveState ac = obj->GetActiveState();
 				if (ac == ActiveState::UPDATE_STOP) {

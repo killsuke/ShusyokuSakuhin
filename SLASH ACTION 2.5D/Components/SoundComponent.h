@@ -9,6 +9,7 @@
 struct SourceVoiceData {
 
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
+	float maxVolume = 1.0f;
 	bool isPlayed = false;
 };
 
@@ -73,4 +74,8 @@ public:
 	void AddVolume(const float volume);
 
 	void AddVolume(const std::string& label, const float volume);
+
+	void SetMaxVolume(const float volume);
+
+	void SetMaxVolume(const std::string& label, const float volume);
 };
