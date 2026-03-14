@@ -50,7 +50,12 @@ void RenderRingLuminescenceBillboardComponent::Update()
 
 		rotationOnly = XMMatrixTranspose(rotationOnly);	// “]’us—ñ‚É‚·‚é‚±‚Æ‚Å‹ts—ñ‚É‚·‚é‚æ‚èˆ—‚ªŒy‚¢
 
-		cb.matrixWorld = XMMatrixTranspose(s * rotationOnly * t);
+		//		const XMMATRIX transMtx = transform->GetWorldMatrix();
+		const XMMATRIX renderMtx = MakeRenderMatrix(s * rotationOnly * t);
+
+		cb.matrixWorld = XMMatrixTranspose(renderMtx);
+
+		//		cb.matrixWorld = XMMatrixTranspose(s * rotationOnly * t);
 
 		cb.color = XMFLOAT4(m_Color);
 

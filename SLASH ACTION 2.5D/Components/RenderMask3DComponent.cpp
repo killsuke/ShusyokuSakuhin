@@ -18,7 +18,10 @@ void RenderMask3DComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
+		const XMMATRIX transMtx = transform->GetWorldMatrix();
+		const XMMATRIX renderMtx = MakeRenderMatrix(transMtx);
+
+		cb.matrixWorld = XMMatrixTranspose(renderMtx);
 
 		cb.color = m_Color;
 

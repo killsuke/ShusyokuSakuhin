@@ -4,6 +4,8 @@
 #include "Manager/GameObjectManager.h"
 #include "Manager/ShadowManager.h"
 
+using namespace DirectX;
+
 RoundShadowRenderComponent::RoundShadowRenderComponent(GameObject& obj) : RenderComponent(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
@@ -44,7 +46,10 @@ void RoundShadowRenderComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
+		const XMMATRIX transMtx = transform->GetWorldMatrix();
+		const XMMATRIX renderMtx = MakeRenderMatrix(transMtx);
+
+		cb.matrixWorld = XMMatrixTranspose(renderMtx);
 
 		cb.color = m_Color;
 

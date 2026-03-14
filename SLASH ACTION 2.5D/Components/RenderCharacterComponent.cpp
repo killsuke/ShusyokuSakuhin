@@ -3,6 +3,8 @@
 #include "System/DirectXRender.h"
 #include "Structs/HPParam.h"
 
+
+using namespace DirectX;
 RenderCharacterComponent::RenderCharacterComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
@@ -16,7 +18,10 @@ void RenderCharacterComponent::Update()
 		//定数バッファを更新
 		ConstBuffer cb;
 
-		cb.matrixWorld = XMMatrixTranspose(transform->GetWorldMatrix());
+		const XMMATRIX transMtx = transform->GetWorldMatrix();
+		const XMMATRIX renderMtx = MakeRenderMatrix(transMtx);
+
+		cb.matrixWorld = XMMatrixTranspose(renderMtx);
 
 		cb.color = m_Color;
 

@@ -30,6 +30,13 @@
 #pragma comment(lib,"directxtk.lib")
 #pragma comment(lib,"d3d11.lib")
 
+struct RenderOffset {
+	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT3 rotation = DirectX::XMFLOAT3();
+	DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionIdentity();
+};
+
 class RenderComponent : public Component
 {
 protected:
@@ -41,6 +48,7 @@ protected:
 	RightLeft m_Inversion = RightLeft::RIGHT;
 	D3D_PRIMITIVE_TOPOLOGY m_PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;		// 現在のプリミティブタイプ
 	D3D_PRIMITIVE_TOPOLOGY m_RequestPrimitive = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;	// 要求されたプリミティブタイプ
+	RenderOffset m_RenderOffset = {};
 
 	RenderComponent(GameObject& obj);
 	~RenderComponent() = default;
@@ -61,6 +69,33 @@ public:
 	void SetColor(const DirectX::XMFLOAT4& color) { m_Color = color; };
 	void SetInversionFlag(const RightLeft& flag) { m_Inversion = flag; };
 	void SetPrimitiveType(const D3D_PRIMITIVE_TOPOLOGY& type) { m_RequestPrimitive = type; };
+	void SetRenderOffset(const RenderOffset& offset) { m_RenderOffset = offset; };
+	void SetRenderOffset(const DirectX::XMFLOAT3& pos, const DirectX::XMFLOAT3& rot, const DirectX::XMFLOAT3& sca) {
+		m_RenderOffset.position = pos;
+		SetRenderOffsetRotation(rot); // 回転をセットする際にクォータニオンも更新する
+		m_RenderOffset.scale = sca;
+	};
+	void SetRenderOffset(const DirectX::XMFLOAT3& pos, const DirectX::XMFLOAT3& rot, const DirectX::XMFLOAT3& sca, const DirectX::XMVECTOR& qua) {
+		m_RenderOffset.position = pos;
+		SetRenderOffsetRotation(rot); // 回転をセットする際にクォータニオンも更新する
+		m_RenderOffset.scale = sca;
+	};
+	void SetRenderOffsetPosition(const DirectX::XMFLOAT3& pos) { m_RenderOffset.position = pos; };
+	void SetRenderOffsetRotation(const DirectX::XMFLOAT3& rot) { 
+		m_RenderOffset.rotation = rot;
+	
+		const float pitch = DirectX::XMConvertToRadians(m_RenderOffset.rotation.x);
+		const float yaw = DirectX::XMConvertToRadians(m_RenderOffset.rotation.y);
+		const float roll = DirectX::XMConvertToRadians(m_RenderOffset.rotation.z);
+
+		m_RenderOffset.quaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
+	};
+	void SetRenderOffsetScale(const DirectX::XMFLOAT3& sca) { m_RenderOffset.scale = sca; };
+	void SetRenderOffsetQuaternion(const DirectX::XMVECTOR& qua) { m_RenderOffset.quaternion = qua; };
 
 	Mesh* GetMesh() { return m_Mesh.get(); };
 	Texture GetTexture() {
@@ -93,6 +128,8 @@ public:
 	void AddColor_A(const float color) { m_Color.w += color; };
 
 	StaticMesh* LoadModelMesh(const std::string& filename, const std::string& texturedirectory);
+
+	DirectX::XMMATRIX MakeRenderMatrix(const DirectX::XMMATRIX& mtx);
 
 	template<class T>
 	T* CreateMesh() {
