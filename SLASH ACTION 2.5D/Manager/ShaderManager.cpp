@@ -42,7 +42,9 @@ void ShaderManager::UnInit() {
 
 HRESULT ShaderManager::CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model, void** shaderObj, size_t& size, ID3DBlob** blob) {
 
-	ShaderKey key{ file, entry, model };
+	const std::string fullPath = ResolveShaderPath(file);
+
+	ShaderKey key{ fullPath.c_str(), entry, model};
 	
 	// １．キャッシュに存在するか確認
 	std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash>::iterator it =
@@ -55,7 +57,7 @@ HRESULT ShaderManager::CreateShader(const char* file,const LPCSTR& entry,const L
 	}
 
 	// ２．csoが存在するか確認
-	std::string csoPath = ReplaceExt(file, "cso");
+	std::string csoPath = ReplaceExt(fullPath, "cso");
 	if (FileExists(csoPath)) {
 		std::vector<unsigned char> data;
 		ReadCsoFile(csoPath, data);
@@ -69,7 +71,7 @@ HRESULT ShaderManager::CreateShader(const char* file,const LPCSTR& entry,const L
 	HRESULT hr = S_OK;
 
 	// ３．コンパイルしてキャッシュに保存
-	hr = CompileShader(file, entry, model, shaderObj, size, blob);
+	hr = CompileShader(fullPath.c_str(), entry, model, shaderObj, size, blob);
 	if(FAILED(hr)) {
 		return hr;
 	}
@@ -154,4 +156,14 @@ std::vector<std::string> ShaderManager::GetShaderFiles(const std::string& folder
 	}
 
 	return files;
+}
+
+std::string ShaderManager::ResolveShaderPath(const std::string& file) {
+
+	if(file.find('/') != std::string::npos ||
+	   file.find('\\') != std::string::npos) {
+		return file;	// すでにパスが含まれている場合はそのまま返す
+	}
+
+	return FILE_PATH_TO_SHADER + file;	// パスを追加して返す
 }

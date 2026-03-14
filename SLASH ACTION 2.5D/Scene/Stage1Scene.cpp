@@ -72,7 +72,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/Mountain/uploads_files_4307558_Mountain.fbx",
 		//	"assets/model/Mountain");
 
-		//rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		//rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		////	rend->ChangeTexture("NoTexture.png");
 		//rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -87,7 +87,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/NewCar/uploads_files_3262252_r8.fbx",
 		//	"assets/model/NewCar");
 
-		//rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		//rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		////	rend->ChangeTexture("NoTexture.png");
 		//rend->SetColor({ 1.0f,1.0f,0.0f,1.0f });
 	}
@@ -101,7 +101,7 @@ void Stage1Scene::Init()
 		rend->SetBasePoint(-5.0f);
 		rend->SetTipPoint(5.0f);*/
 		//rend->CreateMesh<SquareMesh>();
-//		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+//		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//	rend->ChangeTexture("ranks.png");
 //		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -115,7 +115,7 @@ void Stage1Scene::Init()
 			rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 				"assets/model/Container");
 
-			rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+			rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 			rend->CreateMesh<SquareMesh>();
 			rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });*/
 	}
@@ -127,7 +127,7 @@ void Stage1Scene::Init()
 		testTrans->SetScale({ 30.0f,30.0f,30.0f });
 		auto rend = testObj->AddComponent<RenderMotionBlurComponent>();
 		rend->CreateMesh<CubeMesh>();
-		rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/MotionBlurPS.hlsl");
+		rend->SetShader("litTextureVS.hlsl", "MotionBlurPS.hlsl");
 		rend->ChangeTexture("dice.png");
 		rend->SetBlurVelocity({ 0.5f,0.0f });*/
 
@@ -141,7 +141,7 @@ void Stage1Scene::Init()
 		meshCutTrans->SetScale({ 70.0f,70.0f,1.0f });
 		auto meshRend = meshCutObj->AddComponent<Render3DComponent>();
 		meshRend->CreateMesh<SquareMesh>();
-		meshRend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		meshRend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		meshRend->SetColor({ 0.0f,0.0f,1.0f,1.0f });
 
 
@@ -164,7 +164,7 @@ void Stage1Scene::Init()
 	//	trans->SetScale(DirectX::XMFLOAT3(10.0f,10.0f,1.0f));
 	//	Render3DComponent* rend = obj->AddComponent<Render3DComponent>();
 	//	rend->CreateMesh<SquareMesh>();
-	//	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//	rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//}
 
 	{
@@ -180,7 +180,7 @@ void Stage1Scene::Init()
 		//rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
 		//	"assets/model/Container");
 
-		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		//	rend->ChangeTexture("NoTexture.png");
 		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}
@@ -197,7 +197,7 @@ void Stage1Scene::Init()
 		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);*/
 		Render2DComponent* parentRend = parentObj->AddComponent<Render2DComponent>();
 		parentRend->CreateMesh<SquareMesh>();
-		parentRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		parentRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		parentRend->ChangeTexture("background1.png");
 	//	m_testID = parentObj->GetInstanceID();
 
@@ -212,7 +212,7 @@ void Stage1Scene::Init()
 		//RenderMotionBlurCircularComponent* rend = testObj->AddComponent<RenderMotionBlurCircularComponent>();
 		//rend->CreateMesh<SquareMesh>();
 		//rend->ChangeTexture("background1.png");
-		//rend->SetShader("ShaderResource/PassThroughVS.hlsl", "ShaderResource/unlitTexturePS.hlsl","ShaderResource/MotionBlurCircularGS.hlsl");
+		//rend->SetShader("PassThroughVS.hlsl", "unlitTexturePS.hlsl","MotionBlurCircularGS.hlsl");
 
 
 		//parentObj->SetChild(testObj);
@@ -261,7 +261,7 @@ void Stage1Scene::BonePartTest()
 	//auto waistrend = waist->AddComponent<Render3DComponent>();
 
 	//waistrend->CreateMesh<SquareMesh>();
-	//waistrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//waistrend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//waistrend->ChangeTexture("NoTexture.png");
 	//waistrend->SetColor({ 0.0f,0.7f,0.0f,1.0f });
 
@@ -279,7 +279,7 @@ void Stage1Scene::BonePartTest()
 
 	//auto chestrend = chest->AddComponent<Render3DComponent>();
 	//chestrend->CreateMesh<SquareMesh>();
-	//chestrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//chestrend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//chestrend->ChangeTexture("NoTexture.png");
 	//chestrend->SetColor({ 0.0f,0.0f,0.0f,1.0f });
 
@@ -297,7 +297,7 @@ void Stage1Scene::BonePartTest()
 
 	//auto headrend = head->AddComponent<Render3DComponent>();
 	//headrend->CreateMesh<SquareMesh>();
-	//headrend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	//headrend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//headrend->ChangeTexture("NoTexture.png");
 	//headrend->SetColor({ 0.0f,0.0f,0.5f,1.0f });
 
@@ -325,7 +325,7 @@ void Stage1Scene::TestBlur() {
 	trans->SetScale({ 200.0f,200.0f,1.0f });
 	auto rend = obj->AddComponent<RenderBlurComponent>();
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/BlurPS.hlsl");
+	rend->SetShader("unlitTextureVS.hlsl", "BlurPS.hlsl");
 	rend->ChangeTexture("setumei.png");
 	rend->SetBlurTextureSize(XMFLOAT2(512.0f, 512.0f));
 }

@@ -560,7 +560,7 @@ void PlayerOperationComponent::CreateChargeSlash() {
 
 	Render3DComponent* slashRender = chargeSlash->AddComponent<Render3DComponent>();
 	slashRender->CreateMesh<SquareMesh>();
-	slashRender->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	slashRender->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	slashRender->ChangeTexture("charge_slash1.png");
 	slashRender->SetInversionFlag(m_CurrentRightLeft);
 }
@@ -670,7 +670,7 @@ void PlayerOperationComponent::CreateSlashEffect() {
 	// エフェクト用のレンダー
 	RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
 	render->CreateMesh<SquareMesh>();
-	render->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
+	render->SetShader("unlitTextureVS.hlsl", "unlitLuminescencePS.hlsl");
 	render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
 	render->SetGlowPower(0.4f);
 	render->SetGlowRadius(0.2f);

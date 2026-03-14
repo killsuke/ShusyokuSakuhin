@@ -313,7 +313,7 @@ void TestSwordActionComponent::CreateSwordEffect() {
     // エフェクト用のレンダー
     RenderLuminescenceBillboardComponent* render = effect->AddComponent<RenderLuminescenceBillboardComponent>();
     render->CreateMesh<SquareMesh>();
-    render->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
+    render->SetShader("unlitTextureVS.hlsl", "unlitLuminescencePS.hlsl");
     render->SetColor({ 0.3f,0.8f,1.0f,1.0f });
     render->SetGlowPower(0.5f);
     render->SetGlowRadius(0.6f);

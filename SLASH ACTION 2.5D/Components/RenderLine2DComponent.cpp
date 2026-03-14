@@ -17,7 +17,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 
 	CreateMesh<LineMesh>();
 	// 専用のインプットレイアウトもここで作成予定
-	SetShader("ShaderResource/LineVS.hlsl", "ShaderResource/unlitTexturePS.hlsl", "ShaderResource/unlitTexture2D_GS.hlsl");
+	SetShader("LineVS.hlsl", "unlitTexturePS.hlsl", "unlitTexture2D_GS.hlsl");
 
 	m_StartObj = GameObjectManager::AddAbsFront("startPoint", "LineObj");
 	TransformComponent* transS = m_StartObj->AddComponent<TransformComponent>();
@@ -26,7 +26,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 	RenderBillboardComponent* rendS = m_StartObj->AddComponent<RenderBillboardComponent>();
 
 	rendS->CreateMesh<CircleMesh>();
-	rendS->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendS->SetShader("unlitTextureVS2D.hlsl", "unlitTexturePS.hlsl");
 	rendS->ChangeTexture("NoTexture.png");
 
 	m_EndObj = GameObjectManager::AddAbsFront("endPoint", "LineObj");
@@ -36,7 +36,7 @@ RenderLine2DComponent::RenderLine2DComponent(GameObject& obj) : RenderComponent(
 	RenderBillboardComponent* rendE = m_EndObj->AddComponent<RenderBillboardComponent>();
 
 	rendE->CreateMesh<CircleMesh>();
-	rendE->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendE->SetShader("unlitTextureVS2D.hlsl", "unlitTexturePS.hlsl");
 	rendE->ChangeTexture("NoTexture.png");
 }
 

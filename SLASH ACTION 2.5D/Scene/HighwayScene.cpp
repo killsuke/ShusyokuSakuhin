@@ -40,7 +40,7 @@ HighwayScene::HighwayScene() {
 	Render2DComponent* renderPlayer = player->AddComponent<Render2DComponent>();
 	renderPlayer->CreateMesh<SquareMesh>();
 	renderPlayer->ChangeTexture("aka.png");
-	renderPlayer->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	renderPlayer->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	auto jumpPlayer = player->AddComponent<JumpComponent>();
 	jumpPlayer->SetJumpPower(50.0f);
 	player->AddComponent<PlayerOperationComponent>();
@@ -87,7 +87,7 @@ void HighwayScene::Enemeis() {
 	Render2DComponent* enemy1Render = enemy1->AddComponent<Render2DComponent>();
 	enemy1Render->CreateMesh<SquareMesh>();
 	enemy1Render->ChangeTexture("hopper.png");
-	enemy1Render->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	enemy1Render->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	enemy1Render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	enemy1->AddComponent<TestExtrusionJudgeComponent>();
 	ColliderComponent* enemy1Coll = enemy1->AddComponent<ColliderComponent>();
@@ -110,7 +110,7 @@ void HighwayScene::Enemeis() {
 	Render2DComponent* enemy2Render = enemy2->AddComponent<Render2DComponent>();
 	enemy2Render->CreateMesh<SquareMesh>();
 	enemy2Render->ChangeTexture("hopper.png");
-	enemy2Render->SetShader("ShaderResource/Animation2DVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	enemy2Render->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	enemy2Render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	enemy2->AddComponent<TestExtrusionJudgeComponent>();
 	ColliderComponent* enemy2Coll = enemy2->AddComponent<ColliderComponent>();
@@ -134,7 +134,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain1Coll->SetColliderSize_AABB(*terrain1Trans);
 	auto terrain1Rend = terrain1->AddComponent<Render3DComponent>();
 	terrain1Rend->CreateMesh<CubeMesh>();
-	terrain1Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain1Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid1 = terrain1->AddComponent<RigidBodyComponent>();
 	//	rigid1->SetLimitVelocity(XMFLOAT3(50.0f, 100.0f, 100.0f));
 	rigid1->SetGravityFlag(false);
@@ -150,7 +150,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain2Coll->SetColliderSize_AABB(*terrain2Trans);
 	auto terrain2Rend = terrain2->AddComponent<Render3DComponent>();
 	terrain2Rend->CreateMesh<CubeMesh>();
-	terrain2Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain2Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid2 = terrain2->AddComponent<RigidBodyComponent>();
 	rigid2->SetGravityFlag(false);
 
@@ -162,7 +162,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain3Coll->SetColliderSize_AABB(*terrain3Trans);
 	auto terrain3Rend = terrain3->AddComponent<Render3DComponent>();
 	terrain3Rend->CreateMesh<CubeMesh>();
-	terrain3Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain3Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid3 = terrain3->AddComponent<RigidBodyComponent>();
 	rigid3->SetGravityFlag(false);
 
@@ -174,7 +174,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain4Coll->SetColliderSize_AABB(*terrain4Trans);
 	auto terrain4Rend = terrain4->AddComponent<Render3DComponent>();
 	terrain4Rend->CreateMesh<CubeMesh>();
-	terrain4Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain4Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid4 = terrain4->AddComponent<RigidBodyComponent>();
 	rigid4->SetGravityFlag(false);
 
@@ -187,7 +187,7 @@ void HighwayScene::TerrainsCenter() {
 		terrain5Coll->SetColliderSize_AABB(*terrain5Trans);
 		auto terrain5Rend = terrain5->AddComponent<Render3DComponent>();
 		terrain5Rend->CreateMesh<CubeMesh>();
-		terrain5Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		terrain5Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		auto rigid5 = terrain5->AddComponent<RigidBodyComponent>();
 		rigid5->SetGravityFlag(false);
 
@@ -199,7 +199,7 @@ void HighwayScene::TerrainsCenter() {
 		terrain6Coll->SetColliderSize_AABB(*terrain6Trans);
 		auto terrain6Rend = terrain6->AddComponent<Render3DComponent>();
 		terrain6Rend->CreateMesh<CubeMesh>();
-		terrain6Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		terrain6Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		auto rigid6 = terrain6->AddComponent<RigidBodyComponent>();
 		rigid6->SetGravityFlag(false);
 	}
@@ -212,7 +212,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain7Coll->SetColliderSize_AABB(*terrain7Trans);
 	auto terrain7Rend = terrain7->AddComponent<Render3DComponent>();
 	terrain7Rend->CreateMesh<CubeMesh>();
-	terrain7Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain7Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid7 = terrain7->AddComponent<RigidBodyComponent>();
 	rigid7->SetGravityFlag(false);
 
@@ -224,7 +224,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain8Coll->SetColliderSize_AABB(*terrain8Trans);
 	auto terrain8Rend = terrain8->AddComponent<Render3DComponent>();
 	terrain8Rend->CreateMesh<CubeMesh>();
-	terrain8Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain8Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid8 = terrain8->AddComponent<RigidBodyComponent>();
 	rigid8->SetGravityFlag(false);
 
@@ -237,7 +237,7 @@ void HighwayScene::TerrainsCenter() {
 		terrain9Coll->SetColliderSize_AABB(*terrain9Trans);
 		auto terrain9Rend = terrain9->AddComponent<Render3DComponent>();
 		terrain9Rend->CreateMesh<CubeMesh>();
-		terrain9Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		terrain9Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		auto rigid9 = terrain9->AddComponent<RigidBodyComponent>();
 		rigid9->SetGravityFlag(false);
 
@@ -249,7 +249,7 @@ void HighwayScene::TerrainsCenter() {
 		terrain10Coll->SetColliderSize_AABB(*terrain10Trans);
 		auto terrain10Rend = terrain10->AddComponent<Render3DComponent>();
 		terrain10Rend->CreateMesh<CubeMesh>();
-		terrain10Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+		terrain10Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		auto rigid10 = terrain10->AddComponent<RigidBodyComponent>();
 		rigid10->SetGravityFlag(false);
 	}
@@ -262,7 +262,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain11Coll->SetColliderSize_AABB(*terrain11Trans);
 	auto terrain11Rend = terrain11->AddComponent<Render3DComponent>();
 	terrain11Rend->CreateMesh<CubeMesh>();
-	terrain11Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain11Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid11 = terrain11->AddComponent<RigidBodyComponent>();
 	rigid11->SetGravityFlag(false);
 
@@ -274,7 +274,7 @@ void HighwayScene::TerrainsCenter() {
 	terrain12Coll->SetColliderSize_AABB(*terrain12Trans);
 	auto terrain12Rend = terrain12->AddComponent<Render3DComponent>();
 	terrain12Rend->CreateMesh<CubeMesh>();
-	terrain12Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrain12Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	auto rigid12 = terrain12->AddComponent<RigidBodyComponent>();
 	rigid12->SetGravityFlag(false);
 
@@ -290,7 +290,7 @@ void HighwayScene::TerrainsBack() {
 	terrainBack1Coll->SetColliderSize_AABB(*terrainBack1Trans);
 	auto terrainBack1Rend = terrainBack1->AddComponent<Render3DComponent>();
 	terrainBack1Rend->CreateMesh<CubeMesh>();
-	terrainBack1Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrainBack1Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	terrainBack1Rend->SetColor(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 	auto rigid1 = terrainBack1->AddComponent<RigidBodyComponent>();
 	//	rigid2->SetLimitVelocity(XMFLOAT3(50.0f, 100.0f, 100.0f));
@@ -306,7 +306,7 @@ void HighwayScene::TerrainsBack() {
 	terrainBack2Coll->SetColliderSize_AABB(*terrainBack2Trans);
 	auto terrainBack2Rend = terrainBack2->AddComponent<Render3DComponent>();
 	terrainBack2Rend->CreateMesh<CubeMesh>();
-	terrainBack2Rend->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	terrainBack2Rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	terrainBack2Rend->SetColor(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 	auto rigid2 = terrainBack2->AddComponent<RigidBodyComponent>();
 	rigid2->SetGravityFlag(false);

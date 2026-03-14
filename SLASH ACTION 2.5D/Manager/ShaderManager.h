@@ -42,6 +42,7 @@ private:
 	static bool ReadCsoFile(const std::string& path, std::vector<unsigned char>& out);
 	static bool SaveCsoFile(const std::string& path, const void* data, const size_t& size);
 	static std::vector<std::string> GetShaderFiles(const std::string& folder);
+	static std::string ResolveShaderPath(const std::string& file);
 
 public:
 	static void Init();

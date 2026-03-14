@@ -49,12 +49,12 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 
 	Render2DComponent* rend2D = m_BossBarrier->AddComponent<Render2DComponent>();
 	rend2D->CreateMesh<SquareMesh>();
-	rend2D->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
 
 	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("ShaderResource/unlitLuminescenceVS.hlsl", "ShaderResource/unlitRingLuminescencePS.hlsl");
+	rend->SetShader("unlitLuminescenceVS.hlsl", "unlitRingLuminescencePS.hlsl");
 	rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 	rend->SetGlowPower(0.5f);
 	rend->SetGlowRadius(0.3f);
@@ -94,12 +94,12 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 
 		Render2DComponent* rend2D = barrier->AddComponent<Render2DComponent>();
 		rend2D->CreateMesh<SquareMesh>();
-		rend2D->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		rend2D->ChangeTexture("ring.png");
 
 		RenderRingLuminescenceBillboardComponent* rend = barrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->SetShader("ShaderResource/unlitLuminescenceVS.hlsl", "ShaderResource/unlitRingLuminescencePS.hlsl");
+		rend->SetShader("unlitLuminescenceVS.hlsl", "unlitRingLuminescencePS.hlsl");
 		rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 		rend->SetGlowPower(0.5f);
 		rend->SetGlowRadius(0.3f);
@@ -121,7 +121,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 
 		Render3DComponent* hpRender = hp->AddComponent<Render3DComponent>();
 		hpRender->CreateMesh<SquareMesh>();
-		hpRender->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		hpRender->SetShader("unlitTextureVS2D.hlsl", "unlitTexturePS.hlsl");
 		hpRender->ChangeTexture("boss_bar.png");
 	}
 
@@ -134,7 +134,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		RenderHpComponent* hpBar = m_HpBar->AddComponent<RenderHpComponent>();
 		hpBar->SetReferenceHPObj(*m_Object);
 		hpBar->CreateMesh<SquareMesh>();
-		hpBar->SetShader("ShaderResource/OverVertexMoveVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		hpBar->SetShader("OverVertexMoveVS.hlsl", "unlitTexturePS.hlsl");
 		hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	}
 }
@@ -352,13 +352,13 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 
 	Render2DComponent* rend2D = bullet->AddComponent<Render2DComponent>();
 	rend2D->CreateMesh<SquareMesh>();
-	rend2D->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
 
 	RenderRingLuminescenceBillboardComponent* rend = bullet->AddComponent<RenderRingLuminescenceBillboardComponent>();
 
 	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitRingLuminescencePS.hlsl");
+	rend->SetShader("unlitTextureVS.hlsl", "unlitRingLuminescencePS.hlsl");
 	rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 	rend->SetGlowPower(1.0f);
 	rend->SetGlowRadius(0.5f);

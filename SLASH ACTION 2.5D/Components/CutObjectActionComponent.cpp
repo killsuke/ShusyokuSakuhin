@@ -474,7 +474,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 	crackTrans1->SetScale(size1);
 	Render2DComponent* rend1 = m_Crack1->AddComponent<Render2DComponent>();
 	rend1->CreateMesh<SquareMesh>();
-	rend1->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rend1->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend1->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
 	rend1->ChangeTexture("crack.png");
 	//		m_Crack1ID = m_Crack1->GetInstanceID();
@@ -485,7 +485,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 	crackTrans2->SetScale(size2);
 	Render2DComponent* rend2 = m_Crack2->AddComponent<Render2DComponent>();
 	rend2->CreateMesh<SquareMesh>();
-	rend2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rend2->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2->SetColor(XMFLOAT4(3.0f, 3.0f, 3.0f, 1.0f));
 	rend2->ChangeTexture("crack.png");
 	//		m_Crack2ID = m_Crack2->GetInstanceID();
@@ -527,7 +527,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 
 		Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		rend->ChangeTexture("glass_shards.png");
 
 		m_Debris.push_back(debris);
@@ -558,7 +558,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 
 		Render3DComponent* rend = debris->AddComponent<Render3DComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		rend->ChangeTexture("glass_shards.png");
 
 		m_Debris.push_back(debris);

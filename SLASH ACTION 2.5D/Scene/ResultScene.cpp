@@ -38,7 +38,7 @@ ResultScene::ResultScene()
 
 	auto rendTitle = ResultUI->AddComponent<Render2DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
-	rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendTitle->SetShader("unlitTextureVS2D.hlsl", "unlitTexturePS.hlsl");
 	if (fadeUI->GetWinLoseFlag() == true) {
 		rendTitle->ChangeTexture("gameclear.png");
 	}
@@ -56,7 +56,7 @@ ResultScene::ResultScene()
 
 		auto rendTitle = titleUI->AddComponent<Render2DComponent>();
 		rendTitle->CreateMesh<SquareMesh>();
-		rendTitle->SetShader("ShaderResource/unlitTextureVS2D.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rendTitle->SetShader("unlitTextureVS2D.hlsl", "unlitTexturePS.hlsl");
 		rendTitle->ChangeTexture("please.png");
 		rendTitle->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 	}

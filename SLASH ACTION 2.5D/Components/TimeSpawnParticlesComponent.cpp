@@ -32,14 +32,14 @@ void TimeSpawnParticlesComponent::Update() {
 
 		RenderParticlesComponent* renderComp1 = particleObj->AddComponent<RenderParticlesComponent>();
 		renderComp1->CreateMesh<SquareMesh>();
-		renderComp1->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		renderComp1->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		renderComp1->ChangeTexture("shine.png");
 		renderComp1->SetColor({1.0f,1.0f,1.0f,1.0f});
 		renderComp1->SetVanishTime(3.0f);
 
 		RenderLuminescenceBillboardComponent* childRender = particleObj->AddComponent<RenderLuminescenceBillboardComponent>();
 		childRender->CreateMesh<SquareMesh>();
-		childRender->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitLuminescencePS.hlsl");
+		childRender->SetShader("unlitTextureVS.hlsl", "unlitLuminescencePS.hlsl");
 		childRender->SetColor({ 0.3f,0.8f,1.0f,0.5f });
 		childRender->SetGlowPower(0.5f);
 		childRender->SetGlowRadius(0.5f);

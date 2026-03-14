@@ -92,7 +92,7 @@ void BossEventComponent::CreateBossWalls() {
 
 	Render3DComponent* render = terrainObj->AddComponent<Render3DComponent>();
 	render->CreateMesh<CubeMesh>();
-	render->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/litTexturePS.hlsl");
+	render->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	render->ChangeTexture("testTerrain.png");
 
 
@@ -129,7 +129,7 @@ void BossEventComponent::CreateBossWalls() {
 
 	Render2DComponent* cubeRe = boss->AddComponent<Render2DComponent>();
 	cubeRe->CreateMesh<SquareMesh>();
-	cubeRe->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	cubeRe->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 //	cubeRe->ChangeTexture("bossHo-dai.png");
 	cubeRe->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
 

@@ -26,7 +26,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	//	transTitle->SetRotation({ 0.0f,30.0f,0.0f });
 	Render3DComponent* rendTitle = titleUI->AddComponent<Render3DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
-	rendTitle->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendTitle->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rendTitle->ChangeTexture("Slash_Action_Title.png");
 	m_TitleRogo = titleUI;
 
@@ -41,7 +41,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	Render3DComponent* rendSword = sword3D->AddComponent<Render3DComponent>();
 	rendSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
 		"assets/model/Copilot3D");
-	rendSword->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendSword->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	m_Sword3D = sword3D;
 
 	GameObject* startUI = GameObjectManager::AddObject("start", "TitleUI");
@@ -53,7 +53,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 	Render3DComponent* startRend = startUI->AddComponent<Render3DComponent>();
 	startRend->CreateMesh<SquareMesh>();
-	startRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	startRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	startRend->ChangeTexture("start.png");
 	m_StartUI = startUI;
 	m_StartUI->SetActiveState(ActiveState::ALL_STOP);
@@ -64,7 +64,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	endTrans->SetScale({ 80.0f,30.0f,1.0f });
 	Render3DComponent* endRend = endUI->AddComponent<Render3DComponent>();
 	endRend->CreateMesh<SquareMesh>();
-	endRend->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	endRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	endRend->ChangeTexture("end.png");
 	m_EndUI = endUI;
 	m_EndUI->SetActiveState(ActiveState::ALL_STOP);
@@ -80,7 +80,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	Render3DComponent* rendMiniSword = miniSword->AddComponent<Render3DComponent>();
 	rendMiniSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
 		"assets/model/Copilot3D");
-	rendMiniSword->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendMiniSword->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	m_MiniSword3D = miniSword;
 	m_MiniSword3D->SetActiveState(ActiveState::ALL_STOP);
 
@@ -104,7 +104,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 		Render2DComponent* rendTri1 = triangle1->AddComponent<Render2DComponent>();
 		rendTri1->CreateMesh<TriangleMesh>();
-		rendTri1->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rendTri1->SetShader("litTextureVS.hlsl", "unlitTexturePS.hlsl");
 		m_Triangles[0] = triangle1;
 
 		GameObject* triangle2 = GameObjectManager::AddObject("triangle2", "TitleUI");
@@ -126,7 +126,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 		Render2DComponent* rendTri2 = triangle2->AddComponent<Render2DComponent>();
 		rendTri2->CreateMesh<TriangleMesh>();
-		rendTri2->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rendTri2->SetShader("litTextureVS.hlsl", "unlitTexturePS.hlsl");
 		m_Triangles[1] = triangle2;
 
 		GameObject* triangle3 = GameObjectManager::AddObject("triangle3", "TitleUI");
@@ -148,7 +148,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 		Render2DComponent* rendTri3 = triangle3->AddComponent<Render2DComponent>();
 		rendTri3->CreateMesh<TriangleMesh>();
-		rendTri3->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rendTri3->SetShader("litTextureVS.hlsl", "unlitTexturePS.hlsl");
 		m_Triangles[2] = triangle3;
 
 		GameObject* triangle4 = GameObjectManager::AddObject("triangle4", "TitleUI");
@@ -170,7 +170,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 		Render2DComponent* rendTri4 = triangle4->AddComponent<Render2DComponent>();
 		rendTri4->CreateMesh<TriangleMesh>();
-		rendTri4->SetShader("ShaderResource/litTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		rendTri4->SetShader("litTextureVS.hlsl", "unlitTexturePS.hlsl");
 		m_Triangles[3] = triangle4;
 	}
 
@@ -189,7 +189,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 	Render2DComponent* rendSlashLine = slashLineUI->AddComponent<Render2DComponent>();
 	rendSlashLine->CreateMesh<SquareMesh>();
-	rendSlashLine->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendSlashLine->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rendSlashLine->ChangeTexture("LightLine.png");
 	m_SlashUI1 = slashLineUI;
 	m_SlashUI1->SetActiveState(ActiveState::UPDATE_STOP);
@@ -209,7 +209,7 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 
 	Render2DComponent* rendSlashLine2 = slashLineUI2->AddComponent<Render2DComponent>();
 	rendSlashLine2->CreateMesh<SquareMesh>();
-	rendSlashLine2->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+	rendSlashLine2->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rendSlashLine2->ChangeTexture("LightLine.png");
 	m_SlashUI2 = slashLineUI2;
 	m_SlashUI2->SetActiveState(ActiveState::UPDATE_STOP);

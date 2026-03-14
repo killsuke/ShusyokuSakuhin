@@ -103,7 +103,7 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		// 当たり判定の可視化用（デバッグ用）
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
-		renderColl->SetShader("ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl");
+		renderColl->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		renderColl->ChangeTexture("NoTexture.png");
 		renderColl->SetColor(Vector4(1.0f, 0.0f, 0.0f, 0.5f));*/
 

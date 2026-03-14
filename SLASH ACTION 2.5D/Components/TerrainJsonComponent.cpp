@@ -14,8 +14,8 @@ void TerrainJsonComponent::Update() {
 
 void TerrainJsonComponent::MakeSampleStatus() {
     std::vector<TerrainStatus> terrains = {
-        { "T_Block" , {5.0f,5.0f,5.0f}, { 0.0f,0.0f,0.0f },"NoTexture.png","ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl"},
-        { "T_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },"dice.png","ShaderResource/unlitTextureVS.hlsl", "ShaderResource/unlitTexturePS.hlsl"},
+        { "T_Block" , {5.0f,5.0f,5.0f}, { 0.0f,0.0f,0.0f },"NoTexture.png","unlitTextureVS.hlsl", "unlitTexturePS.hlsl"},
+        { "T_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },"dice.png","unlitTextureVS.hlsl", "unlitTexturePS.hlsl"},
     };
 
 	m_terrainStatus = terrains;
