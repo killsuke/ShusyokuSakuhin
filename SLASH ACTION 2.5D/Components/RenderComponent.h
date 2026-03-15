@@ -97,6 +97,30 @@ public:
 	void SetRenderOffsetScale(const DirectX::XMFLOAT3& sca) { m_RenderOffset.scale = sca; };
 	void SetRenderOffsetQuaternion(const DirectX::XMVECTOR& qua) { m_RenderOffset.quaternion = qua; };
 
+	void AddRenderOffsetPosition(const DirectX::XMFLOAT3& pos) {
+		m_RenderOffset.position.x += pos.x;
+		m_RenderOffset.position.y += pos.y;
+		m_RenderOffset.position.z += pos.z;
+	};
+	void AddRenderOffsetRotation(const DirectX::XMFLOAT3& rot) {
+		m_RenderOffset.rotation.x += rot.x;
+		m_RenderOffset.rotation.y += rot.y;
+		m_RenderOffset.rotation.z += rot.z;
+		const float pitch = DirectX::XMConvertToRadians(m_RenderOffset.rotation.x);
+		const float yaw = DirectX::XMConvertToRadians(m_RenderOffset.rotation.y);
+		const float roll = DirectX::XMConvertToRadians(m_RenderOffset.rotation.z);
+		m_RenderOffset.quaternion = DirectX::XMQuaternionRotationRollPitchYaw(
+			pitch,
+			yaw,
+			roll
+		);
+	};
+	void AddRenderOffsetScale(const DirectX::XMFLOAT3& sca) {
+		m_RenderOffset.scale.x += sca.x;
+		m_RenderOffset.scale.y += sca.y;
+		m_RenderOffset.scale.z += sca.z;
+	};
+
 	Mesh* GetMesh() { return m_Mesh.get(); };
 	Texture GetTexture() {
 

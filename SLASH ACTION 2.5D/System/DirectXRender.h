@@ -62,7 +62,16 @@ enum class EBufferTypes {
 	MAX
 };
 
+enum class SamplerState {
 
+	WRAP = 0,
+	CLAMP,
+	BORDER,
+	MIRROR,
+	MIRROR_ONCE,
+
+	MAX
+};
 
 // 定数バッファ用構造体
 struct ConstBuffer
@@ -207,8 +216,9 @@ private:
 	static inline D3D_FEATURE_LEVEL m_FeatureLevel;
 	static inline ID3D11BlendState* m_BlendStateATC = nullptr;
 
-
-	static inline ID3D11SamplerState* m_Sampler = nullptr;		// サンプラー用変数
+	static inline ID3D11SamplerState* m_CurrentSampler = nullptr;		// サンプラー用変数
+	static inline std::array<ID3D11SamplerState*, (int)(SamplerState::MAX)> m_SamplerStates = { };	// サンプラーステート配列
+	static inline SamplerState m_CurrentSamplerState = SamplerState::WRAP;
 
 	// ブラー用バッファとモーションブラー用バッファは別途用意する
 	// モーションブラー用バッファは実験中の為
@@ -295,6 +305,8 @@ public:
 		m_SwapChain->SetFullscreenState(flag, NULL);
 	};
 
+	static void SetSamplerState(const SamplerState& state);
+
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
 	static ID3D11RenderTargetView* GetRenderTargetView() { return m_RenderTargetView; };
@@ -323,7 +335,8 @@ public:
 	static ID3D11Buffer* GetRingGlowBuffer() { return m_RingGlowBuffer; };
 	static ID3D11Buffer* GetTimeBuffer() { return m_TimeBuffer; };
 	static ID3D11Buffer* GetShadowBuffer() { return m_ShadowBuffer; };
-	static ID3D11SamplerState* GetSampler() { return m_Sampler; };
+	static ID3D11SamplerState* GetSampler() { return m_CurrentSampler; };
+	// サンプラーのバリエーションを増やそう
 
 	//=============================================================================
 	// ブレンド ステート設定

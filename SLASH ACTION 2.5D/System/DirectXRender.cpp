@@ -76,7 +76,7 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_DepthStateEnable);
 	SAFE_RELEASE(m_DepthStateDisable);
 	SAFE_RELEASE(m_SwapChain);
-	SAFE_RELEASE(m_Sampler);
+	SAFE_RELEASE(m_CurrentSampler);
 	SAFE_RELEASE(m_DefaultDrawBuffer);
 	SAFE_RELEASE(m_BoneConstantBuffer);
 	SAFE_RELEASE(m_OverVertexConstantBuffer);
@@ -96,6 +96,13 @@ void DirectXRender::UnInit() {
 			//g_BlendState[i] = nullptr;  // 解放後にポインタをクリア
 		}
 	}
+
+	//for(int i = 0; i < (int)(SamplerState::MAX); ++i) {
+	//	if (m_SamplerStates[i]) {  // nullptr チェック
+	//		SAFE_RELEASE(m_SamplerStates[i]);
+	//		//m_SamplerStates[i] = nullptr;  // 解放後にポインタをクリア
+	//	}
+	//}
 	SAFE_RELEASE(m_BlendStateATC);
 	SAFE_RELEASE(m_CameraInformationBuffer);
 	SAFE_RELEASE(m_LineThicknessBuffer);
@@ -125,7 +132,7 @@ void DirectXRender::DrawBegin() {
 	// ポストエフェクト等でどんな描画かを使う場合は、
 	// 最初の値（スロット）を１以上にする
 	// 次の引数たちも増やすことも考える
-	m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler);
+	m_DeviceContext->PSSetSamplers(0, 1, &m_CurrentSampler);
 }
 
 //=======================================
@@ -156,7 +163,7 @@ HRESULT DirectXRender::DeviceAndSwapCreate() {
 	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, NULL, 0,
 		D3D11_SDK_VERSION, &swapChainDesc, &m_SwapChain, &m_Device, &m_FeatureLevel, &m_DeviceContext);
 	if (FAILED(hr)) return hr;
-	
+
 	return hr;
 }
 
@@ -352,21 +359,60 @@ HRESULT DirectXRender::SamplerCreate() {
 	D3D11_SAMPLER_DESC samplerDesc{};
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	//	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+	samplerDesc.MaxAnisotropy = 8;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	// テクスチャのアドレッシングモードを設定
+	// WRAP: テクスチャ座標が0.0から1.0の範囲を超えると、テクスチャが繰り返される
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+
+	D3D11_SAMPLER_DESC wrap = samplerDesc;
+
+	// CLAMP: テクスチャ座標が0.0から1.0の範囲を超えると、テクスチャの端の色が繰り返される
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
-	/*samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;*/
+	D3D11_SAMPLER_DESC clamp = samplerDesc;
 
-	samplerDesc.MaxAnisotropy = 4;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	// BORDER: テクスチャ座標が0.0から1.0の範囲を超えると、指定したボーダーカラーが使用される
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
 
-	//	ID3D11SamplerState* samplerState{};
-	hr = m_Device->CreateSamplerState(&samplerDesc, &m_Sampler);
-	if (FAILED(hr)) return hr;
+	samplerDesc.BorderColor[0] = 0.0f; // R
+	samplerDesc.BorderColor[1] = 0.0f; // G
+	samplerDesc.BorderColor[2] = 0.0f; // B
+	samplerDesc.BorderColor[3] = 0.0f; // A
+
+	D3D11_SAMPLER_DESC border = samplerDesc;
+
+	// MIRROR: テクスチャ座標が0.0から1.0の範囲を超えると、テクスチャが鏡像反転して繰り返される
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+
+	D3D11_SAMPLER_DESC mirror = samplerDesc;
+
+	// MIRROR_ONCE: テクスチャ座標が0.0から1.0の範囲を超えると、テクスチャが一度だけ鏡像反転して繰り返される
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+
+	D3D11_SAMPLER_DESC mirror_once = samplerDesc;
+
+	hr = m_Device->CreateSamplerState(&clamp, &m_CurrentSampler);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
+		return hr;
+	}
+
+	m_CurrentSamplerState = SamplerState::CLAMP;
 
 	return hr;
 }
@@ -429,7 +475,7 @@ HRESULT DirectXRender::CreateLineThicknessBuffer() {
 	bufferDesc.StructureByteStride = sizeof(float);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LineThicknessBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -455,11 +501,11 @@ HRESULT DirectXRender::CreateBlurBuffer() {
 	bufferDesc.StructureByteStride = sizeof(float);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_BlurBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
-	
+
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::BLUR), 1, &m_BlurBuffer);
 	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::BLUR), 1, &m_BlurBuffer);
 
@@ -481,7 +527,7 @@ HRESULT DirectXRender::CreateHitFlashBuffer() {
 	bufferDesc.StructureByteStride = sizeof(float);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -560,7 +606,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 	bufferDesc.ByteWidth = sizeof(MotionBlurBuffer);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -571,7 +617,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 	bufferDesc.ByteWidth = sizeof(MotionBlurCircularBuffer);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurCircularBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -604,7 +650,7 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
 
 	// 定数バッファを頂点シェーダーにセットする
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::BONE), 1, &m_BoneConstantBuffer);
-	
+
 	return hr;
 }
 
@@ -647,7 +693,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 	bufferDesc.ByteWidth = sizeof(GlowBuffer);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_GlowBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -658,7 +704,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 	bufferDesc.ByteWidth = sizeof(RingGlowBuffer);
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_RingGlowBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
 		return hr;
 	}
@@ -952,6 +998,36 @@ void DirectXRender::SetFillMode(const EFillMode& fillMode) {
 	}
 }
 
+void DirectXRender::SetSamplerState(const SamplerState& state) {
+
+	m_CurrentSamplerState = state;
+
+	switch (m_CurrentSamplerState) {
+	case SamplerState::WRAP:
+
+		m_CurrentSampler = m_SamplerStates[(int)(SamplerState::WRAP)];
+		break;
+	case SamplerState::CLAMP:
+
+		m_CurrentSampler = m_SamplerStates[(int)(SamplerState::CLAMP)];
+		break;
+	case SamplerState::BORDER:
+
+		m_CurrentSampler = m_SamplerStates[(int)(SamplerState::BORDER)];
+		break;
+	case SamplerState::MIRROR:
+
+		m_CurrentSampler = m_SamplerStates[(int)(SamplerState::MIRROR)];
+		break;
+	case SamplerState::MIRROR_ONCE:
+
+		m_CurrentSampler = m_SamplerStates[(int)(SamplerState::MIRROR_ONCE)];
+		break;
+	default:
+		break;
+	}
+}
+
 // モデルの表示状態を変更
 void DirectXRender::SwitchingFillMode() {
 
@@ -1022,7 +1098,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 
 	// バックバッファサイズ変更
 	hr = m_SwapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"ResizeBuffers error", L"Error", MB_OK);
 		return;
 	}
@@ -1030,14 +1106,14 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 	// バックバッファ再取得
 	ID3D11Texture2D* backBuffer = nullptr;
 	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"GetBuffer error", L"Error", MB_OK);
 		return;
 	}
 
 	// レンダーターゲットビュー再作成
 	hr = m_Device->CreateRenderTargetView(backBuffer, nullptr, &m_RenderTargetView);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateRenderTargetView error", L"Error", MB_OK);
 		return;
 	}
@@ -1057,7 +1133,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	hr = m_Device->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencile);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateTexture2D error", L"Error", MB_OK);
 		return;
 	}
@@ -1069,7 +1145,7 @@ void DirectXRender::OnResize(const UINT& width, const UINT& height) {
 
 	// デプスステンシルビュー再作成
 	hr = m_Device->CreateDepthStencilView(depthStencile, &depthStencilViewDesc, &m_DepthStencilView);
-	if(FAILED(hr)) {
+	if (FAILED(hr)) {
 		MessageBoxW(nullptr, L"CreateDepthStencilView error", L"Error", MB_OK);
 		return;
 	}
