@@ -7,9 +7,11 @@
 #include "RigidBodyComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
+#include "Mesh/TerrainMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
 #include "RoundShadowRenderComponent.h"
+#include "RenderTerrainComponent.h"
 
 using namespace DirectX;
 
@@ -24,18 +26,18 @@ void TerrainCreateComponent::Update() {
 
 void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, const float centerZ) {
 	// この中で生成する
-	if(m_csvObjData.empty()) {
+	if (m_csvObjData.empty()) {
 		return; // データがない場合は何もしない
 	}
 
 	unsigned int num = 0; // 生成したオブジェクトの数をカウント
 
-	for(const CSV_Data& data: m_csvObjData) {
+	for (const CSV_Data& data : m_csvObjData) {
 		std::string kind = data.kind; // 地形の種類
 
 		TerrainStatus tS;
-		for(const TerrainStatus& t : status) {
-			if(t.kind == kind) {
+		for (const TerrainStatus& t : status) {
+			if (t.kind == kind) {
 				tS.kind = t.kind;
 				tS.scale = t.scale;
 				tS.angle = t.angle;
@@ -47,8 +49,8 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 		}
 
 		std::string name = "terrain_" + std::to_string(num);
-		
-		GameObject* terrainObj = GameObjectManager::AddObject(name,"Terrain");
+
+		GameObject* terrainObj = GameObjectManager::AddObject(name, "Terrain");
 		TransformComponent* transform = terrainObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, centerZ });
 		transform->SetScale(tS.scale);
@@ -68,10 +70,16 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 			RigidBodyComponent* rigid = terrainObj->AddComponent<RigidBodyComponent>();
 			rigid->SetMass(2.0f);
 
-			RoundShadowRenderComponent* render = terrainObj->AddComponent<RoundShadowRenderComponent>();
+			/*RoundShadowRenderComponent* render = terrainObj->AddComponent<RoundShadowRenderComponent>();
 			render->CreateMesh<CubeMesh>();
 			render->SetShader(tS.shaderVS, tS.shaderPS);
+			render->ChangeTexture(tS.texture);*/
+
+			RenderTerrainComponent* render = terrainObj->AddComponent<RenderTerrainComponent>();
+			//render->CreateMesh<TerrainMesh>();
+			render->SetShader(tS.shaderVS, tS.shaderPS);
 			render->ChangeTexture(tS.texture);
+			render->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 		}
 
 		// デバッグ用のコライダー表示

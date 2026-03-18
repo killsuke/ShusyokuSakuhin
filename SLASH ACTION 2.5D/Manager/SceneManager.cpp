@@ -13,7 +13,7 @@ void SceneManager::Init() {
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	m_Scene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
-	//m_pScene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
+	//m_Scene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
 	//	Debug::DebugFirst();
 }
 
@@ -42,6 +42,9 @@ void SceneManager::Update() {
 			// ポインタ内に入ってるシーンの更新
 			m_Scene->Update();
 		}
+	}
+	else {
+		MessageBoxW(nullptr, L"シーンが存在しません。", L"Error", MB_OK | MB_ICONWARNING);
 	}
 
 	GameObjectManager::Update();

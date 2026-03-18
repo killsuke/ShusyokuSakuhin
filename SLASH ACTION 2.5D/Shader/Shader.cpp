@@ -37,7 +37,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		&m_pVertexShader,
 		&m_pVertexLayout);
 	if (!sts) {
-		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK);
+		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -49,7 +49,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		"ps_5_0",
 		&m_pPixelShader);
 	if (!sts) {
-		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK);
+		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -62,7 +62,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 			"gs_5_0",
 			&m_pGeometryShader);
 		if (!sts) {
-			MessageBoxW(nullptr, L"CreateGeometryShader error", L"error", MB_OK);
+			MessageBoxW(nullptr, L"CreateGeometryShader error", L"error", MB_OK | MB_ICONWARNING);
 			return;
 		}
 	}
@@ -96,7 +96,7 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 		&m_pVertexShader,
 		&m_pVertexLayout);
 	if (!sts) {
-		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK);
+		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -108,7 +108,7 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 		"ps_5_0",
 		&m_pPixelShader);
 	if (!sts) {
-		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK);
+		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 

@@ -1,4 +1,4 @@
-#include "RoundShadowRenderComponent.h"
+#include "RenderTerrainComponent.h"
 #include "TransformComponent.h"
 #include "Manager/TextureManager.h"
 #include "Manager/GameObjectManager.h"
@@ -6,13 +6,14 @@
 
 using namespace DirectX;
 
-RoundShadowRenderComponent::RoundShadowRenderComponent(GameObject& obj) : RenderComponent(obj)
-{
+RenderTerrainComponent::RenderTerrainComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ソート番号を設定
 	m_Shader = std::make_unique<Shader>();
 
 	m_ShadowSRV = TextureManager::GetTexture("bullet.png");
 	m_ShaderResource[1] = m_ShadowSRV.Get();
+
+	m_TerrainMesh = CreateMesh<TerrainMesh>();
 
 	ID3D11Device* device = DirectXRender::GetDevice();
 
@@ -37,17 +38,15 @@ RoundShadowRenderComponent::RoundShadowRenderComponent(GameObject& obj) : Render
 	}
 }
 
-RoundShadowRenderComponent::~RoundShadowRenderComponent()
-{
+RenderTerrainComponent::~RenderTerrainComponent() {
 	SAFE_RELEASE(m_SamplerState[1]);
 }
 
-void RoundShadowRenderComponent::Update()
-{
+void RenderTerrainComponent::Update() {
 
 	const TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	if (transform != nullptr && m_Mesh != nullptr && m_ShaderResource[1] != nullptr && m_SamplerState[1] != nullptr) {
+	if (transform != nullptr && m_TerrainMesh != nullptr && m_ShaderResource[1] != nullptr && m_SamplerState[1] != nullptr) {
 		//定数バッファを更新
 		ConstBuffer cb;
 
@@ -62,6 +61,13 @@ void RoundShadowRenderComponent::Update()
 
 		ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 
+		// ここで頂点バッファを書き換える
+		const XMFLOAT3 pos = transform->GetPosition();
+		const XMFLOAT3 scale = transform->GetScale();
+		
+		m_TerrainMesh->ChangeUV(scale);
+		m_VertexBuffer.Modify(m_TerrainMesh->GetVertices());
+
 		// 描画の処理
 		// トポロジーをセット（プリミティブタイプ）
 		PrimitiveTypeUpdate(deviceContext);
@@ -74,25 +80,35 @@ void RoundShadowRenderComponent::Update()
 		// 行列をシェーダーに渡す
 		deviceContext->UpdateSubresource(bufferDraw, 0, NULL, &cb, 0, 0);
 
-		std::vector<SUBSET> subsets = m_Mesh->GetSubsets();
+		std::vector<SUBSET> subsets = m_TerrainMesh->GetSubsets();
 
-		std::vector<MATERIAL> materials = m_Mesh->GetMaterials();
+		std::vector<MATERIAL> materials = m_TerrainMesh->GetMaterials();
 
-		std::vector<Texture> textures = m_Mesh->GetTextures();
+		std::vector<Texture> textures = m_TerrainMesh->GetTextures();
 
 		ID3D11Buffer* bufferMaterial = DirectXRender::GetMaterialBuffer();
 
 		ID3D11Buffer* shadowBuffer = DirectXRender::GetShadowBuffer();
 
-		ID3D11SamplerState* sampler = DirectXRender::GetSampler();
+		ID3D11SamplerState* currentSampler = DirectXRender::GetSampler();
 
-		if(sampler == nullptr) {
+		if (currentSampler == nullptr) {
 			return;
 		}
 
-		m_SamplerState[0] = sampler;
+		m_SamplerState[0] = currentSampler;
 
-		deviceContext->PSSetSamplers(0, 2, m_SamplerState.data());
+		// 現在のサンプラーステートを保存してから、描画に必要なサンプラーステートに切り替える
+		const SamplerState currentSamplerState = DirectXRender::GetCurrentSamplerState();
+
+		ID3D11SamplerState* newSampler = DirectXRender::SetSamplerState(SamplerState::WRAP);
+
+		std::array<ID3D11SamplerState*, 2> previousSamplers{};
+
+		previousSamplers[0] = newSampler;
+		previousSamplers[1] = m_SamplerState[1];
+
+		deviceContext->PSSetSamplers(0, 2, previousSamplers.data());
 
 		//マテリアル数分ループ 
 		for (size_t i = 0; i < subsets.size(); ++i)
@@ -116,5 +132,7 @@ void RoundShadowRenderComponent::Update()
 				subsets[i].IndexBase,		// 最初のインデックスバッファの位置	
 				subsets[i].VertexBase);	// 頂点バッファの最初から使用
 		}
+
+		DirectXRender::SetSamplerState(currentSamplerState);
 	}
 }

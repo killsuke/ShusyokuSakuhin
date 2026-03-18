@@ -191,6 +191,7 @@
     <ClCompile Include="Helper\StringHelper.cpp" />
     <ClCompile Include="Components\RoundShadowRenderComponent.cpp" />
     <ClCompile Include="Manager\ShadowManager.cpp" />
+    <ClCompile Include="Components\RenderTerrainComponent.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
@@ -320,6 +321,7 @@
     <ClCompile Include="Components\PlayerOperationComponent.cpp" />
     <ClCompile Include="Scene\TestStageScene.cpp" />
     <ClCompile Include="Components\TestSwordActionComponent.cpp" />
+    <ClCompile Include="Mesh\TerrainMesh.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="Manager\TextureManager.cpp" />
     <ClCompile Include="Manager\TimeManager.cpp" />
@@ -364,6 +366,7 @@
     <ClInclude Include="Helper\StringHelper.h" />
     <ClInclude Include="Components\RoundShadowRenderComponent.h" />
     <ClInclude Include="Manager\ShadowManager.h" />
+    <ClInclude Include="Components\RenderTerrainComponent.h" />
     <ClInclude Include="Structs\RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />
@@ -516,6 +519,7 @@
     <ClInclude Include="Components\PlayerOperationComponent.h" />
     <ClInclude Include="Scene\TestStageScene.h" />
     <ClInclude Include="Components\TestSwordActionComponent.h" />
+    <ClInclude Include="Mesh\TerrainMesh.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Manager\TextureManager.h" />
     <ClInclude Include="Manager\TimeManager.h" />
@@ -793,6 +797,26 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gs_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gs_main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="ShaderResource\TerrainPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="ShaderResource\TerrainVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

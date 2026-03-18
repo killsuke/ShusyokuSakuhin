@@ -139,6 +139,7 @@ void BossEventComponent::CreateBossWalls() {
 
 	if (mySound != nullptr) {
 		mySound->Play();
+		mySound->SetVolume(0.7f);
 
 		GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 		if(camera != nullptr) {

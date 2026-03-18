@@ -62,13 +62,13 @@ void EnemyActionHopperComponent::Update() {
 		m_moveFlag = true;
 	}
 
-	m_recordTime += m_deltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
-	if (m_recordTime < 2.0f) {
+	if (m_RecordTime < 1.0f) {
 		jumpFlag = true;
 	}
-	else if (m_recordTime > 2.0f) {
-		m_recordTime = 0.0f;
+	else if (m_RecordTime > 1.0f) {
+		m_RecordTime = 0.0f;
 		jumpFlag = false;
 	}
 
@@ -87,6 +87,8 @@ void EnemyActionHopperComponent::Update() {
 	HopperAction(jumpFlag);
 
 	m_IsBeforeJump = jumpFlag;
+
+	FearAction();
 
 	//rigid->ReduceVelocity_X(0.5f);
 }
@@ -155,4 +157,9 @@ void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
 	}
 
 	rigid->AddVelocity_Y(50.0f);
+
+	m_RecordTime = 0.0f; // ジャンプの時間をリセット
+	m_IsFear = true; // アクティブにする
+	m_RecordFearTime = 0.0f; // 怯み時間の記録もリセット
+	m_FearPower = FEAR_POWER;	// 怯みの強さをセット
 }

@@ -57,7 +57,7 @@ LoadStageScene::LoadStageScene() {
 	SoundComponent* sound = camera->AddComponent<SoundComponent>();
 	sound->AddSoundLabel("game");
 	sound->Play();
-	sound->SetMaxVolume(0.8f);
+	sound->SetVolume(0.7f);
 
 	TransformComponent* cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45度 == 1.0f として計算して、視野角同士の引き算で計算するとか？

@@ -45,8 +45,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_BigFloor",
@@ -61,8 +61,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_ShortFloor",
@@ -77,8 +77,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_Wall",
@@ -93,8 +93,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_Small",
@@ -109,8 +109,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_Move",
@@ -125,8 +125,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         },
 	{
             "kind": "T_Dummy",
@@ -141,8 +141,8 @@
                 "z": 0.0
             },
             "texture": "testTerrain.png",
-            "shaderVS": "ShadowVS.hlsl",
-            "shaderPS": "ShadowPS.hlsl"
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
         }
     ]
 }

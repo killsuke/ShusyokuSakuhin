@@ -62,17 +62,17 @@ void ComponentTypeManager::MakeSampleJson() {
 	const std::string filepath = "json/component.json";
 	// JSONをファイルに保存
 	if (SaveJsonToFile(j, filepath)) {
-		std::cout << "Component JSON saved successfully to " << filepath << std::endl;
+		MessageBoxW(nullptr, L"Component JSON を保存しました。", L"Success", MB_ICONINFORMATION | MB_OK);
 	}
 	else {
-		std::cerr << "Failed to save Component JSON." << std::endl;
+		MessageBoxW(nullptr, L"Component JSON の保存に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
 	}
 }
 
 void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath) {
 	std::ifstream ifs(filepath);
 	if (!ifs) {
-		std::cerr << "ファイルを開けません: " << filepath << "\n";
+		MessageBoxW(nullptr, L"コンポーネントのJSONファイルを開けませんでした。", L"Error", MB_ICONERROR | MB_OK);
 		return;
 	}
 
@@ -113,21 +113,21 @@ bool ComponentTypeManager::SaveJsonToFile(const nlohmann::ordered_json& j, const
 		std::error_code ec;
 		create_directories(_path.parent_path(), ec);
 		if (ec) {
-			std::cerr << "ディレクトリ作成失敗：" << ec.message() << std::endl;
+			MessageBoxW(nullptr, (L"ディレクトリの作成に失敗しました: " + _path.parent_path().wstring()).c_str(), L"Error", MB_ICONERROR | MB_OK);
 			return false;
 		}
 	}
 
 	std::ofstream ofs(filepath, std::ios::out | std::ios::trunc);
 	if (!ofs) {
-		std::cerr << "ファイルを開けませんでした：" << filepath << std::endl;
+		MessageBoxW(nullptr, (L"ファイルを開けませんでした: " + _path.wstring()).c_str(), L"Error", MB_ICONERROR | MB_OK);
 		return false;
 	}
 
 	// JSONを書き込み
 	ofs << j.dump(4); // 4はインデントのスペース数
 	if (!ofs) {
-		std::cerr << "ファイル書き込み失敗：" << filepath << std::endl;
+		MessageBoxW(nullptr, (L"ファイルへの書き込みに失敗しました: " + _path.wstring()).c_str(), L"Error", MB_ICONERROR | MB_OK);
 		return false;
 	}
 	ofs.close();

@@ -141,7 +141,7 @@ HRESULT SoundManager::ReadChunkData(const HANDLE& hFile, void* buffer, const DWO
 void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 
 	if(!exists(path)) {
-		std::cerr << "Directory does not exist: " << path << std::endl;
+		MessageBoxW(nullptr, (L"ディレクトリが存在しません。: " + std::wstring(path.begin(), path.end())).c_str(), L"Error", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -159,7 +159,7 @@ void SoundManager::LoadFolder(const std::string& path, const bool loop) {
 			
 			hr = LoadWave(name, c_path, loop);
 			if (FAILED(hr)) {
-				std::wcerr << L"Failed to load sound file: " << full_path << L". Error code: " << hr << std::endl;
+				MessageBoxW(nullptr, (L"ファイルの読み込みに失敗しました。: " + full_path).c_str(), L"Error", MB_OK | MB_ICONWARNING);
 			}
 		}
 	}

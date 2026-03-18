@@ -172,16 +172,16 @@ void EnemyActionBossComponent::Update() {
 	{
 	case BossActionState::DEFAULT:
 
-		if (m_recordTime > 2.0f) {
+		if (m_RecordTime > 2.0f) {
 			ChangeState(BossActionState::JUMP_SHOOTING);
-			m_recordTime = 0.0f;
+			m_RecordTime = 0.0f;
 		}
 
 		break;
 	case BossActionState::JUMP_SHOOTING:
 
-		m_RecordTime1 += m_deltaTime;
-		m_recordTime += m_deltaTime;
+		m_RecordTime1 += TimeManager::GetFixedDeltaTime();
+		m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 		// ’e”­ŽË”»’è
 		if (m_RecordTime1 > BulletTiming) {
@@ -309,7 +309,7 @@ void EnemyActionBossComponent::Update() {
 		}
 	}
 
-	m_recordTime += m_deltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 }
 
 void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos) {
@@ -400,7 +400,7 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 	{
 	case BossActionState::DEFAULT:
 
-		m_recordTime = 0.0f;
+		m_RecordTime = 0.0f;
 		break;
 	case BossActionState::JUMP_SHOOTING:
 

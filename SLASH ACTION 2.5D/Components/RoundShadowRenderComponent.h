@@ -12,7 +12,7 @@ private:
 
 public:
 	RoundShadowRenderComponent(GameObject& obj);
-	~RoundShadowRenderComponent() = default;
+	~RoundShadowRenderComponent();
 	void Update() override;
 
 };

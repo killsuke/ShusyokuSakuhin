@@ -11,6 +11,7 @@
 #include "Mesh/SquareMesh.h"
 #include "Mesh/TriangleMesh.h"
 #include "Mesh/TriangularPrismMesh.h"
+#include "Mesh/TerrainMesh.h"
 #include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
 #include "Components/GoAroundComponent.h"
@@ -26,6 +27,7 @@
 #include "Components/FliesMoveComponent.h"
 #include "Components/MeshCut2DComponent.h"
 #include "Components/VectorMoveComponent.h"
+#include "Components/RenderTerrainComponent.h"
 
 //#include "Effekseer.h"
 //#include "EffekseerRendererDX11.h"
@@ -168,7 +170,7 @@ void Stage1Scene::Init()
 	//}
 
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Test");
+		auto testObj = GameObjectManager::AddObject("testObj", "Enemy");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ 600.0f, 0.0f, 0.0f });
 		testTrans->SetScale({ 100.5f,100.5f,150.5f });
@@ -195,10 +197,10 @@ void Stage1Scene::Init()
 		vectorMove->SetMovePower(2.0f);
 		MeshCut2DComponent* meshCut = parentObj->AddComponent<MeshCut2DComponent>();
 		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);*/
-		Render2DComponent* parentRend = parentObj->AddComponent<Render2DComponent>();
-		parentRend->CreateMesh<SquareMesh>();
-		parentRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
-		parentRend->ChangeTexture("background1.png");
+		RenderTerrainComponent* parentRend = parentObj->AddComponent<RenderTerrainComponent>();
+		//parentRend->CreateMesh<TerrainMesh>();
+		parentRend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+		parentRend->ChangeTexture("testTerrain.png");
 	//	m_testID = parentObj->GetInstanceID();
 
 		//GameObject* testObj = GameObjectManager::AddChild("testObj", "Test");

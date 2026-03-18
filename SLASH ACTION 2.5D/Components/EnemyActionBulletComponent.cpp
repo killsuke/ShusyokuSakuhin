@@ -5,6 +5,7 @@
 #include "Render3DComponent.h"
 #include "RigidBodyComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include "Render3DColliderAABBComponent.h"
 #include "BulletComponent.h"
 #include "AttackOneTimeComponent.h"
@@ -27,12 +28,21 @@ namespace {
 }
 
 EnemyActionBulletComponent::EnemyActionBulletComponent(GameObject& obj) :EnemyActionComponent(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
+
+	m_listenerID_HitEvent_Bullet = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		FearEvent(e);
+		});
+}
+
+EnemyActionBulletComponent::~EnemyActionBulletComponent() {
+	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Bullet);
 }
 
 void EnemyActionBulletComponent::Update() {
 
-	m_recordTime += m_deltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
 	if (player == nullptr) {
@@ -59,11 +69,13 @@ void EnemyActionBulletComponent::Update() {
 
 	rend->SetInversionFlag(m_IsRightLeft);
 
-	if (m_recordTime > ATTACK_TIME) {
+	if (m_RecordTime > ATTACK_TIME) {
 
 		FiringBullet();
-		m_recordTime = 0.0f;
+		m_RecordTime = 0.0f;
 	}
+
+	FearAction();	// 怯み状態の処理
 }
 
 // 弾を作成
@@ -104,4 +116,19 @@ void EnemyActionBulletComponent::FiringBullet() {
 	rend->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	rend->ChangeTexture("bullet.png");
 	rend->SetInversionFlag(m_IsRightLeft);
+}
+
+void EnemyActionBulletComponent::FearEvent(const HitEvent& event) {
+
+	const uint32_t deadID = m_Object->GetInstanceID();
+
+	if (event.targetID != deadID) {
+		return; // 自分宛じゃないなら無視
+	}
+
+	m_RecordTime = 0.0f; // 攻撃されたら時間をリセット
+
+	m_IsFear = true;
+	m_RecordFearTime = 0.0f; // 怯み時間の記録もリセット
+	m_FearPower = FEAR_POWER;	// 怯みの強さをセット
 }

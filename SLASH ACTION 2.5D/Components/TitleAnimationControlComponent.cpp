@@ -411,7 +411,7 @@ void TitleAnimationControlComponent::GameStartWait() {
 
 	if (sound != nullptr) {
 		sound->PlayOnce(0.0f);
-		sound->SetMaxVolume(0.8f);
+		sound->SetMaxVolume(0.7f);
 		sound->AddVolume(0.005f);
 	}
 

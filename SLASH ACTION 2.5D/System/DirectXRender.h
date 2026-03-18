@@ -305,7 +305,7 @@ public:
 		m_SwapChain->SetFullscreenState(flag, NULL);
 	};
 
-	static void SetSamplerState(const SamplerState& state);
+	static ID3D11SamplerState* SetSamplerState(const SamplerState& state,const bool isUpdate = true);
 
 	static ID3D11DeviceContext* GetDeviceContext() { return m_DeviceContext; };
 	static ID3D11Device* GetDevice() { return m_Device; };
@@ -336,6 +336,8 @@ public:
 	static ID3D11Buffer* GetTimeBuffer() { return m_TimeBuffer; };
 	static ID3D11Buffer* GetShadowBuffer() { return m_ShadowBuffer; };
 	static ID3D11SamplerState* GetSampler() { return m_CurrentSampler; };
+	static SamplerState GetCurrentSamplerState() { return m_CurrentSamplerState; };
+
 	// サンプラーのバリエーションを増やそう
 
 	//=============================================================================

@@ -477,6 +477,12 @@
     <ClCompile Include="Manager\ShadowManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Components\RenderTerrainComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\TerrainMesh.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helper\dx11helper.h">
@@ -968,6 +974,12 @@
     <ClInclude Include="Manager\ShadowManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Components\RenderTerrainComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\TerrainMesh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ShaderResource\common.hlsl">
@@ -1035,6 +1047,8 @@
     <FxCompile Include="ShaderResource\OverVertexMove3DVS.hlsl" />
     <FxCompile Include="ShaderResource\ShadowVS.hlsl" />
     <FxCompile Include="ShaderResource\ShadowPS.hlsl" />
+    <FxCompile Include="ShaderResource\TerrainVS.hlsl" />
+    <FxCompile Include="ShaderResource\TerrainPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ShaderResource\ShadowPS.cso" />

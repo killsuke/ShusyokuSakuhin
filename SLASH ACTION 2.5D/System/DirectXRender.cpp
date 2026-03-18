@@ -93,16 +93,16 @@ void DirectXRender::UnInit() {
 	for (int i = 0; i < (int)(EBlendState::MAX_BLENDSTATE); ++i) {
 		if (m_BlendState[i]) {  // nullptr ƒ`ƒFƒbƒN
 			SAFE_RELEASE(m_BlendState[i]);
-			//g_BlendState[i] = nullptr;  // ‰ğ•úŒã‚Éƒ|ƒCƒ“ƒ^‚ğƒNƒŠƒA
+			//m_BlendState[i] = nullptr;  // ‰ğ•úŒã‚Éƒ|ƒCƒ“ƒ^‚ğƒNƒŠƒA
 		}
 	}
 
-	//for(int i = 0; i < (int)(SamplerState::MAX); ++i) {
-	//	if (m_SamplerStates[i]) {  // nullptr ƒ`ƒFƒbƒN
-	//		SAFE_RELEASE(m_SamplerStates[i]);
-	//		//m_SamplerStates[i] = nullptr;  // ‰ğ•úŒã‚Éƒ|ƒCƒ“ƒ^‚ğƒNƒŠƒA
-	//	}
-	//}
+	for (int i = 0; i < (int)(SamplerState::MAX); ++i) {
+		if (m_SamplerStates[i]) {  // nullptr ƒ`ƒFƒbƒN
+			SAFE_RELEASE(m_SamplerStates[i]);
+			//m_SamplerStates[i] = nullptr;  // ‰ğ•úŒã‚Éƒ|ƒCƒ“ƒ^‚ğƒNƒŠƒA
+		}
+	}
 	SAFE_RELEASE(m_BlendStateATC);
 	SAFE_RELEASE(m_CameraInformationBuffer);
 	SAFE_RELEASE(m_LineThicknessBuffer);
@@ -360,6 +360,7 @@ HRESULT DirectXRender::SamplerCreate() {
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	//	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	samplerDesc.MaxAnisotropy = 8;
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
@@ -370,14 +371,14 @@ HRESULT DirectXRender::SamplerCreate() {
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	D3D11_SAMPLER_DESC wrap = samplerDesc;
+	const D3D11_SAMPLER_DESC wrap = samplerDesc;
 
 	// CLAMP: ƒeƒNƒXƒ`ƒƒÀ•W‚ª0.0‚©‚ç1.0‚Ì”ÍˆÍ‚ğ’´‚¦‚é‚ÆAƒeƒNƒXƒ`ƒƒ‚Ì’[‚ÌF‚ªŒJ‚è•Ô‚³‚ê‚é
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
-	D3D11_SAMPLER_DESC clamp = samplerDesc;
+	const D3D11_SAMPLER_DESC clamp = samplerDesc;
 
 	// BORDER: ƒeƒNƒXƒ`ƒƒÀ•W‚ª0.0‚©‚ç1.0‚Ì”ÍˆÍ‚ğ’´‚¦‚é‚ÆAw’è‚µ‚½ƒ{[ƒ_[ƒJƒ‰[‚ªg—p‚³‚ê‚é
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
@@ -389,28 +390,59 @@ HRESULT DirectXRender::SamplerCreate() {
 	samplerDesc.BorderColor[2] = 0.0f; // B
 	samplerDesc.BorderColor[3] = 0.0f; // A
 
-	D3D11_SAMPLER_DESC border = samplerDesc;
+	const D3D11_SAMPLER_DESC border = samplerDesc;
 
 	// MIRROR: ƒeƒNƒXƒ`ƒƒÀ•W‚ª0.0‚©‚ç1.0‚Ì”ÍˆÍ‚ğ’´‚¦‚é‚ÆAƒeƒNƒXƒ`ƒƒ‚ª‹¾‘œ”½“]‚µ‚ÄŒJ‚è•Ô‚³‚ê‚é
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
 
-	D3D11_SAMPLER_DESC mirror = samplerDesc;
+	const D3D11_SAMPLER_DESC mirror = samplerDesc;
 
 	// MIRROR_ONCE: ƒeƒNƒXƒ`ƒƒÀ•W‚ª0.0‚©‚ç1.0‚Ì”ÍˆÍ‚ğ’´‚¦‚é‚ÆAƒeƒNƒXƒ`ƒƒ‚ªˆê“x‚¾‚¯‹¾‘œ”½“]‚µ‚ÄŒJ‚è•Ô‚³‚ê‚é
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
 	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
 
-	D3D11_SAMPLER_DESC mirror_once = samplerDesc;
+	const D3D11_SAMPLER_DESC mirror_once = samplerDesc;
 
-	hr = m_Device->CreateSamplerState(&clamp, &m_CurrentSampler);
+	// ƒTƒ“ƒvƒ‰[ƒXƒe[ƒg‚Ìì¬
+	hr = m_Device->CreateSamplerState(&wrap, &m_SamplerStates[(int)(SamplerState::WRAP)]);
 	if (FAILED(hr))
 	{
 		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
 		return hr;
 	}
+
+	hr = m_Device->CreateSamplerState(&clamp, &m_SamplerStates[(int)(SamplerState::CLAMP)]);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
+		return hr;
+	}
+
+	hr = m_Device->CreateSamplerState(&border, &m_SamplerStates[(int)(SamplerState::BORDER)]);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
+		return hr;
+	}
+
+	hr = m_Device->CreateSamplerState(&mirror, &m_SamplerStates[(int)(SamplerState::MIRROR)]);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
+		return hr;
+	}
+
+	hr = m_Device->CreateSamplerState(&mirror_once, &m_SamplerStates[(int)(SamplerState::MIRROR_ONCE)]);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"CreateSamplerState error", L"Error", MB_OK);
+		return hr;
+	}
+
+	m_CurrentSampler = m_SamplerStates[(int)(SamplerState::CLAMP)];
 
 	m_CurrentSamplerState = SamplerState::CLAMP;
 
@@ -452,7 +484,7 @@ HRESULT DirectXRender::CreateCameraBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_CameraInformationBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒIƒuƒWƒFƒNƒg‚Ì•`‰æ—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::CAMERA), 1, &m_CameraInformationBuffer);
@@ -476,7 +508,7 @@ HRESULT DirectXRender::CreateLineThicknessBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LineThicknessBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ‰ƒCƒ“—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -502,7 +534,7 @@ HRESULT DirectXRender::CreateBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_BlurBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒuƒ‰[—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -528,7 +560,7 @@ HRESULT DirectXRender::CreateHitFlashBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_HitFlashBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ_ƒ[ƒWƒtƒ‰ƒbƒVƒ…—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -553,7 +585,7 @@ HRESULT DirectXRender::LightBufferCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_LightBuffer);
 
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"¢ŠE‚Ìƒ‰ƒCƒg—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -579,7 +611,7 @@ HRESULT DirectXRender::MaterialBufferCreate() {
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MaterialBuffer);
 
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ}ƒeƒŠƒAƒ‹—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -607,7 +639,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ‚[ƒVƒ‡ƒ“ƒuƒ‰[i•½sˆÚ“®j—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -618,7 +650,7 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_MotionBlurCircularBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ‚[ƒVƒ‡ƒ“ƒuƒ‰[i‰ñ“]ƒAƒŠj—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
@@ -644,7 +676,7 @@ HRESULT DirectXRender::BoneConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒY
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &m_BoneConstantBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒ{[ƒ“—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -669,7 +701,7 @@ HRESULT DirectXRender::HPBarConstantBufferCreate() {// ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ƒTƒCƒ
 
 	hr = m_Device->CreateBuffer(&bd, nullptr, &m_OverVertexConstantBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"HP‚ÌUI—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -694,7 +726,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_GlowBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒOƒ[—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -705,7 +737,7 @@ HRESULT DirectXRender::CreateGlowBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_RingGlowBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ƒŠƒ“ƒOŒ^‚ÌƒOƒ[—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -731,7 +763,7 @@ HRESULT DirectXRender::CreateTimeBuffer() {
 
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_TimeBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"ŠÔ—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 
@@ -753,7 +785,7 @@ HRESULT DirectXRender::CreateShadowBuffer() {
 	bufferDesc.ByteWidth = sizeof(ShadowBuffer);
 	hr = m_Device->CreateBuffer(&bufferDesc, NULL, &m_ShadowBuffer);
 	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"CreateBuffer(constant buffer) error", L"Error", MB_OK);
+		MessageBoxW(nullptr, L"‰e—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@ì¬‚É¸”s‚µ‚Ü‚µ‚½B", L"Error", MB_OK);
 		return hr;
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::SHADOW), 1, &m_ShadowBuffer);
@@ -998,7 +1030,7 @@ void DirectXRender::SetFillMode(const EFillMode& fillMode) {
 	}
 }
 
-void DirectXRender::SetSamplerState(const SamplerState& state) {
+ID3D11SamplerState* DirectXRender::SetSamplerState(const SamplerState& state, const bool isUpdate) {
 
 	m_CurrentSamplerState = state;
 
@@ -1026,6 +1058,12 @@ void DirectXRender::SetSamplerState(const SamplerState& state) {
 	default:
 		break;
 	}
+
+	if (isUpdate == true) {
+		m_DeviceContext->PSSetSamplers(0, 1, &m_CurrentSampler);
+	}
+
+	return m_CurrentSampler;
 }
 
 // ƒ‚ƒfƒ‹‚Ì•\¦ó‘Ô‚ğ•ÏX

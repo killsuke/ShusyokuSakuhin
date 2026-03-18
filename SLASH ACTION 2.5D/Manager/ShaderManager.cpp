@@ -143,8 +143,9 @@ std::vector<std::string> ShaderManager::GetShaderFiles(const std::string& folder
 
 	std::vector<std::string> files;
 
+	// フォルダが存在するか確認
 	if(!exists(folder)) {
-		std::cerr << "Directory does not exist: " << folder << std::endl;
+		MessageBoxW(NULL, L"シェーダーフォルダが見つかりませんでした。", L"エラー", MB_ICONERROR | MB_OK);
 		return files;
 	}
 
