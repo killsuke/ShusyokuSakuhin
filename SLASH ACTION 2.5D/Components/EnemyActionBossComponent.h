@@ -29,9 +29,13 @@ private:
 	void JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos);
 	void ChangeState(const BossActionState& state);
 	void ResetBarriers(FighterComponent& fight);
+	void DeadAnimation() override {};
 
 public:
+
 	EnemyActionBossComponent(GameObject& obj);
 	~EnemyActionBossComponent() = default;
+	
+	void Init()override;
 	void Update()override;
 };

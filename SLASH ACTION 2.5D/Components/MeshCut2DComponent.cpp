@@ -75,6 +75,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		return cutObjIDs;
 	}
 
+	const XMFLOAT4 uvs = mesh->GetUVSets();
+
 	SquareMesh* squareMesh = dynamic_cast<SquareMesh*>(mesh);
 	if (squareMesh == nullptr) {
 		return cutObjIDs;
@@ -93,10 +95,12 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	leftTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
 	VectorMoveComponent* leftMove = m_CutObj1->AddComponent<VectorMoveComponent>();
 	Render2DComponent* leftRend = m_CutObj1->AddComponent<Render2DComponent>();
-	leftRend->CreateMesh<SquareMesh>();
+	Mesh* leftMesh = leftRend->CreateMesh<SquareMesh>();
 	leftRend->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	leftRend->ChangeTexture(texName);
 	leftRend->SetInversionFlag(isInversion);
+	leftMesh->SetTextureUV(uvs.x, uvs.y, uvs.z, uvs.w);
+
 	m_CutObj1ID = m_CutObj1->GetInstanceID();
 
 	m_CutObj2 = GameObjectManager::AddObject("CutRight", "CutPart");
@@ -104,10 +108,12 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	rightTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
 	VectorMoveComponent* rightMove = m_CutObj2->AddComponent<VectorMoveComponent>();
 	Render2DComponent* rightRend = m_CutObj2->AddComponent<Render2DComponent>();
-	rightRend->CreateMesh<SquareMesh>();
+	Mesh* rightMesh = rightRend->CreateMesh<SquareMesh>();
 	rightRend->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	rightRend->ChangeTexture(texName);
 	rightRend->SetInversionFlag(isInversion);
+	rightMesh->SetTextureUV(uvs.x, uvs.y, uvs.z, uvs.w);
+
 	m_CutObj2ID = m_CutObj2->GetInstanceID();
 
 	std::vector<VERTEX_3D> CutVertices1;

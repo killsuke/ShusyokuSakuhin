@@ -17,6 +17,8 @@ enum class EEnemyState {
 	MOVE,
 	ATTACK,
 	DAMAGED,
+
+	MAX
 };
 
 class EnemyActionComponent : public Component
@@ -35,9 +37,13 @@ protected:
 	~EnemyActionComponent();
 
 	void FearAction();	// 怯み状態の処理
+	void ChangeState(const EEnemyState& newState) {};	// 状態の変更
+	void StateUpdate() {};	// 状態に応じた処理
+	virtual void DeadAnimation() {};	// 死亡アニメーションの処理
 
 public:
-	
+
+	virtual void Init() = 0;
 	virtual void Update() = 0;
 
 	void CreateDamageEffect(const HitEvent& event);

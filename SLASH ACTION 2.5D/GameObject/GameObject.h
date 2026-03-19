@@ -86,6 +86,12 @@ public:
             obj->m_Parent = nullptr; // 親オブジェクトを解除
         }
     };
+	inline void ClearChild() {
+		for (GameObject* child : m_Children) {
+			child->m_Parent = nullptr; // 親オブジェクトを解除
+		}
+		m_Children.clear();
+	};
 
 	inline void SetActiveState(const ActiveState& as) { m_ActiveState = as; };
 	inline void SetDrawContainer(const DrawContainer& dc) { m_DrawContainer = dc; };

@@ -3,8 +3,8 @@
         {
             "kind": "E_Gunner",
             "scale": {
-                "x": 10.0,
-                "y": 10.0,
+                "x": 15.0,
+                "y": 15.0,
                 "z": 5.0
             },
             "angle": {
@@ -14,9 +14,9 @@
             },
             "atk": 10,
             "hp": 15,
-            "texture": "ho-dai.png",
+            "texture": "ho_dai_Anims.png",
             "shaderVS": "Animation2DVS.hlsl",
-            "shaderPS": "Fighter2DPS.hlsl"
+            "shaderPS": "unlitTexturePS.hlsl"
         },
         {
             "kind": "E_Hopper",

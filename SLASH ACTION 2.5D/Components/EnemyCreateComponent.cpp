@@ -57,12 +57,12 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		}
 
 		std::string newName = "enemy_" + std::to_string(num);
-		auto enemyObj = GameObjectManager::AddObject(newName, "Enemy");
-		auto transform = enemyObj->AddComponent<TransformComponent>();
+		GameObject* enemyObj = GameObjectManager::AddObject(newName, "Enemy");
+		TransformComponent* transform = enemyObj->AddComponent<TransformComponent>();
 		transform->SetPosition({ data.position.x, data.position.y, 0.0f });
 		transform->SetScale(eS.scale);
 		transform->SetRotation(eS.angle);
-		auto rigidBody = enemyObj->AddComponent<RigidBodyComponent>();
+		RigidBodyComponent* rigidBody = enemyObj->AddComponent<RigidBodyComponent>();
 		rigidBody->SetGravityFlag(true); // 重力を有効にする
 		enemyObj->AddComponent<TestExtrusionJudgeComponent>(); // 地面判定コンポーネントを追加
 
@@ -76,29 +76,28 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 	//	deathEvent->SetEnemyDeathEventState(EnemyDeathEventState::STICKY);
 	//	deathEvent->SetEnemyDeathEventState(EnemyDeathEventState::IMMEDIATE);
 
-		auto fighter = enemyObj->AddComponent<FighterComponent>();
+		FighterComponent* fighter = enemyObj->AddComponent<FighterComponent>();
 		fighter->SetUseDeadFlag(false);
 		fighter->SetAtk(eS.atk);
 		fighter->SetHp(eS.hp);
 
-		auto collider = enemyObj->AddComponent<ColliderComponent>();
+		ColliderComponent* collider = enemyObj->AddComponent<ColliderComponent>();
 		collider->SetOffsetSizeAABB(XMFLOAT3(0.0f, 1.0f, 1.0f));
 		ColliderAttackComponent* collAttack = enemyObj->AddComponent<ColliderAttackComponent>();
 		ColliderDamageComponent* collDamage = enemyObj->AddComponent<ColliderDamageComponent>();
 
-		auto render = enemyObj->AddComponent<Render2DComponent>();
-		render->CreateMesh<SquareMesh>();
+		Render2DComponent* render = enemyObj->AddComponent<Render2DComponent>();
+		SquareMesh* sMesh = render->CreateMesh<SquareMesh>();
 		render->SetShader(eS.shaderVS, eS.shaderPS);
 		render->ChangeTexture(eS.texture);
 		render->SetColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
-		auto atk = enemyObj->AddComponent<AttackTimingComponent>();
+		AttackTimingComponent* atk = enemyObj->AddComponent<AttackTimingComponent>();
 		atk->SetCoolDownTime(0.1f);
 
 		HitFlashComponent* hitFlash = enemyObj->AddComponent<HitFlashComponent>();
 		hitFlash->SetHitFlashColor(XMFLOAT3(1.0f, 1.0f, 1.0f));
 		hitFlash->SetHitFlashPower(0.8f);
-
 		
 		// 当たり判定の可視化用（デバッグ用）
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
@@ -124,13 +123,14 @@ void EnemyCreateComponent::CreateKind(const std::string& kind, GameObject& obj)
 	else if (kind == "E_Oku_No_TEKI") {
 		enemyAction = obj.AddComponent<EnemyActionHopperComponent>();
 
-		auto trans = obj.GetComponent<TransformComponent>();
+		TransformComponent* trans = obj.GetComponent<TransformComponent>();
 		trans->SetPosition({ 0.0f, 10.0f, 15.0f });
 	}
 
 	PlayerDamageComponent* pd = obj.AddComponent<PlayerDamageComponent>();
 
 	if (enemyAction != nullptr) {
+
 		pd->SetEnemyActionComponent(enemyAction);
 	}
 }

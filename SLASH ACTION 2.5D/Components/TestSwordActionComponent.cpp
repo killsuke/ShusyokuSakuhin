@@ -21,7 +21,7 @@ using namespace DirectX;
 namespace {
 	// Œ•‚Ì‰ñ“]‚ÌŽ²
 	constexpr XMFLOAT3 Slash1st = XMFLOAT3(0.0f, 1.0f, 1.0f);
-	constexpr XMFLOAT3 Slash2nd = XMFLOAT3(0.0f, 1.0f, -1.0f);
+	constexpr XMFLOAT3 Slash2nd = XMFLOAT3(0.0f, 1.0f, -0.3f);
 	constexpr XMFLOAT3 Slash3rd = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	constexpr XMFLOAT3 SlashFast = XMFLOAT3(0.0f, 1.0f, -0.5f);
 

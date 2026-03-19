@@ -139,6 +139,11 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	}
 }
 
+void EnemyActionBossComponent::Init() {
+
+
+}
+
 void EnemyActionBossComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");

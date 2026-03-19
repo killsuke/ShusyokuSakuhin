@@ -10,7 +10,6 @@
 #include "BulletComponent.h"
 #include "AttackOneTimeComponent.h"
 #include "PlayerDamageComponent.h"
-#include "Mesh/SquareMesh.h"
 
 #include <iostream>
 
@@ -20,9 +19,14 @@ namespace {
 	constexpr XMFLOAT3 BULLET_SCALE{ 5.0f,5.0f,1.0f };
 	constexpr XMFLOAT3 LEFT_VECTOR{ -1.0f, 0.0f, 0.0f };
 	constexpr XMFLOAT3 RIGHT_VECTOR{ 1.0f, 0.0f, 0.0f };
+	constexpr XMFLOAT2 DEFAULT_POSE{ 1.0f,1.0f };
+	constexpr XMFLOAT2 ATTACK_POSE{ 2.0f,1.0f };
+	constexpr XMFLOAT2 DAMAGE_POSE{ 3.0f,1.0f };
+	constexpr XMFLOAT2 ANIM_CUT{ 3.0f,1.0f };
 	constexpr float FIRING_SPEED = 100.0f;
 	constexpr float RIMIT_TIME = 1.0f;
 	constexpr float ATTACK_TIME = 3.0f;
+	constexpr float PRELIMINARY_OPERATION_TIME = 0.7f;
 	constexpr int BULLET_ATK = 2;
 	constexpr int BULLET_HP = 2;
 }
@@ -40,9 +44,11 @@ EnemyActionBulletComponent::~EnemyActionBulletComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Bullet);
 }
 
-void EnemyActionBulletComponent::Update() {
+void EnemyActionBulletComponent::Init() {
 
-	m_RecordTime += TimeManager::GetFixedDeltaTime();
+}
+
+void EnemyActionBulletComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
 	if (player == nullptr) {
@@ -57,35 +63,28 @@ void EnemyActionBulletComponent::Update() {
 		return;
 	}
 
+	Mesh* mesh = rend->GetMesh();
+
+	if (mesh == nullptr) {
+		return;
+	}
+
 	const XMFLOAT3 myPos = myTrans->GetPosition();
 	const XMFLOAT3 playPos = playTrans->GetPosition();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+	m_RecordTime += deltaTime;
 
-	if (myPos.x > playPos.x) {
-		m_IsRightLeft = RightLeft::LEFT;
-	}
-	else {
-		m_IsRightLeft = RightLeft::RIGHT;
-	}
+	ChangeDirection(myPos, playPos);
 
 	rend->SetInversionFlag(m_IsRightLeft);
 
-	if (m_RecordTime > ATTACK_TIME) {
+	//	FearAction();	// ‹¯‚Ýó‘Ô‚Ìˆ—
 
-		FiringBullet();
-		m_RecordTime = 0.0f;
-	}
-
-	FearAction();	// ‹¯‚Ýó‘Ô‚Ìˆ—
+	StateUpdate(deltaTime, myPos, playPos, *mesh);	// ó‘Ô‚É‰ž‚¶‚½ˆ—
 }
 
 // ’e‚ðì¬
-void EnemyActionBulletComponent::FiringBullet() {
-
-	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
-	if (myTrans == nullptr) {
-		return;
-	}
-	const XMFLOAT3 myPos = myTrans->GetPosition();
+void EnemyActionBulletComponent::FiringBullet(const DirectX::XMFLOAT3& myPos) {
 
 	GameObject* bullet = GameObjectManager::AddObject("bullet", "Bullets");
 	TransformComponent* trans = bullet->AddComponent<TransformComponent>();
@@ -131,4 +130,127 @@ void EnemyActionBulletComponent::FearEvent(const HitEvent& event) {
 	m_IsFear = true;
 	m_RecordFearTime = 0.0f; // ‹¯‚ÝŽžŠÔ‚Ì‹L˜^‚àƒŠƒZƒbƒg
 	m_FearPower = FEAR_POWER;	// ‹¯‚Ý‚Ì‹­‚³‚ðƒZƒbƒg
+
+	ChangeState(EEnemyState::DAMAGED);
+}
+
+void EnemyActionBulletComponent::ChangeState(const EEnemyState& newState) {
+
+	if (m_EnemyState == newState) {
+		return; // ó‘Ô‚ª•Ï‚í‚Á‚Ä‚¢‚È‚¢‚È‚ç‰½‚à‚µ‚È‚¢
+	}
+
+	switch (newState) {
+
+	case EEnemyState::WAIT:
+		break;
+	case EEnemyState::MOVE:
+		break;
+	case EEnemyState::ATTACK:
+		break;
+	case EEnemyState::DAMAGED:
+		break;
+	default:
+		break;
+	}
+
+	m_EnemyState = newState;
+
+	switch (m_EnemyState) {
+
+	case EEnemyState::WAIT:
+		break;
+	case EEnemyState::MOVE:
+		break;
+	case EEnemyState::ATTACK:
+		break;
+	case EEnemyState::DAMAGED:
+		break;
+	default:
+		break;
+	}
+}
+
+void EnemyActionBulletComponent::StateUpdate(const float deltaTime, const DirectX::XMFLOAT3& myPos, const DirectX::XMFLOAT3& playPos, Mesh& mesh) {
+
+	const float ratio = m_RecordTime / ATTACK_TIME;
+
+	switch (m_EnemyState) {
+
+	case EEnemyState::WAIT:
+
+		mesh.SetInitialCut(ANIM_CUT);
+		mesh.SetCutNum(DEFAULT_POSE);
+
+		if (ratio > PRELIMINARY_OPERATION_TIME) {
+
+			ChangeState(EEnemyState::ATTACK);
+		}
+
+		break;
+	case EEnemyState::MOVE:
+
+		break;
+	case EEnemyState::ATTACK:
+
+		if (m_RecordTime > ATTACK_TIME) {
+
+			FiringBullet(myPos);
+			m_RecordTime = 0.0f;
+
+			ChangeState(EEnemyState::WAIT);
+			break;
+		}
+
+		// UŒ‚‘O‚Ì—\”õ“®ì
+		if (ratio > PRELIMINARY_OPERATION_TIME) {
+
+			ChangeState(EEnemyState::ATTACK);
+
+			const int newRatio = static_cast<int>(ratio / deltaTime) % 2;
+
+			if (newRatio == 0) {
+				mesh.SetCutNum(DEFAULT_POSE);
+			}
+			else {
+				mesh.SetCutNum(ATTACK_POSE);
+			}
+		}
+
+		break;
+	case EEnemyState::DAMAGED:
+
+		mesh.SetCutNum(DAMAGE_POSE);
+		FearAction();	// ‹¯‚Ýó‘Ô‚Ìˆ—
+		break;
+	default:
+		break;
+	}
+}
+
+void EnemyActionBulletComponent::ChangeDirection(const DirectX::XMFLOAT3& myPos, const DirectX::XMFLOAT3& playPos) {
+
+	if (myPos.x > playPos.x) {
+		m_IsRightLeft = RightLeft::LEFT;
+	}
+	else {
+		m_IsRightLeft = RightLeft::RIGHT;
+	}
+}
+
+void EnemyActionBulletComponent::DeadAnimation() {
+
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+
+	if (rend == nullptr) {
+		return;
+	}
+
+	Mesh* mesh = rend->GetMesh();
+
+	if (mesh == nullptr) {
+		return;
+	}
+
+	mesh->SetCutNum(DAMAGE_POSE);
 }

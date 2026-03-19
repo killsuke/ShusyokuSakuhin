@@ -29,6 +29,11 @@ EnemyActionHopperComponent::~EnemyActionHopperComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Hopper);
 }
 
+void EnemyActionHopperComponent::Init() {
+
+
+}
+
 void EnemyActionHopperComponent::Update() {
 
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();

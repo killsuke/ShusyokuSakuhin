@@ -22,7 +22,7 @@ private:
 	float m_ChargeSlashRecordTime = 0.0f;
 	float m_DamageRecordTime = 0.0f; // ダメージを受けてからの時間を記録
 	float m_ChargeTime = 0.0f; // チャージしている時間を記録する
-	float m_ChargeCompleteTime = 2.0f; // チャージ完了までの時間
+	float m_ChargeCompleteTime = 1.5f; // チャージ完了までの時間
 	float m_KnockBackPower = 0.0f; // ノックバックの力
 	uint64_t m_listenerID_HitEvent = 0;
 

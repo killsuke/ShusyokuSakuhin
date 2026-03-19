@@ -121,6 +121,13 @@ public:
 		return textures;
 	}
 
+	DirectX::XMFLOAT4 GetUVSets() const {
+		if (m_Textures.size() == 1) {
+			return m_Textures[0]->GetUVSets();
+		}
+		return DirectX::XMFLOAT4();
+	}
+
 	void ChangeTexture(const std::string& filename) {
 		if (m_Textures.size() == 1) {
 			// 単一テクスチャの場合のみ変更可能

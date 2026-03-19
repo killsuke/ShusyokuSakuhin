@@ -163,9 +163,10 @@ public:
 		const std::vector<unsigned int>& indices = mesh->GetIndices();
 		if (vertices.empty() == true || indices.empty() == true) {
 			// メッシュの作成に失敗した場合はエラーメッセージを出力してnullptrを返す
-			MessageBoxW(nullptr, L"Mesh creation failed: vertices or indices are empty", L"Error", MB_OK | MB_ICONWARNING);
+			//std::cerr();
 			return nullptr;
 		}
+
 		m_VertexBuffer.Create(vertices);
 		m_IndexBuffer.Create(indices);
 		T* raw = mesh.get();
