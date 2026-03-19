@@ -78,8 +78,6 @@ void EnemyActionBulletComponent::Update() {
 
 	rend->SetInversionFlag(m_IsRightLeft);
 
-	//	FearAction();	// ‹¯‚İó‘Ô‚Ìˆ—
-
 	StateUpdate(deltaTime, myPos, playPos, *mesh);	// ó‘Ô‚É‰‚¶‚½ˆ—
 }
 
@@ -140,7 +138,7 @@ void EnemyActionBulletComponent::ChangeState(const EEnemyState& newState) {
 		return; // ó‘Ô‚ª•Ï‚í‚Á‚Ä‚¢‚È‚¢‚È‚ç‰½‚à‚µ‚È‚¢
 	}
 
-	switch (newState) {
+	switch (m_EnemyState) {
 
 	case EEnemyState::WAIT:
 		break;

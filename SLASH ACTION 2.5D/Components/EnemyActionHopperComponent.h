@@ -4,17 +4,21 @@
 class EnemyActionHopperComponent : public EnemyActionComponent
 {
 private:
-	bool m_moveFlag = false; // 移動フラグ
-	bool m_IsBeforeJump = false;
-	uint64_t m_listenerID_HitEvent_Hopper = 0;
+	bool m_MoveFlag = false; // 移動フラグ
+	uint64_t m_ListenerID_HitEvent_Hopper = 0;
+
+	void ChangeState(const EEnemyState& newState);
+	void StateUpdate(GameObject* player);
+
+	void ChangeDirection();
 
 	void DeadAnimation() override {};
 
 public:
-	
+
 	EnemyActionHopperComponent(GameObject& obj);
 	~EnemyActionHopperComponent();
-	
+
 	void Init() override;
 	void Update() override;
 	void HopperAction(const bool jumpFlag);
