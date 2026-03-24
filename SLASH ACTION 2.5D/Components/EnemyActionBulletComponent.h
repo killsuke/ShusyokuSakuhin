@@ -20,8 +20,6 @@ public:
 	EnemyActionBulletComponent(GameObject& obj);
 	~EnemyActionBulletComponent();
 
-	void Init()override;
 	void Update()override;
-
 };
 

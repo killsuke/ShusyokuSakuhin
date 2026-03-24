@@ -12,6 +12,10 @@ AttackTimingComponent::AttackTimingComponent(GameObject& obj) : AttackComponent(
 void AttackTimingComponent::Update() {
 
 	ColliderAttackComponent* collObj = m_Object->GetComponent<ColliderAttackComponent>();
+	if(collObj == nullptr) {
+		return; // コリジョンコンポーネントがない場合は何もしない
+	}
+
 	if (collObj->GetActiveColliderFlag() == false) {
 		m_AttackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;

@@ -28,6 +28,7 @@
 #include "Components/MeshCut2DComponent.h"
 #include "Components/VectorMoveComponent.h"
 #include "Components/RenderTerrainComponent.h"
+#include "Components/RenderTextureLuminescenceComponent.h"
 
 //#include "Effekseer.h"
 //#include "EffekseerRendererDX11.h"
@@ -170,7 +171,7 @@ void Stage1Scene::Init()
 	//}
 
 	{
-		auto testObj = GameObjectManager::AddObject("testObj", "Enemy");
+		auto testObj = GameObjectManager::AddObject("testObj", "Test");
 		auto testTrans = testObj->AddComponent<TransformComponent>();
 		testTrans->SetPosition({ 600.0f, 0.0f, 0.0f });
 		testTrans->SetScale({ 100.5f,100.5f,150.5f });
@@ -192,15 +193,23 @@ void Stage1Scene::Init()
 		TransformComponent* parentTrans = parentObj->AddComponent<TransformComponent>();
 		parentTrans->SetPosition({ 0.0f, 0.0f, 0.0f });
 		parentTrans->SetScale({ 50.0f,50.0f,50.0f });
+		RenderTextureLuminescenceComponent* rend = parentObj->AddComponent<RenderTextureLuminescenceComponent>();
+		rend->CreateMesh<SquareMesh>();
+		rend->ChangeTexture("win_Text.png");
+		rend->SetShader("unlitTextureVS.hlsl", "LuminescenceTexturePS.hlsl");
+		rend->SetGlowRadius(5.0f);
+		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		rend->SetGlowColor({ 1.0f,0.0f,0.0f,1.0f });
+
 		/*VectorMoveComponent* vectorMove = parentObj->AddComponent<VectorMoveComponent>();
 		vectorMove->SetMoveDirection({ 1.0f,0.0f,0.0f });
 		vectorMove->SetMovePower(2.0f);
 		MeshCut2DComponent* meshCut = parentObj->AddComponent<MeshCut2DComponent>();
 		meshCut->InitCutSettings(CutDirection::HORIZONTAL, 0.5f, 0.5f);*/
-		RenderTerrainComponent* parentRend = parentObj->AddComponent<RenderTerrainComponent>();
+	//	RenderTerrainComponent* parentRend = parentObj->AddComponent<RenderTerrainComponent>();
 		//parentRend->CreateMesh<TerrainMesh>();
-		parentRend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
-		parentRend->ChangeTexture("testTerrain.png");
+	//	parentRend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+	//	parentRend->ChangeTexture("testTerrain.png");
 	//	m_testID = parentObj->GetInstanceID();
 
 		//GameObject* testObj = GameObjectManager::AddChild("testObj", "Test");

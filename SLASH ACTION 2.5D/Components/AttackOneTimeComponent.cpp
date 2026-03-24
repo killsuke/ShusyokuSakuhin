@@ -8,12 +8,18 @@ AttackOneTimeComponent::AttackOneTimeComponent(GameObject& obj) : AttackComponen
 }
 
 void AttackOneTimeComponent::Update() {
+
 	ColliderAttackComponent* collObj = m_Object->GetComponent<ColliderAttackComponent>();
+	
+	if(collObj == nullptr) {
+		m_AttackObjs.clear(); // コリジョンコンポーネントが存在しない場合は攻撃オブジェクトをクリア
+		return;
+	}
+
 	if (collObj->GetActiveColliderFlag() == false) {
 		m_AttackObjs.clear(); // コリジョンが無効な場合は攻撃オブジェクトをクリア
 		return;
 	}
-
 }
 
 void AttackOneTimeComponent::AttackAction(GameObject& obj) {

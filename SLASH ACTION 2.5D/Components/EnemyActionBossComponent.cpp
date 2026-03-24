@@ -31,6 +31,7 @@ namespace {
 }
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ソート番号を設定
 
 	// 防御用ボスのバリアの本体
@@ -51,6 +52,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	rend2D->CreateMesh<SquareMesh>();
 	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
+	rend2D->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f));
 
 	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 	rend->CreateMesh<SquareMesh>();
@@ -139,11 +141,6 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	}
 }
 
-void EnemyActionBossComponent::Init() {
-
-
-}
-
 void EnemyActionBossComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
@@ -160,6 +157,8 @@ void EnemyActionBossComponent::Update() {
 		return;
 	}
 
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
+
 	XMFLOAT3 playPos = playTrans->GetPosition();
 	XMFLOAT3 myPos = myTrans->GetPosition();
 
@@ -173,85 +172,8 @@ void EnemyActionBossComponent::Update() {
 
 	const bool isGround = testExtrude->GetIsGround();
 
-	switch (m_CurrentState)
-	{
-	case BossActionState::DEFAULT:
+	StateUpdate(myPos, playPos, isGround);
 
-		if (m_RecordTime > 2.0f) {
-			ChangeState(BossActionState::JUMP_SHOOTING);
-			m_RecordTime = 0.0f;
-		}
-
-		break;
-	case BossActionState::JUMP_SHOOTING:
-
-		m_RecordTime1 += TimeManager::GetFixedDeltaTime();
-		m_RecordTime += TimeManager::GetFixedDeltaTime();
-
-		// 弾発射判定
-		if (m_RecordTime1 > BulletTiming) {
-
-			JumpBullet(playPos, myPos);
-			m_RecordTime1 = 0.0f;
-		}
-
-		// ジャンプ移動終了判定
-		if (isGround == true && m_RecordTime1 == 0.0f) {
-
-			ChangeState(BossActionState::BARRIER);
-			break;
-		}
-
-		myTrans->AddPosition({ m_MoveDir,0.0f,0.0f });
-		break;
-	case BossActionState::BARRIER:
-	{
-		TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
-
-		if (bossBarrierTrans != nullptr) {
-
-			// 移動はこっち
-			for (int i = 0; i < BarrierCount; ++i) {
-
-				TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
-				if (barrierTrans != nullptr) {
-
-					if (m_LengthCount < TargetLength) {
-
-						bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
-
-						if (i == 0) {
-							barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
-						}
-						else if (i == 1) {
-							barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
-						}
-						else if (i == 2) {
-							barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
-						}
-						else if (i == 3) {
-							barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
-						}
-					}
-					else {
-
-						//m_LengthCount = 0.0f;
-						// 最後に回転を開始
-						ChangeState(BossActionState::DEFAULT);
-						break;
-					}
-				}
-			}
-
-			m_LengthCount += MoveSpeed;
-		}
-	}
-	break;
-	case BossActionState::MAX:
-		break;
-	default:
-		break;
-	}
 
 	// 回転はこっち
 	if (m_IsBarrier == true) {
@@ -265,28 +187,8 @@ void EnemyActionBossComponent::Update() {
 		}
 	}
 
-	{
-		// バリア耐久値チェック
-		FighterComponent* fight = m_BossBarrier->GetComponent<FighterComponent>();
-		if (m_BossBarrier == nullptr) {
-			return;
-		}
-		if (fight == nullptr) {
-			return;
-		}
-
-		const int hp = fight->GetHp();
-
-		if (hp <= 0) {
-
-			ResetBarriers(*fight);
-		}
-		else if (hp <= (BarrierDurability / 2)) {
-
-			RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
-			rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
-		}
-	}
+	// バリアの耐久力チェック
+	BarrierDurabilityCheck();
 
 	{
 		// HPバー処理
@@ -314,7 +216,6 @@ void EnemyActionBossComponent::Update() {
 		}
 	}
 
-	m_RecordTime += TimeManager::GetFixedDeltaTime();
 }
 
 void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos) {
@@ -512,4 +413,121 @@ void EnemyActionBossComponent::ResetBarriers(FighterComponent& fight) {
 	if (myCollDamage != nullptr) {
 		myCollDamage->SetActiveColliderFlag(true);
 	}
+}
+
+void EnemyActionBossComponent::BarrierDurabilityCheck() {
+
+	if (m_BossBarrier == nullptr) {
+		return;
+	}
+	// バリア耐久値チェック
+	FighterComponent* fight = m_BossBarrier->GetComponent<FighterComponent>();
+	if (fight == nullptr) {
+		return;
+	}
+
+	const int hp = fight->GetHp();
+
+	if (hp <= 0) {
+
+		ResetBarriers(*fight);
+	}
+	else if (hp <= (BarrierDurability / 2)) {
+
+		RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
+		if (rend != nullptr) {
+			rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
+
+}
+
+void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const DirectX::XMFLOAT3& playPos, const bool isGround) {
+
+	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+
+	if(myTrans == nullptr) {
+		return;
+	}
+
+	switch (m_CurrentState)
+	{
+	case BossActionState::DEFAULT:
+
+		if (m_RecordTime > 2.0f) {
+			ChangeState(BossActionState::JUMP_SHOOTING);
+			m_RecordTime = 0.0f;
+		}
+
+		break;
+	case BossActionState::JUMP_SHOOTING:
+
+		m_RecordTime1 += TimeManager::GetFixedDeltaTime();
+		m_RecordTime += TimeManager::GetFixedDeltaTime();
+
+		// 弾発射判定
+		if (m_RecordTime1 > BulletTiming) {
+
+			JumpBullet(playPos, myPos);
+			m_RecordTime1 = 0.0f;
+		}
+
+		// ジャンプ移動終了判定
+		if (isGround == true && m_RecordTime1 == 0.0f) {
+
+			ChangeState(BossActionState::BARRIER);
+			break;
+		}
+
+		myTrans->AddPosition({ m_MoveDir,0.0f,0.0f });
+		break;
+	case BossActionState::BARRIER:
+	{
+		TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
+
+		if (bossBarrierTrans != nullptr) {
+
+			// 移動はこっち
+			for (int i = 0; i < BarrierCount; ++i) {
+
+				TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
+				if (barrierTrans != nullptr) {
+
+					if (m_LengthCount < TargetLength) {
+
+						bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
+
+						if (i == 0) {
+							barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+						}
+						else if (i == 1) {
+							barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
+						}
+						else if (i == 2) {
+							barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
+						}
+						else if (i == 3) {
+							barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
+						}
+					}
+					else {
+
+						//m_LengthCount = 0.0f;
+						// 最後に回転を開始
+						ChangeState(BossActionState::DEFAULT);
+						break;
+					}
+				}
+			}
+
+			m_LengthCount += MoveSpeed;
+		}
+	}
+	break;
+	case BossActionState::MAX:
+		break;
+	default:
+		break;
+	}
+
 }

@@ -44,10 +44,6 @@ EnemyActionBulletComponent::~EnemyActionBulletComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Bullet);
 }
 
-void EnemyActionBulletComponent::Init() {
-
-}
-
 void EnemyActionBulletComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");

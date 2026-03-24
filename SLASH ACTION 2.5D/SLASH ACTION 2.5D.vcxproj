@@ -192,6 +192,7 @@
     <ClCompile Include="Components\RoundShadowRenderComponent.cpp" />
     <ClCompile Include="Manager\ShadowManager.cpp" />
     <ClCompile Include="Components\RenderTerrainComponent.cpp" />
+    <ClCompile Include="Components\RenderTextureLuminescenceComponent.cpp" />
     <ClCompile Include="System\Application.cpp" />
     <ClCompile Include="DebugSystem\DebugSystem.cpp" />
     <ClCompile Include="Components\VectorMoveComponent.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="Components\RoundShadowRenderComponent.h" />
     <ClInclude Include="Manager\ShadowManager.h" />
     <ClInclude Include="Components\RenderTerrainComponent.h" />
+    <ClInclude Include="Components\RenderTextureLuminescenceComponent.h" />
     <ClInclude Include="Structs\RightLeft.h" />
     <ClInclude Include="Manager\ShaderManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />
@@ -538,6 +540,16 @@
     <ClInclude Include="Helper\XMFLOAT_Helper.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="ShaderResource\LuminescenceTexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="ShaderResource\MaskTexturePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

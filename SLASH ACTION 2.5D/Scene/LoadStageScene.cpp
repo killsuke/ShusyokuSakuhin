@@ -57,7 +57,7 @@ LoadStageScene::LoadStageScene() {
 	SoundComponent* sound = camera->AddComponent<SoundComponent>();
 	sound->AddSoundLabel("game");
 	sound->Play();
-	sound->SetVolume(0.7f);
+	sound->SetVolume(0.5f);
 
 	TransformComponent* cameraTrans = camera->AddComponent<TransformComponent>();
 	cameraTrans->SetPosition(XMFLOAT3(10.0f, 30.0f, -70.0f));	// 0.45“x == 1.0f ‚Æ‚µ‚ÄŒvŽZ‚µ‚ÄAŽ‹–ìŠp“¯Žm‚Ìˆø‚«ŽZ‚ÅŒvŽZ‚·‚é‚Æ‚©H
@@ -432,7 +432,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point1 = GameObjectManager::AddObject("CameraPoint1", "CameraPoint");
 		TransformComponent* pointTrans1 = point1->AddComponent<TransformComponent>();
 		pointTrans1->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans1->AddPosition({ 120.0f, 50.0f, 0.0f });
+		pointTrans1->SetPosition({ 120.0f, 50.0f, 0.0f });
 		CameraPointComponent* pointCamera1 = point1->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl1 = point1->AddComponent<ColliderComponent>();
 
@@ -444,7 +444,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point2 = GameObjectManager::AddObject("CameraPoint2", "CameraPoint");
 		TransformComponent* pointTrans2 = point2->AddComponent<TransformComponent>();
 		pointTrans2->SetScale({ 40.0f, 5.0f, 10.0f });
-		pointTrans2->AddPosition({ 305.0f, -30.0f, 0.0f });
+		pointTrans2->SetPosition({ 305.0f, -30.0f, 0.0f });
 		CameraPointComponent* pointCamera2 = point2->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl2 = point2->AddComponent<ColliderComponent>();
 
@@ -456,7 +456,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point3 = GameObjectManager::AddObject("CameraPoint3", "CameraPoint");
 		TransformComponent* pointTrans3 = point3->AddComponent<TransformComponent>();
 		pointTrans3->SetScale({ 30.0f, 6.0f, 10.0f });
-		pointTrans3->AddPosition({ 160.0f, -180.0f, 0.0f });
+		pointTrans3->SetPosition({ 160.0f, -180.0f, 0.0f });
 		CameraPointComponent* pointCamera3 = point3->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl3 = point3->AddComponent<ColliderComponent>();
 
@@ -468,7 +468,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
 		TransformComponent* pointTrans4 = point4->AddComponent<TransformComponent>();
 		pointTrans4->SetScale({ 10.0f, 90.0f, 10.0f });
-		pointTrans4->AddPosition({ 330.0f, -270.0f, 0.0f });
+		pointTrans4->SetPosition({ 330.0f, -270.0f, 0.0f });
 		CameraPointComponent* pointCamera4 = point4->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl4 = point4->AddComponent<ColliderComponent>();
 
@@ -480,7 +480,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point5 = GameObjectManager::AddObject("CameraPoint5", "CameraPoint");
 		TransformComponent* pointTrans5 = point5->AddComponent<TransformComponent>();
 		pointTrans5->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans5->AddPosition({ 580.0f, -280.0f, 0.0f });
+		pointTrans5->SetPosition({ 580.0f, -280.0f, 0.0f });
 		CameraPointComponent* pointCamera5 = point5->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl5 = point5->AddComponent<ColliderComponent>();
 
@@ -492,7 +492,7 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point6 = GameObjectManager::AddObject("CameraPoint6", "CameraPoint");
 		TransformComponent* pointTrans6 = point6->AddComponent<TransformComponent>();
 		pointTrans6->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans6->AddPosition({ 830.0f, -280.0f, 0.0f });
+		pointTrans6->SetPosition({ 830.0f, -280.0f, 0.0f });
 		CameraPointComponent* pointCamera6 = point6->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl6 = point6->AddComponent<ColliderComponent>();
 
@@ -504,12 +504,22 @@ void LoadStageScene::TargetAndScroolCreate() {
 		GameObject* point7 = GameObjectManager::AddObject("CameraPoint7", "CameraPoint");
 		TransformComponent* pointTrans7 = point7->AddComponent<TransformComponent>();
 		pointTrans7->SetScale({ 8.0f, 80.0f, 10.0f });
-		pointTrans7->AddPosition({ 1080.0f, -280.0f, 0.0f });
+		pointTrans7->SetPosition({ 1080.0f, -280.0f, 0.0f });
 		CameraPointComponent* pointCamera7 = point7->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl7 = point7->AddComponent<ColliderComponent>();
 		BossEventComponent* bossEvent = point7->AddComponent<BossEventComponent>();
 		SoundComponent* bossSound = point7->AddComponent<SoundComponent>();
 		bossSound->AddSoundLabel("battle");
+
+		// —]—T‚ª‚ ‚ê‚Î‰‰o‚Æ‚©‚à‚â‚é—p‚Æ‚µ‚Ä‚¨‚¢‚Ä‚¨‚­
+	/*	GameObject* testObj = GameObjectManager::AddObject("testObj", "TestObj");
+		TransformComponent* testObjTrans = testObj->AddComponent<TransformComponent>();
+		testObjTrans->SetScale({ 8.0f, 80.0f, 10.0f });
+		testObjTrans->SetPosition({ 1080.0f, -280.0f, 100.0f });
+		Render3DComponent* testObjRend = testObj->AddComponent<Render3DComponent>();
+		testObjRend->CreateMesh<SquareMesh>();
+		testObjRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");*/
+		
 
 		Render3DColliderAABBComponent* pointRend7 = point7->AddComponent<Render3DColliderAABBComponent>();
 		pointRend7->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f));

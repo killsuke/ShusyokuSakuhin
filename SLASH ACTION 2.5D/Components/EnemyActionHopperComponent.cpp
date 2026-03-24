@@ -49,11 +49,6 @@ EnemyActionHopperComponent::~EnemyActionHopperComponent() {
 	EventBusManager::Unsubscribe(m_ListenerID_HitEvent_Hopper);
 }
 
-void EnemyActionHopperComponent::Init() {
-
-
-}
-
 void EnemyActionHopperComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
