@@ -54,7 +54,6 @@ void TestSwordActionComponent::Update() {
     ArbitraryRotationComponent* goAround = m_Object->GetComponent<ArbitraryRotationComponent>();
     PlayerOperationComponent* moveComp = m_Holder->GetComponent<PlayerOperationComponent>();
     TransformComponent* objTrans = m_Object->GetComponent<TransformComponent>();
-//  auto sound = SceneManager::GetSound();
 
     if (goAround == nullptr) {
         return;

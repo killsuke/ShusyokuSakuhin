@@ -1,8 +1,5 @@
 #include "ChargeParticleMoveComponent.h"
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
 
@@ -31,7 +28,7 @@ void ChargeParticleMoveComponent::Update() {
 	dir = XMVector3Normalize(dir);
 
 	// 移動量を計算
-	XMVECTOR movement = XMVectorScale(dir, m_MoveSpeed * DeltaTime);
+	XMVECTOR movement = XMVectorScale(dir, m_MoveSpeed * TimeManager::GetFixedDeltaTime());
 
 	// 新しい位置を計算して設定
 	XMVECTOR newPos = XMVectorAdd(myVec, movement);

@@ -32,12 +32,12 @@ SoundComponent::~SoundComponent()
 		const SourceVoiceData& sourceVoiceData = entry.second;
 		if (sourceVoiceData.pSourceVoice) {
 			hr = sourceVoiceData.pSourceVoice->Stop(0);
-			if(FAILED(hr)) {
+			if (FAILED(hr)) {
 				MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
 				continue;
 			}
 			hr = sourceVoiceData.pSourceVoice->FlushSourceBuffers();
-			if(FAILED(hr)) {
+			if (FAILED(hr)) {
 				MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
 				continue;
 			}
@@ -180,8 +180,17 @@ void SoundComponent::Play(const std::string& label)
 		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
-	pSV->Start(0);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
 }
 
 void SoundComponent::Play(const float volume) {
@@ -209,22 +218,49 @@ void SoundComponent::Play(const float volume) {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+
+		hr = pSV->FlushSourceBuffers();
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
 
-	pSV->SetVolume(volume);
-	pSV->Start(0);
+	hr = pSV->SetVolume(volume);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの音量の設定に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
 }
 
 void SoundComponent::Play(const std::string& label, const float volume) {
@@ -250,21 +286,49 @@ void SoundComponent::Play(const std::string& label, const float volume) {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+		
+		hr = pSV->FlushSourceBuffers();
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
-	pSV->SetVolume(volume);
-	pSV->Start(0);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->SetVolume(volume);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの音量の設定に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
 }
 
 void SoundComponent::PlayOnce() {
@@ -299,20 +363,42 @@ void SoundComponent::PlayOnce() {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+
+		hr = pSV->FlushSourceBuffers();
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
-	pSV->Start(0);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+	}
 }
 
 void SoundComponent::PlayOnce(const std::string& label) {
@@ -344,20 +430,42 @@ void SoundComponent::PlayOnce(const std::string& label) {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+
+		hr = pSV->FlushSourceBuffers();
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
-	pSV->Start(0);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+	
+	hr = pSV->Start(0);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+	}
 }
 
 void SoundComponent::PlayOnce(const float volume) {
@@ -391,22 +499,48 @@ void SoundComponent::PlayOnce(const float volume) {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+
+		hr = pSV->FlushSourceBuffers();
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
 
-	pSV->SetVolume(volume);
-	pSV->Start(0);
+	hr = pSV->SetVolume(volume);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの音量の設定に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+	}
 }
 
 void SoundComponent::PlayOnce(const std::string& label, const float volume) {
@@ -438,21 +572,48 @@ void SoundComponent::PlayOnce(const std::string& label, const float volume) {
 
 	IXAudio2SourceVoice*& pSV = it->second.pSourceVoice;
 
+	HRESULT hr = S_OK;
+
 	// ソースボイスが存在しない場合は作成、存在する場合は停止してバッファをクリア
 	if (pSV == nullptr)
 	{
-		HRESULT hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
-		if (FAILED(hr)) return;
+		hr = xAudio->CreateSourceVoice(&pSV, &soundRes->wfx.Format);
+		if (FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの作成に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 	else
 	{
-		pSV->Stop(0);
-		pSV->FlushSourceBuffers();
+		hr = pSV->Stop(0);
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスの停止に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
+
+		hr = pSV->FlushSourceBuffers();
+		if(FAILED(hr)) {
+			MessageBoxW(nullptr, L"ソースボイスのバッファのフラッシュに失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+			return;
+		}
 	}
 
-	pSV->SubmitSourceBuffer(&soundRes->buffer);
-	pSV->SetVolume(volume);
-	pSV->Start(0);
+	hr = pSV->SubmitSourceBuffer(&soundRes->buffer);
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスへのバッファの送信に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->SetVolume(volume);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの音量の設定に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	hr = pSV->Start(0);
+	if(FAILED(hr)) {
+		MessageBoxW(nullptr, L"ソースボイスの再生の開始に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
+	}
 }
 
 void SoundComponent::Stop() {
@@ -561,7 +722,11 @@ void SoundComponent::Resume() {
 		return;
 	}
 
-	sourceVoice->Start();
+	HRESULT hr = sourceVoice->Start();
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"サウンドの再開に失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
+	}
 }
 
 void SoundComponent::Resume(const float volume) {
@@ -580,8 +745,20 @@ void SoundComponent::Resume(const float volume) {
 	if (sourceVoice == nullptr) {
 		return;
 	}
-	sourceVoice->SetVolume(volume);
-	sourceVoice->Start();
+
+	HREFTYPE hr = S_OK;
+
+	hr = sourceVoice->SetVolume(volume);
+	if (FAILED(hr))
+	{
+		MessageBoxW(nullptr, L"サウンドの音量調整に失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	hr = sourceVoice->Start();
+	if (FAILED(hr)) {
+		MessageBoxW(nullptr, L"サウンドの再開に失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
+	}
 }
 
 void SoundComponent::Resume(const std::string& label) {
@@ -631,6 +808,7 @@ void SoundComponent::Resume(const std::string& label, const float volume) {
 	if (FAILED(hr))
 	{
 		MessageBoxW(nullptr, L"サウンドの音量調整に失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
+		return;
 	}
 
 	hr = sourceVoice->Start();
@@ -695,7 +873,7 @@ void SoundComponent::SetVolume(const std::string& label, const float volume) {
 
 	// 音量調整
 	HRESULT hr = sourceVoice->SetVolume(clampedVolume);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		MessageBoxW(nullptr, L"サウンドの音量調整に失敗しました。", L"エラー", MB_OK | MB_ICONERROR);
 	}

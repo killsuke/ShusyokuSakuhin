@@ -1,12 +1,9 @@
 #include "FliesMoveComponent.h"
-#include <random>
 #include "TransformComponent.h"
+#include "Manager/TimeManager.h"
+#include <random>
 
 using namespace DirectX;
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 FliesMoveComponent::FliesMoveComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
@@ -37,5 +34,5 @@ void FliesMoveComponent::Update() {
 		m_ChangeTargetTime = dist(gen) * 2.0f + 3.0f; // 1秒から5秒の間
 	}
 
-	m_ChangeTargetTime -= DeltaTime;
+	m_ChangeTargetTime -= TimeManager::GetFixedDeltaTime();
 }

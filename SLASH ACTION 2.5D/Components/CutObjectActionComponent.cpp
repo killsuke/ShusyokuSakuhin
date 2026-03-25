@@ -7,13 +7,13 @@
 #include "CameraShakeComponent.h"
 #include "TimeLineComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/TimeManager.h"
 #include "Mesh/SquareMesh.h"
 #include <random>
 
 using namespace DirectX;
 
 namespace {
-	constexpr float DeltaTime = 0.016f;
 	constexpr float FrontCameraZ = 20.0f;
 	constexpr float CameraUpY = 25.0f;
 	constexpr float ShakePower = 15.0f;
@@ -73,7 +73,7 @@ void CutObjectActionComponent::Update() {
 		break;
 	}
 
-	m_RecordTime += DeltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 }
 
@@ -346,6 +346,8 @@ void CutObjectActionComponent::ScreenClashStart() {
 // 切断オブジェクトをカメラ方向に移動させる
 void CutObjectActionComponent::CutObjsMove() {
 
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 	if (camera == nullptr) {
 		return;
@@ -397,8 +399,8 @@ void CutObjectActionComponent::CutObjsMove() {
 	dir1 = XMVector3Normalize(dir1);
 	dir2 = XMVector3Normalize(dir2);
 
-	XMVECTOR moveVec1 = XMVectorScale(dir1, distance1 * 10.0f * DeltaTime);
-	XMVECTOR moveVec2 = XMVectorScale(dir2, distance2 * 10.0f * DeltaTime);
+	XMVECTOR moveVec1 = XMVectorScale(dir1, distance1 * 10.0f * deltaTime);
+	XMVECTOR moveVec2 = XMVectorScale(dir2, distance2 * 10.0f * deltaTime);
 
 	XMVECTOR pos1 = XMVectorAdd(obj1CurrentPos, moveVec1);
 	XMVECTOR pos2 = XMVectorAdd(obj2CurrentPos, moveVec2);
@@ -568,36 +570,7 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 // カメラ揺れて衝突エフェクト
 void CutObjectActionComponent::ShakeAndClash() {
 
-	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-	if (camera == nullptr) {
-		return;
-	}
-
-	GameObject* obj1 = GameObjectManager::GameObjectFindInstanceID(m_CutObj1ID);
-	GameObject* obj2 = GameObjectManager::GameObjectFindInstanceID(m_CutObj2ID);
-
-	if (obj1 == nullptr || obj2 == nullptr) {
-		return;
-	}
-
-	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
-	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
-
-	FollowCamera();
-
-	XMFLOAT3 pos1 = obj1Trans->GetPosition();
-	XMFLOAT3 pos2 = obj2Trans->GetPosition();
-
-	//TransformComponent* crack1 = m_Crack1->GetComponent<TransformComponent>();
-	//TransformComponent* crack2 = m_Crack2->GetComponent<TransformComponent>();
-
-	//pos1.z -= 1.0f;
-	//pos2.z -= 1.0f;
-
-	//// ヒビも一緒に移動させる処理を作らないとダメ
-
-	//crack1->SetPosition(pos1);
-	//crack2->SetPosition(pos2);
+	FollowCamera();	
 }
 
 // カメラに追従

@@ -4,6 +4,7 @@
 #include "Render2DComponent.h"
 #include "Render3DComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/TimeManager.h"
 #include "Mesh/CubeMesh.h"
 #include "TerrainJsonComponent.h"
 #include "MoveTerrainComponent.h"
@@ -19,10 +20,6 @@
 #include "ColliderAttackComponent.h"
 #include "ColliderDamageComponent.h"
 #include "SoundComponent.h"
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
@@ -48,7 +45,7 @@ void BossEventComponent::Update() {
 			fade->SetNextSceneName("ResultScene");
 			fade->SetBootDoor(true);
 		}
-		m_RecordTime += DeltaTime;
+		m_RecordTime += TimeManager::GetFixedDeltaTime();
 		return;
 	}
 

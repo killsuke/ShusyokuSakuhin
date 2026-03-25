@@ -7,10 +7,6 @@
 
 using namespace DirectX;
 
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
-
 RenderParticlesComponent::RenderParticlesComponent(GameObject& obj) : RenderComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è
 	m_Shader = std::make_unique<Shader>();

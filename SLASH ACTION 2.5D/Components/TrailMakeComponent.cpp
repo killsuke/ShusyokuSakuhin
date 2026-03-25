@@ -7,7 +7,6 @@
 #include <iostream>
 
 namespace {
-	constexpr float DeltaTime = 0.016f;
 	constexpr int VertexNumSquare = 4;
 	constexpr int IndexNumSquare = 6;
 }
@@ -24,5 +23,4 @@ void TrailMakeComponent::Update() {
 		return;
 	}
 	m_TrailRenderComponent->TrailCountUp();
-	//m_TrailRenderComponent->InversionEvent();
 }

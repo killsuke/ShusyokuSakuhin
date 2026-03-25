@@ -1,11 +1,11 @@
 #include "ArbitraryRotationComponent.h"
 #include "TransformComponent.h"
 #include "TrailRenderComponent.h"
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
 
 namespace {
-	constexpr float DeltaTime = 0.016f;
 	constexpr float Deg180 = 180.0f;
 }
 
@@ -56,6 +56,7 @@ void ArbitraryRotationComponent::DefaultRollingMove() {
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	TransformComponent* centerTrans = m_CenterObject->GetComponent<TransformComponent>();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	if(transform == nullptr || centerTrans == nullptr) {
 		return; // トランスフォームが取得できない場合は何もしない
@@ -88,7 +89,7 @@ void ArbitraryRotationComponent::DefaultRollingMove() {
 	// 回転のみを停止、位置更新はする
 	if (m_rollingActive == true) {
 
-		const float rotationSpeed = DeltaTime * m_rotationSpeed;
+		const float rotationSpeed = deltaTime * m_rotationSpeed;
 		// 時計回りか反時計回りか
 		if (m_clockwise == true) {
 			m_nowAngleRadian -= rotationSpeed; // 角度を更新間隔時間に基づいて計算
@@ -111,7 +112,7 @@ void ArbitraryRotationComponent::DefaultRollingMove() {
 
 		// 到達後の猶予時間
 		if (m_RecordTime < m_StopTime) {
-			m_RecordTime += DeltaTime;
+			m_RecordTime += deltaTime;
 			m_IsFinished = true;
 		}
 		else {
@@ -308,13 +309,14 @@ void ArbitraryRotationComponent::SimulationMove() {
 	TrailRenderComponent* trailRender = m_Object->GetComponent<TrailRenderComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	TransformComponent* centerTrans = m_CenterObject->GetComponent<TransformComponent>();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	if (trailRender != nullptr && transform != nullptr && centerTrans != nullptr) {
 		m_worldPosQuats.clear();
 		
 		const XMFLOAT3 centerPos = centerTrans->GetPosition();
 		const XMVECTOR centerQuat = centerTrans->GetQuaternion();
-
+		
 		// ラジアンに変換
 		const float startRad = XMConvertToRadians(m_StartAngle);
 		const float endRad = XMConvertToRadians(m_EndAngle);
@@ -323,10 +325,10 @@ void ArbitraryRotationComponent::SimulationMove() {
 
 		// 時計回りか反時計回りか
 		if (m_clockwise == true) {
-			rotationSpeed = -DeltaTime * m_rotationSpeed;
+			rotationSpeed = -deltaTime * m_rotationSpeed;
 		}
 		else {
-			rotationSpeed = DeltaTime * m_rotationSpeed;
+			rotationSpeed = deltaTime * m_rotationSpeed;
 		}
 
 		float simulationRad = m_nowAngleRadian;

@@ -24,12 +24,12 @@
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
+#include "Manager/TimeManager.h"
 #include <iostream>
 
 using namespace DirectX;
 
 namespace {
-	constexpr float DeltaTime = 0.016f; // 仮のデルタタイム
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
 	constexpr float ChargeSlashStopTime = 0.15f; // チャージスラッシュ終了時間
 	constexpr float ChargeSlashEndTime = 0.45f; // チャージスラッシュ終了時間
@@ -75,8 +75,10 @@ void PlayerOperationComponent::TestProcess3() {
 
 // 更新処理
 void PlayerOperationComponent::Update() {
+	
 	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
@@ -111,7 +113,7 @@ void PlayerOperationComponent::Update() {
 
 	if (fighter->GetInvincibleFlag() == true) {
 		// 無敵状態の時間を計測
-		m_BlinkingRecordTime += DeltaTime;
+		m_BlinkingRecordTime += deltaTime;
 
 		if (m_BlinkingRecordTime >= 0.1f) {
 			// 無敵状態なら透明にする
@@ -246,6 +248,7 @@ void PlayerOperationComponent::StateUpdate() {
 	const bool keyAttack = Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_X);
 	const bool keyCharge = Input::GetKeyPress(VK_RETURN) || Input::GetButtonPress(XINPUT_X);
 	const bool keyCAttack = Input::GetKeyRelease(VK_RETURN) || Input::GetButtonRelease(XINPUT_X);
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	TestExtrusionJudgeComponent* extrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
@@ -316,7 +319,7 @@ void PlayerOperationComponent::StateUpdate() {
 			}
 		}
 
-		m_DamageRecordTime += DeltaTime;
+		m_DamageRecordTime += deltaTime;
 		if (m_DamageRecordTime >= DONT_MOVE_TIME) {
 			m_DamageRecordTime = 0.0f;
 			m_KnockBackPower = DEFAULT_KNOCKBACK_POWER;
@@ -451,6 +454,7 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 
 	ChargePerformanceComponent* chargePerf = m_Object->GetComponent<ChargePerformanceComponent>();
 	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	if (chargePerf == nullptr) {
 		return;
@@ -508,7 +512,7 @@ void PlayerOperationComponent::Charge(const bool charge, const bool attack) {
 			if (m_ChargeTime > ChargeStartTime) {
 				chargePerf->SetActiveFlag(true);
 			}
-			m_ChargeTime += DeltaTime;
+			m_ChargeTime += deltaTime;
 		}
 	}
 	else {
@@ -567,10 +571,10 @@ void PlayerOperationComponent::CreateChargeSlash() {
 
 void PlayerOperationComponent::FastChageSlash() {
 
-
 	// プレイヤーに一閃用の当たり判定用の子オブジェクトを装備させておくか
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	if (transform == nullptr || rigid == nullptr || m_WeaponObject == nullptr || m_ChargeSlashObject == nullptr)
 	{
@@ -587,7 +591,7 @@ void PlayerOperationComponent::FastChageSlash() {
 		return;
 	}
 
-	m_ChargeSlashRecordTime += DeltaTime;
+	m_ChargeSlashRecordTime += deltaTime;
 
 	// 一閃の待ち処理終了
 	if (m_ChargeSlashRecordTime > ChargeSlashEndTime) {

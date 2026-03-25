@@ -38,7 +38,6 @@ private:
 	bool m_IsSwordAction = false;
 
 	int m_TestSlashCount = 0;
-	float m_DeltaTime = 0.016f;
 	GameObject* m_Holder = nullptr; // 持ち主のオブジェクト
 	ESwordActionState m_SwordActionState = ESwordActionState::NONE;
 	SwordActionPattern m_SwordActionPattern = {};

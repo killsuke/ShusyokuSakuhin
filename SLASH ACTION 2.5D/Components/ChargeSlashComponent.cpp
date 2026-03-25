@@ -1,8 +1,5 @@
 #include "ChargeSlashComponent.h"
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
+#include "Manager/TimeManager.h"
 
 ChargeSlashComponent::ChargeSlashComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("EFFECT"); // ƒ\[ƒg”Ô†‚ðÝ’è
@@ -14,5 +11,5 @@ void ChargeSlashComponent::Update() {
 		m_Object->Destroy();
 	}
 
-	m_RecordTime += DeltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 }

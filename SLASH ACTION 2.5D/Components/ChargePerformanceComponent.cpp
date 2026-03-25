@@ -4,13 +4,10 @@
 #include "RenderRingLuminescenceBillboardComponent.h"
 #include "ChargeParticleMoveComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/TimeManager.h"
 #include "Mesh/SquareMesh.h"
 #include <algorithm>
 #include <random>
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 using namespace DirectX;
 
@@ -19,6 +16,8 @@ ChargePerformanceComponent::ChargePerformanceComponent(GameObject& obj) :Compone
 }
 
 void ChargePerformanceComponent::Update() {
+
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	// アクティブになると、秒数に応じてパーティクルたちを
 	// アクティブにする
@@ -35,8 +34,9 @@ void ChargePerformanceComponent::Update() {
 		m_RecordTime = 0.0f; // リセット
 	}
 
-	m_RecordTime += DeltaTime;
-	m_RecordTime2 += DeltaTime;
+
+	m_RecordTime += deltaTime;
+	m_RecordTime2 += deltaTime;
 
 	if (m_IsCompleteCharge == true) {
 		TransformComponent* trans = m_ChargeCompleteParticle->GetComponent<TransformComponent>();

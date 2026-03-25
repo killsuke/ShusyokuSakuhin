@@ -1,11 +1,11 @@
 #include "SlashEffectComponent.h"
 #include "TransformComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
 
 namespace {
-	constexpr float DeltaTime = 0.016f;
 	constexpr float SubstructPower = 0.005f;
 }
 
@@ -26,7 +26,7 @@ void SlashEffectComponent::Update() {
 	rend->SetGlowRadius(power);
 	power -= SubstructPower;
 
-	m_RecordTime += DeltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 	if (m_RecordTime >= m_RimitTime) {
 		m_Object->SetDeleteFg(true); // オブジェクト削除フラグを立てる
 	}

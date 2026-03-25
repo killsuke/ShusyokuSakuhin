@@ -8,7 +8,6 @@
 using namespace DirectX;
 
 namespace {
-	constexpr float DeltaTime = 0.016f;
 	constexpr int VertexNumSquare = 4;
 	constexpr int IndexNumSquare = 6;
 }

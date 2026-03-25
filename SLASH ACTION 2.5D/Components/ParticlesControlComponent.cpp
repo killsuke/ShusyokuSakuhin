@@ -1,12 +1,9 @@
 #include "ParticlesControlComponent.h"
 #include "RenderParticlesComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 ParticlesControlComponent::ParticlesControlComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を仮置き
@@ -33,7 +30,7 @@ void ParticlesControlComponent::Update() {
 		m_Object->SetDeleteFg(true);
 	}
 
-	m_RecordTime += DeltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 	// こっちはエフェクトの色調整とか
 	if (lumComp != nullptr) {

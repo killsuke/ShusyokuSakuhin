@@ -7,10 +7,6 @@
 
 using namespace DirectX;
 
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
-
 CameraShakeComponent::CameraShakeComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERASHAKE"); // ソート番号を設定
 }
@@ -215,9 +211,6 @@ DirectX::XMFLOAT3 CameraShakeComponent::RandomShakeDepthAttenuation(const Direct
 		m_ShakeVector = XMVectorSet(0.0f, 0.0f, rZ, 0.0f);
 		m_ShakeVector = XMVector3Normalize(m_ShakeVector);
 	}
-
-	// ランダム揺れ用オフセット
-//	const float offsetX = sinf(m_RecordTime * m_ShakePower) * m_ShakeSpeed;
 
 	// 正規化したRightベクトルをオフセットに適用
 	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);

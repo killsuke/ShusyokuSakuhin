@@ -1,15 +1,12 @@
 #include "TimeSpawnParticlesComponent.h"
 #include "TransformComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/TimeManager.h"
 #include "RenderParticlesComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "Render3DComponent.h"
 #include "FliesMoveComponent.h"
 #include "Mesh/SquareMesh.h"
-
-namespace {
-	constexpr float DeltaTime = 0.016f;
-}
 
 TimeSpawnParticlesComponent::TimeSpawnParticlesComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を仮置き
@@ -49,5 +46,5 @@ void TimeSpawnParticlesComponent::Update() {
 		return;
 	}
 
-	m_SpawnInterval -= DeltaTime;
+	m_SpawnInterval -= TimeManager::GetFixedDeltaTime();
 }

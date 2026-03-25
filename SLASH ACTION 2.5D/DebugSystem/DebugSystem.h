@@ -2,14 +2,20 @@
 #include "GameObject/GameObject.h"
 #include "Components/DebugCameraComponent.h"
 #include <vector>
+#include <array>
 #include <string>
+
+namespace {
+
+	constexpr unsigned int UI_DISPLAY_COUNT = 4;
+}
 
 class DebugSystem final
 {
 private:
 
-	static inline std::vector<GameObject*> m_DebugUIs = { nullptr };
-	static inline std::vector<std::string> m_DebugUITextureNames = { "" };
+	static inline std::array<GameObject*, UI_DISPLAY_COUNT> m_DebugUIs = { nullptr };
+	static inline std::array<std::string, UI_DISPLAY_COUNT> m_DebugUITextureNames = { "" };
 	static inline GameObject* m_DebugCamera = nullptr;
 	static inline bool m_IsDebugUI = true; // デバッグUIの表示非表示フラグ
 	static inline bool m_ScreenStop = false; // 画面停止のフラグ

@@ -2,6 +2,7 @@
 #include "Manager/TimeManager.h"
 
 TimeLineComponent::TimeLineComponent(GameObject& obj) : Component(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("TIME_LINE"); // ソート番号を設定
 
 	m_PointEvents.clear();	// イベントリストを初期化
@@ -25,6 +26,8 @@ void TimeLineComponent::Update() {
 	UpdateRangeEvents();	// 範囲イベントの更新
 	UpdateContinuousEvents();	// 動き続けるイベントの更新
 }
+
+// イベント更新系の関数 =============================================
 
 // 一度きりのイベントの更新
 void TimeLineComponent::UpdatePointEvents() {
@@ -112,6 +115,10 @@ void TimeLineComponent::UpdateContinuousEvents() {
 		}
 	}
 }
+
+// ===========================================================================
+
+// イベント登録系の関数 ======================================================
 
 // 一度きりのイベントを追加
 uint32_t TimeLineComponent::AddPointEvent(const float time, Component* owner, std::function<void()> action) {
@@ -229,6 +236,8 @@ uint32_t TimeLineComponent::AddContinuousDelayEvent(const float delayTime, Compo
 
 	return newEvent.eventID;
 }
+
+// =======================================================================================
 
 // 指定したコンポーネントに関連するすべてのイベントを削除
 void TimeLineComponent::RemoveEventsByComponent(Component* owner) {

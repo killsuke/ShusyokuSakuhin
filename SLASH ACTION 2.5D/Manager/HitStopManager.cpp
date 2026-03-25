@@ -1,5 +1,6 @@
 #include "HitStopManager.h"
-#include "Manager/GameObjectManager.h"
+#include "GameObjectManager.h"
+#include "TimeManager.h"
 #include "GameObject/GameObject.h"
 #include <vector>
 
@@ -7,11 +8,6 @@ std::unordered_set<std::string> HitStopManager::m_TargetTags;
 float HitStopManager::m_HitStopTime = 0.0f;
 float HitStopManager::m_RecordTime = 0.0f;
 bool HitStopManager::m_IsHitStopActive = true;
-
-namespace
-{
-	const float DeltaTime = 0.016f;
-}
 
 void HitStopManager::Update()
 {
@@ -35,7 +31,7 @@ void HitStopManager::Update()
 			}
 		}
 
-		m_RecordTime += DeltaTime;
+		m_RecordTime += TimeManager::GetFixedDeltaTime();
 		if(m_RecordTime >= m_HitStopTime)
 		{
 			// ヒットストップ終了
