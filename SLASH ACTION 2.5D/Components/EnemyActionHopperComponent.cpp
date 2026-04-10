@@ -28,6 +28,7 @@ namespace {
 	constexpr XMFLOAT2 ATTACK_POSE{ 3.0f,1.0f };
 	constexpr XMFLOAT2 DAMAGE_POSE{ 4.0f,1.0f };
 	constexpr XMFLOAT2 ANIM_CUT{ 4.0f,1.0f };
+	constexpr XMFLOAT2 KNOCKBACK_POWER{ 50.0f,50.0f };
 }
 
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
@@ -126,13 +127,13 @@ void EnemyActionHopperComponent::KnockBackEvent(const HitEvent& event) {
 	const XMFLOAT3 enemyPos = enemyTrans->GetPosition();
 
 	if (enemyPos.x > playPos.x) {
-		rigid->AddVelocity_X(100.0f);
+		rigid->AddVelocity_X(KNOCKBACK_POWER.x);
 	}
 	else if (enemyPos.x < playPos.x) {
-		rigid->AddVelocity_X(-100.0f);
+		rigid->AddVelocity_X(-KNOCKBACK_POWER.x);
 	}
 
-	rigid->AddVelocity_Y(50.0f);
+	rigid->AddVelocity_Y(KNOCKBACK_POWER.y);
 
 	m_RecordTime = 0.0f; // ジャンプの時間をリセット
 	m_IsFear = true; // アクティブにする

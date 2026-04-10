@@ -13,7 +13,7 @@
                 "z": 0.0
             },
             "atk": 10,
-            "hp": 15,
+            "hp": 12,
             "texture": "ho_dai_Anims.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "unlitTexturePS.hlsl"
@@ -31,7 +31,7 @@
                 "z": 0.0
             },
             "atk": 5,
-            "hp": 20,
+            "hp": 7,
             "texture": "hopper_Anim.png",
             "shaderVS": "Animation2DVS.hlsl",
             "shaderPS": "Fighter2DPS.hlsl"

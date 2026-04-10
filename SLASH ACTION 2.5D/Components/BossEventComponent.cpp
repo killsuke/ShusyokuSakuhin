@@ -20,6 +20,9 @@
 #include "ColliderAttackComponent.h"
 #include "ColliderDamageComponent.h"
 #include "SoundComponent.h"
+#include "RenderTerrainComponent.h"
+
+using namespace DirectX;
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
@@ -87,10 +90,10 @@ void BossEventComponent::CreateBossWalls() {
 
 	ColliderComponent* collider = terrainObj->AddComponent<ColliderComponent>();
 
-	Render3DComponent* render = terrainObj->AddComponent<Render3DComponent>();
-	render->CreateMesh<CubeMesh>();
-	render->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
-	render->ChangeTexture("testTerrain.png");
+	RenderTerrainComponent* rend = terrainObj->AddComponent<RenderTerrainComponent>();
+	rend->ChangeTexture("testTerrain.png");
+	rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+	rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 
 
 	// ボス本体を作成 =======================================================

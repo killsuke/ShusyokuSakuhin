@@ -52,7 +52,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	rend2D->CreateMesh<SquareMesh>();
 	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
-	rend2D->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f));
+	rend2D->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 	rend->CreateMesh<SquareMesh>();

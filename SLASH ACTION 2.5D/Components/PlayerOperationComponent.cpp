@@ -276,10 +276,7 @@ void PlayerOperationComponent::StateUpdate() {
 		{
 			ChangeState(PlayerState::MOVE);
 		}
-		if (keyCharge)
-		{
-			//	ChangeState(PlayerState::CHARGE);
-		}
+
 		// ‚±‚±‚ÅUŒ‚‚·‚é‚©”Û‚©‚ð”»’f
 		Attack(keyAttack, isGround);
 
@@ -333,7 +330,7 @@ void PlayerOperationComponent::StateUpdate() {
 	}
 
 	// ƒ`ƒƒ[ƒW‚Ìˆ—
-	Charge(keyCharge, keyCAttack);
+	//Charge(keyCharge, keyCAttack);
 
 	JumpComponent* jumpComp = m_Object->GetComponent<JumpComponent>();
 	if (jumpComp != nullptr) {

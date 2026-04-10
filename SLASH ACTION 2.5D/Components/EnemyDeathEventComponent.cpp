@@ -5,7 +5,10 @@
 #include "Mesh/TriangularPrismMesh.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/GameObjectManager.h"
+#include "RenderBillboardComponent.h"
+#include "Mesh/SquareMesh.h"
 #include <DirectXMath.h>
+#include <random>
 
 using namespace DirectX;
 
@@ -90,6 +93,35 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
 	// ヒット時の通知テスト
 //	EventBusManager::Push(ce);
+
+	/*TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
+
+	XMFLOAT3 pos = trans->GetPosition();
+	pos.z -= 5.0f;
+
+	GameObject* effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
+	TransformComponent* effectTrans = effect->AddComponent<TransformComponent>();
+	effectTrans->SetScale(XMFLOAT3(10.0f,10.0f,1.0f));
+	effectTrans->SetPosition(pos);
+
+	RenderBillboardComponent* render = effect->AddComponent<RenderBillboardComponent>();
+	SquareMesh* mesh = render->CreateMesh<SquareMesh>();
+	render->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
+	render->ChangeTexture("bomb_anim.png");*/
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(0, 2);
+
+	int value = dist(gen);
+
+	if (value < 1) {
+
+		m_DeathState = EnemyDeathEventState::STICKY;
+	}
+	else {
+		m_DeathState = EnemyDeathEventState::IMMEDIATE;
+	}
 
 	GameObject* cutCompObj = GameObjectManager::AddObject("cutCompObj","CutCompObj");
 	TransformComponent* cutCompTrans = cutCompObj->AddComponent<TransformComponent>();

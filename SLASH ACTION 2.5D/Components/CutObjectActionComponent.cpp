@@ -7,8 +7,10 @@
 #include "CameraShakeComponent.h"
 #include "TimeLineComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/SoundManager.h"
 #include "Manager/TimeManager.h"
 #include "Mesh/SquareMesh.h"
+#include "SoundComponent.h"
 #include <random>
 
 using namespace DirectX;
@@ -27,6 +29,22 @@ CutObjectActionComponent::CutObjectActionComponent(GameObject& obj) : Component(
 	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 	if (timeLine == nullptr) {
 		timeLine = m_Object->AddComponent<TimeLineComponent>();
+	}
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(0, 1);
+
+	int value = dist(gen);
+
+	SoundComponent* sound = m_Object->AddComponent<SoundComponent>();
+
+	// ƒ‰ƒ“ƒ_ƒ€‚Å2Ží—Þ‚ÌŠ„‚ê‚é‰¹‚ð–Â‚ç‚·
+	if(value == 0) {
+		sound->AddSoundLabel("glass_breaking1");
+	}
+	else {
+		sound->AddSoundLabel("glass_breaking2");
 	}
 }
 
@@ -451,8 +469,9 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 		obj2->Destroy();
 		return;
 	}
-	render1->SetColor({ 0.3f,0.3f,0.3f,1.0f });
-	render2->SetColor({ 0.3f,0.3f,0.3f,1.0f });
+
+	render1->SetColor({ 0.8f,0.8f,0.8f,1.0f });
+	render2->SetColor({ 0.8f,0.8f,0.8f,1.0f });
 
 	// ‰æ–Ê—h‚êŠJŽn
 	CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
@@ -564,6 +583,11 @@ void CutObjectActionComponent::CreateCracksAndDebris() {
 		rend->ChangeTexture("glass_shards.png");
 
 		m_Debris.push_back(debris);
+	}
+
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound != nullptr) {
+		sound->Play();
 	}
 }
 

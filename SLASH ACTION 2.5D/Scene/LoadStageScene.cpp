@@ -48,6 +48,7 @@
 #include "Components/ColliderDamageComponent.h"
 #include "Components/SoundComponent.h"
 #include "Components/RenderCharacterComponent.h"
+#include "Components/RenderTerrainComponent.h"
 
 using namespace DirectX;
 
@@ -467,8 +468,8 @@ void LoadStageScene::TargetAndScroolCreate() {
 
 		GameObject* point4 = GameObjectManager::AddObject("CameraPoint4", "CameraPoint");
 		TransformComponent* pointTrans4 = point4->AddComponent<TransformComponent>();
-		pointTrans4->SetScale({ 10.0f, 90.0f, 10.0f });
-		pointTrans4->SetPosition({ 330.0f, -270.0f, 0.0f });
+		pointTrans4->SetScale({ 5.0f, 90.0f, 10.0f });
+		pointTrans4->SetPosition({ 320.0f, -270.0f, 0.0f });
 		CameraPointComponent* pointCamera4 = point4->AddComponent<CameraPointComponent>();
 		ColliderComponent* pointColl4 = point4->AddComponent<ColliderComponent>();
 
@@ -665,10 +666,10 @@ void LoadStageScene::BackGroundCreate() {
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
 		trans->SetPosition({ 230.0f,-110.0f,30.0f });
 		trans->SetScale({ 110.0f,90.0f,5.0f });
-		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
-		rend->CreateMesh<CubeMesh>();
+		RenderTerrainComponent* rend = backGround->AddComponent<RenderTerrainComponent>();
 		rend->ChangeTexture("testTerrain.png");
-		rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
+		rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+		rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	}
 
 	{
@@ -676,10 +677,10 @@ void LoadStageScene::BackGroundCreate() {
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
 		trans->SetPosition({ 250.0f,-250.0f,30.0f });
 		trans->SetScale({ 110.0f,90.0f,5.0f });
-		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
-		rend->CreateMesh<CubeMesh>();
+		RenderTerrainComponent* rend = backGround->AddComponent<RenderTerrainComponent>();
 		rend->ChangeTexture("testTerrain.png");
-		rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
+		rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+		rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	}
 
 	{
@@ -687,9 +688,9 @@ void LoadStageScene::BackGroundCreate() {
 		TransformComponent* trans = backGround->AddComponent<TransformComponent>();
 		trans->SetPosition({ 250.0f,-250.0f,30.0f });
 		trans->SetScale({ 110.0f,90.0f,5.0f });
-		Render3DComponent* rend = backGround->AddComponent<Render3DComponent>();
-		rend->CreateMesh<CubeMesh>();
+		RenderTerrainComponent* rend = backGround->AddComponent<RenderTerrainComponent>();
 		rend->ChangeTexture("testTerrain.png");
-		rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
+		rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
+		rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	}
 }
