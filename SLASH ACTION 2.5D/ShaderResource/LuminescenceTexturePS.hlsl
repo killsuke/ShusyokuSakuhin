@@ -1,45 +1,39 @@
 #include "common.hlsl"
-
 Texture2D g_Texture : register(t0);
 SamplerState g_SamplerState : register(s0);
 
-// ピクセルシェーダーのエントリポイント
 float4 ps_main(in PS_IN input) : SV_Target
 {
-    float4 texColor = g_Texture.Sample(g_SamplerState, input.tex);
+    // テクスチャカラーは不要、アルファの形だけ使う
+    float alpha = g_Texture.Sample(g_SamplerState, input.tex).a;
+
+    // 広範囲サンプリングでアルファをぼかす
+    float glowAlpha = 0.0;
+    const int STEPS = 8;
+    const float MAX_OFFSET = 0.05;
+
+    for (int i = 1; i <= STEPS; i++)
+    {
+        float r = (float) i / (float) STEPS * MAX_OFFSET;
+        float weight = 1.0 - (float) i / (float) STEPS;
+
+        float s = 0.0;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(r, 0)).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(-r, 0)).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(0, r)).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(0, -r)).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(r, r) * 0.707).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(-r, r) * 0.707).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(r, -r) * 0.707).a;
+        s += g_Texture.Sample(g_SamplerState, input.tex + float2(-r, -r) * 0.707).a;
+        s /= 8.0;
+
+        glowAlpha += s * weight;
+    }
+    glowAlpha = saturate(glowAlpha / (STEPS * 0.5));
+
+    // グロー色と強度だけ出力、テクスチャ色は一切無視
+    float GlowPower = 2.0;    
     
-    float3 BaseColor = input.col.rgb; // 通常色
-    
-    BaseColor *= texColor.rgb; // テクスチャの色を乗算して基本色を決定
-    
-    // uvの中心を基準に距離を計算
-    float2 uv = input.tex * 2.0f - 1.0f; // これで描画可能範囲を広げる
-    
-  //  float4 GlowColor = float4(1.0f, 1.0f, 1.0f, 1.0f); // グローの色
-    
-    //float s, c;
-    //sincos(Angle, s, c); // 回転を使うので行列生成
-    //float2x2 rotationMtx = float2x2(c, -s, s, c);
-    //d = mul(rotationMtx, d);
-    
-    // 楕円形にも対応できるようスケール設定
- //   d *= EllipseScale;
-    
-    // 中心から離れれば離れるほどボヤける
-    float dist = sqrt(dot(uv, uv));
-    
-    // グロー量（外に行くほど減衰）
-    //float glow = saturate(1.0f - dist / GlowRadius);
-    //glow *= glow; // 二乗して中心部を強調
-    
-    float glow = texColor.a;
-    
-    float3 colorRGB = BaseColor + GlowColor.rgb * glow * GlowPower;
-    
-    //float alpha = glow; // グロー量をアルファに利用
-    float alpha = texColor.a * input.col.a; // グロー量をアルファに利用
-    
-   // alpha *= texColor.a; // テクスチャのアルファも考慮
-    
-    return float4(colorRGB, alpha);
+    return float4(GlowColor.rgb * glowAlpha * GlowPower, glowAlpha);
 }

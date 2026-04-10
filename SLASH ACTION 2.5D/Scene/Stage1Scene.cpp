@@ -196,8 +196,9 @@ void Stage1Scene::Init()
 		RenderTextureLuminescenceComponent* rend = parentObj->AddComponent<RenderTextureLuminescenceComponent>();
 		rend->CreateMesh<SquareMesh>();
 		rend->ChangeTexture("win_Text.png");
-		rend->SetShader("unlitTextureVS.hlsl", "LuminescenceTexturePS.hlsl");
+		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		rend->SetGlowRadius(5.0f);
+		rend->SetExpand(1.5f);
 		rend->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 		rend->SetGlowColor({ 1.0f,0.0f,0.0f,1.0f });
 

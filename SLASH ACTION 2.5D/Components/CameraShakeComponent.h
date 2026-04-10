@@ -49,15 +49,18 @@ public:
 		m_ShakePower = power;
 		m_ShakeSpeed = speed;
 		m_RequestTime = time;
+		m_RecordTime = 0.0f;
 	};
 
 	void ShakingPreparation(const ShakeStatus& status) {
 		m_ShakePower = status.power;
 		m_ShakeSpeed = status.speed;
 		m_RequestTime = status.time;
+		m_RecordTime = 0.0f;
 	};
 
 	void SetShakeType(const ShakeType& type) {
 		m_ShakeType = type;
+		m_RecordTime = 0.0f;
 	};
 };

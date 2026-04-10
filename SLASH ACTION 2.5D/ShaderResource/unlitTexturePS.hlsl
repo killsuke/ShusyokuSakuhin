@@ -13,7 +13,7 @@ float4 ps_main(in PS_IN input) : SV_Target
     color *= input.col;
     
     // Š®‘S‚È“§–¾‚Ìê‡‚Í•`‚©‚È‚¢
-    if (color.a == 0.0f)
+    if (color.a < 0.01f)
     {
         discard;
     }

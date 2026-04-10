@@ -1,5 +1,6 @@
 #pragma once
-#include "Component.h"
+#include "TimeLineComponent.h"
+
 class BossEventComponent : public Component
 {
 private:
@@ -7,6 +8,7 @@ private:
 	bool createCompletionFlag = false;
 	bool m_IsBossDied = false;
 	GameObject* m_boss = nullptr;
+	TimeLineComponent* m_TimeLine = nullptr;
 
 public:
 	BossEventComponent(GameObject& obj);
@@ -15,4 +17,9 @@ public:
 	void Update()override;
 
 	void CreateBossWalls();
+	void CreateBossObj();
+
+	void PlayerControlStop();
+	void PlayerControlRestart();
+	void PlayerMoveControl();
 };

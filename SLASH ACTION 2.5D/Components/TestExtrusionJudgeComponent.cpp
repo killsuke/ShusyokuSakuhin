@@ -31,6 +31,12 @@ void TestExtrusionJudgeComponent::Update()
 	m_isCeiling = false;
 
 	for (GameObject* terrain : terrains) {
+
+		// 自分自身はスキップ
+		if (terrain == m_Object) {
+			continue;
+		}
+
 		ColliderComponent* terrainColl = terrain->GetComponent<ColliderComponent>();
 		if (terrainColl == nullptr) {
 			continue; // コライダーが存在しない場合はスキップ

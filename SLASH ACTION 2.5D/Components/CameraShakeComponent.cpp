@@ -20,11 +20,10 @@ void CameraShakeComponent::Update() {
 
 		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-		const float deltaTime = TimeManager::GetDeltaTime();
+		const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 
 		// 揺れ時間の計測
-		m_RecordTime += deltaTime;
 		if (m_RecordTime > m_RequestTime) {
 			m_RecordTime = 0.0f;
 			m_RequestTime = 0.0f;
@@ -32,6 +31,7 @@ void CameraShakeComponent::Update() {
 			m_ShakeSpeed = 0.0f;
 			m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };
 		}
+		m_RecordTime += deltaTime;
 
 		// 揺れのパターン
 		switch (m_ShakeType)

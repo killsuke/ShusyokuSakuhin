@@ -85,6 +85,7 @@ void TimeLineComponent::UpdateRangeEvents() {
 			float t = (now - e.startTime) / (e.endTime - e.startTime);
 			t = std::clamp(t, 0.0f, 1.0f);
 			if (e.onUpdate) {
+
 				e.onUpdate(t);
 			}
 		}
@@ -208,8 +209,8 @@ uint32_t TimeLineComponent::AddRangeDelayEvent(const float startTime, const floa
 
 	TimeRangeEvent newEvent;
 	newEvent.eventID = GenerateEventID();
-	newEvent.startTime = startTime + delayTime;
-	newEvent.endTime = endTime + delayTime;
+	newEvent.startTime = m_CurrentTime + startTime + delayTime;
+	newEvent.endTime = m_CurrentTime + endTime + delayTime;
 	newEvent.onUpdate = onUpdate;
 	newEvent.onStart = onStart;
 	newEvent.onEnd = onEnd;

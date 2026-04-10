@@ -21,23 +21,26 @@
 #include "ColliderDamageComponent.h"
 #include "SoundComponent.h"
 #include "RenderTerrainComponent.h"
+#include "PlayerOperationComponent.h"
 
 using namespace DirectX;
 
 BossEventComponent::BossEventComponent(GameObject& obj) : Component(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE");	// 仮にテストムーブを
+	m_TimeLine = m_Object->AddComponent<TimeLineComponent>();
 }
 
 void BossEventComponent::Update() {
 
 	GameObject* obj = GameObjectManager::GameObjectFindNameUI("fade");
 
-	if(obj == nullptr) {
+	if (obj == nullptr) {
 		return;
 	}
 	DoorFadeComponent* fade = obj->GetComponent<DoorFadeComponent>();
 
-	if(fade == nullptr) {
+	if (fade == nullptr) {
 		return;
 	}
 
@@ -57,7 +60,13 @@ void BossEventComponent::Update() {
 	{
 		if (point->GetScrollDir() == 1) {
 			if (createCompletionFlag == false) {
-				CreateBossWalls();
+
+				m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {CreateBossWalls(); });
+				m_TimeLine->AddRangeDelayEvent(0.0f, 0.5f, 0.0f, this, [this](float) {PlayerMoveControl(); }, [this]() {PlayerControlStop(); }, [this]() {PlayerControlRestart(); });
+				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {CreateBossObj(); });
+
+
+				createCompletionFlag = true;
 				return;
 			}
 
@@ -85,16 +94,25 @@ void BossEventComponent::CreateBossWalls() {
 	// ボス戦用の壁を作成
 	GameObject* terrainObj = GameObjectManager::AddObject("bossTerrain", "Terrain");
 	TransformComponent* transform = terrainObj->AddComponent<TransformComponent>();
-	transform->SetPosition({ 1080.0f, -280.0f, 0.0f });
-	transform->SetScale({ 8.0f,80.0f,10.0f });
+	transform->SetPosition({ 1080.0f, 80.0f, 0.0f });
+	transform->SetScale({ 8.0f,60.0f,10.0f });
 
 	ColliderComponent* collider = terrainObj->AddComponent<ColliderComponent>();
+
+	TestExtrusionJudgeComponent* extrusion = terrainObj->AddComponent<TestExtrusionJudgeComponent>();
+
+	RigidBodyComponent* terrainRigid = terrainObj->AddComponent<RigidBodyComponent>();
+	terrainRigid->SetGravityFlag(true);
+	terrainRigid->SetMass(2.0f);
 
 	RenderTerrainComponent* rend = terrainObj->AddComponent<RenderTerrainComponent>();
 	rend->ChangeTexture("testTerrain.png");
 	rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
 	rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 
+}
+
+void BossEventComponent::CreateBossObj() {
 
 	// ボス本体を作成 =======================================================
 	GameObject* boss = GameObjectManager::AddObject("Boss", "Enemy");
@@ -130,7 +148,6 @@ void BossEventComponent::CreateBossWalls() {
 	Render2DComponent* cubeRe = boss->AddComponent<Render2DComponent>();
 	cubeRe->CreateMesh<SquareMesh>();
 	cubeRe->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
-//	cubeRe->ChangeTexture("bossHo-dai.png");
 	cubeRe->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
 
 	m_boss = boss;
@@ -140,16 +157,68 @@ void BossEventComponent::CreateBossWalls() {
 	if (mySound != nullptr) {
 		mySound->Play();
 		mySound->SetVolume(0.7f);
+	}
+}
 
-		GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-		if(camera != nullptr) {
-			
-			SoundComponent* cameraSound = camera->GetComponent<SoundComponent>();
-			if(cameraSound != nullptr) {
-				cameraSound->Stop();
-			}
-		}
+void BossEventComponent::PlayerControlStop() {
+
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+
+	if (player == nullptr) {
+		return;
 	}
 
-	createCompletionFlag = true;
+	PlayerOperationComponent* operation = player->GetComponent<PlayerOperationComponent>();
+
+	if (operation == nullptr) {
+		return;
+	}
+
+	operation->SetActiveFlag(false);
+}
+
+void BossEventComponent::PlayerControlRestart() {
+
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+
+	if (player == nullptr) {
+		return;
+	}
+
+	PlayerOperationComponent* operation = player->GetComponent<PlayerOperationComponent>();
+
+	if (operation == nullptr) {
+		return;
+	}
+
+	operation->SetActiveFlag(true);
+}
+
+void BossEventComponent::PlayerMoveControl() {
+
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+
+	if (player == nullptr) {
+		return;
+	}
+
+	TransformComponent* trans = player->GetComponent<TransformComponent>();
+
+	if (trans == nullptr) {
+		return;
+	}
+
+	trans->AddPosition(XMFLOAT3(1.5f, 0.0f, 0.0f));
+
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+	if (camera == nullptr) {
+		return;
+	}
+
+	SoundComponent* cameraSound = camera->GetComponent<SoundComponent>();
+	if (cameraSound == nullptr) {
+		return;
+	}
+
+	cameraSound->AddVolume(-0.05f);
 }

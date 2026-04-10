@@ -10,6 +10,7 @@ private:
 	DirectX::XMFLOAT2 m_EllipseScale = { 1.0f,1.0f }; // 楕円のスケール
 	DirectX::XMFLOAT4 m_GlowColor = { 1.0f,1.0f,1.0f,1.0f }; // 輝きの色
 	EBlendState m_BlendState = EBlendState::BS_ADDITIVE;
+	std::unique_ptr<Shader> m_GlowShader = nullptr;
 
 public:
 	RenderTextureLuminescenceComponent(GameObject& obj);
@@ -19,6 +20,7 @@ public:
 	void SetGlowPower(const float power) { m_GlowPower = power; };
 	void SetEllipseScale(const DirectX::XMFLOAT2& scale) { m_EllipseScale = scale; };
 	void SetGlowRadius(const float radius) { m_GlowRadius = radius; };
+	void SetExpand(const float expand) { m_Expand = expand; };
 	void SetGlowColor(const DirectX::XMFLOAT4& color) { m_GlowColor = color; };
 	void SetBlendState(const EBlendState& state) { m_BlendState = state; };
 };
