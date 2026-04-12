@@ -49,6 +49,7 @@
 #include "Components/SoundComponent.h"
 #include "Components/RenderCharacterComponent.h"
 #include "Components/RenderTerrainComponent.h"
+#include "Components/FallJudgmentComponent.h"
 
 using namespace DirectX;
 
@@ -143,6 +144,8 @@ LoadStageScene::LoadStageScene() {
 
 		ColliderComponent* cubeColl = player->AddComponent<ColliderComponent>();
 		ColliderDamageComponent* collDamage = player->AddComponent<ColliderDamageComponent>();
+
+		TimeLineComponent* timeLine = player->AddComponent<TimeLineComponent>();
 
 		FighterComponent* fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);
@@ -252,6 +255,18 @@ LoadStageScene::LoadStageScene() {
 	hpBar->SetShader("OverVertexMoveVS.hlsl", "unlitTexturePS.hlsl");
 	hpBar->ChangeTexture("NoTexture.png");
 	hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+
+	GameObject* fallJudge = GameObjectManager::AddObject("fallJudge", "FallJudge");
+	TransformComponent* fallTrans = fallJudge->AddComponent<TransformComponent>();
+	fallTrans->SetPosition({ 750.0f, -420.0f, 0.0f });
+	fallTrans->SetScale({ 300.0f, 10.0f, 10.0f });
+	ColliderComponent* fallColl = fallJudge->AddComponent<ColliderComponent>();
+	FallJudgmentComponent* fallJudgment = fallJudge->AddComponent<FallJudgmentComponent>();
+	fallJudgment->SetResurrection({ 650.0f, -240.0f, 0.0f });
+	TimeLineComponent* timeLine = fallJudge->AddComponent<TimeLineComponent>();
+	Render3DColliderOBBComponent* fallRend = fallJudge->AddComponent<Render3DColliderOBBComponent>();
+	fallRend->CreateMesh<CubeMesh>();
+	fallRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 
 	std::vector<GameObject*> fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	if (!fade.empty()) {

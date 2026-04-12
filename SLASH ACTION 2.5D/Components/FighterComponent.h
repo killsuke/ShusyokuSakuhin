@@ -3,8 +3,6 @@
 
 // テストコード用のヒットイベント構造体
 struct HitEvent {
-	// ここはIDで判断した方が良いかも
-	// ダングリングポインタを避けるために
 	uint32_t attackerID; // 攻撃者のインスタンスID
 	uint32_t targetID;   // 被攻撃者のインスタンスID
 };
@@ -12,6 +10,19 @@ struct HitEvent {
 struct DamageEvent {
 	uint32_t attackerID; // 攻撃者のインスタンスID
 	uint32_t targetID;   // 被攻撃者のインスタンスID
+	int damage;			// ダメージ量
+};
+
+struct FallHitEvent {
+
+	uint32_t attackerID; // 攻撃者のインスタンスID
+	uint32_t targetID; // 被攻撃者のインスタンスID
+	int damage;			// ダメージ量
+};
+
+struct FallDamageEvent {
+	uint32_t attackerID; // 攻撃者のインスタンスID
+	uint32_t targetID; // 被攻撃者のインスタンスID
 	int damage;			// ダメージ量
 };
 
@@ -29,6 +40,7 @@ private:
 	bool m_deadFlag = false; // 死亡フラグ
 	bool m_useDeadFlag = true; // 死亡フラグそのものを使うか
 	uint64_t m_listenerID_HitEvent = 0; // ヒットイベントのリスナーID
+	uint64_t m_listenerID_FallHitEvent = 0; // 落下ヒットイベントのリスナーID
 
 public:
 	FighterComponent(GameObject& obj);
@@ -65,7 +77,10 @@ public:
 	};
 
 	void DamageProcess(const HitEvent& event);
+	void FallDamageProcess(const FallHitEvent& event);
+
 	// ヒットした際のイベント
 	void OnHit(const HitEvent& event);
-};
 
+	void OnFallHit(const FallHitEvent& event); // 落下してヒットした際のイベント
+};

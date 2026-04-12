@@ -19,7 +19,7 @@
 #include "SlashEffectComponent.h"
 #include "RenderCharacterComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
-#include "TimeLineComponent.h"	// これがちゃんと動くのか明日テスト
+#include "TimeLineComponent.h"
 #include "StretchingComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
@@ -28,6 +28,8 @@
 #include <iostream>
 
 using namespace DirectX;
+
+// タイムラインある？あとプレイヤーの死亡処理作成
 
 namespace {
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
@@ -52,30 +54,20 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 	m_listenerID_HitEvent = EventBusManager::Subscribe<DamageEvent>([&](const DamageEvent& e) {
 		OnDamageHit(e);
 		});
+
+	m_listenerID_FallDamageEvent = EventBusManager::Subscribe<FallDamageEvent>([&](const FallDamageEvent& e) {
+		OnDamageFallHit(e);
+		});
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
-}
-
-void PlayerOperationComponent::TestProcess() {
-
-	std::cout << "Start" << std::endl;
-}
-
-void PlayerOperationComponent::TestProcess2(float t) {
-
-	std::cout << "TestProcess" << std::endl;
-}
-
-void PlayerOperationComponent::TestProcess3() {
-
-	std::cout << "End" << std::endl;
+	EventBusManager::Unsubscribe(m_listenerID_FallDamageEvent);
 }
 
 // 更新処理
 void PlayerOperationComponent::Update() {
-	
+
 	const bool keyLeft = Input::GetKeyPress(VK_A) || Input::GetKeyPress(VK_LEFT) || Input::GetButtonPress(XINPUT_LEFT);
 	const bool keyRight = Input::GetKeyPress(VK_D) || Input::GetKeyPress(VK_RIGHT) || Input::GetButtonPress(XINPUT_RIGHT);
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
@@ -90,11 +82,11 @@ void PlayerOperationComponent::Update() {
 		return;
 	}
 
-	if (transform->GetPosition().y < -500.0f) {
-		if (fighter != nullptr) {
-			fighter->SetHp(0); // 落下したら体力0
-		}
-	}
+	//if (transform->GetPosition().y < -500.0f) {
+	//	if (fighter != nullptr) {
+	//		fighter->SetHp(0); // 落下したら体力0
+	//	}
+	//}
 
 	GameObject* fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
 
@@ -103,9 +95,8 @@ void PlayerOperationComponent::Update() {
 		DoorFadeComponent* fade = fadeObj->GetComponent<DoorFadeComponent>();
 
 		if (fighter->GetDeadFlag() == true) {
-			fade->SetWinLoseFlag(false);
-			fade->SetNextSceneName("ResultScene");
-			fade->SetBootDoor(true);
+
+			ChangeState(PlayerState::DEAD);
 		}
 	}
 
@@ -165,6 +156,10 @@ void PlayerOperationComponent::Update() {
 }
 
 void PlayerOperationComponent::ChangeState(const PlayerState& state) {
+
+	if (state == m_CurrentState) {
+		return; // 同じ状態に変更しようとしたら何もしない
+	}
 
 	PlayerState previousState = m_CurrentState;
 
@@ -233,7 +228,25 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	case PlayerState::DAMAGE:
 		break;
 	case PlayerState::DEAD:
-		break;
+
+	{
+		std::cout << "DEAD" << std::endl;
+		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+		if (timeLine != nullptr) {
+
+			//	timeLine->AddRangeDelayEvent(0.21f, 0.4f, 0.0f, this, [this](float) {FollowCamera(); }, [this]() {ShakeAndClash(); }, [this]() {FollowCamera(); });	// 画面衝突とカメラ追従
+			timeLine->AddPointDelayEvent(0.0f, this, [this]() { DeathCameraShake(); });
+			timeLine->AddPointDelayEvent(1.0f, this, [this]() { ChangeResult(); });
+		}
+
+		RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+		if (rigid != nullptr) {
+			rigid->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f)); // 死んだら動かないようにする
+			rigid->SetGravityFlag(false); // 重力も無効にする
+			rigid->SetActiveFlag(false); // 物理判定も無効にする
+		}
+	}
+	break;
 	default:
 		break;
 	}
@@ -345,7 +358,7 @@ void PlayerOperationComponent::StateUpdate() {
 	m_beforeMove = isMove;
 
 	// どのキーも押されていないときは状態をNONEにする
-	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::DAMAGE) {
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::DAMAGE && m_CurrentState != PlayerState::DEAD) {
 		ChangeState(PlayerState::NONE);
 	}
 }
@@ -626,6 +639,8 @@ void PlayerOperationComponent::OnDamageHit(const DamageEvent& event) {
 		return; // 自分宛じゃないなら無視
 	}
 
+	ChangeState(PlayerState::DAMAGE);
+
 	GameObject* attacker = GameObjectManager::GameObjectFindInstanceIDAll(event.attackerID);
 
 	if (attacker == nullptr) {
@@ -650,8 +665,17 @@ void PlayerOperationComponent::OnDamageHit(const DamageEvent& event) {
 
 		m_KnockBackRightLeft = RightLeft::LEFT;
 	}
+}
+
+void PlayerOperationComponent::OnDamageFallHit(const FallDamageEvent& event) {
+	const uint32_t targetID = m_Object->GetInstanceID();
+
+	if (event.targetID != targetID) {
+		return; // 自分宛じゃないなら無視
+	}
 
 	ChangeState(PlayerState::DAMAGE);
+	m_KnockBackRightLeft = RightLeft::NONE; // 落下ダメージはノックバックなし
 }
 
 void PlayerOperationComponent::CreateSlashEffect() {
@@ -676,4 +700,39 @@ void PlayerOperationComponent::CreateSlashEffect() {
 	render->SetGlowPower(0.4f);
 	render->SetGlowRadius(0.2f);
 	render->SetEllipseScale({ 1.0f,1.0f });
+}
+
+void PlayerOperationComponent::DeathCameraShake() {
+
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+	if (camera == nullptr) {
+		return;
+	}
+
+	CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
+	if (camShake == nullptr) {
+		return;
+	}
+
+	camShake->ShakingPreparation(15.0f, 4.5f, 0.2f);
+	camShake->SetShakeType(ShakeType::RANDOM_2D);
+}
+
+void PlayerOperationComponent::ChangeResult() {
+
+	GameObject* fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
+
+	if (fadeObj == nullptr) {
+		return;
+	}
+
+	DoorFadeComponent* fade = fadeObj->GetComponent<DoorFadeComponent>();
+
+	if (fade == nullptr) {
+		return;
+	}
+
+	fade->SetWinLoseFlag(false);
+	fade->SetNextSceneName("ResultScene");
+	fade->SetBootDoor(true);
 }

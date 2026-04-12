@@ -15,7 +15,7 @@ void CameraShakeComponent::Update() {
 
 	CameraComponent* camera = m_Object->GetComponent<CameraComponent>();
 
-	if (camera != nullptr && m_RequestTime != 0.0f) {
+	if (camera != nullptr && m_RequestTime > 0.0f) {
 		const XMMATRIX view = camera->GetView3D();
 
 		XMFLOAT3 newPos = XMFLOAT3(0.0f, 0.0f, 0.0f);

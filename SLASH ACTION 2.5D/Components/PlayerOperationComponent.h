@@ -25,6 +25,7 @@ private:
 	float m_ChargeCompleteTime = 1.5f; // チャージ完了までの時間
 	float m_KnockBackPower = 0.0f; // ノックバックの力
 	uint64_t m_listenerID_HitEvent = 0;
+	uint64_t m_listenerID_FallDamageEvent = 0;
 
 	RightLeft m_CurrentRightLeft = RightLeft::RIGHT; // 現在の向き管理
 	RightLeft m_KnockBackRightLeft = RightLeft::NONE; // ノックバックの向き管理
@@ -45,7 +46,11 @@ private:
 	void CreateChargeSlash();
 	void FastChageSlash();	// 高速チャージスラッシュ攻撃
 	void OnDamageHit(const DamageEvent& event);
+	void OnDamageFallHit(const FallDamageEvent& event);
 	void CreateSlashEffect();
+
+	void DeathCameraShake();
+	void ChangeResult();
 
 public:
 	PlayerOperationComponent(GameObject& obj);
@@ -62,9 +67,4 @@ public:
 	bool GetMoveFlag() const { return m_IsMoveFlag; } // 移動中かどうかのフラグ取得
 	bool GetIsJump() const { return m_IsJump; } // ジャンプ中かどうかのフラグ取得
 	PlayerState GetPlayerState()const { return m_CurrentState; };
-
-	void TestProcess();
-	void TestProcess2(float t);
-	void TestProcess3();
 };
-

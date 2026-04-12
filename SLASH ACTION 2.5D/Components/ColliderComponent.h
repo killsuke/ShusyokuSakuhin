@@ -111,7 +111,7 @@ private:
 
 	GameObject* beforeTouchObj = nullptr;	// 前回のタッチオブジェクト
 	
-	bool m_activeColliderFlag = true; // コライダーの有効・無効フラグ
+	bool m_ActiveColliderFlag = true; // コライダーの有効・無効フラグ
 
 	DirectX::XMFLOAT2 beforeTouchAxis = {}; // 前回のタッチ軸
 
@@ -315,7 +315,7 @@ public:
 
 		coll_ob.offsetQuat = quat; };
 
-	inline void SetActiveColliderFlag(const bool flag) { this->m_activeColliderFlag = flag; };
+	inline void SetActiveColliderFlag(const bool flag) { this->m_ActiveColliderFlag = flag; };
 
 	//	inline void SetOffsetRotation(const DirectX::XMFLOAT3& offset) { this->offsetRotation = offset; };
 
@@ -331,7 +331,7 @@ public:
 	inline DirectX::XMMATRIX GetWorldAABBMatrix() const { return coll_ab.worldAABBMatrix; };
 	inline DirectX::XMMATRIX GetWorldOBBMatrix() const { return coll_ob.worldOBBMatrix; };
 
-	inline bool GetActiveColliderFlag() const { return this->m_activeColliderFlag; };
+	inline bool GetActiveColliderFlag() const { return this->m_ActiveColliderFlag; };
 
 	void MakeWorldAABBMatrix();
 	void MakeWorldOBBMatrix();
@@ -343,6 +343,8 @@ public:
 
 	// make AABB
 	AABB SetAABB(const DirectX::XMFLOAT3& centerposition, float width, float height, float depth);
+
+	void InitCollider();
 
 	/*
 		// 線分に平行な与えられた幅の４角形の座標を求める

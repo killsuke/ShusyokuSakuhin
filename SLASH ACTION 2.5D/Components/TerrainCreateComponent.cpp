@@ -63,7 +63,7 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 
 			if (kind == "T_Move") {
 				MoveTerrainComponent* move = terrainObj->AddComponent<MoveTerrainComponent>();
-				move->SetMoveSpeed(80.0f);
+				move->SetMoveSpeed(50.0f);
 				move->SetMoveVector(XMFLOAT3(1.0f, 0.0f, 0.0f));
 			}
 

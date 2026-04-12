@@ -231,7 +231,7 @@
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Manager\ComponentTypeManager.cpp" />
     <ClCompile Include="Components\CSVObjectManagerComponent.cpp" />
-    <ClCompile Include="Components\DeathBlockComponent.cpp" />
+    <ClCompile Include="Components\FallJudgmentComponent.cpp" />
     <ClCompile Include="Components\DoorFadeComponent.cpp" />
     <ClCompile Include="Components\Effect2DComponent.cpp" />
     <ClCompile Include="Components\EnemyActionBossComponent.cpp" />
@@ -416,7 +416,7 @@
     <ClInclude Include="Manager\ComponentTypeManager.h" />
     <ClInclude Include="Components\CSVObjectManagerComponent.h" />
     <ClInclude Include="Structs\CSV_Data.h" />
-    <ClInclude Include="Components\DeathBlockComponent.h" />
+    <ClInclude Include="Components\FallJudgmentComponent.h" />
     <ClInclude Include="Components\DoorFadeComponent.h" />
     <ClInclude Include="Components\Effect2DComponent.h" />
     <ClInclude Include="Components\EnemyActionBossComponent.h" />

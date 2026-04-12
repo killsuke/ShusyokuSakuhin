@@ -61,14 +61,14 @@ public:
 	uint32_t AddPointEvent(const float time, Component* owner, std::function<void()> action);
 	uint32_t AddRangeEvent(
 		const float startTime, const float endTime, Component* owner,
-		std::function<void(float)> onUpdate,
+		std::function<void(float)> onUpdate = nullptr,
 		std::function<void()> onStart = nullptr,
 		std::function<void()> onEnd = nullptr);
 	uint32_t AddContinuousEvent(const float startTime, Component* owner, std::function<void()> action);
 
 	uint32_t AddPointDelayEvent(const float delayTime, Component* owner, std::function<void()> action);
 	uint32_t AddRangeDelayEvent(const float startTime, const float endTime, const float delayTime, Component* owner,
-		std::function<void(float)> onUpdate,
+		std::function<void(float)> onUpdate = nullptr,
 		std::function<void()> onStart = nullptr,
 		std::function<void()> onEnd = nullptr);
 	uint32_t AddContinuousDelayEvent(const float delayTime, Component* owner, std::function<void()> action);

@@ -8,6 +8,26 @@ using namespace DirectX;
 
 ColliderComponent::ColliderComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("COLLIDER"); // ソート番号を設定
+
+	// コライダーの初期化
+	InitCollider();
+}
+
+// コライダーの初期化
+void ColliderComponent::InitCollider() {
+
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	if(transform != nullptr) {
+	
+		XMFLOAT3 pos = transform->GetPosition();
+		XMFLOAT3 scale = transform->GetScale();
+		XMVECTOR rot = transform->GetQuaternion();
+
+		SetColliderSize_AABB(pos, scale);
+		SetColliderSize_OBB(pos, scale, rot);
+	}
+
+	Update();
 }
 
 void ColliderComponent::Update()
@@ -414,7 +434,7 @@ bool ColliderComponent::CheckHit(const Sphere& s1, const Sphere& s2, XMFLOAT3& c
 // AABBとAABBの当たり判定
 //==================================
 bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent& p1, const ColliderComponent& p2) {
-	if (p1.m_activeColliderFlag == false || p2.m_activeColliderFlag == false) {
+	if (p1.m_ActiveColliderFlag == false || p2.m_ActiveColliderFlag == false) {
 		return false; // コライダーが無効な場合は衝突しない
 	}
 
@@ -526,6 +546,11 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const ColliderComponent
 // 戻しナシ
 //==================================
 bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, XMFLOAT3& hitNormal) {
+	
+	if (p1.m_ActiveColliderFlag == false || p2.m_ActiveColliderFlag == false) {
+		return false; // コライダーが無効な場合は衝突しない
+	}
+
 	const AABB coll1 = p1.coll_ab;
 	const AABB coll2 = p2.coll_ab;
 
@@ -1263,7 +1288,7 @@ bool ColliderComponent::CubeAndCubeHit_OBB(const OBB& col1, const OBB& col2) {
 
 bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent& aabb, const ColliderComponent& obb) {
 
-	if (aabb.m_activeColliderFlag == false || obb.m_activeColliderFlag == false) {
+	if (aabb.m_ActiveColliderFlag == false || obb.m_ActiveColliderFlag == false) {
 		return false; // どちらかのコライダーが無効なら衝突無し
 	}
 

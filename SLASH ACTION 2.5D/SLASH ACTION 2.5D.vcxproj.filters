@@ -297,7 +297,7 @@
     <ClCompile Include="Components\BlinkingUIComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\DeathBlockComponent.cpp">
+    <ClCompile Include="Components\FallJudgmentComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\HumanBoneComponent.cpp">
@@ -794,7 +794,7 @@
     <ClInclude Include="Components\BlinkingUIComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\DeathBlockComponent.h">
+    <ClInclude Include="Components\FallJudgmentComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\HumanBoneComponent.h">

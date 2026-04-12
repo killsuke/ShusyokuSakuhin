@@ -14,10 +14,15 @@ FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnHit(e);
 		});
+
+	m_listenerID_FallHitEvent = EventBusManager::Subscribe<FallHitEvent>([&](const FallHitEvent& e) {
+		OnFallHit(e);
+		});
 }
 
 FighterComponent::~FighterComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_listenerID_FallHitEvent);
 }
 
 void FighterComponent::Update() {
@@ -71,7 +76,7 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 				m_invincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
 				m_hp -= m_totalDamage;
 
-				DamageEvent de = { 
+				DamageEvent de = {
 					event.attackerID,
 					event.targetID,
 					m_totalDamage
@@ -114,7 +119,62 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 				m_deadFlag = true; // 死亡フラグを立てる
 				const uint32_t id = m_Object->GetInstanceID();
 				const DeathEvent de = { id };
-				
+
+				EventBusManager::Push(de);
+			}
+			return; // 死亡フラグがfalseなら何もしない
+		}
+
+		m_deadFlag = true; // 死亡フラグを立てる
+	}
+}
+
+void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
+
+	if (m_useInvincible == true) {
+
+		if (event.damage > 0) {
+			m_invincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
+			m_hp -= event.damage;
+
+			FallDamageEvent de = {
+				event.attackerID,
+				event.targetID,
+				event.damage
+			};
+
+			EventBusManager::Push(de);
+
+			m_recordTime = 0.0f; // 無敵時間の記録をリセット
+		}
+	}
+	else {
+
+		if (event.damage > 0) {
+			// 合計ダメージを引く
+			m_hp -= event.damage;
+
+			FallDamageEvent de = {
+					event.attackerID,
+					event.targetID,
+					event.damage
+			};
+
+			EventBusManager::Push(de);
+		}
+	}
+
+	if (m_hp <= 0) {
+		m_hp = 0; // ヒットポイントが0以下になったら0にする
+
+		// これがボスであった場合はどうするかを考えてみる
+		if (m_useDeadFlag == false) {
+
+			if (m_deadFlag == false) {
+				m_deadFlag = true; // 死亡フラグを立てる
+				const uint32_t id = m_Object->GetInstanceID();
+				const DeathEvent de = { id };
+
 				EventBusManager::Push(de);
 			}
 			return; // 死亡フラグがfalseなら何もしない
@@ -127,10 +187,21 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 void FighterComponent::OnHit(const HitEvent& event) {
 
 	const uint32_t id = m_Object->GetInstanceID();
-	
+
 	if (event.targetID != id) {
 		return; // 自分宛じゃないなら無視
 	}
 	// ダメージを受ける処理
 	DamageProcess(event);
+}
+
+void FighterComponent::OnFallHit(const FallHitEvent& event) {
+
+	const uint32_t id = m_Object->GetInstanceID();
+
+	if (event.targetID != id) {
+		return; // 自分宛じゃないなら無視
+	}
+
+	FallDamageProcess(event);
 }
