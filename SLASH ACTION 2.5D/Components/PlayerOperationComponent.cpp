@@ -21,6 +21,9 @@
 #include "RenderLuminescenceBillboardComponent.h"
 #include "TimeLineComponent.h"
 #include "StretchingComponent.h"
+#include "ColliderDamageComponent.h"
+#include "RenderTextureLuminescenceComponent.h"
+#include "DeadRingComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
@@ -82,22 +85,10 @@ void PlayerOperationComponent::Update() {
 		return;
 	}
 
-	//if (transform->GetPosition().y < -500.0f) {
-	//	if (fighter != nullptr) {
-	//		fighter->SetHp(0); // 落下したら体力0
-	//	}
-	//}
+	// 死亡フラグが立っていたら状態をDEADにする
+	if (fighter->GetDeadFlag() == true) {
 
-	GameObject* fadeObj = GameObjectManager::GameObjectFindNameUI("fade");
-
-	if (fadeObj != nullptr) {
-
-		DoorFadeComponent* fade = fadeObj->GetComponent<DoorFadeComponent>();
-
-		if (fighter->GetDeadFlag() == true) {
-
-			ChangeState(PlayerState::DEAD);
-		}
+		ChangeState(PlayerState::DEAD);
 	}
 
 	rend->SetInversionFlag(m_CurrentRightLeft); // 向きに合わせて反転
@@ -230,21 +221,32 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	case PlayerState::DEAD:
 
 	{
-		std::cout << "DEAD" << std::endl;
 		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 		if (timeLine != nullptr) {
 
-			//	timeLine->AddRangeDelayEvent(0.21f, 0.4f, 0.0f, this, [this](float) {FollowCamera(); }, [this]() {ShakeAndClash(); }, [this]() {FollowCamera(); });	// 画面衝突とカメラ追従
-			timeLine->AddPointDelayEvent(0.0f, this, [this]() { DeathCameraShake(); });
-			timeLine->AddPointDelayEvent(1.0f, this, [this]() { ChangeResult(); });
+			timeLine->AddPointDelayEvent(0.0f, this, [this]() { DeadCameraShake(); });
+			timeLine->AddContinuousDelayEvent(0.2f, this, [this]() {DeadProcess(); });
+			timeLine->AddPointDelayEvent(0.2f, this, [this]() { CreateDeadRing(); });
+			timeLine->AddPointDelayEvent(0.6f, this, [this]() { CreateDeadRing(); });
+			timeLine->AddPointDelayEvent(1.0f, this, [this]() { CreateDeadRing(); });
+			timeLine->AddPointDelayEvent(2.5f, this, [this]() { ChangeResult(); });
 		}
 
 		RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
-		if (rigid != nullptr) {
-			rigid->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f)); // 死んだら動かないようにする
-			rigid->SetGravityFlag(false); // 重力も無効にする
-			rigid->SetActiveFlag(false); // 物理判定も無効にする
+		TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+		ColliderComponent* collider = m_Object->GetComponent<ColliderComponent>();
+		ColliderDamageComponent* collDamage = m_Object->GetComponent<ColliderDamageComponent>();
+
+		if (rigid == nullptr || transform == nullptr || collider == nullptr || collDamage == nullptr) {
+			return;
 		}
+
+		rigid->SetVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f)); // 死んだら動かないようにする
+		rigid->SetGravityFlag(false); // 重力も無効にする
+		rigid->SetActiveFlag(false); // 物理判定も無効にする
+		transform->SetActiveFlag(false); // トランスフォームも無効にする
+		collider->SetActiveColliderFlag(false); // 当たり判定も無効にする
+		collDamage->SetActiveColliderFlag(false); // ダメージの当たり判定も無効にする
 	}
 	break;
 	default:
@@ -702,10 +704,12 @@ void PlayerOperationComponent::CreateSlashEffect() {
 	render->SetEllipseScale({ 1.0f,1.0f });
 }
 
-void PlayerOperationComponent::DeathCameraShake() {
+void PlayerOperationComponent::DeadCameraShake() {
 
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-	if (camera == nullptr) {
+	GameObject* sword = GameObjectManager::GameObjectFindName("sword");
+
+	if (camera == nullptr || sword == nullptr) {
 		return;
 	}
 
@@ -714,10 +718,61 @@ void PlayerOperationComponent::DeathCameraShake() {
 		return;
 	}
 
+	// 止めるゲームオブジェクトを選出しておく
+
 	camShake->ShakingPreparation(15.0f, 4.5f, 0.2f);
 	camShake->SetShakeType(ShakeType::RANDOM_2D);
+	sword->SetActiveState(ActiveState::ALL_STOP);
+
+	// 死亡演出に集中させるために一度止める
+	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindTags("Enemy", "Effect", "SkyDome", "Bullets");
+	for (GameObject* obj : stopObjects) {
+
+		obj->SetActiveState(ActiveState::UPDATE_STOP);
+	}
 }
 
+// 死亡処理。時間経過で徐々に透明にしていく
+void PlayerOperationComponent::DeadProcess() {
+
+	RenderCharacterComponent* rend = m_Object->GetComponent<RenderCharacterComponent>();
+
+	if (rend == nullptr) {
+		return;
+	}
+
+	rend->AddColor_A(m_ColorA);
+	m_ColorA -= 0.04f;
+}
+
+// 死亡エフェクトのリングを生成する
+void PlayerOperationComponent::CreateDeadRing() {
+
+	TransformComponent* playerTransform = m_Object->GetComponent<TransformComponent>();
+
+	if (playerTransform == nullptr) {
+		return;
+	}
+
+	const XMFLOAT3 myPos = playerTransform->GetPosition();
+
+	// 死亡エフェクトのリングを生成
+	GameObject* ring = GameObjectManager::AddAbsFront("deadRing", "Effect_Dead");
+	TransformComponent* ringTrans = ring->AddComponent<TransformComponent>();
+	// プレイヤーの位置に生成
+	ringTrans->SetPosition(XMFLOAT3(myPos.x, myPos.y, myPos.z - 1.0f));
+	DeadRingComponent* ringComp = ring->AddComponent<DeadRingComponent>();
+	ringComp->SetScaleUpSpeed(5.0f);
+	ringComp->SetDeleteSpeed(0.02f);
+	RenderTextureLuminescenceComponent* ringRender = ring->AddComponent<RenderTextureLuminescenceComponent>();
+	ringRender->CreateMesh<SquareMesh>();
+	ringRender->SetShader("unlitTextureVS.hlsl", "unlitLuminescencePS.hlsl");
+	ringRender->ChangeTexture("dead_ring.png");
+	ringRender->SetColor(XMFLOAT4(0.8f, 0.8f, 1.0f, 1.0f));
+	ringRender->SetGlowColor(XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
+}
+
+// 結果画面に移行する
 void PlayerOperationComponent::ChangeResult() {
 
 	GameObject* fadeObj = GameObjectManager::GameObjectFindNameUI("fade");

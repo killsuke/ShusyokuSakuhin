@@ -183,6 +183,7 @@
     <ClCompile Include="Components\SlashEffectComponent.cpp" />
     <ClCompile Include="Components\CutObjectActionComponent.cpp" />
     <ClCompile Include="Components\DebugCameraComponent.cpp" />
+    <ClCompile Include="Components\DeadRingComponent.cpp" />
     <ClCompile Include="Manager\ShaderManager.cpp" />
     <ClCompile Include="Components\RenderRingLuminescenceBillboardComponent.cpp" />
     <ClCompile Include="Components\RenderHpComponent.cpp" />
@@ -364,6 +365,7 @@
     <ClInclude Include="Components\CutObjectActionComponent.h" />
     <ClInclude Include="Components\DebugCameraComponent.h" />
     <ClInclude Include="Components\StretchingComponent.h" />
+    <ClInclude Include="Components\DeadRingComponent.h" />
     <ClInclude Include="Helper\StringHelper.h" />
     <ClInclude Include="Components\RoundShadowRenderComponent.h" />
     <ClInclude Include="Manager\ShadowManager.h" />

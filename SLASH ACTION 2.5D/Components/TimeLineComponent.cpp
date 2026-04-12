@@ -10,6 +10,10 @@ TimeLineComponent::TimeLineComponent(GameObject& obj) : Component(obj) {
 
 TimeLineComponent::~TimeLineComponent() {
 	m_PointEvents.clear();	// イベントリストをクリア
+	m_RangeEvents.clear();
+	m_ContinuousEvents.clear();
+
+	m_ComponentEventMap.clear();	// コンポーネントごとのイベントマップをクリア
 }
 
 void TimeLineComponent::Update() {
@@ -25,6 +29,10 @@ void TimeLineComponent::Update() {
 	UpdatePointEvents();	// 一度きりのイベントの更新
 	UpdateRangeEvents();	// 範囲イベントの更新
 	UpdateContinuousEvents();	// 動き続けるイベントの更新
+
+	CleanUpPointEvents();	// 一度きりのイベントのクリーンアップ
+	CleanUpRangeEvents();	// 範囲イベントのクリーンアップ
+	CleanUpContinuousEvents();	// 動き続けるイベントのクリーンアップ
 }
 
 // イベント更新系の関数 =============================================
@@ -34,27 +42,15 @@ void TimeLineComponent::UpdatePointEvents() {
 
 	const float now = m_CurrentTime;
 
-	// 次のイベントが存在し、かつ現在の時間がそのイベントのトリガー時間を超えている場合
-	while (m_NextEventIndex < m_PointEvents.size()) {
-
-		TimePointEvent e = m_PointEvents[m_NextEventIndex];
+	for (TimePointEvent& e : m_PointEvents) {
 
 		if (e.valid == false) {
-
-			m_NextEventIndex++;
-			continue; // 無効なイベントはスキップ
+			continue;
 		}
 
 		if (now >= e.triggerTime) {
-			// イベントを実行
 			e.eventAction();
-			// 次のイベントへ進む
-			m_NextEventIndex++;
-		}
-
-		if (m_CurrentTime < e.triggerTime)
-		{
-			break; // 次のイベントの時間に達していない場合はループを抜ける
+			e.valid = false;
 		}
 	}
 }
@@ -117,6 +113,27 @@ void TimeLineComponent::UpdateContinuousEvents() {
 	}
 }
 
+void TimeLineComponent::CleanUpPointEvents() {
+
+	std::erase_if(m_PointEvents, [](const TimePointEvent& e) {
+		return !e.valid;
+		});
+}
+
+void TimeLineComponent::CleanUpRangeEvents() {
+
+	std::erase_if(m_RangeEvents, [](const TimeRangeEvent& e) {
+		return !e.valid;
+		});
+}
+
+void TimeLineComponent::CleanUpContinuousEvents() {
+
+	std::erase_if(m_ContinuousEvents, [](const TimeContinuousEvent& e) {
+		return !e.valid;
+		});
+}
+
 // ===========================================================================
 
 // イベント登録系の関数 ======================================================
@@ -131,8 +148,7 @@ uint32_t TimeLineComponent::AddPointEvent(const float time, Component* owner, st
 	newEvent.eventAction = action;
 	m_PointEvents.push_back(newEvent);	// イベントを追加
 
-	const size_t index = m_PointEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 
 	// イベントをトリガー時間でソート
 	std::sort(m_PointEvents.begin(), m_PointEvents.end(),
@@ -160,8 +176,7 @@ uint32_t TimeLineComponent::AddRangeEvent(
 	newEvent.ownerComponent = owner;
 	m_RangeEvents.push_back(newEvent);	// イベントを追加
 
-	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 
 	return newEvent.eventID;
 }
@@ -175,8 +190,7 @@ uint32_t TimeLineComponent::AddContinuousEvent(const float startTime, Component*
 	newEvent.ownerComponent = owner;
 	m_ContinuousEvents.push_back(newEvent);	// イベントを追加
 
-	const size_t index = m_ContinuousEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 	return newEvent.eventID;
 }
 
@@ -190,8 +204,7 @@ uint32_t TimeLineComponent::AddPointDelayEvent(const float delayTime, Component*
 	newEvent.eventAction = action;
 	m_PointEvents.push_back(newEvent);	// イベントを追加
 
-	const size_t index = m_PointEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 
 	// イベントをトリガー時間でソート
 	std::sort(m_PointEvents.begin(), m_PointEvents.end(),
@@ -217,8 +230,7 @@ uint32_t TimeLineComponent::AddRangeDelayEvent(const float startTime, const floa
 	newEvent.ownerComponent = owner;
 	m_RangeEvents.push_back(newEvent);	// イベントを追加
 
-	const size_t index = m_RangeEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 
 	return newEvent.eventID;
 }
@@ -232,8 +244,7 @@ uint32_t TimeLineComponent::AddContinuousDelayEvent(const float delayTime, Compo
 	newEvent.ownerComponent = owner;
 	m_ContinuousEvents.push_back(newEvent);
 
-	const size_t index = m_ContinuousEvents.size() - 1;	// 追加したイベントのインデックスを取得
-	m_ComponentEventMap[owner].push_back(index); // コンポーネントごとのマップにインデックスを追加
+	m_ComponentEventMap[owner].push_back(newEvent.eventID); // コンポーネントごとのマップにイベントIDを追加
 
 	return newEvent.eventID;
 }
@@ -243,20 +254,17 @@ uint32_t TimeLineComponent::AddContinuousDelayEvent(const float delayTime, Compo
 // 指定したコンポーネントに関連するすべてのイベントを削除
 void TimeLineComponent::RemoveEventsByComponent(Component* owner) {
 
-    std::unordered_map<Component*, std::vector<size_t>>::iterator it = m_ComponentEventMap.find(owner);
-    if (it == m_ComponentEventMap.end()) {
-        return;
-    }
+	auto it = m_ComponentEventMap.find(owner);
+	if (it == m_ComponentEventMap.end()) {
+		return;
+	}
 
-    for (size_t index : it->second) {
-        m_PointEvents[index].valid = false; // 空の関数に置き換え
-    }
+	// 関連するイベントIDをすべて停止
+	for (uint32_t eventID : it->second) {
+		StopEvent(eventID);
+	}
 
-    for (size_t index : it->second) {
-        m_RangeEvents[index].valid = false; // 空の関数に置き換え
-    }
-
-    m_ComponentEventMap.erase(it); // マップからエントリを削除
+	m_ComponentEventMap.erase(it);
 }
 
 // 指定したイベントIDのイベントを停止
@@ -279,5 +287,17 @@ void TimeLineComponent::StopEvent(uint32_t eventID) {
 			e.valid = false; // イベントを無効化
 			return;
 		}
+	}
+}
+
+void TimeLineComponent::AllStopEvents() {
+	for (TimePointEvent& e : m_PointEvents) {
+		e.valid = false; // すべてのイベントを無効化
+	}
+	for (TimeRangeEvent& e : m_RangeEvents) {
+		e.valid = false; // すべてのイベントを無効化
+	}
+	for (TimeContinuousEvent& e : m_ContinuousEvents) {
+		e.valid = false; // すべてのイベントを無効化
 	}
 }

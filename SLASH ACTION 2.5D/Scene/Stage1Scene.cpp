@@ -195,7 +195,7 @@ void Stage1Scene::Init()
 		parentTrans->SetScale({ 50.0f,50.0f,50.0f });
 		RenderTextureLuminescenceComponent* rend = parentObj->AddComponent<RenderTextureLuminescenceComponent>();
 		rend->CreateMesh<SquareMesh>();
-		rend->ChangeTexture("win_Text.png");
+		rend->ChangeTexture("dead_ring.png");
 		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		rend->SetGlowRadius(5.0f);
 		rend->SetExpand(1.5f);

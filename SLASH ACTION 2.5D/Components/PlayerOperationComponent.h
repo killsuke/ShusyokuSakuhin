@@ -24,6 +24,7 @@ private:
 	float m_ChargeTime = 0.0f; // チャージしている時間を記録する
 	float m_ChargeCompleteTime = 1.5f; // チャージ完了までの時間
 	float m_KnockBackPower = 0.0f; // ノックバックの力
+	float m_ColorA = 1.0f; // プレイヤーの色のアルファ値
 	uint64_t m_listenerID_HitEvent = 0;
 	uint64_t m_listenerID_FallDamageEvent = 0;
 
@@ -49,7 +50,9 @@ private:
 	void OnDamageFallHit(const FallDamageEvent& event);
 	void CreateSlashEffect();
 
-	void DeathCameraShake();
+	void DeadCameraShake();
+	void DeadProcess();
+	void CreateDeadRing();
 	void ChangeResult();
 
 public:

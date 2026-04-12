@@ -131,5 +131,7 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	cutCompAction->SetDeathState(m_DeathState);
 
 	m_IsActiveFlag = true;
+
+	m_Object->Destroy(); // オブジェクトを削除フラグを立てる
 }
 

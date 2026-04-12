@@ -43,15 +43,20 @@ class TimeLineComponent final : public Component
 private:
 	uint32_t m_NextEventID = 1; // 次に割り当てるイベントID
 	float m_CurrentTime = 0.0f; // 現在のタイムライン時間
-	size_t m_NextEventIndex = 0; // 次に発生するイベントのインデックス
 	std::vector<TimePointEvent> m_PointEvents; // タイムラインイベントのリスト
 	std::vector<TimeRangeEvent> m_RangeEvents; // 一定時間継続するイベントのリスト
 	std::vector<TimeContinuousEvent> m_ContinuousEvents;	// 無期限で継続するイベントのリスト
-	std::unordered_map<Component*, std::vector<size_t>> m_ComponentEventMap; // コンポーネントごとのイベントインデックスマップ
+	std::unordered_map<Component*, std::vector<uint32_t>> m_ComponentEventMap; // コンポーネントごとのイベントインデックスマップ
 
 	void UpdatePointEvents();
 	void UpdateRangeEvents();
 	void UpdateContinuousEvents();
+
+	void CleanUpPointEvents();
+	void CleanUpRangeEvents();
+	void CleanUpContinuousEvents();
+	
+	void AllStopEvents();
 
 public:
 	TimeLineComponent(GameObject& obj);

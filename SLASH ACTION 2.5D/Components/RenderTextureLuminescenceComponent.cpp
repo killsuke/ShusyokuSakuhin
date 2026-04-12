@@ -100,8 +100,6 @@ void RenderTextureLuminescenceComponent::Update()
 
 			cb.matrixWorld = XMMatrixTranspose(glowMtx);
 
-			//deviceContext->UpdateSubresource(bufferDefault, 0, NULL, &cb, 0, 0);
-
 			const EBlendState currentBlendState = DirectXRender::GetCurrentBlendState();
 			DirectXRender::SetBlendState(EBlendState::BS_ADDITIVE);
 			const bool prevDepthEnable = DirectXRender::GetIsDepthEnable();

@@ -264,9 +264,9 @@ LoadStageScene::LoadStageScene() {
 	FallJudgmentComponent* fallJudgment = fallJudge->AddComponent<FallJudgmentComponent>();
 	fallJudgment->SetResurrection({ 650.0f, -240.0f, 0.0f });
 	TimeLineComponent* timeLine = fallJudge->AddComponent<TimeLineComponent>();
-	Render3DColliderOBBComponent* fallRend = fallJudge->AddComponent<Render3DColliderOBBComponent>();
+	/*Render3DColliderOBBComponent* fallRend = fallJudge->AddComponent<Render3DColliderOBBComponent>();
 	fallRend->CreateMesh<CubeMesh>();
-	fallRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
+	fallRend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");*/
 
 	std::vector<GameObject*> fade = GameObjectManager::GameObjectFindTagUI("FadeUI");
 	if (!fade.empty()) {

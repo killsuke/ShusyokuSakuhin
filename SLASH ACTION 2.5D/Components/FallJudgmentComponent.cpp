@@ -3,6 +3,7 @@
 #include "ColliderComponent.h"
 #include "FighterComponent.h"
 #include "TimeLineComponent.h"
+#include "RigidBodyComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 
@@ -29,7 +30,7 @@ void FallJudgmentComponent::Update() {
 	TransformComponent* playerTransform = player->GetComponent<TransformComponent>();
 	ColliderComponent* collplay = player->GetComponent<ColliderComponent>();
 
-	if(playerTransform == nullptr || collplay == nullptr) {
+	if (playerTransform == nullptr || collplay == nullptr) {
 		return;
 	}
 
@@ -38,7 +39,7 @@ void FallJudgmentComponent::Update() {
 
 		// ここでタイムラインを使用する
 		timeLine->AddRangeDelayEvent(0.0f, 1.0f, 0.0f, this, nullptr, [this]() {ResurrentionProcess(); }, [this]() {PlayerActiveProcess(); });
-	
+
 		//	timeLine->AddPointDelayEvent(0.21f, this, [this]() {CreateCracksAndDebris(); });	// 破片やヒビを生成
 	}
 }
@@ -55,19 +56,25 @@ void FallJudgmentComponent::ResurrentionProcess() {
 
 	TransformComponent* playerTransform = player->GetComponent<TransformComponent>();
 	ColliderComponent* collplay = player->GetComponent<ColliderComponent>();
+	ColliderComponent* myCollider = m_Object->GetComponent<ColliderComponent>();
+	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 
-	if (playerTransform == nullptr || collplay == nullptr) {
+	if (playerTransform == nullptr || collplay == nullptr || myCollider == nullptr || timeLine == nullptr) {
 		return;
 	}
-
-	playerTransform->SetPosition(m_Resurrection);
-	collplay->Update(); // コライダーの位置を更新
 
 	FighterComponent* fighter = player->GetComponent<FighterComponent>();
 
 	if (fighter == nullptr) {
 		return;
 	}
+
+	const int totalDamage = fighter->GetTotalDamage();
+	const int hp = fighter->GetHp();
+
+	const int predictionDamage = totalDamage + DAMAGE;
+
+	const int predictedHp = hp - predictionDamage;
 
 	const uint32_t myID = m_Object->GetInstanceID();
 	const uint32_t otherID = player->GetInstanceID();
@@ -77,8 +84,18 @@ void FallJudgmentComponent::ResurrentionProcess() {
 	// ヒット時の通知テスト
 	EventBusManager::Push(he);
 
-	player->SetActiveState(ActiveState::ALL_STOP);
-	sword->SetActiveState(ActiveState::DRAW_STOP);
+	if (predictedHp > 0) {
+
+		playerTransform->SetPosition(m_Resurrection);
+		collplay->Update(); // コライダーの位置を更新
+
+		player->SetActiveState(ActiveState::ALL_STOP);
+		sword->SetActiveState(ActiveState::DRAW_STOP);
+	}
+	else {
+
+		myCollider->SetActiveColliderFlag(false); // 自身のコライダーを無効にする
+	}
 }
 
 void FallJudgmentComponent::PlayerActiveProcess() {

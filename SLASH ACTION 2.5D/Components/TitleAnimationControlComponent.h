@@ -28,7 +28,6 @@ private:
 public:
 
 	TitleAnimationControlComponent(GameObject& obj);
-	~TitleAnimationControlComponent() = default;
 	void Update()override;
 
 	void Slash1ActiveOn();

@@ -23,4 +23,15 @@ public:
 	void SetExpand(const float expand) { m_Expand = expand; };
 	void SetGlowColor(const DirectX::XMFLOAT4& color) { m_GlowColor = color; };
 	void SetBlendState(const EBlendState& state) { m_BlendState = state; };
+
+	void AddGlowColor(const DirectX::XMFLOAT4& color) {
+		m_GlowColor.x += color.x;
+		m_GlowColor.y += color.y;
+		m_GlowColor.z += color.z;
+		m_GlowColor.w += color.w;
+	};
+	void AddGlowColor_R(const float r) { m_GlowColor.x += r; };
+	void AddGlowColor_G(const float g) { m_GlowColor.y += g; };
+	void AddGlowColor_B(const float b) { m_GlowColor.z += b; };
+	void AddGlowColor_A(const float a) { m_GlowColor.w += a; };
 };

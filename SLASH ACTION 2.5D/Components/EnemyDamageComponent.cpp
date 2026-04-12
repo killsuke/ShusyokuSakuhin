@@ -78,7 +78,7 @@ void EnemyDamageComponent::Update()
 					}
 
 					// ヒットストップの候補セット
-					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome"});
+					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome","Bullets" });
 					HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
 
 					GameObject* camera = GameObjectManager::GameObjectFindName("camera");

@@ -29,94 +29,94 @@ void FighterComponent::Update() {
 
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-	if (m_atk < 0) {
-		m_atk = 0; // 攻撃力が0以下になったら0にする
+	if (m_Atk < 0) {
+		m_Atk = 0; // 攻撃力が0以下になったら0にする
 	}
 
 	// 無敵の経過時間を加算
-	if (m_invincibleFlag == true) {
+	if (m_InvincibleFlag == true) {
 		m_recordTime += deltaTime;
 
 		// 無敵時間終了判定
 		if (m_recordTime >= 1.5f) {
 			m_recordTime = 0.0f;
-			m_invincibleFlag = false;
+			m_InvincibleFlag = false;
 		}
 	}
 
-	if (m_hp <= 0) {
-		m_hp = 0; // ヒットポイントが0以下になったら0にする
+	if (m_Hp <= 0) {
+		m_Hp = 0; // ヒットポイントが0以下になったら0にする
 
 		// 遅れて死ぬ
-		m_DeadRecordTime += deltaTime;
-		if (m_DeadRecordTime > 5.0f) {
-			m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
-		}
+		//m_DeadRecordTime += deltaTime;
+		//if (m_DeadRecordTime > 5.0f) {
+		//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
+		//}
 
 		// これがボスであった場合はどうするかを考えてみる
-		if (m_useDeadFlag == false) {
+		if (m_UseDeadFlag == false) {
 
-			if (m_deadFlag == false) {
-				m_deadFlag = true; // 死亡フラグを立てる
+			if (m_DeadFlag == false) {
+				m_DeadFlag = true; // 死亡フラグを立てる
 
 			}
 			return; // 死亡フラグがfalseなら何もしない
 		}
 
-		m_deadFlag = true; // 死亡フラグを立てる
+		m_DeadFlag = true; // 死亡フラグを立てる
 	}
 }
 
 void FighterComponent::DamageProcess(const HitEvent& event) {
 
-	if (m_useInvincible == true) {
+	if (m_UseInvincible == true) {
 
 		if (m_recordTime < 1.5f) {
-			if (m_totalDamage > 0 && m_invincibleFlag == false) {
-				m_invincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
-				m_hp -= m_totalDamage;
+			if (m_TotalDamage > 0 && m_InvincibleFlag == false) {
+				m_InvincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
+				m_Hp -= m_TotalDamage;
 
 				DamageEvent de = {
 					event.attackerID,
 					event.targetID,
-					m_totalDamage
+					m_TotalDamage
 				};
 
 				EventBusManager::Push(de);
 
-				m_totalDamage = 0;
+				m_TotalDamage = 0;
 			}
 		}
 		else {
 			m_recordTime = 0.0f;
-			m_invincibleFlag = false;
+			m_InvincibleFlag = false;
 		}
 	}
 	else {
 
-		if (m_totalDamage > 0) {
+		if (m_TotalDamage > 0) {
 			// 合計ダメージを引く
-			m_hp -= m_totalDamage;
+			m_Hp -= m_TotalDamage;
 
 			DamageEvent de = {
 					event.attackerID,
 					event.targetID,
-					m_totalDamage
+					m_TotalDamage
 			};
 
 			EventBusManager::Push(de);
-			m_totalDamage = 0;
+			m_TotalDamage = 0;
 		}
 	}
 
-	if (m_hp <= 0) {
-		m_hp = 0; // ヒットポイントが0以下になったら0にする
+	if (m_Hp <= 0) {
+		m_Hp = 0; // ヒットポイントが0以下になったら0にする
 
 		// これがボスであった場合はどうするかを考えてみる
-		if (m_useDeadFlag == false) {
+		if (m_UseDeadFlag == false) {
 
-			if (m_deadFlag == false) {
-				m_deadFlag = true; // 死亡フラグを立てる
+			if (m_DeadFlag == false) {
+				m_DeadFlag = true; // 死亡フラグを立てる
 				const uint32_t id = m_Object->GetInstanceID();
 				const DeathEvent de = { id };
 
@@ -125,17 +125,17 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 			return; // 死亡フラグがfalseなら何もしない
 		}
 
-		m_deadFlag = true; // 死亡フラグを立てる
+		m_DeadFlag = true; // 死亡フラグを立てる
 	}
 }
 
 void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 
-	if (m_useInvincible == true) {
+	if (m_UseInvincible == true) {
 
 		if (event.damage > 0) {
-			m_invincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
-			m_hp -= event.damage;
+			m_InvincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
+			m_Hp -= event.damage;
 
 			FallDamageEvent de = {
 				event.attackerID,
@@ -152,7 +152,7 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 
 		if (event.damage > 0) {
 			// 合計ダメージを引く
-			m_hp -= event.damage;
+			m_Hp -= event.damage;
 
 			FallDamageEvent de = {
 					event.attackerID,
@@ -164,14 +164,14 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 		}
 	}
 
-	if (m_hp <= 0) {
-		m_hp = 0; // ヒットポイントが0以下になったら0にする
+	if (m_Hp <= 0) {
+		m_Hp = 0; // ヒットポイントが0以下になったら0にする
 
 		// これがボスであった場合はどうするかを考えてみる
-		if (m_useDeadFlag == false) {
+		if (m_UseDeadFlag == false) {
 
-			if (m_deadFlag == false) {
-				m_deadFlag = true; // 死亡フラグを立てる
+			if (m_DeadFlag == false) {
+				m_DeadFlag = true; // 死亡フラグを立てる
 				const uint32_t id = m_Object->GetInstanceID();
 				const DeathEvent de = { id };
 
@@ -180,7 +180,7 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 			return; // 死亡フラグがfalseなら何もしない
 		}
 
-		m_deadFlag = true; // 死亡フラグを立てる
+		m_DeadFlag = true; // 死亡フラグを立てる
 	}
 }
 

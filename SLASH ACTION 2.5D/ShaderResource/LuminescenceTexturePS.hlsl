@@ -31,7 +31,8 @@ float4 ps_main(in PS_IN input) : SV_Target
         glowAlpha += s * weight;
     }
     glowAlpha = saturate(glowAlpha / (STEPS * 0.5));
-
+    glowAlpha *= GlowColor.a;
+    
     // グロー色と強度だけ出力、テクスチャ色は一切無視
     float GlowPower = 2.0;    
     
