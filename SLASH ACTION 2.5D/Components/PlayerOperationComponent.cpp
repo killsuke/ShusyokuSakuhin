@@ -28,6 +28,7 @@
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/TimeManager.h"
+#include "SoundComponent.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -217,6 +218,11 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	case PlayerState::CHARGE_SLASH:
 		break;
 	case PlayerState::DAMAGE:
+	{
+		SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+		sound->Play("damage");
+	}
+
 		break;
 	case PlayerState::DEAD:
 
@@ -707,7 +713,7 @@ void PlayerOperationComponent::CreateSlashEffect() {
 void PlayerOperationComponent::DeadCameraShake() {
 
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-	GameObject* sword = GameObjectManager::GameObjectFindName("sword");
+	GameObject* sword = GameObjectManager::GameObjectFindAllName("sword");
 
 	if (camera == nullptr || sword == nullptr) {
 		return;
@@ -718,14 +724,16 @@ void PlayerOperationComponent::DeadCameraShake() {
 		return;
 	}
 
-	// 止めるゲームオブジェクトを選出しておく
-
+	// カメラを揺らす
 	camShake->ShakingPreparation(15.0f, 4.5f, 0.2f);
 	camShake->SetShakeType(ShakeType::RANDOM_2D);
+
+	// 剣は止めておく
 	sword->SetActiveState(ActiveState::ALL_STOP);
 
+	// 止めるゲームオブジェクトを選出
 	// 死亡演出に集中させるために一度止める
-	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindTags("Enemy", "Effect", "SkyDome", "Bullets");
+	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindTags("Enemy", "Effect", "SkyDome", "Bullets","Terrain");
 	for (GameObject* obj : stopObjects) {
 
 		obj->SetActiveState(ActiveState::UPDATE_STOP);
@@ -749,10 +757,13 @@ void PlayerOperationComponent::DeadProcess() {
 void PlayerOperationComponent::CreateDeadRing() {
 
 	TransformComponent* playerTransform = m_Object->GetComponent<TransformComponent>();
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
 
-	if (playerTransform == nullptr) {
+	if (playerTransform == nullptr || sound == nullptr) {
 		return;
 	}
+
+	sound->Play("playerDead");
 
 	const XMFLOAT3 myPos = playerTransform->GetPosition();
 

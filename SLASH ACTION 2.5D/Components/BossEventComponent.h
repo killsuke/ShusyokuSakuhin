@@ -22,4 +22,8 @@ public:
 	void PlayerControlStop();
 	void PlayerControlRestart();
 	void PlayerMoveControl();
+
+	void TransferResultScene();
+	void DeadCameraShakeAndScreenStop();
+	void ScreenReStart();
 };

@@ -424,6 +424,17 @@ GameObject* GameObjectManager::GameObjectFindName(const std::string& name) {
     return nullptr; // 一致するオブジェクトが見つからなかった場合、nullptrを返す
 }
 
+GameObject* GameObjectManager::GameObjectFindAllName(const std::string& name) {
+
+    for (const std::unique_ptr<GameObject>& obj : m_Objects) { // objects をループで探索
+        if (obj->GetName() == name) { // 名前が一致するかチェック
+            return obj.get(); // 一致するオブジェクトを追加
+        }
+    }
+
+    return nullptr;
+}
+
 // 検索したオブジェクトを複数返すが、存在しない場合は止まるので注意
 std::vector<GameObject*> GameObjectManager::GameObjectFindTag(const std::string& tag) {
 

@@ -5,8 +5,8 @@ class RenderHpComponent : public RenderComponent
 {
 private:
 
-	GameObject* referenceHpObj = nullptr;
-	float hpScale = 3.3f; // HPの値「１」辺りの縦のサイズ
+	GameObject* m_ReferenceHpObj = nullptr;
+	float m_HpScale = 3.3f; // HPの値「１」辺りの縦のサイズ
 
 public:
 	RenderHpComponent(GameObject& obj);
@@ -14,6 +14,7 @@ public:
 
 	void Update()override;
 
-	inline void SetReferenceHPObj(GameObject& obj) { referenceHpObj = &obj; };
-	inline void SetHpScale(float scale) { hpScale = scale; } // HPの値「１」辺りの縦のサイズを設定
+	void SetReferenceHPObj(GameObject& obj) { m_ReferenceHpObj = &obj; };
+	void SetHpScale(float scale) { m_HpScale = scale; } // HPの値「１」辺りの縦のサイズを設定
+	void ResetReferenceHPObj() { m_ReferenceHpObj = nullptr; }; // 参照するHPオブジェクトをリセット
 };

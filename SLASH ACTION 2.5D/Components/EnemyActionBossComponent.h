@@ -11,6 +11,7 @@ enum class BossActionState {
 	DEFAULT,
 	JUMP_SHOOTING,
 	BARRIER,
+	DEAD,
 	MAX
 };
 

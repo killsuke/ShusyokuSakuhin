@@ -22,6 +22,10 @@
 #include "SoundComponent.h"
 #include "RenderTerrainComponent.h"
 #include "PlayerOperationComponent.h"
+#include "CameraShakeComponent.h"
+#include "RenderHpComponent.h"
+#include "Manager/HitStopManager.h"
+#include "Manager/EventBusManager.h"
 
 using namespace DirectX;
 
@@ -45,13 +49,6 @@ void BossEventComponent::Update() {
 	}
 
 	if (m_IsBossDied == true) {
-
-		if (m_RecordTime > 3.0f) {
-			fade->SetWinLoseFlag(true);
-			fade->SetNextSceneName("ResultScene");
-			fade->SetBootDoor(true);
-		}
-		m_RecordTime += TimeManager::GetFixedDeltaTime();
 		return;
 	}
 
@@ -79,6 +76,15 @@ void BossEventComponent::Update() {
 					EnemyActionBossComponent* bossAction = boss->GetComponent<EnemyActionBossComponent>();
 					if (bossAction != nullptr) {
 						bossAction->SetActiveFlag(false);
+					}
+
+					if(m_IsBossDied == false) {
+
+
+						m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {DeadCameraShakeAndScreenStop(); });
+						m_TimeLine->AddPointDelayEvent(0.7f, this, [this]() {ScreenReStart(); });
+						m_TimeLine->AddPointDelayEvent(3.0f, this, [this]() {TransferResultScene(); });
+
 					}
 					m_IsBossDied = true;
 					return;
@@ -133,6 +139,8 @@ void BossEventComponent::CreateBossObj() {
 	ColliderComponent* cubeColl = boss->AddComponent<ColliderComponent>();
 	ColliderAttackComponent* collAttack = boss->AddComponent<ColliderAttackComponent>();
 	ColliderDamageComponent* collDamage = boss->AddComponent<ColliderDamageComponent>();
+
+	TimeLineComponent* timeLine = boss->AddComponent<TimeLineComponent>();
 
 	FighterComponent* fighterPlayer = boss->AddComponent<FighterComponent>();
 	fighterPlayer->SetHp(50);
@@ -221,4 +229,72 @@ void BossEventComponent::PlayerMoveControl() {
 	}
 
 	cameraSound->AddVolume(-0.05f);
+}
+
+void BossEventComponent::TransferResultScene() {
+
+	GameObject* obj = GameObjectManager::GameObjectFindNameUI("fade");
+
+	if (obj == nullptr) {
+		return;
+	}
+	DoorFadeComponent* fade = obj->GetComponent<DoorFadeComponent>();
+
+	if (fade == nullptr) {
+		return;
+	}
+
+	fade->SetWinLoseFlag(true);
+	fade->SetNextSceneName("ResultScene");
+	fade->SetBootDoor(true);
+}
+
+void BossEventComponent::DeadCameraShakeAndScreenStop() {
+
+	HitStopManager::SetIsHitStopActive(false);
+
+	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+
+	if (camera == nullptr) {
+		return;
+	}
+
+	CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
+	if (camShake != nullptr) {
+		camShake->ShakingPreparation(150.0f, 4.0f, 0.4f);
+		camShake->SetShakeType(ShakeType::RANDOM_2D);
+	}
+
+	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindAllTags("Player", "Sword", "Effect", "SkyDome", "Bullets");
+	for (GameObject* obj : stopObjects) {
+
+		obj->SetActiveState(ActiveState::UPDATE_STOP);
+	}
+}
+
+void BossEventComponent::ScreenReStart() {
+
+	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindAllTags("Player", "Sword", "Effect", "SkyDome", "Bullets");
+	for (GameObject* obj : stopObjects) {
+
+		obj->SetActiveState(ActiveState::ACTIVE);
+	}
+
+	GameObject* boss = GameObjectManager::GameObjectFindName("Boss");
+	GameObject* hp_Boss = GameObjectManager::GameObjectFindNameUI("hpUI_Boss");
+
+	if(boss == nullptr || hp_Boss == nullptr) {
+		return;
+	}
+
+	RenderHpComponent* hpRender = hp_Boss->GetComponent<RenderHpComponent>();
+
+	if(hpRender == nullptr) {
+		return;
+	}
+
+	hpRender->ResetReferenceHPObj();
+
+	DeathEvent de = { boss->GetInstanceID() };
+	EventBusManager::Push(de);
 }

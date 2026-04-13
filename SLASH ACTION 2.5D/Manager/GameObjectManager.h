@@ -92,15 +92,16 @@ public:
 	static void DrawSort();
 
 	// ゲームオブジェクトを見つければ返す
-	static GameObject* GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	static GameObject* GameObjectFindNameUI(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindTagUI(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	static GameObject* GameObjectFindNameAbsFront(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindTagAbsFront(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindAllTag(const std::string& tag);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindAllTag(const std::vector<std::string>& tags);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
-	static std::vector<GameObject*> GameObjectFindAllTag(const std::unordered_set<std::string>& tags);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか考える
+	static GameObject* GameObjectFindName(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか
+	static GameObject* GameObjectFindAllName(const std::string&);	// 名前検索でゲームオブジェクトを持ってくる
+	static std::vector<GameObject*> GameObjectFindTag(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
+	static GameObject* GameObjectFindNameUI(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか
+	static std::vector<GameObject*> GameObjectFindTagUI(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
+	static GameObject* GameObjectFindNameAbsFront(const std::string&);	// 名前検索（１体のみ）でゲームオブジェクトを持ってくるか
+	static std::vector<GameObject*> GameObjectFindTagAbsFront(const std::string&);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
+	static std::vector<GameObject*> GameObjectFindAllTag(const std::string& tag);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
+	static std::vector<GameObject*> GameObjectFindAllTag(const std::vector<std::string>& tags);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
+	static std::vector<GameObject*> GameObjectFindAllTag(const std::unordered_set<std::string>& tags);	// タグ検索（複数体）でゲームオブジェクトを持ってくるか
 
 	template<typename ... Tags>
 	static std::vector<GameObject*> GameObjectFindTags(Tags&& ... tags) {

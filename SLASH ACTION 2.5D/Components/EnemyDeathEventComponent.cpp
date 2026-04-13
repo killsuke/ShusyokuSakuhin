@@ -91,36 +91,27 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	}
 
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
-	// ヒット時の通知テスト
-//	EventBusManager::Push(ce);
 
-	/*TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
+	const std::string name = m_Object->GetName();
 
-	XMFLOAT3 pos = trans->GetPosition();
-	pos.z -= 5.0f;
-
-	GameObject* effect = GameObjectManager::AddAbsFront("swordEffect", "Effect");
-	TransformComponent* effectTrans = effect->AddComponent<TransformComponent>();
-	effectTrans->SetScale(XMFLOAT3(10.0f,10.0f,1.0f));
-	effectTrans->SetPosition(pos);
-
-	RenderBillboardComponent* render = effect->AddComponent<RenderBillboardComponent>();
-	SquareMesh* mesh = render->CreateMesh<SquareMesh>();
-	render->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
-	render->ChangeTexture("bomb_anim.png");*/
-
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(0, 2);
-
-	int value = dist(gen);
-
-	if (value < 1) {
+	if (name == "Boss") {
 
 		m_DeathState = EnemyDeathEventState::STICKY;
 	}
 	else {
-		m_DeathState = EnemyDeathEventState::IMMEDIATE;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dist(0, 2);
+
+		int value = dist(gen);
+
+		if (value < 1) {
+
+			m_DeathState = EnemyDeathEventState::STICKY;
+		}
+		else {
+			m_DeathState = EnemyDeathEventState::IMMEDIATE;
+		}
 	}
 
 	GameObject* cutCompObj = GameObjectManager::AddObject("cutCompObj","CutCompObj");
@@ -134,4 +125,3 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 
 	m_Object->Destroy(); // オブジェクトを削除フラグを立てる
 }
-

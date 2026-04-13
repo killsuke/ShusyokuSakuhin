@@ -15,6 +15,12 @@ GameObject::GameObject(const std::string& _name, const uint32_t& id) : m_Name(_n
 	m_RenderComponents.reserve(FIRST_RENDERCOMPONENT_RESERVE);
 };
 
+GameObject::~GameObject() {
+
+	m_Parent = nullptr;
+	DestroyChildren();
+}
+
 void GameObject::Update() {
 	// XVˆ—‚ğÁ‚·‚©H
 	if (m_ActiveState == ActiveState::UPDATE_STOP || m_ActiveState == ActiveState::ALL_STOP)

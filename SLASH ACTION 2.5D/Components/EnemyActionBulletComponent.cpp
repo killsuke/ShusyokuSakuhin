@@ -70,8 +70,6 @@ void EnemyActionBulletComponent::Update() {
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 	m_RecordTime += deltaTime;
 
-	ChangeDirection(myPos, playPos);
-
 	rend->SetInversionFlag(m_IsRightLeft);
 
 	StateUpdate(deltaTime, myPos, playPos, *mesh);	// ó‘Ô‚É‰ž‚¶‚½ˆ—
@@ -176,6 +174,8 @@ void EnemyActionBulletComponent::StateUpdate(const float deltaTime, const Direct
 		mesh.SetInitialCut(ANIM_CUT);
 		mesh.SetCutNum(DEFAULT_POSE);
 
+		ChangeDirection(myPos, playPos);
+
 		if (ratio > PRELIMINARY_OPERATION_TIME) {
 
 			ChangeState(EEnemyState::ATTACK);
@@ -187,31 +187,43 @@ void EnemyActionBulletComponent::StateUpdate(const float deltaTime, const Direct
 		break;
 	case EEnemyState::ATTACK:
 
-		if (m_RecordTime > ATTACK_TIME) {
+	{
+		const float deltaPosX = fabs(playPos.x - myPos.x);
 
-			FiringBullet(myPos);
-			m_RecordTime = 0.0f;
-
+		// ƒvƒŒƒCƒ„[‚ªˆê’è‹——£ˆÈã—£‚ê‚½‚çUŒ‚‚ð’†Ž~‚µ‚Ä‘Ò‹@ó‘Ô‚É–ß‚é
+		if(deltaPosX > 120.0f) {
 			ChangeState(EEnemyState::WAIT);
+			m_RecordTime = 0.0f;
 			break;
 		}
+	}
 
-		// UŒ‚‘O‚Ì—\”õ“®ì
-		if (ratio > PRELIMINARY_OPERATION_TIME) {
+	if (m_RecordTime > ATTACK_TIME) {
 
-			ChangeState(EEnemyState::ATTACK);
+		FiringBullet(myPos);
+		m_RecordTime = 0.0f;
+		mesh.SetCutNum(DEFAULT_POSE);
 
-			const int newRatio = static_cast<int>(ratio / deltaTime) % 2;
-
-			if (newRatio == 0) {
-				mesh.SetCutNum(DEFAULT_POSE);
-			}
-			else {
-				mesh.SetCutNum(ATTACK_POSE);
-			}
-		}
-
+		ChangeState(EEnemyState::WAIT);
 		break;
+	}
+
+	// UŒ‚‘O‚Ì—\”õ“®ì
+	if (ratio > PRELIMINARY_OPERATION_TIME) {
+
+		ChangeState(EEnemyState::ATTACK);
+
+		const int newRatio = static_cast<int>(ratio / deltaTime) % 2;
+
+		if (newRatio == 0) {
+			mesh.SetCutNum(DEFAULT_POSE);
+		}
+		else {
+			mesh.SetCutNum(ATTACK_POSE);
+		}
+	}
+
+	break;
 	case EEnemyState::DAMAGED:
 
 		mesh.SetCutNum(DAMAGE_POSE);

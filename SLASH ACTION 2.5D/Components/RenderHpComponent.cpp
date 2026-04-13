@@ -15,11 +15,11 @@ void RenderHpComponent::Update()
 {
 	const TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
-	if(referenceHpObj == nullptr ) {
+	if(m_ReferenceHpObj == nullptr ) {
 		return; // 参照するHPオブジェクトが設定されていない場合は何もしない
 	}
 
-	FighterComponent* hpObj = referenceHpObj->GetComponent<FighterComponent>();
+	FighterComponent* hpObj = m_ReferenceHpObj->GetComponent<FighterComponent>();
 
 	if (transform != nullptr && m_Mesh != nullptr && hpObj != nullptr) {
 
@@ -60,7 +60,7 @@ void RenderHpComponent::Update()
 		hpParam.currentScale = float(nowHP);
 
 		// HPの値「１」辺りの縦のサイズを入れる
-		hpParam.baseScale = hpScale;
+		hpParam.baseScale = m_HpScale;
 
 		ID3D11Buffer* bufferHp = DirectXRender::GetOverVertexMoveBuffer();
 		deviceContext->VSSetConstantBuffers(UINT(EBufferTypes::OVER_VERTEX), 1, &bufferHp);

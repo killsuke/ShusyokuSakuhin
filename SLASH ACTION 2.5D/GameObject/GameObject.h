@@ -54,7 +54,7 @@ private:
 public:
 
 	GameObject(const std::string& _name, const uint32_t& id); // 名前とタグを指定して初期化
-	~GameObject() = default;	// デフォルトデストラクタ
+	~GameObject();	// デフォルトデストラクタ
 
 	GameObject(const GameObject&) = delete;			 // コピーコンストラクタ禁止
 	GameObject(GameObject&&) = delete;				 // ムーブコンストラクタ禁止
@@ -86,9 +86,16 @@ public:
             obj->m_Parent = nullptr; // 親オブジェクトを解除
         }
     };
-	inline void ClearChild() {
+	inline void ClearChildren() {
 		for (GameObject* child : m_Children) {
 			child->m_Parent = nullptr; // 親オブジェクトを解除
+		}
+		m_Children.clear();
+	};
+	inline void DestroyChildren() {
+		for (GameObject* child : m_Children) {
+			child->m_Parent = nullptr; // 親オブジェクトを解除
+			child->Destroy(); // 子オブジェクトを削除
 		}
 		m_Children.clear();
 	};

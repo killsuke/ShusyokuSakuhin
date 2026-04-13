@@ -4,11 +4,6 @@
 #include "GameObject/GameObject.h"
 #include <vector>
 
-std::unordered_set<std::string> HitStopManager::m_TargetTags;
-float HitStopManager::m_HitStopTime = 0.0f;
-float HitStopManager::m_RecordTime = 0.0f;
-bool HitStopManager::m_IsHitStopActive = true;
-
 void HitStopManager::Update()
 {
 	if(m_IsHitStopActive == false)

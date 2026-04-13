@@ -6,10 +6,10 @@ class HitStopManager final
 {
 private:
 
-	static std::unordered_set<std::string> m_TargetTags;
-	static float m_RecordTime;
-	static float m_HitStopTime;
-	static bool m_IsHitStopActive;	// このマネージャーのアップデートを有効にするかどうか
+	static inline std::unordered_set<std::string> m_TargetTags;
+	static inline float m_RecordTime = 0.0f;
+	static inline float m_HitStopTime = 0.0f;
+	static inline bool m_IsHitStopActive = true;	// このマネージャーのアップデートを有効にするかどうか
 
 public:
 

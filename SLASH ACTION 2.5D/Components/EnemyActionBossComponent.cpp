@@ -16,6 +16,7 @@
 #include "RenderHpComponent.h"
 #include "JumpComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "TimeLineComponent.h"
 #include "Mesh/SquareMesh.h"
 
 using namespace DirectX;
@@ -128,7 +129,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	}
 
 	{
-		m_HpBar = GameObjectManager::AddUI("hpUI", "HP_UI");
+		m_HpBar = GameObjectManager::AddUI("hpUI_Boss", "HP_UI");
 		TransformComponent* hpTrans = m_HpBar->AddComponent<TransformComponent>();
 		hpTrans->SetPosition({ 570.0f, 120.0f, 0.0f });
 		hpTrans->SetScale({ 30.0f, 1.0f, 1.0f });
@@ -152,10 +153,20 @@ void EnemyActionBossComponent::Update() {
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
 	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 	TestExtrusionJudgeComponent* testExtrude = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	FighterComponent* fight = m_Object->GetComponent<FighterComponent>();
 
-	if (playTrans == nullptr || myTrans == nullptr || rend == nullptr || testExtrude == nullptr) {
+	if (playTrans == nullptr || myTrans == nullptr || rend == nullptr || testExtrude == nullptr || fight == nullptr) {
 		return;
 	}
+
+	const int maxHp = fight->GetMaxHp();
+	const int hp = fight->GetHp();
+
+	if (hp <= 0) {
+		ChangeState(BossActionState::DEAD);
+		return;
+	}
+
 
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
@@ -192,13 +203,9 @@ void EnemyActionBossComponent::Update() {
 
 	{
 		// HPバー処理
-		FighterComponent* fight = m_Object->GetComponent<FighterComponent>();
 		RenderHpComponent* hpBar = m_HpBar->GetComponent<RenderHpComponent>();
 
-		if (fight != nullptr && hpBar != nullptr) {
-
-			const int maxHp = fight->GetMaxHp();
-			const int hp = fight->GetHp();
+		if (hpBar != nullptr) {
 
 			// HPのカラー変更
 			if (hp <= 0) {
@@ -363,6 +370,27 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 
 		m_IsBarrier = true;
 		break;
+	case BossActionState::DEAD:
+
+	{
+		trans->SetActiveFlag(false);
+		jump->SetActiveFlag(false);
+		ColliderAttackComponent* collAttack = m_Object->GetComponent<ColliderAttackComponent>();
+		ColliderComponent* coll = m_Object->GetComponent<ColliderComponent>();
+		ColliderDamageComponent* collDamage = m_Object->GetComponent<ColliderDamageComponent>();
+		RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+
+		if (collAttack == nullptr || coll == nullptr || collDamage == nullptr || rigid == nullptr || timeLine == nullptr) {
+			return;
+		}
+
+		collAttack->SetActiveColliderFlag(false);
+		coll->SetActiveColliderFlag(false);
+		collDamage->SetActiveColliderFlag(false);
+		rigid->SetActiveFlag(false);
+	}
+	break;
 	case BossActionState::MAX:
 		break;
 	default:
@@ -446,7 +474,7 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
 
-	if(myTrans == nullptr) {
+	if (myTrans == nullptr) {
 		return;
 	}
 
@@ -524,6 +552,9 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 		}
 	}
 	break;
+	case BossActionState::DEAD:
+
+		break;
 	case BossActionState::MAX:
 		break;
 	default:

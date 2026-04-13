@@ -40,6 +40,7 @@
 #include "Components/BossEventComponent.h"
 #include "Components/RenderBlurComponent.h"
 #include "Manager/ModelManager.h"
+#include "Manager/HitStopManager.h"
 #include "Components/HitFlashComponent.h"
 #include "Components/TrailRenderComponent.h"
 #include "Components/RenderMotionBlurComponent.h"
@@ -54,6 +55,8 @@
 using namespace DirectX;
 
 LoadStageScene::LoadStageScene() {
+
+	HitStopManager::SetIsHitStopActive(true);	// ヒットストップを有効にする
 
 	GameObject* camera = GameObjectManager::AddObject("camera", "Camera");
 	SoundComponent* sound = camera->AddComponent<SoundComponent>();
@@ -146,6 +149,10 @@ LoadStageScene::LoadStageScene() {
 		ColliderDamageComponent* collDamage = player->AddComponent<ColliderDamageComponent>();
 
 		TimeLineComponent* timeLine = player->AddComponent<TimeLineComponent>();
+
+		SoundComponent* sound = player->AddComponent<SoundComponent>();
+		sound->AddSoundLabel("playerDead");
+		sound->AddSoundLabel("damage");
 
 		FighterComponent* fighterPlayer = player->AddComponent<FighterComponent>();
 		fighterPlayer->SetHp(50);
