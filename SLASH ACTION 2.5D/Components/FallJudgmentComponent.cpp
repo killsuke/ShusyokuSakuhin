@@ -27,20 +27,16 @@ void FallJudgmentComponent::Update() {
 		return;
 	}
 
-	TransformComponent* playerTransform = player->GetComponent<TransformComponent>();
 	ColliderComponent* collplay = player->GetComponent<ColliderComponent>();
 
-	if (playerTransform == nullptr || collplay == nullptr) {
+	if (collplay == nullptr) {
 		return;
 	}
 
-	XMFLOAT3 hitNormal = {};
-	if (collider->CheckHit_CubeAndCube_IsTrigger2D_Normal(*collplay, *collider, hitNormal) == true) {
+	if (collider->CheckHit_CubeAndCube_IsTrigger3D(*collplay, *collider) == true) {
 
 		// ここでタイムラインを使用する
-		timeLine->AddRangeDelayEvent(0.0f, 1.0f, 0.0f, this, nullptr, [this]() {ResurrentionProcess(); }, [this]() {PlayerActiveProcess(); });
-
-		//	timeLine->AddPointDelayEvent(0.21f, this, [this]() {CreateCracksAndDebris(); });	// 破片やヒビを生成
+		timeLine->AddRangeDelayEvent(0.0f, 1.0f, 0.0f, this, [this](float) {PlayerStop(); }, [this]() {ResurrentionProcess(); }, [this]() {PlayerActiveProcess(); });
 	}
 }
 
@@ -48,7 +44,7 @@ void FallJudgmentComponent::ResurrentionProcess() {
 
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
-	GameObject* sword = GameObjectManager::GameObjectFindName("sword");
+	GameObject* sword = GameObjectManager::GameObjectFindAllName("sword");
 
 	if (player == nullptr || sword == nullptr) {
 		return;
@@ -58,8 +54,9 @@ void FallJudgmentComponent::ResurrentionProcess() {
 	ColliderComponent* collplay = player->GetComponent<ColliderComponent>();
 	ColliderComponent* myCollider = m_Object->GetComponent<ColliderComponent>();
 	TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
+	RigidBodyComponent* rigid = player->GetComponent<RigidBodyComponent>();
 
-	if (playerTransform == nullptr || collplay == nullptr || myCollider == nullptr || timeLine == nullptr) {
+	if (playerTransform == nullptr || collplay == nullptr || myCollider == nullptr || timeLine == nullptr || rigid == nullptr) {
 		return;
 	}
 
@@ -87,10 +84,8 @@ void FallJudgmentComponent::ResurrentionProcess() {
 	if (predictedHp > 0) {
 
 		playerTransform->SetPosition(m_Resurrection);
-		collplay->Update(); // コライダーの位置を更新
-
-		player->SetActiveState(ActiveState::ALL_STOP);
-		sword->SetActiveState(ActiveState::DRAW_STOP);
+		collplay->SetActiveColliderFlag(false);
+		rigid->ClearVelocity();
 	}
 	else {
 
@@ -98,14 +93,36 @@ void FallJudgmentComponent::ResurrentionProcess() {
 	}
 }
 
-void FallJudgmentComponent::PlayerActiveProcess() {
+void FallJudgmentComponent::PlayerStop() {
+
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
-	GameObject* sword = GameObjectManager::GameObjectFindName("sword");
+	GameObject* sword = GameObjectManager::GameObjectFindAllName("sword");
 
 	if (player == nullptr || sword == nullptr) {
 		return;
 	}
+
+	player->SetActiveState(ActiveState::ALL_STOP);
+	sword->SetActiveState(ActiveState::DRAW_STOP);
+}
+
+void FallJudgmentComponent::PlayerActiveProcess() {
+
+	GameObject* player = GameObjectManager::GameObjectFindName("Player");
+	GameObject* sword = GameObjectManager::GameObjectFindAllName("sword");
+
+	if (player == nullptr || sword == nullptr) {
+		return;
+	}
+
+	ColliderComponent* collplay = player->GetComponent<ColliderComponent>();
+
+	if (collplay == nullptr) {
+		return;
+	}
+
+	collplay->SetActiveColliderFlag(true); // コライダーを有効にする
 
 	player->SetActiveState(ActiveState::ACTIVE);
 	sword->SetActiveState(ActiveState::ACTIVE);

@@ -3,13 +3,14 @@
 #include "FighterComponent.h"
 #include "EnemyDeathEventComponent.h"
 #include "Structs/RightLeft.h"
+#include "SoundComponent.h"
 #include "Manager/TimeManager.h"
 
 namespace {
 	constexpr float FEAR_POWER = 0.8f;
 	constexpr float FEAR_SPEED = 50.0f;
 	constexpr float FEAR_RIMIT_TIME = 0.8f;
-	constexpr float FEAR_DECAY = 0.95f;
+	constexpr float FEAR_DECAY = 0.8f;
 }
 
 enum class EEnemyState {
@@ -43,6 +44,7 @@ protected:
 
 public:
 
+	virtual void Init() {};
 	virtual void Update() = 0;
 
 	void CreateDamageEffect(const HitEvent& event);

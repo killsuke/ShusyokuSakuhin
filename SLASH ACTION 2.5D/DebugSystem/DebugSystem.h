@@ -7,7 +7,7 @@
 
 namespace {
 
-	constexpr unsigned int UI_DISPLAY_COUNT = 4;
+	constexpr unsigned int UI_DISPLAY_COUNT = 5;
 }
 
 class DebugSystem final
@@ -19,7 +19,10 @@ private:
 	static inline GameObject* m_DebugCamera = nullptr;
 	static inline bool m_IsDebugUI = true; // デバッグUIの表示非表示フラグ
 	static inline bool m_ScreenStop = false; // 画面停止のフラグ
+	static inline bool m_IsVisualization = true; // コライダーの可視化フラグ
 	static inline FieldOfView m_CurrentFieldOfView = FieldOfView::DEFAULT;
+	static inline std::vector<uint32_t> m_ColliderObjects = {};
+	static inline std::vector<uint32_t> m_CameraTarget = {};
 
 	DebugSystem() = default;
 	~DebugSystem() = default;
@@ -42,10 +45,21 @@ private:
 	// ワイヤーフレームとソリッドの切り替え
 	static void SwitchingFillMode();
 
+	// コライダーの可視化のON/OFF
+	static void SwitchingVisualization();
+
 public:
 
 	static void Init();
 	static void UnInit();
 
 	static void Update();
+
+	static void AddColliderObjects(const uint32_t& obj);
+	static void RemoveColliderObjects(const uint32_t& obj);
+	static void ClearColliderObjects();
+
+	static void AddCameraTarget(const uint32_t& obj);
+	static void RemoveCameraTarget(const uint32_t& obj);
+	static void ClearCameraTarget();
 };

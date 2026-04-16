@@ -20,6 +20,7 @@
 #include "ProjectileMotionComponent.h"
 #include "MeshCut2DComponent.h"
 #include "EnemyDeathEventComponent.h"
+#include "SoundComponent.h"
 
 using namespace DirectX;
 
@@ -66,6 +67,8 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		rigidBody->SetGravityFlag(true); // 重力を有効にする
 		enemyObj->AddComponent<TestExtrusionJudgeComponent>(); // 地面判定コンポーネントを追加
 
+		SoundComponent* sound = enemyObj->AddComponent<SoundComponent>();
+
 		CreateKind(eS.kind, *enemyObj);
 
 		ProjectileMotionComponent* proj = enemyObj->AddComponent<ProjectileMotionComponent>();
@@ -98,7 +101,7 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		HitFlashComponent* hitFlash = enemyObj->AddComponent<HitFlashComponent>();
 		hitFlash->SetHitFlashColor(XMFLOAT3(1.0f, 1.0f, 1.0f));
 		hitFlash->SetHitFlashPower(0.8f);
-		
+
 		// 当たり判定の可視化用（デバッグ用）
 		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
@@ -116,15 +119,21 @@ void EnemyCreateComponent::CreateKind(const std::string& kind, GameObject& obj)
 
 	if (kind == "E_Gunner") {
 		enemyAction = obj.AddComponent<EnemyActionBulletComponent>();
+
+		enemyAction->Init();
 	}
 	else if(kind == "E_Hopper") {
 		enemyAction = obj.AddComponent<EnemyActionHopperComponent>();
+
+		enemyAction->Init();
 	}
 	else if (kind == "E_Oku_No_TEKI") {
 		enemyAction = obj.AddComponent<EnemyActionHopperComponent>();
 
 		TransformComponent* trans = obj.GetComponent<TransformComponent>();
 		trans->SetPosition({ 0.0f, 10.0f, 15.0f });
+
+		enemyAction->Init();
 	}
 
 	PlayerDamageComponent* pd = obj.AddComponent<PlayerDamageComponent>();

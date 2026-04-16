@@ -28,6 +28,7 @@
 #include "Manager/GameObjectManager.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/TimeManager.h"
+#include "Manager/HitStopManager.h"
 #include "SoundComponent.h"
 #include <iostream>
 
@@ -111,13 +112,6 @@ void PlayerOperationComponent::Update() {
 		rend->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)); // 元に戻す
 	}
 
-	//if (rigid != nullptr) {
-
-	//	// 後で減速の仕方を考える
-	//	if (!keyLeft && !keyRight) {
-	//		rigid->ReduceVelocity_X(0.5f);
-	//	}
-	//}
 
 	GameObject* hpUI = GameObjectManager::GameObjectFindNameUI("hpUI");
 	if (hpUI != nullptr) {
@@ -223,7 +217,7 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 		sound->Play("damage");
 	}
 
-		break;
+	break;
 	case PlayerState::DEAD:
 
 	{
@@ -397,6 +391,8 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 		m_CurrentRightLeft = RightLeft::RIGHT;
 	}
 
+#if _DEBUG
+
 	// ダッシュ
 	if (dash) {
 
@@ -424,6 +420,20 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 			transform->AddPosition(MoveRightSpeed);
 		}
 	}
+#else
+	// 移動しない
+	if (right && left) {
+		ChangeState(PlayerState::NONE);
+		return;
+	}
+
+	if (left) {
+		transform->AddPosition(MoveLeftSpeed);
+	}
+	if (right) {
+		transform->AddPosition(MoveRightSpeed);
+	}
+#endif
 
 	// 移動する
 	*isMove = true;
@@ -712,6 +722,8 @@ void PlayerOperationComponent::CreateSlashEffect() {
 
 void PlayerOperationComponent::DeadCameraShake() {
 
+	HitStopManager::SetIsHitStopActive(false);
+
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 	GameObject* sword = GameObjectManager::GameObjectFindAllName("sword");
 
@@ -731,9 +743,17 @@ void PlayerOperationComponent::DeadCameraShake() {
 	// 剣は止めておく
 	sword->SetActiveState(ActiveState::ALL_STOP);
 
+	Render3DComponent* rend3D = sword->GetComponent<Render3DComponent>();
+
+	if (rend3D == nullptr) {
+		return;
+	}
+
+	rend3D->SetActiveFlag(false);
+
 	// 止めるゲームオブジェクトを選出
 	// 死亡演出に集中させるために一度止める
-	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindTags("Enemy", "Effect", "SkyDome", "Bullets","Terrain");
+	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindTags("Enemy", "Effect", "SkyDome", "Bullets", "Terrain");
 	for (GameObject* obj : stopObjects) {
 
 		obj->SetActiveState(ActiveState::UPDATE_STOP);

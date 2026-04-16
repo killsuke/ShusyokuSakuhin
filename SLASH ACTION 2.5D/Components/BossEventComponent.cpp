@@ -58,10 +58,11 @@ void BossEventComponent::Update() {
 		if (point->GetScrollDir() == 1) {
 			if (createCompletionFlag == false) {
 
+				// ボス戦が始まる際の演出
 				m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {CreateBossWalls(); });
-				m_TimeLine->AddRangeDelayEvent(0.0f, 0.5f, 0.0f, this, [this](float) {PlayerMoveControl(); }, [this]() {PlayerControlStop(); }, [this]() {PlayerControlRestart(); });
+				m_TimeLine->AddRangeDelayEvent(0.0f, 0.5f, 0.0f, this, [this](float) {PlayerMoveControl(); }, [this]() {PlayerControlStop(); }, nullptr);
 				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {CreateBossObj(); });
-
+				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {PlayerControlRestart(); });
 
 				createCompletionFlag = true;
 				return;
@@ -78,7 +79,7 @@ void BossEventComponent::Update() {
 						bossAction->SetActiveFlag(false);
 					}
 
-					if(m_IsBossDied == false) {
+					if (m_IsBossDied == false) {
 
 
 						m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {DeadCameraShakeAndScreenStop(); });
@@ -100,8 +101,8 @@ void BossEventComponent::CreateBossWalls() {
 	// ボス戦用の壁を作成
 	GameObject* terrainObj = GameObjectManager::AddObject("bossTerrain", "Terrain");
 	TransformComponent* transform = terrainObj->AddComponent<TransformComponent>();
-	transform->SetPosition({ 1080.0f, 80.0f, 0.0f });
-	transform->SetScale({ 8.0f,60.0f,10.0f });
+	transform->SetPosition({ 1080.0f, 80.0f, 10.0f });
+	transform->SetScale({ 8.0f,60.0f,20.0f });
 
 	ColliderComponent* collider = terrainObj->AddComponent<ColliderComponent>();
 
@@ -283,13 +284,13 @@ void BossEventComponent::ScreenReStart() {
 	GameObject* boss = GameObjectManager::GameObjectFindName("Boss");
 	GameObject* hp_Boss = GameObjectManager::GameObjectFindNameUI("hpUI_Boss");
 
-	if(boss == nullptr || hp_Boss == nullptr) {
+	if (boss == nullptr || hp_Boss == nullptr) {
 		return;
 	}
 
 	RenderHpComponent* hpRender = hp_Boss->GetComponent<RenderHpComponent>();
 
-	if(hpRender == nullptr) {
+	if (hpRender == nullptr) {
 		return;
 	}
 

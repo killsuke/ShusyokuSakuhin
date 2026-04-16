@@ -2,6 +2,7 @@
 #include "System/DirectXRender.h"
 #include "ColliderComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "DebugSystem/DebugSystem.h"
 
 using namespace DirectX;
 
@@ -9,6 +10,12 @@ Render3DColliderOBBComponent::Render3DColliderOBBComponent(GameObject& obj) : Re
 
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_DEBUG"); // É\Å[Égî‘çÜÇê›íË
 	m_Shader = std::make_unique<Shader>();
+
+	DebugSystem::AddColliderObjects(m_Object->GetInstanceID());
+}
+
+Render3DColliderOBBComponent::~Render3DColliderOBBComponent() {
+	DebugSystem::RemoveColliderObjects(m_Object->GetInstanceID());
 }
 
 void Render3DColliderOBBComponent::Update()

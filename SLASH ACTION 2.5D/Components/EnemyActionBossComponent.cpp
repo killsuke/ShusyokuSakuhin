@@ -23,12 +23,13 @@ using namespace DirectX;
 
 namespace {
 
-	constexpr float BulletTiming = 0.35f;
+	constexpr float BulletTiming = 0.5f;
+	constexpr float BulletTimingEX = 0.35f;
 	constexpr float JumpMoveX = 2.0f;
 	constexpr float TargetLength = 20.0f;
 	constexpr float MoveSpeed = 0.2f;
 	constexpr float ScaleSpeed = 0.05f;
-	constexpr int BarrierDurability = 35;
+	constexpr int BarrierDurability = 25;
 }
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
@@ -140,6 +141,10 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		hpBar->SetShader("OverVertexMoveVS.hlsl", "unlitTexturePS.hlsl");
 		hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	}
+}
+
+void EnemyActionBossComponent::Init() {
+	
 }
 
 void EnemyActionBossComponent::Update() {

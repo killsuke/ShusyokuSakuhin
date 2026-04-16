@@ -19,6 +19,7 @@ public:
 	EnemyActionHopperComponent(GameObject& obj);
 	~EnemyActionHopperComponent();
 
+	void Init() override;
 	void Update() override;
 	void HopperAction(const bool jumpFlag);
 

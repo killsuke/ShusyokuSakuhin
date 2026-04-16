@@ -3,6 +3,7 @@
 #include "ColliderComponent.h"
 #include "Manager/GameObjectManager.h"
 #include "Mesh/CubeMesh.h"
+#include "DebugSystem/DebugSystem.h"
 
 using namespace DirectX;
 
@@ -12,6 +13,12 @@ Render3DColliderAABBComponent::Render3DColliderAABBComponent(GameObject& obj) : 
 	m_Shader->Create("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	CreateMesh<CubeMesh>();
 	m_Color = XMFLOAT4(0.0f, 1.0f, 0.0f, 0.3f); // —ÎF
+
+	DebugSystem::AddColliderObjects(m_Object->GetInstanceID());
+}
+
+Render3DColliderAABBComponent::~Render3DColliderAABBComponent() {
+	DebugSystem::RemoveColliderObjects(m_Object->GetInstanceID());
 }
 
 void Render3DColliderAABBComponent::Update()

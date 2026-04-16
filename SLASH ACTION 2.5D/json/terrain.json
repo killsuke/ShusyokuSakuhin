@@ -113,7 +113,23 @@
             "shaderPS": "TerrainPS.hlsl"
         },
 	{
-            "kind": "T_Move",
+            "kind": "T_MoveR",
+            "scale": {
+                "x": 20.0,
+                "y": 5.0,
+                "z": 20.0
+            },
+            "angle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "texture": "testTerrain.png",
+            "shaderVS": "TerrainVS.hlsl",
+            "shaderPS": "TerrainPS.hlsl"
+        },
+	{
+            "kind": "T_MoveL",
             "scale": {
                 "x": 20.0,
                 "y": 5.0,

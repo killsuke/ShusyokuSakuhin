@@ -3,14 +3,6 @@
 #include    <Windows.h>
 #include    <cstdint>
 
-// ImGui系
-#include <imgui.h>
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
-
-#pragma comment (lib, "imgui.lib")
-
-
 //-----------------------------------------------------------------------------
 // Applicationクラス
 //-----------------------------------------------------------------------------

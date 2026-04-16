@@ -15,6 +15,11 @@
 
 using namespace DirectX;
 
+namespace {
+	XMFLOAT3 RIGHT = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3 LEFT = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+}
+
 TerrainCreateComponent::TerrainCreateComponent(GameObject& obj) : CSVObjectManagerComponent(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CSV_OBJECT_MANAGER"); // É\Å[Égî‘çÜÇê›íË
 }
@@ -61,10 +66,15 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 			ColliderComponent* collider = terrainObj->AddComponent<ColliderComponent>();
 			collider->SetOffsetSizeAABB(XMFLOAT3(0.0f, 1.0f, 1.0f));
 
-			if (kind == "T_Move") {
+			if (kind == "T_MoveR") {
 				MoveTerrainComponent* move = terrainObj->AddComponent<MoveTerrainComponent>();
 				move->SetMoveSpeed(50.0f);
-				move->SetMoveVector(XMFLOAT3(1.0f, 0.0f, 0.0f));
+				move->SetMoveVector(RIGHT);
+			}
+			else if(kind == "T_MoveL") {
+				MoveTerrainComponent* move = terrainObj->AddComponent<MoveTerrainComponent>();
+				move->SetMoveSpeed(50.0f);
+				move->SetMoveVector(LEFT);
 			}
 
 			RigidBodyComponent* rigid = terrainObj->AddComponent<RigidBodyComponent>();
@@ -76,7 +86,6 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 			render->ChangeTexture(tS.texture);*/
 
 			RenderTerrainComponent* render = terrainObj->AddComponent<RenderTerrainComponent>();
-			//render->CreateMesh<TerrainMesh>();
 			render->SetShader(tS.shaderVS, tS.shaderPS);
 			render->ChangeTexture(tS.texture);
 			render->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));

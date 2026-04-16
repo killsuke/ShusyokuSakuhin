@@ -50,6 +50,16 @@ EnemyActionHopperComponent::~EnemyActionHopperComponent() {
 	EventBusManager::Unsubscribe(m_ListenerID_HitEvent_Hopper);
 }
 
+void EnemyActionHopperComponent::Init() {
+
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound == nullptr) {
+		return;
+	}
+
+	sound->AddSoundLabel("jump");
+}
+
 void EnemyActionHopperComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");

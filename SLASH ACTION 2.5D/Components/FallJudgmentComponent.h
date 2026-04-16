@@ -9,6 +9,7 @@ private:
 	DirectX::XMFLOAT3 m_Resurrection = {};
 
 	void ResurrentionProcess();
+	void PlayerStop();
 	void PlayerActiveProcess();
 
 public:

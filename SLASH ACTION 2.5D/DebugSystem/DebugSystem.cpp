@@ -4,6 +4,8 @@
 #include "Manager/HitStopManager.h"
 #include "Components/TransformComponent.h"
 #include "Components/Render3DComponent.h"
+#include "Components/Render3DColliderAABBComponent.h"
+#include "Components/Render3DColliderOBBComponent.h"
 #include "Mesh/SquareMesh.h"
 #include "System/DirectXRender.h"
 #include "Input/Input.h"
@@ -29,6 +31,7 @@ void DebugSystem::Init() {
 	m_DebugUITextureNames[1] = "debugUI_F2.png";
 	m_DebugUITextureNames[2] = "debugUI_F3.png";
 	m_DebugUITextureNames[3] = "debugUI_F4.png";
+	m_DebugUITextureNames[4] = "debugUI_F5.png";
 
 	XMFLOAT3 uiPosition = START_UI_POSITION;
 	std::string debugUIName = "DebugUIObject";
@@ -98,6 +101,7 @@ void DebugSystem::Update() {
 	ScreenStopped(objs);
 	FrameAdvance(objs);
 	SwitchingFillMode();
+	SwitchingVisualization();
 
 #endif //  _DEBUG
 }
@@ -121,7 +125,7 @@ void DebugSystem::DebugUI() {
 
 void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
-	if(objs.empty()) {
+	if (objs.empty()) {
 		return;
 	}
 
@@ -221,7 +225,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
 void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 
-	if(objs.empty()) {
+	if (objs.empty()) {
 		return;
 	}
 
@@ -231,7 +235,7 @@ void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 	if (vk_F3_Trigger && m_ScreenStop == true) {
 
 		for (GameObject* obj : objs) {
-		
+
 			// 描画停止中か全停止中のオブジェクトはスルー
 			const ActiveState currentState = obj->GetActiveState();
 			if (currentState == ActiveState::DRAW_STOP || currentState == ActiveState::ALL_STOP) {
@@ -259,6 +263,116 @@ void DebugSystem::SwitchingFillMode() {
 	if (vk_F4_Trigger) {
 		DirectXRender::SwitchingFillMode();
 	}
+}
+
+void DebugSystem::SwitchingVisualization() {
+
+	XMFLOAT4 debugColor = WHITECOLOR;
+	const bool vk_F5_Trigger = Input::GetKeyTrigger(VK_F5);
+
+	if (vk_F5_Trigger) {
+
+		// カメラのターゲットにしているオブジェクトを取得
+		for (const uint32_t& objID : m_ColliderObjects) {
+			GameObject* obj = GameObjectManager::GameObjectFindInstanceID(objID);
+			if (obj != nullptr) {
+
+				if (m_IsVisualization == true) {
+					Render3DColliderOBBComponent* renderComp = obj->GetComponent<Render3DColliderOBBComponent>();
+					if (renderComp != nullptr) {
+						renderComp->SetActiveFlag(false);
+					}
+					Render3DColliderAABBComponent* renderComp2 = obj->GetComponent<Render3DColliderAABBComponent>();
+					if (renderComp2 != nullptr) {
+						renderComp2->SetActiveFlag(false);
+					}
+
+					debugColor = WEAK_REDCOLOR;
+				}
+				else {
+					Render3DColliderOBBComponent* renderComp = obj->GetComponent<Render3DColliderOBBComponent>();
+					if (renderComp != nullptr) {
+						renderComp->SetActiveFlag(true);
+					}
+					Render3DColliderAABBComponent* renderComp2 = obj->GetComponent<Render3DColliderAABBComponent>();
+					if (renderComp2 != nullptr) {
+						renderComp2->SetActiveFlag(true);
+					}
+				}
+			}
+		}
+
+		// カメラのターゲットのオブジェクトも可視化の対象にする
+		for (const uint32_t& objID : m_CameraTarget) {
+			GameObject* obj = GameObjectManager::GameObjectFindInstanceID(objID);
+
+			if (obj != nullptr) {
+
+				if (m_IsVisualization == true) {
+					Render3DComponent* renderComp = obj->GetComponent<Render3DComponent>();
+					if (renderComp != nullptr) {
+						renderComp->SetActiveFlag(false);
+					}
+				}
+				else {
+					Render3DComponent* renderComp = obj->GetComponent<Render3DComponent>();
+					if (renderComp != nullptr) {
+						renderComp->SetActiveFlag(true);
+					}
+				}
+			}
+		}
+
+		m_IsVisualization = !m_IsVisualization;
+
+		// デバッグUIの色変更
+		Render3DComponent* dbRender = m_DebugUIs[4]->GetComponent<Render3DComponent>();
+
+		if (dbRender != nullptr) {
+			dbRender->SetColor(debugColor);
+		}
+	}
+}
+
+void DebugSystem::AddColliderObjects(const uint32_t& obj) {
+
+	// すでに登録されているオブジェクトはスルー
+	std::vector<uint32_t>::iterator it = std::find(m_ColliderObjects.begin(), m_ColliderObjects.end(), obj);
+	if (it != m_ColliderObjects.end()) {
+		return;
+	}
+	m_ColliderObjects.push_back(obj);
+}
+
+void DebugSystem::RemoveColliderObjects(const uint32_t& obj) {
+	std::vector<uint32_t>::iterator it = std::find(m_ColliderObjects.begin(), m_ColliderObjects.end(), obj);
+	if (it != m_ColliderObjects.end()) {
+		m_ColliderObjects.erase(it);
+	}
+}
+
+void DebugSystem::ClearColliderObjects() {
+	m_ColliderObjects.clear();
+}
+
+void DebugSystem::AddCameraTarget(const uint32_t& obj) {
+	// すでに登録されているオブジェクトはスルー
+	std::vector<uint32_t>::iterator it = std::find(m_CameraTarget.begin(), m_CameraTarget.end(), obj);
+	if (it != m_CameraTarget.end()) {
+		return;
+	}
+	m_CameraTarget.push_back(obj);
+}
+
+void DebugSystem::RemoveCameraTarget(const uint32_t& obj) {
+	std::vector<uint32_t>::iterator it = std::find(m_CameraTarget.begin(), m_CameraTarget.end(), obj);
+	if (it != m_CameraTarget.end()) {
+		m_CameraTarget.erase(it);
+	}
+}
+
+void DebugSystem::ClearCameraTarget() {
+	m_CameraTarget.clear();
 }
 
 // 割り当てるキー

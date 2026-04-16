@@ -44,6 +44,16 @@ EnemyActionBulletComponent::~EnemyActionBulletComponent() {
 	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Bullet);
 }
 
+void EnemyActionBulletComponent::Init() {
+	
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound == nullptr) {
+		return;
+	}
+
+	sound->AddSoundLabel("enemyBullet");
+}
+
 void EnemyActionBulletComponent::Update() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
@@ -107,6 +117,13 @@ void EnemyActionBulletComponent::FiringBullet(const DirectX::XMFLOAT3& myPos) {
 	rend->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 	rend->ChangeTexture("bullet.png");
 	rend->SetInversionFlag(m_IsRightLeft);
+
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound == nullptr) {
+		return;
+	}
+
+	sound->Play();
 }
 
 void EnemyActionBulletComponent::FearEvent(const HitEvent& event) {
@@ -188,10 +205,11 @@ void EnemyActionBulletComponent::StateUpdate(const float deltaTime, const Direct
 	case EEnemyState::ATTACK:
 
 	{
-		const float deltaPosX = fabs(playPos.x - myPos.x);
+		const float deltaPosX = fabsf(playPos.x - myPos.x);
+		const float deltaPosY = fabsf(playPos.y - myPos.y);
 
 		// ƒvƒŒƒCƒ„[‚ªˆê’è‹——£ˆÈã—£‚ê‚½‚çUŒ‚‚ð’†Ž~‚µ‚Ä‘Ò‹@ó‘Ô‚É–ß‚é
-		if(deltaPosX > 120.0f) {
+		if(deltaPosX > 120.0f || deltaPosY > 120.0f) {
 			ChangeState(EEnemyState::WAIT);
 			m_RecordTime = 0.0f;
 			break;

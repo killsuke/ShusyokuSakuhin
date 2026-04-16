@@ -6,6 +6,7 @@
 #include "RigidBodyComponent.h"
 #include <cmath>
 #include <iostream>
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
 
@@ -16,7 +17,7 @@ MoveTerrainComponent::MoveTerrainComponent(GameObject& obj) : Component(obj)
 
 void MoveTerrainComponent::Update() {
 
-	m_recordTime += m_deltaTime;
+	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	ColliderComponent* collider = m_Object->GetComponent<ColliderComponent>();
@@ -28,9 +29,9 @@ void MoveTerrainComponent::Update() {
 
 	const XMFLOAT3 myPos = transform->GetPosition();
 
-	const float newPosX = sinf(m_recordTime) * m_moveSpeed;
+	const XMFLOAT3 newPos = m_MoveVector * sinf(m_RecordTime) * m_MoveSpeed;
 
-	rigid->ConstantVelocity_X(newPosX);
+	rigid->ConstantVelocity(newPos);
 
 	if (m_player == nullptr) {
 		GameObject* player = GameObjectManager::GameObjectFindName("Player");

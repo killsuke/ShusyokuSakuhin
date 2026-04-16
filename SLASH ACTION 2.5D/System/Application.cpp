@@ -11,12 +11,6 @@
 #include "DebugSystem/DebugSystem.h"
 #include "Input/Input.h"
 
-#if _DEBUG
-
-// Application.cppの先頭などにこれを追加すればOK
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-#endif
-
 const wchar_t* ClassName = TEXT("SLASH_ACTION_2.5D");     //!< ウィンドウクラス名.
 const wchar_t* WindowName = TEXT("SLASH_ACTION_2.5D");    //!< ウィンドウ名.
 
@@ -152,15 +146,6 @@ bool Application::InitWnd()
 //-----------------------------------------------------------------------------
 void Application::TermWnd()
 {
-#if _DEBUG
-
-	// Cleanup
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-
-#endif
-
 	// ウィンドウの登録を解除.
 	if (m_HInst != nullptr)
 	{
@@ -197,23 +182,6 @@ void Application::MainLoop()
 	ID3D11DeviceContext* deviceContext = DirectXRender::GetDeviceContext();
 	ID3D11Device* device = DirectXRender::GetDevice();
 
-#if _DEBUG
-
-	// ImGuiコンテキストの作成
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // キーボード操作を有効化
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// ImGuiのスタイル設定（オプション）
-	ImGui::StyleColorsDark();
-
-	// デバイスやウィンドウへのバインド
-	ImGui_ImplWin32_Init(m_HWnd);  // hwnd: ウィンドウハンドル
-	ImGui_ImplDX11_Init(device, deviceContext);
-#endif
-
 	// FPS計測用変数
 	int fpsCounter = 0;
 
@@ -234,37 +202,6 @@ void Application::MainLoop()
 		}
 		else
 		{
-#if _DEBUG
-
-			// ImGuiのフレーム開始
-			ImGui_ImplDX11_NewFrame();
-			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
-
-			// ImGuiのUI要素をここに追加
-			//ImGui::Begin("Debug Window");
-			//ImGui::Text("マウスの座標");
-			//DirectX::SimpleMath::Vector2 vec2 = Input::GetMousePositionNormalize();
-
-			//// マウス座標デバッグ
-			//ImGui::Text("X_Mouse : %.3f", vec2.x); // 現在の値を表示
-			//ImGui::Text("Y_Mouse : %.3f", vec2.y); // 現在の値を表示
-
-			//if (ImGui::Button("Click Me!")) {
-			//	ImGui::Text("FPS: %d", fpsCounter);
-			//}
-
-			//bool isChecked = false;
-			//ImGui::Checkbox("Enable Feature", &isChecked);
-
-			//ImGui::SliderFloat("Float Slider", &num, 0.0f, 1.0f);
-
-			//ImDrawList* draw_list = ImGui::GetWindowDrawList();
-			//draw_list->AddCircle(ImVec2(150, 150), 50, ImColor(255, 0, 0));
-
-			//ImGui::End();
-#endif
-
 			Input::Update();
 			TimeManager::Update();
 
@@ -377,13 +314,6 @@ LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	break;
 	default:
 	{
-#if _DEBUG
-
-		if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
-			return true;
-		}
-
-#endif
 		// 受け取ったメッセージに対してデフォルトの処理を実行
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
 		break;

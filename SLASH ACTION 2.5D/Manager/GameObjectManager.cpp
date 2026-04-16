@@ -424,9 +424,28 @@ GameObject* GameObjectManager::GameObjectFindName(const std::string& name) {
     return nullptr; // 一致するオブジェクトが見つからなかった場合、nullptrを返す
 }
 
+// オブジェクトを全探索
 GameObject* GameObjectManager::GameObjectFindAllName(const std::string& name) {
 
     for (const std::unique_ptr<GameObject>& obj : m_Objects) { // objects をループで探索
+        if (obj->GetName() == name) { // 名前が一致するかチェック
+            return obj.get(); // 一致するオブジェクトを追加
+        }
+    }
+
+    for (const std::unique_ptr<GameObject>& obj : m_Child_Objects) { // objects をループで探索
+        if (obj->GetName() == name) { // 名前が一致するかチェック
+            return obj.get(); // 一致するオブジェクトを追加
+        }
+    }
+
+    for (const std::unique_ptr<GameObject>& obj : m_Objects_UI) { // objects をループで探索
+        if (obj->GetName() == name) { // 名前が一致するかチェック
+            return obj.get(); // 一致するオブジェクトを追加
+        }
+    }
+
+    for (const std::unique_ptr<GameObject>& obj : m_Objects_Absfront) { // objects をループで探索
         if (obj->GetName() == name) { // 名前が一致するかチェック
             return obj.get(); // 一致するオブジェクトを追加
         }

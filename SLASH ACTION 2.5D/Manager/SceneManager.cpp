@@ -55,23 +55,10 @@ void SceneManager::Update() {
 // •`‰æ
 void SceneManager::Draw() {
 
-#if _DEBUG
-
-	ImGui::Render();
-
-#endif
-
 	// •`‰æ‘Oˆ—
 	DirectXRender::DrawBegin();
 
 	GameObjectManager::Draw();
-
-#if _DEBUG
-
-	// ImGui‚Ì•`‰æ
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-#endif
 
 	// •`‰æŒãˆ—
 	DirectXRender::DrawEnd();

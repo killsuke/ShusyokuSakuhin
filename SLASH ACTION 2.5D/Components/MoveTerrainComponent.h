@@ -5,17 +5,16 @@
 class MoveTerrainComponent : public Component
 {
 private:
-	DirectX::XMFLOAT3 m_moveVector = {};
+	DirectX::XMFLOAT3 m_MoveVector = {};
 	DirectX::XMFLOAT3 m_BeforePos = {};
-	float m_moveSpeed = 1.0f;
-	const float m_deltaTime = 0.016f;
-	float m_recordTime = 0.0f;
+	float m_MoveSpeed = 1.0f;
+	float m_RecordTime = 0.0f;
 	GameObject* m_player = nullptr;
 public:
 	MoveTerrainComponent(GameObject& obj);
 	~MoveTerrainComponent() = default;
 	void Update() override;
 
-	void SetMoveVector(DirectX::XMFLOAT3 vector) { m_moveVector = vector; };
-	void SetMoveSpeed(const float speed) { m_moveSpeed = speed; };
+	void SetMoveVector(DirectX::XMFLOAT3 vector) { m_MoveVector = vector; };
+	void SetMoveSpeed(const float speed) { m_MoveSpeed = speed; };
 };

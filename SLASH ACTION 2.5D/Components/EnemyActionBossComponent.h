@@ -39,5 +39,6 @@ public:
 	EnemyActionBossComponent(GameObject& obj);
 	~EnemyActionBossComponent() = default;
 	
+	void Init() override;
 	void Update()override;
 };
