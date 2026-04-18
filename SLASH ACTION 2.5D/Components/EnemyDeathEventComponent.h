@@ -10,14 +10,23 @@ struct DeathEvent {
 };
 
 enum class EnemyDeathEventState {
-	STICKY,
-	IMMEDIATE
+	STICKY,		// “\‚è‚Â‚«
+	IMMEDIATE	// ”ò‚ñ‚Å—ˆ‚é‚¾‚¯
 };
 
 enum class DeathPattern {
 	NONE = -1,
 	DEFAULT,
 	CHARGE,
+
+	MAX
+};
+
+enum DeathType {
+
+	RAMDOM,
+	ABS_STICKY,
+	ABS_IMMEDIATE,
 
 	MAX
 };
@@ -32,6 +41,7 @@ private:
 	RightLeft m_RightLeft = RightLeft::RIGHT;
 
 	DeathPattern m_DeathPattern = DeathPattern::NONE;
+	DeathType m_DeathType = DeathType::RAMDOM;
 
 public:
 	EnemyDeathEventComponent(GameObject& obj);
@@ -60,5 +70,9 @@ public:
 		else if (m_DeathPattern == DeathPattern::CHARGE) {
 			m_DeathState = EnemyDeathEventState::STICKY;
 		}
+	};
+
+	void SetDeathType(const DeathType type) {
+		m_DeathType = type;
 	};
 };

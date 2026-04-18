@@ -34,8 +34,6 @@
 
 using namespace DirectX;
 
-// タイムラインある？あとプレイヤーの死亡処理作成
-
 namespace {
 	constexpr float ChargeStartTime = 0.5f; // チャージエフェクト開始時間
 	constexpr float ChargeSlashStopTime = 0.15f; // チャージスラッシュ終了時間
@@ -56,18 +54,18 @@ PlayerOperationComponent::PlayerOperationComponent(GameObject& obj) :Component(o
 
 	m_KnockBackPower = DEFAULT_KNOCKBACK_POWER; // ノックバックの力を初期化
 
-	m_listenerID_HitEvent = EventBusManager::Subscribe<DamageEvent>([&](const DamageEvent& e) {
+	m_ListenerID_HitEvent = EventBusManager::Subscribe<DamageEvent>([&](const DamageEvent& e) {
 		OnDamageHit(e);
 		});
 
-	m_listenerID_FallDamageEvent = EventBusManager::Subscribe<FallDamageEvent>([&](const FallDamageEvent& e) {
+	m_ListenerID_FallDamageEvent = EventBusManager::Subscribe<FallDamageEvent>([&](const FallDamageEvent& e) {
 		OnDamageFallHit(e);
 		});
 }
 
 PlayerOperationComponent::~PlayerOperationComponent() {
-	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
-	EventBusManager::Unsubscribe(m_listenerID_FallDamageEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_FallDamageEvent);
 }
 
 // 更新処理
@@ -165,11 +163,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	break;
 	case PlayerState::MOVE:
 		break;
-	case PlayerState::AIR:
-		break;
-	case PlayerState::GROUND:
-		break;
-	case PlayerState::JUMP:
+	case PlayerState::FORCED_MOVE:
+
 		break;
 	case PlayerState::ATTACK:
 		break;
@@ -201,11 +196,8 @@ void PlayerOperationComponent::ChangeState(const PlayerState& state) {
 	break;
 	case PlayerState::MOVE:
 		break;
-	case PlayerState::AIR:
-		break;
-	case PlayerState::GROUND:
-		break;
-	case PlayerState::JUMP:
+	case PlayerState::FORCED_MOVE:
+
 		break;
 	case PlayerState::ATTACK:
 		break;
@@ -270,9 +262,11 @@ void PlayerOperationComponent::StateUpdate() {
 	bool isGround = false;
 
 	// ここで地面か空中か判断
-	if (extrusion != nullptr) {
-		isGround = extrusion->GetIsGround();
+	if (extrusion == nullptr || rigid == nullptr) {
+		return;
 	}
+
+	isGround = extrusion->GetIsGround();
 
 	bool isMove = false;
 
@@ -302,13 +296,10 @@ void PlayerOperationComponent::StateUpdate() {
 		Attack(keyAttack, isGround);
 		Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
 		break;
-	case PlayerState::AIR:
-		break;
-	case PlayerState::GROUND:
-		break;
-	case PlayerState::JUMP:
 
-		//Move(keyRight, keyLeft, keyBack, keyAttack, isGround, &isMove);
+	case PlayerState::FORCED_MOVE:
+
+		ForcedMove();
 		break;
 	case PlayerState::ATTACK:
 		break;
@@ -357,19 +348,23 @@ void PlayerOperationComponent::StateUpdate() {
 		jumpComp->SetJumpPress(keyUp && isNonDamage);
 	}
 
-	m_beforeMove = isMove;
+	m_BeforeMove = isMove;
 
 	// どのキーも押されていないときは状態をNONEにする
-	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::DAMAGE && m_CurrentState != PlayerState::DEAD) {
+	if (!keyLeft && !keyRight && !keyUp && !keyBack && !keyAttack && !keyCharge && !keyCAttack && m_CurrentState != PlayerState::FORCED_MOVE && m_CurrentState != PlayerState::DAMAGE && m_CurrentState != PlayerState::DEAD) {
 		ChangeState(PlayerState::NONE);
 	}
 }
 
 void PlayerOperationComponent::Move(const bool right, const bool left, const bool dash, const bool attack, const bool isGround, bool* isMove) {
 
-	//	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 	TestSwordActionComponent* swordAction = m_WeaponObject->GetComponent<TestSwordActionComponent>();
+
+	if (swordAction == nullptr) {
+		ChangeState(PlayerState::NONE);
+		return;
+	}
 
 	// 地面の攻撃は移動しない
 	const bool isAction = swordAction->GetIsSwordAction();
@@ -436,8 +431,19 @@ void PlayerOperationComponent::Move(const bool right, const bool left, const boo
 #endif
 
 	// 移動する
-	*isMove = true;
+	* isMove = true;
 	m_IsMoveFlag = true;
+}
+
+// 強制的に移動させるときの処理
+void PlayerOperationComponent::ForcedMove() {
+
+	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+	if (transform == nullptr) {
+		return;
+	}
+
+	transform->AddPosition(m_ForceMoveSpeed);
 }
 
 // これそのものを呼び出すと攻撃する

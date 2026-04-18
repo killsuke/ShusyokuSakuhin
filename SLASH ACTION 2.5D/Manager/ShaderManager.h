@@ -6,6 +6,11 @@
 #include <fstream>
 #include "Helper/dx11helper.h"
 
+enum class CompileMode {
+	Full,	// ëSÇƒ
+	Dirty	// ç∑ï™
+};
+
 struct ShaderKey {
 	std::string file = "";
 	std::string entry = "";
@@ -48,4 +53,6 @@ public:
 	static void Init();
 	static void UnInit();
 	static HRESULT CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model,void** shaderObj,size_t& size, ID3DBlob** blob);
+	static void CompileShaderSet_Dirty(const std::string& hlslPath, const std::string& csoPath);
+	//static HRESULT CompileShaderSet_Full(const std::vector<std::string>& fileNames);
 };

@@ -631,6 +631,9 @@ void SoundComponent::Stop() {
 	it->second.isPlayed = false;
 
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
+	if(sourceVoice == nullptr) {
+		return;
+	}
 
 	XAUDIO2_VOICE_STATE xa2state = {};
 	sourceVoice->GetState(&xa2state);
@@ -662,6 +665,9 @@ void SoundComponent::Stop(const std::string& label)
 	it->second.isPlayed = false;
 
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
+	if(sourceVoice == nullptr) {
+		return;
+	}
 
 	XAUDIO2_VOICE_STATE xa2state = {};
 	sourceVoice->GetState(&xa2state);
@@ -686,6 +692,9 @@ void SoundComponent::StopAll() {
 
 		entry.second.isPlayed = false;
 		IXAudio2SourceVoice* sourceVoice = entry.second.pSourceVoice;
+		if(sourceVoice == nullptr) {
+			continue;
+		}
 		XAUDIO2_VOICE_STATE xa2state = {};
 		sourceVoice->GetState(&xa2state);
 		if (xa2state.BuffersQueued > 0)
@@ -801,7 +810,6 @@ void SoundComponent::Resume(const std::string& label, const float volume) {
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
 	if (sourceVoice == nullptr) {
 		return;
-
 	}
 
 	HRESULT hr = sourceVoice->SetVolume(volume);

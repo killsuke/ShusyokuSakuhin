@@ -60,7 +60,7 @@ void BossEventComponent::Update() {
 
 				// ボス戦が始まる際の演出
 				m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {CreateBossWalls(); });
-				m_TimeLine->AddRangeDelayEvent(0.0f, 0.5f, 0.0f, this, [this](float) {PlayerMoveControl(); }, [this]() {PlayerControlStop(); }, nullptr);
+				m_TimeLine->AddRangeDelayEvent(0.0f, 0.5f, 0.0f, this, [this](float) {PlayerMoveControl(); }, nullptr, [this]() {PlayerControlStop(); });
 				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {CreateBossObj(); });
 				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {PlayerControlRestart(); });
 
@@ -148,6 +148,8 @@ void BossEventComponent::CreateBossObj() {
 	fighterPlayer->SetMaxHp(50);
 	fighterPlayer->SetAtk(10);
 
+	SoundComponent* sound = boss->AddComponent<SoundComponent>();
+
 	MeshCut2DComponent* meshCut = boss->AddComponent<MeshCut2DComponent>();
 
 	EnemyDeathEventComponent* deathEvent = boss->AddComponent<EnemyDeathEventComponent>();
@@ -161,6 +163,8 @@ void BossEventComponent::CreateBossObj() {
 
 	m_boss = boss;
 
+	enemyAction->Init();
+
 	SoundComponent* mySound = m_Object->GetComponent<SoundComponent>();
 
 	if (mySound != nullptr) {
@@ -169,6 +173,7 @@ void BossEventComponent::CreateBossObj() {
 	}
 }
 
+// プレイヤーの操作を一時的に停止する（ボス戦の開始時の演出用）
 void BossEventComponent::PlayerControlStop() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
@@ -183,9 +188,11 @@ void BossEventComponent::PlayerControlStop() {
 		return;
 	}
 
+	operation->ChangeState(PlayerState::NONE);
 	operation->SetActiveFlag(false);
 }
 
+// プレイヤーの操作を再開する（ボス戦の開始時の演出用）
 void BossEventComponent::PlayerControlRestart() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
@@ -203,6 +210,7 @@ void BossEventComponent::PlayerControlRestart() {
 	operation->SetActiveFlag(true);
 }
 
+// プレイヤーを強制的に動かす（ボス戦の開始時の演出用）
 void BossEventComponent::PlayerMoveControl() {
 
 	GameObject* player = GameObjectManager::GameObjectFindName("Player");
@@ -211,13 +219,14 @@ void BossEventComponent::PlayerMoveControl() {
 		return;
 	}
 
-	TransformComponent* trans = player->GetComponent<TransformComponent>();
+	PlayerOperationComponent* operation = player->GetComponent<PlayerOperationComponent>();
 
-	if (trans == nullptr) {
+	if (operation == nullptr) {
 		return;
 	}
 
-	trans->AddPosition(XMFLOAT3(1.5f, 0.0f, 0.0f));
+	operation->ChangeState(PlayerState::FORCED_MOVE);
+	operation->SetForceMoveSpeed({ 1.5f,0.0f,0.0f });
 
 	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
 	if (camera == nullptr) {

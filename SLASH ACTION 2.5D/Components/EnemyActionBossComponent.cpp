@@ -4,6 +4,7 @@
 #include "Render2DComponent.h"
 #include "Render3DComponent.h"
 #include "RenderRingLuminescenceBillboardComponent.h"
+#include "RenderTextureLuminescenceComponent.h"
 #include "RenderLuminescenceBillboardComponent.h"
 #include "FighterComponent.h"
 #include "RigidBodyComponent.h"
@@ -15,6 +16,7 @@
 #include "ColliderDamageComponent.h"
 #include "RenderHpComponent.h"
 #include "JumpComponent.h"
+#include "SoundComponent.h"
 #include "TestExtrusionJudgeComponent.h"
 #include "TimeLineComponent.h"
 #include "Mesh/SquareMesh.h"
@@ -54,7 +56,12 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	rend2D->CreateMesh<SquareMesh>();
 	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
-	rend2D->SetColor(DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	//RenderTextureLuminescenceComponent* rendTex = m_BossBarrier->AddComponent<RenderTextureLuminescenceComponent>();
+	//rendTex->CreateMesh<SquareMesh>();
+	//rendTex->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
+	//rendTex->ChangeTexture("ring.png");
+	//rendTex->SetGlowColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
 
 	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 	rend->CreateMesh<SquareMesh>();
@@ -87,7 +94,6 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		fight->SetHp(1);
 		fight->SetAtk(2);
 
-		//	ColliderComponent* coll = barrier->AddComponent<ColliderComponent>();
 		ColliderAttackComponent* collAttack = barrier->AddComponent<ColliderAttackComponent>();
 		collAttack->SetActiveColliderFlag(false); // Å‰‚Í“–‚½‚è”»’è–³Œø
 
@@ -145,6 +151,10 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 
 void EnemyActionBossComponent::Init() {
 	
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound != nullptr) {
+		sound->AddSoundLabel("boss_bullet");
+	}
 }
 
 void EnemyActionBossComponent::Update() {
@@ -232,8 +242,8 @@ void EnemyActionBossComponent::Update() {
 
 void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos) {
 
-	XMVECTOR diff = XMLoadFloat3(&playPos) - XMLoadFloat3(&myPos);
-	float lengthSq = XMVectorGetX(XMVector3LengthSq(diff));
+	const XMVECTOR diff = XMLoadFloat3(&playPos) - XMLoadFloat3(&myPos);
+	const float lengthSq = XMVectorGetX(XMVector3LengthSq(diff));
 
 	XMFLOAT3 dirFloat3;
 	if (lengthSq > 0.000001f) {
@@ -247,6 +257,10 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 		return;
 	}
 
+	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+	if (sound != nullptr) {
+		sound->Play("boss_bullet");
+	}
 
 	// ‚±‚±‚ª’eì¬ˆ—
 	GameObject* bullet = GameObjectManager::AddAbsFront("bullet", "Effect");

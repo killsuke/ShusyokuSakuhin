@@ -17,18 +17,19 @@ using namespace DirectX;
 
 namespace {
 
-	constexpr float DETECTION_RANGE = 100.0f;
+	constexpr float DETECTION_RANGE = 110.0f;
 	constexpr float ATTACK_TIMING = 0.3f;
 	constexpr float JUMP_TIMING = 1.0f;
 	constexpr float DAMAGE_POSE_FIN_TIME = 1.0f;
 	constexpr float GROUND_BETWEEN_TIME = 1.5f;
+	constexpr float JUMP_POWER = 60.0f;
 
 	constexpr XMFLOAT2 DEFAULT_POSE{ 1.0f,1.0f };
 	constexpr XMFLOAT2 POSTURE_POSE{ 2.0f,1.0f };
 	constexpr XMFLOAT2 ATTACK_POSE{ 3.0f,1.0f };
 	constexpr XMFLOAT2 DAMAGE_POSE{ 4.0f,1.0f };
 	constexpr XMFLOAT2 ANIM_CUT{ 4.0f,1.0f };
-	constexpr XMFLOAT2 KNOCKBACK_POWER{ 50.0f,50.0f };
+	constexpr XMFLOAT2 KNOCKBACK_POWER{ 40.0f,50.0f };
 }
 
 EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyActionComponent(obj) {
@@ -38,7 +39,7 @@ EnemyActionHopperComponent::EnemyActionHopperComponent(GameObject& obj) :EnemyAc
 
 	if (jump == nullptr) {
 		jump = m_Object->AddComponent<JumpComponent>();
-		jump->SetJumpPower(60.0f);
+		jump->SetJumpPower(JUMP_POWER);
 	}
 
 	m_ListenerID_HitEvent_Hopper = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
@@ -102,12 +103,10 @@ void EnemyActionHopperComponent::HopperAction(const bool jumpFlag) {
 	}
 
 	if (m_IsRightLeft == RightLeft::LEFT) {
-		//rigid->ConstantVelocity_X(-30.0f);
 
 		myTrans->AddPosition({ -0.5f,0.0f,0.0f });
 	}
 	else if (m_IsRightLeft == RightLeft::RIGHT) {
-		//rigid->ConstantVelocity_X(30.0f);
 
 		myTrans->AddPosition({ 0.5f,0.0f,0.0f });
 	}
@@ -197,6 +196,13 @@ void EnemyActionHopperComponent::ChangeState(const EEnemyState& newState) {
 		ChangeDirection();
 		break;
 	case EEnemyState::DAMAGED:
+	{
+
+		SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+		if (sound != nullptr) {
+			sound->Stop("jump");
+		}
+	}
 		break;
 	default:
 		break;
@@ -258,6 +264,11 @@ void EnemyActionHopperComponent::StateUpdate(GameObject* player) {
 		// ƒWƒƒƒ“ƒv
 		if (m_RecordTime > JUMP_TIMING) {
 
+			SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+			if (sound != nullptr) {
+				sound->PlayOnce("jump");
+			}
+
 			HopperAction(true);
 		}
 		// \‚¦
@@ -270,6 +281,11 @@ void EnemyActionHopperComponent::StateUpdate(GameObject* player) {
 		if (isGround == true) {
 
 			if (m_RecordTime > GROUND_BETWEEN_TIME) {
+
+				SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
+				if (sound != nullptr) {
+					sound->Stop("jump");
+				}
 				ChangeState(EEnemyState::WAIT);
 			}
 		}

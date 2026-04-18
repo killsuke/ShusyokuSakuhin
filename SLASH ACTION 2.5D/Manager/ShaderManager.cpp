@@ -27,8 +27,8 @@ void ShaderManager::Init() {
 
 		const file_time_type csoTime = last_write_time(csoPath);
 
-		// 更新時間がhlslの方が新しい場合、またはcsoが存在しない場合、再コンパイルする
-		if(hlslTime > csoTime) {
+		// 更新時間がhlslの方が新しい場合、またはcsoが存在しない場合、一度ファイルを削除
+		if(hlslTime >= csoTime) {
 			
 			std::cout << "Delete Shader File : " << csoPath << std::endl;
 			remove(csoPath); // 古いcsoファイルを削除
@@ -168,3 +168,14 @@ std::string ShaderManager::ResolveShaderPath(const std::string& file) {
 
 	return FILE_PATH_TO_SHADER + file;	// パスを追加して返す
 }
+
+
+void CompileShaderSet_Dirty(const std::string& hlslPath, const std::string& csoPath) {
+
+	
+}
+
+//HRESULT ShaderManager::CompileShaderSet_Full(const std::vector<std::string>& fileNames) {
+//
+//
+//}

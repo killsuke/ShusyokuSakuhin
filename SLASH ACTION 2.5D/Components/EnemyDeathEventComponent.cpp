@@ -92,6 +92,23 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
 
+	/*switch (m_DeathType)
+	{
+	case RAMDOM:
+
+		break;
+	case ABS_STICKY:
+		m_DeathState = EnemyDeathEventState::STICKY;
+		break;
+	case ABS_IMMEDIATE:
+		m_DeathState = EnemyDeathEventState::IMMEDIATE;
+		break;
+	case MAX:
+		break;
+	default:
+		break;
+	}*/
+
 	const std::string name = m_Object->GetName();
 
 	if (name == "Boss") {
