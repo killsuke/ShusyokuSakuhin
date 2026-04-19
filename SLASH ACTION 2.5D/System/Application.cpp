@@ -171,11 +171,11 @@ void Application::MainLoop()
 	}
 
 	TimeManager::Init();
+	ShaderManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
 	SceneManager::Init();
 	EventBusManager::Init();
-	ShaderManager::Init();
 	DebugSystem::Init();
 	Input::Init();
 

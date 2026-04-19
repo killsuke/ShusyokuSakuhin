@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 PS_IN vs_main(in VS_IN input)
 {
@@ -26,17 +26,20 @@ PS_IN vs_main(in VS_IN input)
 	
     output.pos = mul(newPos, matrixWorld);
 
-    output.pos = mul(output.pos, ViewSky);
+	output.pos = mul(output.pos, View3D);
 
-    output.pos = mul(output.pos, ProjectionSky);
+	output.pos = mul(output.pos, Projection3D);
 
 	// ‚t‚uÀ•W‚ğˆÚ“®‚³‚¹‚é
-    float4 uv;
-	
-    uv.xy = input.tex; // s—ñŠ|‚¯Z‚Ì‚½‚ßflaot4Œ^‚ÉˆÚ‚·
-    output.tex = uv.xy; // Š|‚¯Z‚ÌŒ‹‰Ê‚ğ‘—M—p•Ï”‚ÉƒZƒbƒg
+	float4 uv;
+	uv.xy = input.tex;	// s—ñŠ|‚¯Z‚Ì‚½‚ßflaot4Œ^‚ÉˆÚ‚·
+	uv.z = 0.0f;
+	uv.w = 1.0f;
+	//uv = mul(uv, matrixTex1);	// ‚t‚uÀ•W‚ÆˆÚ“®s—ñ‚ğŠ|‚¯Z
+	output.tex = uv.xy;			// Š|‚¯Z‚ÌŒ‹‰Ê‚ğ‘—M—p•Ï”‚ÉƒZƒbƒg
 
     output.col = input.col * vertexColor;
 
     return output;
 }
+

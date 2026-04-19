@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 VS_OUTPUT vs_main(in VS_IN input)
 {

@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 Texture2D g_Texture : register(t0);
 Texture2D shadowTex : register(t1);
@@ -12,9 +12,9 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
     float shadow = 0.0f;
 
     for (int i = 0; i < SHADOW_OBJECT_MAX; i++)
-    {
+    {        
         if (i >= shadowCount)
-            break;
+            break;        
         
         float height = input.worldPos.y - shadows[i].objectPos.y; // オブジェクトとピクセルの高さ差を計算
         
@@ -42,7 +42,7 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
             float2 shadowUV = diff / radius; // オブジェクトを中心としたUV座標に変換
             shadowUV = shadowUV * 0.5f + 0.5f; // UV座標を[0,1]範囲に変換
         
-            float shadowTexValue = shadowTex.SampleLevel(shadowSampler, shadowUV, 0.0f).r; // 影テクスチャから影の強さをサンプリング
+            float shadowTexValue = shadowTex.SampleLevel(shadowSampler, shadowUV,0.0f).r; // 影テクスチャから影の強さをサンプリング
             s *= shadowTexValue; // 影テクスチャの値を影の強さに乗算
         }
         
@@ -59,9 +59,6 @@ float4 ps_main(in PS_SHADOW input) : SV_Target
     if (Material.TextureEnable)
     {
         // Sample関数→テクスチャから該当のUV位置のピクセル色を取って来る
-        //float2 uv = input.tex;
-        //uv *= 10.0f; // UVを拡大してタイル状にする
-        //color = g_Texture.Sample(g_SamplerState, uv);
         color = g_Texture.Sample(g_SamplerState, input.tex);
         color *= input.col;
     }

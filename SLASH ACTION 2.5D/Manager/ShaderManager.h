@@ -6,31 +6,24 @@
 #include <fstream>
 #include "Helper/dx11helper.h"
 
-enum class CompileMode {
-	Full,	// 全て
-	Dirty	// 差分
+// シェーダーの種類を表す列挙型
+// 必要とあれば他のシェーダータイプも追加可能
+enum class ShaderType {
+	VS,	// 頂点シェーダー
+	PS,	// ピクセルシェーダー
+	GS,	// ジオメトリシェーダー
+
+	MAX	// シェーダータイプの最大値
 };
 
-struct ShaderKey {
-	std::string file = "";
-	std::string entry = "";
-	std::string model = "";
-
-	bool operator==(const ShaderKey& other) const {
-		return file == other.file && entry == other.entry && model == other.model;
-	}
-};
-
-struct ShaderKeyHash {
-	std::size_t operator()(const ShaderKey& k) const {
-		return std::hash<std::string>()(k.file) ^ std::hash<std::string>()(k.entry) ^ std::hash<std::string>()(k.model);
-	}
+struct ShaderBinary {
+	std::vector<uint8_t> data;
 };
 
 class ShaderManager final
 {
 private:
-	static inline std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash> m_ShaderCache;
+	static inline std::unordered_map<std::string, ShaderBinary> m_Binaries;
 
 	// コンストラクタ・デストラクタを削除
 	ShaderManager() = delete;
@@ -47,12 +40,18 @@ private:
 	static bool ReadCsoFile(const std::string& path, std::vector<unsigned char>& out);
 	static bool SaveCsoFile(const std::string& path, const void* data, const size_t& size);
 	static std::vector<std::string> GetShaderFiles(const std::string& folder);
-	static std::string ResolveShaderPath(const std::string& file);
+	static std::string ResolveShaderPath(const std::string& file, const ShaderType& type);
+	static const char* ShaderTypeToString(const ShaderType& type);
+	static std::string MakeKey(const std::string& file, const ShaderType& type);
+	static void LoadAllCSO();
+	static const ShaderBinary* GetBinary(const std::string& file, const ShaderType& type);
+	static const ShaderBinary* GetBinaryByKey(const std::string& key);
 
 public:
 	static void Init();
 	static void UnInit();
-	static HRESULT CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model,void** shaderObj,size_t& size, ID3DBlob** blob);
-	static void CompileShaderSet_Dirty(const std::string& hlslPath, const std::string& csoPath);
-	//static HRESULT CompileShaderSet_Full(const std::vector<std::string>& fileNames);
+	static HRESULT CreateShader(const char* file, const ShaderType& type, const LPCSTR& entry, void** shaderObj, size_t& size);
+	static std::string ToCsoPath(const std::string& file, const ShaderType& type);
+	static bool NeedsCompile(const std::string& file, const ShaderType& type);
+	static void CompileShaderSet_Dirty();
 };

@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 PS_SHADOW vs_main(in VS_IN input)
 {

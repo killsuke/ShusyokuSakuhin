@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 Texture2D g_Texture : register(t0);
 SamplerState g_SamplerState : register(s0);
 
@@ -35,6 +35,6 @@ float4 ps_main(in PS_IN input) : SV_Target
     
     // グロー色と強度だけ出力、テクスチャ色は一切無視
     float GlowPower = 2.0;    
-    
+        
     return float4(GlowColor.rgb * glowAlpha * GlowPower, glowAlpha);
 }

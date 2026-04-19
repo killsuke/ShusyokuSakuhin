@@ -3,15 +3,13 @@
 #include	<directxmath.h>
 #include	<locale.h>
 #include	<d3d11.h>
-#include	<DirectXMath.h>
 #include	<memory>
 #include	<string>
 
-HRESULT CompileShader(const char* szFileName, 
+HRESULT CompileShader(
+	const char* szFileName, 
 	LPCSTR szEntryPoint, 
 	LPCSTR szShaderModel, 
-	void** ShaderObject, 
-	size_t& ShaderObjectSize, 
 	ID3DBlob** ppBlobOut);
 
 HRESULT CompileShaderFromFile(

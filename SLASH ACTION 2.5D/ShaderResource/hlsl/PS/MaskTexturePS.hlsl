@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 Texture2D tex1 : register(t0);		// 通常テクスチャ
 Texture2D mask : register(t1);	// マスクテクスチャ

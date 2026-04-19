@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 // ピクセルシェーダーのエントリポイント
 float4 ps_main(in PS_IN input) : SV_Target

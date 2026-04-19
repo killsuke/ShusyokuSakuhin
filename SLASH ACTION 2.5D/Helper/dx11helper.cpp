@@ -55,41 +55,23 @@ bool readShader(const char* csoName, std::vector<unsigned char>& byteArray)
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
 //--------------------------------------------------------------------------------------
-HRESULT CompileShader(const char* szFileName, // 読み込むシェーダーのファイルパス
-					  LPCSTR szEntryPoint,	  // エントリーポイント関数名（ "main" など）
-					  LPCSTR szShaderModel,	  // シェーダーモデル（ "vs_5_0" や "ps_5_0" など）
-					  void** ShaderObject,	  // シェーダーオブジェクトのポインタ
-					  size_t& ShaderObjectSize, // シェーダーオブジェクトのサイズ
-					  ID3DBlob** ppBlobOut	  // コンパイル結果のバイナリデータ（Blob）
+HRESULT CompileShader(
+	const char* szFileName,   // HLSLのパス
+	LPCSTR szEntryPoint,      // "VSMain" など
+	LPCSTR szShaderModel,     // "vs_5_0" など
+	ID3DBlob** ppBlobOut      // 結果を受け取る袋
 ) {
-
-	HRESULT hr;
-	static std::vector<unsigned char> byteArray;
+	// 無効なポインタであればエラーを返す
+	if (!ppBlobOut) return E_INVALIDARG;
 	*ppBlobOut = nullptr;
 
-	std::string extname = GetFileExt(szFileName);
-	if (extname == "cso") {
-		bool sts = readShader(szFileName, byteArray);
-		if (!sts) {
-			FILE* fp;
-			// ファイルは開ける？
-			if (fopen_s(&fp, "debug.txt", "a") == 0 && fp != nullptr) {
-				fprintf(fp, "file open error \n");
-				fclose(fp);
-			}
-			return E_FAIL;
-		}
-		*ShaderObject = byteArray.data();
-		ShaderObjectSize = byteArray.size();
-	}
-	else {
-		hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, ppBlobOut);
-		if (FAILED(hr)) {
-			if (*ppBlobOut)(*ppBlobOut)->Release();
-			return E_FAIL;
-		}
-		*ShaderObject = (*ppBlobOut)->GetBufferPointer();
-		ShaderObjectSize = (*ppBlobOut)->GetBufferSize();
+	// コンパイルだけを実行する
+	HRESULT hr = CompileShaderFromFile(szFileName, szEntryPoint, szShaderModel, ppBlobOut);
+
+	if (FAILED(hr)) {
+		// 失敗した場合はここでReleaseまで責任を持つ必要はなく、
+		// 呼び出し元（CompileShaderSet_Dirty）にエラーを伝える
+		return hr;
 	}
 
 	return S_OK;
@@ -167,7 +149,7 @@ bool CreateVertexShader(
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName,ShaderType::VS, szEntryPoint, &ShaderObject, ShaderObjectSize);
 
 	if (FAILED(hr))
 	{
@@ -216,7 +198,7 @@ bool CreatePixelShader(ID3D11Device* device,
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName, ShaderType::PS, szEntryPoint, &ShaderObject, ShaderObjectSize);
 
 	if (FAILED(hr))
 	{
@@ -237,7 +219,8 @@ bool CreatePixelShader(ID3D11Device* device,
 //--------------------------------------------------------------------------------------
 // ジオメトリシェーダーオブジェクトを生成する
 //--------------------------------------------------------------------------------------
-bool CreateGeometryShader(ID3D11Device* device,
+bool CreateGeometryShader(
+	ID3D11Device* device,
 	const char* szFileName,
 	LPCSTR szEntryPoint,
 	LPCSTR szShaderModel,
@@ -251,7 +234,7 @@ bool CreateGeometryShader(ID3D11Device* device,
 	size_t	ShaderObjectSize;
 
 	// ファイルの拡張子に合わせてコンパイル
-	hr = ShaderManager::CreateShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	hr = ShaderManager::CreateShader(szFileName, ShaderType::GS, szEntryPoint, &ShaderObject, ShaderObjectSize);
 
 	if (FAILED(hr))
 	{

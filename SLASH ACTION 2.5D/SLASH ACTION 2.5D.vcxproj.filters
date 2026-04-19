@@ -994,76 +994,33 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ShaderResource\common.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTexturePS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTextureVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\OneSkinAnimationVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\OneSkinAnimationPS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTextureVS2D.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\MaskTexturePS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\OverVertexMoveVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTextureVSSkyDome.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\litTextureVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\litTexturePS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTexture_GS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\LineVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\BlurPS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\Animation2DVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\Fighter2DPS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\unlitTexture2D_GS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\MotionBlurVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\litTextureVS2D.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderResource\MotionBlurCircularGS.hlsl" />
-    <FxCompile Include="ShaderResource\PassThroughVS.hlsl" />
-    <FxCompile Include="ShaderResource\unlitLuminescencePS.hlsl" />
-    <FxCompile Include="ShaderResource\unlitRingLuminescencePS.hlsl" />
-    <FxCompile Include="ShaderResource\unlitLuminescenceVS.hlsl" />
-    <FxCompile Include="ShaderResource\OverVertexMove3DVS.hlsl" />
-    <FxCompile Include="ShaderResource\ShadowVS.hlsl" />
-    <FxCompile Include="ShaderResource\ShadowPS.hlsl" />
-    <FxCompile Include="ShaderResource\TerrainVS.hlsl" />
-    <FxCompile Include="ShaderResource\TerrainPS.hlsl" />
-    <FxCompile Include="ShaderResource\LuminescenceTexturePS.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ShaderResource\ShadowPS.cso" />
+    <None Include="ShaderResource\hlsl\GS\unlitTexture_GS.hlsl" />
+    <None Include="ShaderResource\hlsl\GS\unlitTexture2D_GS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\BlurPS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\Fighter2DPS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\litTexturePS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\LuminescenceTexturePS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\MaskTexturePS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\OneSkinAnimationPS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\ShadowPS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\TerrainPS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\unlitLuminescencePS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\unlitRingLuminescencePS.hlsl" />
+    <None Include="ShaderResource\hlsl\PS\unlitTexturePS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\Animation2DVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\LineVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\litTextureVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\litTextureVS2D.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\MotionBlurVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\OneSkinAnimationVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\OverVertexMove3DVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\OverVertexMoveVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\PassThroughVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\ShadowVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\TerrainVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\unlitLuminescenceVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\unlitTextureVS.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\unlitTextureVS2D.hlsl" />
+    <None Include="ShaderResource\hlsl\VS\unlitTextureVSSkyDome.hlsl" />
   </ItemGroup>
 </Project>

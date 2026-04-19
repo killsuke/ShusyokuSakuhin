@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 [maxvertexcount(4)]
 void gs_main(line PS_IN input[2], inout TriangleStream<PS_IN> output)

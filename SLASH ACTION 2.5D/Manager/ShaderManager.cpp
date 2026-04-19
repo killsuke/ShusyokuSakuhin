@@ -5,90 +5,41 @@ using namespace std::filesystem;
 
 namespace {
 	std::string FILE_PATH_TO_SHADER = "ShaderResource/"; // シェーダーファイルのパス
+	std::string FILE_PATH_TO_SHADER_HLSL = "ShaderResource/hlsl/"; // シェーダーファイルのパス（HLSL）
+	std::string FILE_PATH_TO_SHADER_CSO = "ShaderResource/cso/"; // シェーダーファイルのパス（CSO）
 }
 
 void ShaderManager::Init() {
-	m_ShaderCache.clear();
 
-	// シェーダーファイルの一覧を取得
-	const std::vector<std::string> fileNames = GetShaderFiles(FILE_PATH_TO_SHADER);
-	
-	// ファイルの更新時刻の比較
-	for (const std::string& file : fileNames) {
+	CompileShaderSet_Dirty();
+	m_Binaries.clear();
+	LoadAllCSO();
 
-		const file_time_type hlslTime = last_write_time(file);	// hlslファイルの更新時間を取得
-		const std::string csoPath = ReplaceExt(file, "cso");
-
-		// csoファイルが存在するか確認
-		if (!exists(csoPath)) {
-			remove(csoPath); // 古いcsoファイルを削除
-			continue;	// 存在しない場合はスキップ
-		}
-
-		const file_time_type csoTime = last_write_time(csoPath);
-
-		// 更新時間がhlslの方が新しい場合、またはcsoが存在しない場合、一度ファイルを削除
-		if(hlslTime >= csoTime) {
-			
-			std::cout << "Delete Shader File : " << csoPath << std::endl;
-			remove(csoPath); // 古いcsoファイルを削除
-		}
-	}
+	std::cout << "ShaderManager内で初期化完了" << std::endl;
 }
 
 void ShaderManager::UnInit() {
-	m_ShaderCache.clear();
+	m_Binaries.clear();
 }
 
-HRESULT ShaderManager::CreateShader(const char* file,const LPCSTR& entry,const LPCSTR& model, void** shaderObj, size_t& size, ID3DBlob** blob) {
-
-	const std::string fullPath = ResolveShaderPath(file);
-
-	ShaderKey key{ fullPath.c_str(), entry, model};
-	
-	// １．キャッシュに存在するか確認
-	std::unordered_map<ShaderKey, std::vector<unsigned char>, ShaderKeyHash>::iterator it =
-		m_ShaderCache.find(key);
-
-	if (it != m_ShaderCache.end()) {
-		*shaderObj = it->second.data();
-		size = it->second.size();
-		return S_OK;
-	}
-
-	// ２．csoが存在するか確認
-	std::string csoPath = ReplaceExt(fullPath, "cso");
-	if (FileExists(csoPath)) {
-		std::vector<unsigned char> data;
-		ReadCsoFile(csoPath, data);
-
-		m_ShaderCache[key] = data;
-		*shaderObj = m_ShaderCache[key].data();
-		size = m_ShaderCache[key].size();
-		return S_OK;
-	}
+HRESULT ShaderManager::CreateShader(const char* file, const ShaderType& type, const LPCSTR& entry, void** shaderObj, size_t& size) {
 
 	HRESULT hr = S_OK;
 
-	// ３．コンパイルしてキャッシュに保存
-	hr = CompileShader(fullPath.c_str(), entry, model, shaderObj, size, blob);
-	if(FAILED(hr)) {
-		return hr;
+	std::string key = MakeKey(file, type);
+
+	const ShaderBinary* binary = GetBinaryByKey(key); // キーで直接探す関数があると便利
+	if (binary) {
+		// キャッシュにあればそれを使う
+		*shaderObj = (void*)binary->data.data();
+		size = binary->data.size();
+		return S_OK;
 	}
 
-	// ４．csoを保存
-	SaveCsoFile(csoPath, (*blob)->GetBufferPointer(), (*blob)->GetBufferSize());
+	// 見つからない場合はエラー
+	MessageBoxW(NULL, L"シェーダーが見つかりませんでした。", L"エラー", MB_ICONERROR | MB_OK);
 
-	// ５．キャッシュに保存
-	m_ShaderCache[key] = std::vector<unsigned char>(
-		reinterpret_cast<unsigned char*>((*blob)->GetBufferPointer()),
-		reinterpret_cast<unsigned char*>((*blob)->GetBufferPointer()) + (*blob)->GetBufferSize()
-	);
-
-	*shaderObj = m_ShaderCache[key].data();
-	size = m_ShaderCache[key].size();
-
-	return S_OK;
+	return E_FAIL;
 }
 
 // 拡張子を置き換える
@@ -112,7 +63,7 @@ bool ShaderManager::FileExists(const std::string& path) {
 bool ShaderManager::ReadCsoFile(const std::string& path, std::vector<unsigned char>& out) {
 
 	std::ifstream file(path, std::ios::binary);	// バイナリモードでファイルを開く
-	if(!file) {
+	if (!file) {
 		return false;
 	}
 
@@ -127,10 +78,10 @@ bool ShaderManager::ReadCsoFile(const std::string& path, std::vector<unsigned ch
 }
 
 // csoファイルを保存する
-bool ShaderManager::SaveCsoFile(const std::string& path, const void* data,const size_t& size) {
+bool ShaderManager::SaveCsoFile(const std::string& path, const void* data, const size_t& size) {
 
 	std::ofstream file(path, std::ios::binary);	// バイナリモードでファイルを開く
-	if(!file) {
+	if (!file) {
 		return false;
 	}
 
@@ -144,38 +95,203 @@ std::vector<std::string> ShaderManager::GetShaderFiles(const std::string& folder
 	std::vector<std::string> files;
 
 	// フォルダが存在するか確認
-	if(!exists(folder)) {
+	if (!exists(folder)) {
 		MessageBoxW(NULL, L"シェーダーフォルダが見つかりませんでした。", L"エラー", MB_ICONERROR | MB_OK);
 		return files;
 	}
 
-	for(const directory_entry& entry : directory_iterator(folder)) {
-		
+	for (const directory_entry& entry : directory_iterator(folder)) {
+
 		if (entry.path().extension() == ".hlsl") {
 			files.push_back(entry.path().string());
-		}	
+		}
 	}
 
 	return files;
 }
 
-std::string ShaderManager::ResolveShaderPath(const std::string& file) {
+std::string ShaderManager::ResolveShaderPath(const std::string& file, const ShaderType& type) {
 
-	if(file.find('/') != std::string::npos ||
-	   file.find('\\') != std::string::npos) {
-		return file;	// すでにパスが含まれている場合はそのまま返す
+	std::string base = FILE_PATH_TO_SHADER_HLSL;
+	return base + ShaderTypeToString(type) + "/" + file;
+}
+
+// シェーダータイプを文字列に変換する
+const char* ShaderManager::ShaderTypeToString(const ShaderType& type) {
+
+	switch (type)
+	{
+	case ShaderType::VS:
+		return "VS";
+	case ShaderType::PS:
+		return "PS";
+	case ShaderType::GS:
+		return "GS";
+	default:
+		break;
 	}
 
-	return FILE_PATH_TO_SHADER + file;	// パスを追加して返す
+	return "";
 }
 
-
-void CompileShaderSet_Dirty(const std::string& hlslPath, const std::string& csoPath) {
-
-	
+// シェーダーのキーを作成する
+std::string ShaderManager::MakeKey(const std::string& file, const ShaderType& type) {
+	std::filesystem::path p(file);
+	return p.stem().string() + "_" + ShaderTypeToString(type);
 }
 
-//HRESULT ShaderManager::CompileShaderSet_Full(const std::vector<std::string>& fileNames) {
-//
-//
-//}
+void ShaderManager::LoadAllCSO() {
+
+	std::vector<ShaderType> types = {
+		ShaderType::VS,
+		ShaderType::PS,
+		ShaderType::GS
+	};
+
+	for (const ShaderType& type : types) {
+
+		std::string folder = FILE_PATH_TO_SHADER_CSO + ShaderTypeToString(type) + "/";
+
+		if (!exists(folder)) {
+			continue;	// フォルダが存在しない場合はスキップ
+		}
+
+		directory_iterator files = std::filesystem::directory_iterator(folder);
+
+		for (const directory_entry& entry : files) {
+
+			if (entry.path().extension() != ".cso") {
+				continue;	// csoファイル以外はスキップ
+			}
+
+			// ファイル名だけ抜く
+			std::string filePath = entry.path().string();
+			std::string key = MakeKey(filePath, type);
+
+			std::vector<uint8_t> data;
+			ReadCsoFile(entry.path().string(), data);
+
+			m_Binaries[key] = { data };
+
+			std::cout << "Loaded Key: " << key << " from " << entry.path().filename() << std::endl;
+		}
+	}
+}
+
+const ShaderBinary* ShaderManager::GetBinary(const std::string& file, const ShaderType& type) {
+
+	std::string key = MakeKey(file, type);
+
+	std::unordered_map<std::string, ShaderBinary>::iterator it = m_Binaries.find(key);
+	if (it != m_Binaries.end()) {
+		return &it->second;
+	}
+
+	return nullptr;
+}
+
+const ShaderBinary* ShaderManager::GetBinaryByKey(const std::string& key) {
+	std::unordered_map<std::string, ShaderBinary>::iterator it = m_Binaries.find(key);
+	if (it != m_Binaries.end()) {
+		return &it->second;
+	}
+	return nullptr;
+}
+
+std::string ShaderManager::ToCsoPath(const std::string& file, const ShaderType& type) {
+
+	std::string base = FILE_PATH_TO_SHADER_CSO;
+	std::string name = ReplaceExt(file, "cso");
+
+	return base + ShaderTypeToString(type) + "/" + name;
+}
+
+bool ShaderManager::NeedsCompile(const std::string& file, const ShaderType& type) {
+
+	const std::string hlslPath = ResolveShaderPath(file, type);
+	const std::string csoPath = ToCsoPath(file, type);
+
+	if (!exists(csoPath)) {
+		return true;	// csoファイルが存在しない場合はコンパイルが必要
+	}
+
+	const file_time_type hlslTime = last_write_time(hlslPath);	// hlslファイルの更新時間を取得
+	const file_time_type csoTime = last_write_time(csoPath);	// csoファイルの更新時間を取得
+
+	return hlslTime >= csoTime;	// hlslの方が新しい場合はコンパイルが必要
+}
+
+void ShaderManager::CompileShaderSet_Dirty() {
+
+	std::vector<ShaderType> types = {
+		ShaderType::VS,
+		ShaderType::PS,
+		ShaderType::GS
+	};
+
+	for (const ShaderType& type : types) {
+
+		std::string folder = FILE_PATH_TO_SHADER_HLSL + ShaderTypeToString(type) + "/";
+
+		std::vector<std::string> files = GetShaderFiles(folder);
+
+		for (const std::string& file : files) {
+
+			// ファイル名だけ抜く
+			std::string fileName = std::filesystem::path(file).filename().string();
+
+			if (!NeedsCompile(fileName, type)) {
+				continue;	// コンパイルが不要な場合はスキップ
+			}
+
+			std::cout << "Compile Shader : " << fileName << std::endl;
+
+			const std::string hlslPath = ResolveShaderPath(fileName, type);
+			const std::string csoPath = ToCsoPath(fileName, type);
+
+			// csoファイルの親ディレクトリを作成
+			create_directories(
+				path(csoPath).parent_path()
+			);
+
+			std::string entry = "";
+			std::string model = "";
+
+			switch (type)
+			{
+			case ShaderType::VS:
+				entry = "vs_main";
+				model = "vs_5_0";
+				break;
+			case ShaderType::PS:
+				entry = "ps_main";
+				model = "ps_5_0";
+				break;
+			case ShaderType::GS:
+				entry = "gs_main";
+				model = "gs_5_0";
+				break;
+			}
+
+			ID3DBlob* blob = nullptr;
+			size_t size = 0;
+
+			HRESULT hr = CompileShader(
+				hlslPath.c_str(),
+				entry.c_str(),
+				model.c_str(),
+				&blob
+			);
+
+			if (FAILED(hr)) {
+
+				const std::string errorMsg = "シェーダーのコンパイルに失敗しました。該当ファイル: " + fileName;
+				MessageBoxW(NULL, std::wstring(errorMsg.begin(), errorMsg.end()).c_str(), L"エラー", MB_ICONERROR | MB_OK);
+				continue;
+			}
+
+			SaveCsoFile(csoPath, blob->GetBufferPointer(), blob->GetBufferSize());
+			blob->Release();
+		}
+	}
+}

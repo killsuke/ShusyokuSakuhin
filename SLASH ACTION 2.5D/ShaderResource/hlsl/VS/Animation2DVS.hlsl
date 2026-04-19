@@ -1,4 +1,4 @@
-#include "common.hlsl"
+#include "../common.hlsl"
 
 PS_IN vs_main(in VS_IN input)
 {
