@@ -92,6 +92,7 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
 
+	// ‚±‚±‚Í‚Ì‚¿‚É‘I‘ğ®‚É•ÏX
 	/*switch (m_DeathType)
 	{
 	case RAMDOM:

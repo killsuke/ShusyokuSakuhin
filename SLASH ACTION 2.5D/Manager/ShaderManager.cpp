@@ -260,16 +260,16 @@ void ShaderManager::CompileShaderSet_Dirty() {
 			switch (type)
 			{
 			case ShaderType::VS:
-				entry = "vs_main";
-				model = "vs_5_0";
+				entry = VS_INFORMATION.entryName;
+				model = VS_INFORMATION.modelName;
 				break;
 			case ShaderType::PS:
-				entry = "ps_main";
-				model = "ps_5_0";
+				entry = PS_INFORMATION.entryName;
+				model = PS_INFORMATION.modelName;
 				break;
 			case ShaderType::GS:
-				entry = "gs_main";
-				model = "gs_5_0";
+				entry = GS_INFORMATION.entryName;
+				model = GS_INFORMATION.modelName;
 				break;
 			}
 

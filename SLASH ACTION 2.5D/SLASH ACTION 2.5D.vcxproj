@@ -481,10 +481,6 @@
     <ClInclude Include="Components\JumpComponent.h" />
     <ClInclude Include="Structs\Material.h" />
     <ClInclude Include="Mesh\Mesh.h" />
-    <ClInclude Include="MeshRenderer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Manager\ModelManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Components\RenderComponent.h" />

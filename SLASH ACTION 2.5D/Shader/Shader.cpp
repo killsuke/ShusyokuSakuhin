@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include "Helper/dx11helper.h"
 #include "System/DirectXRender.h"
+#include "Manager/ShaderManager.h"
 
 //=======================================
 //Shader作成
@@ -30,8 +31,8 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 
 	sts = CreateVertexShader(device,
 		vs.c_str(),
-		"vs_main",
-		"vs_5_0",
+		VS_INFORMATION.entryName.c_str(),
+		VS_INFORMATION.modelName.c_str(),
 		layout.data(),	// ポインタに変換
 		numElements,
 		&m_pVertexShader,
@@ -45,8 +46,8 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 	sts = CreatePixelShader(			// ピクセルシェーダーオブジェクトを生成
 		device,							// デバイスオブジェクト
 		ps.c_str(),
-		"ps_main",
-		"ps_5_0",
+		PS_INFORMATION.entryName.c_str(),
+		PS_INFORMATION.modelName.c_str(),
 		&m_pPixelShader);
 	if (!sts) {
 		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK | MB_ICONWARNING);
@@ -58,8 +59,8 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		sts = CreateGeometryShader(			// ピクセルシェーダーオブジェクトを生成
 			device,							// デバイスオブジェクト
 			gs.c_str(),
-			"gs_main",
-			"gs_5_0",
+			GS_INFORMATION.entryName.c_str(),
+			GS_INFORMATION.modelName.c_str(),
 			&m_pGeometryShader);
 		if (!sts) {
 			MessageBoxW(nullptr, L"CreateGeometryShader error", L"error", MB_OK | MB_ICONWARNING);

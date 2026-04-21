@@ -1,23 +1,6 @@
 #include "SoundComponent.h"
 #include <algorithm>
 
-#ifdef _XBOX //Big-Endian
-#define fourccRIFF 'RIFF'
-#define fourccDATA 'data'
-#define fourccFMT 'fmt '
-#define fourccWAVE 'WAVE'
-#define fourccXWMA 'XWMA'
-#define fourccDPDS 'dpds'
-#endif
-#ifndef _XBOX //Little-Endian
-#define fourccRIFF 'FFIR'
-#define fourccDATA 'atad'
-#define fourccFMT ' tmf'
-#define fourccWAVE 'EVAW'
-#define fourccXWMA 'AMWX'
-#define fourccDPDS 'sdpd'
-#endif
-
 SoundComponent::SoundComponent(GameObject& obj) :Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("SOUND"); // É\Å[Égî‘çÜÇê›íË

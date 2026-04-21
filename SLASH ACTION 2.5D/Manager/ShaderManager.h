@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <array>
 #include <filesystem>
 #include <fstream>
 #include "Helper/dx11helper.h"
@@ -20,10 +21,23 @@ struct ShaderBinary {
 	std::vector<uint8_t> data;
 };
 
+struct ShaderInformation {
+
+	std::string entryName = "";
+	std::string modelName = "";
+};
+
+namespace {
+	ShaderInformation VS_INFORMATION = { "vs_main","vs_5_0" };
+	ShaderInformation PS_INFORMATION = { "ps_main","ps_5_0" };
+	ShaderInformation GS_INFORMATION = { "gs_main","gs_5_0" };
+}
+
 class ShaderManager final
 {
 private:
 	static inline std::unordered_map<std::string, ShaderBinary> m_Binaries;
+	static inline std::array<ShaderInformation, static_cast<size_t>(ShaderType::MAX)> m_ShaderInformation;
 
 	// コンストラクタ・デストラクタを削除
 	ShaderManager() = delete;
