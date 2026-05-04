@@ -7,7 +7,7 @@ VS_OUTPUT vs_main(in VS_IN input)
     float4 newPos = float4(input.pos, 1.0f);
     
     // ã‘¤‚Ì’¸“_‚¾‚¯“®‚©‚·i‚t‚u‚Ì‚u‚Ì’l‚ª‚O‚Ì’¸“_j
-    if (input.tex.y == 0.0f)
+    if (input.tex.y <= 0.001f)
     {
         newPos.y += baseScale * currentScale; // HP‚Ì”‚¾‚¯’·‚­‚·‚é
     }

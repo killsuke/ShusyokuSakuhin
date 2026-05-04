@@ -118,7 +118,6 @@ void TestSwordActionComponent::Update() {
 
 			goAround->SetLockAngle(m_SwordActionPattern.lockAngle);
 
-			//goAround->SetActiveFlag(true);
 			goAround->ResetVariables();
 
 			goAround->SetSampleDivisions(14);
@@ -153,7 +152,6 @@ void TestSwordActionComponent::Update() {
 		TrailRenderComponent* trail = m_Object->GetComponent<TrailRenderComponent>();
 		TrailMakeComponent* trailMake = m_Object->GetComponent<TrailMakeComponent>();
 		if (trail != nullptr && trailMake != nullptr) {
-			//  trail->ClearTrail();
 			trail->SetActiveFlag(false);
 			trailMake->SetActiveFlag(false);
 		}
@@ -337,6 +335,8 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 	case ESwordActionState::NONE:
 		break;
 	case ESwordActionState::SLASH_1ST:
+
+		// 斬り方のパターンを選択
 		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
@@ -353,6 +353,8 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 
 		break;
 	case ESwordActionState::SLASH_2ND:
+
+		// 斬り方のパターンを選択
 		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
@@ -368,6 +370,8 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 
 		break;
 	case ESwordActionState::SLASH_3RD:
+
+		// 斬り方のパターンを選択
 		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 120.0f;
 			m_SwordActionPattern.endAngle = -120.0f;
@@ -384,6 +388,7 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 		break;
 	case ESwordActionState::SLASH_FAST:
 
+		// 斬り方のパターンを選択
 		if (m_RightLeft == RightLeft::RIGHT) {
 			m_SwordActionPattern.startAngle = 180.0f;
 			m_SwordActionPattern.endAngle = 0.0f;
@@ -400,5 +405,4 @@ void TestSwordActionComponent::ChoiceSlashPattern(const RightLeft& horizontalAxi
 	default:
 		break;
 	}
-
 }

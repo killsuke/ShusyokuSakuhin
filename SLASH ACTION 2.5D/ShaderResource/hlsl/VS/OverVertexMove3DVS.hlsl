@@ -7,7 +7,7 @@ VS_OUTPUT vs_main(in VS_IN input)
     float4 newPos = float4(input.pos, 1.0f);
     
     // 上側の頂点だけ動かす（ＵＶのＶの値が０の頂点）
-    if (input.tex.y == 0.0f)
+    if (input.tex.y <= 0.001f)
     {
         newPos.y += baseScale * currentScale; // 値分だけ長くする
     }

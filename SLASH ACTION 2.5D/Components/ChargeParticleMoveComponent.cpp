@@ -17,25 +17,25 @@ void ChargeParticleMoveComponent::Update() {
 	}
 
 	// 移動処理
-	XMFLOAT3 targetPos = targetTrans->GetLocalPosition();
+	const XMFLOAT3 targetPos = targetTrans->GetLocalPosition();
 	XMFLOAT3 myPos = myTrans->GetLocalPosition();
 
-	XMVECTOR targetVec = XMLoadFloat3(&targetPos);
-	XMVECTOR myVec = XMLoadFloat3(&myPos);
+	const XMVECTOR targetVec = XMLoadFloat3(&targetPos);
+	const XMVECTOR myVec = XMLoadFloat3(&myPos);
 
 	// ターゲットへの方向ベクトルを計算して正規化
 	XMVECTOR dir = XMVectorSubtract(targetVec, myVec);
 	dir = XMVector3Normalize(dir);
 
 	// 移動量を計算
-	XMVECTOR movement = XMVectorScale(dir, m_MoveSpeed * TimeManager::GetFixedDeltaTime());
+	const XMVECTOR movement = XMVectorScale(dir, m_MoveSpeed * TimeManager::GetFixedDeltaTime());
 
 	// 新しい位置を計算して設定
-	XMVECTOR newPos = XMVectorAdd(myVec, movement);
+	const XMVECTOR newPos = XMVectorAdd(myVec, movement);
 	XMStoreFloat3(&myPos, newPos);
 
 	// ターゲットに到達したかどうかの判定
-	XMVECTOR toTarget = XMVectorSubtract(targetVec, newPos);
+	const XMVECTOR toTarget = XMVectorSubtract(targetVec, newPos);
 	float distanceToTarget = XMVectorGetX(XMVector3Length(toTarget));
 	if (distanceToTarget <= m_RimitDistance) {
 		m_Object->SetActiveState(ActiveState::ALL_STOP);
@@ -45,7 +45,7 @@ void ChargeParticleMoveComponent::Update() {
 	}
 
 	myTrans->SetLocalPosition(myPos);
-	XMFLOAT3 scale = myTrans->GetLocalScale();
+	const XMFLOAT3 scale = myTrans->GetLocalScale();
 	myTrans->SetLocalScale({ scale.x * 0.9f,scale.y * 0.9f,scale.z });
 }
 

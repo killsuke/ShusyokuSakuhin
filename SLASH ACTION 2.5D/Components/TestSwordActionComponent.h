@@ -60,15 +60,12 @@ public:
 		switch (pattern)
 		{
 		case SlashPattern::GROUND_SLASH:
-			//m_SwordActionState = ESwordActionState::SLASH_1ST;
 			m_TestSlashCount = 0;
 			break;
 		case SlashPattern::AIR_SLASH:
-			//m_SwordActionState = ESwordActionState::SLASH_1ST;
 			m_TestSlashCount = 0;
 			break;
 		case SlashPattern::CHARGE_SLASH:
-			//m_SwordActionState = ESwordActionState::SLASH_3RD;
 			m_TestSlashCount = 2;
 			break;
 		default:
@@ -82,4 +79,3 @@ public:
 	RightLeft GetRightLeft()const { return m_RightLeft; };
 	bool GetIsSwordAction()const { return m_IsSwordAction; };
 };
-

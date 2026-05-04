@@ -13,7 +13,7 @@ void HitStopManager::Update()
 
 	if(m_HitStopTime > 0.0f)
 	{
-		if(m_RecordTime == 0.0f)
+		if(m_RecordTime <= 0.001f)
 		{
 			// 最初のフレームだけ、オブジェクトの更新を止める
 			std::vector<GameObject*>objs = GameObjectManager::GameObjectFindAllTag(m_TargetTags);

@@ -21,7 +21,7 @@ void ProjectileMotionComponent::Update()
 	}
 
 	// ’l‚ª‚O‚È‚ç‰½‚à‚µ‚È‚¢
-	if (m_ProjectilePower == 0.0f || XMVector4Equal(m_ProjectileDirection, XMVectorZero())) {
+	if (m_ProjectilePower <= 0.001f || XMVector4Equal(m_ProjectileDirection, XMVectorZero())) {
 		return;
 	}
 

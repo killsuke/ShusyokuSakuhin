@@ -114,14 +114,7 @@ void EnemyActionComponent::ActionOff(const DeathEvent& event) {
 
 	DeadAnimation();
 
-	/*ProjectileMotionComponent* proj = m_Object->GetComponent<ProjectileMotionComponent>();
-	if (proj != nullptr) {
-		proj->InitProjectile(XMFLOAT3(0.5f,1.0f,-1.0f), XMFLOAT3(0.0f,0.0f,10.0f), 25.0f);
-	}*/
-
-
 	m_IsActiveFlag = false;
-
 }
 
 void EnemyActionComponent::FearAction() {

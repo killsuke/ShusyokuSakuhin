@@ -251,6 +251,8 @@ bool ColliderComponent::CheckHit(const Sphere& sphere, const TrianglePolygon& po
 	return false;
 }
 
+// 後に使うかもしれない関数 ==================================
+
 ////==================================
 //// ■CheckHit関数
 //// 円柱と平面の当たり判定
@@ -383,6 +385,8 @@ bool ColliderComponent::CheckHit(const Sphere& sphere, const TrianglePolygon& po
 
 //	return false;
 //}
+
+// =====================================================================
 
 //==================================
 // ■CheckHit関数
@@ -1015,7 +1019,7 @@ bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderCo
 		}
 
 		// 強制押し出しのとき、引っかかる個所を解除
-		if (forcedBeside == true && result2.y == 0.0f/* && rightLeft == -1*/) {
+		if (forcedBeside == true && result2.y == 0.0f) {
 			forcedBeside = false;	// 強制的に横押し出しにするのを解除
 		}
 		if (forcedBeside == false && result2.y != 0.0f && result2.x == 0.0f && result3.y != 0.0f && result3.x == 0.0f && rightLeft == 1) {
@@ -1420,6 +1424,7 @@ bool ColliderComponent::CompareLengthOBBvsAABB(
 	return dist <= (rOBB + rAABB);
 }
 
+// のちに再利用するかもしれない関数 ==============================
 
 //AABB& DetectCollisionFace(const AABB& a, const AABB& b) {
 //	if (!CheckHit(a, b)) {
@@ -1800,7 +1805,7 @@ XMFLOAT3 ColliderComponent::moveSphere(const Sphere& sphere, const TrianglePolyg
 	return contact + XMFLOAT3(0.0f, sphere.radius, 0.0f);
 }
 
-
+// 後に使うかもしれない関数 ========================
 
 // 線分に平行な与えられた幅の４角形の座標を求める
 //void CalcQuadOrientedLine(
@@ -1877,7 +1882,7 @@ XMFLOAT3 ColliderComponent::moveSphere(const Sphere& sphere, const TrianglePolyg
 
 //}
 
-
+// ==================================================================
 
 //==================================
 // AABBを設定

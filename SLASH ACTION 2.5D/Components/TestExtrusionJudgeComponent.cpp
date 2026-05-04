@@ -27,8 +27,8 @@ void TestExtrusionJudgeComponent::Update()
 		return; // テレインが存在しない、または必要なコンポーネントが存在しない場合は終了
 	}
 
-	m_isGround = false;
-	m_isCeiling = false;
+	m_IsGround = false;
+	m_IsCeiling = false;
 
 	for (GameObject* terrain : terrains) {
 
@@ -46,7 +46,7 @@ void TestExtrusionJudgeComponent::Update()
 		if (coll->TestNormal(*terrainColl, *coll, hitNormal)) {
 			if (hitNormal.y < -0.5f) {	// 地面
 				rigid->UseGravity(false);
-				m_isGround = true;
+				m_IsGround = true;
 
 				MoveCarComponent* moveCarComp = terrain->GetComponent<MoveCarComponent>();
 				std::string terrainName = terrain->GetName();
@@ -56,68 +56,20 @@ void TestExtrusionJudgeComponent::Update()
 				}
 			}
 			else if (hitNormal.y > 0.5f) {	// 天井
-				m_isCeiling = true;
+				m_IsCeiling = true;
 				//		std::cout << "天井" << std::endl;
 			}
 			else if (abs(hitNormal.x) > 0.5f) { // 左右の壁
 
-				PlayerOperationComponent* testMove = m_Object->GetComponent<PlayerOperationComponent>();
-				if (testMove != nullptr) {
-					//RightLeft rightLeft = testMove->GetRightLeft();
-					//bool isJump = testMove->GetIsJump();
-					//TransformComponent* terrainTrans = terrain->GetComponent<TransformComponent>();
-					//// ここに壁けりの処理を入れる
-					//Vector3 terrainPos = terrainTrans->GetPosition();
-					//Vector3 myPos = transform->GetPosition();
-
-					// この実際の壁けりの処理は分ける（地面と壁を分けるため）
-					/*if (isJump == true) {
-						if (myPos.x < terrainPos.x) {
-							rigid->AddVelocity(Vector3(-400.0f, 100.0f, 0.0f));
-							rigid->SetLimitVelocity_X(400.0f);
-							rigid->SetLimitVelocity_Y(100.0f);
-						}
-						else {
-							rigid->AddVelocity(Vector3(400.0f, 100.0f, 0.0f));
-							rigid->SetLimitVelocity_X(400.0f);
-							rigid->SetLimitVelocity_Y(100.0f);
-						}
-
-						rigid->UpdateVelocity();
-					}*/
-					//		std::cout << "左右" << std::endl;
-				}
 			}
 		}
-
 	}
 
-	// 後に奥側からジャンプしてくる敵用に使う
-	//if (m_MoveCarObjName != "") {
-
-	//	GameObject* moveCarObj = GameObjectManager::GameObjectFindName(m_MoveCarObjName);
-
-	//	if (moveCarObj != nullptr) {
-
-	//		MoveCarComponent* moveCar = moveCarObj->GetComponent<MoveCarComponent>();
-
-	//		// 名前検索の処理も入れる
-
-	//		//float speed = moveCar->GetMoveSpeed();
-	//		//// ここの2倍は外そう
-	//		//rigid->AddForce(Vector3(speed * 2.0f, 0.0f, 0.0f));
-	//		//rigid->UpdateVelocity();
-
-	//		Vector3 deltaPos = moveCar->GetDeltaCarPos();
-
-	//		transform->AddPosition(deltaPos * 2.0f);
-	//	}
-	//}
 	coll->Update();
 
 	if (jump == nullptr) {
 		return; // ジャンプコンポーネントが存在しない場合は終了
 	}
-	jump->SetIsGround(m_isGround); // 地面にいるかどうかを設定
-	jump->SetIsCeiling(m_isCeiling); // 天井にいるかどうかを設定
+	jump->SetIsGround(m_IsGround); // 地面にいるかどうかを設定
+	jump->SetIsCeiling(m_IsCeiling); // 天井にいるかどうかを設定
 }

@@ -40,7 +40,7 @@ private:
 	int m_SwordSlashFrameCount = 0; // 剣振り用のフレームカウント
 	int m_SampleDivisions = 0;	// 剣の軌跡のサンプルの分割数設定
 
-	RollingPattern m_rollingPattern = RollingPattern::DEFAULT_ROLLING;
+	RollingPattern m_RollingPattern = RollingPattern::DEFAULT_ROLLING;
 
 	DirectX::XMFLOAT3 m_initialOffset = {}; // 中心と回転するオブジェクトの差分
 	DirectX::XMFLOAT3 m_LockRotation = {};
@@ -80,7 +80,7 @@ public:
 		}
 		m_TargetRotationAmount = DirectX::XMConvertToRadians(std::abs(delta));
 		m_nowAngleRadian = 0.0f;	// 累積角度は０からスタート
-		m_rollingPattern = RollingPattern::DEFAULT_ROLLING;
+		m_RollingPattern = RollingPattern::DEFAULT_ROLLING;
 	}
 
 	// ワープ角度の設定
@@ -112,7 +112,7 @@ public:
 		m_TargetRotationAmount = DirectX::XMConvertToRadians(std::abs(delta));
 		m_WarpRadian = DirectX::XMConvertToRadians(std::abs(deltaWarp));
 		m_nowAngleRadian = 0.0f;	// 累積角度は０からスタート
-		m_rollingPattern = RollingPattern::SWORD_SLASH;
+		m_RollingPattern = RollingPattern::SWORD_SLASH;
 	}
 
 	inline void SetCenterObject(GameObject* centerObj) { m_CenterObject = centerObj; }
@@ -159,11 +159,6 @@ public:
 	inline std::vector<PosAndQuaternion> GetWorldPosAndQuats()const { return m_worldPosQuats; };
 	inline GameObject* GetCenterObject()const { return m_CenterObject; };
 	inline float GetRollingSpeed()const {
-
-		ActiveState activeState = m_Object->GetActiveState();
-		/*if (m_IsActiveFlag == false || activeState == ActiveState::ALL_STOP || activeState == ActiveState::UPDATE_STOP) {
-			return 0.0f;
-		}*/
 		return m_rotationSpeed;
 	}
 	inline bool GetIsFinished()const { return m_IsFinished; };
@@ -172,5 +167,4 @@ public:
 	float NormalizeAngleRadian(float rad);
 	void SimulationMove();
 	void DefaultRollingMove();
-	void SwordSlashMove();
 };

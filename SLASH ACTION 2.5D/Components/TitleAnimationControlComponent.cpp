@@ -23,7 +23,6 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	TransformComponent* transTitle = titleUI->AddComponent<TransformComponent>();
 	transTitle->SetPosition({ 0.0f,70.0f,0.0f });
 	transTitle->SetScale({ 350.0f,200.0f,1.0f });
-	//	transTitle->SetRotation({ 0.0f,30.0f,0.0f });
 	Render3DComponent* rendTitle = titleUI->AddComponent<Render3DComponent>();
 	rendTitle->CreateMesh<SquareMesh>();
 	rendTitle->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
@@ -238,7 +237,7 @@ void TitleAnimationControlComponent::Update() {
 
 void TitleAnimationControlComponent::Slash1ActiveOn() {
 
-	if(m_SlashUI1 == nullptr){
+	if (m_SlashUI1 == nullptr) {
 		return;
 	}
 
@@ -251,7 +250,7 @@ void TitleAnimationControlComponent::Slash1ActiveOn() {
 
 void TitleAnimationControlComponent::Slash2ActiveOn() {
 
-	if(m_SlashUI2 == nullptr){
+	if (m_SlashUI2 == nullptr) {
 		return;
 	}
 
@@ -264,7 +263,7 @@ void TitleAnimationControlComponent::Slash2ActiveOn() {
 
 void TitleAnimationControlComponent::SlashesActiveOff() {
 
-	if(m_SlashUI1 == nullptr || m_SlashUI2 == nullptr){
+	if (m_SlashUI1 == nullptr || m_SlashUI2 == nullptr) {
 		return;
 	}
 
@@ -272,10 +271,11 @@ void TitleAnimationControlComponent::SlashesActiveOff() {
 	m_SlashUI2->SetActiveState(ActiveState::ALL_STOP);
 }
 
+// タイトルの画面を割るアニメーション開始
 void TitleAnimationControlComponent::TrianglesActiveOn() {
 
-	for (GameObject* const triangle : m_Triangles){
-		if(triangle == nullptr){
+	for (GameObject* const triangle : m_Triangles) {
+		if (triangle == nullptr) {
 			return;
 		}
 	}
@@ -304,8 +304,8 @@ void TitleAnimationControlComponent::TrianglesActiveOn() {
 	rigid1->SetActiveFlag(true);
 	rigid2->SetActiveFlag(true);
 	rigid3->SetActiveFlag(true);
-	rigid4->SetActiveFlag(true);	
-	
+	rigid4->SetActiveFlag(true);
+
 	proj1->SetActiveFlag(true);
 	proj2->SetActiveFlag(true);
 	proj3->SetActiveFlag(true);
@@ -348,7 +348,7 @@ void TitleAnimationControlComponent::SwordMove() {
 
 void TitleAnimationControlComponent::LogoRotating() {
 
-	if(m_TitleRogo == nullptr){
+	if (m_TitleRogo == nullptr) {
 		return;
 	}
 
@@ -374,7 +374,7 @@ void TitleAnimationControlComponent::SwordSpecifiedPosition() {
 
 void TitleAnimationControlComponent::SwordDown() {
 
-	if(m_Sword3D == nullptr){
+	if (m_Sword3D == nullptr) {
 		return;
 	}
 
@@ -386,7 +386,7 @@ void TitleAnimationControlComponent::SwordDown() {
 
 void TitleAnimationControlComponent::SwordSheath() {
 
-	if(m_MiniSword3D == nullptr){
+	if (m_MiniSword3D == nullptr) {
 		return;
 	}
 
@@ -403,7 +403,7 @@ void TitleAnimationControlComponent::GameStartWait() {
 	const bool IsUporDown = (Input::GetKeyTrigger(VK_W) || Input::GetKeyTrigger(VK_S) || Input::GetKeyTrigger(VK_UP) || Input::GetKeyTrigger(VK_DOWN)
 		|| Input::GetButtonTrigger(XINPUT_UP) || Input::GetButtonTrigger(XINPUT_DOWN));
 
-	if(m_StartUI == nullptr || m_EndUI == nullptr || m_MiniSword3D == nullptr){
+	if (m_StartUI == nullptr || m_EndUI == nullptr || m_MiniSword3D == nullptr) {
 		return;
 	}
 
@@ -432,8 +432,8 @@ void TitleAnimationControlComponent::GameStartWait() {
 		trans->SetPosition({ -200.0f,-200.0f,-8.0f });
 		// エンターキーを押してステージ1へ
 		if (IsEnter == true)
-		{			
-			if(sound != nullptr){
+		{
+			if (sound != nullptr) {
 				sound->Stop();
 			}
 
@@ -456,7 +456,7 @@ void TitleAnimationControlComponent::GameStartWait() {
 
 void TitleAnimationControlComponent::SkipAnimation() {
 
-	if(m_EndUI == nullptr || m_StartUI == nullptr || m_MiniSword3D == nullptr){
+	if (m_EndUI == nullptr || m_StartUI == nullptr || m_MiniSword3D == nullptr) {
 		return;
 	}
 
@@ -471,45 +471,68 @@ void TitleAnimationControlComponent::SkipAnimation() {
 
 	const bool IsEnter = (Input::GetKeyTrigger(VK_RETURN) || Input::GetButtonTrigger(XINPUT_A));
 
-	if (IsEnter) {
+	if (IsEnter == false) {
 
-		TimeLineComponent* line = m_Object->GetComponent<TimeLineComponent>();
-
-		for (const uint32_t event : m_Events) {
-
-			line->StopEvent(event);
-		}
-
-		// スラッシュUI
-		SlashesActiveOff();
-
-		// 割れた破片たち
-		for (GameObject* triangle : m_Triangles) {
-			triangle->SetActiveState(ActiveState::ALL_STOP);
-		}
-		
-		// タイトルロゴを止める
-		TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
-		if (trans != nullptr) {
-			trans->SetRotation({ 0.0f,42.0f,0.0f });
-		}
-
-		// パーティクルたちをストップ
-		std::vector<GameObject*> particles = GameObjectManager::GameObjectFindAllTag("Particle");
-		for (GameObject* particle : particles) {
-
-			particle->SetActiveState(ActiveState::ALL_STOP);
-		}
-
-		// デカい剣を止める
-		TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
-		if (transSword != nullptr) {
-			transSword->SetPosition({ 90.0f,100.0f,2.0f });
-			transSword->SetRotation({ 45.0f,-50.0f,0.0f });
-			transSword->SetScale({ 10.0f,500.0f,800.0f });
-		}
-
-		m_IsloopAnim = true;
 		return;
 	}
+
+	TimeLineComponent* line = m_Object->GetComponent<TimeLineComponent>();
+
+	if(line == nullptr){
+		return;
+	}
+
+	for (const uint32_t event : m_Events) {
+
+		line->StopEvent(event);
+	}
+
+	// スラッシュUI
+	SlashesActiveOff();
+
+	// 割れた破片たち
+	for (GameObject* triangle : m_Triangles) {
+
+		if(triangle == nullptr){
+			return;
+		}
+
+		triangle->SetActiveState(ActiveState::ALL_STOP);
+	}
+
+	// タイトルロゴを止める
+	TransformComponent* trans = m_TitleRogo->GetComponent<TransformComponent>();
+	
+	if (trans == nullptr) {
+		
+		return;
+	}
+
+	trans->SetRotation({ 0.0f,42.0f,0.0f });
+
+	// パーティクルたちをストップ
+	std::vector<GameObject*> particles = GameObjectManager::GameObjectFindAllTag("Particle");
+	for (GameObject* particle : particles) {
+
+		if(particle == nullptr){
+			return;
+		}
+
+		particle->SetActiveState(ActiveState::ALL_STOP);
+	}
+
+	// デカい剣を止める
+	TransformComponent* transSword = m_Sword3D->GetComponent<TransformComponent>();
+
+	if (transSword == nullptr) {
+		
+		return;
+	}
+
+	transSword->SetPosition({ 90.0f,100.0f,2.0f });
+	transSword->SetRotation({ 45.0f,-50.0f,0.0f });
+	transSword->SetScale({ 10.0f,500.0f,800.0f });
+
+	m_IsloopAnim = true;
+
 }

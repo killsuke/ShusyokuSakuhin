@@ -30,7 +30,6 @@ private:
 	void ImmediateStartProcess();
 	void ImmediateEndProcess();
 
-	void StickyProcess(GameObject* obj1, GameObject* obj2);
 	void ScreenClashStart();
 	void CutObjsMove();
 	void CreateCracksAndDebris();
@@ -52,7 +51,6 @@ public:
 		m_CutObj2ID = obj2ID;
 	};
 
-	void ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2);
 	void SetDeathState(const EnemyDeathEventState& state) {
 		m_DeathState = state;
 	};

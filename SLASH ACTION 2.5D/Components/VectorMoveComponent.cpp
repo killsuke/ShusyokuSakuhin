@@ -11,7 +11,7 @@ VectorMoveComponent::VectorMoveComponent(GameObject& obj) : Component(obj)
 void VectorMoveComponent::Update()
 {
 	// ’l‚ª‚O‚È‚ç‰½‚à‚µ‚È‚¢
-	if (m_MovePower == 0.0f || XMVector4Equal(m_MoveDirection, XMVectorZero())) {
+	if (m_MovePower <= 0.001f || XMVector4Equal(m_MoveDirection, XMVectorZero())) {
 		return;
 	}
 

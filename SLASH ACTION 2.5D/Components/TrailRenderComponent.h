@@ -25,7 +25,7 @@ private:
 	std::vector<int> m_SampleDivisions;
 	float m_TipOffset = 0.0f;	// 先端のオフセット
 	float m_BaseOffset = 0.0f; // 根元のオフセット
-	bool m_RightLeftFlag = true; // 右向きか左向きか
+	bool m_IsRightLeft = true; // 右向きか左向きか
 	int m_TrailCount = 0;
 	int m_AverageSamplingNum = 0;
 	int m_TrailDivisionsCount = 1;
@@ -51,7 +51,7 @@ public:
 	void SetTrailPoint(const std::vector<PosAndQuaternion>& points);
 	void SetTipPoint(const float tip) { m_TipOffset = tip; };
 	void SetBasePoint(const float base) { m_BaseOffset = base; };
-	void SetRightLeftFlag(const bool flag) { m_RightLeftFlag = flag; };
+	void SetRightLeftFlag(const bool flag) { m_IsRightLeft = flag; };
 	void SetTrailDivisionsCount(const int count = 1) { m_TrailDivisionsCount = count; };
 
 	void ResetTrailCount() { m_TrailCount = 0; };

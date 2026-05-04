@@ -85,6 +85,9 @@ void CameraMoveComponent::ChaseCamera(GameObject& cameraObj, GameObject& player)
     TransformComponent* cameraTrans = cameraObj.GetComponent<TransformComponent>();
     TransformComponent* playerTrans = player.GetComponent<TransformComponent>();
 
+    if (cameraComp == nullptr || cameraTrans == nullptr || playerTrans == nullptr) {
+        return; // CameraComponentATransformComponent‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
+    }
 
     const XMFLOAT3 playerPos = playerTrans->GetPosition();
 

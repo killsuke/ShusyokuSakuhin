@@ -57,11 +57,13 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	rend2D->ChangeTexture("ring.png");
 
+	// これはシェーダー側の調整が完了すれば実装する予定 ============
 	//RenderTextureLuminescenceComponent* rendTex = m_BossBarrier->AddComponent<RenderTextureLuminescenceComponent>();
 	//rendTex->CreateMesh<SquareMesh>();
 	//rendTex->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	//rendTex->ChangeTexture("ring.png");
 	//rendTex->SetGlowColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
+	// ========================================================
 
 	RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 	rend->CreateMesh<SquareMesh>();
@@ -150,7 +152,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 }
 
 void EnemyActionBossComponent::Init() {
-	
+
 	SoundComponent* sound = m_Object->GetComponent<SoundComponent>();
 	if (sound != nullptr) {
 		sound->AddSoundLabel("boss_bullet");
@@ -177,16 +179,16 @@ void EnemyActionBossComponent::Update() {
 	const int maxHp = fight->GetMaxHp();
 	const int hp = fight->GetHp();
 
+	// 死亡状態の処理
 	if (hp <= 0) {
 		ChangeState(BossActionState::DEAD);
 		return;
 	}
 
-
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
-	XMFLOAT3 playPos = playTrans->GetPosition();
-	XMFLOAT3 myPos = myTrans->GetPosition();
+	const XMFLOAT3 playPos = playTrans->GetPosition();
+	const XMFLOAT3 myPos = myTrans->GetPosition();
 
 	if (myPos.x > playPos.x) {
 		m_IsRightLeft = RightLeft::LEFT;
@@ -199,7 +201,6 @@ void EnemyActionBossComponent::Update() {
 	const bool isGround = testExtrude->GetIsGround();
 
 	StateUpdate(myPos, playPos, isGround);
-
 
 	// 回転はこっち
 	if (m_IsBarrier == true) {
@@ -237,9 +238,9 @@ void EnemyActionBossComponent::Update() {
 			}
 		}
 	}
-
 }
 
+// ジャンプしながらプレイヤーに向かって弾を撃つ処理
 void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, const DirectX::XMFLOAT3& myPos) {
 
 	const XMVECTOR diff = XMLoadFloat3(&playPos) - XMLoadFloat3(&myPos);
@@ -253,7 +254,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 	}
 	else {
 		// 同じ位置 or ほぼ同じ位置
-		dirFloat3 = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		dirFloat3 = XMFLOAT3();
 		return;
 	}
 
@@ -299,6 +300,7 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 	rend->SetRingWidth(0.2f);
 }
 
+// 状態の変更処理
 void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 
 	JumpComponent* jump = m_Object->GetComponent<JumpComponent>();
@@ -417,6 +419,7 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 	}
 }
 
+// バリアのリセット処理
 void EnemyActionBossComponent::ResetBarriers(FighterComponent& fight) {
 
 	// バリアの耐久力回復＆当たり判定無効化
@@ -462,6 +465,7 @@ void EnemyActionBossComponent::ResetBarriers(FighterComponent& fight) {
 	}
 }
 
+// バリアの耐久力チェック処理
 void EnemyActionBossComponent::BarrierDurabilityCheck() {
 
 	if (m_BossBarrier == nullptr) {
@@ -475,10 +479,12 @@ void EnemyActionBossComponent::BarrierDurabilityCheck() {
 
 	const int hp = fight->GetHp();
 
+	// 耐久力が0以下になったらバリアをリセット
 	if (hp <= 0) {
 
 		ResetBarriers(*fight);
 	}
+	// 耐久力が半分以下になったらバリアの色を赤色に変更
 	else if (hp <= (BarrierDurability / 2)) {
 
 		RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
@@ -486,9 +492,9 @@ void EnemyActionBossComponent::BarrierDurabilityCheck() {
 			rend->SetColor(DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
-
 }
 
+// 状態に応じた処理
 void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const DirectX::XMFLOAT3& playPos, const bool isGround) {
 
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
@@ -520,7 +526,7 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 		}
 
 		// ジャンプ移動終了判定
-		if (isGround == true && m_RecordTime1 == 0.0f) {
+		if (isGround == true && m_RecordTime1 <= 0.001f) {
 
 			ChangeState(BossActionState::BARRIER);
 			break;
@@ -532,43 +538,47 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 	{
 		TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
 
-		if (bossBarrierTrans != nullptr) {
+		if (bossBarrierTrans == nullptr) {
 
-			// 移動はこっち
-			for (int i = 0; i < BarrierCount; ++i) {
+			return;
+		}
+		// 移動はこっち
+		for (int i = 0; i < BarrierCount; ++i) {
 
-				TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
-				if (barrierTrans != nullptr) {
+			TransformComponent* barrierTrans = m_BarrierList[i]->GetComponent<TransformComponent>();
 
-					if (m_LengthCount < TargetLength) {
+			if (barrierTrans == nullptr) {
 
-						bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
-
-						if (i == 0) {
-							barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
-						}
-						else if (i == 1) {
-							barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
-						}
-						else if (i == 2) {
-							barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
-						}
-						else if (i == 3) {
-							barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
-						}
-					}
-					else {
-
-						//m_LengthCount = 0.0f;
-						// 最後に回転を開始
-						ChangeState(BossActionState::DEFAULT);
-						break;
-					}
-				}
+				return;
 			}
 
-			m_LengthCount += MoveSpeed;
+			if (m_LengthCount < TargetLength) {
+
+				bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
+
+				if (i == 0) {
+					barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+				}
+				else if (i == 1) {
+					barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
+				}
+				else if (i == 2) {
+					barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
+				}
+				else if (i == 3) {
+					barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
+				}
+			}
+			else {
+
+				//m_LengthCount = 0.0f;
+				// 最後に回転を開始
+				ChangeState(BossActionState::DEFAULT);
+				break;
+			}
 		}
+
+		m_LengthCount += MoveSpeed;
 	}
 	break;
 	case BossActionState::DEAD:
@@ -579,5 +589,4 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 	default:
 		break;
 	}
-
 }

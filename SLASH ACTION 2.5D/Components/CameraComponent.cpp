@@ -129,11 +129,7 @@ void CameraComponent::Update3D() {
 	const XMFLOAT3 target = m_Target + m_OffsetTarget;
 	const XMVECTOR targetV = XMLoadFloat3(&target);
 
-	viewMatrix = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+	viewMatrix = XMMatrixLookAtLH(posV, targetV, up);
 
 	m_ViewMatrix3D = viewMatrix;
 
@@ -174,11 +170,7 @@ void CameraComponent::Update3D() {
 		aspectRatio,	// 画面のアスペクト比
 		nearPlane,		// 前方クリップ面
 		farPlane		// 後方クリップ面
-	);	// 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// projectionMatrix = SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
+	);	
 
 	m_ProjectionMatrix3D = projectionMatrix;
 
@@ -187,15 +179,11 @@ void CameraComponent::Update3D() {
 
 void CameraComponent::UpdateSky() {
 	//// ビュー変換後列作成
-	XMVECTOR up = XMVectorSet(0.0f,1.0f,0.0f,0.0f);
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR posV = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR targetV = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 
-	m_ViewMatrixSky = XMMatrixLookAtLH(posV, targetV, up); // 左手系にした　20230511 by suzuki.tomoki
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// m_ViewMatrix = m_ViewMatrix.CreateLookAt(m_Position, m_Target, up);					
+	m_ViewMatrixSky = XMMatrixLookAtLH(posV, targetV, up);
 
 	DirectXRender::SetViewMatrixSkyDome(&m_ViewMatrixSky);
 
@@ -211,11 +199,4 @@ void CameraComponent::UpdateSky() {
 	m_ProjectionMatrixSky = XMMatrixPerspectiveFovLH(fieldOfView, aspectRatio, nearPlane, farPlane);	// 左手系にした　20230511 by suzuki.tomoki
 
 	DirectXRender::SetProjectionMatrixSkyDome(&m_ProjectionMatrixSky);
-
-	// DIRECTXTKのメソッドは右手系　20230511 by suzuki.tomoki
-	// 右手系にすると３角形頂点が反時計回りになるので描画されなくなるので注意
-	// このコードは確認テストのために残す
-	// projectionMatrix = SimpleMath::Matrix::CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlane, farPlane);
-
-	//projectionMtxSky = XMMatrixTranspose(projectionMatrix);
 }

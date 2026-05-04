@@ -92,7 +92,6 @@ void CutObjectActionComponent::Update() {
 	}
 
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
-
 }
 
 void CutObjectActionComponent::ImmediateStartProcess() {
@@ -138,185 +137,6 @@ void CutObjectActionComponent::ImmediateEndProcess() {
 	obj1->Destroy();
 	obj2->Destroy();
 	m_Object->Destroy();
-}
-
-void CutObjectActionComponent::StickyProcess(GameObject* obj1, GameObject* obj2) {
-
-	GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-	if (camera == nullptr) {
-		return;
-	}
-
-	TransformComponent* camTrans = camera->GetComponent<TransformComponent>();
-	TransformComponent* obj1Trans = obj1->GetComponent<TransformComponent>();
-	TransformComponent* obj2Trans = obj2->GetComponent<TransformComponent>();
-
-	if (camTrans == nullptr || obj1Trans == nullptr || obj2Trans == nullptr) {
-		return;
-	}
-
-
-	VectorMoveComponent* move1 = obj1->GetComponent<VectorMoveComponent>();
-	VectorMoveComponent* move2 = obj2->GetComponent<VectorMoveComponent>();
-
-	if (move1 == nullptr || move2 == nullptr) {
-		obj1->Destroy();
-		obj2->Destroy();
-		return;
-	}
-
-	if (m_RecordTime > 3.0f) {
-		obj1->Destroy();
-		obj2->Destroy();
-		m_Object->Destroy();
-	}
-	else if (m_RecordTime > 1.5f) {	// 落ちる
-		RigidBodyComponent* rigid1 = obj1->GetComponent<RigidBodyComponent>();
-		RigidBodyComponent* rigid2 = obj2->GetComponent<RigidBodyComponent>();
-
-		rigid1->SetGravityFlag(true);
-		rigid2->SetGravityFlag(true);
-
-		rigid1->SetActiveFlag(true);
-		rigid2->SetActiveFlag(true);
-
-		obj1Trans->AddRotation({ 0.0f,0.0f,5.0f });
-		obj2Trans->AddRotation({ 0.0f,0.0f,-5.0f });
-	}
-	else if (m_RecordTime > 1.3f) {	// 震えを止める
-	}
-	else if (m_RecordTime > 1.0f) {	// 貼りついて揺らす
-
-		const XMFLOAT3 camPos = camTrans->GetPosition();
-
-		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
-		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
-
-		if (m_IsFirstCamPos == true) {
-			m_IsFirstCamPos = false;
-
-			Render2DComponent* render1 = obj1->GetComponent<Render2DComponent>();
-			Render2DComponent* render2 = obj2->GetComponent<Render2DComponent>();
-
-			if (render1 == nullptr || render2 == nullptr) {
-				obj1->Destroy();
-				obj2->Destroy();
-				return;
-			}
-			render1->SetColor({ 0.3f,0.3f,0.3f,1.0f });
-			render2->SetColor({ 0.3f,0.3f,0.3f,1.0f });
-
-			// 画面揺れ開始
-			CameraShakeComponent* camShake = camera->GetComponent<CameraShakeComponent>();
-			if (camShake != nullptr) {
-				camShake->ShakingPreparation(150.0f, 4.0f, 0.3f);
-				camShake->SetShakeType(ShakeType::RANDOM_DEPTH);
-			}
-			return;
-		}
-
-		ShakeCutObjects(obj1Trans, obj2Trans);	// 揺らす
-	}
-	else if (m_RecordTime > 0.8f) {	// ここで出てくる
-
-		const XMFLOAT3 camPos = camTrans->GetPosition();
-
-		// 最初の一回だけカメラ上部に張り付ける
-		if (m_IsFirstCamPos == false) {
-			move1->SetActiveFlag(false);
-			move2->SetActiveFlag(false);
-			obj1Trans->SetPosition({ camPos.x, camPos.y + CameraUpY, camPos.z + FrontCameraZ });
-			obj2Trans->SetPosition({ camPos.x, camPos.y + CameraUpY, camPos.z + FrontCameraZ });
-			m_IsFirstCamPos = true;
-
-			m_CutObj1Pos.y = CameraUpY;
-			m_CutObj2Pos.y = CameraUpY;
-			return;
-		}
-
-		std::random_device rd;  // 非決定的な乱数の種
-		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-		std::uniform_real_distribution<float> dist(0.0f, 5.0f); // 範囲指定
-
-		const float value = dist(gen);
-
-		m_CutObj1Pos.x -= value;
-		m_CutObj2Pos.x += value;
-
-		m_CutObj1Pos.y -= value;
-		m_CutObj2Pos.y -= value;
-
-		obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + FrontCameraZ });
-		obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + FrontCameraZ });
-
-	}
-	else if (m_RecordTime == 0.0f) { // 天高く飛ばす
-
-		std::random_device rd;  // 非決定的な乱数の種
-		std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-		std::uniform_real_distribution<float> dist(8.0f, 10.0f); // 範囲指定
-
-		const float value = dist(gen);
-
-		move1->SetMoveDirection({ 0.2f,1.0f,0.0f });
-		move1->SetMovePower(3.5f);
-		move1->SetRotationValue({ 0.0f,0.0f,value });
-
-		move2->SetMoveDirection({ -0.2f,1.0f,0.0f });
-		move2->SetMovePower(3.5f);
-		move2->SetRotationValue({ 0.0f,0.0f,-value });
-
-		RigidBodyComponent* rigid1 = obj1->AddComponent<RigidBodyComponent>();
-		RigidBodyComponent* rigid2 = obj2->AddComponent<RigidBodyComponent>();
-
-		rigid1->SetMass(2.0f);
-		rigid2->SetMass(2.0f);
-
-		rigid1->SetGravityFlag(false);
-		rigid2->SetGravityFlag(false);
-
-		rigid1->SetActiveFlag(false);
-		rigid2->SetActiveFlag(false);
-
-		rigid1->SetFallMagnification(6.0f);
-		rigid2->SetFallMagnification(6.0f);
-
-		rigid1->SetFirstFallMagnification(60.0f);
-		rigid2->SetFirstFallMagnification(60.0f);
-	}
-}
-
-void CutObjectActionComponent::ShakeCutObjects(TransformComponent* obj1, TransformComponent* obj2) {
-
-	std::random_device rd;  // 非決定的な乱数の種
-	std::mt19937 gen(rd()); // メルセンヌ・ツイスタ
-	std::uniform_real_distribution<float> dist(-1.0f, 1.0f); // 範囲指定
-
-	const float rX = dist(gen); // 0.0 ～ 1.0 の乱数
-	const float rY = dist(gen); // 0.0 ～ 1.0 の乱数
-
-	m_ShakeVector = XMVectorSet(rX, rY, 0.0f, 0.0f);
-	m_ShakeVector = XMVector3Normalize(m_ShakeVector);
-
-
-	// ランダム揺れ用オフセット
-	const float offsetX = sinf(m_RecordTime * 50.0f) * 1.5f;
-
-	// 正規化したRightベクトルをオフセットに適用
-	const XMVECTOR offset = XMVectorScale(m_ShakeVector, offsetX);
-
-	// 前フレームとの差分を取る
-	// サイン波がゼロに戻るときに差分もゼロになるので、
-	// 最終的に元の位置に戻る
-	const XMVECTOR frameOffset = XMVectorSubtract(offset, m_PrevShakeOffset);
-
-	m_PrevShakeOffset = offset;
-
-	XMFLOAT3 newPos;
-	XMStoreFloat3(&newPos, frameOffset);
-
-	obj1->AddPosition({ newPos.x,newPos.y,0.0f });
-	obj2->AddPosition({ newPos.x,newPos.y,0.0f });
 }
 
 // 画面衝突エフェクト開始
@@ -628,6 +448,7 @@ void CutObjectActionComponent::FollowCamera() {
 	obj1Trans->SetPosition({ camPos.x + m_CutObj1Pos.x,camPos.y + m_CutObj1Pos.y,camPos.z + camOffset.z + FrontCameraZ });
 	obj2Trans->SetPosition({ camPos.x + m_CutObj2Pos.x,camPos.y + m_CutObj2Pos.y,camPos.z + camOffset.z + FrontCameraZ });
 
+	// ヒビも追従させる
 	if (m_Crack1 != nullptr && m_Crack2 != nullptr) {
 
 		TransformComponent* crack1Trans = m_Crack1->GetComponent<TransformComponent>();
@@ -683,12 +504,14 @@ void CutObjectActionComponent::FallProcess() {
 		return;
 	}
 
+	// 落ちるときに少し回転させる
 	obj1Trans->AddRotation({ 0.0f,0.0f,5.0f });
 	obj2Trans->AddRotation({ 0.0f,0.0f,-5.0f });
 
 	Render2DComponent* rend1 = m_Crack1->GetComponent<Render2DComponent>();
 	Render2DComponent* rend2 = m_Crack2->GetComponent<Render2DComponent>();
 
+	// 落ちるときにヒビも少しずつ薄くしていく
 	rend1->AddColor_A(-0.05f);
 	rend2->AddColor_A(-0.05f);
 }
@@ -708,6 +531,7 @@ void CutObjectActionComponent::FallEnd() {
 	m_Crack1->Destroy();
 	m_Crack2->Destroy();
 
+	// 破片もまとめて削除
 	for (GameObject* debris : m_Debris) {
 		debris->Destroy();
 	}

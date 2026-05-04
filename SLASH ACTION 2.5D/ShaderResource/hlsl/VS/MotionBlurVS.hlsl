@@ -24,7 +24,7 @@ PS_IN vs_main(in VS_IN input)
 
     output.col = input.col * vertexColor;
     
-    if (blurParams.a == 0.0f)
+    if (blurParams.a <= 0.001f)
     {
         output.pos = currentPos;
     }

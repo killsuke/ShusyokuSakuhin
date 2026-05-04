@@ -102,7 +102,7 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		hitFlash->SetHitFlashPower(0.8f);
 
 		// 当たり判定の可視化用（デバッグ用）
-		/*auto renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
+		/*Render3DColliderAABBComponent* renderColl = enemyObj->AddComponent<Render3DColliderAABBComponent>();
 		renderColl->CreateMesh<SquareMesh>();
 		renderColl->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		renderColl->ChangeTexture("NoTexture.png");

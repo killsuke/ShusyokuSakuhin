@@ -80,18 +80,13 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 			RigidBodyComponent* rigid = terrainObj->AddComponent<RigidBodyComponent>();
 			rigid->SetMass(2.0f);
 
-			/*RoundShadowRenderComponent* render = terrainObj->AddComponent<RoundShadowRenderComponent>();
-			render->CreateMesh<CubeMesh>();
-			render->SetShader(tS.shaderVS, tS.shaderPS);
-			render->ChangeTexture(tS.texture);*/
-
 			RenderTerrainComponent* render = terrainObj->AddComponent<RenderTerrainComponent>();
 			render->SetShader(tS.shaderVS, tS.shaderPS);
 			render->ChangeTexture(tS.texture);
 			render->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 		}
 
-		// デバッグ用のコライダー表示
+		// デバッグ用のコライダー表示（場合によっては使うので、残しておく）
 		//CubeMesh cubeMeshCollider;
 		//auto renderCollider = terrainObj->AddComponent<Render3DColliderAABBComponent>();
 		//renderCollider->SetMesh(cubeMeshCollider);
@@ -101,5 +96,4 @@ void TerrainCreateComponent::CreateTerrains(std::vector<TerrainStatus> status, c
 
 		num++;
 	}
-
 }
