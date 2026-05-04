@@ -22,9 +22,11 @@ GameObject::~GameObject() {
 }
 
 void GameObject::Update() {
-	// 更新処理を消すか？
-	if (m_ActiveState == ActiveState::UPDATE_STOP || m_ActiveState == ActiveState::ALL_STOP)
+
+	// 更新処理を止めるか
+	if (m_ActiveState == ActiveState::UPDATE_STOP || m_ActiveState == ActiveState::ALL_STOP) {
 		return;
+	}
 
 	// コンポーネントの更新
 	for (std::unique_ptr<Component>& component : m_Components) {
@@ -42,9 +44,11 @@ void GameObject::Update() {
 }
 
 void GameObject::Draw() {
-	// 描画処理を消すか？
-	if (m_ActiveState == ActiveState::DRAW_STOP || m_ActiveState == ActiveState::ALL_STOP)
+
+	// 描画処理を止める
+	if (m_ActiveState == ActiveState::DRAW_STOP || m_ActiveState == ActiveState::ALL_STOP) {
 		return;
+	}
 
 	// 描画用コンポーネントの更新
 	for (std::unique_ptr<Component>& renderComp : m_RenderComponents) {
@@ -56,8 +60,8 @@ void GameObject::Draw() {
 	// 子オブジェクトの描画
 	if (!m_Children.empty()) {
 		for (GameObject* child : m_Children) {
-			if (m_ChildAbsFrontFlag == true) {
-				
+			if (m_IsChildAbsFrontFlag == true) {
+
 				const bool currentDepthEnable = DirectXRender::GetIsDepthEnable();
 				DirectXRender::SetDepthEnable(false);
 				child->Draw();
@@ -70,7 +74,9 @@ void GameObject::Draw() {
 	}
 }
 
+// コンポーネントのソート
 void GameObject::SortComponents() {
+
 	std::sort(m_Components.begin(), m_Components.end(),	// レンダー関係以外のコンポーネントコンテナをソート
 		[](const std::unique_ptr<Component>& a, const std::unique_ptr<Component>& b) {
 			return a->GetSortNum() < b->GetSortNum();
@@ -82,6 +88,7 @@ void GameObject::SortComponents() {
 		});
 }
 
+// 描画関係のコンポーネントかどうかの判定
 bool GameObject::ComponentCheck(Component* comp) {
 	// 描画関係の機能と分けるため、ここで判断
 	if (RenderComponent* renderComp = dynamic_cast<RenderComponent*>(comp)) {

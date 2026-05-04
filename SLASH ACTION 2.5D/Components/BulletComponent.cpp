@@ -1,6 +1,7 @@
 #include "BulletComponent.h"
 #include "RigidBodyComponent.h"
 #include "TransformComponent.h"
+#include "Manager/TimeManager.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -20,7 +21,9 @@ void BulletComponent::Update() {
 
 	rigid->ConstantVelocity(newVelocity);
 
-	m_rimitTime -= m_deltaTime;
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+
+	m_rimitTime -= deltaTime;
 
 	if (m_rimitTime <= 0.0f) {
 		m_Object->SetDeleteFg(true);

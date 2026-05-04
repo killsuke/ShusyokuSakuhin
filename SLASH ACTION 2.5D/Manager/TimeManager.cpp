@@ -5,9 +5,9 @@
 using namespace DirectX;
 
 namespace {
-	constexpr double FIXED_DT = (1.0 / 60.0);
-	constexpr double MAX_DELTA_TIME = 0.05;
-	constexpr double RESTRICTION_DELTA_TIME = 0.032;
+	constexpr double FIXED_DT = (1.0 / 60.0);			// 固定更新のデルタタイム（60FPS）
+	constexpr double MAX_DELTA_TIME = 0.05;				// 巨大フレームを防止するための最大デルタタイム（50ms）
+	constexpr double RESTRICTION_DELTA_TIME = 0.032;	// 更新時間の制限（32ms、約30FPS）
 }
 
 void TimeManager::Init() {
@@ -78,7 +78,6 @@ bool TimeManager::ShouldFixedUpdate() {
 	{
 		m_Accumulator -= FIXED_DT;
 		m_TotalTime += FIXED_DT;
-		m_FixedDeltaTime = deltaTime;
 
 		// 固定更新の時間をシェーダーに渡す
 		timeData.deltaTime = deltaTime;
@@ -94,5 +93,6 @@ bool TimeManager::ShouldFixedUpdate() {
 // 固定更新のデルタタイムを取得
 float TimeManager::GetFixedDeltaTime()
 {
-	return m_FixedDeltaTime;
+	const float fixedDeltaTime = static_cast<float>(FIXED_DT);
+	return fixedDeltaTime;
 }

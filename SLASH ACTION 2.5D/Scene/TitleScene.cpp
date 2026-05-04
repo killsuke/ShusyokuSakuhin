@@ -65,17 +65,6 @@ void TitleScene::Init()
 // 更新
 void TitleScene::Update()
 {
-	//m_RecordTime += 0.016f; // 仮のデルタタイム
-
-	//if(m_RecordTime > 10.0f) {
-	//	GameObject* fadeFake = GameObjectManager::GameObjectFindNameUI("fade");
-	//	if (fadeFake != nullptr) {
-	//		DoorFadeComponent* fade = fadeFake->GetComponent<DoorFadeComponent>();
-	//		fade->SetBootDoor(true);
-	//		fade->SetNextSceneName("TitleScene");
-	//	}
-	//	SceneManager::SceneChange<TitleScene>();
-	//}
 }
 
 // 終了処理

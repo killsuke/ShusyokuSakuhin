@@ -52,8 +52,6 @@ HRESULT DirectXRender::Init() {
 
 	CreateShadowBuffer(); // シャドウ用定数バッファ作成、１２番目
 
-	//MaterialSetting();
-
 	SetBlendState(EBlendState::BS_ALPHABLEND);
 
 #ifdef _DEBUG

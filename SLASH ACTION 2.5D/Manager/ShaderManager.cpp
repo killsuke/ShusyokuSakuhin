@@ -4,11 +4,12 @@
 using namespace std::filesystem;
 
 namespace {
-	std::string FILE_PATH_TO_SHADER = "ShaderResource/"; // シェーダーファイルのパス
-	std::string FILE_PATH_TO_SHADER_HLSL = "ShaderResource/hlsl/"; // シェーダーファイルのパス（HLSL）
-	std::string FILE_PATH_TO_SHADER_CSO = "ShaderResource/cso/"; // シェーダーファイルのパス（CSO）
+	std::string FILE_PATH_TO_SHADER = "ShaderResource/";			// シェーダーファイルのパス
+	std::string FILE_PATH_TO_SHADER_HLSL = "ShaderResource/hlsl/";	// シェーダーファイルのパス（HLSL）
+	std::string FILE_PATH_TO_SHADER_CSO = "ShaderResource/cso/";	// シェーダーファイルのパス（CSO）
 }
 
+// シェーダーの初期化
 void ShaderManager::Init() {
 
 	CompileShaderSet_Dirty();
@@ -18,10 +19,12 @@ void ShaderManager::Init() {
 	std::cout << "ShaderManager内で初期化完了" << std::endl;
 }
 
+// シェーダーの終了処理
 void ShaderManager::UnInit() {
 	m_Binaries.clear();
 }
 
+// シェーダーオブジェクトを作成する関数
 HRESULT ShaderManager::CreateShader(const char* file, const ShaderType& type, const LPCSTR& entry, void** shaderObj, size_t& size) {
 
 	HRESULT hr = S_OK;
@@ -110,6 +113,7 @@ std::vector<std::string> ShaderManager::GetShaderFiles(const std::string& folder
 	return files;
 }
 
+// シェーダーファイルのパスを解決する（ファイル名とシェーダータイプから完全なパスを生成する）
 std::string ShaderManager::ResolveShaderPath(const std::string& file, const ShaderType& type) {
 
 	std::string base = FILE_PATH_TO_SHADER_HLSL;
@@ -140,6 +144,7 @@ std::string ShaderManager::MakeKey(const std::string& file, const ShaderType& ty
 	return p.stem().string() + "_" + ShaderTypeToString(type);
 }
 
+// csoファイルをすべて読み込む関数
 void ShaderManager::LoadAllCSO() {
 
 	std::vector<ShaderType> types = {
@@ -148,6 +153,7 @@ void ShaderManager::LoadAllCSO() {
 		ShaderType::GS
 	};
 
+	// 各シェーダータイプごとに処理
 	for (const ShaderType& type : types) {
 
 		std::string folder = FILE_PATH_TO_SHADER_CSO + ShaderTypeToString(type) + "/";
@@ -158,6 +164,7 @@ void ShaderManager::LoadAllCSO() {
 
 		directory_iterator files = std::filesystem::directory_iterator(folder);
 
+		// フォルダ内のすべてのファイルを処理
 		for (const directory_entry& entry : files) {
 
 			if (entry.path().extension() != ".cso") {
@@ -178,6 +185,7 @@ void ShaderManager::LoadAllCSO() {
 	}
 }
 
+// ファイル名とシェーダータイプからシェーダーバイナリを取得する関数
 const ShaderBinary* ShaderManager::GetBinary(const std::string& file, const ShaderType& type) {
 
 	std::string key = MakeKey(file, type);
@@ -190,6 +198,7 @@ const ShaderBinary* ShaderManager::GetBinary(const std::string& file, const Shad
 	return nullptr;
 }
 
+// キーで直接探す関数
 const ShaderBinary* ShaderManager::GetBinaryByKey(const std::string& key) {
 	std::unordered_map<std::string, ShaderBinary>::iterator it = m_Binaries.find(key);
 	if (it != m_Binaries.end()) {
@@ -198,6 +207,7 @@ const ShaderBinary* ShaderManager::GetBinaryByKey(const std::string& key) {
 	return nullptr;
 }
 
+// シェーダーファイルのパスから対応するcsoファイルのパスを生成する
 std::string ShaderManager::ToCsoPath(const std::string& file, const ShaderType& type) {
 
 	std::string base = FILE_PATH_TO_SHADER_CSO;
@@ -206,6 +216,7 @@ std::string ShaderManager::ToCsoPath(const std::string& file, const ShaderType& 
 	return base + ShaderTypeToString(type) + "/" + name;
 }
 
+// シェーダーファイルがコンパイルが必要かどうかを確認する
 bool ShaderManager::NeedsCompile(const std::string& file, const ShaderType& type) {
 
 	const std::string hlslPath = ResolveShaderPath(file, type);
@@ -221,6 +232,7 @@ bool ShaderManager::NeedsCompile(const std::string& file, const ShaderType& type
 	return hlslTime >= csoTime;	// hlslの方が新しい場合はコンパイルが必要
 }
 
+// シェーダーファイルをコンパイルする（古いファイルや存在しないファイルがあればコンパイルする）
 void ShaderManager::CompileShaderSet_Dirty() {
 
 	std::vector<ShaderType> types = {
@@ -229,12 +241,14 @@ void ShaderManager::CompileShaderSet_Dirty() {
 		ShaderType::GS
 	};
 
+	// 各シェーダータイプごとに処理
 	for (const ShaderType& type : types) {
 
 		std::string folder = FILE_PATH_TO_SHADER_HLSL + ShaderTypeToString(type) + "/";
 
 		std::vector<std::string> files = GetShaderFiles(folder);
 
+		// フォルダ内のすべてのファイルを処理
 		for (const std::string& file : files) {
 
 			// ファイル名だけ抜く
@@ -257,6 +271,7 @@ void ShaderManager::CompileShaderSet_Dirty() {
 			std::string entry = "";
 			std::string model = "";
 
+			// シェーダータイプに応じてエントリーポイントとシェーダーモデルを設定
 			switch (type)
 			{
 			case ShaderType::VS:
@@ -276,6 +291,7 @@ void ShaderManager::CompileShaderSet_Dirty() {
 			ID3DBlob* blob = nullptr;
 			size_t size = 0;
 
+			// シェーダーをコンパイル
 			HRESULT hr = CompileShader(
 				hlslPath.c_str(),
 				entry.c_str(),
@@ -290,6 +306,7 @@ void ShaderManager::CompileShaderSet_Dirty() {
 				continue;
 			}
 
+			// コンパイルに成功したらcsoファイルとして保存
 			SaveCsoFile(csoPath, blob->GetBufferPointer(), blob->GetBufferSize());
 			blob->Release();
 		}

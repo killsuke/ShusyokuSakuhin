@@ -4,7 +4,6 @@
 using namespace DirectX;
 
 namespace {
-	constexpr float FIXED_DELTATIME = 0.016f; // 固定フレームレート（60 FPS相当）
 	constexpr float DEFAULT_GRAVITY_STOP = 100.0f; // 重力固定パワー（デフォルト）
 	constexpr float DEFAULT_FIRSTFALLMAGNIFICATION = 120.0f; // 初回の落下倍率（デフォルト）
 	constexpr float DEFAULT_FALLMAGNIFICATION = 12.0f; // 落下倍率（デフォルト）
@@ -36,6 +35,8 @@ void RigidBodyComponent::UpdateVelocity() {
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
 	if (transform != nullptr) {
+
+		const float FIXED_DELTATIME = TimeManager::GetFixedDeltaTime();	// 固定フレームレートのデルタタイムを取得
 
 		// 力から加速度を更新
 		m_Acceleration.x = m_TotalForce.x / m_Mass; // 合力を質量で割って加速度を計算
@@ -143,6 +144,12 @@ float RigidBodyComponent::UseGravity(const bool gravityFlag) {
 
 	if (gravityFlag == true) {
 		TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
+
+		if(transform == nullptr) {
+			return m_Velocity.y;	// TransformComponentがない場合は何もしない
+		}
+
+		const float FIXED_DELTATIME = TimeManager::GetFixedDeltaTime();	// 固定フレームレートのデルタタイムを取得
 
 		m_TotalForce.y = -GRAVITY * m_FallMagnification;	// 重力の加速度を設定
 

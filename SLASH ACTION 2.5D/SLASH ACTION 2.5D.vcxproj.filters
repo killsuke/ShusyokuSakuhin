@@ -198,9 +198,6 @@
     <ClCompile Include="Components\Render3DColliderOBBComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\GoAroundComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Components\HPBarMoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -684,9 +681,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Render3DColliderOBBComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\GoAroundComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Structs\HPParam.h">

@@ -28,12 +28,12 @@ class EventBusManager final
 {
 private:
 
-	static inline std::vector<QueuedEvent> m_QueuedEventsA;
-	static inline std::vector<QueuedEvent> m_QueuedEventsB;
+	static inline std::vector<QueuedEvent> m_QueuedEventsA;			// イベントをキューに追加するためのベクター
+	static inline std::vector<QueuedEvent> m_QueuedEventsB;			// イベントをキューに追加するためのベクター
 	static inline ActiveQueue m_ActiveQueue = ActiveQueue::QUEUE_A;
 
-	static inline std::unordered_map<std::type_index, std::vector<ListenerEntry>> m_Listeners;
-	static inline uint64_t m_NextListenerID;
+	static inline std::unordered_map<std::type_index, std::vector<ListenerEntry>> m_Listeners;	// イベントリスナーを管理するマップ
+	static inline uint64_t m_NextListenerID;	// 次のリスナーIDを生成するためのカウンター
 
 	EventBusManager() = default;
 	~EventBusManager() = default;
@@ -96,5 +96,4 @@ public:
 			);
 		}
 	}
-
 };

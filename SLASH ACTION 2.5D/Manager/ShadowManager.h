@@ -15,13 +15,13 @@ namespace {
 
 struct ShadowData {
 
-	DirectX::XMFLOAT3 objectPos = DirectX::XMFLOAT3();
-	float shadowRadius = 0.0f;
+	DirectX::XMFLOAT3 objectPos = DirectX::XMFLOAT3();	// 影を出すオブジェクトの位置
+	float shadowRadius = 0.0f;							// 影の半径
 };
 
 struct ShadowBuffer {
 
-	std::array<ShadowData, SHADOW_OBJECT_MAX> shadowData = {};
+	std::array<ShadowData, SHADOW_OBJECT_MAX> shadowData = {};	// 影を出すオブジェクトの位置と半径の配列
 	int shadowCount = 0;
 	DirectX::XMFLOAT3 padding = DirectX::XMFLOAT3(); // 4バイトのパディング
 };

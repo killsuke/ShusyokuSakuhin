@@ -1,6 +1,7 @@
 #include "AttackTimingComponent.h"
 #include "FighterComponent.h"
 #include "ColliderAttackComponent.h"
+#include "Manager/TimeManager.h"
 #include <iostream>
 #include <algorithm>
 
@@ -25,7 +26,9 @@ void AttackTimingComponent::Update() {
 
 		if (attackObj.hitCoolTime > 0.0f) {
 
-			attackObj.hitCoolTime -= 0.016f; // 16msごとに減少
+			const float deltaTime = TimeManager::GetFixedDeltaTime();
+
+			attackObj.hitCoolTime -= deltaTime; // 固定フレームレートのデルタタイムを使用
 		}
 		else {
 			attackObj.hitCoolTime = m_coolDownTime; // 0以下になったらリセット

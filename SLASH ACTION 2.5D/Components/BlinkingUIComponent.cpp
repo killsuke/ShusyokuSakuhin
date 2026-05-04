@@ -1,5 +1,6 @@
 #include "BlinkingUIComponent.h"
 #include "Render2DComponent.h"
+#include "Manager/TimeManager.h"
 
 using namespace DirectX;
 
@@ -7,11 +8,15 @@ BlinkingUIComponent::BlinkingUIComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("TEST_MOVE"); // ソート番号を設定
 }
 
-void BlinkingUIComponent										::Update() {
+void BlinkingUIComponent::Update() {
+	
 	if (m_blinkingFlag == false) {
 		return; // 点滅フラグがfalseなら何もしない
 	}
-	m_recordTime += m_deltaTime;
+
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
+
+	m_recordTime += deltaTime;
 	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 	if (rend == nullptr) {
 		return;

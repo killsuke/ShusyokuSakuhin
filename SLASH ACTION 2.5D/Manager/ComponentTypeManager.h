@@ -15,8 +15,8 @@
 class ComponentTypeManager final
 {
 private:
-	static std::unordered_map<std::string, uint32_t> nameToId;
-	static std::unordered_map<uint32_t, std::string> idToName;
+	static inline std::unordered_map<std::string, uint32_t> nameToId;
+	static inline std::unordered_map<uint32_t, std::string> idToName;
 
 	// コンストラクタ・デストラクタを削除
 	ComponentTypeManager() = delete;

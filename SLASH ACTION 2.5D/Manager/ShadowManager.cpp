@@ -56,6 +56,10 @@ void ShadowManager::Update()
 
         TransformComponent* enemyTrans = enemyObjects[i]->GetComponent<TransformComponent>();
 
+        if(enemyTrans == nullptr) {
+            continue; // トランスフォームコンポーネントがない場合はスキップ
+		}
+
         ShadowData buf;
         buf.objectPos = enemyTrans->GetPosition();
         buf.shadowRadius = enemyTrans->GetScale().x * SHADOW_RADIUS_MULTIPLIER_ENEMY;
@@ -73,9 +77,11 @@ void ShadowManager::Update()
 
 	ID3D11Buffer* shadowBuffer = DirectXRender::GetShadowBuffer();
 
+    // バッファにデータを転送
 	ShadowBuffer bufferData;
 	bufferData.shadowCount = m_ShadowCount;
 	std::copy(m_ShadowBuffers.begin(), m_ShadowBuffers.end(), bufferData.shadowData.begin());
 
+	// 更新
 	context->UpdateSubresource(shadowBuffer, 0, nullptr, &bufferData, 0, 0);
 }

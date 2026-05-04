@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <typeindex>
 
+// オブジェクトのアクティブ状態
 enum class ActiveState {
 	ACTIVE,
 	UPDATE_STOP,
@@ -16,6 +17,7 @@ enum class ActiveState {
 	MAX
 };
 
+// 描画コンテナの種類
 enum class DrawContainer {
 	Default,
 	Child,
@@ -35,21 +37,21 @@ class Component; // 前方宣言
 
 class GameObject final {	// 変に継承されないようにするためにfinalを付ける
 private:
-	std::vector<std::unique_ptr<Component>> m_Components;
-	std::vector<std::unique_ptr<Component>> m_RenderComponents;
-	std::unordered_map<std::type_index, Component*> m_ComponentMap;
-	std::vector<GameObject*> m_Children;	// 子オブジェクトを持つことができる
-	GameObject* m_Parent = nullptr;	// 親オブジェクトを持つことができる
-	TagAndID m_TagAndID = { "",0 }; // タグとIDのペア
-	uint32_t m_InstanceID = 0; // インスタンスID
-	std::string m_Name = "";	// オブジェクトの名前
-	bool m_IsDeletefg = false;	// オブジェクトを削除して良いかどうかのフラグ
-	bool m_IsDrawContainerChange = false;	// コンテナを入れ替える
-	bool m_CarryOverFlag = false; // シーンを跨いでオブジェクトを持ち越すかどうかのフラグ
-	bool m_ChildAbsFrontFlag = false; // 子オブジェクトを絶対前面させるかどうかのフラグ
-	ActiveState m_ActiveState = ActiveState::ACTIVE;
-	DrawContainer m_DrawContainer = DrawContainer::Default;
-	DrawContainer m_HopeDrawContainer = DrawContainer::Default;
+	std::vector<std::unique_ptr<Component>> m_Components;			// コンポーネントを持つ
+	std::vector<std::unique_ptr<Component>> m_RenderComponents;		// 描画用コンポーネントを持つ
+	std::unordered_map<std::type_index, Component*> m_ComponentMap;	// コンポーネントのタイプインデックスとポインタのマップ
+	std::vector<GameObject*> m_Children;							// 子オブジェクトを持つ
+	GameObject* m_Parent = nullptr;									// 親オブジェクトを持つ
+	TagAndID m_TagAndID = { "",0 };									// タグとIDのペア
+	uint32_t m_InstanceID = 0;										// インスタンスID
+	std::string m_Name = "";										// オブジェクトの名前
+	bool m_IsDeletefg = false;										// オブジェクトを削除して良いかどうかのフラグ
+	bool m_IsDrawContainerChange = false;							// コンテナを入れ替える
+	bool m_IsCarryOverFlag = false;									// シーンを跨いでオブジェクトを持ち越すかどうかのフラグ
+	bool m_IsChildAbsFrontFlag = false;								// 子オブジェクトを絶対前面させるかどうかのフラグ
+	ActiveState m_ActiveState = ActiveState::ACTIVE;				// オブジェクトのアクティブ状態
+	DrawContainer m_DrawContainer = DrawContainer::Default;			// 描画コンテナの種類
+	DrawContainer m_HopeDrawContainer = DrawContainer::Default;		// 入れ替えたい描画コンテナの種類
 
 public:
 
@@ -107,8 +109,8 @@ public:
 		m_IsDrawContainerChange = dccFlag;
 	};
 
-	inline void SetCarryOverFlag(const bool flag) { m_CarryOverFlag = flag; };
-	inline void SetChildAbsFrontFlag(const bool flag) { m_ChildAbsFrontFlag = flag; };
+	inline void SetCarryOverFlag(const bool flag) { m_IsCarryOverFlag = flag; };
+	inline void SetChildAbsFrontFlag(const bool flag) { m_IsChildAbsFrontFlag = flag; };
 
 	// ゲッター
 	inline bool GetDeleteFg()const { return m_IsDeletefg; };
@@ -121,7 +123,7 @@ public:
 	inline DrawContainer GetDrawContainer()const { return m_DrawContainer; };
 	inline DrawContainer GetHopeDrawContainer()const { return m_HopeDrawContainer; };
 	inline bool GetDrawContainerChangeFlag()const { return m_IsDrawContainerChange; };
-	inline bool GetCarryOverFlag()const { return m_CarryOverFlag; };
+	inline bool GetCarryOverFlag()const { return m_IsCarryOverFlag; };
 	inline uint32_t GetInstanceID()const { return m_InstanceID; };
 
 	void Destroy() { m_IsDeletefg = true; };

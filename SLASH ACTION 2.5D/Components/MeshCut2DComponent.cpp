@@ -82,6 +82,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		return cutObjIDs;
 	}
 
+	// テクスチャの情報取得
 	Texture texture = rendComp->GetTexture();
 	std::string texName = texture.GetTexname();
 	const RightLeft isInversion = rendComp->GetInversionFlag();
@@ -90,6 +91,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	XMFLOAT3 pos = trans->GetPosition();
 	XMFLOAT3 size = trans->GetScale();
 
+	// 切断後のオブジェクトを生成
+	// オブジェクト１
 	m_CutObj1 = GameObjectManager::AddObject("CutLeft", "CutPart");
 	TransformComponent* leftTrans = m_CutObj1->AddComponent<TransformComponent>();
 	leftTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
@@ -103,6 +106,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 
 	m_CutObj1ID = m_CutObj1->GetInstanceID();
 
+	// オブジェクト２
 	m_CutObj2 = GameObjectManager::AddObject("CutRight", "CutPart");
 	TransformComponent* rightTrans = m_CutObj2->AddComponent<TransformComponent>();
 	rightTrans->SetScale(XMFLOAT3(size.x, size.y, size.z));
@@ -122,6 +126,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	CutVertices1.resize(4);
 	CutVertices2.resize(4);
 
+	// 切断がどちらの方向か決定
+	// 頂点とUVの位置を計算してセット
 	if (m_CutDirection == CutDirection::HORIZONTAL) { // HORIZONTAL
 
 		leftTrans->SetPosition(XMFLOAT3(pos.x, pos.y + (size.y * 0.5f), pos.z));
@@ -196,6 +202,8 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 		// =========================================================
 	}
 
+	// 他の情報を設定
+
 	CutVertices1[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	CutVertices1[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	CutVertices1[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -216,6 +224,7 @@ std::array<uint32_t, 2> MeshCut2DComponent::MakeMeshCutAction(const CutDirection
 	CutVertices2[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 	CutVertices2[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
+	// 頂点の情報をセット
 	VertexBuffer<VERTEX_3D>* vLBuffer = leftRend->GetVertexBuffer();
 	vLBuffer->Modify(CutVertices1);
 

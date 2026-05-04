@@ -7,7 +7,6 @@ class BulletComponent : public Component
 private:
 	DirectX::XMFLOAT3 m_firingVector = DirectX::XMFLOAT3();
 	float m_firingSpeed = 0.0f;	// ”ò‚Ô‘¬“x
-	const float m_deltaTime = 0.016f;
 	float m_rimitTime = 2.0f;
 
 public:

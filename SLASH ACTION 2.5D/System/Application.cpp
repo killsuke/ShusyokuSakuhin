@@ -4,6 +4,8 @@
 #include "System/DirectXRender.h"
 #include "Manager/GameObjectManager.h"
 #include "Manager/SceneManager.h"
+#include "Manager/TextureManager.h"
+#include "Manager/SoundManager.h"
 #include "Manager/ComponentTypeManager.h"
 #include "Manager/EventBusManager.h"
 #include "Manager/TimeManager.h"
@@ -174,6 +176,9 @@ void Application::MainLoop()
 	ShaderManager::Init();
 	ComponentTypeManager::Init();
 	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
+	SoundManager::Init();	// サウンドの初期化
+	TextureManager::Init(); // テクスチャマネージャーの初期化処理
+	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	SceneManager::Init();
 	EventBusManager::Init();
 	DebugSystem::Init();
@@ -253,6 +258,9 @@ void Application::MainLoop()
 	ComponentTypeManager::UnInit();
 	EventBusManager::UnInit();
 	SceneManager::UnInit();
+	GameObjectManager::UnInit();	// ゲームオブジェクトのマネージャーを終了
+	TextureManager::UnInit(); // テクスチャマネージャーの終了処理
+	SoundManager::UnInit();	// サウンドの終了処理
 	ShaderManager::UnInit();
 	DirectXRender::UnInit();
 }

@@ -67,4 +67,5 @@ public:
 	inline DirectX::XMMATRIX GetProj3D() const { return m_ProjectionMatrix3D; };
 
 	inline DirectX::XMFLOAT3 GetOffsetPosition() const { return m_OffsetPosition; };
+	inline FieldOfView GetFieldOfView() const { return m_FieldOfView; };
 };

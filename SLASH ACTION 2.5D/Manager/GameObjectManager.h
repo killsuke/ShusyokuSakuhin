@@ -42,8 +42,6 @@ private:
 	static std::vector<GameObject*> HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
 	static GameObject* HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id);
 
-public:
-
 	// コンストラクタ・デストラクタを削除
 	GameObjectManager() = delete;
 	~GameObjectManager() = delete;
@@ -53,6 +51,8 @@ public:
 	GameObjectManager(GameObjectManager&&) = delete;
 	GameObjectManager& operator=(const GameObjectManager&) = delete;
 	GameObjectManager& operator=(GameObjectManager&&) = delete;
+
+public:
 
 	static void Init() {
 		m_Objects.reserve(100);
@@ -253,4 +253,3 @@ public:
 		return nullptr;
 	}
 };
-

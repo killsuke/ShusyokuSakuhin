@@ -25,6 +25,7 @@ namespace {
 	std::string SEPath = "sound/SE/";
 }
 
+// 初期化処理
 HRESULT SoundManager::Init() {
 
 	HRESULT hr;
@@ -57,6 +58,7 @@ HRESULT SoundManager::Init() {
 	return hr;
 }
 
+// 終了処理
 void SoundManager::UnInit() {
 
 	for (const std::pair<const std::string, SoundResource>& entry : m_SoundResources)
@@ -126,6 +128,7 @@ HRESULT SoundManager::FindChunk(const HANDLE& hFile, const DWORD& fourcc, DWORD&
 	return S_OK;
 }
 
+// チャンクデータを読み込む
 HRESULT SoundManager::ReadChunkData(const HANDLE& hFile, void* buffer, const DWORD& buffersize, const DWORD& bufferoffset)
 {
 	HRESULT hr = S_OK;

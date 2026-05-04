@@ -1,6 +1,7 @@
 #include "JumpComponent.h"
 #include "RigidBodyComponent.h"
 #include "TestExtrusionJudgeComponent.h"
+#include "Manager/TimeManager.h"
 #include <cmath>
 #include <iostream>
 
@@ -25,6 +26,10 @@ void JumpComponent::Update() {
 void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 {
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	
+	if(rigid == nullptr) {
+		return; // RigidBodyComponent‚ª‚È‚¢ê‡‚Í‰½‚à‚µ‚È‚¢
+	}
 
 	XMFLOAT3 velocity = rigid->GetVelocity();
 
@@ -48,7 +53,10 @@ void JumpComponent::JumpAction(bool isJumpButtonPressed, bool trigger)
 
 	// ƒWƒƒƒ“ƒv’†‚Ìˆ—
 	if (m_isJumping) {
-		m_time += m_deltaTime;
+
+		const float deltaTime = TimeManager::GetFixedDeltaTime();
+
+		m_time += deltaTime;
 
 		if (isJumpButtonPressed == true && m_time < m_maxJumpTime && m_firstSpeed >= m_velocityIgnore) {
 						

@@ -11,7 +11,6 @@ private:
 	bool m_bootDoor = false;	// 起動する
 	bool m_winloseFlag = false; // 勝敗フラグ、true:勝ち、false:負け
 	float timer = 0.0f; // ドアの移動にかかる時間
-	const float deltaTime = 0.016f; // 仮のデルタタイム
 	GameObject* doorUp = nullptr;
 	GameObject* doorDown = nullptr;
 	DirectX::XMFLOAT3 doorUpFirstPos = DirectX::XMFLOAT3();

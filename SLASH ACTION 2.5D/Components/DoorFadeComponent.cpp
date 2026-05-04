@@ -58,8 +58,13 @@ void DoorFadeComponent::Update()
 }
 
 void DoorFadeComponent::OpenDoor() {
+	
 	TransformComponent* upTrans = doorUp->GetComponent<TransformComponent>();
 	TransformComponent* downTrans = doorDown->GetComponent<TransformComponent>();
+
+	if(upTrans == nullptr || downTrans == nullptr) {
+		return;
+	}
 
 	if (m_doorMoveEndFlag == false) {
 		upTrans->AddPosition({ 0.0f,10.0f,0.0f });
@@ -68,6 +73,8 @@ void DoorFadeComponent::OpenDoor() {
 	else {
 		return;
 	}
+
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	timer += deltaTime;
 
@@ -78,8 +85,13 @@ void DoorFadeComponent::OpenDoor() {
 }
 
 void DoorFadeComponent::CloseDoor() {
+	
 	TransformComponent* upTrans = doorUp->GetComponent<TransformComponent>();
 	TransformComponent* downTrans = doorDown->GetComponent<TransformComponent>();
+
+	if(upTrans == nullptr || downTrans == nullptr) {
+		return;
+	}
 
 	DirectX::XMFLOAT3 upPos = upTrans->GetPosition();
 
@@ -109,6 +121,8 @@ void DoorFadeComponent::CloseDoor() {
 	else {
 		return;
 	}
+
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	timer += deltaTime;
 }

@@ -72,13 +72,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\imgui\imgui\Include;single_include\nlohmann;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\imgui\imgui\Lib\Debug;..\directxtk\lib\x64\Debug;..\assimp\assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>single_include\nlohmann;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\directxtk\lib\x64\Debug;..\assimp\assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\imgui\imgui\Include;single_include\nlohmann;..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
-    <LibraryPath>..\imgui\imgui\Lib\Release;..\assimp\assimp\5.2.5\lib;..\directxtk\lib\x64\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
+    <IncludePath>single_include\nlohmann;single_include\nlohmann;..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>..\assimp\assimp\5.2.5\lib;..\directxtk\lib\x64\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -281,10 +281,6 @@
     <ClCompile Include="Components\EnemyDamageComponent.cpp" />
     <ClCompile Include="Components\FighterComponent.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
-    <ClCompile Include="Components\GoAroundComponent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Components\HPBarMoveComponent.cpp" />
     <ClCompile Include="Components\InchWorm_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -467,10 +463,6 @@
     <ClInclude Include="Components\EnemyDamageComponent.h" />
     <ClInclude Include="Components\FighterComponent.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
-    <ClInclude Include="Components\GoAroundComponent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Components\HPBarMoveComponent.h" />
     <ClInclude Include="Structs\HPParam.h" />
     <ClInclude Include="Components\InchWorm_Test.h">

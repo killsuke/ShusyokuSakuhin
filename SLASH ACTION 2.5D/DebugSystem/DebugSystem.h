@@ -14,15 +14,15 @@ class DebugSystem final
 {
 private:
 
-	static inline std::array<GameObject*, UI_DISPLAY_COUNT> m_DebugUIs = { nullptr };
-	static inline std::array<std::string, UI_DISPLAY_COUNT> m_DebugUITextureNames = { "" };
-	static inline GameObject* m_DebugCamera = nullptr;
-	static inline bool m_IsDebugUI = true; // デバッグUIの表示非表示フラグ
-	static inline bool m_ScreenStop = false; // 画面停止のフラグ
-	static inline bool m_IsVisualization = true; // コライダーの可視化フラグ
-	static inline FieldOfView m_CurrentFieldOfView = FieldOfView::DEFAULT;
-	static inline std::vector<uint32_t> m_ColliderObjects = {};
-	static inline std::vector<uint32_t> m_CameraTarget = {};
+	static inline std::array<GameObject*, UI_DISPLAY_COUNT> m_DebugUIs = { nullptr };			// デバッグUIのGameObjectの配列
+	static inline std::array<std::string, UI_DISPLAY_COUNT> m_DebugUITextureNames = { "" };		// デバッグUIのテクスチャ名の配列
+	static inline GameObject* m_DebugCamera = nullptr;											// デバッグカメラのGameObject
+	static inline bool m_IsDebugUI = true;														// デバッグUIの表示非表示フラグ
+	static inline bool m_IsScreenStop = false;													// 画面停止のフラグ
+	static inline bool m_IsVisualization = true;												// コライダーの可視化フラグ
+	static inline FieldOfView m_CurrentFieldOfView = FieldOfView::DEFAULT;						// 現在の視野角
+	static inline std::vector<uint32_t> m_ColliderObjects = {};									// コライダーオブジェクトのID
+	static inline std::vector<uint32_t> m_CameraTarget = {};									// カメラターゲットのID
 
 	DebugSystem() = default;
 	~DebugSystem() = default;
@@ -47,6 +47,11 @@ private:
 
 	// コライダーの可視化のON/OFF
 	static void SwitchingVisualization();
+
+	// デバッグ用カメラの視野角の切り替え
+	static void ChangeFieldOfView();
+
+	static void SettingFieldOfView();
 
 public:
 

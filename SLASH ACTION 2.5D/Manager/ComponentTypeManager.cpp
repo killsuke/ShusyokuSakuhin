@@ -2,18 +2,16 @@
 using json = nlohmann::ordered_json;
 using namespace std::filesystem;
 
-
-std::unordered_map<std::string, uint32_t> ComponentTypeManager::nameToId;
-std::unordered_map<uint32_t, std::string> ComponentTypeManager::idToName;
-
+// 初期化処理
 void ComponentTypeManager::Init() {
-	// 初期化処理
+
 	nameToId.clear();
 	idToName.clear();
 }
 
+// 後始末処理
 void ComponentTypeManager::UnInit() {
-	// 後始末処理
+
 	nameToId.clear();
 	idToName.clear();
 }
@@ -53,13 +51,16 @@ void ComponentTypeManager::MakeSampleJson() {
 
 	nameToId = components;
 
+	// nameToId から idToName を生成
 	for (const std::pair<const std::string, uint32_t>& comp : nameToId) {
 		idToName[comp.second] = comp.first;
 	}
 
 	json j = ComponentTypeNameToJson(nameToId);
+
 	// 保存先のファイルパス
 	const std::string filepath = "json/component.json";
+	
 	// JSONをファイルに保存
 	if (SaveJsonToFile(j, filepath)) {
 		MessageBoxW(nullptr, L"Component JSON を保存しました。", L"Success", MB_ICONINFORMATION | MB_OK);
@@ -69,7 +70,9 @@ void ComponentTypeManager::MakeSampleJson() {
 	}
 }
 
+// JSONファイルからコンポーネントの名前とIDを読み込む
 void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath) {
+
 	std::ifstream ifs(filepath);
 	if (!ifs) {
 		MessageBoxW(nullptr, L"コンポーネントのJSONファイルを開けませんでした。", L"Error", MB_ICONERROR | MB_OK);
@@ -79,6 +82,7 @@ void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath
 	nlohmann::json j;
 	ifs >> j;
 
+	// JSONからコンポーネントの名前とIDを読み込む
 	for (const nlohmann::json& comp : j["components"]) {
 		std::string compName = comp.at("name");
 		uint32_t id = comp.at("ID");
@@ -87,15 +91,19 @@ void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath
 	}
 }
 
+// コンポーネントの名前とIDをJSON形式に変換する
 json ComponentTypeManager::ComponentTypeNameToJson(const std::unordered_map<std::string, uint32_t>& comps) {
+
 	json j;
 	j["components"] = json::array();
 
+	// コンポーネントをID順にソートしてJSONに追加
 	std::vector<std::pair<std::string, uint32_t>> sorted(comps.begin(), comps.end());
 	std::sort(sorted.begin(), sorted.end(), [](const std::pair<std::string, uint32_t>& a, const std::pair<std::string, uint32_t>& b) {
 		return a.second < b.second; // 名前に変えるのも可
 		});
 
+	// ソートされたコンポーネントをJSONに追加
 	for (const std::pair<std::string, uint32_t>& c : sorted) {
 		json comp;
 		comp["name"] = c.first;
@@ -105,6 +113,7 @@ json ComponentTypeManager::ComponentTypeNameToJson(const std::unordered_map<std:
 	return j;
 }
 
+// JSONをファイルに保存する関数
 bool ComponentTypeManager::SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath) {
 
 	// ディレクトリ部分を作成（ファイル名を除いたパス）
@@ -118,6 +127,7 @@ bool ComponentTypeManager::SaveJsonToFile(const nlohmann::ordered_json& j, const
 		}
 	}
 
+	// ファイルを開く（上書きモード）
 	std::ofstream ofs(filepath, std::ios::out | std::ios::trunc);
 	if (!ofs) {
 		MessageBoxW(nullptr, (L"ファイルを開けませんでした: " + _path.wstring()).c_str(), L"Error", MB_ICONERROR | MB_OK);

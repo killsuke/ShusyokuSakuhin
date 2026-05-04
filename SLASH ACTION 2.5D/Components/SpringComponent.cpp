@@ -1,6 +1,7 @@
 #include "SpringComponent.h"
 #include "TransformComponent.h"
 #include "RigidBodyComponent.h"
+#include "Manager/TimeManager.h"
 #include <iostream>
 
 using namespace DirectX;
@@ -162,18 +163,16 @@ void SpringComponent::SpringActionTransform() {
 	const float springForceMagnitude = distance - m_restLength;
 	const XMFLOAT3 springOffsest = -direction * (springForceMagnitude * m_K);
 
+	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-//	XMFLOAT3 velAndOffset = m_SpringVelocity + XMFLOAT3(springOffsest.x, springOffsest.y, springOffsest.z);
-
-	float dt = 0.016f; // ÉtÉåÅ[ÉÄéûä‘
-	m_SpringVelocity += springOffsest * dt;
-	m_SpringVelocity *= (1.0f - m_DAMPING * dt);
+	m_SpringVelocity += springOffsest * deltaTime;
+	m_SpringVelocity *= (1.0f - m_DAMPING * deltaTime);
 
 	XMFLOAT3 newPos{
 
-		 m_SpringVelocity.x * 0.016f,
-		 m_SpringVelocity.y * 0.016f,
-		 m_SpringVelocity.z * 0.016f
+		 m_SpringVelocity.x * deltaTime,
+		 m_SpringVelocity.y * deltaTime,
+		 m_SpringVelocity.z * deltaTime
 	};
 
 	XMVECTOR springVec = XMLoadFloat3(&m_SpringVelocity);

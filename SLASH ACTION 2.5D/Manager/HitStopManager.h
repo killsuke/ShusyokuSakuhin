@@ -6,12 +6,10 @@ class HitStopManager final
 {
 private:
 
-	static inline std::unordered_set<std::string> m_TargetTags;
-	static inline float m_RecordTime = 0.0f;
-	static inline float m_HitStopTime = 0.0f;
-	static inline bool m_IsHitStopActive = true;	// このマネージャーのアップデートを有効にするかどうか
-
-public:
+	static inline std::unordered_set<std::string> m_TargetTags;	// ヒットストップの対象となるタグのセット
+	static inline float m_RecordTime = 0.0f;					// ヒットストップの時間を記録するための変数
+	static inline float m_HitStopTime = 0.0f;					// ヒットストップの時間
+	static inline bool m_IsHitStopActive = true;				// このマネージャーのアップデートを有効にするかどうか
 
 	// コンストラクタ・デストラクタを削除
 	HitStopManager() = delete;
@@ -22,6 +20,8 @@ public:
 	HitStopManager(HitStopManager&&) = delete;
 	HitStopManager& operator=(const HitStopManager&) = delete;
 	HitStopManager& operator=(HitStopManager&&) = delete;
+
+public:	
 
 	static void Update();
 

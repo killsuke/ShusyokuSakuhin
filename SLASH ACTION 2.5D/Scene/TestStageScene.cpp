@@ -20,7 +20,6 @@
 #include "Components/CameraMoveComponent.h"
 #include "Components/CameraPointComponent.h"
 #include "Components/CameraTargetComponent.h"
-#include "Components/GoAroundComponent.h"
 #include "Components/HPBarMoveComponent.h"
 #include "Components/TestExtrusionJudgeComponent.h"
 #include "Components/SpringComponent.h"

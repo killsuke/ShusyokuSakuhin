@@ -14,7 +14,6 @@
 #include "Mesh/TerrainMesh.h"
 #include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
-#include "Components/GoAroundComponent.h"
 #include "Components/RenderBlurComponent.h"
 #include "Components/RenderMotionBlurCircularComponent.h"
 #include "Input/Input.h"
@@ -29,9 +28,6 @@
 #include "Components/VectorMoveComponent.h"
 #include "Components/RenderTerrainComponent.h"
 #include "Components/RenderTextureLuminescenceComponent.h"
-
-//#include "Effekseer.h"
-//#include "EffekseerRendererDX11.h"
 
 using namespace DirectX;
 

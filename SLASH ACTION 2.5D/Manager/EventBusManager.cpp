@@ -11,12 +11,22 @@ namespace {
 	constexpr int MAX_LOOP = 1000;
 }
 
+// 初期化
 void EventBusManager::Init()
 {
 	// 初期化処理
 	m_QueuedEventsA.clear();
 	m_QueuedEventsB.clear();
 	m_ActiveQueue = ActiveQueue::QUEUE_A; // デフォルトでQUEUE_Aをアクティブに設定
+	m_Listeners.clear();
+}
+
+// 解放
+void EventBusManager::UnInit()
+{
+	// キューに残っているイベントデータを解放
+	m_QueuedEventsA.clear();
+	m_QueuedEventsB.clear();
 	m_Listeners.clear();
 }
 
@@ -60,12 +70,4 @@ void EventBusManager::Update()
 
 	m_QueuedEventsA.clear();
 	m_QueuedEventsB.clear();
-}
-
-void EventBusManager::UnInit()
-{
-	// キューに残っているイベントデータを解放
-	m_QueuedEventsA.clear();
-	m_QueuedEventsB.clear();
-	m_Listeners.clear();
 }

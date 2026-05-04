@@ -92,10 +92,26 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 
 	m_Object->SetActiveState(ActiveState::ALL_STOP);
 
-	// ‚±‚±‚Í‚Ì‚¿‚É‘I‘ğ®‚É•ÏX
-	/*switch (m_DeathType)
+	// €‚É•û‚ğ‘I‘ğ
+	switch (m_DeathType)
 	{
 	case RAMDOM:
+
+	{
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dist(0, 2);
+
+		int value = dist(gen);
+
+		if (value < 1) {
+
+			m_DeathState = EnemyDeathEventState::STICKY;	// ‰æ–ÊÕ“Ë
+		}
+		else {
+			m_DeathState = EnemyDeathEventState::IMMEDIATE;	// ”ò‚ñ‚Å‚¢‚­
+		}
+	}
 
 		break;
 	case ABS_STICKY:
@@ -108,7 +124,7 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 		break;
 	default:
 		break;
-	}*/
+	}
 
 	const std::string name = m_Object->GetName();
 

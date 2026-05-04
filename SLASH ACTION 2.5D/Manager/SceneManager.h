@@ -9,9 +9,9 @@ class SceneManager final
 {
 private:
 	static inline std::unique_ptr<Scene> m_Scene = nullptr;		// 現在のシーン
-	static inline bool m_IsSceneChange = false;	// シーンチェンジが起こったのかのフラグ
-	static inline float m_WaitTime = 0.0f;	// シーン遷移を少し待つ
-	static inline float m_WaitTimeCounter = 0.0f;
+	static inline bool m_IsSceneChange = false;					// シーンチェンジが起こったのかのフラグ
+	static inline float m_WaitTime = 0.0f;						// シーン遷移を少し待つ
+	static inline float m_WaitTimeCounter = 0.0f;				// シーン遷移を少し待つためのカウンター
 
 	// コンストラクタ・デストラクタを削除
 	SceneManager() = delete;

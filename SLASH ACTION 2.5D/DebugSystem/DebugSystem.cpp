@@ -24,6 +24,7 @@ namespace {
 	constexpr float SHIFT_UI = 120.0f;
 }
 
+// 初期化
 void DebugSystem::Init() {
 #if _DEBUG
 
@@ -72,6 +73,7 @@ void DebugSystem::Init() {
 #endif
 }
 
+// 終了処理
 void DebugSystem::UnInit() {
 
 	// デバッグUIの破棄
@@ -102,10 +104,12 @@ void DebugSystem::Update() {
 	FrameAdvance(objs);
 	SwitchingFillMode();
 	SwitchingVisualization();
+	SettingFieldOfView();
 
 #endif //  _DEBUG
 }
 
+// デバッグUIの表示非表示の切り替え
 void DebugSystem::DebugUI() {
 
 	const bool vk_F1_Trigger = Input::GetKeyTrigger(VK_F1);
@@ -123,6 +127,7 @@ void DebugSystem::DebugUI() {
 	}
 }
 
+// 画面停止の切り替え
 void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 
 	if (objs.empty()) {
@@ -150,7 +155,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 	// 停止と起動を入れ替える
 	if (vk_F2_Trigger) {
 
-		m_ScreenStop = !m_ScreenStop;
+		m_IsScreenStop = !m_IsScreenStop;
 
 		const XMFLOAT3 sceneCamPos = sceneCamTrans->GetPosition();
 		const XMFLOAT3 sceneCamTarget = sceneCamComp->GetTarget();
@@ -160,7 +165,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 		debugCamComp->SetTarget(sceneCamTarget);
 
 		// 画面停止解除時の処理
-		if (m_ScreenStop == false) {
+		if (m_IsScreenStop == false) {
 
 			sceneCamera->SetActiveState(ActiveState::ACTIVE);
 			m_DebugCamera->SetActiveState(ActiveState::ALL_STOP);
@@ -192,7 +197,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 	XMFLOAT4 debugColor = WHITECOLOR;
 
 	// 画面停止中の処理
-	if (m_ScreenStop == true) {
+	if (m_IsScreenStop == true) {
 
 		sceneCamera->SetActiveState(ActiveState::ALL_STOP);
 		m_DebugCamera->SetActiveState(ActiveState::ACTIVE);
@@ -223,6 +228,7 @@ void DebugSystem::ScreenStopped(const std::vector<GameObject*>& objs) {
 	}
 }
 
+// コマ送りの処理
 void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 
 	if (objs.empty()) {
@@ -232,7 +238,7 @@ void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 	const bool vk_F3_Trigger = Input::GetKeyTrigger(VK_F3);
 
 	// コマ送り
-	if (vk_F3_Trigger && m_ScreenStop == true) {
+	if (vk_F3_Trigger && m_IsScreenStop == true) {
 
 		for (GameObject* obj : objs) {
 
@@ -256,6 +262,7 @@ void DebugSystem::FrameAdvance(const std::vector<GameObject*>& objs) {
 	}
 }
 
+// ワイヤーフレームとソリッドの切り替え
 void DebugSystem::SwitchingFillMode() {
 
 	const bool vk_F4_Trigger = Input::GetKeyTrigger(VK_F4);
@@ -265,6 +272,7 @@ void DebugSystem::SwitchingFillMode() {
 	}
 }
 
+// コライダーの可視化の切り替え
 void DebugSystem::SwitchingVisualization() {
 
 	XMFLOAT4 debugColor = WHITECOLOR;
@@ -334,6 +342,60 @@ void DebugSystem::SwitchingVisualization() {
 	}
 }
 
+// デバッグ用カメラの視野角の切り替え
+void DebugSystem::ChangeFieldOfView() {
+
+	const bool vk_F6_Trigger = Input::GetKeyTrigger(VK_F6);
+
+	if (vk_F6_Trigger && m_DebugCamera != nullptr) {
+		DebugCameraComponent* debugCamComp = m_DebugCamera->GetComponent<DebugCameraComponent>();
+		if (debugCamComp != nullptr) {
+
+			const FieldOfView currentFOV = debugCamComp->GetFieldOfView();
+
+			switch (currentFOV)
+			{
+			case FieldOfView::DEFAULT:
+				debugCamComp->SetFieldOfView(FieldOfView::WIDE);
+				break;
+			case FieldOfView::WIDE:
+				debugCamComp->SetFieldOfView(FieldOfView::TELEPHOTO);
+				break;
+			case FieldOfView::TELEPHOTO:
+				debugCamComp->SetFieldOfView(FieldOfView::DEFAULT);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+// デバッグ用カメラの視野角の設定
+void DebugSystem::SettingFieldOfView() {
+
+	if (m_DebugCamera == nullptr) {
+		return;
+	}
+
+	DebugCameraComponent* debugCamComp = m_DebugCamera->GetComponent<DebugCameraComponent>();
+
+	if (debugCamComp == nullptr) {
+
+		return;
+	}
+
+	if (m_IsScreenStop == false) {
+
+		debugCamComp->SetFieldOfView(FieldOfView::DEFAULT);
+	}
+	else {
+
+		ChangeFieldOfView();
+	}
+}
+
+// コライダーオブジェクトの追加
 void DebugSystem::AddColliderObjects(const uint32_t& obj) {
 
 	// すでに登録されているオブジェクトはスルー
@@ -344,18 +406,23 @@ void DebugSystem::AddColliderObjects(const uint32_t& obj) {
 	m_ColliderObjects.push_back(obj);
 }
 
+// コライダーオブジェクトの削除
 void DebugSystem::RemoveColliderObjects(const uint32_t& obj) {
+
 	std::vector<uint32_t>::iterator it = std::find(m_ColliderObjects.begin(), m_ColliderObjects.end(), obj);
 	if (it != m_ColliderObjects.end()) {
 		m_ColliderObjects.erase(it);
 	}
 }
 
+// コライダーオブジェクトのクリア
 void DebugSystem::ClearColliderObjects() {
 	m_ColliderObjects.clear();
 }
 
+// カメラターゲットの追加
 void DebugSystem::AddCameraTarget(const uint32_t& obj) {
+
 	// すでに登録されているオブジェクトはスルー
 	std::vector<uint32_t>::iterator it = std::find(m_CameraTarget.begin(), m_CameraTarget.end(), obj);
 	if (it != m_CameraTarget.end()) {
@@ -364,13 +431,16 @@ void DebugSystem::AddCameraTarget(const uint32_t& obj) {
 	m_CameraTarget.push_back(obj);
 }
 
+// カメラターゲットの削除
 void DebugSystem::RemoveCameraTarget(const uint32_t& obj) {
+
 	std::vector<uint32_t>::iterator it = std::find(m_CameraTarget.begin(), m_CameraTarget.end(), obj);
 	if (it != m_CameraTarget.end()) {
 		m_CameraTarget.erase(it);
 	}
 }
 
+// カメラターゲットのクリア
 void DebugSystem::ClearCameraTarget() {
 	m_CameraTarget.clear();
 }

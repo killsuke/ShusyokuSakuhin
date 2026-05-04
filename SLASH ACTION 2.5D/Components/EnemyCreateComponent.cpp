@@ -76,8 +76,7 @@ void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 		MeshCut2DComponent* meshCut = enemyObj->AddComponent<MeshCut2DComponent>();
 
 		EnemyDeathEventComponent* deathEvent = enemyObj->AddComponent<EnemyDeathEventComponent>();
-	//	deathEvent->SetEnemyDeathEventState(EnemyDeathEventState::STICKY);
-	//	deathEvent->SetEnemyDeathEventState(EnemyDeathEventState::IMMEDIATE);
+		deathEvent->SetDeathType(DeathType::RAMDOM);
 
 		FighterComponent* fighter = enemyObj->AddComponent<FighterComponent>();
 		fighter->SetUseDeadFlag(false);

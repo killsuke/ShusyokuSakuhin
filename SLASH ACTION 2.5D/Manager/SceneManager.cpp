@@ -1,30 +1,20 @@
 #include "SceneManager.h"
-#include "TextureManager.h"
 #include "GameObjectManager.h"
 #include "HitStopManager.h"
+#include "System/DirectXRender.h"
 #include "System/Application.h"
 #include "DebugSystem/DebugSystem.h"
-#include "SoundManager.h"
 #include "ShadowManager.h"
 
+// 初期化
 void SceneManager::Init() {
 	
-	SoundManager::Init();	// サウンドの初期化
-	TextureManager::Init(); // テクスチャマネージャーの初期化処理
-	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
 	m_Scene = std::make_unique<TitleScene>();	// 初期シーンはタイトルシーン
-	//m_Scene = std::make_unique<Stage1Scene>();	// 初期シーンはタイトルシーン
-	//	Debug::DebugFirst();
+	//m_Scene = std::make_unique<Stage1Scene>();	// テスト用シーン
 }
 
+// 終了
 void SceneManager::UnInit() {
-
-	GameObjectManager::UnInit();	// ゲームオブジェクトのマネージャーを終了
-
-	TextureManager::UnInit(); // テクスチャマネージャーの終了処理
-
-	SoundManager::UnInit();	// サウンドの終了処理
-	//	Debug::DebugFin();
 
 };
 

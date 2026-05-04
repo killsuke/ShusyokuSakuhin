@@ -27,7 +27,9 @@ private:
 	TextureManager(TextureManager&&) = delete;
 	TextureManager& operator=(const TextureManager&) = delete;
 	TextureManager& operator=(TextureManager&&) = delete;
+
 	static void LoadFolder(const std::string& path);
+	static std::wstring ShortConversion(const std::string& filename);		// ファイルパスを簡単に変換する
 
 public:
 	static void Init();
@@ -36,8 +38,6 @@ public:
 	static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> LoadTexture(const std::string& filename);			// テクスチャの読み込み、シーンをロードするたびにテクスチャごとに一度だけ行う。
  	static Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetTexture(const std::string& filename);	// テクスチャの取得、インスタンスにテクスチャを渡す。
 	static void ReleaseAllTextures();	// 片付け
-	static std::wstring ShortConversion(const std::string& filename);		// ファイルパスを簡単に変換する
-
 };
 
 // ---------------------------------------------------------

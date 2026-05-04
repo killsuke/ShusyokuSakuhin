@@ -153,6 +153,7 @@ void BossEventComponent::CreateBossObj() {
 	MeshCut2DComponent* meshCut = boss->AddComponent<MeshCut2DComponent>();
 
 	EnemyDeathEventComponent* deathEvent = boss->AddComponent<EnemyDeathEventComponent>();
+	deathEvent->SetDeathType(DeathType::ABS_STICKY);
 
 	EnemyActionBossComponent* enemyAction = boss->AddComponent<EnemyActionBossComponent>();
 
