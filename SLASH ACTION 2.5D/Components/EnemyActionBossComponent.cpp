@@ -1,5 +1,6 @@
 #include "EnemyActionBossComponent.h"
 #include "Manager/GameObjectManager.h"
+#include "Manager/EventBusManager.h"
 #include "TransformComponent.h"
 #include "Render2DComponent.h"
 #include "Render3DComponent.h"
@@ -25,13 +26,23 @@ using namespace DirectX;
 
 namespace {
 
-	constexpr float BulletTiming = 0.5f;
-	constexpr float BulletTimingEX = 0.35f;
-	constexpr float JumpMoveX = 2.0f;
-	constexpr float TargetLength = 20.0f;
-	constexpr float MoveSpeed = 0.2f;
-	constexpr float ScaleSpeed = 0.05f;
-	constexpr int BarrierDurability = 25;
+	constexpr float BULLET_TIMING = 0.5f;
+	constexpr float BULLET_TIMING_EX = 0.35f;	// 強化バージョン
+	constexpr float JUMP_MOVE_X = 2.0f;
+	constexpr float TARGET_LENGTH = 20.0f;
+	constexpr float MOVE_SPEED = 0.2f;
+	constexpr float SCALE_SPEED = 0.05f;
+	constexpr float ATTACK_TIME = 2.0f;
+	constexpr float DAMAGE_TIME = 0.3f;
+	constexpr int BARRIER_DURABILITY = 25;
+
+	constexpr XMFLOAT2 DEFAULT_POSE{ 1.0f,1.0f };
+	constexpr XMFLOAT2 MAKE_BARRIER_POSE{ 2.0f,1.0f };
+	constexpr XMFLOAT2 JUMP_ATTACK_POSE{ 3.0f,1.0f };
+	constexpr XMFLOAT2 ON_GROUND_ATTACK_POSE{ 4.0f,1.0f };
+	constexpr XMFLOAT2 DAMAGE_POSE{ 5.0f,1.0f };
+	constexpr XMFLOAT2 ANIM_CUT{ 5.0f,1.0f };
+	constexpr XMFLOAT3 SHURIKEN_SCALE{ 6.5f,6.5f,1.0f };
 }
 
 EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyActionComponent(obj) {
@@ -49,7 +60,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 	collDamage->SetActiveColliderFlag(false); // 最初は当たり判定無効
 
 	FighterComponent* fight = m_BossBarrier->AddComponent<FighterComponent>();
-	fight->SetHp(BarrierDurability);
+	fight->SetHp(BARRIER_DURABILITY);
 	fight->SetAtk(1);
 
 	Render2DComponent* rend2D = m_BossBarrier->AddComponent<Render2DComponent>();
@@ -107,7 +118,7 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		Render2DComponent* rend2D = barrier->AddComponent<Render2DComponent>();
 		rend2D->CreateMesh<SquareMesh>();
 		rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
-		rend2D->ChangeTexture("ring.png");
+		rend2D->ChangeTexture("Shuriken.png");
 
 		RenderRingLuminescenceBillboardComponent* rend = barrier->AddComponent<RenderRingLuminescenceBillboardComponent>();
 		rend->CreateMesh<SquareMesh>();
@@ -123,6 +134,38 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		barrier->SetActiveState(ActiveState::ALL_STOP);
 		m_Object->SetChild(barrier);
 		m_BarrierList[i] = barrier;
+	}
+
+	for (int i = 0; i < ShurikenCount; ++i) {
+
+		GameObject* bullet = GameObjectManager::AddAbsFront("shuriken", "Effect");
+
+		TransformComponent* trans = bullet->AddComponent<TransformComponent>();
+		trans->SetPosition(XMFLOAT3());
+		trans->SetScale(SHURIKEN_SCALE);
+		RigidBodyComponent* rigid = bullet->AddComponent<RigidBodyComponent>();
+
+		BulletComponent* bull = bullet->AddComponent<BulletComponent>();
+		bull->SetDestroyOrStopFlag(false);	// 止まるようにする
+
+		FighterComponent* fight = bullet->AddComponent<FighterComponent>();
+		fight->SetAtk(5);
+		fight->SetHp(10);
+
+		AttackOneTimeComponent* atk = bullet->AddComponent<AttackOneTimeComponent>();
+		PlayerDamageComponent* dmg = bullet->AddComponent<PlayerDamageComponent>();
+
+		ColliderComponent* coll = bullet->AddComponent<ColliderComponent>();
+		ColliderAttackComponent* collAttack = bullet->AddComponent<ColliderAttackComponent>();
+
+		RenderTextureLuminescenceComponent* rendTex = bullet->AddComponent<RenderTextureLuminescenceComponent>();
+		rendTex->CreateMesh<SquareMesh>();
+		rendTex->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
+		rendTex->ChangeTexture("Shuriken.png");
+		rendTex->SetGlowColor(DirectX::XMFLOAT4(0.0f, 0.0f, 0.8f, 1.0f));
+
+		bullet->SetActiveState(ActiveState::ALL_STOP);
+		m_ShurikenList[i] = bullet;
 	}
 
 	{
@@ -149,6 +192,10 @@ EnemyActionBossComponent::EnemyActionBossComponent(GameObject& obj) :EnemyAction
 		hpBar->SetShader("OverVertexMoveVS.hlsl", "unlitTexturePS.hlsl");
 		hpBar->SetColor(DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	}
+
+	m_ListenerID_DamageEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+		DamageEvent(e);
+		});
 }
 
 void EnemyActionBossComponent::Init() {
@@ -178,12 +225,6 @@ void EnemyActionBossComponent::Update() {
 
 	const int maxHp = fight->GetMaxHp();
 	const int hp = fight->GetHp();
-
-	// 死亡状態の処理
-	if (hp <= 0) {
-		ChangeState(BossActionState::DEAD);
-		return;
-	}
 
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
@@ -263,41 +304,50 @@ void EnemyActionBossComponent::JumpBullet(const DirectX::XMFLOAT3& playPos, cons
 		sound->Play("boss_bullet");
 	}
 
-	// ここが弾作成処理
-	GameObject* bullet = GameObjectManager::AddAbsFront("bullet", "Effect");
+	// 手裏剣の数が上限に達している場合はこれ以上撃たない
+	if(m_ShurikenCount > ShurikenCount - 1){
+		return;
+	}
 
-	TransformComponent* trans = bullet->AddComponent<TransformComponent>();
-	trans->SetPosition({ myPos.x + 10.0f,myPos.y,myPos.z });
-	trans->SetScale({ 5.0f,5.0f,1.0f });
-	RigidBodyComponent* rigid = bullet->AddComponent<RigidBodyComponent>();
-	BulletComponent* bull = bullet->AddComponent<BulletComponent>();
+	// 弾作成処理
+
+	if (m_ShurikenList[m_ShurikenCount] == nullptr) {
+		return;
+	}
+
+	m_ShurikenList[m_ShurikenCount]->SetActiveState(ActiveState::ACTIVE);
+
+	BulletComponent* bull = m_ShurikenList[m_ShurikenCount]->GetComponent<BulletComponent>();
+	TransformComponent* trans = m_ShurikenList[m_ShurikenCount]->GetComponent<TransformComponent>();
+	AttackOneTimeComponent* atk = m_ShurikenList[m_ShurikenCount]->GetComponent<AttackOneTimeComponent>();
+
+	if (bull == nullptr || trans == nullptr || atk == nullptr) {
+		return;
+	}
+
+	atk->ClearAttackObjs();	// 攻撃対象をリセット
+
+	trans->SetPosition(myPos);
+
+	// 向きや飛ばす強さの設定
+
 	bull->SetFiringVector(dirFloat3);
 	bull->SetFiringSpeed(150.0f);
 	bull->SetRimitTime(3.0f);
-	FighterComponent* fight = bullet->AddComponent<FighterComponent>();
-	fight->SetAtk(5);
-	fight->SetHp(10);
-	AttackOneTimeComponent* atk = bullet->AddComponent<AttackOneTimeComponent>();
-	PlayerDamageComponent* dmg = bullet->AddComponent<PlayerDamageComponent>();
+	bull->SetRotateFlag(true);
 
-	ColliderComponent* coll = bullet->AddComponent<ColliderComponent>();
-	ColliderAttackComponent* collAttack = bullet->AddComponent<ColliderAttackComponent>();
+	const float diffX = playPos.x - myPos.x;
 
-	Render2DComponent* rend2D = bullet->AddComponent<Render2DComponent>();
-	rend2D->CreateMesh<SquareMesh>();
-	rend2D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
-	rend2D->ChangeTexture("ring.png");
+	if (diffX < 0.0f) {
 
-	RenderRingLuminescenceBillboardComponent* rend = bullet->AddComponent<RenderRingLuminescenceBillboardComponent>();
+		bull->SetRotateValue({ 0.0f,0.0f,10.0f });
+	}
+	else {
 
-	rend->CreateMesh<SquareMesh>();
-	rend->SetShader("unlitTextureVS.hlsl", "unlitRingLuminescencePS.hlsl");
-	rend->SetColor(DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f));
-	rend->SetGlowPower(1.0f);
-	rend->SetGlowRadius(0.5f);
-	rend->SetEllipseScale({ 1.0f,1.0f });
-	rend->SetRingRadius(0.8f);
-	rend->SetRingWidth(0.2f);
+		bull->SetRotateValue({ 0.0f,0.0f,-10.0f });
+	}
+
+	m_ShurikenCount++;
 }
 
 // 状態の変更処理
@@ -310,6 +360,11 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		return;
 	}
 
+	// 同じ状態に変更しようとした場合は何もしない
+	if (m_CurrentState == state) {
+		return;
+	}
+
 	// 終了時の処理
 	switch (m_CurrentState)
 	{
@@ -317,9 +372,14 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		break;
 	case BossActionState::JUMP_SHOOTING:
 
+		m_ShurikenCount = 0;	// ジャンプ攻撃で撃つ手裏剣の数をリセット
+		m_RecordTime = 0.0f;
+
 		jump->SetJumpPress(false);
 		break;
 	case BossActionState::BARRIER:
+		break;
+	case BossActionState::DAMAGE:
 		break;
 	case BossActionState::MAX:
 		break;
@@ -334,7 +394,6 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 	{
 	case BossActionState::DEFAULT:
 
-		m_RecordTime = 0.0f;
 		break;
 	case BossActionState::JUMP_SHOOTING:
 
@@ -344,12 +403,12 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 		if (m_IsRightLeft == RightLeft::LEFT) {
 
 			m_MoveDir = -1.0f;
-			m_MoveDir *= JumpMoveX;
+			m_MoveDir *= JUMP_MOVE_X;
 		}
 		else if (m_IsRightLeft == RightLeft::RIGHT) {
 
 			m_MoveDir = 1.0f;
-			m_MoveDir *= JumpMoveX;
+			m_MoveDir *= JUMP_MOVE_X;
 		}
 		break;
 	case BossActionState::BARRIER:
@@ -391,26 +450,13 @@ void EnemyActionBossComponent::ChangeState(const BossActionState& state) {
 
 		m_IsBarrier = true;
 		break;
-	case BossActionState::DEAD:
+
+	case BossActionState::DAMAGE:
 
 	{
-		trans->SetActiveFlag(false);
-		jump->SetActiveFlag(false);
-		ColliderAttackComponent* collAttack = m_Object->GetComponent<ColliderAttackComponent>();
-		ColliderComponent* coll = m_Object->GetComponent<ColliderComponent>();
-		ColliderDamageComponent* collDamage = m_Object->GetComponent<ColliderDamageComponent>();
-		RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
-		TimeLineComponent* timeLine = m_Object->GetComponent<TimeLineComponent>();
 
-		if (collAttack == nullptr || coll == nullptr || collDamage == nullptr || rigid == nullptr || timeLine == nullptr) {
-			return;
-		}
-
-		collAttack->SetActiveColliderFlag(false);
-		coll->SetActiveColliderFlag(false);
-		collDamage->SetActiveColliderFlag(false);
-		rigid->SetActiveFlag(false);
 	}
+
 	break;
 	case BossActionState::MAX:
 		break;
@@ -427,7 +473,7 @@ void EnemyActionBossComponent::ResetBarriers(FighterComponent& fight) {
 	if (collDamage != nullptr) {
 		collDamage->SetActiveColliderFlag(false);
 	}
-	fight.SetHp(BarrierDurability);
+	fight.SetHp(BARRIER_DURABILITY);
 	m_BossBarrier->SetActiveState(ActiveState::ALL_STOP);
 
 	TransformComponent* bossBarrierTrans = m_BossBarrier->GetComponent<TransformComponent>();
@@ -485,7 +531,7 @@ void EnemyActionBossComponent::BarrierDurabilityCheck() {
 		ResetBarriers(*fight);
 	}
 	// 耐久力が半分以下になったらバリアの色を赤色に変更
-	else if (hp <= (BarrierDurability / 2)) {
+	else if (hp <= (BARRIER_DURABILITY / 2)) {
 
 		RenderRingLuminescenceBillboardComponent* rend = m_BossBarrier->GetComponent<RenderRingLuminescenceBillboardComponent>();
 		if (rend != nullptr) {
@@ -498,8 +544,15 @@ void EnemyActionBossComponent::BarrierDurabilityCheck() {
 void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const DirectX::XMFLOAT3& playPos, const bool isGround) {
 
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 
-	if (myTrans == nullptr) {
+	if (myTrans == nullptr || rend == nullptr) {
+		return;
+	}
+
+	Mesh* mesh = rend->GetMesh();
+
+	if (mesh == nullptr) {
 		return;
 	}
 
@@ -507,7 +560,10 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 	{
 	case BossActionState::DEFAULT:
 
-		if (m_RecordTime > 2.0f) {
+		mesh->SetInitialCut(ANIM_CUT);
+		mesh->SetCutNum(DEFAULT_POSE);
+
+		if (m_RecordTime > ATTACK_TIME) {
 			ChangeState(BossActionState::JUMP_SHOOTING);
 			m_RecordTime = 0.0f;
 		}
@@ -515,18 +571,27 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 		break;
 	case BossActionState::JUMP_SHOOTING:
 
-		m_RecordTime1 += TimeManager::GetFixedDeltaTime();
-		m_RecordTime += TimeManager::GetFixedDeltaTime();
+		// 地上にいるかどうかで攻撃モーションを切り替える
+		if (isGround == true) {
+
+			mesh->SetCutNum(ON_GROUND_ATTACK_POSE);
+		}
+		else {
+
+			mesh->SetCutNum(JUMP_ATTACK_POSE);
+		}
+
+		m_RecordTime_Jump += TimeManager::GetFixedDeltaTime();
 
 		// 弾発射判定
-		if (m_RecordTime1 > BulletTiming) {
+		if (m_RecordTime_Jump > BULLET_TIMING) {
 
 			JumpBullet(playPos, myPos);
-			m_RecordTime1 = 0.0f;
+			m_RecordTime_Jump = 0.0f;
 		}
 
 		// ジャンプ移動終了判定
-		if (isGround == true && m_RecordTime1 <= 0.001f) {
+		if (isGround == true && m_RecordTime_Jump <= 0.001f) {
 
 			ChangeState(BossActionState::BARRIER);
 			break;
@@ -542,6 +607,7 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 
 			return;
 		}
+
 		// 移動はこっち
 		for (int i = 0; i < BarrierCount; ++i) {
 
@@ -552,41 +618,105 @@ void EnemyActionBossComponent::StateUpdate(const DirectX::XMFLOAT3& myPos, const
 				return;
 			}
 
-			if (m_LengthCount < TargetLength) {
+			// バリアの展開処理
+			// 一定の距離までは移動と拡大を行う
+			if (m_LengthCount < TARGET_LENGTH) {
 
-				bossBarrierTrans->AddLocalScale({ ScaleSpeed,ScaleSpeed,0.0f });
+				bossBarrierTrans->AddLocalScale({ SCALE_SPEED,SCALE_SPEED,0.0f });
 
 				if (i == 0) {
-					barrierTrans->AddLocalPosition({ 0.0f,MoveSpeed,0.0f });
+					barrierTrans->AddLocalPosition({ 0.0f,MOVE_SPEED,0.0f });
 				}
 				else if (i == 1) {
-					barrierTrans->AddLocalPosition({ MoveSpeed,0.0f,0.0f });
+					barrierTrans->AddLocalPosition({ MOVE_SPEED,0.0f,0.0f });
 				}
 				else if (i == 2) {
-					barrierTrans->AddLocalPosition({ 0.0f,-MoveSpeed,0.0f });
+					barrierTrans->AddLocalPosition({ 0.0f,-MOVE_SPEED,0.0f });
 				}
 				else if (i == 3) {
-					barrierTrans->AddLocalPosition({ -MoveSpeed,0.0f,0.0f });
+					barrierTrans->AddLocalPosition({ -MOVE_SPEED,0.0f,0.0f });
 				}
+
+				mesh->SetCutNum(MAKE_BARRIER_POSE);
 			}
 			else {
 
-				//m_LengthCount = 0.0f;
 				// 最後に回転を開始
 				ChangeState(BossActionState::DEFAULT);
 				break;
 			}
 		}
 
-		m_LengthCount += MoveSpeed;
+		m_LengthCount += MOVE_SPEED;
 	}
 	break;
-	case BossActionState::DEAD:
+	case BossActionState::DAMAGE:
+
+		mesh->SetCutNum(DAMAGE_POSE);
+
+		m_RecordTime_Damage += TimeManager::GetFixedDeltaTime();
+
+		// ダメージモーション終了判定
+		if (m_RecordTime_Damage > DAMAGE_TIME) {
+			ChangeState(BossActionState::DEFAULT);
+			m_RecordTime_Damage = 0.0f;
+		}
 
 		break;
 	case BossActionState::MAX:
 		break;
 	default:
 		break;
+	}
+}
+
+// 死亡時のアニメーション処理
+void EnemyActionBossComponent::DeadAnimation() {
+
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+
+	if (rend == nullptr) {
+		return;
+	}
+
+	Mesh* mesh = rend->GetMesh();
+
+	if (mesh == nullptr) {
+		return;
+	}
+
+	mesh->SetCutNum(DAMAGE_POSE);
+
+	// バリアオブジェクトの非表示
+
+	if (m_BossBarrier == nullptr) {
+		return;
+	}
+
+	m_BossBarrier->SetActiveState(ActiveState::ALL_STOP);
+
+	// 攻撃用バリアの非表示
+
+	for (GameObject* barrier : m_BarrierList) {
+
+		if (barrier != nullptr) {
+
+			barrier->SetActiveState(ActiveState::ALL_STOP);
+		}
+	}
+}
+
+// ダメージを受けたときの処理
+void EnemyActionBossComponent::DamageEvent(const HitEvent& e) {
+
+	const uint32_t targetID = m_Object->GetInstanceID();
+
+	if (e.targetID != targetID) {
+		return;
+	}
+
+	if (m_CurrentState == BossActionState::DEFAULT) {
+
+		ChangeState(BossActionState::DAMAGE);
 	}
 }

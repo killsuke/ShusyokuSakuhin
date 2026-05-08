@@ -7,7 +7,6 @@ RenderBlurComponent::RenderBlurComponent(GameObject& obj) :RenderComponent(obj) 
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER"); // ƒ\[ƒg”Ô†‚ğİ’è
 
 	m_Shader = std::make_unique<Shader>();
-	//m_Texture = std::make_unique<Texture>();
 }
 
 void RenderBlurComponent::Update() {

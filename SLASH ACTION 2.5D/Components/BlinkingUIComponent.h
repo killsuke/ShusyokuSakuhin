@@ -5,16 +5,16 @@
 class BlinkingUIComponent : public Component
 {
 private:
-	bool m_blinkingFlag = true; // 点滅フラグ
-	float m_recordTime = 0.0f; // 点滅している時間を記録する
-	float m_blinkingSpeed = 1.0f; // 点滅の速さ
+	bool m_IsBlinkingFlag = true; // 点滅フラグ
+	float m_RecordTime = 0.0f; // 点滅している時間を記録する
+	float m_BlinkingSpeed = 1.0f; // 点滅の速さ
 
 public:
 	BlinkingUIComponent(GameObject& obj);
 	~BlinkingUIComponent() = default;
 	void Update()override;
-	void SetBlinkingFlag(const bool flag) { m_blinkingFlag = flag; };
-	bool GetBlinkingFlag() const { return m_blinkingFlag; };
+	void SetBlinkingFlag(const bool flag) { m_IsBlinkingFlag = flag; };
+	bool GetBlinkingFlag() const { return m_IsBlinkingFlag; };
 
-	void SetBlinkingSpeed(const float speed) { m_blinkingSpeed = speed; };
+	void SetBlinkingSpeed(const float speed) { m_BlinkingSpeed = speed; };
 };

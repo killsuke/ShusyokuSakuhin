@@ -90,8 +90,8 @@ private:
 	static inline bool m_IsRightButtonTriggered = false; // 押された瞬間
 	static inline bool m_IsRightButtonReleased = false;  // 離された瞬間
 
-	static inline POINT prevPt = { 0, 0 }; // 前フレームのマウス座標を保持する変数
-	static inline DirectX::XMFLOAT2 vec2 = {}; // 前フレームの正規化されたマウス座標を保持する変数
+	static inline POINT m_PrevPt = { 0, 0 }; // 前フレームのマウス座標を保持する変数
+	static inline DirectX::XMFLOAT2 m_PrevPos = {}; // 前フレームの正規化されたマウス座標を保持する変数
 
 	// コンストラクタ・デストラクタを削除
 	Input() = delete;

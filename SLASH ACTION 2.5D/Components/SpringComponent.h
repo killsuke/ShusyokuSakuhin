@@ -5,15 +5,15 @@
 class SpringComponent final : public Component
 {
 private:
-	GameObject* m_springPartner = nullptr;	// バネの相手となるオブジェクト
+	GameObject* m_SpringPartner = nullptr;	// バネの相手となるオブジェクト
 
-	float m_K = 1.0f;           // ばね定数
-	float m_DAMPING = 0.0f;     // 減衰係数
+	float m_Konstante = 1.0f;           // ばね定数
+	float m_Damping = 0.0f;     // 減衰係数
 
-	float m_restLength = 0.0f;         // 初期の長さ
+	float m_RestLength = 0.0f;         // 初期の長さ
 
-	bool m_isSpringAction = true;
-	bool m_finSpringAction = false;
+	bool m_IsSpringAction = true;
+	bool m_FinSpringAction = false;
 
 	float m_PreviousDistance = 0.0f;
 
@@ -43,7 +43,7 @@ public:
 	// ばねの初期の長さをセットする
 	void Setrestlng(float restLength);
 
-	inline void SetSpringPartner(GameObject* partner) { m_springPartner = partner; }
+	void SetSpringPartner(GameObject* partner) { m_SpringPartner = partner; }
 
 	void MakeDamping();
 
@@ -57,11 +57,11 @@ public:
 
 	float ComputeCriticalDamping(float mass, float springConstant);
 
-	void SetSpringAction(const bool flag) { m_isSpringAction = flag; };
-	void SetFinSpringAction(const bool flag) { m_finSpringAction = flag; };
+	void SetSpringAction(const bool flag) { m_IsSpringAction = flag; };
+	void SetFinSpringAction(const bool flag) { m_FinSpringAction = flag; };
 
-	bool GetSpringAction()const { return m_isSpringAction; };
-	bool GetFinSpringAction()const { return m_finSpringAction; };
+	bool GetSpringAction()const { return m_IsSpringAction; };
+	bool GetFinSpringAction()const { return m_FinSpringAction; };
 
 	// これで突然前の部屋に戻ってもちゃんとスクロールする
 	void PreviousDistanceReset() {

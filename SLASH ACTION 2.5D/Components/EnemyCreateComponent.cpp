@@ -36,11 +36,11 @@ void EnemyCreateComponent::Update()
 void EnemyCreateComponent::CreateEnemies(std::vector<EnemyStatus> status)
 {
 	// この中で生成する
-	if (m_csvObjData.empty()) {
+	if (m_CsvObjData.empty()) {
 		return; // データがない場合は何もしない
 	}
 	unsigned int num = 0; // 生成したオブジェクトの数をカウント
-	for (auto& data : m_csvObjData) {
+	for (auto& data : m_CsvObjData) {
 		std::string kind = data.kind; // 敵の種類
 		EnemyStatus eS;
 		for (auto& e : status) {

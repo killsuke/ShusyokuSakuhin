@@ -18,13 +18,13 @@ void EnemyJsonComponent::MakeSampleStatus() {
 	{ "E_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },10,10,"dice.png","unlitTextureVS.hlsl", "unlitTexturePS.hlsl"},
 	};
 
-	m_enemyStatus = enemies;
+	m_EnemyStatus = enemies;
 
-	for (auto& e : m_enemyStatus) {
-		m_kindNames.push_back(e.kind); // 地形の種類をベクターに追加
+	for (auto& e : m_EnemyStatus) {
+		m_KindNames.push_back(e.kind); // 地形の種類をベクターに追加
 	}
 
-	json j = EnemyToJson(m_enemyStatus);
+	json j = EnemyToJson(m_EnemyStatus);
 	// 保存先のファイルパス
 	std::string filepath = "json/enemy.json";
 	// JSONをファイルに保存
@@ -79,10 +79,10 @@ std::vector<EnemyStatus> EnemyJsonComponent::LoadEnemyJsonFile(const std::string
 		enemies.push_back(e);
 	}
 
-	m_enemyStatus = enemies;
+	m_EnemyStatus = enemies;
 
-	for (auto& e : m_enemyStatus) {
-		m_kindNames.push_back(e.kind); // 地形の種類をベクターに追加
+	for (auto& e : m_EnemyStatus) {
+		m_KindNames.push_back(e.kind); // 地形の種類をベクターに追加
 	}
 
 	return enemies;

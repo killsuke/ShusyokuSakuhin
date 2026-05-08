@@ -138,7 +138,7 @@ DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 		const uint32_t SCREEN_HEIGHT = Application::GetHeight();
 
 		// 前フレームと位置が違えば更新
-		if (pt.x != prevPt.x || pt.y != prevPt.y) {
+		if (pt.x != m_PrevPt.x || pt.y != m_PrevPt.y) {
 			// ウィンドウ座標に変換
 			if (ScreenToClient(hWnd, &pt)) {
 				RECT clientRect;	// ウィンドウのクライアント領域の矩形を取得
@@ -147,15 +147,15 @@ DirectX::XMFLOAT2 Input::GetMousePositionNormalize() {
 				const int height = clientRect.bottom - clientRect.top;	// ウィンドウの縦幅を計算
 
 				// 補正処理（座標の正規化）
-				vec2.x = static_cast<float>(pt.x) / static_cast<float>(width) * SCREEN_WIDTH - (SCREEN_WIDTH * 0.5f);
-				vec2.y = -(static_cast<float>(pt.y) / static_cast<float>(height) * SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.5f));
+				m_PrevPos.x = static_cast<float>(pt.x) / static_cast<float>(width) * SCREEN_WIDTH - (SCREEN_WIDTH * 0.5f);
+				m_PrevPos.y = -(static_cast<float>(pt.y) / static_cast<float>(height) * SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.5f));
 
 				// 前フレームのマウス座標を更新
-				prevPt = pt;
+				m_PrevPt = pt;
 			}
 		}
 	}
-	return vec2;	// マウスの座標を返す
+	return m_PrevPos;	// マウスの座標を返す
 }
 
 // 左クリック

@@ -1,6 +1,5 @@
 #pragma once
 #include "RenderComponent.h"
-#include "Structs/TestBoneData.h"
 #include <DirectXMath.h>
 #include "Helper/HelpMath.h"
 

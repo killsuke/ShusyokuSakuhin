@@ -18,10 +18,10 @@ void TerrainJsonComponent::MakeSampleStatus() {
         { "T_dice" ,  {5.0f,10.0f,5.0f}, { 0.0f,0.0f,0.0f },"dice.png","unlitTextureVS.hlsl", "unlitTexturePS.hlsl"},
     };
 
-	m_terrainStatus = terrains;
+	m_TerrainStatus = terrains;
 
-    for (TerrainStatus& t : m_terrainStatus) {
-		m_kindNames.push_back(t.kind); // 地形の種類をベクターに追加
+    for (TerrainStatus& t : m_TerrainStatus) {
+		m_KindNames.push_back(t.kind); // 地形の種類をベクターに追加
     }
 
     json j = TerrainsToJson(terrains);
@@ -74,10 +74,10 @@ std::vector<TerrainStatus> TerrainJsonComponent::LoadTerrainJsonFile(const std::
         terrains.push_back(t);
     }
 
-    m_terrainStatus = terrains;
+    m_TerrainStatus = terrains;
 
-    for (TerrainStatus& t : m_terrainStatus) {
-        m_kindNames.push_back(t.kind); // 地形の種類をベクターに追加
+    for (TerrainStatus& t : m_TerrainStatus) {
+        m_KindNames.push_back(t.kind); // 地形の種類をベクターに追加
     }
 
     return terrains;

@@ -21,7 +21,6 @@
 #include "Buffer/VertexBuffer.h"
 #include "Buffer/IndexBuffer.h"
 #include "Mesh/Mesh.h"
-#include "Structs/BoneData.h"
 #include "Mesh/StaticMesh.h"
 #include "Structs/RightLeft.h"
 #include "System/DirectXRender.h"

@@ -121,8 +121,8 @@ void DebugCameraComponent::Update()
 		if (Input::MouseRightPress() == true) {
 
 			// マウス座標の差分を計算
-			const float delta_X = mouseVec2.x - prevMouse.x;
-			const float delta_Y = mouseVec2.y - prevMouse.y;
+			const float delta_X = mouseVec2.x - m_PrevMouse.x;
+			const float delta_Y = mouseVec2.y - m_PrevMouse.y;
 
 			// 感度（スピード）をかける
 			const float rotationSpeed = 0.1f;
@@ -164,7 +164,7 @@ void DebugCameraComponent::Update()
 #endif
 
 		// このフレームのマウス位置を次回に備えて保存
-		prevMouse = mouseVec2;
+		m_PrevMouse = mouseVec2;
 
 		Update2D();
 		Update3D();

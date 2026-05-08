@@ -15,7 +15,7 @@ using namespace DirectX;
 EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("DOOR_FADE"); // ソート番号を設定（あとで変えよ）
 
-	m_listenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
+	m_ListenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
 		DeathEventAction(e);
 		});
 
@@ -24,7 +24,7 @@ EnemyDeathEventComponent::EnemyDeathEventComponent(GameObject& obj) :Component(o
 }
 
 EnemyDeathEventComponent::~EnemyDeathEventComponent() {
-	EventBusManager::Unsubscribe(m_listenerID_DeathEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_DeathEvent);
 }
 
 void EnemyDeathEventComponent::Update() {
@@ -33,6 +33,7 @@ void EnemyDeathEventComponent::Update() {
 }
 
 void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
+
 	const uint32_t deadID = m_Object->GetInstanceID();
 
 	if (event.deadID != deadID) {
@@ -126,28 +127,6 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 		break;
 	}
 
-	const std::string name = m_Object->GetName();
-
-	if (name == "Boss") {
-
-		m_DeathState = EnemyDeathEventState::STICKY;
-	}
-	else {
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dist(0, 2);
-
-		int value = dist(gen);
-
-		if (value < 1) {
-
-			m_DeathState = EnemyDeathEventState::STICKY;
-		}
-		else {
-			m_DeathState = EnemyDeathEventState::IMMEDIATE;
-		}
-	}
-
 	GameObject* cutCompObj = GameObjectManager::AddObject("cutCompObj","CutCompObj");
 	TransformComponent* cutCompTrans = cutCompObj->AddComponent<TransformComponent>();
 	TimeLineComponent* timeLine = cutCompObj->AddComponent<TimeLineComponent>();
@@ -156,6 +135,4 @@ void EnemyDeathEventComponent::DeathEventAction(const DeathEvent& event) {
 	cutCompAction->SetDeathState(m_DeathState);
 
 	m_IsActiveFlag = true;
-
-	m_Object->Destroy(); // オブジェクトを削除フラグを立てる
 }

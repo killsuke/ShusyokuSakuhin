@@ -156,20 +156,6 @@ cbuffer MotionBlurCircularBuffer : register(b7)
     float3 padding_3;
 }
 
-cbuffer ConstantBufferBoneComb : register(b8)
-{
-	//	// 頂点カラー
- //   float4 vertexColorB;
-
-	//// UV座標移動行列
- //   matrix matrixTex1B;
-
-	// ワールド変換行列
-    matrix matrixWorldB;
-	
-    matrix bonecombmtx[5]; // ボーンコンビネーション行列
-};
-
 cbuffer UIParam : register(b9)
 {
     float currentScale;

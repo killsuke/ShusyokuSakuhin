@@ -4,14 +4,14 @@
 SoundComponent::SoundComponent(GameObject& obj) :Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("SOUND"); // ソート番号を設定
-	m_pSourceVoices.clear();
+	m_SourceVoices.clear();
 }
 
 SoundComponent::~SoundComponent()
 {
 	HRESULT hr = S_OK;
 	// 全てのソースボイスを破棄
-	for (const std::pair<const std::string, SourceVoiceData>& entry : m_pSourceVoices) {
+	for (const std::pair<const std::string, SourceVoiceData>& entry : m_SourceVoices) {
 		const SourceVoiceData& sourceVoiceData = entry.second;
 		if (sourceVoiceData.pSourceVoice) {
 			hr = sourceVoiceData.pSourceVoice->Stop(0);
@@ -28,7 +28,7 @@ SoundComponent::~SoundComponent()
 		}
 	}
 
-	m_pSourceVoices.clear();
+	m_SourceVoices.clear();
 }
 
 void SoundComponent::Update()
@@ -41,22 +41,22 @@ void SoundComponent::Update()
 // =============================================================================
 void SoundComponent::AddSoundLabel(const std::string& label) {
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		// 見つからなかった場合、新しいエントリを追加
-		m_pSourceVoices.emplace(label, nullptr);
+		m_SourceVoices.emplace(label, nullptr);
 	}
 }
 
 void SoundComponent::Play() {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
 
-	if (it == m_pSourceVoices.end()) {
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -117,12 +117,12 @@ void SoundComponent::Play() {
 //=============================================================================
 void SoundComponent::Play(const std::string& label)
 {
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -178,12 +178,12 @@ void SoundComponent::Play(const std::string& label)
 
 void SoundComponent::Play(const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -248,12 +248,12 @@ void SoundComponent::Play(const float volume) {
 
 void SoundComponent::Play(const std::string& label, const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -316,13 +316,13 @@ void SoundComponent::Play(const std::string& label, const float volume) {
 
 void SoundComponent::PlayOnce() {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
 
-	if (it == m_pSourceVoices.end()) {
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -386,12 +386,12 @@ void SoundComponent::PlayOnce() {
 
 void SoundComponent::PlayOnce(const std::string& label) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -453,12 +453,12 @@ void SoundComponent::PlayOnce(const std::string& label) {
 
 void SoundComponent::PlayOnce(const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -528,12 +528,12 @@ void SoundComponent::PlayOnce(const float volume) {
 
 void SoundComponent::PlayOnce(const std::string& label, const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -601,13 +601,13 @@ void SoundComponent::PlayOnce(const std::string& label, const float volume) {
 
 void SoundComponent::Stop() {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
 
-	if (it == m_pSourceVoices.end()) {
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -636,12 +636,12 @@ void SoundComponent::Stop() {
 //=============================================================================
 void SoundComponent::Stop(const std::string& label)
 {
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 
@@ -667,11 +667,11 @@ void SoundComponent::Stop(const std::string& label)
 
 void SoundComponent::StopAll() {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	for (std::pair<const std::string, SourceVoiceData>& entry : m_pSourceVoices) {
+	for (std::pair<const std::string, SourceVoiceData>& entry : m_SourceVoices) {
 
 		entry.second.isPlayed = false;
 		IXAudio2SourceVoice* sourceVoice = entry.second.pSourceVoice;
@@ -697,13 +697,13 @@ void SoundComponent::StopAll() {
 //=============================================================================
 void SoundComponent::Resume() {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
 
-	if (it == m_pSourceVoices.end()) {
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -723,12 +723,12 @@ void SoundComponent::Resume() {
 
 void SoundComponent::Resume(const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -755,12 +755,12 @@ void SoundComponent::Resume(const float volume) {
 
 void SoundComponent::Resume(const std::string& label) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 
@@ -780,12 +780,12 @@ void SoundComponent::Resume(const std::string& label) {
 
 void SoundComponent::Resume(const std::string& label, const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 
@@ -811,13 +811,13 @@ void SoundComponent::Resume(const std::string& label, const float volume) {
 
 void SoundComponent::SetVolume(const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
 
-	if (it == m_pSourceVoices.end()) {
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 
@@ -844,12 +844,12 @@ void SoundComponent::SetVolume(const float volume) {
 //=============================================================================
 void SoundComponent::SetVolume(const std::string& label, const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
 
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 
@@ -872,11 +872,11 @@ void SoundComponent::SetVolume(const std::string& label, const float volume) {
 
 void SoundComponent::AddVolume(const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
@@ -908,11 +908,11 @@ void SoundComponent::AddVolume(const float volume) {
 
 void SoundComponent::AddVolume(const std::string& label, const float volume) {
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
@@ -944,11 +944,11 @@ void SoundComponent::SetMaxVolume(const float volume) {
 
 	const float clampedVolume = std::clamp(volume, 0.0f, 1.0f);
 
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.begin();
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.begin();
+	if (it == m_SourceVoices.end()) {
 		return;
 	};
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;
@@ -962,11 +962,11 @@ void SoundComponent::SetMaxVolume(const float volume) {
 void SoundComponent::SetMaxVolume(const std::string& label, const float volume) {
 
 	const float clampedVolume = std::clamp(volume, 0.0f, 1.0f);
-	if (m_pSourceVoices.empty()) {
+	if (m_SourceVoices.empty()) {
 		return;
 	}
-	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_pSourceVoices.find(label);
-	if (it == m_pSourceVoices.end()) {
+	std::unordered_map<std::string, SourceVoiceData>::iterator it = m_SourceVoices.find(label);
+	if (it == m_SourceVoices.end()) {
 		return;
 	}
 	IXAudio2SourceVoice* sourceVoice = it->second.pSourceVoice;

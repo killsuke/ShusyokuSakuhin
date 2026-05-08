@@ -67,34 +67,34 @@ public:
 	void Draw();
 
 	// セッター
-	inline void SetDeleteFg(const bool deletefg) { this->m_IsDeletefg = deletefg; };
-	inline void SetTag(const std::string& tag) { m_TagAndID.tag = tag; };
-	inline void SetID(const uint16_t& id) { m_TagAndID.id = id; };
-	inline void SetName(const std::string& name) { this->m_Name = name; };
-	inline void SetChild(GameObject* obj) {
+	void SetDeleteFg(const bool deletefg) { this->m_IsDeletefg = deletefg; };
+	void SetTag(const std::string& tag) { m_TagAndID.tag = tag; };
+	void SetID(const uint16_t& id) { m_TagAndID.id = id; };
+	void SetName(const std::string& name) { this->m_Name = name; };
+	void SetChild(GameObject* obj) {
 
-        std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
-        if (childObj != m_Children.end()) {
-            return; // すでに子オブジェクトとして登録されている場合は何もしない
-        }
+		std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
+		if (childObj != m_Children.end()) {
+			return; // すでに子オブジェクトとして登録されている場合は何もしない
+		}
 
-        m_Children.push_back(obj);
-        obj->m_Parent = this;   // 親オブジェクトを設定
-    };
-    inline void RemoveChild(GameObject* obj) {
-        std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
-        if (childObj != m_Children.end()) {
-            m_Children.erase(childObj);
-            obj->m_Parent = nullptr; // 親オブジェクトを解除
-        }
-    };
-	inline void ClearChildren() {
+		m_Children.push_back(obj);
+		obj->m_Parent = this;   // 親オブジェクトを設定
+	};
+	void RemoveChild(GameObject* obj) {
+		std::vector<GameObject*>::iterator childObj = std::find(m_Children.begin(), m_Children.end(), obj);
+		if (childObj != m_Children.end()) {
+			m_Children.erase(childObj);
+			obj->m_Parent = nullptr; // 親オブジェクトを解除
+		}
+	};
+	void ClearChildren() {
 		for (GameObject* child : m_Children) {
 			child->m_Parent = nullptr; // 親オブジェクトを解除
 		}
 		m_Children.clear();
 	};
-	inline void DestroyChildren() {
+	void DestroyChildren() {
 		for (GameObject* child : m_Children) {
 			child->m_Parent = nullptr; // 親オブジェクトを解除
 			child->Destroy(); // 子オブジェクトを削除
@@ -102,29 +102,29 @@ public:
 		m_Children.clear();
 	};
 
-	inline void SetActiveState(const ActiveState& as) { m_ActiveState = as; };
-	inline void SetDrawContainer(const DrawContainer& dc) { m_DrawContainer = dc; };
-	inline void SetDrawContainerChangeFlag(const DrawContainer& dc, const bool dccFlag) {
+	void SetActiveState(const ActiveState& as) { m_ActiveState = as; };
+	void SetDrawContainer(const DrawContainer& dc) { m_DrawContainer = dc; };
+	void SetDrawContainerChangeFlag(const DrawContainer& dc, const bool dccFlag) {
 		m_HopeDrawContainer = dc;
 		m_IsDrawContainerChange = dccFlag;
 	};
 
-	inline void SetCarryOverFlag(const bool flag) { m_IsCarryOverFlag = flag; };
-	inline void SetChildAbsFrontFlag(const bool flag) { m_IsChildAbsFrontFlag = flag; };
+	void SetCarryOverFlag(const bool flag) { m_IsCarryOverFlag = flag; };
+	void SetChildAbsFrontFlag(const bool flag) { m_IsChildAbsFrontFlag = flag; };
 
 	// ゲッター
-	inline bool GetDeleteFg()const { return m_IsDeletefg; };
-	inline std::string GetTag()const { return m_TagAndID.tag; };
-	inline uint16_t GetID()const { return m_TagAndID.id; };
-	inline std::string GetName()const { return m_Name; };
-	inline GameObject* GetParent() { return m_Parent; };
-	inline std::vector<GameObject*>& GetChildren() { return m_Children; };
-	inline ActiveState GetActiveState()const { return m_ActiveState; };
-	inline DrawContainer GetDrawContainer()const { return m_DrawContainer; };
-	inline DrawContainer GetHopeDrawContainer()const { return m_HopeDrawContainer; };
-	inline bool GetDrawContainerChangeFlag()const { return m_IsDrawContainerChange; };
-	inline bool GetCarryOverFlag()const { return m_IsCarryOverFlag; };
-	inline uint32_t GetInstanceID()const { return m_InstanceID; };
+	bool GetDeleteFg()const { return m_IsDeletefg; };
+	std::string GetTag()const { return m_TagAndID.tag; };
+	uint16_t GetID()const { return m_TagAndID.id; };
+	std::string GetName()const { return m_Name; };
+	GameObject* GetParent() { return m_Parent; };
+	std::vector<GameObject*>& GetChildren() { return m_Children; };
+	ActiveState GetActiveState()const { return m_ActiveState; };
+	DrawContainer GetDrawContainer()const { return m_DrawContainer; };
+	DrawContainer GetHopeDrawContainer()const { return m_HopeDrawContainer; };
+	bool GetDrawContainerChangeFlag()const { return m_IsDrawContainerChange; };
+	bool GetCarryOverFlag()const { return m_IsCarryOverFlag; };
+	uint32_t GetInstanceID()const { return m_InstanceID; };
 
 	void Destroy() { m_IsDeletefg = true; };
 
@@ -138,53 +138,53 @@ public:
 	template<typename T1>
 	T1* GetComponent() {
 
-        std::unordered_map<std::type_index, Component*>::iterator it = m_ComponentMap.find(typeid(T1));
-        return (it != m_ComponentMap.end()) ? static_cast<T1*>(it->second): nullptr;
-    }
+		std::unordered_map<std::type_index, Component*>::iterator it = m_ComponentMap.find(typeid(T1));
+		return (it != m_ComponentMap.end()) ? static_cast<T1*>(it->second) : nullptr;
+	}
 
-    template<typename T2>
-    std::vector<T2*> GetComponents() {
-        std::vector<T2*> comps;
-        comps.clear();
+	template<typename T2>
+	std::vector<T2*> GetComponents() {
+		std::vector<T2*> comps;
+		comps.clear();
 
-        for (std::unique_ptr<Component>& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
-            if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
-                comps.push_back(ptr);
-            }
-        }
-        for (std::unique_ptr<Component>& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
-            if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
-                comps.push_back(ptr);
-            }
-        }
-        return comps; // 指定された型のコンポーネント群を返す
-    }
+		for (std::unique_ptr<Component>& component : m_Components) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
+				comps.push_back(ptr);
+			}
+		}
+		for (std::unique_ptr<Component>& component : m_RenderComponents) { // ゲームオブジェクト内のコンポーネントをループで見る
+			if (T2* ptr = dynamic_cast<T2*>(component.get())) { // ダイナミックキャストでキャスト可能かどうか判定
+				comps.push_back(ptr);
+			}
+		}
+		return comps; // 指定された型のコンポーネント群を返す
+	}
 
-    // コンポーネントを追加する
-    template<typename T3>
-    // コンポーネントを追加する
-    T3* AddComponent() {
-        static_assert(std::is_base_of<Component, T3>::value,
-            "型エラー！Compnentクラスを継承していません！");  // プロジェクトをUTF-8に変換しておく
+	// コンポーネントを追加する
+	template<typename T3>
+	// コンポーネントを追加する
+	T3* AddComponent() {
+		static_assert(std::is_base_of<Component, T3>::value,
+			"型エラー！Compnentクラスを継承していません！");  // プロジェクトをUTF-8に変換しておく
 
-        std::unique_ptr<T3> comp = std::make_unique<T3>(*this);   // thisで呼び出した者を取得可能
-        T3* ptr = comp.get();  // 一度別で格納してアクセス違反を防ぐ
+		std::unique_ptr<T3> comp = std::make_unique<T3>(*this);   // thisで呼び出した者を取得可能
+		T3* ptr = comp.get();  // 一度別で格納してアクセス違反を防ぐ
 
-        Component* p_comp = comp.get();
+		Component* p_comp = comp.get();
 
-        // 型IDで登録
-        m_ComponentMap[typeid(T3)] = p_comp;
+		// 型IDで登録
+		m_ComponentMap[typeid(T3)] = p_comp;
 
-        const bool renderFlag = ComponentCheck(p_comp);
+		const bool renderFlag = ComponentCheck(p_comp);
 
-        if (renderFlag == true) {
-            m_RenderComponents.emplace_back(std::move(comp));
-        }
-        else {
-            m_Components.emplace_back(std::move(comp));
-        }
+		if (renderFlag == true) {
+			m_RenderComponents.emplace_back(std::move(comp));
+		}
+		else {
+			m_Components.emplace_back(std::move(comp));
+		}
 
-        SortComponents();
-        return ptr;
-    }
+		SortComponents();
+		return ptr;
+	}
 };

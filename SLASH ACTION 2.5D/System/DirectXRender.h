@@ -115,12 +115,6 @@ struct LineThickness
 	float pad[3] = { 0.0f };
 };
 
-// パーティクル用（一度描画して処理負荷を考えてから使う）
-//struct PointPosition {
-//	DirectX::SimpleMath::Vector3 position = DirectX::SimpleMath::Vector3::Zero;
-//	float pad = 0.0f;
-//};
-
 struct BlurBuffer {
 	DirectX::XMFLOAT2 textureSize = DirectX::XMFLOAT2();
 	DirectX::XMFLOAT2 blurPad = DirectX::XMFLOAT2();
@@ -232,7 +226,6 @@ private:
 	static inline ID3D11Buffer* m_MaterialBuffer = nullptr;		// マテリアル用定数バッファ、６番目
 	static inline ID3D11Buffer* m_MotionBlurBuffer = nullptr;	// 縦横のみモーションブラー用バッファ、７番目
 	static inline ID3D11Buffer* m_MotionBlurCircularBuffer = nullptr;	// 自由に使えるモーションブラー用バッファ（開発中）、７番目
-	static inline ID3D11Buffer* m_BoneConstantBuffer = nullptr;		// ボーン用バッファ、８番目（このプロジェクトでは使わない）
 
 	static inline ID3D11Buffer* m_OverVertexConstantBuffer = nullptr;	// HPバー用バッファ、９番目
 	static inline ID3D11Buffer* m_GlowBuffer = nullptr;				// グロー用定数バッファ、１０番目
@@ -258,7 +251,6 @@ private:
 	static HRESULT DepthStencilSetting();
 	static HRESULT SamplerCreate();
 	static HRESULT DefaultDrawConstantBufferCreate();
-	static HRESULT BoneConstantBufferCreate();
 	static HRESULT HPBarConstantBufferCreate();
 	static HRESULT LightBufferCreate();
 	static void LightSetting();
@@ -325,7 +317,6 @@ public:
 	static bool GetIsDepthEnable() { return m_IsDepthEnable; };
 
 	static ID3D11Buffer* GetDefaultDrawBuffer() { return m_DefaultDrawBuffer; }
-	static ID3D11Buffer* GetBoneBuffer() { return m_BoneConstantBuffer; };
 	static ID3D11Buffer* GetOverVertexMoveBuffer() { return m_OverVertexConstantBuffer; };
 	static ID3D11Buffer* GetMaterialBuffer() { return m_MaterialBuffer; };
 	static ID3D11Buffer* GetBlurBuffer() { return m_BlurBuffer; };

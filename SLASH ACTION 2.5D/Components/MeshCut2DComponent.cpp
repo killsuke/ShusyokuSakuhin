@@ -16,13 +16,13 @@ MeshCut2DComponent::MeshCut2DComponent(GameObject& obj) : Component(obj)
 	// コンポーネントのソート番号を設定（あとで）
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 
-	m_listenerID_CutEvent = EventBusManager::Subscribe<CutEvent>([&](const CutEvent& e) {
+	m_ListenerID_CutEvent = EventBusManager::Subscribe<CutEvent>([&](const CutEvent& e) {
 		MeshCutAction(e);
 		});
 }
 
 MeshCut2DComponent::~MeshCut2DComponent() {
-	EventBusManager::Unsubscribe(m_listenerID_CutEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_CutEvent);
 }
 
 void MeshCut2DComponent::Update()

@@ -15,8 +15,8 @@
 class ComponentTypeManager final
 {
 private:
-	static inline std::unordered_map<std::string, uint32_t> nameToId;
-	static inline std::unordered_map<uint32_t, std::string> idToName;
+	static inline std::unordered_map<std::string, uint32_t> m_NameToId;
+	static inline std::unordered_map<uint32_t, std::string> m_IdToName;
 
 	// コンストラクタ・デストラクタを削除
 	ComponentTypeManager() = delete;
@@ -37,12 +37,13 @@ public:
 
 	static void MakeSampleJson();
 	static void LoadComponentTypeJsonFile(const std::string& filepath);
+	static void OverwriteComponentTypeJsonFile(const std::string& filepath);
 	static nlohmann::ordered_json ComponentTypeNameToJson(const std::unordered_map<std::string, uint32_t>& comps);
 	static bool SaveJsonToFile(const nlohmann::ordered_json& j, const std::string& filepath);
 
 	static uint32_t GetID_FromName(const std::string& name) {
-		const std::unordered_map<std::string, uint32_t>::const_iterator it = nameToId.find(name);
-		if (it != nameToId.end()) {
+		const std::unordered_map<std::string, uint32_t>::const_iterator it = m_NameToId.find(name);
+		if (it != m_NameToId.end()) {
 			return it->second;
 		}
 
@@ -54,8 +55,8 @@ public:
 	}
 
 	static std::string GetName_FromID(const uint32_t& id) {
-		const std::unordered_map<uint32_t, std::string>::const_iterator it = idToName.find(id);
-		if(it != idToName.end()) {
+		const std::unordered_map<uint32_t, std::string>::const_iterator it = m_IdToName.find(id);
+		if(it != m_IdToName.end()) {
 			return it->second; // 見つかった場合は名前を返す
 		}
 		MessageBoxW(nullptr, L"その ID のコンポーネントの名前は存在しません。", L"Error", MB_ICONERROR | MB_OK);
@@ -66,5 +67,5 @@ public:
 
 	// コンポーネントの最大数
 	static uint32_t GetMax() {
-		return static_cast<uint32_t>(nameToId.size()); };
+		return static_cast<uint32_t>(m_NameToId.size()); };
 };

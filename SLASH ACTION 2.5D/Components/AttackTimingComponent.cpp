@@ -31,21 +31,19 @@ void AttackTimingComponent::Update() {
 			attackObj.hitCoolTime -= deltaTime; // 固定フレームレートのデルタタイムを使用
 		}
 		else {
-			attackObj.hitCoolTime = m_coolDownTime; // 0以下になったらリセット
+			attackObj.hitCoolTime = m_CoolDownTime; // 0以下になったらリセット
 		}
 	}
 
 }
 
 void AttackTimingComponent::AttackAction(GameObject& obj) {
+
 	// 攻撃処理の実装
-	// ここでは仮の実装として、攻撃力を表示するだけ
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
 	FighterComponent* targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {
-
-		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
 		std::vector<HitRule>::iterator it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
@@ -58,7 +56,7 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 			}
 		}
 		else {
-			m_AttackObjs.push_back({ &obj, m_coolDownTime,1 });	// ここで攻撃対象に組み込む
+			m_AttackObjs.push_back({ &obj, m_CoolDownTime,1 });	// ここで攻撃対象に組み込む
 		}
 
 		m_AttackHitFlag = true; // 攻撃が当たったフラグを立てる
@@ -66,7 +64,5 @@ void AttackTimingComponent::AttackAction(GameObject& obj) {
 		int atk = fighter->GetAtk();
 
 		targetFighter->AddDamage(atk); // 攻撃力分だけ相手のHPを減らす
-
-		//	std::cout << "ここでダメージ！！" << std::endl;
 	}
 }

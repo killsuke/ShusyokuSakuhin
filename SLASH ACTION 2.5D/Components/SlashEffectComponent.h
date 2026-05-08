@@ -8,7 +8,7 @@ private:
 	DirectX::XMFLOAT2 m_SizeChange = { 1.0f,1.0f }; // サイズ変更量
 	float m_RecordTime = 0.0f; // サイズ変更時間記録用
 	float m_RimitTime = 0.0f; // サイズ変更時間リミット
-	float power = 0.2f;
+	float m_GlowRadius = 0.2f;
 
 public:
 	SlashEffectComponent(GameObject& obj);

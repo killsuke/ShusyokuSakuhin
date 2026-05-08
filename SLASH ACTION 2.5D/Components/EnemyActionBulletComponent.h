@@ -6,7 +6,7 @@ class EnemyActionBulletComponent : public EnemyActionComponent
 {
 private:
 
-	uint64_t m_listenerID_HitEvent_Bullet = 0;
+	uint64_t m_ListenerID_HitEvent_Bullet = 0;
 
 	void FearEvent(const HitEvent& event);
 	void ChangeState(const EEnemyState& newState);

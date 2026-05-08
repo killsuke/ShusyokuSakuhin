@@ -162,13 +162,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\imgui\imgui\Include\imgui.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_demo.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_draw.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp" />
-    <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp" />
     <ClCompile Include="Components\RenderCharacterComponent.cpp" />
     <ClCompile Include="Components\ColliderDamageComponent.cpp" />
     <ClCompile Include="Components\ColliderAttackComponent.cpp" />
@@ -207,19 +200,7 @@
     <ClCompile Include="Components\AttackOneTimeComponent.cpp" />
     <ClCompile Include="Components\AttackTimingComponent.cpp" />
     <ClCompile Include="Components\BlinkingUIComponent.cpp" />
-    <ClCompile Include="Components\BoneComponent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Components\BonePartsComponent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Mesh\BonePartsMesh.cpp" />
-    <ClCompile Include="Components\Bones.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Components\BossEventComponent.cpp" />
     <ClCompile Include="Components\BulletComponent.cpp" />
     <ClCompile Include="Components\CameraComponent.cpp" />
@@ -250,15 +231,9 @@
     </ClCompile>
     <ClCompile Include="Components\RenderLine2DComponent.cpp" />
     <ClCompile Include="Components\RenderParticlesComponent.cpp" />
-    <ClCompile Include="Scene\HighwayScene.cpp" />
     <ClCompile Include="Components\HitFlashComponent.cpp" />
     <ClCompile Include="Manager\HitStopManager.cpp" />
-    <ClCompile Include="Components\HumanBoneComponent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Components\JsonComponent.cpp" />
-    <ClCompile Include="Components\LeapToCenterCarComponent.cpp" />
     <ClCompile Include="Mesh\LineMesh.cpp" />
     <ClCompile Include="Scene\LoadStageScene.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
@@ -282,10 +257,6 @@
     <ClCompile Include="Components\FighterComponent.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Components\HPBarMoveComponent.cpp" />
-    <ClCompile Include="Components\InchWorm_Test.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Components\JumpComponent.cpp" />
     <ClCompile Include="Manager\ModelManager.cpp" />
@@ -297,10 +268,6 @@
     <ClCompile Include="Components\Render3DColliderOBBComponent.cpp" />
     <ClCompile Include="Components\RenderBillboardComponent.cpp" />
     <ClCompile Include="Components\RenderMask3DComponent.cpp" />
-    <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Components\RigidBodyComponent.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -336,14 +303,6 @@
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\imgui\imgui\Include\imconfig.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imgui.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imgui_impl_dx11.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imgui_impl_win32.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imgui_internal.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h" />
-    <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h" />
     <ClInclude Include="Components\RenderCharacterComponent.h" />
     <ClInclude Include="Components\ColliderDamageComponent.h" />
     <ClInclude Include="Components\ColliderAttackComponent.h" />
@@ -383,23 +342,7 @@
     <ClInclude Include="Components\AttackOneTimeComponent.h" />
     <ClInclude Include="Components\AttackTimingComponent.h" />
     <ClInclude Include="Components\BlinkingUIComponent.h" />
-    <ClInclude Include="Components\BoneComponent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Structs\BoneData.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Components\BonePartsComponent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Mesh\BonePartsMesh.h" />
-    <ClInclude Include="Components\Bones.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Components\BossEventComponent.h" />
     <ClInclude Include="Components\BulletComponent.h" />
     <ClInclude Include="Components\CameraComponent.h" />
@@ -432,15 +375,9 @@
     </ClInclude>
     <ClInclude Include="Components\RenderLine2DComponent.h" />
     <ClInclude Include="Components\RenderParticlesComponent.h" />
-    <ClInclude Include="Scene\HighwayScene.h" />
     <ClInclude Include="Components\HitFlashComponent.h" />
     <ClInclude Include="Manager\HitStopManager.h" />
-    <ClInclude Include="Components\HumanBoneComponent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Components\JsonComponent.h" />
-    <ClInclude Include="Components\LeapToCenterCarComponent.h" />
     <ClInclude Include="Mesh\LineMesh.h" />
     <ClInclude Include="Components\MoveCarComponent.h" />
     <ClInclude Include="Components\MoveTerrainComponent.h" />
@@ -465,10 +402,6 @@
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Components\HPBarMoveComponent.h" />
     <ClInclude Include="Structs\HPParam.h" />
-    <ClInclude Include="Components\InchWorm_Test.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Components\JumpComponent.h" />
     <ClInclude Include="Structs\Material.h" />
@@ -483,10 +416,6 @@
     <ClInclude Include="Components\RenderBillboardComponent.h" />
     <ClInclude Include="Structs\RenderElement.h" />
     <ClInclude Include="Components\RenderMask3DComponent.h" />
-    <ClInclude Include="Components\RenderOneSkinAnimation.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Components\RigidBodyComponent.h" />
     <ClInclude Include="Scene\Scene.h" />
@@ -499,10 +428,6 @@
     <ClInclude Include="Scene\Stage1Scene.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="Structs\TestBoneData.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Buffer\IndexBuffer.h" />
     <ClInclude Include="System\main.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -684,15 +609,6 @@
       <FileType>Document</FileType>
     </None>
     <None Include="ShaderResource\hlsl\VS\MotionBlurVS.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <FileType>Document</FileType>
-    </None>
-    <None Include="ShaderResource\hlsl\VS\OneSkinAnimationVS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

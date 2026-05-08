@@ -38,7 +38,7 @@ void SkyDomeRenderComponent::Update() {
 		m_VertexBuffer.SetGPU();
 		m_IndexBuffer.SetGPU();
 
-		deviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
+		deviceContext->PSSetShaderResources(0, 1, &m_TextureView);
 
 		ID3D11Buffer* bufferDraw = DirectXRender::GetDefaultDrawBuffer();
 		// 行列をシェーダーに渡す
@@ -54,7 +54,7 @@ void SkyDomeRenderComponent::Update() {
 void SkyDomeRenderComponent::TextureLoadSkyDome(const wchar_t* tex) {
 	ID3D11Device* device = DirectXRender::GetDevice();
 
-	HRESULT hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_pTextureView);
+	HRESULT hr = DirectX::CreateDDSTextureFromFile(device, tex, nullptr, &m_TextureView);
 	if (FAILED(hr))
 	{
 		MessageBoxW(NULL, L"DDSファイルの読み込みに失敗しました。", L"エラー", MB_OK | MB_ICONERROR);

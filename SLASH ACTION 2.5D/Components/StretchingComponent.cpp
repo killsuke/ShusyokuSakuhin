@@ -9,6 +9,7 @@ StretchingComponent::StretchingComponent(GameObject& obj) : Component(obj) {
 	m_SortNum = ComponentTypeManager::GetID_FromName("RENDER_CONTOROL"); // ソート番号を設定
 }
 
+// プレイヤーが待機中のアニメーションを行う
 void StretchingComponent::Update()
 {
 	RenderCharacterComponent* renderCharacter = m_Object->GetComponent<RenderCharacterComponent>();

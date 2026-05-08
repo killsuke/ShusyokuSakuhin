@@ -20,8 +20,8 @@ void SpringComponent::SpringAction2D()
 	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
 
-	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
-	RigidBodyComponent* rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
+	TransformComponent* transformP2 = m_SpringPartner->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigidBodyP2 = m_SpringPartner->GetComponent<RigidBodyComponent>();
 
 	if(transformP1 == nullptr || transformP2 == nullptr || rigidBodyP1 == nullptr || rigidBodyP2 == nullptr) {
 		return; // TransformComponentまたはRigidBodyComponentがない場合は何もしない
@@ -48,12 +48,12 @@ void SpringComponent::SpringAction2D()
 
 	XMFLOAT3 direction = delta / distance;   // 正規化
 	// フックの法則
-	float springForceMagnitude = (distance - m_restLength) * m_K;
+	float springForceMagnitude = (distance - m_RestLength) * m_Konstante;
 
 	// 減衰（相対速度に沿った力）
 	XMFLOAT3 relativeVelocity = velocityP1 - velocityP2;
 
-	relativeVelocity = relativeVelocity * m_DAMPING;
+	relativeVelocity = relativeVelocity * m_Damping;
 	XMVECTOR vec1 = XMLoadFloat3(&relativeVelocity);
 	XMVECTOR vec2 = XMLoadFloat3(&direction);
 
@@ -81,7 +81,7 @@ void SpringComponent::SpringAction2D()
 		rigidBodyP1->SetVelocity(XMFLOAT3(0, 0, 0));
 
 		transformP1->SetPosition({ posP2.x,posP2.y,transformP1->GetPosition().z }); // ← ここでスナップ
-		m_finSpringAction = true;
+		m_FinSpringAction = true;
 	}
 }
 
@@ -90,8 +90,8 @@ void SpringComponent::SpringAction3D()
 	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
 	RigidBodyComponent* rigidBodyP1 = m_Object->GetComponent<RigidBodyComponent>();
 
-	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
-	RigidBodyComponent* rigidBodyP2 = m_springPartner->GetComponent<RigidBodyComponent>();
+	TransformComponent* transformP2 = m_SpringPartner->GetComponent<TransformComponent>();
+	RigidBodyComponent* rigidBodyP2 = m_SpringPartner->GetComponent<RigidBodyComponent>();
 
 	if(transformP1 == nullptr || transformP2 == nullptr || rigidBodyP1 == nullptr || rigidBodyP2 == nullptr) {
 		return; // TransformComponentやRigidBodyComponentがない場合は何もしない
@@ -112,12 +112,12 @@ void SpringComponent::SpringAction3D()
 
 	XMFLOAT3 direction = delta / distance;   // 正規化
 	// フックの法則
-	float springForceMagnitude = (distance - m_restLength) * m_K;
+	float springForceMagnitude = (distance - m_RestLength) * m_Konstante;
 
 	// 減衰（相対速度に沿った力）
 	XMFLOAT3 relativeVelocity = velocityP1 - velocityP2;
 
-	relativeVelocity = relativeVelocity * m_DAMPING;
+	relativeVelocity = relativeVelocity * m_Damping;
 
 	XMVECTOR vec1 = XMLoadFloat3(&relativeVelocity);
 	XMVECTOR vec2 = XMLoadFloat3(&direction);
@@ -134,7 +134,7 @@ void SpringComponent::SpringAction3D()
 void SpringComponent::SpringActionTransform() {
 
 	TransformComponent* transformP1 = m_Object->GetComponent<TransformComponent>();
-	TransformComponent* transformP2 = m_springPartner->GetComponent<TransformComponent>();
+	TransformComponent* transformP2 = m_SpringPartner->GetComponent<TransformComponent>();
 
 	if(transformP1 == nullptr || transformP2 == nullptr) {
 		return; // TransformComponentがない場合は何もしない
@@ -155,18 +155,18 @@ void SpringComponent::SpringActionTransform() {
 
 	const XMFLOAT3 direction = delta / distance;   // 正規化
 
-	m_K = 15.0f;
-	m_DAMPING = 20 * sqrt(0.05f);
+	m_Konstante = 15.0f;
+	m_Damping = 20 * sqrt(0.05f);
 
 
 	// フックの法則
-	const float springForceMagnitude = distance - m_restLength;
-	const XMFLOAT3 springOffsest = -direction * (springForceMagnitude * m_K);
+	const float springForceMagnitude = distance - m_RestLength;
+	const XMFLOAT3 springOffsest = -direction * (springForceMagnitude * m_Konstante);
 
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
 	m_SpringVelocity += springOffsest * deltaTime;
-	m_SpringVelocity *= (1.0f - m_DAMPING * deltaTime);
+	m_SpringVelocity *= (1.0f - m_Damping * deltaTime);
 
 	XMFLOAT3 newPos{
 
@@ -191,7 +191,7 @@ void SpringComponent::SpringActionTransform() {
 	if (distance2 > prevDistance && prevDistance != 0.0f) {
 		transformP1->SetPosition({ posP2.x, posP2.y, transformP1->GetPosition().z });
 		m_SpringVelocity = XMFLOAT3(0, 0, 0);
-		m_finSpringAction = true;
+		m_FinSpringAction = true;
 		m_PreviousDistance = 0.0f;
 		return;
 	}
@@ -201,17 +201,17 @@ void SpringComponent::SpringActionTransform() {
 
 // ばね定数をセットする
 void SpringComponent::SetK(float k) {
-	m_K = k;
+	m_Konstante = k;
 }
 
 // ダンピング定数をセットする
 void SpringComponent::SetDAMPING(float damping) {
-	m_DAMPING = damping;
+	m_Damping = damping;
 }
 
 // ばねの初期の長さをセットする
 void SpringComponent::Setrestlng(float restLength) {
-	m_restLength = restLength;
+	m_RestLength = restLength;
 }
 
 // ダンピング定数を作成する
@@ -221,7 +221,7 @@ void SpringComponent::MakeDamping() {
 	if (rigid != nullptr) {
 
 		// m_DAMPING = 0.0f; だと、減衰がないのでバネ挙動を続ける
-		m_DAMPING = -ComputeCriticalDamping(rigid->GetMass(), m_K);
+		m_Damping = -ComputeCriticalDamping(rigid->GetMass(), m_Konstante);
 	}
 }
 

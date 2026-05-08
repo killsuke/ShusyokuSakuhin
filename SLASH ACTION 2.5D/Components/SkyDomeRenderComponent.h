@@ -5,7 +5,7 @@
 class SkyDomeRenderComponent : public RenderComponent
 {
 private:
-	ID3D11ShaderResourceView* m_pTextureView = nullptr;
+	ID3D11ShaderResourceView* m_TextureView = nullptr;
 
 public:
 	SkyDomeRenderComponent(GameObject& obj);

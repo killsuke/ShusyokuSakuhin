@@ -24,8 +24,8 @@ public:
 	virtual ~Component() = default;
 
 	virtual void Update() = 0;
-	inline uint32_t GetSortNum() const { return m_SortNum; };		 // ソート番号を返す
-	inline GameObject* GetGameObject() { return m_Object; }; // このコンポーネントが所属するGameObjectへのポインタを返す
-	inline void SetActiveFlag(const bool flag) { m_IsActiveFlag = flag; }; // コンポーネントの有効フラグをセット
-	inline bool GetActiveFlag() const { return m_IsActiveFlag; } // コンポーネントの有効フラグを取得
+	uint32_t GetSortNum() const { return m_SortNum; };		 // ソート番号を返す
+	GameObject* GetGameObject() { return m_Object; }; // このコンポーネントが所属するGameObjectへのポインタを返す
+	void SetActiveFlag(const bool flag) { m_IsActiveFlag = flag; }; // コンポーネントの有効フラグをセット
+	bool GetActiveFlag() const { return m_IsActiveFlag; } // コンポーネントの有効フラグを取得
 };

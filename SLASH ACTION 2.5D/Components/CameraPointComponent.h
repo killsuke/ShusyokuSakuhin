@@ -13,20 +13,20 @@ class CameraPointComponent : public Component
 {
 private:
 
-	GameObject* m_beforeTargetObj = nullptr;	// 前のポイント（から検索し、m_targetObjを見つける）
-	GameObject* m_nextTargetPoint = nullptr;	// スクロールしたい位置（目標点直接）
+	GameObject* m_BeforeTargetObj = nullptr;	// 前のポイント（から検索し、m_targetObjを見つける）
+	GameObject* m_NextTargetPoint = nullptr;	// スクロールしたい位置（目標点直接）
 
-	DirectX::XMFLOAT3 m_beforeDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが抜けたベクトル
-	DirectX::XMFLOAT3 m_frame2BeforeDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// 2フレーム前のプレイヤーが抜けたベクトル
+	DirectX::XMFLOAT3 m_BeforeDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが抜けたベクトル
+	DirectX::XMFLOAT3 m_Frame2BeforeDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// 2フレーム前のプレイヤーが抜けたベクトル
 
-	DirectX::XMFLOAT3 m_scrollDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);	// 次の部屋にスクロールしたい方向
-	DirectX::XMFLOAT3 m_inserDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが入ってきたベクトル
-	DirectX::XMFLOAT3 m_exitDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが抜けたベクトル
+	DirectX::XMFLOAT3 m_ScrollDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);	// 次の部屋にスクロールしたい方向
+	DirectX::XMFLOAT3 m_InserDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが入ってきたベクトル
+	DirectX::XMFLOAT3 m_ExitDirection = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);		// プレイヤーが抜けたベクトル
 
-	bool beforeTouched = false; // 前に触れたかどうかのフラグ
-	bool afterTouched = false; // 後に触れたかどうかのフラグ
+	bool m_IsBeforeTouched = false; // 前に触れたかどうかのフラグ
+	bool m_IsAfterTouched = false; // 後に触れたかどうかのフラグ
 
-	int m_isScrollDir = 0; // スクロールどっちにスクロールするかのフラグ
+	int m_ScrollDir = 0; // スクロールどっちにスクロールするかのフラグ
 
 public:
 	CameraPointComponent(GameObject& obj);
@@ -34,16 +34,16 @@ public:
 
 	void Update() override;
 
-	inline void SetBeforeTargetObj(GameObject& point) { m_beforeTargetObj = &point; };
-	inline void SetNextTargetObj(GameObject& pos) { m_nextTargetPoint = &pos; };
-	inline void SetBeforeAndNextTargetObj(GameObject& before, GameObject& next) {
-		m_beforeTargetObj = &before;
-		m_nextTargetPoint = &next;
+	void SetBeforeTargetObj(GameObject& point) { m_BeforeTargetObj = &point; };
+	void SetNextTargetObj(GameObject& pos) { m_NextTargetPoint = &pos; };
+	void SetBeforeAndNextTargetObj(GameObject& before, GameObject& next) {
+		m_BeforeTargetObj = &before;
+		m_NextTargetPoint = &next;
 	};
-	inline void SetScrollDirection(const DirectX::XMFLOAT3& dir) { m_scrollDirection = dir; };
+	void SetScrollDirection(const DirectX::XMFLOAT3& dir) { m_ScrollDirection = dir; };
 
 	// ヌルポインタであったときのことも考えてGameObject*で返す
-	inline GameObject* GetTargetObj()const { return m_nextTargetPoint; };
+	GameObject* GetTargetObj()const { return m_NextTargetPoint; };
 
-	inline int GetScrollDir() { return m_isScrollDir; };
+	int GetScrollDir() { return m_ScrollDir; };
 };

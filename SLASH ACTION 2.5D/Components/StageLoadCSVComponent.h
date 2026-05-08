@@ -6,8 +6,6 @@
 
 class StageLoadCSVComponent :  public Component
 {
-private:
-
 public:
 	StageLoadCSVComponent(GameObject& obj);
 	~StageLoadCSVComponent() = default;

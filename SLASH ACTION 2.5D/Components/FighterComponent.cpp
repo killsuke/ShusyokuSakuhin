@@ -8,21 +8,26 @@
 #include "Manager/EventBusManager.h"
 #include "Manager/TimeManager.h"
 
+namespace {
+	constexpr float INVINCIBLE_TIME = 1.5f; // 無敵時間
+}
+
 FighterComponent::FighterComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("FIGHTER"); // ソート番号を設定
-	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_ListenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnHit(e);
 		});
 
-	m_listenerID_FallHitEvent = EventBusManager::Subscribe<FallHitEvent>([&](const FallHitEvent& e) {
+	m_ListenerID_FallHitEvent = EventBusManager::Subscribe<FallHitEvent>([&](const FallHitEvent& e) {
 		OnFallHit(e);
 		});
 }
 
 FighterComponent::~FighterComponent() {
-	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
-	EventBusManager::Unsubscribe(m_listenerID_FallHitEvent);
+
+	EventBusManager::Unsubscribe(m_ListenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_FallHitEvent);
 }
 
 void FighterComponent::Update() {
@@ -35,43 +40,22 @@ void FighterComponent::Update() {
 
 	// 無敵の経過時間を加算
 	if (m_InvincibleFlag == true) {
-		m_recordTime += deltaTime;
+		m_RecordTime += deltaTime;
 
 		// 無敵時間終了判定
-		if (m_recordTime >= 1.5f) {
-			m_recordTime = 0.0f;
+		if (m_RecordTime >= INVINCIBLE_TIME) {
+			m_RecordTime = 0.0f;
 			m_InvincibleFlag = false;
 		}
 	}
-
-	if (m_Hp <= 0) {
-		m_Hp = 0; // ヒットポイントが0以下になったら0にする
-
-		// 遅れて死ぬ
-		//m_DeadRecordTime += deltaTime;
-		//if (m_DeadRecordTime > 5.0f) {
-		//	m_Object->SetDeleteFg(true); // オブジェクトを削除フラグを立てる
-		//}
-
-		// これがボスであった場合はどうするかを考えてみる
-		if (m_UseDeadFlag == false) {
-
-			if (m_DeadFlag == false) {
-				m_DeadFlag = true; // 死亡フラグを立てる
-
-			}
-			return; // 死亡フラグがfalseなら何もしない
-		}
-
-		m_DeadFlag = true; // 死亡フラグを立てる
-	}
 }
 
+// 敵から受けるダメージ
 void FighterComponent::DamageProcess(const HitEvent& event) {
 
 	if (m_UseInvincible == true) {
 
-		if (m_recordTime < 1.5f) {
+		if (m_RecordTime < INVINCIBLE_TIME) {
 			if (m_TotalDamage > 0 && m_InvincibleFlag == false) {
 				m_InvincibleFlag = true; // ダメージを受けたら無敵フラグを立てる
 				m_Hp -= m_TotalDamage;
@@ -88,7 +72,7 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 			}
 		}
 		else {
-			m_recordTime = 0.0f;
+			m_RecordTime = 0.0f;
 			m_InvincibleFlag = false;
 		}
 	}
@@ -110,9 +94,8 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 	}
 
 	if (m_Hp <= 0) {
-		m_Hp = 0; // ヒットポイントが0以下になったら0にする
+		m_Hp = 0;
 
-		// これがボスであった場合はどうするかを考えてみる
 		if (m_UseDeadFlag == false) {
 
 			if (m_DeadFlag == false) {
@@ -122,13 +105,14 @@ void FighterComponent::DamageProcess(const HitEvent& event) {
 
 				EventBusManager::Push(de);
 			}
-			return; // 死亡フラグがfalseなら何もしない
+			return;
 		}
 
 		m_DeadFlag = true; // 死亡フラグを立てる
 	}
 }
 
+// 落下した場合のダメージ
 void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 
 	if (m_UseInvincible == true) {
@@ -145,7 +129,7 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 
 			EventBusManager::Push(de);
 
-			m_recordTime = 0.0f; // 無敵時間の記録をリセット
+			m_RecordTime = 0.0f; // 無敵時間の記録をリセット
 		}
 	}
 	else {
@@ -165,9 +149,8 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 	}
 
 	if (m_Hp <= 0) {
-		m_Hp = 0; // ヒットポイントが0以下になったら0にする
+		m_Hp = 0;
 
-		// これがボスであった場合はどうするかを考えてみる
 		if (m_UseDeadFlag == false) {
 
 			if (m_DeadFlag == false) {
@@ -177,7 +160,7 @@ void FighterComponent::FallDamageProcess(const FallHitEvent& event) {
 
 				EventBusManager::Push(de);
 			}
-			return; // 死亡フラグがfalseなら何もしない
+			return;
 		}
 
 		m_DeadFlag = true; // 死亡フラグを立てる

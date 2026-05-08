@@ -36,9 +36,9 @@ void TitleScene::Init()
 {
 	GameObject* camera = GameObjectManager::AddObject("camera", "Camera");
 	TransformComponent* cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(10.0f, 30.0f, -900.0f));
+	cameraTrans->SetPosition(DirectX::XMFLOAT3(10.0f, 30.0f, -900.0f));
 	CameraComponent* cameraObj = camera->AddComponent<CameraComponent>();
-	cameraObj->SetTarget(DirectX::SimpleMath::Vector3(10.0f, 30.0f, 0.0f));
+	cameraObj->SetTarget(DirectX::XMFLOAT3(10.0f, 30.0f, 0.0f));
 
 	FLOAT clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	DirectXRender::SetClearColor(clearColor);

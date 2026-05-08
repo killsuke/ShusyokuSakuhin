@@ -3,8 +3,6 @@
 
 class AttackOneTimeComponent : public AttackComponent
 {
-private:
-
 public:
 	AttackOneTimeComponent(GameObject& obj);
 	~AttackOneTimeComponent() = default;

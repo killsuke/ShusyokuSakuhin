@@ -27,7 +27,7 @@
 TestStageScene::TestStageScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -200.0f));
+	cameraTrans->SetPosition(DirectX::XMFLOAT3(0.0f, 0.0f, -200.0f));
 	camera->AddComponent<RigidBodyComponent>();
 	auto cameraMove = camera->AddComponent<CameraMoveComponent>();
 	camera->AddComponent<CameraComponent>();

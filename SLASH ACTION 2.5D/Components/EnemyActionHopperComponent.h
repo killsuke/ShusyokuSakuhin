@@ -12,7 +12,7 @@ private:
 
 	void ChangeDirection();
 
-	void DeadAnimation() override {};
+	void DeadAnimation() override;
 
 public:
 

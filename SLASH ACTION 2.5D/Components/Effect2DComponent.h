@@ -3,12 +3,12 @@
 class Effect2DComponent : public Component
 {
 private:
-	float m_cutRecordTime = 0.0f;
-	float m_recordTime = 0.0f;	// 経過時間
-	float m_onePieceTime = 0.0f;	// 分割数切り替えの時の１枚辺りの時間
-	float m_maxCutNumX = 1.0f;
-	float m_nowCutNumX = 1.0f;
-	float m_maxTime = 0.0f; // エフェクトが消えるまでの時間
+	float m_CutRecordTime = 0.0f;
+	float m_RecordTime = 0.0f;	// 経過時間
+	float m_OnePieceTime = 0.0f;	// 分割数切り替えの時の１枚辺りの時間
+	float m_MaxCutNumX = 1.0f;
+	float m_NowCutNumX = 1.0f;
+	float m_MaxTime = 0.0f; // エフェクトが消えるまでの時間
 
 public:
 
@@ -17,10 +17,10 @@ public:
 	void Update() override;
 
 	// テクスチャの最大時間と分割数を設定
-	inline void SetMaxTimeAndCut_X(const float time,const float cut) { 
-		m_maxTime = time; 
-		m_maxCutNumX = cut;
+	void SetMaxTimeAndCut_X(const float time, const float cut) {
+		m_MaxTime = time;
+		m_MaxCutNumX = cut;
 
-		m_onePieceTime = m_maxTime / m_maxCutNumX;	// １枚辺りの時間を計算
+		m_OnePieceTime = m_MaxTime / m_MaxCutNumX;	// １枚辺りの時間を計算
 	};
 };

@@ -9,7 +9,7 @@ namespace {
 
 void TextureManager::Init() {
 
-	textureMap.clear();
+	m_TextureMap.clear();
 
 	LoadFolder(TexturePath);
 }
@@ -54,9 +54,9 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 
 	// すでに読み込まれているテクスチャがあるかどうかを確認
 	const std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it
-		= textureMap.find(wfilename);
+		= m_TextureMap.find(wfilename);
 
-	if (it != textureMap.end()) {
+	if (it != m_TextureMap.end()) {
 		return it->second;    // 既存のテクスチャが見つかったら、すぐに返す。
 	}
 
@@ -72,7 +72,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::LoadTexture(con
 	}
 
 	// 読み込みが成功すれば、そのテクスチャのポインタをキャッシュに保存
-	textureMap[wfilename] = texture;
+	m_TextureMap[wfilename] = texture;
 
 	return texture;
 }
@@ -82,9 +82,9 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(cons
 
 	const std::wstring wfilename = ShortConversion(filename);
 	const std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>>::iterator it
-		= textureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
+		= m_TextureMap.find(wfilename); // マップ内でファイル名に対応する要素を検索
 
-	if (it != textureMap.end()) { // 要素が見つかった場合
+	if (it != m_TextureMap.end()) { // 要素が見つかった場合
 		return it->second; // 対応するテクスチャを返す
 	}
 
@@ -95,7 +95,7 @@ Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> TextureManager::GetTexture(cons
 
 // 解放処理
 void TextureManager::ReleaseAllTextures() {
-	textureMap.clear();
+	m_TextureMap.clear();
 }
 
 // stringをwstringに変換する関数

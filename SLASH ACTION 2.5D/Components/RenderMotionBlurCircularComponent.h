@@ -7,9 +7,9 @@ class RenderMotionBlurCircularComponent :  public RenderComponent
 private:
 	GameObject* m_ChildTip = nullptr;
 	GameObject* m_ChildRoot = nullptr;
-	DirectX::XMFLOAT3 prevTipPos = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 prevRootPos = { 0.0f,0.0f,0.0f };	
-	DirectX::XMVECTOR prevQuat = DirectX::XMQuaternionIdentity();
+	DirectX::XMFLOAT3 m_PrevTipPos = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 m_PrevRootPos = { 0.0f,0.0f,0.0f };	
+	DirectX::XMVECTOR m_PrevQuat = DirectX::XMQuaternionIdentity();
 
 public:
 	RenderMotionBlurCircularComponent(GameObject& obj);

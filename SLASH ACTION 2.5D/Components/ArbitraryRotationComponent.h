@@ -53,15 +53,15 @@ public:
 
 	void Update()override;
 
-	inline void SetArbitraryAxis(const DirectX::XMFLOAT3& axis) {
+	void SetArbitraryAxis(const DirectX::XMFLOAT3& axis) {
 		DirectX::XMVECTOR vAxis = DirectX::XMVectorSet(axis.x, axis.y, axis.z, 1.0f);
 		m_ArbitraryAxis = DirectX::XMVector4Normalize(vAxis);
 	};
-	inline void SetStartAngle(const float angle) {
+	void SetStartAngle(const float angle) {
 		m_StartAngle = angle;
 	};
-	inline void SetEndAngle(const float angle) { m_EndAngle = angle; };
-	inline void SetStartAndEndAngle(const float angle1, const float angle2, const bool clockwise) {
+	void SetEndAngle(const float angle) { m_EndAngle = angle; };
+	void SetStartAndEndAngle(const float angle1, const float angle2, const bool clockwise) {
 		m_StartAngle = angle1;
 		m_EndAngle = angle2;
 		m_clockwise = clockwise;
@@ -86,7 +86,7 @@ public:
 	// ワープ角度の設定
 	// 時計回り・反時計回りで処理を分ける
 	// ルールとして、360度以上の回転はしないかつ、間違えて反転しないようにする
-	inline void SetStartAndEndAndWarpAngle(const float angle1, const float angle2, const float angle3, const bool clockwise) {
+	void SetStartAndEndAndWarpAngle(const float angle1, const float angle2, const float angle3, const bool clockwise) {
 		m_StartAngle = angle1;
 		m_EndAngle = angle2;
 		m_clockwise = clockwise;
@@ -115,27 +115,27 @@ public:
 		m_RollingPattern = RollingPattern::SWORD_SLASH;
 	}
 
-	inline void SetCenterObject(GameObject* centerObj) { m_CenterObject = centerObj; }
+	void SetCenterObject(GameObject* centerObj) { m_CenterObject = centerObj; }
 
-	inline void SetRotationSpeed(float speed) { m_rotationSpeed = fabsf(speed); }
-	inline void MakeInitialOffset(const DirectX::XMFLOAT3& parent, const DirectX::XMFLOAT3& child) {
+	void SetRotationSpeed(float speed) { m_rotationSpeed = fabsf(speed); }
+	void MakeInitialOffset(const DirectX::XMFLOAT3& parent, const DirectX::XMFLOAT3& child) {
 		m_initialOffset = child - parent; // 子オブジェクトの位置から親オブジェクトの位置を引いて差分を計算
 
 		const DirectX::XMFLOAT2 offset = DirectX::XMFLOAT2(m_initialOffset.x, m_initialOffset.y);
 
 		m_radius = sqrtf(offset.x * offset.x + offset.y * offset.y);
 	}
-	inline void SetClockwise(const bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
-	inline void SetRollingActive(const bool active) { m_rollingActive = active; } // 回転の停止・再開
-	inline void SetFlipRequested(const bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
-	inline void SetLockAngle(const DirectX::XMFLOAT3& angle) { m_LockRotation = angle; };
-	inline void SetSampleDivisions(const int sample) { m_SampleDivisions = sample; }
-	inline void SetStopTime(const float time) { m_StopTime = time; }
-	inline void ResetNowAngle_Radian() { m_nowAngleRadian = 0.0f; } // 角度をリセット（ラジアン）
-	inline void ResetNowAngle_Degree() { m_nowAngleDegree = 0.0f; } // 角度をリセット（ディグリー）
-	inline void ResetIsFinished() { m_IsFinished = false; } // 回転完了フラグをリセット
-	
-	inline void ResetVariables() {
+	void SetClockwise(const bool clockwise) { m_clockwise = clockwise; }	// 時計回りか反時計回りか
+	void SetRollingActive(const bool active) { m_rollingActive = active; } // 回転の停止・再開
+	void SetFlipRequested(const bool flip) { m_flipRequested = flip; } // 反転要求フラグの設定
+	void SetLockAngle(const DirectX::XMFLOAT3& angle) { m_LockRotation = angle; };
+	void SetSampleDivisions(const int sample) { m_SampleDivisions = sample; }
+	void SetStopTime(const float time) { m_StopTime = time; }
+	void ResetNowAngle_Radian() { m_nowAngleRadian = 0.0f; } // 角度をリセット（ラジアン）
+	void ResetNowAngle_Degree() { m_nowAngleDegree = 0.0f; } // 角度をリセット（ディグリー）
+	void ResetIsFinished() { m_IsFinished = false; } // 回転完了フラグをリセット
+
+	void ResetVariables() {
 
 		m_nowAngleDegree = 0.0f;
 		m_nowAngleRadian = 0.0f;
@@ -144,24 +144,24 @@ public:
 		m_IsFinished = false;
 		m_rollingActive = true;
 	}
-	
-	inline void RollingStop() { m_rollingActive = false; } // 回転を停止
-	inline void RollingStart() { m_rollingActive = true; } // 回転を再開
 
-	inline void AddNowAngle(float angle) {
+	void RollingStop() { m_rollingActive = false; } // 回転を停止
+	void RollingStart() { m_rollingActive = true; } // 回転を再開
+
+	void AddNowAngle(float angle) {
 		float newAngle = angle * (DirectX::XM_PI / 180.0f);
 		m_nowAngleRadian += newAngle;
 		m_nowAngleDegree += angle;
 	};
 
-	inline float GetNowAngleDegree() const { return m_nowAngleDegree; } // 現在の角度（度数法）を取得
-	inline bool GetRollingActive()const { return m_rollingActive; };
-	inline std::vector<PosAndQuaternion> GetWorldPosAndQuats()const { return m_worldPosQuats; };
-	inline GameObject* GetCenterObject()const { return m_CenterObject; };
-	inline float GetRollingSpeed()const {
+	float GetNowAngleDegree() const { return m_nowAngleDegree; } // 現在の角度（度数法）を取得
+	bool GetRollingActive()const { return m_rollingActive; };
+	std::vector<PosAndQuaternion> GetWorldPosAndQuats()const { return m_worldPosQuats; };
+	GameObject* GetCenterObject()const { return m_CenterObject; };
+	float GetRollingSpeed()const {
 		return m_rotationSpeed;
 	}
-	inline bool GetIsFinished()const { return m_IsFinished; };
+	bool GetIsFinished()const { return m_IsFinished; };
 
 	float NormalizeAngleDegree(float deg);
 	float NormalizeAngleRadian(float rad);

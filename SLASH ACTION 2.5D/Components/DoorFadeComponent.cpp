@@ -87,14 +87,14 @@ void DoorFadeComponent::OpenDoor() {
 
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-	timer += deltaTime;
+	m_RecordTime += deltaTime;
 
-	if (timer > DOOR_MOVE_DURATION) {
+	if (m_RecordTime > DOOR_MOVE_DURATION) {
 		m_IsDoorMoveEndFlag = true;
 
 		upTrans->SetPosition(m_DoorUpFirstPos);
 		downTrans->SetPosition(m_DoorDownFirstPos);
-		timer = 0.0f;
+		m_RecordTime = 0.0f;
 	}
 }
 
@@ -112,20 +112,20 @@ void DoorFadeComponent::CloseDoor() {
 
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-	timer += deltaTime;
+	m_RecordTime += deltaTime;
 
-	if (timer > DOOR_MOVE_DURATION) {
+	if (m_RecordTime > DOOR_MOVE_DURATION) {
 
 
 		m_IsDoorMoveEndFlag = true;
-		timer = 0.0f;
-		if(m_nextSceneName == "TitleScene"){
+		m_RecordTime = 0.0f;
+		if(m_NextSceneName == "TitleScene"){
 			SceneManager::SceneChange<TitleScene>();
 		}
-		else if (m_nextSceneName == "LoadStageScene") {
+		else if (m_NextSceneName == "LoadStageScene") {
 			SceneManager::SceneChange<LoadStageScene>();
 		}
-		else if(m_nextSceneName == "ResultScene") {
+		else if(m_NextSceneName == "ResultScene") {
 			SceneManager::SceneChange<ResultScene>();
 		}
 		else {
@@ -138,8 +138,5 @@ void DoorFadeComponent::CloseDoor() {
 	if (m_IsDoorMoveEndFlag == false) {
 		upTrans->AddPosition(DOOR_UP_CLOSE_SPEED);
 		downTrans->AddPosition(DOOR_DOWN_CLOSE_SPEED);
-	}
-	else {
-		return;
 	}
 }

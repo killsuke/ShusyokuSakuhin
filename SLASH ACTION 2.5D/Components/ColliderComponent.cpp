@@ -32,7 +32,7 @@ void ColliderComponent::InitCollider() {
 
 void ColliderComponent::Update()
 {
-	beforeColl_ab = coll_ab; // 前回のAABBの当たり判定用を保存
+	m_BeforeColl_AABB = m_Coll_AABB; // 前回のAABBの当たり判定用を保存
 
 	TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
 
@@ -67,13 +67,13 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	XMFLOAT3 outCenter = {};
 	XMFLOAT3 outSize = {};
 
-	outCenter.x = (coll_ab.min.x + coll_ab.max.x) * 0.5f;
-	outCenter.y = (coll_ab.min.y + coll_ab.max.y) * 0.5f;
-	outCenter.z = (coll_ab.min.z + coll_ab.max.z) * 0.5f;
+	outCenter.x = (m_Coll_AABB.min.x + m_Coll_AABB.max.x) * 0.5f;
+	outCenter.y = (m_Coll_AABB.min.y + m_Coll_AABB.max.y) * 0.5f;
+	outCenter.z = (m_Coll_AABB.min.z + m_Coll_AABB.max.z) * 0.5f;
 
-	outSize.x = (coll_ab.max.x - coll_ab.min.x) * 0.5f;
-	outSize.y = (coll_ab.max.y - coll_ab.min.y) * 0.5f;
-	outSize.z = (coll_ab.max.z - coll_ab.min.z) * 0.5f;
+	outSize.x = (m_Coll_AABB.max.x - m_Coll_AABB.min.x) * 0.5f;
+	outSize.y = (m_Coll_AABB.max.y - m_Coll_AABB.min.y) * 0.5f;
+	outSize.z = (m_Coll_AABB.max.z - m_Coll_AABB.min.z) * 0.5f;
 
 	// クォータニオン作成
 	const XMVECTOR quat = XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f);
@@ -86,20 +86,20 @@ void ColliderComponent::MakeWorldAABBMatrix() {
 	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	// ワールド行列を作成し、保存
-	coll_ab.worldAABBMatrix = s * r * t;
+	m_Coll_AABB.worldAABBMatrix = s * r * t;
 }
 
 void ColliderComponent::MakeWorldOBBMatrix() {
 
 	// SRT情報作成
-	const XMMATRIX r = XMMatrixRotationQuaternion(coll_ob.rotation);
-	const XMVECTOR scale = XMVectorSet(coll_ob.size.x, coll_ob.size.y, coll_ob.size.z, 1.0f);
+	const XMMATRIX r = XMMatrixRotationQuaternion(m_Coll_OBB.rotation);
+	const XMVECTOR scale = XMVectorSet(m_Coll_OBB.size.x, m_Coll_OBB.size.y, m_Coll_OBB.size.z, 1.0f);
 	const XMMATRIX s = XMMatrixScalingFromVector(scale);
-	const XMVECTOR pos = XMVectorSet(coll_ob.center.x, coll_ob.center.y, coll_ob.center.z, 1.0f);
+	const XMVECTOR pos = XMVectorSet(m_Coll_OBB.center.x, m_Coll_OBB.center.y, m_Coll_OBB.center.z, 1.0f);
 	const XMMATRIX t = XMMatrixTranslationFromVector(pos);
 
 	// ワールド行列を作成し、保存
-	coll_ob.worldOBBMatrix = s * r * t;
+	m_Coll_OBB.worldOBBMatrix = s * r * t;
 }
 
 //==================================
@@ -442,8 +442,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent
 		return false; // コライダーが無効な場合は衝突しない
 	}
 
-	const AABB coll1 = p1.coll_ab;
-	const AABB coll2 = p2.coll_ab;
+	const AABB coll1 = p1.m_Coll_AABB;
+	const AABB coll2 = p2.m_Coll_AABB;
 
 	// X座標
 	if (coll1.max.x < coll2.min.x) {
@@ -482,8 +482,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger3D(const ColliderComponent
 //==================================
 bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& pos) {
 
-	const AABB coll1 = p1.coll_ab;
-	const AABB coll2 = p2.coll_ab;
+	const AABB coll1 = p1.m_Coll_AABB;
+	const AABB coll2 = p2.m_Coll_AABB;
 
 	// そもそも衝突しているかどうかのチェック
 	// 奥行きからの敵の登場のことも考えて、念のため
@@ -555,8 +555,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 		return false; // コライダーが無効な場合は衝突しない
 	}
 
-	const AABB coll1 = p1.coll_ab;
-	const AABB coll2 = p2.coll_ab;
+	const AABB coll1 = p1.m_Coll_AABB;
+	const AABB coll2 = p2.m_Coll_AABB;
 
 	bool hit = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
@@ -641,8 +641,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_IsTrigger2D_Normal(const ColliderCo
 // 戻しアリ
 //==================================
 bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderComponent& p1, const ColliderComponent& p2, XMFLOAT3& hitNormal) {
-	const AABB coll1 = p1.coll_ab;
-	const AABB coll2 = p2.coll_ab;
+	const AABB coll1 = p1.m_Coll_AABB;
+	const AABB coll2 = p2.m_Coll_AABB;
 
 	// そもそも衝突しているかどうかのチェック
 	// 奥行きからの敵の登場のことも考えて、念のため
@@ -653,8 +653,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	if (check == true) {
 
 		XMFLOAT3 returnDir = {};
-		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = touchObjects.find(p1.m_Object);
-		if (it != touchObjects.end()) {
+		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = m_TouchObjects.find(p1.m_Object);
+		if (it != m_TouchObjects.end()) {
 
 			if (it->second != XMFLOAT3()) {
 				hitNormal = it->second;
@@ -736,8 +736,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 		}
 
 		// 挿入
-		touchObjects.insert({ p1.m_Object,hitNormal });
-		touchObjects[p1.m_Object] = hitNormal;
+		m_TouchObjects.insert({ p1.m_Object,hitNormal });
+		m_TouchObjects[p1.m_Object] = hitNormal;
 
 		// 位置補正をして、SRT情報を再計算
 		TransformComponent* transform = m_Object->GetComponent<TransformComponent>();
@@ -754,8 +754,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger2D_Normal(const ColliderCo
 	}
 	else {
 		// 存在確認をして、second情報をリセット上書き
-		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = touchObjects.find(p1.m_Object);
-		if (it != touchObjects.end()) {
+		std::unordered_map<GameObject*, DirectX::XMFLOAT3>::iterator it = m_TouchObjects.find(p1.m_Object);
+		if (it != m_TouchObjects.end()) {
 			it->second = XMFLOAT3();
 		}
 	}
@@ -777,8 +777,8 @@ bool ColliderComponent::CheckHit_CubeAndCube_NoTrigger3D(const ColliderComponent
 		// 最終的のオブジェクトを押し戻すためのベクトル
 		DirectX::XMFLOAT3 pushBack(0.0f, 0.0f, 0.0f);
 
-		const AABB coll1 = p1.coll_ab;
-		const AABB coll2 = p2.coll_ab;
+		const AABB coll1 = p1.m_Coll_AABB;
+		const AABB coll2 = p2.m_Coll_AABB;
 
 		// 各軸での「めり込み量」を計算
 		const float dx1 = (coll1.max.x - coll2.min.x);	// Bの右端 - Aの左端（Aが左から押し込んでいる時）
@@ -887,9 +887,9 @@ bool ColliderComponent::IntersectRayAABB(
 
 bool ColliderComponent::TestNormal(const ColliderComponent& p1, const ColliderComponent& p2, DirectX::XMFLOAT3& hitNormal) {
 
-	const AABB coll1 = p1.coll_ab;
-	const AABB coll2 = p2.coll_ab;
-	const AABB beforeColl2 = p2.beforeColl_ab;
+	const AABB coll1 = p1.m_Coll_AABB;
+	const AABB coll2 = p2.m_Coll_AABB;
+	const AABB beforeColl2 = p2.m_BeforeColl_AABB;
 
 	const bool check = CheckHit_CubeAndCube_IsTrigger3D(p1, p2);
 
@@ -1296,22 +1296,22 @@ bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent&
 		return false; // どちらかのコライダーが無効なら衝突無し
 	}
 
-	const XMFLOAT3 AABBCenter = (aabb.coll_ab.max + aabb.coll_ab.min) * 0.5f;
-	const XMFLOAT3 OBBCenter = obb.coll_ob.center;
+	const XMFLOAT3 AABBCenter = (aabb.m_Coll_AABB.max + aabb.m_Coll_AABB.min) * 0.5f;
+	const XMFLOAT3 OBBCenter = obb.m_Coll_OBB.center;
 
 	XMFLOAT3 vecDistance = AABBCenter - OBBCenter;
 
-	const XMFLOAT3 obbAxes[3] = { obb.coll_ob.axisX, obb.coll_ob.axisY, obb.coll_ob.axisZ };
+	const XMFLOAT3 obbAxes[3] = { obb.m_Coll_OBB.axisX, obb.m_Coll_OBB.axisY, obb.m_Coll_OBB.axisZ };
 	const XMFLOAT3 aabbAxes[3] = { XMFLOAT3(1.0f,0.0f,0.0f), XMFLOAT3(0.0f,1.0f,0.0f), XMFLOAT3(0.0f,0.0f,1.0f) };
 
 	// OBBの3軸
 	for (int i = 0; i < 3; ++i) {
-		if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, obbAxes[i], vecDistance)) return false;
+		if (!CompareLengthOBBvsAABB(obb.m_Coll_OBB, aabb.m_Coll_AABB, obbAxes[i], vecDistance)) return false;
 	}
 
 	// AABBの3軸
 	for (int i = 0; i < 3; ++i) {
-		if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, aabbAxes[i], vecDistance)) return false;
+		if (!CompareLengthOBBvsAABB(obb.m_Coll_OBB, aabb.m_Coll_AABB, aabbAxes[i], vecDistance)) return false;
 	}
 
 	// 外積9本
@@ -1337,7 +1337,7 @@ bool ColliderComponent::CheckHit_AABBAndOBB_IsTrigger3D(const ColliderComponent&
 			XMFLOAT3 axis;
 			XMStoreFloat3(&axis, axisV);
 
-			if (!CompareLengthOBBvsAABB(obb.coll_ob, aabb.coll_ab, axis, vecDistance)) {
+			if (!CompareLengthOBBvsAABB(obb.m_Coll_OBB, aabb.m_Coll_AABB, axis, vecDistance)) {
 				return false;
 			}
 		}

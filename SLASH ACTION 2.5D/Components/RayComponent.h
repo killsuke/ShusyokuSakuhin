@@ -15,10 +15,10 @@ public:
 
 	void Update()override;
 
-	inline void SetOriginPosition(const DirectX::XMVECTOR& origin) { m_Origin = origin; };
-	inline DirectX::XMVECTOR GetOriginPosition() const { return m_Origin; };
+	void SetOriginPosition(const DirectX::XMVECTOR& origin) { m_Origin = origin; };
+	DirectX::XMVECTOR GetOriginPosition() const { return m_Origin; };
 
-	inline void SetDirection(const DirectX::XMVECTOR& direction) { m_Direction = direction; };
-	inline DirectX::XMVECTOR GetDirection() const { return m_Direction; };
+	void SetDirection(const DirectX::XMVECTOR& direction) { m_Direction = direction; };
+	DirectX::XMVECTOR GetDirection() const { return m_Direction; };
 };
 

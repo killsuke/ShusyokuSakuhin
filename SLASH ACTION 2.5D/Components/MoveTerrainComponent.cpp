@@ -33,16 +33,16 @@ void MoveTerrainComponent::Update() {
 
 	rigid->ConstantVelocity(newPos);
 
-	if (m_player == nullptr) {
+	if (m_Player == nullptr) {
 		GameObject* player = GameObjectManager::GameObjectFindName("Player");
 		if (player != nullptr) {
-			m_player = player;
+			m_Player = player;
 		}
 	}
 	else {
-		TransformComponent* playerTransform = m_player->GetComponent<TransformComponent>();
-		ColliderComponent* collplay = m_player->GetComponent<ColliderComponent>();
-		PlayerOperationComponent* testMove = m_player->GetComponent<PlayerOperationComponent>();
+		TransformComponent* playerTransform = m_Player->GetComponent<TransformComponent>();
+		ColliderComponent* collplay = m_Player->GetComponent<ColliderComponent>();
+		PlayerOperationComponent* testMove = m_Player->GetComponent<PlayerOperationComponent>();
 
 		if (playerTransform == nullptr || collplay == nullptr) {
 			return;

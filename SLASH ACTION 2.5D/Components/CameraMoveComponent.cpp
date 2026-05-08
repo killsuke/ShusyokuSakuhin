@@ -12,7 +12,7 @@ using namespace DirectX;
 CameraMoveComponent::CameraMoveComponent(GameObject& obj) : Component(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("CAMERA_MOVE"); // ソート番号を設定
-	m_chaseHeight = 25.0f; // 初期の追従高さは0
+	m_ChaseHeight = 25.0f; // 初期の追従高さは0
 }
 
 void CameraMoveComponent::Update()
@@ -34,9 +34,9 @@ void CameraMoveComponent::Update()
 
     m_CameraPattern = CameraPattern::CAMERA_NONE;
 
-    if (m_moveTarget != nullptr) {
+    if (m_MoveTarget != nullptr) {
 
-        m_CameraPattern = m_moveTarget->GetComponent<CameraTargetComponent>()->GetCameraPattern();
+        m_CameraPattern = m_MoveTarget->GetComponent<CameraTargetComponent>()->GetCameraPattern();
     }
 
     if (m_CameraPattern == CameraPattern::CAMERA_NONE) {
@@ -147,7 +147,7 @@ void CameraMoveComponent::Chase_YCamera(GameObject& cameraObj, GameObject& playe
 
     const XMFLOAT3 playerPos = playerTrans->GetPosition();
     
-    if (abs(playerPos.y) > m_chaseHeight)
+    if (abs(playerPos.y) > m_ChaseHeight)
     {
         // ちょっと上ぐらいがちょうどいい
         cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
@@ -165,13 +165,13 @@ void CameraMoveComponent::SpringCamera(GameObject& cameraObj)
         const bool fin = cameraSpring->GetFinSpringAction();
         if (fin == true) {
             cameraSpring->SetFinSpringAction(false);
-            m_moveTarget = nullptr;
+            m_MoveTarget = nullptr;
             return;
         }
 
         // m_moveTargetから情報を全部もらうとか？
-        cameraSpring->SetSpringPartner(m_moveTarget);
-        cameraSpring->SetK(m_moveTarget->GetComponent<CameraTargetComponent>()->GetSpringK());
+        cameraSpring->SetSpringPartner(m_MoveTarget);
+        cameraSpring->SetK(m_MoveTarget->GetComponent<CameraTargetComponent>()->GetSpringK());
         cameraSpring->MakeDamping(); // ダンピングを作成
         cameraSpring->SpringActionTransform();
     }
@@ -189,7 +189,7 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 
     const XMFLOAT3 playerPos = playerTrans->GetPosition();
     
-    if (abs(playerPos.y) > m_chaseHeight)
+    if (abs(playerPos.y) > m_ChaseHeight)
     {
         // ちょっと上ぐらいがちょうどいい
         cameraTrans->SetPosition({ cameraTrans->GetPosition().x, playerPos.y + 15.0f, cameraTrans->GetPosition().z });
@@ -199,7 +199,7 @@ void CameraMoveComponent::AdjustmentHeight(GameObject& cameraObj, GameObject& pl
 
 void CameraMoveComponent::SetMoveTarget(GameObject& target) {
 
-    m_moveTarget = &target;
+    m_MoveTarget = &target;
 
     GameObject* cameraObj = GameObjectManager::GameObjectFindName("camera");
 

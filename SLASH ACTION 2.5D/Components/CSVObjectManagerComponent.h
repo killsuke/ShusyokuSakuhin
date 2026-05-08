@@ -9,7 +9,7 @@
 class CSVObjectManagerComponent : public Component
 {
 protected:
-	std::vector<CSV_Data> m_csvObjData; // CSVファイルから読み取ったデータを格納する2次元ベクター
+	std::vector<CSV_Data> m_CsvObjData; // CSVファイルから読み取ったデータを格納する2次元ベクター
 
 	CSVObjectManagerComponent(GameObject& obj);
 	~CSVObjectManagerComponent() = default;
@@ -20,7 +20,7 @@ public:
 
 	void Update() override;
 
-	inline void SetCsvObjData(std::vector<CSV_Data>&& data) {
-		m_csvObjData = std::move(data); // 地形データをセット
+	void SetCsvObjData(std::vector<CSV_Data>&& data) {
+		m_CsvObjData = std::move(data); // 地形データをセット
 	}
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObjectManager.h"
+#include "EventBusManager.h"
 #include "Input/Input.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneList.h"
@@ -29,6 +30,9 @@ public:
 	static void SceneChange() {	// sceneの値で現在処理するべきシーンへと変更する
 		static_assert(std::is_base_of<Scene, T1>::value, "T1 must be derived from Scene");
 		{
+			EventBusManager::UnInit();	// イベントバスマネージャーの片付け
+			EventBusManager::Init();		// イベントバスマネージャーの初期化
+
 			m_IsSceneChange = true;	// シーンチェンジのフラグを立てる
 			m_Scene.reset();	// 現在のシーンを片付ける
 		}

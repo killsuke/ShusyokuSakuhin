@@ -1,6 +1,6 @@
 #include "System/DirectXRender.h"
 #include "System/Application.h"
-#include "Structs/BoneData.h"
+
 #include <d3dcompiler.h>
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -42,8 +42,6 @@ HRESULT DirectXRender::Init() {
 
 	CreateMotionBlurBuffer();	// モーションブラー用定数バッファ作成、７番目
 
-	BoneConstantBufferCreate();	// ボーン用定数バッファ作成、８番目
-
 	HPBarConstantBufferCreate();	// ＨＰバー用定数バッファ作成、９番目
 
 	CreateGlowBuffer(); // グロー用定数バッファ作成、１０番目
@@ -76,7 +74,6 @@ void DirectXRender::UnInit() {
 	SAFE_RELEASE(m_SwapChain);
 	SAFE_RELEASE(m_CurrentSampler);
 	SAFE_RELEASE(m_DefaultDrawBuffer);
-	SAFE_RELEASE(m_BoneConstantBuffer);
 	SAFE_RELEASE(m_OverVertexConstantBuffer);
 	SAFE_RELEASE(m_BlurBuffer);
 	SAFE_RELEASE(m_MotionBlurBuffer);
@@ -653,33 +650,6 @@ HRESULT DirectXRender::CreateMotionBlurBuffer() {
 	}
 	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
 	m_DeviceContext->PSSetConstantBuffers(UINT(EBufferTypes::MOTION_BLUR), 1, &m_MotionBlurCircularBuffer);
-
-	return hr;
-}
-
-// ボーン用定数バッファ作成、８番目
-HRESULT DirectXRender::BoneConstantBufferCreate() {// コンスタントバッファサイズ
-	HRESULT hr;
-
-	// ボーン用の定数バッファ作成
-	D3D11_BUFFER_DESC bd;
-
-	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(CBBoneMatrix);									// バッファの大き
-	bd.Usage = D3D11_USAGE_DEFAULT;							// バッファ使用方法
-	//	bd.Usage = D3D11_USAGE_DYNAMIC;							// バッファ使用方法
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;					// コンスタントバッファ
-	bd.CPUAccessFlags = 0;					// CPUアクセス可能
-	//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;					// CPUアクセス可能
-
-	hr = m_Device->CreateBuffer(&bd, nullptr, &m_BoneConstantBuffer);
-	if (FAILED(hr)) {
-		MessageBoxW(nullptr, L"ボーン用のコンスタントバッファ作成に失敗しました。", L"Error", MB_OK);
-		return hr;
-	}
-
-	// 定数バッファを頂点シェーダーにセットする
-	m_DeviceContext->VSSetConstantBuffers(UINT(EBufferTypes::BONE), 1, &m_BoneConstantBuffer);
 
 	return hr;
 }

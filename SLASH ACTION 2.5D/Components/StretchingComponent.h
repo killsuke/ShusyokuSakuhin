@@ -4,12 +4,12 @@
 class StretchingComponent : public Component
 {
 private:
-	float m_BaseScale = 1.0f;	// Šî–{‚Ì‘å‚«‚³
+	float m_BaseScale = 1.0f;		// Šî–{‚Ì‘å‚«‚³
 	float m_CurrentScale = 1.0f;	// Œ»İ‚Ì‘å‚«‚³
-	float m_RecordTime = 0.0f;	// Œo‰ßŠÔ‚Ì‹L˜^
+	float m_RecordTime = 0.0f;		// Œo‰ßŠÔ‚Ì‹L˜^
 	float m_StretchSpeed = 1.0f;	// Lk‚Ìü”g”
 	float m_StretchPower = 0.5f;	// Lk‚ÌU•
-	float m_HolderTime = 0.0f;	// Lk‚Ì•ÛŠÔ
+	float m_HolderTime = 0.0f;		// Lk‚Ì•ÛŠÔ
 
 public:
 	StretchingComponent(GameObject& obj);

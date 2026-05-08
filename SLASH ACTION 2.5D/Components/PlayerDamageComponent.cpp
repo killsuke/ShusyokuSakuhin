@@ -20,6 +20,10 @@ void PlayerDamageComponent::Update()
 	ColliderAttackComponent* collObjMe = m_Object->GetComponent<ColliderAttackComponent>();
 	std::vector<GameObject*> objOthers = GameObjectManager::GameObjectFindTag("Player");
 
+	if (collObjMe == nullptr || objOthers.empty()) {
+		return;
+	}
+
 	AttackTimingComponent* attack_T = m_Object->GetComponent<AttackTimingComponent>();
 	AttackOneTimeComponent* attack_O = m_Object->GetComponent<AttackOneTimeComponent>();
 
@@ -30,40 +34,46 @@ void PlayerDamageComponent::Update()
 		attack_T->ReSetAttackHitFlag();
 	}
 
-	// ここでプレイヤーをちょっと吹っ飛ばす処理も追加する予定
-	if (collObjMe != nullptr) {
 
-		for (GameObject* objOther : objOthers) {
-			ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
-			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
-				*collObjOther, *collObjMe)) {
+	for (GameObject* objOther : objOthers) {
 
-				if (m_EnemyActionComp != nullptr) {
+		ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
 
-					PlayerOperationComponent* playerOp = objOther->GetComponent<PlayerOperationComponent>();
-					if (playerOp != nullptr) {
-						// チャージスラッシュ中はダメージを与えない
-						if (playerOp->GetPlayerState() == PlayerState::CHARGE_SLASH) {
-							return;
-						}
-					}
-				}
+		if (collObjOther == nullptr) {
 
-				const uint32_t myID = m_Object->GetInstanceID();
-				const uint32_t otherID = objOther->GetInstanceID();
+			return;
+		}
 
-				const HitEvent he = { myID,otherID };
+		if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
+			*collObjOther, *collObjMe) == false) {
 
-				// ヒット時の通知テスト
-				EventBusManager::Push(he);
+			return;
+		}
 
-				if (attack_O != nullptr) {
-					attack_O->AttackAction(*objOther);
-				}
-				if (attack_T != nullptr) {
-					attack_T->AttackAction(*objOther);
+		if (m_EnemyActionComp != nullptr) {
+
+			PlayerOperationComponent* playerOp = objOther->GetComponent<PlayerOperationComponent>();
+			if (playerOp != nullptr) {
+				// チャージスラッシュ中はダメージを与えない
+				if (playerOp->GetPlayerState() == PlayerState::CHARGE_SLASH) {
+					return;
 				}
 			}
+		}
+
+		const uint32_t myID = m_Object->GetInstanceID();
+		const uint32_t otherID = objOther->GetInstanceID();
+
+		const HitEvent he = { myID,otherID };
+
+		// ヒット時の通知テスト
+		EventBusManager::Push(he);
+
+		if (attack_O != nullptr) {
+			attack_O->AttackAction(*objOther);
+		}
+		if (attack_T != nullptr) {
+			attack_T->AttackAction(*objOther);
 		}
 	}
 }

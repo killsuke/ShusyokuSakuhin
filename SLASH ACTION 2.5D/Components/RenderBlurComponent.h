@@ -13,5 +13,5 @@ public:
 
 	void Update() override;
 
-	void SetBlurTextureSize(const DirectX::SimpleMath::Vector2& size) { m_BlurSize = size; };
+	void SetBlurTextureSize(const DirectX::XMFLOAT2& size) { m_BlurSize = size; };
 };

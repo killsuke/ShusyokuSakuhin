@@ -16,7 +16,7 @@ public:
 
 	void Update()override;
 
-	inline void SetTrailRenderComponent(TrailRenderComponent* trailRenderComp) {
+	void SetTrailRenderComponent(TrailRenderComponent* trailRenderComp) {
 		m_TrailRenderComponent = trailRenderComp;
 	};
 };

@@ -25,12 +25,10 @@ void AttackOneTimeComponent::Update() {
 void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 
 	// 攻撃処理の実装
-		// ここでは仮の実装として、攻撃力を表示するだけ
 	FighterComponent* fighter = m_Object->GetComponent<FighterComponent>();
 	FighterComponent* targetFighter = obj.GetComponent<FighterComponent>();
 
 	if (fighter != nullptr && targetFighter != nullptr) {
-		//m_attackHitFlag = false; // 攻撃が当たったフラグを一度リセット
 
 		std::vector<HitRule>::iterator it = std::find_if(m_AttackObjs.begin(), m_AttackObjs.end(),
 			[&obj](const HitRule& hitObj) {return hitObj.target == &obj; });
@@ -51,7 +49,5 @@ void AttackOneTimeComponent::AttackAction(GameObject& obj) {
 		const int atk = fighter->GetAtk();
 
 		targetFighter->AddDamage(atk); // 攻撃力分だけ相手のHPを減らす
-
-		//	std::cout << "ここでダメージ！！" << std::endl;
 	}
 }

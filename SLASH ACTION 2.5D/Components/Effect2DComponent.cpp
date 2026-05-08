@@ -16,18 +16,18 @@ void Effect2DComponent::Update() {
 
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-	m_cutRecordTime += deltaTime;
-	m_recordTime += deltaTime;
+	m_CutRecordTime += deltaTime;
+	m_RecordTime += deltaTime;
 
-	if (m_recordTime > m_maxTime) {
+	if (m_RecordTime > m_MaxTime) {
 		m_Object->SetDeleteFg(true);
 		return;
 	}
 
 	// テクスチャの分割数を変更
 	if(rendBill != nullptr) {
-		if (m_cutRecordTime > m_onePieceTime) {
-			m_nowCutNumX += 1.0f;
+		if (m_CutRecordTime > m_OnePieceTime) {
+			m_NowCutNumX += 1.0f;
 
 			Mesh* mesh = rendBill->GetMesh();
 			
@@ -35,8 +35,8 @@ void Effect2DComponent::Update() {
 				return;
 			}
 
-			mesh->SetCutNum(m_nowCutNumX, 1.0f);
-			m_cutRecordTime = 0.0f;
+			mesh->SetCutNum(m_NowCutNumX, 1.0f);
+			m_CutRecordTime = 0.0f;
 		}
 	}
 }

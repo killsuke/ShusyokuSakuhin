@@ -12,7 +12,6 @@
 #include "Mesh/TriangleMesh.h"
 #include "Mesh/TriangularPrismMesh.h"
 #include "Mesh/TerrainMesh.h"
-#include "Components/HumanBoneComponent.h"
 #include "Components/RenderLineComponent.h"
 #include "Components/RenderBlurComponent.h"
 #include "Components/RenderMotionBlurCircularComponent.h"

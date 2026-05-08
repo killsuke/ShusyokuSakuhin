@@ -22,12 +22,13 @@ namespace {
 }
 
 EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
+
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // É\Å[Égî‘çÜÇê›íË
-	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_ListenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		CreateDamageEffect(e);
 		});
 
-	m_listenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
+	m_ListenerID_DeathEvent = EventBusManager::Subscribe<DeathEvent>([&](const DeathEvent& e) {
 		ActionOff(e);
 		});
 
@@ -36,8 +37,8 @@ EnemyActionComponent::EnemyActionComponent(GameObject& obj) :Component(obj) {
 
 EnemyActionComponent::~EnemyActionComponent() {
 
-	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
-	EventBusManager::Unsubscribe(m_listenerID_DeathEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_DeathEvent);
 }
 
 void EnemyActionComponent::Update() {

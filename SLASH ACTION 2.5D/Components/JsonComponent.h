@@ -15,7 +15,7 @@ protected:
 	JsonComponent(GameObject& obj);
 	~JsonComponent() = default;
 
-	std::vector<std::string> m_kindNames;	// 種類名を格納するベクター
+	std::vector<std::string> m_KindNames;	// 種類名を格納するベクター
 
 private:
 
@@ -23,7 +23,7 @@ public:
 
 	void Update()override;
 
-	inline std::vector<std::string> GetKindNames() const { return m_kindNames; } // 地形の種類の取得
+	std::vector<std::string> GetKindNames() const { return m_KindNames; } // 地形の種類の取得
 
 	// Vector3 → JSON
 	nlohmann::ordered_json  XMFLOAT3ToJson(const DirectX::XMFLOAT3& v);

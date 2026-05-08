@@ -22,6 +22,7 @@ void FliesMoveComponent::Update() {
 		trans->AddPosition(velocity);
 	}
 
+	// ハエのように時々動く方向を変える
 	if(m_ChangeTargetTime <= 0.0f) {
 		// ランダムな方向を生成
 		std::random_device rd;

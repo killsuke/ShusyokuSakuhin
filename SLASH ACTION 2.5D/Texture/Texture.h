@@ -40,22 +40,22 @@ public:
 	bool LoadMask(const std::string& filename);
 	bool LoadTexture(const std::string& filename);
 
-	bool LoadFromFemory(const unsigned char* data,const int len);
+	bool LoadFromFemory(const unsigned char* data, const int len);
 
 	void SetGPU();
 	void SetGPU(ID3D11DeviceContext* context);
 	void SetGPU_Mask();
 
-	DirectX::XMMATRIX MakeUV(const float u,const float v,const float uw,const float vh);
+	DirectX::XMMATRIX MakeUV(const float u, const float v, const float uw, const float vh);
 
-	void SetUV(const float nu,const float nv,const float sx,const float sy) {
+	void SetUV(const float nu, const float nv, const float sx, const float sy) {
 		m_NumU = nu;
 		m_NumV = nv;
 		m_SplitX = sx;
 		m_SplitY = sy;
 	};
 
-	inline DirectX::XMFLOAT4 GetUVSets() {
+	DirectX::XMFLOAT4 GetUVSets() {
 		DirectX::XMFLOAT4 uvs;
 
 		uvs.x = m_NumU;
@@ -70,12 +70,12 @@ public:
 
 	ID3D11ShaderResourceView* GetShaderResourceView() const { return m_Srv.Get(); };
 
-	inline void SetInitialCut(const float sx, const float sy) {
+	void SetInitialCut(const float sx, const float sy) {
 		m_SplitX = sx;
 		m_SplitY = sy;
 	};
 
-	inline void SetCutNum(const float nu, const float nv) {
+	void SetCutNum(const float nu, const float nv) {
 		m_NumU = nu;
 		m_NumV = nv;
 	};

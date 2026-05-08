@@ -29,14 +29,14 @@ private:
 	DirectX::XMVECTOR m_ShakeVector = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
 	DirectX::XMVECTOR m_PrevShakeOffset = { 0.0f,0.0f,0.0f,0.0f };	// ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü‚É—h‚ç‚·‚½‚ß‚ÉŽg‚¤
 
+	ShakeType m_ShakeType = ShakeType::RANDOM_2D;
+
 	DirectX::XMFLOAT3 WidthShake(const DirectX::XMMATRIX& view)const;
 	DirectX::XMFLOAT3 HeightShake(const DirectX::XMMATRIX& view)const;
 	DirectX::XMFLOAT3 DepthShake(const DirectX::XMMATRIX& view)const;
 	DirectX::XMFLOAT3 RandomShake2D(const DirectX::XMMATRIX& view);
 	DirectX::XMFLOAT3 RandomShakeDepth(const DirectX::XMMATRIX& view);
 	DirectX::XMFLOAT3 RandomShakeDepthAttenuation(const DirectX::XMMATRIX& view);
-
-	ShakeType m_ShakeType = ShakeType::RANDOM_2D;
 
 public:
 

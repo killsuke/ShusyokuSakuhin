@@ -15,11 +15,11 @@ public:
 	~TestExtrusionJudgeComponent() = default;
 
 	void Update() override;
-	inline void SetIsGround(const bool isGround) { m_IsGround = isGround; } // 地面にいるかどうかを設定
-	inline bool GetIsGround()const { return m_IsGround; } // 地面にいるかどうかを取得
+	void SetIsGround(const bool isGround) { m_IsGround = isGround; } // 地面にいるかどうかを設定
+	bool GetIsGround()const { return m_IsGround; } // 地面にいるかどうかを取得
 
-	inline void SetIsCeiling(const bool isCeiling) { m_IsCeiling = isCeiling; } // 天井にいるかどうかを設定
-	inline bool GetIsCeiling() const { return m_IsCeiling; } // 天井にいるかどうかを取得
+	void SetIsCeiling(const bool isCeiling) { m_IsCeiling = isCeiling; } // 天井にいるかどうかを設定
+	bool GetIsCeiling() const { return m_IsCeiling; } // 天井にいるかどうかを取得
 
 	void SetMoveCarObjectByName(const std::string& name) { m_MoveCarObjName = name; }
 };

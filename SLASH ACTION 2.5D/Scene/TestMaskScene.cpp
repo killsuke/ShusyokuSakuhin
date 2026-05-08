@@ -8,7 +8,7 @@
 TestMaskScene::TestMaskScene() {
 	auto camera = GameObjectManager::AddObject("camera", "Camera");
 	auto cameraTrans = camera->AddComponent<TransformComponent>();
-	cameraTrans->SetPosition(DirectX::SimpleMath::Vector3(0.0f, 0.0f, -300.0f));
+	cameraTrans->SetPosition(DirectX::XMFLOAT3(0.0f, 0.0f, -300.0f));
 	camera->AddComponent<CameraComponent>();
 
 	auto testSquare = GameObjectManager::AddObject("testSquare", "TestSquare");

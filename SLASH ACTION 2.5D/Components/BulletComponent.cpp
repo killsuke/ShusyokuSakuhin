@@ -11,21 +11,33 @@ BulletComponent::BulletComponent(GameObject& obj) : Component(obj) {
 }
 
 void BulletComponent::Update() {
-	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 
-	if(rigid == nullptr) {
+	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
+	TransformComponent* trans = m_Object->GetComponent<TransformComponent>();
+
+	if(rigid == nullptr || trans == nullptr) {
 		return;
 	}
 
-	XMFLOAT3 newVelocity = m_firingVector * m_firingSpeed;
+	const XMFLOAT3 newVelocity = m_FiringVector * m_FiringSpeed;
 
 	rigid->ConstantVelocity(newVelocity);
 
+	if (m_IsRotateFlag == true) {
+		trans->AddRotation(m_RotateValue);
+	}
+
 	const float deltaTime = TimeManager::GetFixedDeltaTime();
 
-	m_rimitTime -= deltaTime;
+	m_RimitTime -= deltaTime;
 
-	if (m_rimitTime <= 0.0f) {
-		m_Object->SetDeleteFg(true);
+	if (m_RimitTime <= 0.0f) {
+
+		if (m_IsDestroyOrStop == true) {
+			m_Object->Destroy();
+		}
+		else {
+			m_Object->SetActiveState(ActiveState::ALL_STOP);
+		}
 	}
 }

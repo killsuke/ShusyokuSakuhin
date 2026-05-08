@@ -26,7 +26,7 @@ struct ShadowBuffer {
 	DirectX::XMFLOAT3 padding = DirectX::XMFLOAT3(); // 4バイトのパディング
 };
 
-class ShadowManager
+class ShadowManager final
 {
 private:
 

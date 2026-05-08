@@ -5,14 +5,14 @@
 HitFlashComponent::HitFlashComponent(GameObject& obj) : RenderComponent(obj)
 {
 	m_SortNum = ComponentTypeManager::GetID_FromName("HIT_FLASH"); // É\Å[Égî‘çÜÇê›íË
-	m_listenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_ListenerID_HitEvent = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		OnHitFlash(e);
 		});
 }
 
 HitFlashComponent::~HitFlashComponent() {
 
-	EventBusManager::Unsubscribe(m_listenerID_HitEvent);
+	EventBusManager::Unsubscribe(m_ListenerID_HitEvent);
 }
 
 void HitFlashComponent::Update() {

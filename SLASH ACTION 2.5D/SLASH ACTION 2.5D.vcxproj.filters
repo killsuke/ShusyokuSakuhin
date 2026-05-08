@@ -66,27 +66,6 @@
     <ClCompile Include="System\DirectXRender.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_demo.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_impl_dx11.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_impl_win32.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_tables.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\imgui\Include\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="System\DebugCout.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -147,22 +126,13 @@
     <ClCompile Include="Mesh\SphereMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Components\RenderOneSkinAnimation.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh\BonePartsMesh.cpp">
       <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\InchWorm_Test.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\Render2DComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\RenderBillboardComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\BoneComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene\TestStageScene.cpp">
@@ -297,9 +267,6 @@
     <ClCompile Include="Components\FallJudgmentComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\HumanBoneComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh\LineMesh.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
@@ -308,9 +275,6 @@
     </ClCompile>
     <ClCompile Include="utility.cpp">
       <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\BonePartsComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\FollowPositionComponent.cpp">
       <Filter>Components</Filter>
@@ -323,12 +287,6 @@
     </ClCompile>
     <ClCompile Include="Mesh\Mesh.cpp">
       <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\HighwayScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\LeapToCenterCarComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\MoveCarComponent.cpp">
       <Filter>Components</Filter>
@@ -353,9 +311,6 @@
     </ClCompile>
     <ClCompile Include="Components\TrailMakeComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\Bones.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Components\CameraShakeComponent.cpp">
       <Filter>Components</Filter>
@@ -533,30 +488,6 @@
     <ClInclude Include="System\DirectXRender.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imconfig.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imgui_impl_dx11.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imgui_impl_win32.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imgui_internal.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imstb_rectpack.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imstb_textedit.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\imgui\imgui\Include\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="System\DebugCout.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -626,25 +557,13 @@
     <ClInclude Include="Mesh\SphereMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Structs\BoneData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\RenderOneSkinAnimation.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh\BonePartsMesh.h">
       <Filter>Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\InchWorm_Test.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Render2DComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderBillboardComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\BoneComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TestStageScene.h">
@@ -791,34 +710,19 @@
     <ClInclude Include="Components\FallJudgmentComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\HumanBoneComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh\LineMesh.h">
       <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderLineComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\BonePartsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Components\FollowPositionComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Structs\TestBoneData.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Helper\HelpMath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\RenderBlurComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\HighwayScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\LeapToCenterCarComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\MoveCarComponent.h">
@@ -847,9 +751,6 @@
     </ClInclude>
     <ClInclude Include="Components\TrailMakeComponent.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Bones.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Components\CameraShakeComponent.h">
       <Filter>Components</Filter>
@@ -1003,7 +904,6 @@
     <None Include="ShaderResource\hlsl\VS\litTextureVS.hlsl" />
     <None Include="ShaderResource\hlsl\VS\litTextureVS2D.hlsl" />
     <None Include="ShaderResource\hlsl\VS\MotionBlurVS.hlsl" />
-    <None Include="ShaderResource\hlsl\VS\OneSkinAnimationVS.hlsl" />
     <None Include="ShaderResource\hlsl\VS\OverVertexMove3DVS.hlsl" />
     <None Include="ShaderResource\hlsl\VS\OverVertexMoveVS.hlsl" />
     <None Include="ShaderResource\hlsl\VS\PassThroughVS.hlsl" />

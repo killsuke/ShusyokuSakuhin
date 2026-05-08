@@ -26,7 +26,7 @@ private:
 	// カットする時の割合
 	float m_CutRatio1 = 0.5f;
 	float m_CutRatio2 = 0.5f;
-	uint64_t m_listenerID_CutEvent = 0; // ヒットイベントのリスナーID
+	uint64_t m_ListenerID_CutEvent = 0; // ヒットイベントのリスナーID
 	GameObject* m_CutObj1 = nullptr;
 	GameObject* m_CutObj2 = nullptr;
 	uint32_t m_CutObj1ID = 0;

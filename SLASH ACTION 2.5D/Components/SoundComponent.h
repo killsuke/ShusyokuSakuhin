@@ -16,7 +16,7 @@ struct SourceVoiceData {
 class SoundComponent final : public Component {
 private:
 
-	std::unordered_map<std::string, SourceVoiceData> m_pSourceVoices;
+	std::unordered_map<std::string, SourceVoiceData> m_SourceVoices;
 
 public:
 

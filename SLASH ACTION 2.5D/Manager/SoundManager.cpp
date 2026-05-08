@@ -38,16 +38,16 @@ HRESULT SoundManager::Init() {
 	}
 
 	// 音声エンジン作成
-	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
+	hr = XAudio2Create(&m_XAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
 	if (FAILED(hr)) {
 		CoUninitialize();
 		return hr;
 	}
 
 	// スピーカーへの最終出力ノード作成
-	hr = m_pXAudio2->CreateMasteringVoice(&m_pMasteringVoice);			// 今回はＰＣのデフォルト設定に任せている
+	hr = m_XAudio2->CreateMasteringVoice(&m_MasteringVoice);			// 今回はＰＣのデフォルト設定に任せている
 	if (FAILED(hr)) {
-		if (m_pXAudio2)	m_pXAudio2->Release();
+		if (m_XAudio2)	m_XAudio2->Release();
 		CoUninitialize();
 		return hr;
 	}
@@ -70,12 +70,12 @@ void SoundManager::UnInit() {
 		}
 	}
 
-	if (m_pMasteringVoice) {
-		m_pMasteringVoice->DestroyVoice();
+	if (m_MasteringVoice) {
+		m_MasteringVoice->DestroyVoice();
 	}
 
-	if (m_pXAudio2) {
-		m_pXAudio2->Release();
+	if (m_XAudio2) {
+		m_XAudio2->Release();
 	}
 
 	// COMの破棄

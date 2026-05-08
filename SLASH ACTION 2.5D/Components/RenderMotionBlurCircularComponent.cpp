@@ -71,7 +71,7 @@ void RenderMotionBlurCircularComponent::Update() {
 		motionBlur.length = XMVectorGetX(XMVector3Length(deltaVec));
 
 		motionBlur.currRot = transform->GetQuaternion();
-		motionBlur.prevRot = prevQuat;
+		motionBlur.prevRot = m_PrevQuat;
 		motionBlur.shellCount = 10;
 
 		//DirectXRender::SetCullingState(ECullingState::CULLING_NONE);
@@ -112,6 +112,6 @@ void RenderMotionBlurCircularComponent::Update() {
 		}
 
 		//		DirectXRender::SetDepthEnable(true);
-		prevQuat = transform->GetQuaternion();
+		m_PrevQuat = transform->GetQuaternion();
 	}
 }

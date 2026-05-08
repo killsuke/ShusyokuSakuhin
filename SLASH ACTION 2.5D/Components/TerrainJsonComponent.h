@@ -4,8 +4,10 @@
 class TerrainJsonComponent : public JsonComponent
 {
 private:
-	std::vector<TerrainStatus> m_terrainStatus;	// 地形情報のベクター
+	std::vector<TerrainStatus> m_TerrainStatus;	// 地形情報のベクター
+
 public:
+
 	TerrainJsonComponent(GameObject& obj);
 	~TerrainJsonComponent() = default;
 
@@ -17,5 +19,5 @@ public:
 	std::vector<TerrainStatus> LoadTerrainJsonFile(const std::string& filepath);
 
 
-	inline std::vector<TerrainStatus> GetTerrainStatus() const { return m_terrainStatus; } // 地形情報の取得
+	std::vector<TerrainStatus> GetTerrainStatus() const { return m_TerrainStatus; } // 地形情報の取得
 };

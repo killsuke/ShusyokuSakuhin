@@ -72,8 +72,9 @@ void EnemyActionHopperComponent::Update() {
 	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
 	RigidBodyComponent* rigid = m_Object->GetComponent<RigidBodyComponent>();
 	TestExtrusionJudgeComponent* testExtrusion = m_Object->GetComponent<TestExtrusionJudgeComponent>();
+	FighterComponent* fight = m_Object->GetComponent<FighterComponent>();
 
-	if (rend == nullptr || rigid == nullptr || testExtrusion == nullptr) {
+	if (rend == nullptr || rigid == nullptr || testExtrusion == nullptr || fight == nullptr) {
 		return;
 	}
 
@@ -86,6 +87,12 @@ void EnemyActionHopperComponent::Update() {
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
 
 	rend->SetInversionFlag(m_IsRightLeft);
+
+	const int hp = fight->GetHp();
+	if (hp <= 0) {
+		ChangeState(EEnemyState::DEAD);
+		m_Object->Destroy();
+	}
 
 	StateUpdate(player);
 }
@@ -179,6 +186,8 @@ void EnemyActionHopperComponent::ChangeState(const EEnemyState& newState) {
 	break;
 	case EEnemyState::DAMAGED:
 		break;
+	case EEnemyState::DEAD:
+		break;
 	default:
 		break;
 	}
@@ -203,6 +212,8 @@ void EnemyActionHopperComponent::ChangeState(const EEnemyState& newState) {
 			sound->Stop("jump");
 		}
 	}
+		break;
+	case EEnemyState::DEAD:
 		break;
 	default:
 		break;
@@ -304,6 +315,10 @@ void EnemyActionHopperComponent::StateUpdate(GameObject* player) {
 		}
 
 		break;
+	case EEnemyState::DEAD:
+
+		mesh->SetCutNum(DAMAGE_POSE);
+		break;
 	default:
 		break;
 	}
@@ -336,4 +351,21 @@ void EnemyActionHopperComponent::ChangeDirection() {
 	else {
 		m_IsRightLeft = RightLeft::RIGHT;
 	}
+}
+
+void EnemyActionHopperComponent::DeadAnimation() {
+
+	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+
+	if (rend == nullptr) {
+		return;
+	}
+
+	Mesh* mesh = rend->GetMesh();
+
+	if (mesh == nullptr) {
+		return;
+	}
+
+	mesh->SetCutNum(DAMAGE_POSE);
 }

@@ -5,15 +5,15 @@ using namespace std::filesystem;
 // 初期化処理
 void ComponentTypeManager::Init() {
 
-	nameToId.clear();
-	idToName.clear();
+	m_NameToId.clear();
+	m_IdToName.clear();
 }
 
 // 後始末処理
 void ComponentTypeManager::UnInit() {
 
-	nameToId.clear();
-	idToName.clear();
+	m_NameToId.clear();
+	m_IdToName.clear();
 }
 
 void ComponentTypeManager::Update() {
@@ -49,14 +49,14 @@ void ComponentTypeManager::MakeSampleJson() {
 		{ "MAX" ,					24},
 	};
 
-	nameToId = components;
+	m_NameToId = components;
 
 	// nameToId から idToName を生成
-	for (const std::pair<const std::string, uint32_t>& comp : nameToId) {
-		idToName[comp.second] = comp.first;
+	for (const std::pair<const std::string, uint32_t>& comp : m_NameToId) {
+		m_IdToName[comp.second] = comp.first;
 	}
 
-	json j = ComponentTypeNameToJson(nameToId);
+	json j = ComponentTypeNameToJson(m_NameToId);
 
 	// 保存先のファイルパス
 	const std::string filepath = "json/component.json";
@@ -86,8 +86,44 @@ void ComponentTypeManager::LoadComponentTypeJsonFile(const std::string& filepath
 	for (const nlohmann::json& comp : j["components"]) {
 		std::string compName = comp.at("name");
 		uint32_t id = comp.at("ID");
-		nameToId[compName] = id; // 名前とIDを紐付け
-		idToName[id] = compName; // IDと名前を紐付け
+		m_NameToId[compName] = id; // 名前とIDを紐付け
+		m_IdToName[id] = compName; // IDと名前を紐付け
+	}
+}
+
+// JSONファイルからコンポーネントの名前を読み込み、IDは上書き
+void ComponentTypeManager::OverwriteComponentTypeJsonFile(const std::string& filepath) {
+
+	std::ifstream ifs(filepath);
+	if (!ifs) {
+		MessageBoxW(nullptr, L"コンポーネントのJSONファイルを開けませんでした。", L"Error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	nlohmann::json j;
+	ifs >> j;
+
+	uint32_t currentID = 0; // IDを上書きするためのカウンター
+
+	// JSONからコンポーネントの名前とIDを読み込む
+	for (const nlohmann::json& comp : j["components"]) {
+		std::string compName = comp.at("name");
+
+		m_NameToId[compName] = currentID; // 名前とIDを紐付け
+		m_IdToName[currentID] = compName; // IDと名前を紐付け
+
+		currentID++; // 次のIDに進む
+	}
+
+	// 上書きした内容でJSONを再生成
+	json newJson = ComponentTypeNameToJson(m_NameToId);
+
+	// JSONをファイルに保存
+	if (SaveJsonToFile(newJson, filepath)) {
+		MessageBoxW(nullptr, L"Component JSON を上書き保存しました。", L"Success", MB_ICONINFORMATION | MB_OK);
+	}
+	else {
+		MessageBoxW(nullptr, L"Component JSON の上書き保存に失敗しました。", L"Error", MB_ICONERROR | MB_OK);
 	}
 }
 

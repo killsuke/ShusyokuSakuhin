@@ -30,77 +30,77 @@ void CameraPointComponent::Update() {
 		return;
 
 	// ここで当たり判定でリリースがあればこれ以降の処理を実行
-	beforeTouched = afterTouched; // 前に触れたかどうかのフラグを更新
+	m_IsBeforeTouched = m_IsAfterTouched; // 前に触れたかどうかのフラグを更新
 
 	XMFLOAT3 dir = {};
 	XMFLOAT3 dir2 = {};
 	if (camColl->CheckHit_CubeAndCube_IsTrigger2D_Normal(*camColl, *playerColl, dir)) {
 
 		// プレイヤーが入ってきた方向をセット
-		if (m_inserDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
-			m_exitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		if (m_InserDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
+			m_ExitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
 			dir2 = XMFLOAT3(dir.x, dir.y, dir.z);
-			m_inserDirection = dir2;
+			m_InserDirection = dir2;
 		}
 
-		m_frame2BeforeDirection = m_beforeDirection; // 2フレーム前のプレイヤーが抜けたベクトルを更新
+		m_Frame2BeforeDirection = m_BeforeDirection; // 2フレーム前のプレイヤーが抜けたベクトルを更新
 
-		m_beforeDirection = dir; // プレイヤーが抜けたベクトルをセット
+		m_BeforeDirection = dir; // プレイヤーが抜けたベクトルをセット
 
-		afterTouched = true;
+		m_IsAfterTouched = true;
 	}
 	else {
-		afterTouched = false;
+		m_IsAfterTouched = false;
 	}
 
 	// リリースでとる
-	if (beforeTouched == true && afterTouched == false) {
+	if (m_IsBeforeTouched == true && m_IsAfterTouched == false) {
 
-		if (m_beforeDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
-			m_beforeDirection = m_frame2BeforeDirection;
+		if (m_BeforeDirection == XMFLOAT3(0.0f, 0.0f, 0.0f)) {
+			m_BeforeDirection = m_Frame2BeforeDirection;
 		}
 
 		// プレイヤーが抜けた方向をセット
-		m_exitDirection = m_beforeDirection;
+		m_ExitDirection = m_BeforeDirection;
 
-		const XMVECTOR scVec = XMLoadFloat3(&m_scrollDirection);
-		const XMVECTOR inVec = XMLoadFloat3(&m_inserDirection);
-		const XMVECTOR exVec = XMLoadFloat3(&m_exitDirection);
+		const XMVECTOR scVec = XMLoadFloat3(&m_ScrollDirection);
+		const XMVECTOR inVec = XMLoadFloat3(&m_InserDirection);
+		const XMVECTOR exVec = XMLoadFloat3(&m_ExitDirection);
 
 		const float dirIn1 = XMVectorGetX(XMVector3Dot(scVec,inVec));
 		const float dirIn2 = XMVectorGetX(XMVector3Dot(inVec,exVec));
 
 		// プレイヤーが入ってきた方向と抜けた方向が同じなら
 		if (dirIn1 == -1.0f && dirIn2 == -1.0f) {
-			m_isScrollDir = 1;
+			m_ScrollDir = 1;
 		}
 
 		// プレイヤーが抜けた方向と入ってきた方向が違うなら
 		if (dirIn1 == 1.0f && dirIn2 == -1.0f) {
-			m_isScrollDir = -1;
+			m_ScrollDir = -1;
 		}
 
 		if (dirIn2 == 1.0f) {
-			m_isScrollDir = 0; // 同じならスクロールしない
+			m_ScrollDir = 0; // 同じならスクロールしない
 		}
 
 		camRigid->ClearVelocity(); // プレイヤーが抜けたらカメラの速度をリセット
 		camRigid->ClearForce();
-		m_inserDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		m_beforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
-		m_frame2BeforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
+		m_InserDirection = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		m_BeforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
+		m_Frame2BeforeDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
 	}
 
 	// ポイントから抜けたら処理を行う
-	if (m_exitDirection != XMFLOAT3(0.0f, 0.0f, 0.0f)) {
+	if (m_ExitDirection != XMFLOAT3(0.0f, 0.0f, 0.0f)) {
 
-		if (m_nextTargetPoint != nullptr && m_isScrollDir == 1) {
-			camMove->SetMoveTarget(*m_nextTargetPoint);
+		if (m_NextTargetPoint != nullptr && m_ScrollDir == 1) {
+			camMove->SetMoveTarget(*m_NextTargetPoint);
 		}
-		else if (m_beforeTargetObj != nullptr && m_isScrollDir == -1) {
-			camMove->SetMoveTarget(*m_beforeTargetObj);
+		else if (m_BeforeTargetObj != nullptr && m_ScrollDir == -1) {
+			camMove->SetMoveTarget(*m_BeforeTargetObj);
 		}
 
-		m_exitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
+		m_ExitDirection = XMFLOAT3(0.0f, 0.0f, 0.0f); // 初期化
 	}
 }

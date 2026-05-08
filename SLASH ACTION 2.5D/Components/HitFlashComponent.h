@@ -9,7 +9,7 @@ private:
 	DirectX::XMFLOAT3 m_HitFlashColor = DirectX::XMFLOAT3();
 	float m_HitFlashPower = 0.0f;
 	bool m_IsFlash = false;
-	uint64_t m_listenerID_HitEvent = 0; // ヒットイベントのリスナーID
+	uint64_t m_ListenerID_HitEvent = 0; // ヒットイベントのリスナーID
 
 public:
 	HitFlashComponent(GameObject& obj);

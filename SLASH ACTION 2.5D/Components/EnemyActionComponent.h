@@ -18,6 +18,7 @@ enum class EEnemyState {
 	MOVE,
 	ATTACK,
 	DAMAGED,
+	DEAD,
 
 	MAX
 };
@@ -30,8 +31,8 @@ protected:
 	float m_FearPower = 0.0f; // 怯みの強さ
 	bool m_IsFear = false; // 怯み状態かどうかのフラグ
 	RightLeft m_IsRightLeft = RightLeft::RIGHT; // 左右の移動フラグ、初期は右向き(true:右、false:左)
-	uint64_t m_listenerID_HitEvent = 0;
-	uint64_t m_listenerID_DeathEvent = 0;
+	uint64_t m_ListenerID_HitEvent = 0;
+	uint64_t m_ListenerID_DeathEvent = 0;
 	EEnemyState m_EnemyState = EEnemyState::WAIT;
 
 	EnemyActionComponent(GameObject& obj);

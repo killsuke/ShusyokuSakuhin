@@ -34,7 +34,7 @@ enum DeathType {
 class EnemyDeathEventComponent : public Component
 {
 private:
-	uint64_t m_listenerID_DeathEvent = 0;
+	uint64_t m_ListenerID_DeathEvent = 0;
 
 	EnemyDeathEventState m_DeathState = EnemyDeathEventState::STICKY;
 	ESwordActionState m_SwordActionState = ESwordActionState::NONE;

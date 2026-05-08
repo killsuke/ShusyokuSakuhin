@@ -15,9 +15,9 @@ namespace {
 	constexpr float SecondStopTime = 0.2f; // ２回目のヒットストップ時間
 	constexpr float ThirdStopTime = 0.3f; // ３回目のヒットストップ時間
 
-	const ShakeStatus FirstShake = ShakeStatus(50.0f,1.5f,0.2f);
-	const ShakeStatus SecondShake = ShakeStatus(55.0f,1.8f,0.2f);
-	const ShakeStatus ThirdShake = ShakeStatus(70.0f,2.0f,0.3f);
+	const ShakeStatus FirstShake = ShakeStatus(50.0f, 1.5f, 0.2f);
+	const ShakeStatus SecondShake = ShakeStatus(55.0f, 1.8f, 0.2f);
+	const ShakeStatus ThirdShake = ShakeStatus(70.0f, 2.0f, 0.3f);
 }
 
 EnemyDamageComponent::EnemyDamageComponent(GameObject& obj) : Component(obj)
@@ -32,75 +32,87 @@ void EnemyDamageComponent::Update()
 
 	AttackOneTimeComponent* attack = m_Object->GetComponent<AttackOneTimeComponent>();
 
+	if (collObjMe == nullptr || attack == nullptr || objOthers.empty()) {
+		return;
+	}
+
 	attack->ReSetAttackHitFlag();	// 攻撃が当たったかどうかのフラグをリセット
 
-	if (collObjMe != nullptr) {
 
-		for (auto& objOther : objOthers) {
-			ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
-			if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
-				*collObjOther, *collObjMe)) {
+	for (GameObject* objOther : objOthers) {
 
-				attack->AttackAction(*objOther);
+		ColliderDamageComponent* collObjOther = objOther->GetComponent<ColliderDamageComponent>();
 
-				if (attack->GetAttackHitFlag() == true) {
+		if (collObjOther == nullptr) {
+			return;
+		}
 
-					const std::string tag = m_Object->GetTag();
+		// 当たり判定
+		if (collObjMe->CheckHit_AABBAndOBB_IsTrigger3D(
+			*collObjOther, *collObjMe)) {
 
-					TestSwordActionComponent* swordComp = m_Object->GetComponent<TestSwordActionComponent>();
+			attack->AttackAction(*objOther);
 
-					// チャージ攻撃のことも考えて取り敢えずデフォルト
-					ESwordActionState state = ESwordActionState::NONE;
-					RightLeft dir = RightLeft::RIGHT;
+			if (attack->GetAttackHitFlag() == false) {
 
-					// ヒットストップ時間の選択
-					float stopTime = FirstStopTime;
-					if (swordComp != nullptr) {
-						state = swordComp->GetSwordActionState();
-						stopTime = ChoiceStopTime(state);
-						dir = swordComp->GetRightLeft();
-					}
+				return;
+			}
 
-					// 敵の切られた状態をセット
-					EnemyDeathEventComponent* deathComp = objOther->GetComponent<EnemyDeathEventComponent>();
-					if (deathComp != nullptr) {
-						deathComp->SetHittedState(state, dir);
-					}
+			const std::string tag = m_Object->GetTag();
 
-					// ヒットストップの候補セット
-					HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome","Bullets" });
-					HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
+			TestSwordActionComponent* swordComp = m_Object->GetComponent<TestSwordActionComponent>();
 
-					GameObject* camera = GameObjectManager::GameObjectFindName("camera");
-					if (camera != nullptr) {
-						CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
+			ESwordActionState state = ESwordActionState::NONE;
+			RightLeft dir = RightLeft::RIGHT;
 
-						const uint32_t myID = m_Object->GetInstanceID();
-						const uint32_t otherID = objOther->GetInstanceID();
+			// ヒットストップ時間の選択
+			float stopTime = FirstStopTime;
+			if (swordComp != nullptr) {
+				state = swordComp->GetSwordActionState();
+				stopTime = ChoiceStopTime(state);
+				dir = swordComp->GetRightLeft();
+			}
 
-						const HitEvent he = { myID,otherID };
+			// 敵の切られた状態をセット
+			EnemyDeathEventComponent* deathComp = objOther->GetComponent<EnemyDeathEventComponent>();
+			if (deathComp != nullptr) {
+				deathComp->SetHittedState(state, dir);
+			}
 
-						ShakeStatus status = FirstShake;
+			// ヒットストップの候補セット
+			HitStopManager::AddTargetTags({ "Player","Enemy","Sword","Effect","SkyDome","Bullets" });
+			HitStopManager::SetHitStopTime(stopTime); // ヒットストップ時間をセット
 
-						// ヒット時の通知
-						EventBusManager::Push(he);
+			// カメラ揺れセット
+			GameObject* camera = GameObjectManager::GameObjectFindName("camera");
+			if (camera != nullptr) {
+				CameraShakeComponent* shake = camera->GetComponent<CameraShakeComponent>();
 
-						// 画面揺れステータスの選択
-						if (swordComp != nullptr) {
-							const ESwordActionState state = swordComp->GetSwordActionState();
-							status = ChoiceShakeStatus(state);
-						}
+				const uint32_t myID = m_Object->GetInstanceID();
+				const uint32_t otherID = objOther->GetInstanceID();
 
-						// 画面揺れ開始
-						shake->ShakingPreparation(status);
-						shake->SetShakeType(ShakeType::RANDOM_2D);
-					}
+				const HitEvent he = { myID,otherID };
+
+				ShakeStatus status = FirstShake;
+
+				// ヒット時の通知
+				EventBusManager::Push(he);
+
+				// 画面揺れステータスの選択
+				if (swordComp != nullptr) {
+					const ESwordActionState state = swordComp->GetSwordActionState();
+					status = ChoiceShakeStatus(state);
 				}
+
+				// 画面揺れ開始
+				shake->ShakingPreparation(status);
+				shake->SetShakeType(ShakeType::RANDOM_2D);
 			}
 		}
 	}
 }
 
+// ヒットストップの具合選択
 float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState& state) {
 
 	switch (state)
@@ -122,6 +134,7 @@ float EnemyDamageComponent::ChoiceStopTime(const ESwordActionState& state) {
 	}
 }
 
+// カメラ揺れの具合選択
 ShakeStatus EnemyDamageComponent::ChoiceShakeStatus(const ESwordActionState& state) {
 
 	switch (state)

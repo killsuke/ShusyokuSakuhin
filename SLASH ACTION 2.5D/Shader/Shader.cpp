@@ -35,8 +35,8 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		VS_INFORMATION.modelName.c_str(),
 		layout.data(),	// ポインタに変換
 		numElements,
-		&m_pVertexShader,
-		&m_pVertexLayout);
+		&m_VertexShader,
+		&m_VertexLayout);
 	if (!sts) {
 		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
@@ -48,7 +48,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 		ps.c_str(),
 		PS_INFORMATION.entryName.c_str(),
 		PS_INFORMATION.modelName.c_str(),
-		&m_pPixelShader);
+		&m_PixelShader);
 	if (!sts) {
 		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
@@ -61,7 +61,7 @@ void Shader::Create(const std::string& vs, const std::string& ps, const std::str
 			gs.c_str(),
 			GS_INFORMATION.entryName.c_str(),
 			GS_INFORMATION.modelName.c_str(),
-			&m_pGeometryShader);
+			&m_GeometryShader);
 		if (!sts) {
 			MessageBoxW(nullptr, L"CreateGeometryShader error", L"error", MB_OK | MB_ICONWARNING);
 			return;
@@ -94,8 +94,8 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 		"vs_5_0",
 		layout,
 		numElements,
-		&m_pVertexShader,
-		&m_pVertexLayout);
+		&m_VertexShader,
+		&m_VertexLayout);
 	if (!sts) {
 		MessageBoxW(nullptr, L"CreateVertexShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
@@ -107,7 +107,7 @@ void Shader::CreateOneSkinAnimation(std::string vs, std::string ps)
 		ps.c_str(),
 		"ps_main",
 		"ps_5_0",
-		&m_pPixelShader);
+		&m_PixelShader);
 	if (!sts) {
 		MessageBoxW(nullptr, L"CreatePixelShader error", L"error", MB_OK | MB_ICONWARNING);
 		return;
@@ -123,16 +123,16 @@ void Shader::SetGPU()
 {
 	ID3D11DeviceContext* devicecontext = DirectXRender::GetDeviceContext();
 
-	devicecontext->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
-	devicecontext->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
-	devicecontext->GSSetShader(m_pGeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
-	devicecontext->IASetInputLayout(m_pVertexLayout.Get());				// 頂点レイアウトセット
+	devicecontext->VSSetShader(m_VertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
+	devicecontext->PSSetShader(m_PixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
+	devicecontext->GSSetShader(m_GeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
+	devicecontext->IASetInputLayout(m_VertexLayout.Get());				// 頂点レイアウトセット
 }
 
 void Shader::SetGPU(ID3D11DeviceContext* context) {
 
-	context->VSSetShader(m_pVertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
-	context->PSSetShader(m_pPixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
-	context->GSSetShader(m_pGeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
-	context->IASetInputLayout(m_pVertexLayout.Get());				// 頂点レイアウトセット
+	context->VSSetShader(m_VertexShader.Get(), nullptr, 0);		// 頂点シェーダーをセット
+	context->PSSetShader(m_PixelShader.Get(), nullptr, 0);		// ピクセルシェーダーをセット
+	context->GSSetShader(m_GeometryShader.Get(), nullptr, 0);	// ジオメトリシェーダーをセット
+	context->IASetInputLayout(m_VertexLayout.Get());				// 頂点レイアウトセット
 }

@@ -23,8 +23,8 @@ void SlashEffectComponent::Update() {
 	}
 
 	rend->SetEllipseScale(XMFLOAT2(m_SizeChange.x / 10.0f, m_SizeChange.y / 10.0f));
-	rend->SetGlowRadius(power);
-	power -= SubstructPower;
+	rend->SetGlowRadius(m_GlowRadius);
+	m_GlowRadius -= SubstructPower;
 
 	m_RecordTime += TimeManager::GetFixedDeltaTime();
 	if (m_RecordTime >= m_RimitTime) {

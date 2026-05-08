@@ -9,7 +9,7 @@ namespace {
 	constexpr float TELEPHOTO_FOV = 20.0f;
 }
 
-enum class FieldOfView{
+enum class FieldOfView {
 	DEFAULT,	// ÉfÉtÉHÉãÉg
 	WIDE,		// çLäp
 	TELEPHOTO,	// ñ]âì
@@ -30,10 +30,10 @@ protected:
 
 	DirectX::XMMATRIX m_ViewMatrix2D = DirectX::XMMatrixIdentity();
 	DirectX::XMMATRIX m_ProjectionMatrix2D = DirectX::XMMatrixIdentity();
-					  
+
 	DirectX::XMMATRIX m_ViewMatrix3D = DirectX::XMMatrixIdentity();
 	DirectX::XMMATRIX m_ProjectionMatrix3D = DirectX::XMMatrixIdentity();
-					  
+
 	DirectX::XMMATRIX m_ViewMatrixSky = DirectX::XMMatrixIdentity();
 	DirectX::XMMATRIX m_ProjectionMatrixSky = DirectX::XMMatrixIdentity();
 
@@ -50,22 +50,22 @@ public:
 
 	void Update() override;
 
-	inline void SetTarget(const DirectX::XMFLOAT3& target) { m_Target = target; };
-	inline void AddTarget(const DirectX::XMFLOAT3& target) { m_Target += target; };
+	void SetTarget(const DirectX::XMFLOAT3& target) { m_Target = target; };
+	void AddTarget(const DirectX::XMFLOAT3& target) { m_Target += target; };
 
-	inline void SetFieldOfView(const FieldOfView fov) { m_FieldOfView = fov; }
-	inline void SetOffsetPosition(const DirectX::XMFLOAT3& offsetPos) { m_OffsetPosition = offsetPos; }
-	inline void SetOffsetTarget(const DirectX::XMFLOAT3& offsetTgt) { m_OffsetTarget = offsetTgt; }
+	void SetFieldOfView(const FieldOfView fov) { m_FieldOfView = fov; }
+	void SetOffsetPosition(const DirectX::XMFLOAT3& offsetPos) { m_OffsetPosition = offsetPos; }
+	void SetOffsetTarget(const DirectX::XMFLOAT3& offsetTgt) { m_OffsetTarget = offsetTgt; }
 
-	inline DirectX::XMFLOAT3 GetTarget() const { return m_Target; }
+	DirectX::XMFLOAT3 GetTarget() const { return m_Target; }
 
 	// ì]íuÇµÇƒÇ¢Ç»Ç¢èÛë‘ÇÃÉÇÉmÇï‘Ç∑
-	inline DirectX::XMMATRIX GetView2D() const { return m_ViewMatrix2D; };
-	inline DirectX::XMMATRIX GetView3D() const { return m_ViewMatrix3D; };
+	DirectX::XMMATRIX GetView2D() const { return m_ViewMatrix2D; };
+	DirectX::XMMATRIX GetView3D() const { return m_ViewMatrix3D; };
 
-	inline DirectX::XMMATRIX GetProj2D() const { return m_ProjectionMatrix2D; };
-	inline DirectX::XMMATRIX GetProj3D() const { return m_ProjectionMatrix3D; };
+	DirectX::XMMATRIX GetProj2D() const { return m_ProjectionMatrix2D; };
+	DirectX::XMMATRIX GetProj3D() const { return m_ProjectionMatrix3D; };
 
-	inline DirectX::XMFLOAT3 GetOffsetPosition() const { return m_OffsetPosition; };
-	inline FieldOfView GetFieldOfView() const { return m_FieldOfView; };
+	DirectX::XMFLOAT3 GetOffsetPosition() const { return m_OffsetPosition; };
+	FieldOfView GetFieldOfView() const { return m_FieldOfView; };
 };

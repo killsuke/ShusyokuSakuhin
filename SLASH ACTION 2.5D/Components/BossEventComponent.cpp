@@ -56,7 +56,7 @@ void BossEventComponent::Update() {
 	if (point != nullptr)
 	{
 		if (point->GetScrollDir() == 1) {
-			if (createCompletionFlag == false) {
+			if (m_CreateCompletionFlag == false) {
 
 				// ボス戦が始まる際の演出
 				m_TimeLine->AddPointDelayEvent(0.0f, this, [this]() {CreateBossWalls(); });
@@ -64,7 +64,7 @@ void BossEventComponent::Update() {
 				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {CreateBossObj(); });
 				m_TimeLine->AddPointDelayEvent(2.0f, this, [this]() {PlayerControlRestart(); });
 
-				createCompletionFlag = true;
+				m_CreateCompletionFlag = true;
 				return;
 			}
 
@@ -117,6 +117,12 @@ void BossEventComponent::CreateBossWalls() {
 	rend->SetShader("TerrainVS.hlsl", "TerrainPS.hlsl");
 	rend->SetUVMagnification(XMFLOAT3(0.1f, 0.1f, 0.1f));
 
+	// 既存の敵オブジェクトをすべて削除
+	std::vector<GameObject*> enemies = GameObjectManager::GameObjectFindTag("Enemy");
+
+	for (GameObject* enemy : enemies) {
+		enemy->Destroy();
+	}
 }
 
 void BossEventComponent::CreateBossObj() {
@@ -125,7 +131,7 @@ void BossEventComponent::CreateBossObj() {
 	GameObject* boss = GameObjectManager::AddObject("Boss", "Enemy");
 
 	TransformComponent* playerTrans = boss->AddComponent<TransformComponent>();
-	playerTrans->SetScale({ 8.0f, 10.0f, 5.0f });
+	playerTrans->SetScale({ 15.0f, 15.0f, 5.0f });
 	playerTrans->SetPosition({ 1230.0f,-100.0f,0.0f });
 
 	JumpComponent* cubeJump = boss->AddComponent<JumpComponent>();
@@ -152,17 +158,17 @@ void BossEventComponent::CreateBossObj() {
 
 	MeshCut2DComponent* meshCut = boss->AddComponent<MeshCut2DComponent>();
 
+	EnemyActionBossComponent* enemyAction = boss->AddComponent<EnemyActionBossComponent>();
+
 	EnemyDeathEventComponent* deathEvent = boss->AddComponent<EnemyDeathEventComponent>();
 	deathEvent->SetDeathType(DeathType::ABS_STICKY);
 
-	EnemyActionBossComponent* enemyAction = boss->AddComponent<EnemyActionBossComponent>();
-
 	Render2DComponent* cubeRe = boss->AddComponent<Render2DComponent>();
 	cubeRe->CreateMesh<SquareMesh>();
-	cubeRe->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
-	cubeRe->SetColor(DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f));
+	cubeRe->ChangeTexture("tanuki_Anims.png");
+	cubeRe->SetShader("Animation2DVS.hlsl", "unlitTexturePS.hlsl");
 
-	m_boss = boss;
+	m_Boss = boss;
 
 	enemyAction->Init();
 
@@ -279,6 +285,12 @@ void BossEventComponent::DeadCameraShakeAndScreenStop() {
 	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindAllTags("Player", "Sword", "Effect", "SkyDome", "Bullets");
 	for (GameObject* obj : stopObjects) {
 
+		const ActiveState currentState = obj->GetActiveState();
+
+		if (currentState == ActiveState::UPDATE_STOP || currentState == ActiveState::ALL_STOP) {
+			continue; // すでにUPDATE_STOPまたはALL_STOPの場合はスキップ
+		}
+
 		obj->SetActiveState(ActiveState::UPDATE_STOP);
 	}
 }
@@ -287,6 +299,12 @@ void BossEventComponent::ScreenReStart() {
 
 	std::vector<GameObject*> stopObjects = GameObjectManager::GameObjectFindAllTags("Player", "Sword", "Effect", "SkyDome", "Bullets");
 	for (GameObject* obj : stopObjects) {
+
+		const ActiveState currentState = obj->GetActiveState();
+
+		if (currentState == ActiveState::ACTIVE || currentState == ActiveState::ALL_STOP) {
+			continue; // すでにACTIVEまたはALL_STOPの場合はスキップ
+		}
 
 		obj->SetActiveState(ActiveState::ACTIVE);
 	}

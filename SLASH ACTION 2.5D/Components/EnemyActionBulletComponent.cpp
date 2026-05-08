@@ -35,13 +35,13 @@ EnemyActionBulletComponent::EnemyActionBulletComponent(GameObject& obj) :EnemyAc
 
 	m_SortNum = ComponentTypeManager::GetID_FromName("ENEMY_ACTION"); // ƒ\[ƒg”Ô†‚ğİ’è
 
-	m_listenerID_HitEvent_Bullet = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
+	m_ListenerID_HitEvent_Bullet = EventBusManager::Subscribe<HitEvent>([&](const HitEvent& e) {
 		FearEvent(e);
 		});
 }
 
 EnemyActionBulletComponent::~EnemyActionBulletComponent() {
-	EventBusManager::Unsubscribe(m_listenerID_HitEvent_Bullet);
+	EventBusManager::Unsubscribe(m_ListenerID_HitEvent_Bullet);
 }
 
 void EnemyActionBulletComponent::Init() {
@@ -64,8 +64,9 @@ void EnemyActionBulletComponent::Update() {
 	TransformComponent* playTrans = player->GetComponent<TransformComponent>();
 	TransformComponent* myTrans = m_Object->GetComponent<TransformComponent>();
 	Render2DComponent* rend = m_Object->GetComponent<Render2DComponent>();
+	FighterComponent* fight = m_Object->GetComponent<FighterComponent>();
 
-	if (playTrans == nullptr || myTrans == nullptr || rend == nullptr) {
+	if (playTrans == nullptr || myTrans == nullptr || rend == nullptr || fight == nullptr) {
 		return;
 	}
 
@@ -81,6 +82,12 @@ void EnemyActionBulletComponent::Update() {
 	m_RecordTime += deltaTime;
 
 	rend->SetInversionFlag(m_IsRightLeft);
+
+	const int hp = fight->GetHp();
+	if (hp <= 0) {
+		ChangeState(EEnemyState::DEAD);
+		m_Object->Destroy();
+	}
 
 	StateUpdate(deltaTime, myPos, playPos, *mesh);	// ó‘Ô‚É‰‚¶‚½ˆ—
 }
@@ -159,6 +166,8 @@ void EnemyActionBulletComponent::ChangeState(const EEnemyState& newState) {
 		break;
 	case EEnemyState::DAMAGED:
 		break;
+	case EEnemyState::DEAD:
+		break;
 	default:
 		break;
 	}
@@ -174,6 +183,8 @@ void EnemyActionBulletComponent::ChangeState(const EEnemyState& newState) {
 	case EEnemyState::ATTACK:
 		break;
 	case EEnemyState::DAMAGED:
+		break;
+	case EEnemyState::DEAD:
 		break;
 	default:
 		break;
@@ -246,6 +257,10 @@ void EnemyActionBulletComponent::StateUpdate(const float deltaTime, const Direct
 
 		mesh.SetCutNum(DAMAGE_POSE);
 		FearAction();	// ‹¯‚İó‘Ô‚Ìˆ—
+		break;
+	case EEnemyState::DEAD:
+
+		mesh.SetCutNum(DAMAGE_POSE);
 		break;
 	default:
 		break;

@@ -7,6 +7,10 @@
 class ModelManager final
 {
 private:
+
+	// 全てのモデルデータを保持
+	static inline std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;
+
 	// コンストラクタ・デストラクタを削除
 	ModelManager() = delete;
 	~ModelManager() = delete;
@@ -16,9 +20,6 @@ private:
 	ModelManager(ModelManager&&) = delete;
 	ModelManager& operator=(const ModelManager&) = delete;
 	ModelManager& operator=(ModelManager&&) = delete;
-
-	// 全てのモデルデータを保持
-	static inline std::unordered_map<std::string, std::unique_ptr<StaticMesh>> m_ModelCache;
 
 public:
 

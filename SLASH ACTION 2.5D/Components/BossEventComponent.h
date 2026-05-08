@@ -5,9 +5,9 @@ class BossEventComponent : public Component
 {
 private:
 	float m_RecordTime = 0.0f;
-	bool createCompletionFlag = false;
+	bool m_CreateCompletionFlag = false;
 	bool m_IsBossDied = false;
-	GameObject* m_boss = nullptr;
+	GameObject* m_Boss = nullptr;
 	TimeLineComponent* m_TimeLine = nullptr;
 
 public:

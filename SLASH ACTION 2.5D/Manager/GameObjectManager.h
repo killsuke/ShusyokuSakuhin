@@ -26,8 +26,18 @@ private:
 	static inline std::vector<std::unique_ptr<GameObject>> m_Objects_Absfront;
 	static inline std::vector<std::unique_ptr<GameObject>> m_TemporaryContainer; // 一時的にオブジェクトを保管するコンテナ
 	static inline std::vector<TagAndID> m_TagAndIDList; // タグとIDのリスト
-
 	static inline uint32_t m_NextID = 0;
+
+	// コンストラクタ・デストラクタを削除
+	GameObjectManager() = delete;
+	~GameObjectManager() = delete;
+
+	// コピー・ムーブも削除
+	GameObjectManager(const GameObjectManager&) = delete;
+	GameObjectManager(GameObjectManager&&) = delete;
+	GameObjectManager& operator=(const GameObjectManager&) = delete;
+	GameObjectManager& operator=(GameObjectManager&&) = delete;
+
 	static uint16_t TagToIDGet(const std::string& tag);
 	static uint16_t TagToIDRegister(const std::string& tag);
 
@@ -41,16 +51,6 @@ private:
 	static std::vector<GameObject*> HelperFindTags(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
 	static std::vector<GameObject*> HelperFindTagsOtherThan(const std::vector<std::unique_ptr<GameObject>>& objs, const std::unordered_set<uint16_t>& ids);
 	static GameObject* HelperFindInstanceID(const std::vector<std::unique_ptr<GameObject>>& objs, const uint32_t& id);
-
-	// コンストラクタ・デストラクタを削除
-	GameObjectManager() = delete;
-	~GameObjectManager() = delete;
-
-	// コピー・ムーブも削除
-	GameObjectManager(const GameObjectManager&) = delete;
-	GameObjectManager(GameObjectManager&&) = delete;
-	GameObjectManager& operator=(const GameObjectManager&) = delete;
-	GameObjectManager& operator=(GameObjectManager&&) = delete;
 
 public:
 

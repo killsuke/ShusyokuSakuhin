@@ -9,7 +9,7 @@ private:
 	DirectX::XMFLOAT3 m_BeforePos = {};
 	float m_MoveSpeed = 1.0f;
 	float m_RecordTime = 0.0f;
-	GameObject* m_player = nullptr;
+	GameObject* m_Player = nullptr;
 public:
 	MoveTerrainComponent(GameObject& obj);
 	~MoveTerrainComponent() = default;

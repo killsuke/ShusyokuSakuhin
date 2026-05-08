@@ -17,7 +17,7 @@ class TextureManager final
 private:
 	// テクスチャ管理用のマップ
 	// 文字列とDirectX11のシェーダーリソースビューを関連付ける
-	static inline std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureMap;
+	static inline std::unordered_map<std::wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
 
 	TextureManager() = default;
 	~TextureManager() = default;
