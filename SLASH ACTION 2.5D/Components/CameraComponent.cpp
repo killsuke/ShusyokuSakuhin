@@ -28,7 +28,7 @@ CameraComponent::CameraComponent(GameObject& obj) : Component(obj)
 	m_Target = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	Render3DComponent* render3D = m_Object->AddComponent<Render3DComponent>();
-	render3D->LoadModelMesh("assets/model/Camera/uploads_files_2423186_fbx+file.fbx", "assets/model/Camera/");
+	render3D->LoadModelMesh("Assets/model/Camera/uploads_files_2423186_fbx+file.fbx", "Assets/model/Camera/");
 	render3D->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	render3D->SetActiveFlag(false); // ”ñ•\Ž¦‚É‚·‚é
 }

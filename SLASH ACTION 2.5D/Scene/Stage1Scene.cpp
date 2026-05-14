@@ -67,8 +67,8 @@ void Stage1Scene::Init()
 		//collider->SetOffsetCenterAABB({ 0.0f,0.0f,-50.0f });
 		//auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
 		//auto rend = testObj->AddComponent<Render3DComponent>();
-		//rend->LoadModelMesh("assets/model/Mountain/uploads_files_4307558_Mountain.fbx",
-		//	"assets/model/Mountain");
+		//rend->LoadModelMesh("Assets/model/Mountain/uploads_files_4307558_Mountain.fbx",
+		//	"Assets/model/Mountain");
 
 		//rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		////	rend->ChangeTexture("NoTexture.png");
@@ -82,8 +82,8 @@ void Stage1Scene::Init()
 		//testTrans->SetScale({ 0.1f,0.1f,0.1f });
 		//testTrans->SetRotation({ 0.0f,90.0f,0.0f });
 		//auto rend = testObj->AddComponent<Render3DComponent>();
-		//rend->LoadModelMesh("assets/model/NewCar/uploads_files_3262252_r8.fbx",
-		//	"assets/model/NewCar");
+		//rend->LoadModelMesh("Assets/model/NewCar/uploads_files_3262252_r8.fbx",
+		//	"Assets/model/NewCar");
 
 		//rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 		////	rend->ChangeTexture("NoTexture.png");
@@ -110,8 +110,8 @@ void Stage1Scene::Init()
 			testTrans->SetPosition({ 400.0f, 0.0f, 0.0f });
 			testTrans->SetScale({ 0.5f,0.5f,0.5f });
 			auto rend = testObj->AddComponent<Render3DComponent>();
-			rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
-				"assets/model/Container");
+			rend->LoadModelMesh("Assets/model/Container/12281_Container_v2_L2.obj",
+				"Assets/model/Container");
 
 			rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 			rend->CreateMesh<SquareMesh>();
@@ -172,11 +172,11 @@ void Stage1Scene::Init()
 		testTrans->SetScale({ 100.5f,100.5f,150.5f });
 		//testTrans->SetRotation({90.0f,0.0f,0.0f});
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/rock9/rock9_HIGH_RES.fbx",
-			"assets/model/rock9");
+		rend->LoadModelMesh("Assets/model/rock9/rock9_HIGH_RES.fbx",
+			"Assets/model/rock9");
 
-		//rend->LoadModelMesh("assets/model/Container/12281_Container_v2_L2.obj",
-		//	"assets/model/Container");
+		//rend->LoadModelMesh("Assets/model/Container/12281_Container_v2_L2.obj",
+		//	"Assets/model/Container");
 
 		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 		//	rend->ChangeTexture("NoTexture.png");

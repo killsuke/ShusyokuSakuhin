@@ -38,8 +38,8 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	soundSword->AddSoundLabel("sword_move");
 
 	Render3DComponent* rendSword = sword3D->AddComponent<Render3DComponent>();
-	rendSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
-		"assets/model/Copilot3D");
+	rendSword->LoadModelMesh("Assets/model/Copilot3D/sword3D.glb",
+		"Assets/model/Copilot3D");
 	rendSword->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	m_Sword3D = sword3D;
 
@@ -77,8 +77,8 @@ TitleAnimationControlComponent::TitleAnimationControlComponent(GameObject& obj) 
 	soundMiniSword->AddSoundLabel("sword_sheath");
 
 	Render3DComponent* rendMiniSword = miniSword->AddComponent<Render3DComponent>();
-	rendMiniSword->LoadModelMesh("assets/model/Copilot3D/sword3D.glb",
-		"assets/model/Copilot3D");
+	rendMiniSword->LoadModelMesh("Assets/model/Copilot3D/sword3D.glb",
+		"Assets/model/Copilot3D");
 	rendMiniSword->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	m_MiniSword3D = miniSword;
 	m_MiniSword3D->SetActiveState(ActiveState::ALL_STOP);

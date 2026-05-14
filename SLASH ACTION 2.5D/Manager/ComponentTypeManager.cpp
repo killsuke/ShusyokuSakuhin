@@ -59,7 +59,7 @@ void ComponentTypeManager::MakeSampleJson() {
 	json j = ComponentTypeNameToJson(m_NameToId);
 
 	// 保存先のファイルパス
-	const std::string filepath = "json/component.json";
+	const std::string filepath = "Json/component.json";
 	
 	// JSONをファイルに保存
 	if (SaveJsonToFile(j, filepath)) {

@@ -105,12 +105,12 @@ LoadStageScene::LoadStageScene() {
 		EnemyCreateComponent* enM = stageRoadCSV->AddComponent<EnemyCreateComponent>();
 
 		TerrainJsonComponent* terrainJson = stageRoadCSV->AddComponent<TerrainJsonComponent>();
-		terrainJson->LoadTerrainJsonFile("json/terrain.json");
+		terrainJson->LoadTerrainJsonFile("Json/terrain.json");
 		std::vector<TerrainStatus> terrainStatus = terrainJson->GetTerrainStatus();
 		//	auto terrainKinds = terrainJson->GetKindNames();
 
 		EnemyJsonComponent* enemyJson = stageRoadCSV->AddComponent<EnemyJsonComponent>();
-		enemyJson->LoadEnemyJsonFile("json/enemy.json");
+		enemyJson->LoadEnemyJsonFile("Json/enemy.json");
 		std::vector<EnemyStatus> enemyStatus = enemyJson->GetEnemyStatus();
 
 		//	enemyJson->MakeSampleStatus(); // ƒTƒ“ƒvƒ‹‚Ì“GƒLƒƒƒ‰î•ñ‚ðì¬
@@ -565,8 +565,8 @@ void LoadStageScene::BamboosCreate() {
 
 		auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
 		auto rend = testObj->AddComponent<Render3DComponent>();
-		rend->LoadModelMesh("assets/model/bamboos/bambooRod1.fbx",
-			"assets/model/bamboos");
+		rend->LoadModelMesh("Assets/model/bamboos/bambooRod1.fbx",
+			"Assets/model/bamboos");
 
 		rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");*/
 	}
@@ -581,8 +581,8 @@ void LoadStageScene::BamboosCreate() {
 		////	collider->SetOffsetSizeAABB({ 10.0f,10.0f,10.0f });
 		//auto collRend = testObj->AddComponent<Render3DColliderAABBComponent>();
 		//auto rend = testObj->AddComponent<Render3DComponent>();
-		//rend->LoadModelMesh("assets/model/bamboos/bambooGrass1.fbx",
-		//	"assets/model/bamboos");
+		//rend->LoadModelMesh("Assets/model/bamboos/bambooGrass1.fbx",
+		//	"Assets/model/bamboos");
 
 		//rend->SetShader("litTextureVS.hlsl", "litTexturePS.hlsl");
 	}
@@ -625,8 +625,8 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetRotation({0.0f,90.0f,0.0f});
 		Render3DComponent* rend = rock1->AddComponent<Render3DComponent>();
 		rend->CreateMesh<StaticMesh>();
-		rend->LoadModelMesh("assets/model/rock9/rock9_HIGH_RES.fbx",
-			"assets/model/rock9");
+		rend->LoadModelMesh("Assets/model/rock9/rock9_HIGH_RES.fbx",
+			"Assets/model/rock9");
 		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	}
 
@@ -638,8 +638,8 @@ void LoadStageScene::BackGroundCreate() {
 		trans->SetRotation({ 0.0f,-90.0f,0.0f });
 		Render3DComponent* rend = rock1->AddComponent<Render3DComponent>();
 		rend->CreateMesh<StaticMesh>();
-		rend->LoadModelMesh("assets/model/rock9/rock9_HIGH_RES.fbx",
-			"assets/model/rock9");
+		rend->LoadModelMesh("Assets/model/rock9/rock9_HIGH_RES.fbx",
+			"Assets/model/rock9");
 		rend->SetShader("unlitTextureVS.hlsl", "unlitTexturePS.hlsl");
 	}
 

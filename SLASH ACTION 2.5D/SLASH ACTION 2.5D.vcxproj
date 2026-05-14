@@ -72,12 +72,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>single_include\nlohmann;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
+    <IncludePath>Single_include\nlohmann;..\directxtk\include;..\assimp\assimp\5.2.5\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\directxtk\lib\x64\Debug;..\assimp\assimp\5.2.5\lib;$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>single_include\nlohmann;single_include\nlohmann;..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <IncludePath>Single_include\nlohmann;single_include\nlohmann;..\assimp\assimp\5.2.5\include;..\directxtk\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
     <LibraryPath>..\assimp\assimp\5.2.5\lib;..\directxtk\lib\x64\Release;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(LibraryPath)</LibraryPath>
     <IntDir>$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -123,6 +123,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>
@@ -132,6 +133,9 @@
       <ShaderType>
       </ShaderType>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>xcopy /y /d "$(ProjectDir)Helper\*.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -151,6 +155,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>
@@ -160,6 +165,9 @@
       <ShaderType>
       </ShaderType>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>xcopy /y /d "$(ProjectDir)Helper\*.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Components\RenderCharacterComponent.cpp" />
@@ -278,7 +286,7 @@
     <ClCompile Include="Mesh\SquareMesh.cpp" />
     <ClCompile Include="Scene\Stage1Scene.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
-    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Stb_Image\stb_image.cpp" />
     <ClCompile Include="System\main.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Components\TestExtrusionJudgeComponent.cpp" />
@@ -300,7 +308,7 @@
     <ClCompile Include="Components\TitleAnimationControlComponent.cpp" />
     <ClCompile Include="Mesh\TriangularPrismMesh.cpp" />
     <ClCompile Include="Components\TimeLineComponent.cpp" />
-    <ClCompile Include="utility.cpp" />
+    <ClCompile Include="Utility\utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\RenderCharacterComponent.h" />
@@ -427,7 +435,7 @@
     <ClInclude Include="Mesh\SquareMesh.h" />
     <ClInclude Include="Scene\Stage1Scene.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
-    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Stb_Image\stb_image.h" />
     <ClInclude Include="Buffer\IndexBuffer.h" />
     <ClInclude Include="System\main.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -450,7 +458,7 @@
     <ClInclude Include="Components\TitleAnimationControlComponent.h" />
     <ClInclude Include="Mesh\TriangularPrismMesh.h" />
     <ClInclude Include="Components\TimeLineComponent.h" />
-    <ClInclude Include="utility.h" />
+    <ClInclude Include="Utility\utility.h" />
     <ClInclude Include="Buffer\VertexBuffer.h" />
     <ClInclude Include="Helper\XMFLOAT_Helper.h" />
   </ItemGroup>

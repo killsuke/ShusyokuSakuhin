@@ -4,7 +4,7 @@
 using namespace std::filesystem;
 
 namespace {
-	std::string TexturePath = "assets/texture/";
+	std::string TexturePath = "Assets/texture/";
 }
 
 void TextureManager::Init() {

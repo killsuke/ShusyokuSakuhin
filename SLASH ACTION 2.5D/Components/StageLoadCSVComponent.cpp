@@ -21,7 +21,7 @@ void StageLoadCSVComponent::LoadStageCSV(const std::string& fileName, GameObject
 
 	float posx = firstPointX;
 	float posy = firstPointY;
-	std::string usefilename = "csv/" + fileName;
+	std::string usefilename = "Csv/" + fileName;
 	std::ifstream file(usefilename);
 	if (!file.is_open()) {
 	//	throw std::runtime_error("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: " + fileName);

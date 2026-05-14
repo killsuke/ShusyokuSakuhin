@@ -26,7 +26,7 @@ void TerrainJsonComponent::MakeSampleStatus() {
 
     json j = TerrainsToJson(terrains);
     // 保存先のファイルパス
-    std::string filepath = "json/terrain.json";
+    std::string filepath = "Json/terrain.json";
     // JSONをファイルに保存
     if (SaveJsonToFile(j, filepath)) {
         std::cout << "Terrain JSON saved successfully to " << filepath << std::endl;

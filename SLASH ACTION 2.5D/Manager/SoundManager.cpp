@@ -21,8 +21,8 @@ using namespace std::filesystem;
 
 namespace {
 
-	std::string BGMPath = "sound/BGM/";
-	std::string SEPath = "sound/SE/";
+	std::string BGMPath = "Sound/BGM/";
+	std::string SEPath = "Sound/SE/";
 }
 
 // ‰Šú‰»ˆ—

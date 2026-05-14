@@ -26,7 +26,7 @@ void EnemyJsonComponent::MakeSampleStatus() {
 
 	json j = EnemyToJson(m_EnemyStatus);
 	// 保存先のファイルパス
-	std::string filepath = "json/enemy.json";
+	std::string filepath = "Json/enemy.json";
 	// JSONをファイルに保存
 	if (SaveJsonToFile(j, filepath)) {
 		std::cout << "Enemy JSON saved successfully to " << filepath << std::endl;

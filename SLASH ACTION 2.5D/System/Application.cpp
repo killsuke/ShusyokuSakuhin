@@ -175,7 +175,7 @@ void Application::MainLoop()
 	TimeManager::Init();
 	ShaderManager::Init();
 	ComponentTypeManager::Init();
-	ComponentTypeManager::LoadComponentTypeJsonFile("json/component.json");
+	ComponentTypeManager::LoadComponentTypeJsonFile("Json/component.json");
 	SoundManager::Init();	// サウンドの初期化
 	TextureManager::Init(); // テクスチャマネージャーの初期化処理
 	GameObjectManager::Init();	// ゲームオブジェクトのマネージャーを初期化
